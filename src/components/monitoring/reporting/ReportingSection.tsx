@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { StandardReports } from './reports/StandardReports';
-import { CustomReportBuilder } from './reports/CustomReportBuilder';
-import { ReportTemplates } from './reports/ReportTemplates';
-import { ScheduledReports } from './reports/ScheduledReports';
-import { ComplianceReports } from './reports/ComplianceReports';
+import { StandardReports } from './reports/reports/StandardReports';
+import { CustomReportBuilder } from './reports/reports/CustomReportBuilder';
+import { ReportTemplates } from './reports/reports/ReportTemplates';
+import { ScheduledReports } from './reports/reports/ScheduledReports';
+import { ComplianceReports } from './reports/reports/ComplianceReports';
 import { FileText, Settings, Calendar, BookTemplate as Template, ShieldCheck } from 'lucide-react';
 
 interface ReportingProps {
