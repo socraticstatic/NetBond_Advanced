@@ -5,7 +5,7 @@ export default defineConfig(({ command, mode }) => ({
   plugins: [
     react(),
   ],
-  base: mode === 'production' && process.env.GITHUB_PAGES ? '/att-netbond-sdci/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/att-netbond-sdci/' : '/',
   build: {
     target: 'esnext',
     minify: 'esbuild',
