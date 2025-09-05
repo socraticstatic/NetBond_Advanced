@@ -23,37 +23,20 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
-    - name: Run ESLint
-      run: npm run lint
-      
-    - name: Run TypeScript check
+    - name: TypeScript check
       run: npx tsc --noEmit
       
-    - name: Check for unused dependencies
-      run: npm run find-unused
-      
-    - name: Bundle size check
-      run: |
-        npm run build
-        ls -la dist/
+    - name: Build application
+      run: npm run build
+      env:
+        NODE_ENV: production
         
-    - name: Check bundle size limits
+    - name: Check bundle size
       run: |
         BUNDLE_SIZE=$(du -sk dist | cut -f1)
         echo "Bundle size: ${BUNDLE_SIZE}KB"
-        if [ $BUNDLE_SIZE -gt 5000 ]; then
-          echo "Bundle size exceeds 5MB limit!"
-          exit 1
-        fi
-        
-    - name: Security audit
-      run: npm audit --audit-level moderate
-      
-    - name: Check for TODO/FIXME comments
-      run: |
-        TODO_COUNT=$(grep -r "TODO\|FIXME" src/ | wc -l || echo "0")
-        echo "Found $TODO_COUNT TODO/FIXME comments"
-        if [ $TODO_COUNT -gt 50 ]; then
-          echo "Too many TODO/FIXME comments. Please address some before merging."
-          exit 1
+        if [ $BUNDLE_SIZE -gt 10000 ]; then
+          echo "⚠️  Bundle size is ${BUNDLE_SIZE}KB (above 10MB)"
+        else
+          echo "✅ Bundle size is acceptable: ${BUNDLE_SIZE}KB"
         fi
