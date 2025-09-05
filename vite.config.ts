@@ -115,7 +115,6 @@ export default defineConfig(({ mode }) => ({
       }
     },
     // Enable more aggressive minification
-    minify: 'esbuild' // Use esbuild instead of terser
   },
   server: {
     fs: {
