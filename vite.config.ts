@@ -1,11 +1,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ command, mode }) => ({
   plugins: [
     react(),
   ],
-  base: mode === 'production' ? '/att-netbond-sdci/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/att-netbond-sdci/' : '/',
   build: {
     target: 'esnext',
     minify: 'esbuild',
