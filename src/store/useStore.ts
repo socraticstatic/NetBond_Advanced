@@ -1,0 +1,96 @@
+import { create } from 'zustand';
+import { Connection, Alert, User } from '../types';
+import { WidgetInstance } from '../components/control-center/types';
+import { Group } from '../types/group';
+import { createWidgetSlice, WidgetSlice } from './slices/widgetSlice';
+import { createConnectionSlice, ConnectionSlice } from './slices/connectionSlice';
+import { createAlertSlice, AlertSlice } from './slices/alertSlice';
+import { createUserSlice, UserSlice } from './slices/userSlice';
+import { createUISlice, UISlice } from './slices/uiSlice';
+import { createGroupSlice, GroupSlice } from './slices/groupSlice';
+import { sampleConnections, sampleUsers, sampleGroups } from '../data/sampleData';
+import { safeJsonParse } from '../utils/errorHandling';
+
+// Load persisted state from localStorage with error handling
+const loadPersistedState = () => {
+  try {
+    const persistedState = localStorage.getItem('appState');
+    if (persistedState) {
+      return safeJsonParse(persistedState, {});
+    }
+  } catch (error) {
+    console.error('Failed to load persisted state:', error);
+  }
+  return {};
+};
+
+// Save state to localStorage with error handling
+const persistState = (state: any) => {
+  try {
+    const stateToStore = {
+      connections: state.connections,
+      groups: state.groups,
+      activeTab: state.activeTab
+      // Add other state you want to persist
+    };
+    localStorage.setItem('appState', JSON.stringify(stateToStore));
+  } catch (error) {
+    console.error('Failed to persist state:', error);
+  }
+};
+
+interface Store extends 
+  ConnectionSlice,
+  AlertSlice,
+  UserSlice,
+  UISlice,
+  WidgetSlice,
+  GroupSlice {}
+
+// Create store with persisted or sample data
+export const useStore = create<Store>((set, get) => {
+  // Load persisted state
+  const persistedState = loadPersistedState();
+  
+  // Merge with defaults
+  const initialState = {
+    connections: persistedState.connections || [...sampleConnections],
+    users: [...sampleUsers],
+    groups: persistedState.groups || [...sampleGroups],
+    selectedConnection: null,
+    selectedGroupId: null,
+    activeTab: persistedState.activeTab || 'connections',
+    alerts: [],
+    widgets: []
+  };
+
+  return {
+    ...createConnectionSlice(set, get),
+    ...createAlertSlice(set),
+    ...createUserSlice(set),
+    ...createUISlice(set),
+    ...createWidgetSlice(set),
+    ...createGroupSlice(set, get),
+    ...initialState,
+    
+    // Add a reset function to clear everything (useful for development/testing)
+    reset: () => {
+      localStorage.removeItem('appState');
+      set({
+        connections: [...sampleConnections],
+        users: [...sampleUsers],
+        groups: [...sampleGroups],
+        selectedConnection: null,
+        selectedGroupId: null,
+        activeTab: 'connections',
+        alerts: [],
+        widgets: []
+      });
+    }
+  };
+});
+
+// Subscribe to state changes to persist to localStorage - moved outside of store creation
+useStore.subscribe((state) => {
+  persistState(state);
+});

@@ -1,0 +1,136 @@
+import { useState, useRef, useEffect, ReactNode } from 'react';
+import { MoreVertical } from 'lucide-react';
+
+interface OverflowMenuItem {
+  id: string;
+  label: string;
+  icon: ReactNode;
+  onClick: () => void;
+  variant?: 'default' | 'danger';
+}
+
+interface OverflowMenuProps {
+  items: OverflowMenuItem[];
+  containerRef?: React.RefObject<HTMLElement>;
+  className?: string;
+  isOpen?: boolean;
+  onOpenChange?: (isOpen: boolean) => void;
+}
+
+export function OverflowMenu({ 
+  items, 
+  containerRef, 
+  className = '',
+  isOpen: controlledIsOpen,
+  onOpenChange 
+}: OverflowMenuProps) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const isOpen = controlledIsOpen ?? internalIsOpen;
+  const setIsOpen = (value: boolean) => {
+    if (onOpenChange) {
+      onOpenChange(value);
+    } else {
+      setInternalIsOpen(value);
+    }
+  };
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        menuRef.current && 
+        !menuRef.current.contains(event.target as Node) &&
+        !buttonRef.current?.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isOpen]);
+
+  // Calculate dropdown position
+  const getDropdownStyles = () => {
+    if (!containerRef?.current || !menuRef.current || !buttonRef.current) return {};
+
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const buttonRect = buttonRef.current.getBoundingClientRect();
+    const menuRect = menuRef.current.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    
+    const spaceBelow = viewportHeight - buttonRect.bottom;
+    const shouldShowAbove = spaceBelow < menuRect.height;
+
+    return {
+      position: 'absolute' as const,
+      top: shouldShowAbove ? 'auto' : buttonRect.height + 4,
+      bottom: shouldShowAbove ? buttonRect.height + 4 : 'auto',
+      right: 0,
+      zIndex: 40
+    };
+  };
+
+  const handleItemClick = (item: OverflowMenuItem) => {
+    item.onClick();
+    setIsOpen(false);
+  };
+
+  return (
+    <div className={`relative ${className}`} ref={menuRef}>
+      <button
+        ref={buttonRef}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
+        className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+      >
+        <MoreVertical className="h-5 w-5" />
+      </button>
+
+      {isOpen && (
+        <>
+          <div
+            className="fixed inset-0"
+            style={{ zIndex: 35 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen(false);
+            }}
+          />
+          <div 
+            className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100"
+            style={getDropdownStyles()}
+          >
+            <div className="py-1" role="menu">
+              {items.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleItemClick(item);
+                  }}
+                  className={`
+                    flex items-center w-full px-4 py-2 text-sm
+                    ${item.variant === 'danger'
+                      ? 'text-red-600 hover:bg-red-50'
+                      : 'text-gray-700 hover:bg-gray-100'
+                    }
+                  `}
+                >
+                  {item.icon}
+                  <span className="ml-3">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
