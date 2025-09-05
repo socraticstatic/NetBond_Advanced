@@ -53,20 +53,5 @@ export default {
   future: {
     hoverOnlyWhenSupported: true,
   },
-  // Enable purging for production builds
-  purge: {
-    enabled: process.env.NODE_ENV === 'production',
-    content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-    options: {
-      safelist: [
-        // Keep critical utility classes
-        'bg-brand-blue',
-        'text-brand-blue',
-        'border-brand-blue',
-        'rounded-full',
-        'animate-spin',
-        'animate-pulse'
-      ]
-    }
-  }
+  // Content purging is handled automatically in Tailwind CSS v3+
 };
