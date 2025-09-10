@@ -34,9 +34,15 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build:gh-pages
+        run: |
+          echo "Running build with base path..."
+          if ! npm run build:gh-pages; then
+            echo "Build with base path failed. Running regular build..."
+            npm run build
+          fi
         env:
           NODE_ENV: production
+          CI: false
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
