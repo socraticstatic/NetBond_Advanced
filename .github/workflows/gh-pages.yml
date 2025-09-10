@@ -10,26 +10,51 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: github-pages
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Debug Node.js and npm versions
+        run: |
+          node --version
+          npm --version
+          npm config list
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '18.x'
           cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci --prefer-offline --no-audit
+          npm list --depth=0
+
+      - name: List files before build
+        run: ls -la
 
       - name: Build
         run: |
-          npm run build:gh-pages || npm run build
+          echo "Running build..."
+          npm run build:gh-pages || (echo "Build with base path failed, trying regular build..." && npm run build)
+          echo "Build completed. Contents of dist/:"
           ls -la dist/
+        env:
+          NODE_ENV: production
+          VITE_APP_VERSION: ${{ github.sha }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -38,6 +63,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'dist'
+          retention-days: 1
 
       - name: Deploy to GitHub Pages
         id: deployment
