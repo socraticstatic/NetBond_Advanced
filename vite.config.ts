@@ -115,13 +115,6 @@ export default defineConfig(({ mode }) => ({
       }
     },
     // Enable more aggressive minification
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console.log in production
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug']
-      }
-    }
   },
   server: {
     fs: {
