@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build:gh-pages": "vite build --base=/att-netbond-sdci/",
+    "build": "tsc --noEmit && vite build",
+    "build:gh-pages": "vite build --base=/att-netbond-sdci/ --mode production",
+    "build:skip-typecheck": "vite build",
     "build:analyze": "vite build && npx vite-bundle-analyzer dist/stats.html",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
