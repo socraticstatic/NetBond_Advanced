@@ -5,66 +5,52 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Allow one concurrent deployment
 concurrency:
-  group: 'pages'
+  group: "pages"
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  # Build job
+  build:
     runs-on: ubuntu-latest
-    environment: github-pages
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Debug Node.js and npm versions
-        run: |
-          node --version
-          npm --version
-          npm config list
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
           cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
 
       - name: Install dependencies
-        run: |
-          npm ci --prefer-offline --no-audit
-          npm list --depth=0
-
-      - name: List files before build
-        run: ls -la
+        run: npm ci
 
       - name: Build
-        run: |
-          echo "Running build..."
-          npm run build:gh-pages || (echo "Build with base path failed, trying regular build..." && npm run build)
-          echo "Build completed. Contents of dist/:"
-          ls -la dist/
+        run: npm run build:gh-pages
         env:
           NODE_ENV: production
-          VITE_APP_VERSION: ${{ github.sha }}
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'dist'
-          retention-days: 1
+          path: './dist'
 
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
