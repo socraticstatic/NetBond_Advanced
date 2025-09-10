@@ -45,7 +45,7 @@ jobs:
           VITE_APP_VERSION: ${{ github.sha }}
 
       - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: 'dist/.'
 
