@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { StandardReports } from './reports/StandardReports';
 // import { CustomReportBuilder } from './reports/CustomReportBuilder';
 import { ReportTemplates } from './reports/ReportTemplates';
 import { ScheduledReports } from './reports/ScheduledReports';
@@ -9,12 +10,12 @@ import { Settings, Calendar, BookTemplate as Template, ShieldCheck } from 'lucid
 interface ReportingProps {
   selectedConnection: string;
   timeRange: string;
-  defaultTab?: 'custom' | 'templates' | 'scheduled' | 'compliance';
+  defaultTab?: 'standard' | 'templates' | 'scheduled' | 'compliance';
 }
 
-export function ReportingSection({ selectedConnection, timeRange, defaultTab = 'custom' }: ReportingProps) {
+export function ReportingSection({ selectedConnection, timeRange, defaultTab = 'standard' }: ReportingProps) {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'custom' | 'templates' | 'scheduled' | 'compliance'>(defaultTab);
+  const [activeTab, setActiveTab] = useState<'standard' | 'templates' | 'scheduled' | 'compliance'>(defaultTab);
 
   // Set initial active tab from location state or props
   useEffect(() => {
@@ -27,7 +28,7 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
   }, [location, defaultTab]);
 
   const tabs = [
-    { id: 'custom', label: 'Custom Reports', icon: Settings },
+    { id: 'standard', label: 'Standard Reports', icon: Settings },
     { id: 'templates', label: 'Templates', icon: Template },
     { id: 'scheduled', label: 'Scheduled', icon: Calendar },
     { id: 'compliance', label: 'Compliance', icon: ShieldCheck }
@@ -35,13 +36,8 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'custom':
-        return (
-          <div className="p-4">
-            <h3>Custom Reports</h3>
-            <p>Custom reports functionality coming soon.</p>
-          </div>
-        );
+      case 'standard':
+        return <StandardReports selectedConnection={selectedConnection} timeRange={timeRange} />;
       case 'templates':
         return <ReportTemplates />;
       case 'scheduled':
