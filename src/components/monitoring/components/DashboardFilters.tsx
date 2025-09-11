@@ -96,9 +96,7 @@ export function DashboardFilters({
           )}
           
           {children && (
-            <div className="mt-4">
-              {children}
-            </div>
+            <div className="mt-4">{children}</div>
           )}
         </div>
       </div>
@@ -178,6 +176,16 @@ export function DashboardFilters({
               Last refreshed: {formattedLastRefreshed}
             </p>
           )}
+          
+          <Button
+            variant="outline"
+            icon={RefreshCw}
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className={`w-full justify-center mt-4 ${isRefreshing ? 'cursor-not-allowed' : ''}`}
+          >
+            {isRefreshing ? 'Refreshing...' : 'Refresh Data'}
+          </Button>
           
           {children && (
             <div className="mt-4">
