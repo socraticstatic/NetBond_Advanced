@@ -45,9 +45,7 @@ export function MonitoringDashboard({ connections }: MonitoringDashboardProps) {
         <DashboardFilters
           connections={connections}
           groups={groups}
-        >
-          <RefreshControls />
-        </DashboardFilters>
+        />
 
         <AsyncBoundary>
           <Suspense fallback={
