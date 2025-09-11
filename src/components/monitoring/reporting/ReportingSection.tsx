@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { StandardReports } from './reports/StandardReports';
+// import { StandardReports } from './reports/StandardReports';
 import { CustomReportBuilder } from './reports/CustomReportBuilder';
 import { ReportTemplates } from './reports/ReportTemplates';
 import { ScheduledReports } from './reports/ScheduledReports';
@@ -15,7 +15,7 @@ interface ReportingProps {
 
 export function ReportingSection({ selectedConnection, timeRange, defaultTab = 'standard' }: ReportingProps) {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'standard' | 'custom' | 'templates' | 'scheduled' | 'compliance'>(defaultTab);
+  const [activeTab, setActiveTab] = useState<'custom' | 'templates' | 'scheduled' | 'compliance'>(defaultTab === 'standard' ? 'custom' : defaultTab);
 
   // Set initial active tab from location state or props
   useEffect(() => {
@@ -38,12 +38,8 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
   const renderContent = () => {
     switch (activeTab) {
       case 'standard':
-        return (
-          <StandardReports
-            selectedConnection={selectedConnection}
-            timeRange={timeRange}
-          />
-        );
+        {/* Temporarily disabled */}
+        return null;
       case 'custom':
         return (
           <CustomReportBuilder
