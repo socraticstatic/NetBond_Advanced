@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { CustomReportBuilder } from './reports/CustomReportBuilder';
+// import { CustomReportBuilder } from './reports/CustomReportBuilder';
 import { ReportTemplates } from './reports/ReportTemplates';
 import { ScheduledReports } from './reports/ScheduledReports';
 import { ComplianceReports } from './reports/ComplianceReports';
@@ -37,10 +37,10 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
     switch (activeTab) {
       case 'custom':
         return (
-          <CustomReportBuilder
-            selectedConnection={selectedConnection}
-            timeRange={timeRange}
-          />
+          <div className="p-4">
+            <h3>Custom Reports</h3>
+            <p>Custom reports functionality coming soon.</p>
+          </div>
         );
       case 'templates':
         return <ReportTemplates />;
