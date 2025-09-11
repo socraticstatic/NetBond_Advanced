@@ -171,18 +171,6 @@ export function DashboardFilters({
               <option value="7d">Last 7 Days</option>
               <option value="30d">Last 30 Days</option>
             </select>
-            
-            <Button
-              variant="outline"
-              icon={RefreshCw}
-              onClick={handleRefresh}
-              disabled={isRefreshing}
-              className={isRefreshing ? 'animate-spin' : ''}
-              aria-label="Refresh data"
-              title="Refresh Now"
-            >
-              {isRefreshing ? '' : 'Refresh'}
-            </Button>
           </div>
           
           {lastRefreshed && (
