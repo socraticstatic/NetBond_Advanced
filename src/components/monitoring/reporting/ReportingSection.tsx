@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-// import { StandardReports } from './reports/StandardReports';
 import { CustomReportBuilder } from './reports/CustomReportBuilder';
 import { ReportTemplates } from './reports/ReportTemplates';
 import { ScheduledReports } from './reports/ScheduledReports';
 import { ComplianceReports } from './reports/ComplianceReports';
-import { FileText, Settings, Calendar, BookTemplate as Template, ShieldCheck } from 'lucide-react';
+import { Settings, Calendar, BookTemplate as Template, ShieldCheck } from 'lucide-react';
 
 interface ReportingProps {
   selectedConnection: string;
   timeRange: string;
-  defaultTab?: 'standard' | 'custom' | 'templates' | 'scheduled' | 'compliance';
+  defaultTab?: 'custom' | 'templates' | 'scheduled' | 'compliance';
 }
 
-export function ReportingSection({ selectedConnection, timeRange, defaultTab = 'standard' }: ReportingProps) {
+export function ReportingSection({ selectedConnection, timeRange, defaultTab = 'custom' }: ReportingProps) {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'custom' | 'templates' | 'scheduled' | 'compliance'>(defaultTab === 'standard' ? 'custom' : defaultTab);
+  const [activeTab, setActiveTab] = useState<'custom' | 'templates' | 'scheduled' | 'compliance'>(defaultTab);
 
   // Set initial active tab from location state or props
   useEffect(() => {
@@ -28,7 +27,6 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
   }, [location, defaultTab]);
 
   const tabs = [
-    { id: 'standard', label: 'Standard Reports', icon: FileText },
     { id: 'custom', label: 'Custom Reports', icon: Settings },
     { id: 'templates', label: 'Templates', icon: Template },
     { id: 'scheduled', label: 'Scheduled', icon: Calendar },
@@ -37,9 +35,6 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'standard':
-        {/* Temporarily disabled */}
-        return null;
       case 'custom':
         return (
           <CustomReportBuilder
