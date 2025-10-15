@@ -147,7 +147,7 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <h3 className="text-lg font-medium text-gray-900">Filter Rules</h3>
           <p className="text-sm text-gray-500 mt-1">
@@ -158,6 +158,7 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
           variant="primary"
           icon={Plus}
           onClick={() => setShowCreateModal(true)}
+          className="whitespace-nowrap shrink-0"
         >
           Create Filter Rule
         </Button>
