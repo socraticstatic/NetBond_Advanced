@@ -1,17 +1,19 @@
 import { useState } from 'react';
-import { Plus, Bell, Mail, MessageSquare, Settings, AlertTriangle, X } from 'lucide-react';
+import { Plus, Bell, Mail, MessageSquare, Settings, Edit, Trash2, CheckCircle, XCircle } from 'lucide-react';
 import { ThresholdRule, MetricGroup } from '../../../types/metric';
 import { Button } from '../../common/Button';
+import { useStore } from '../../../store/useStore';
+import { NotificationRule } from '../../../types/rule';
 
 interface NotificationRulesProps {
   selectedConnection: string;
 }
 
 export function NotificationRules({ selectedConnection }: NotificationRulesProps) {
-  const [selectedMetrics, setSelectedMetrics] = useState<string[]>([]);
-  const [thresholds, setThresholds] = useState<Record<string, ThresholdRule[]>>({});
-  const [showThresholdModal, setShowThresholdModal] = useState(false);
-  const [activeMetricId, setActiveMetricId] = useState<string | null>(null);
+  const { rules, toggleRule, deleteRule, addRule } = useStore();
+  const notificationRules = rules.filter(rule => rule.type === 'notification') as NotificationRule[];
+
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [notificationChannels, setNotificationChannels] = useState({
     email: true,
     slack: false,
@@ -195,70 +197,86 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
         </div>
       </div>
 
-      {/* Notification Rules */}
+      {/* Active Notification Rules */}
       <div className="card p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Bell className="h-5 w-5 text-brand-blue mr-2" />
-            <h3 className="text-lg font-medium text-gray-900">Notification Rules</h3>
+            <h3 className="text-lg font-medium text-gray-900">Active Notification Rules</h3>
           </div>
           <Button
             variant="primary"
             icon={Plus}
-            onClick={() => setShowThresholdModal(true)}
+            onClick={() => setShowCreateModal(true)}
           >
             Add Rule
           </Button>
         </div>
 
-        <div className="space-y-4">
-          {metricGroups.map(group => (
-            <div key={group.id}>
-              <h4 className="text-sm font-medium text-gray-900 mb-2">{group.name}</h4>
-              <div className="space-y-2">
-                {group.metrics.map(metric => (
-                  <div key={metric.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
+        <div className="space-y-3">
+          {notificationRules.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              <Bell className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+              <p>No notification rules configured</p>
+            </div>
+          ) : (
+            notificationRules.map(rule => (
+              <div key={rule.id} className={`p-4 border rounded-lg ${!rule.enabled ? 'opacity-60' : ''}`}>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <Bell className={`h-5 w-5 ${rule.enabled ? 'text-blue-600' : 'text-gray-400'}`} />
+                      <h4 className="text-base font-semibold text-gray-900">{rule.name}</h4>
+                      {rule.enabled ? (
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                      ) : (
+                        <XCircle className="h-4 w-4 text-gray-400" />
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-600 mb-2">{rule.description}</p>
+                    <div className="flex items-center space-x-4 text-xs text-gray-500">
+                      <span>Metric: {rule.metricId}</span>
+                      <span>Threshold: {rule.threshold.operator} {rule.threshold.value}</span>
+                      <span>Triggered: {rule.triggerCount} times</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2 ml-4">
+                    <label className="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={selectedMetrics.includes(metric.id)}
-                        onChange={() => handleMetricToggle(metric.id)}
-                        className="h-4 w-4 text-brand-blue rounded border-gray-300 focus:ring-brand-blue"
+                        checked={rule.enabled}
+                        onChange={() => toggleRule(rule.id)}
+                        className="sr-only peer"
                       />
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{metric.name}</p>
-                        <p className="text-xs text-gray-500">{metric.description}</p>
-                      </div>
-                    </div>
-                    {selectedMetrics.includes(metric.id) && (
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => handleAddThreshold(metric.id)}
-                      >
-                        Set Threshold
-                      </Button>
-                    )}
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                    <button
+                      onClick={() => deleteRule(rule.id)}
+                      className="p-2 text-red-400 hover:text-red-600 rounded-lg hover:bg-red-50"
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </button>
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
-      {showThresholdModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium">Add Threshold Rule</h3>
-              <button onClick={() => setShowThresholdModal(false)}>
-                <X className="h-5 w-5 text-gray-400" />
+              <h3 className="text-lg font-medium">Add Notification Rule</h3>
+              <button onClick={() => setShowCreateModal(false)}>
+                <XCircle className="h-5 w-5 text-gray-400" />
               </button>
             </div>
             <div className="text-center py-8 text-gray-500">
-              <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-              <p>Threshold configuration coming soon</p>
+              <Bell className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+              <p>Create notification rule form coming soon</p>
+              <p className="text-xs mt-2">This will allow you to set thresholds for specific metrics</p>
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { createAlertSlice, AlertSlice } from './slices/alertSlice';
 import { createUserSlice, UserSlice } from './slices/userSlice';
 import { createUISlice, UISlice } from './slices/uiSlice';
 import { createGroupSlice, GroupSlice } from './slices/groupSlice';
+import { createRuleSlice, RuleSlice } from './slices/ruleSlice';
 import { sampleConnections, sampleUsers, sampleGroups } from '../data/sampleData';
 import { safeJsonParse } from '../utils/errorHandling';
 
@@ -39,13 +40,14 @@ const persistState = (state: any) => {
   }
 };
 
-interface Store extends 
+interface Store extends
   ConnectionSlice,
   AlertSlice,
   UserSlice,
   UISlice,
   WidgetSlice,
-  GroupSlice {}
+  GroupSlice,
+  RuleSlice {}
 
 // Create store with persisted or sample data
 export const useStore = create<Store>((set, get) => {
@@ -64,15 +66,16 @@ export const useStore = create<Store>((set, get) => {
     widgets: []
   };
 
-  return {
+  const store = {
     ...createConnectionSlice(set, get),
     ...createAlertSlice(set),
     ...createUserSlice(set),
     ...createUISlice(set),
     ...createWidgetSlice(set),
     ...createGroupSlice(set, get),
+    ...createRuleSlice(set, get),
     ...initialState,
-    
+
     // Add a reset function to clear everything (useful for development/testing)
     reset: () => {
       localStorage.removeItem('appState');
@@ -84,10 +87,20 @@ export const useStore = create<Store>((set, get) => {
         selectedGroupId: null,
         activeTab: 'connections',
         alerts: [],
-        widgets: []
+        widgets: [],
+        rules: [],
+        evaluationResults: [],
+        isEvaluating: false
       });
     }
   };
+
+  // Load sample rules on initialization
+  setTimeout(() => {
+    store.loadSampleRules();
+  }, 0);
+
+  return store;
 });
 
 // Subscribe to state changes to persist to localStorage - moved outside of store creation
