@@ -248,11 +248,11 @@ export function NetworkAI({
   };
   
   return (
-    <div className="fixed bottom-20 left-4 z-50">
+    <div className="absolute -left-[420px] top-0 z-10">
       {/* AI Panel Button */}
       <button
         className={`
-          flex items-center justify-center h-12 w-12 rounded-full 
+          absolute top-0 right-0 flex items-center justify-center h-12 w-12 rounded-full
           ${isOpen ? 'bg-[#003184] text-white' : 'bg-gray-100 text-[#003184]'}
           z-10 transition-all duration-200 shadow-md
         `}
@@ -273,15 +273,15 @@ export function NetworkAI({
           </div>
         )}
       </button>
-      
+
       {/* AI Assistant Panel */}
       <div className={`
-        absolute bottom-0 left-0 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden
+        absolute top-0 right-16 bg-white border border-gray-200 rounded-lg shadow-lg flex flex-col
         transition-all duration-300 ease-in-out
-        ${isOpen ? 'w-96 h-[420px] opacity-100' : 'w-0 h-0 opacity-0 pointer-events-none'}
+        ${isOpen ? 'w-96 h-[600px] opacity-100' : 'w-0 h-0 opacity-0 pointer-events-none'}
       `}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-3 bg-[#003184] text-white">
+        {/* Header - Sticky */}
+        <div className="flex items-center justify-between p-3 bg-[#003184] text-white sticky top-0 z-10">
           <div className="flex items-center">
             {/* Add avatar in header */}
             <div className="h-8 w-8 rounded-full overflow-hidden bg-white/10 mr-2 flex items-center justify-center">
@@ -301,9 +301,9 @@ export function NetworkAI({
             </div>
           </div>
         </div>
-        
-        {/* Messages Container */}
-        <div className="p-3 h-[314px] overflow-y-auto bg-gray-50">
+
+        {/* Messages Container - Scrollable */}
+        <div className="p-3 flex-1 overflow-y-auto bg-gray-50">
           {messages.map((message, index) => (
             <div key={index} className={`mb-3 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`
@@ -372,9 +372,9 @@ export function NetworkAI({
           
           <div ref={messagesEndRef} />
         </div>
-        
-        {/* Action Buttons */}
-        <div className="p-2 border-t border-gray-200">
+
+        {/* Action Buttons - Sticky Footer */}
+        <div className="p-2 border-t border-gray-200 bg-white sticky bottom-0 z-10">
           {(messages[messages.length - 1]?.content.includes('Would you like me to select') ||
              messages[messages.length - 1]?.content.includes('recommend')) && 
              !isThinking && !currentTypingMessage && (
