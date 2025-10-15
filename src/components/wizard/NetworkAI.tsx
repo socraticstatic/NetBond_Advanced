@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Zap, Send, Brain, ArrowRight } from 'lucide-react';
+import { Zap, Send, Brain, ArrowRight, Move } from 'lucide-react';
 import { CloudProvider, ConnectionType, BandwidthOption, LocationOption } from '../../types/connection';
 
 interface NetworkAIProps {
@@ -12,11 +12,11 @@ interface NetworkAIProps {
   onSuggestion?: (suggestion: any) => void;
 }
 
-export function NetworkAI({ 
-  provider, 
-  type, 
-  bandwidth, 
-  location, 
+export function NetworkAI({
+  provider,
+  type,
+  bandwidth,
+  location,
   step,
   onNextStep,
   onSuggestion
@@ -28,11 +28,52 @@ export function NetworkAI({
   const [typingIndex, setTypingIndex] = useState(0);
   const [currentTypingMessage, setCurrentTypingMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const dragRef = useRef<HTMLDivElement>(null);
   
   // Auto-scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Drag handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (dragRef.current) {
+      setIsDragging(true);
+      setDragStart({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y
+      });
+    }
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging) {
+        setPosition({
+          x: e.clientX - dragStart.x,
+          y: e.clientY - dragStart.y
+        });
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, dragStart]);
   
   // Provide contextual recommendations based on the current step
   useEffect(() => {
@@ -248,7 +289,15 @@ export function NetworkAI({
   };
   
   return (
-    <div className="fixed bottom-8 right-8 z-50">
+    <div
+      className="fixed z-50"
+      style={{
+        bottom: position.y ? 'auto' : '2rem',
+        right: position.x ? 'auto' : '2rem',
+        left: position.x ? `${position.x}px` : 'auto',
+        top: position.y ? `${position.y}px` : 'auto',
+      }}
+    >
       {/* AI Panel Button */}
       <button
         className={`
@@ -275,15 +324,22 @@ export function NetworkAI({
       </button>
 
       {/* AI Assistant Panel */}
-      <div className={`
-        absolute bottom-16 right-0 bg-white border border-gray-200 rounded-lg shadow-lg flex flex-col
-        transition-all duration-300 ease-in-out
-        ${isOpen ? 'w-96 h-[600px] opacity-100' : 'w-0 h-0 opacity-0 pointer-events-none'}
-      `}>
-        {/* Header - Sticky */}
-        <div className="flex items-center justify-between p-3 bg-[#003184] text-white sticky top-0 z-10">
-          <div className="flex items-center">
-            {/* Add avatar in header */}
+      <div
+        ref={dragRef}
+        className={`
+          absolute bottom-16 right-0 bg-white border border-gray-200 rounded-2xl shadow-2xl flex flex-col
+          transition-all duration-300 ease-in-out overflow-hidden
+          ${isOpen ? 'w-96 h-[600px] opacity-100' : 'w-0 h-0 opacity-0 pointer-events-none'}
+          ${isDragging ? 'cursor-grabbing' : ''}
+        `}
+      >
+        {/* Header - Sticky and Draggable */}
+        <div
+          className="flex items-center justify-between p-3 bg-[#003184] text-white sticky top-0 z-10 cursor-grab active:cursor-grabbing"
+          onMouseDown={handleMouseDown}
+        >
+          <div className="flex items-center flex-1">
+            <Move className="h-4 w-4 mr-3 text-white/50" />
             <div className="h-8 w-8 rounded-full overflow-hidden bg-white/10 mr-2 flex items-center justify-center">
               <Zap className="h-5 w-5 text-white" />
             </div>
