@@ -29,7 +29,7 @@ export function NetworkAI({
   const [currentTypingMessage, setCurrentTypingMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const dragRef = useRef<HTMLDivElement>(null);
@@ -43,9 +43,10 @@ export function NetworkAI({
   const handleMouseDown = (e: React.MouseEvent) => {
     if (dragRef.current) {
       setIsDragging(true);
+      const rect = dragRef.current.getBoundingClientRect();
       setDragStart({
-        x: e.clientX - position.x,
-        y: e.clientY - position.y
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
       });
     }
   };
@@ -289,27 +290,18 @@ export function NetworkAI({
   };
   
   return (
-    <div
-      className="fixed z-50"
-      style={{
-        bottom: position.y ? 'auto' : '2rem',
-        right: position.x ? 'auto' : '2rem',
-        left: position.x ? `${position.x}px` : 'auto',
-        top: position.y ? `${position.y}px` : 'auto',
-      }}
-    >
+    <>
       {/* AI Panel Button */}
       <button
         className={`
-          absolute bottom-0 right-0 flex items-center justify-center h-12 w-12 rounded-full
+          fixed bottom-8 right-8 flex items-center justify-center h-12 w-12 rounded-full
           ${isOpen ? 'bg-[#003184] text-white' : 'bg-gray-100 text-[#003184]'}
-          z-10 transition-all duration-200 shadow-md
+          z-50 transition-all duration-200 shadow-md
         `}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-label="Toggle AI assistant"
       >
-        {/* Replace Brain icon with avatar */}
         {isOpen ? (
           <Brain className="h-6 w-6" />
         ) : (
@@ -327,11 +319,15 @@ export function NetworkAI({
       <div
         ref={dragRef}
         className={`
-          absolute bottom-16 right-0 bg-white border border-gray-200 rounded-2xl shadow-2xl flex flex-col
-          transition-all duration-300 ease-in-out overflow-hidden
+          fixed bg-white border border-gray-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden
           ${isOpen ? 'w-96 h-[600px] opacity-100' : 'w-0 h-0 opacity-0 pointer-events-none'}
-          ${isDragging ? 'cursor-grabbing' : ''}
+          ${isDragging ? 'cursor-grabbing select-none' : ''}
         `}
+        style={
+          position
+            ? { left: `${position.x}px`, top: `${position.y}px`, zIndex: 50 }
+            : { bottom: '5rem', right: '2rem', zIndex: 50 }
+        }
       >
         {/* Header - Sticky and Draggable */}
         <div
@@ -510,6 +506,6 @@ export function NetworkAI({
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
