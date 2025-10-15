@@ -1,19 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Plus, AlertTriangle, Zap } from 'lucide-react';
+import { Plus, AlertTriangle, Zap, Bell } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { AlertRules } from '../logs/rules/AlertRules';
 import { AutomationRules } from '../logs/rules/AutomationRules';
+import { NotificationRules } from './NotificationRules';
 
 interface AlertRuleMakingProps {
   selectedConnection: string;
   timeRange: string;
-  defaultTab?: 'alerts' | 'automation';
+  defaultTab?: 'alerts' | 'automation' | 'notifications';
 }
 
 export function AlertRuleMaking({ selectedConnection, timeRange, defaultTab = 'alerts' }: AlertRuleMakingProps) {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'alerts' | 'automation'>(defaultTab);
+  const [activeTab, setActiveTab] = useState<'alerts' | 'automation' | 'notifications'>(defaultTab);
 
   useEffect(() => {
     const state = location.state as { defaultRuleTab?: typeof activeTab };
@@ -26,6 +27,7 @@ export function AlertRuleMaking({ selectedConnection, timeRange, defaultTab = 'a
 
   const tabs = [
     { id: 'alerts', label: 'Alert Rules', icon: AlertTriangle, description: 'Create rules to trigger alerts' },
+    { id: 'notifications', label: 'Notification Rules', icon: Bell, description: 'Configure notification channels' },
     { id: 'automation', label: 'Automation Rules', icon: Zap, description: 'Automate actions based on conditions' }
   ];
 
@@ -33,6 +35,8 @@ export function AlertRuleMaking({ selectedConnection, timeRange, defaultTab = 'a
     switch (activeTab) {
       case 'alerts':
         return <AlertRules selectedConnection={selectedConnection} />;
+      case 'notifications':
+        return <NotificationRules selectedConnection={selectedConnection} />;
       case 'automation':
         return <AutomationRules selectedConnection={selectedConnection} />;
       default:
