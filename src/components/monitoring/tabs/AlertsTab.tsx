@@ -6,7 +6,7 @@ import { Bell, Settings } from 'lucide-react';
 
 // Lazy load components
 const AlertCards = lazy(() => import('../alerts/AlertCards'));
-const NotificationRules = lazy(() => import('../alerts/NotificationRules').then(module => ({ default: module.NotificationRules })));
+const AlertHistory = lazy(() => import('../alerts/AlertHistory').then(module => ({ default: module.AlertHistory })));
 const AlertRuleMaking = lazy(() => import('../alerts/AlertRuleMaking').then(module => ({ default: module.AlertRuleMaking })));
 
 export function AlertsTab() {
@@ -67,7 +67,7 @@ export function AlertsTab() {
                 className="w-full"
               >
                 <Suspense fallback={<SkeletonCard lines={8} />}>
-                  <NotificationRules selectedConnection={selectedConnection} />
+                  <AlertHistory selectedConnection={selectedConnection} />
                 </Suspense>
               </LazyLoadSection>
             </div>
