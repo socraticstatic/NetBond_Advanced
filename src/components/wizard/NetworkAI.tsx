@@ -248,11 +248,11 @@ export function NetworkAI({
   };
   
   return (
-    <div className="absolute -left-[420px] top-0 z-10">
+    <div className="fixed bottom-8 right-8 z-50">
       {/* AI Panel Button */}
       <button
         className={`
-          absolute top-0 right-0 flex items-center justify-center h-12 w-12 rounded-full
+          absolute bottom-0 right-0 flex items-center justify-center h-12 w-12 rounded-full
           ${isOpen ? 'bg-[#003184] text-white' : 'bg-gray-100 text-[#003184]'}
           z-10 transition-all duration-200 shadow-md
         `}
@@ -276,7 +276,7 @@ export function NetworkAI({
 
       {/* AI Assistant Panel */}
       <div className={`
-        absolute top-0 right-16 bg-white border border-gray-200 rounded-lg shadow-lg flex flex-col
+        absolute bottom-16 right-0 bg-white border border-gray-200 rounded-lg shadow-lg flex flex-col
         transition-all duration-300 ease-in-out
         ${isOpen ? 'w-96 h-[600px] opacity-100' : 'w-0 h-0 opacity-0 pointer-events-none'}
       `}>
