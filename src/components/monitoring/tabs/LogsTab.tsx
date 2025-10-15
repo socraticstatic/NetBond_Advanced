@@ -2,19 +2,19 @@ import { Suspense, lazy, useState } from 'react';
 import { useMonitoring } from '../context/MonitoringContext';
 import { SkeletonTable } from '../../common/SkeletonTable';
 import { LazyLoadSection } from '../../common/layouts/LazyLoadSection';
-import { FileText, Settings } from 'lucide-react';
+import { FileText, Filter } from 'lucide-react';
 
 // Load the logs content component lazily
 const LogsContent = lazy(() => import('./LogsContent'));
-const RuleMaking = lazy(() => import('../logs/RuleMaking').then(module => ({ default: module.RuleMaking })));
+const LogRuleMaking = lazy(() => import('../logs/LogRuleMaking').then(module => ({ default: module.LogRuleMaking })));
 
 export function LogsTab() {
   const { selectedConnection, filteredConnections, timeRange } = useMonitoring();
-  const [activeSubTab, setActiveSubTab] = useState<'logs' | 'rules'>('logs');
+  const [activeSubTab, setActiveSubTab] = useState<'logs' | 'filters'>('logs');
 
   const tabs = [
     { id: 'logs', label: 'Log Viewer', icon: FileText },
-    { id: 'rules', label: 'Rule Making', icon: Settings }
+    { id: 'filters', label: 'Filter Rules', icon: Filter }
   ];
 
   return (
@@ -64,7 +64,7 @@ export function LogsTab() {
             </LazyLoadSection>
           ) : (
             <Suspense fallback={<SkeletonTable rows={5} columns={6} />}>
-              <RuleMaking
+              <LogRuleMaking
                 selectedConnection={selectedConnection}
                 timeRange={timeRange}
               />
