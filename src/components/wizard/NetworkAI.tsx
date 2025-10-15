@@ -87,7 +87,7 @@ export function NetworkAI({
       
       switch(step) {
         case 0: // Initial question about network purpose
-          newMessage = `👋 Hello! I'm Lindsey, your NetBond SDCI AI Assistant. I'll help you create the optimal cloud connection. Based on your organization profile, I recommend considering **AWS** or **Azure** as they match your business needs. What type of workloads will you be running?`;
+          newMessage = `👋 Hello! I'm Niva, your NetBond Advanced AI Assistant. I'll help you create the optimal cloud connection. Based on your organization profile, I recommend considering **AWS** or **Azure** as they match your business needs. What type of workloads will you be running?`;
           break;
           
         case 1: // Connection type
@@ -340,8 +340,8 @@ export function NetworkAI({
               <Zap className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h3 className="text-sm font-medium">Lindsey</h3>
-              <p className="text-xs text-white/70">NetBond SDCI AI Assistant</p>
+              <h3 className="text-sm font-medium">Niva</h3>
+              <p className="text-xs text-white/70">NetBond Advanced AI Assistant</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -497,7 +497,7 @@ export function NetworkAI({
           {/* Dynamic footer status message */}
           {(isThinking || currentTypingMessage) ? (
             <div className="mt-1 text-center">
-              <span className="text-xs text-gray-500">Lindsey is typing...</span>
+              <span className="text-xs text-gray-500">Niva is typing...</span>
             </div>
           ) : (
             <div className="mt-1 text-center">

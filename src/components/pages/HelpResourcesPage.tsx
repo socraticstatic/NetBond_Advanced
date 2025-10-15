@@ -63,7 +63,7 @@ export function HelpResourcesPage() {
                 </div>
                 
                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-                  Meet Lindsey, Your NetBond SDCI AI Assistant
+                  Meet Niva, Your NetBond Advanced AI Assistant
                 </h3>
                 
                 <p className="text-gray-600 mb-4 max-w-2xl">
@@ -77,7 +77,7 @@ export function HelpResourcesPage() {
                     window.addToast({
                       type: 'info',
                       title: 'Coming Soon',
-                      message: 'Lindsey will be available next month. Stay tuned!',
+                      message: 'Niva will be available next month. Stay tuned!',
                       duration: 5000
                     });
                   }}
