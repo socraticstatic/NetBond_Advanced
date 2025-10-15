@@ -185,7 +185,7 @@ export function NetworkAI({
           response += `\n\nWould you like me to select AWS for you?`;
         }
       } else if (step === 1) {
-        response = `For connecting to ${provider}, I recommend using "Internet to Cloud" connection type. It offers a good balance of security, performance, and cost. This type uses the secure AT&T NetBond SDCI service to provide reliable connectivity over the internet to your cloud resources.`;
+        response = `For connecting to ${provider}, I recommend using "Internet to Cloud" connection type. It offers a good balance of security, performance, and cost. This type uses the secure AT&T NetBond Advanced service to provide reliable connectivity over the internet to your cloud resources.`;
       } else if (step === 2) {
         response = `Based on your workload profile and connection type, I recommend **10 Gbps** bandwidth in the **US East** region. This provides optimal performance for your applications while maintaining cost efficiency. This configuration will support approximately 8,500 concurrent users with your current application profile.`;
       }
@@ -204,7 +204,7 @@ export function NetworkAI({
       response = `Bandwidth determines the maximum amount of data that can flow through your connection at once. Here's a guideline:\n\n**1 Gbps**: Suitable for small businesses with < 100 users\n**10 Gbps**: Mid-size organizations with 100-1000 users\n**100 Gbps**: Large enterprises with 1000+ users or data-intensive workloads\n\nAnalyzing your traffic patterns, I recommend 10 Gbps for optimal performance.`;
     }
     else if (userQuestion.toLowerCase().includes('security') || userQuestion.toLowerCase().includes('encrypt')) {
-      response = `All AT&T NetBond SDCI connections include enterprise-grade security features:\n\n- AES-256 encryption\n- DDoS protection\n- Private connectivity that doesn't traverse the public internet\n- Integrated firewall capabilities\n\nThe connection you're configuring meets financial industry compliance requirements including PCI-DSS, SOX, and GDPR.`;
+      response = `All AT&T NetBond Advanced connections include enterprise-grade security features:\n\n- AES-256 encryption\n- DDoS protection\n- Private connectivity that doesn't traverse the public internet\n- Integrated firewall capabilities\n\nThe connection you're configuring meets financial industry compliance requirements including PCI-DSS, SOX, and GDPR.`;
     }
     else if (userQuestion.toLowerCase().includes('cost') || userQuestion.toLowerCase().includes('price') || userQuestion.toLowerCase().includes('pricing')) {
       let pricing = "Pricing depends on connection type, bandwidth, and billing plan. ";
@@ -220,7 +220,7 @@ export function NetworkAI({
     else {
       // Generic responses based on step
       if (step === 0) {
-        response = `I can help you select the ideal cloud provider for your needs. I recommend analyzing your workload characteristics, compliance requirements, and existing technology investments. ${provider || 'AWS, Azure, and Google Cloud'} all offer excellent connectivity options through AT&T NetBond SDCI.`;
+        response = `I can help you select the ideal cloud provider for your needs. I recommend analyzing your workload characteristics, compliance requirements, and existing technology investments. ${provider || 'AWS, Azure, and Google Cloud'} all offer excellent connectivity options through AT&T NetBond Advanced.`;
       } else if (step === 1) {
         response = `The connection type determines how your network traffic flows between your infrastructure and the cloud provider. For most enterprise use cases, "Internet to Cloud" provides the best balance of security, performance, and cost.`;
       } else if (step === 2) {
@@ -294,7 +294,7 @@ export function NetworkAI({
       {/* AI Panel Button */}
       <button
         className={`
-          fixed bottom-8 right-8 flex items-center justify-center h-12 w-12 rounded-full
+          fixed bottom-8 left-8 flex items-center justify-center h-12 w-12 rounded-full
           ${isOpen ? 'bg-[#003184] text-white' : 'bg-gray-100 text-[#003184]'}
           z-50 transition-all duration-200 shadow-md
         `}
@@ -326,7 +326,7 @@ export function NetworkAI({
         style={
           position
             ? { left: `${position.x}px`, top: `${position.y}px`, zIndex: 50 }
-            : { bottom: '5rem', right: '2rem', zIndex: 50 }
+            : { bottom: '5rem', left: '2rem', zIndex: 50 }
         }
       >
         {/* Header - Sticky and Draggable */}
