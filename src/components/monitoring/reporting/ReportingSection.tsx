@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { StandardReports } from './reports/StandardReports';
-// import { CustomReportBuilder } from './reports/CustomReportBuilder';
-import { ReportTemplates } from './reports/ReportTemplates';
-import { ScheduledReports } from './reports/ScheduledReports';
-import { ComplianceReports } from './reports/ComplianceReports';
+import { ReportTemplates } from '../../configure/reporting/ReportTemplates';
 import { Settings, Calendar, BookTemplate as Template, ShieldCheck } from 'lucide-react';
 
 interface ReportingProps {
@@ -37,13 +33,28 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
   const renderContent = () => {
     switch (activeTab) {
       case 'standard':
-        return <StandardReports selectedConnection={selectedConnection} timeRange={timeRange} />;
+        return (
+          <div className="text-center py-12 text-gray-500">
+            <Settings className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+            <p>Standard Reports - Coming Soon</p>
+          </div>
+        );
       case 'templates':
         return <ReportTemplates />;
       case 'scheduled':
-        return <ScheduledReports />;
+        return (
+          <div className="text-center py-12 text-gray-500">
+            <Calendar className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+            <p>Scheduled Reports - Coming Soon</p>
+          </div>
+        );
       case 'compliance':
-        return <ComplianceReports />;
+        return (
+          <div className="text-center py-12 text-gray-500">
+            <ShieldCheck className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+            <p>Compliance Reports - Coming Soon</p>
+          </div>
+        );
       default:
         return null;
     }

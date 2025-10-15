@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { Plus, Bell, Mail, MessageSquare, Settings } from 'lucide-react';
-import { MetricSelector } from '../../monitoring/reporting/reports/components/MetricSelector';
-import { ThresholdModal } from '../../monitoring/reporting/reports/components/ThresholdModal';
+import { Plus, Bell, Mail, MessageSquare, Settings, AlertTriangle, X } from 'lucide-react';
 import { ThresholdRule, MetricGroup } from '../../../types/metric';
 import { Button } from '../../common/Button';
 
@@ -213,22 +211,58 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
           </Button>
         </div>
 
-        <MetricSelector
-          metricGroups={metricGroups}
-          selectedMetrics={selectedMetrics}
-          thresholds={thresholds}
-          onMetricToggle={handleMetricToggle}
-          onAddThreshold={handleAddThreshold}
-          onRemoveThreshold={handleRemoveThreshold}
-        />
+        <div className="space-y-4">
+          {metricGroups.map(group => (
+            <div key={group.id}>
+              <h4 className="text-sm font-medium text-gray-900 mb-2">{group.name}</h4>
+              <div className="space-y-2">
+                {group.metrics.map(metric => (
+                  <div key={metric.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedMetrics.includes(metric.id)}
+                        onChange={() => handleMetricToggle(metric.id)}
+                        className="h-4 w-4 text-brand-blue rounded border-gray-300 focus:ring-brand-blue"
+                      />
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{metric.name}</p>
+                        <p className="text-xs text-gray-500">{metric.description}</p>
+                      </div>
+                    </div>
+                    {selectedMetrics.includes(metric.id) && (
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => handleAddThreshold(metric.id)}
+                      >
+                        Set Threshold
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <ThresholdModal
-        isOpen={showThresholdModal}
-        onClose={() => setShowThresholdModal(false)}
-        onSave={handleSaveThreshold}
-        metricId={activeMetricId || ''}
-      />
+      {showThresholdModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium">Add Threshold Rule</h3>
+              <button onClick={() => setShowThresholdModal(false)}>
+                <X className="h-5 w-5 text-gray-400" />
+              </button>
+            </div>
+            <div className="text-center py-8 text-gray-500">
+              <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+              <p>Threshold configuration coming soon</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
