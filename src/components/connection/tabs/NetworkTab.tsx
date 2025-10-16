@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, ChevronDown, ChevronRight, Router, Network, Shield, Settings, Activity, Info } from 'lucide-react';
+import { Plus, ChevronDown, ChevronRight, Router, Network, Shield, Settings, Activity, Info, List, GitBranch } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { Connection } from '../../../types';
 import { VNF } from '../../../types/vnf';
@@ -11,6 +11,9 @@ import { DeleteCloudRouterModal } from '../cloudrouter/DeleteCloudRouterModal';
 import { VLANModal } from '../modals/VLANModal';
 import { DeleteVLANModal } from '../modals/DeleteVLANModal';
 import { Link } from '../../../types';
+import { CloudRouterTable } from '../cloudrouter/CloudRouterTable';
+import { VNFTable } from '../vnf/VNFTable';
+import { LinkTable } from '../links/LinkTable';
 
 interface NetworkTabProps {
   connection: Connection;
@@ -18,6 +21,9 @@ interface NetworkTabProps {
 }
 
 export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
+  // View mode: 'hierarchy' or 'table'
+  const [viewMode, setViewMode] = useState<'hierarchy' | 'table'>('hierarchy');
+
   // Expansion state for hierarchical view
   const [expandedRouters, setExpandedRouters] = useState<Set<string>>(new Set());
   const [expandedLinks, setExpandedLinks] = useState<Set<string>>(new Set());
@@ -491,31 +497,84 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
     }
   };
 
+  // Flatten all links for table view
+  const allLinks = cloudRouters.flatMap(router =>
+    router.links.map(link => ({
+      ...link,
+      cloudRouterName: router.name,
+      cloudRouterId: router.id,
+      bandwidth: link.linkBandwidth
+    }))
+  );
+
+  // Map VNFs to cloud routers for table view
+  const vnfsWithRouters = vnfs.map(vnf => ({
+    ...vnf,
+    cloudRouterId: vnf.linkIds?.[0] ?
+      cloudRouters.find(r => r.links.some(l => l.id === vnf.linkIds?.[0]))?.id :
+      undefined
+  }));
+
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Network Hierarchy</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            {viewMode === 'hierarchy' ? 'Network Hierarchy' : 'Network Components'}
+          </h2>
           <p className="text-sm text-gray-600 mt-1">
-            Connection → Cloud Routers → Links (VLANs) → VNF Functions
+            {viewMode === 'hierarchy'
+              ? 'Connection → Cloud Routers → Links (VLANs) → VNF Functions'
+              : 'Tabular view of all network components with pagination'
+            }
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={expandAll}
-          >
-            Expand All
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={collapseAll}
-          >
-            Collapse All
-          </Button>
+          {/* View Toggle */}
+          <div className="flex items-center bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setViewMode('hierarchy')}
+              className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'hierarchy'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <GitBranch className="h-4 w-4" />
+              <span>Hierarchy</span>
+            </button>
+            <button
+              onClick={() => setViewMode('table')}
+              className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'table'
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <List className="h-4 w-4" />
+              <span>Tables</span>
+            </button>
+          </div>
+
+          {viewMode === 'hierarchy' && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={expandAll}
+              >
+                Expand All
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={collapseAll}
+              >
+                Collapse All
+              </Button>
+            </>
+          )}
           <Button
             variant="primary"
             size="sm"
@@ -573,15 +632,81 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
           <div className="flex-1">
             <h4 className="text-sm font-semibold text-blue-900 mb-1">Network Organization</h4>
             <p className="text-sm text-blue-700">
-              This view shows your network hierarchy. Each Cloud Router can have multiple Links (VLANs),
-              and each Link can have multiple VNF functions associated with it. Click the arrows to expand/collapse sections.
+              {viewMode === 'hierarchy'
+                ? 'This view shows your network hierarchy. Each Cloud Router can have multiple Links (VLANs), and each Link can have multiple VNF functions associated with it. Click the arrows to expand/collapse sections.'
+                : 'This view shows all network components in sortable, paginated tables. Use the Tables view to efficiently browse and manage large numbers of components.'
+              }
             </p>
           </div>
         </div>
       </div>
 
+      {/* Table View */}
+      {viewMode === 'table' && (
+        <div className="space-y-6">
+          {/* Cloud Routers Table */}
+          <div className="bg-white rounded-lg border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <div className="flex items-center">
+                <Router className="h-5 w-5 text-brand-blue mr-2" />
+                <h3 className="text-lg font-medium text-gray-900">Cloud Routers</h3>
+              </div>
+            </div>
+            <CloudRouterTable
+              cloudRouters={cloudRouters}
+              vnfs={vnfsWithRouters}
+              onEdit={handleEditCloudRouter}
+              onDelete={handleDeleteCloudRouter}
+              connectionBandwidth={connection.bandwidth}
+            />
+          </div>
+
+          {/* Links/VLANs Table */}
+          <div className="bg-white rounded-lg border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <div className="flex items-center">
+                <Network className="h-5 w-5 text-brand-blue mr-2" />
+                <h3 className="text-lg font-medium text-gray-900">Links (VLANs)</h3>
+              </div>
+            </div>
+            <LinkTable
+              links={allLinks}
+              sortField="vlanId"
+              sortDirection="asc"
+              onSort={() => {}}
+              onEdit={(link) => {
+                const router = cloudRouters.find(r => r.id === link.cloudRouterId);
+                if (router) {
+                  handleEditLink(link, router.id);
+                }
+              }}
+              onDelete={handleDeleteLink}
+              searchQuery=""
+              showCloudRouter={true}
+            />
+          </div>
+
+          {/* VNFs Table */}
+          <div className="bg-white rounded-lg border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <div className="flex items-center">
+                <Shield className="h-5 w-5 text-brand-blue mr-2" />
+                <h3 className="text-lg font-medium text-gray-900">VNF Functions</h3>
+              </div>
+            </div>
+            <VNFTable
+              vnfs={vnfsWithRouters}
+              cloudRouters={cloudRouters}
+              onEdit={handleEditVNF}
+              onDelete={handleDeleteVNF}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Hierarchical Tree View */}
-      <div className="bg-white rounded-lg border border-gray-200">
+      {viewMode === 'hierarchy' && (
+        <div className="bg-white rounded-lg border border-gray-200">
         {/* Connection Level */}
         <div className="border-b border-gray-200 bg-gray-50 p-4">
           <div className="flex items-center justify-between">
@@ -837,7 +962,8 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
             </div>
           )}
         </div>
-      </div>
+        </div>
+      )}
 
       {/* Modals */}
       <VNFModal
