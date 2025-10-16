@@ -10,6 +10,7 @@ import { resourceManagementWidgets } from './categories/resource-management';
 import { securityWidgets } from './categories/security';
 import { supportWidgets } from './categories/support';
 import { userManagementWidgets } from './categories/user-management';
+import { sustainabilityWidgets } from './categories/sustainability';
 
 // Widget definitions by category
 export const AVAILABLE_WIDGETS = {
@@ -21,7 +22,8 @@ export const AVAILABLE_WIDGETS = {
   'Observability': observabilityWidgets,
   'Resource Management': resourceManagementWidgets,
   'User Management': userManagementWidgets,
-  'Support': supportWidgets
+  'Support': supportWidgets,
+  'Insights': sustainabilityWidgets
 };
 
 // Mocked data for demonstration
