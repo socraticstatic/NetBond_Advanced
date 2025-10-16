@@ -1,10 +1,10 @@
 /* Button styles */
 
 /* Base button styles */
-button:not(.wizard-card, .mode-selection-card, .network-option),
-.btn:not(.wizard-card, .mode-selection-card, .network-option), 
-.button:not(.wizard-card, .mode-selection-card, .network-option),
-[class*='btn-']:not(.wizard-card, .mode-selection-card, .network-option) {
+button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn),
+.btn:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn),
+.button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn),
+[class*='btn-']:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn) {
   @apply rounded-full !important;
 }
 
