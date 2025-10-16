@@ -97,7 +97,7 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
             <button
               key={type.value}
               onClick={() => onChange({ ...config, authType: type.value as any })}
-              className={`p-4 border text-left transition-all ${
+              className={`quick-action-btn p-4 border text-left transition-all ${
                 config.authType === type.value
                   ? 'border-gray-900 bg-white shadow-sm'
                   : 'border-gray-200 bg-white hover:border-gray-400'
