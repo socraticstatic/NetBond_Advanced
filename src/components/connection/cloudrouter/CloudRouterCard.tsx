@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Router, Network, Settings, ChevronDown, ChevronUp, MoreVertical, Edit2, Trash2, Plus, Shield, ServerCog } from 'lucide-react';
+import { GitBranch, Network, Settings, ChevronDown, ChevronUp, MoreVertical, Edit2, Trash2, Plus, Shield, ServerCog } from 'lucide-react';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { Link } from '../../../types/connection';
@@ -132,7 +132,7 @@ export function CloudRouterCard({
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="p-2 bg-brand-lightBlue rounded-lg mr-3">
-              <Router className="h-5 w-5 text-brand-blue" />
+              <GitBranch className="h-5 w-5 text-brand-blue" />
             </div>
             <div>
               <h3 className="text-base font-medium text-gray-900">{cloudRouter.name}</h3>

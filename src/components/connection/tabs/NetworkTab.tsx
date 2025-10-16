@@ -531,7 +531,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
     {
       id: 'cloudrouters',
       label: 'Cloud Routers',
-      icon: <Router className="h-5 w-5" />,
+      icon: <GitBranch className="h-5 w-5" />,
       count: cloudRouters.length
     },
     {
@@ -623,7 +623,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
           <div className="flex items-center justify-between mb-2">
-            <Router className="h-8 w-8 text-blue-600" />
+            <GitBranch className="h-8 w-8 text-blue-600" />
             <span className="text-3xl font-bold text-blue-900">{cloudRouters.length}</span>
           </div>
           <p className="text-sm font-medium text-blue-700">Cloud Routers</p>
@@ -725,7 +725,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
               <>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center">
-                    <Router className="h-5 w-5 text-brand-blue mr-2" />
+                    <GitBranch className="h-5 w-5 text-brand-blue mr-2" />
                     <h3 className="text-lg font-medium text-gray-900">Cloud Routers</h3>
                   </div>
                   <Button
@@ -861,7 +861,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
                       )}
                     </button>
                     <div className="p-2 bg-blue-50 rounded-lg">
-                      <Router className="h-5 w-5 text-blue-600" />
+                      <GitBranch className="h-5 w-5 text-blue-600" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center space-x-2">
@@ -1081,7 +1081,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
           {/* Empty state for no cloud routers */}
           {cloudRouters.length === 0 && (
             <div className="p-12 text-center">
-              <Router className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <GitBranch className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No Cloud Routers</h3>
               <p className="text-sm text-gray-600 mb-4">Get started by creating your first cloud router</p>
               <Button

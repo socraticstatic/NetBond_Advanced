@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Router, Network, Settings, Info, Plus, AlertTriangle } from 'lucide-react';
+import { X, GitBranch, Network, Settings, Info, Plus, AlertTriangle } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { FormField } from '../../form/FormField';
@@ -147,7 +147,7 @@ export function CloudRouterModal({
       <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[calc(100vh-2rem)] overflow-hidden flex flex-col">
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <h3 className="text-lg font-medium text-gray-900 flex items-center">
-            <Router className="h-5 w-5 text-brand-blue mr-2" />
+            <GitBranch className="h-5 w-5 text-brand-blue mr-2" />
             {isEditMode ? 'Edit Cloud Router' : 'Add New Cloud Router'}
           </h3>
           <button
@@ -179,7 +179,7 @@ export function CloudRouterModal({
               {/* Basic Information */}
               <div className="md:col-span-2">
                 <h4 className="text-base font-medium text-gray-900 mb-4 flex items-center">
-                  <Router className="h-4 w-4 text-gray-500 mr-2" />
+                  <GitBranch className="h-4 w-4 text-gray-500 mr-2" />
                   Basic Information
                 </h4>
                 

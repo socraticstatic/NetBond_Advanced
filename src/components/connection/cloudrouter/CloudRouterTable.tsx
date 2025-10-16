@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Router, Network, Settings, Shield, Edit2, Trash2 } from 'lucide-react';
+import { GitBranch, Network, Settings, Shield, Edit2, Trash2 } from 'lucide-react';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { VNF } from '../../../types/vnf';
@@ -60,7 +60,7 @@ export function CloudRouterTable({
         <div className="flex items-center">
           <div className="flex-shrink-0">
             <div className="p-2 bg-brand-lightBlue rounded-lg">
-              <Router className="h-4 w-4 text-brand-blue" />
+              <GitBranch className="h-4 w-4 text-brand-blue" />
             </div>
           </div>
           <div className="ml-3">
