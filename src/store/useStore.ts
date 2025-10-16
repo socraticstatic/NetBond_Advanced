@@ -9,6 +9,7 @@ import { createUserSlice, UserSlice } from './slices/userSlice';
 import { createUISlice, UISlice } from './slices/uiSlice';
 import { createGroupSlice, GroupSlice } from './slices/groupSlice';
 import { createRuleSlice, RuleSlice } from './slices/ruleSlice';
+import { createAgenticSlice, AgenticSlice } from './slices/agenticSlice';
 import { sampleConnections, sampleUsers, sampleGroups } from '../data/sampleData';
 import { safeJsonParse } from '../utils/errorHandling';
 
@@ -47,7 +48,8 @@ interface Store extends
   UISlice,
   WidgetSlice,
   GroupSlice,
-  RuleSlice {}
+  RuleSlice,
+  AgenticSlice {}
 
 // Create store with persisted or sample data
 export const useStore = create<Store>((set, get) => {
@@ -74,6 +76,7 @@ export const useStore = create<Store>((set, get) => {
     ...createWidgetSlice(set),
     ...createGroupSlice(set, get),
     ...createRuleSlice(set, get),
+    ...createAgenticSlice(set),
     ...initialState,
 
     // Add a reset function to clear everything (useful for development/testing)
