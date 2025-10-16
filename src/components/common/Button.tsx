@@ -1,8 +1,8 @@
-import { ReactNode, memo, forwardRef, isValidElement } from 'react';
+import { ReactNode, memo, forwardRef, isValidElement, ComponentType } from 'react';
 
 interface ButtonProps {
   children: ReactNode;
-  icon?: ReactNode;
+  icon?: ReactNode | ComponentType<any>;
   variant?: 'primary' | 'secondary' | 'outline' | 'danger';
   fullWidth?: boolean;
   onClick?: () => void;
@@ -38,6 +38,23 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-600',
   };
 
+  const iconSizeClass = size === 'sm' ? 'h-4 w-4' : 'h-5 w-5';
+
+  const renderIcon = () => {
+    if (!icon) return null;
+
+    if (isValidElement(icon)) {
+      return <span className="mr-2">{icon}</span>;
+    }
+
+    if (typeof icon === 'function') {
+      const IconComponent = icon as ComponentType<any>;
+      return <IconComponent className={`${iconSizeClass} mr-2`} />;
+    }
+
+    return null;
+  };
+
   return (
     <button
       ref={ref}
@@ -53,7 +70,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
         ${className}
       `}
     >
-      {icon && <span className="mr-2">{icon}</span>}
+      {renderIcon()}
       {children}
     </button>
   );
