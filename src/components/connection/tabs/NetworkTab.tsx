@@ -645,7 +645,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
       {viewMode === 'table' && (
         <div className="space-y-6">
           {/* Cloud Routers Table */}
-          <div className="bg-white rounded-lg border border-gray-200">
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
               <div className="flex items-center">
                 <Router className="h-5 w-5 text-brand-blue mr-2" />
@@ -662,7 +662,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
           </div>
 
           {/* Links/VLANs Table */}
-          <div className="bg-white rounded-lg border border-gray-200">
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
               <div className="flex items-center">
                 <Network className="h-5 w-5 text-brand-blue mr-2" />
@@ -687,7 +687,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
           </div>
 
           {/* VNFs Table */}
-          <div className="bg-white rounded-lg border border-gray-200">
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
               <div className="flex items-center">
                 <Shield className="h-5 w-5 text-brand-blue mr-2" />
