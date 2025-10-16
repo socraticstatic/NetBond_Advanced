@@ -127,12 +127,9 @@ export function APIImportStep({ config, onChange, onNext }: APIImportStepProps) 
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">Import Your API</h2>
-        <p className="text-gray-600">
-          Upload an OpenAPI/Swagger specification, provide a URL, or enter JSON manually
-        </p>
-      </div>
+      <h3 className="text-xl font-semibold text-gray-900 text-center mb-8">
+        Import Your API
+      </h3>
 
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div className="flex items-start">
