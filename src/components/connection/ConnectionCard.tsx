@@ -156,7 +156,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
 
     // Simulate status change after 15 seconds
     setTimeout(() => {
-      updateConnection(connection.id.toString(), { status: newStatus });
+      updateConnection(connection.id, { status: newStatus });
       setIsPending(false);
       setProgress(0);
       
