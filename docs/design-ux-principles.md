@@ -10,7 +10,7 @@
 
 ### 2. **Human-Centered Design**
 - **User Journey Optimization**: Streamlined workflows from novice to expert users
-- **Contextual Guidance**: AI-powered assistance (Lindsey) provides real-time help
+- **Contextual Guidance**: AI-powered assistance (Niva) provides real-time help
 - **Progressive Disclosure**: Complex features revealed gradually to prevent overwhelm
 - **Task-Oriented Architecture**: Features organized around user goals, not system structure
 
@@ -221,7 +221,7 @@
 ## Innovation & Future-Proofing
 
 ### 1. **Emerging Technologies**
-- **AI Integration**: Lindsey AI Assistant with natural language processing
+- **AI Integration**: Niva AI Assistant with natural language processing
 - **Voice Interface Ready**: Component structure supports voice commands
 - **AR/VR Preparedness**: 3D-ready data structures for future visualization
 - **API-First Architecture**: Headless capability for future interfaces

@@ -12,7 +12,7 @@
 - **Apple-Level Aesthetics**: Intuitive, premium user experience with meticulous attention to detail
 - **Accessibility First**: WCAG 2.1 AA compliant (98% conformance) with full keyboard navigation
 - **Mobile-Responsive**: Optimized experience across all devices and screen sizes
-- **AI-Powered Assistance**: Intelligent guidance through Lindsey, the NetBond AI Assistant
+- **AI-Powered Assistance**: Intelligent guidance through Niva, the NetBond AI Assistant
 
 ## Strategic Capabilities
 

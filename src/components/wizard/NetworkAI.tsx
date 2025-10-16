@@ -370,7 +370,7 @@ export function NetworkAI({
                     <div className="h-5 w-5 rounded-full flex items-center justify-center bg-[#003184]/10 mr-1.5">
                       <Zap className="h-3.5 w-3.5 text-[#003184]" />
                     </div>
-                    <span className="text-xs font-medium text-[#003184]">Lindsey</span>
+                    <span className="text-xs font-medium text-[#003184]">Niva</span>
                   </div>
                 )}
                 <div 
@@ -391,11 +391,11 @@ export function NetworkAI({
                   <div className="h-5 w-5 rounded-full flex items-center justify-center bg-[#003184]/10 mr-1.5">
                     <Zap className="h-3.5 w-3.5 text-[#003184]" />
                   </div>
-                  <span className="text-xs font-medium text-[#003184]">Lindsey</span>
+                  <span className="text-xs font-medium text-[#003184]">Niva</span>
                 </div>
                 <div className="text-sm">
-                  <span dangerouslySetInnerHTML={{ 
-                    __html: formatMessage(currentTypingMessage.substring(0, typingIndex)) 
+                  <span dangerouslySetInnerHTML={{
+                    __html: formatMessage(currentTypingMessage.substring(0, typingIndex))
                   }} />
                   <span className="inline-block w-2 h-4 ml-0.5 bg-[#003184] animate-pulse"></span>
                 </div>
@@ -411,7 +411,7 @@ export function NetworkAI({
                   <div className="h-5 w-5 rounded-full flex items-center justify-center bg-[#003184]/10 mr-1.5">
                     <Zap className="h-3.5 w-3.5 text-[#003184]" />
                   </div>
-                  <span className="text-xs font-medium text-[#003184]">Lindsey</span>
+                  <span className="text-xs font-medium text-[#003184]">Niva</span>
                 </div>
                 <div className="flex space-x-1 items-center">
                   <div className="h-2 w-2 bg-[#003184] rounded-full animate-pulse"></div>
