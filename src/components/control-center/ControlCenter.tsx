@@ -5,6 +5,7 @@ import { WidgetDrawer } from './WidgetDrawer';
 import { WidgetGrid } from './WidgetGrid';
 import { WidgetDefinition, WidgetInstance } from './types';
 import { useStore } from '../../store/useStore';
+import { AgenticAssistantDemo } from './AgenticAssistantDemo';
 
 interface ControlCenterProps {
   connections: Connection[];
@@ -82,6 +83,7 @@ export function ControlCenter({ connections }: ControlCenterProps) {
         />
 
         <WidgetDrawer onAddWidget={handleAddWidget} />
+        <AgenticAssistantDemo />
       </div>
     </DndContext>
   );
