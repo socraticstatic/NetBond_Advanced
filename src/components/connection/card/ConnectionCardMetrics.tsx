@@ -115,14 +115,16 @@ export function ConnectionCardMetrics({
       {/* Bottom Row: Monthly Cost */}
       <div>
         {/* Monthly Cost */}
-        <div className={`flex items-start space-x-3 p-3 ${billingInfo.bgColor} rounded-lg border border-${billingInfo.color}-200`}>
-          <DollarSign className={`h-4 w-4 ${billingInfo.textColor} mt-0.5 flex-shrink-0`} />
-          <div className="min-w-0 flex-1">
-            <span className={`text-xs font-medium block mb-0.5 ${
+        <div className={`flex items-center justify-between p-3 ${billingInfo.bgColor} rounded-lg border border-${billingInfo.color}-200`}>
+          <div className="flex items-center space-x-2">
+            <DollarSign className={`h-4 w-4 ${billingInfo.textColor} flex-shrink-0`} />
+            <span className={`text-xs font-medium ${
               billingInfo.bgColor === 'bg-green-50' ? 'text-green-900' :
               billingInfo.bgColor === 'bg-brand-lightBlue' ? 'text-blue-900' :
               'text-gray-900'
             }`}>Monthly Cost</span>
+          </div>
+          <div className="flex items-center space-x-2">
             <p className="text-sm font-semibold text-gray-900">
               {billingInfo.cost ? formatCurrency(billingInfo.cost) : '-'}
             </p>
