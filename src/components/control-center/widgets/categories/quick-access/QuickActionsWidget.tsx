@@ -35,7 +35,7 @@ export function QuickActionsWidget() {
           <button
             key={action.id}
             className={`
-              p-3 rounded-lg text-left transition-colors
+              p-3 rounded-md text-left transition-colors
               ${action.color === 'blue' ? 'bg-blue-50 hover:bg-blue-100' :
                 action.color === 'green' ? 'bg-green-50 hover:bg-green-100' :
                 action.color === 'purple' ? 'bg-purple-50 hover:bg-purple-100' :
@@ -62,7 +62,7 @@ export function QuickActionsWidget() {
         ))}
       </div>
 
-      <button className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
+      <button className="w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md transition-colors">
         <div className="flex items-center">
           <Settings className="h-4 w-4 text-gray-400 mr-2" />
           <span>Configure Quick Actions</span>
