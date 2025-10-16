@@ -84,7 +84,7 @@ export function VNFTable({
       sortable: true,
       sortKey: 'name',
       render: (vnf) => (
-        <div className="flex items-center min-w-0">
+        <div className="flex items-center">
           <div className="flex-shrink-0">
             <div className={`p-2 rounded-lg ${
               vnf.type === 'firewall' ? 'bg-red-100' :
@@ -96,9 +96,9 @@ export function VNFTable({
               {getTypeIcon(vnf.type)}
             </div>
           </div>
-          <div className="ml-3 min-w-0">
-            <div className="text-sm font-medium text-gray-900 truncate">{vnf.name}</div>
-            <div className="text-xs text-gray-500 truncate">{vnf.description}</div>
+          <div className="ml-3">
+            <div className="text-sm font-medium text-gray-900">{vnf.name}</div>
+            <div className="text-xs text-gray-500">{vnf.description}</div>
           </div>
         </div>
       )
@@ -120,7 +120,7 @@ export function VNFTable({
       sortKey: 'vendor',
       width: '120px',
       render: (vnf) => (
-        <div className="text-sm text-gray-900 truncate">{vnf.vendor}</div>
+        <div className="text-sm text-gray-900">{vnf.vendor}</div>
       )
     },
     {
@@ -142,7 +142,7 @@ export function VNFTable({
       sortKey: 'cloudRouterId',
       width: '140px',
       render: (vnf) => (
-        <span className="text-sm text-gray-900 truncate">{getCloudRouterName(vnf.cloudRouterId)}</span>
+        <span className="text-sm text-gray-900">{getCloudRouterName(vnf.cloudRouterId)}</span>
       )
     },
     {
