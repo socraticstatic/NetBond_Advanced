@@ -25,26 +25,22 @@ export function APIImportStep({ config, onChange, onNext }: APIImportStepProps) 
     {
       name: 'Network Monitoring API',
       description: 'Real-time network metrics and status updates',
-      endpoints: 8,
-      icon: '📊'
+      endpoints: 8
     },
     {
       name: 'Cloud Provider API',
       description: 'AWS, Azure, GCP integration endpoints',
-      endpoints: 12,
-      icon: '☁️'
+      endpoints: 12
     },
     {
       name: 'IoT Device Management',
       description: 'Manage and monitor IoT devices',
-      endpoints: 6,
-      icon: '🔌'
+      endpoints: 6
     },
     {
       name: 'Billing & Usage API',
       description: 'Track usage and billing information',
-      endpoints: 5,
-      icon: '💳'
+      endpoints: 5
     }
   ];
 
@@ -219,7 +215,6 @@ export function APIImportStep({ config, onChange, onNext }: APIImportStepProps) 
                   onClick={() => loadSampleAPI(api)}
                   className="text-left p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all"
                 >
-                  <div className="text-2xl mb-2">{api.icon}</div>
                   <div className="text-sm font-medium text-gray-900">{api.name}</div>
                   <div className="text-xs text-gray-500 mt-1">{api.description}</div>
                   <div className="text-xs text-blue-600 mt-2">{api.endpoints} endpoints</div>
