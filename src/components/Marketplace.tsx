@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
+import {
   Cloud, Network, Globe, Plus, Undo, Play, Check, Save, Trash2, Sparkles, Shield, Router, Database, Cpu, Workflow, Car, Home, Gamepad, Smartphone, Clock, FileText, Users,
-  Server, MessageSquare, Send, ArrowRight, X, Building, Zap, Star, Search, Filter
+  Server, MessageSquare, Send, ArrowRight, X, Building, Zap, Star, Search, Filter, Lock, Activity, BarChart3, Layers, Plug, Code, Wrench, ShieldCheck
 } from 'lucide-react';
 import { MarketplaceItem, MarketplaceFilter, MarketplaceCategory } from '../types/connection';
 import { Button } from './common/Button';
@@ -13,8 +13,9 @@ interface MarketplaceProps {
   onSelectItem: (item: MarketplaceItem) => void;
 }
 
-// Code snippet templates
+// Marketplace items organized by type
 const MARKETPLACE_ITEMS: MarketplaceItem[] = [
+  // Connections
   {
     id: 'internet-to-cloud',
     provider: 'Multi-Cloud',
@@ -164,6 +165,338 @@ const MARKETPLACE_ITEMS: MarketplaceItem[] = [
       latency: '<2ms',
       support: '24/7'
     }
+  },
+
+  // AT&T Add-ons & Services
+  {
+    id: 'dynamic-defense',
+    provider: 'AT&T',
+    name: 'Dynamic Defense',
+    description: 'Advanced DDoS protection and threat mitigation',
+    type: 'Security Add-on',
+    bandwidthOptions: ['Included'],
+    basePrice: 250,
+    features: [
+      'Real-time DDoS mitigation',
+      'Layer 3-7 protection',
+      'Threat intelligence',
+      'Traffic analysis',
+      'Automated response'
+    ],
+    icon: 'shield',
+    category: 'Security',
+    tags: ['Security', 'DDoS', 'Threat Protection', 'Add-on'],
+    rating: { score: 4.9, count: 312 },
+    popularity: 96,
+    sla: {
+      uptime: '99.99%',
+      latency: '<2ms',
+      support: '24/7'
+    },
+    addon: true
+  },
+  {
+    id: 'threat-defender',
+    provider: 'AT&T',
+    name: 'Threat Defender',
+    description: 'Comprehensive threat detection and response',
+    type: 'Security Add-on',
+    bandwidthOptions: ['Included'],
+    basePrice: 350,
+    features: [
+      'Advanced threat detection',
+      'Malware analysis',
+      'Behavioral analytics',
+      'Incident response',
+      'SOC integration'
+    ],
+    icon: 'shield',
+    category: 'Security',
+    tags: ['Security', 'Threat Detection', 'SOC', 'Add-on'],
+    rating: { score: 4.8, count: 278 },
+    popularity: 91,
+    sla: {
+      uptime: '99.99%',
+      latency: '<5ms',
+      support: '24/7'
+    },
+    addon: true
+  },
+  {
+    id: 'managed-firewall',
+    provider: 'AT&T',
+    name: 'Managed Firewall Service',
+    description: 'Enterprise-grade firewall management',
+    type: 'Security Add-on',
+    bandwidthOptions: ['Included'],
+    basePrice: 450,
+    features: [
+      'Next-gen firewall',
+      'Intrusion prevention',
+      'Application control',
+      'URL filtering',
+      '24/7 monitoring'
+    ],
+    icon: 'shield',
+    category: 'Security',
+    tags: ['Firewall', 'Security', 'Managed Service', 'Add-on'],
+    rating: { score: 4.7, count: 198 },
+    popularity: 87,
+    sla: {
+      uptime: '99.99%',
+      latency: '<3ms',
+      support: '24/7'
+    },
+    addon: true
+  },
+
+  // Virtual Network Functions (VNFs)
+  {
+    id: 'vnf-palo-alto',
+    provider: 'Palo Alto Networks',
+    name: 'VM-Series Firewall',
+    description: 'Next-generation firewall with ML-powered security',
+    type: 'VNF',
+    bandwidthOptions: ['1 Gbps', '5 Gbps', '10 Gbps'],
+    basePrice: 1500,
+    features: [
+      'Advanced threat prevention',
+      'URL filtering',
+      'Application control',
+      'SSL decryption',
+      'WildFire malware analysis'
+    ],
+    icon: 'shield',
+    category: 'VNF',
+    tags: ['VNF', 'Firewall', 'Security', 'Enterprise'],
+    rating: { score: 4.9, count: 445 },
+    popularity: 94,
+    sla: {
+      uptime: '99.99%',
+      latency: '<5ms',
+      support: '24/7'
+    },
+    vnf: true
+  },
+  {
+    id: 'vnf-cisco-sdwan',
+    provider: 'Cisco',
+    name: 'Viptela SD-WAN',
+    description: 'Software-defined WAN with intelligent path selection',
+    type: 'VNF',
+    bandwidthOptions: ['1 Gbps', '10 Gbps', '100 Gbps'],
+    basePrice: 2000,
+    features: [
+      'Multi-cloud connectivity',
+      'Application-aware routing',
+      'Zero-touch provisioning',
+      'Integrated security',
+      'Real-time analytics'
+    ],
+    icon: 'network',
+    category: 'VNF',
+    tags: ['VNF', 'SD-WAN', 'Routing', 'Multi-Cloud'],
+    rating: { score: 4.8, count: 389 },
+    popularity: 92,
+    sla: {
+      uptime: '99.99%',
+      latency: '<8ms',
+      support: '24/7'
+    },
+    vnf: true
+  },
+  {
+    id: 'vnf-fortinet',
+    provider: 'Fortinet',
+    name: 'FortiGate Virtual Firewall',
+    description: 'High-performance virtual security appliance',
+    type: 'VNF',
+    bandwidthOptions: ['2 Gbps', '10 Gbps', '20 Gbps'],
+    basePrice: 1200,
+    features: [
+      'IPS/IDS',
+      'Web filtering',
+      'Anti-malware',
+      'VPN gateway',
+      'Traffic shaping'
+    ],
+    icon: 'shield',
+    category: 'VNF',
+    tags: ['VNF', 'Firewall', 'IPS', 'Security'],
+    rating: { score: 4.7, count: 334 },
+    popularity: 88,
+    sla: {
+      uptime: '99.99%',
+      latency: '<6ms',
+      support: '24/7'
+    },
+    vnf: true
+  },
+  {
+    id: 'vnf-f5-load-balancer',
+    provider: 'F5 Networks',
+    name: 'BIG-IP Virtual Edition',
+    description: 'Advanced application delivery and load balancing',
+    type: 'VNF',
+    bandwidthOptions: ['5 Gbps', '10 Gbps', '25 Gbps'],
+    basePrice: 1800,
+    features: [
+      'Layer 4-7 load balancing',
+      'SSL offloading',
+      'Application security',
+      'Traffic management',
+      'Health monitoring'
+    ],
+    icon: 'network',
+    category: 'VNF',
+    tags: ['VNF', 'Load Balancer', 'ADC', 'Performance'],
+    rating: { score: 4.8, count: 267 },
+    popularity: 85,
+    sla: {
+      uptime: '99.99%',
+      latency: '<4ms',
+      support: '24/7'
+    },
+    vnf: true
+  },
+
+  // APIs & Integration
+  {
+    id: 'api-network-insights',
+    provider: 'AT&T',
+    name: 'Network Insights API',
+    description: 'Real-time network telemetry and analytics API',
+    type: 'API',
+    bandwidthOptions: ['N/A'],
+    basePrice: 500,
+    features: [
+      'REST API access',
+      'Real-time metrics',
+      'Historical data',
+      'Custom dashboards',
+      'Webhook notifications'
+    ],
+    icon: 'code',
+    category: 'API',
+    tags: ['API', 'Analytics', 'Monitoring', 'Integration'],
+    rating: { score: 4.6, count: 156 },
+    popularity: 79,
+    sla: {
+      uptime: '99.9%',
+      latency: '<50ms',
+      support: 'Business Hours'
+    },
+    api: true
+  },
+  {
+    id: 'api-provisioning',
+    provider: 'AT&T',
+    name: 'Network Provisioning API',
+    description: 'Automate network configuration and deployment',
+    type: 'API',
+    bandwidthOptions: ['N/A'],
+    basePrice: 750,
+    features: [
+      'Automated provisioning',
+      'Configuration management',
+      'Change tracking',
+      'Rollback capability',
+      'Audit logs'
+    ],
+    icon: 'code',
+    category: 'API',
+    tags: ['API', 'Automation', 'DevOps', 'Provisioning'],
+    rating: { score: 4.7, count: 203 },
+    popularity: 82,
+    sla: {
+      uptime: '99.9%',
+      latency: '<100ms',
+      support: 'Business Hours'
+    },
+    api: true
+  },
+  {
+    id: 'api-billing',
+    provider: 'AT&T',
+    name: 'Billing & Usage API',
+    description: 'Access billing data and usage reports',
+    type: 'API',
+    bandwidthOptions: ['N/A'],
+    basePrice: 300,
+    features: [
+      'Usage reports',
+      'Cost allocation',
+      'Invoice details',
+      'Budget alerts',
+      'Export capabilities'
+    ],
+    icon: 'code',
+    category: 'API',
+    tags: ['API', 'Billing', 'Reports', 'Finance'],
+    rating: { score: 4.5, count: 128 },
+    popularity: 74,
+    sla: {
+      uptime: '99.9%',
+      latency: '<100ms',
+      support: 'Business Hours'
+    },
+    api: true
+  },
+
+  // Managed Services
+  {
+    id: 'managed-sase',
+    provider: 'AT&T',
+    name: 'Managed SASE',
+    description: 'Secure Access Service Edge as a managed service',
+    type: 'Managed Service',
+    bandwidthOptions: ['Customized'],
+    basePrice: 3500,
+    features: [
+      'Cloud-native security',
+      'Zero Trust Network Access',
+      'Secure Web Gateway',
+      'Cloud Access Security Broker',
+      '24/7 management'
+    ],
+    icon: 'shield',
+    category: 'Managed Service',
+    tags: ['SASE', 'Security', 'Zero Trust', 'Managed'],
+    rating: { score: 4.8, count: 234 },
+    popularity: 89,
+    sla: {
+      uptime: '99.99%',
+      latency: '<10ms',
+      support: '24/7'
+    },
+    addon: true
+  },
+  {
+    id: 'network-monitoring',
+    provider: 'AT&T',
+    name: 'Advanced Network Monitoring',
+    description: 'Comprehensive network visibility and alerting',
+    type: 'Monitoring Add-on',
+    bandwidthOptions: ['Included'],
+    basePrice: 400,
+    features: [
+      'Real-time monitoring',
+      'Performance analytics',
+      'Alerting & notifications',
+      'Custom reports',
+      'Historical trends'
+    ],
+    icon: 'activity',
+    category: 'Monitoring',
+    tags: ['Monitoring', 'Analytics', 'Alerts', 'Add-on'],
+    rating: { score: 4.6, count: 189 },
+    popularity: 83,
+    sla: {
+      uptime: '99.9%',
+      latency: '<10ms',
+      support: '24/7'
+    },
+    addon: true
   }
 ];
 
@@ -179,6 +512,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
   });
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<'popular' | 'rating' | 'price'>('popular');
+  const [activeTab, setActiveTab] = useState<'all' | 'connections' | 'addons' | 'vnf' | 'api' | 'managed'>('all');
 
   const getIcon = (iconType: string) => {
     switch (iconType) {
@@ -190,9 +524,53 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
         return <Network className="h-6 w-6 text-blue-600" />;
       case 'shield':
         return <Shield className="h-6 w-6 text-blue-600" />;
+      case 'code':
+        return <Code className="h-6 w-6 text-blue-600" />;
+      case 'activity':
+        return <Activity className="h-6 w-6 text-blue-600" />;
       default:
         return <Database className="h-6 w-6 text-blue-600" />;
     }
+  };
+
+  // Filter items based on active tab
+  const getFilteredItems = () => {
+    let items = MARKETPLACE_ITEMS;
+
+    // Filter by tab
+    if (activeTab !== 'all') {
+      if (activeTab === 'connections') {
+        items = items.filter(item => !item.addon && !item.vnf && !item.api);
+      } else if (activeTab === 'addons') {
+        items = items.filter(item => item.addon);
+      } else if (activeTab === 'vnf') {
+        items = items.filter(item => item.vnf);
+      } else if (activeTab === 'api') {
+        items = items.filter(item => item.api);
+      } else if (activeTab === 'managed') {
+        items = items.filter(item => item.type.includes('Managed'));
+      }
+    }
+
+    // Filter by search
+    if (searchQuery) {
+      items = items.filter(item =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+    }
+
+    // Sort items
+    if (sortBy === 'popular') {
+      items = [...items].sort((a, b) => b.popularity - a.popularity);
+    } else if (sortBy === 'rating') {
+      items = [...items].sort((a, b) => b.rating.score - a.rating.score);
+    } else if (sortBy === 'price') {
+      items = [...items].sort((a, b) => a.basePrice - b.basePrice);
+    }
+
+    return items;
   };
 
   const handleSelectItem = (item: MarketplaceItem) => {
@@ -288,6 +666,87 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
       </div>
 
       <div className="flex-1 space-y-6 relative">
+        {/* Tabs */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1">
+          <div className="flex space-x-1">
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+                activeTab === 'all'
+                  ? 'bg-[#003184] text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              All Services
+            </button>
+            <button
+              onClick={() => setActiveTab('connections')}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+                activeTab === 'connections'
+                  ? 'bg-[#003184] text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center justify-center">
+                <Network className="h-4 w-4 mr-1.5" />
+                Connections
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('addons')}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+                activeTab === 'addons'
+                  ? 'bg-[#003184] text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center justify-center">
+                <Plug className="h-4 w-4 mr-1.5" />
+                Add-ons
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('vnf')}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+                activeTab === 'vnf'
+                  ? 'bg-[#003184] text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center justify-center">
+                <Layers className="h-4 w-4 mr-1.5" />
+                VNFs
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('api')}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+                activeTab === 'api'
+                  ? 'bg-[#003184] text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center justify-center">
+                <Code className="h-4 w-4 mr-1.5" />
+                APIs
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('managed')}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+                activeTab === 'managed'
+                  ? 'bg-[#003184] text-white'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center justify-center">
+                <Wrench className="h-4 w-4 mr-1.5" />
+                Managed
+              </div>
+            </button>
+          </div>
+        </div>
+
         {/* Search and Filters */}
         <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center justify-between gap-4">
@@ -295,7 +754,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <input
                 type="text"
-                placeholder="Search connections..."
+                placeholder="Search marketplace..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -324,7 +783,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
 
         {/* Connection Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {MARKETPLACE_ITEMS.map((item, index) => (
+          {getFilteredItems().map((item, index) => (
             <div
               key={item.id}
               className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative"
@@ -349,26 +808,44 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               )}
               
               <div className="p-4 border-b border-gray-100">
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <div className="p-2 bg-gray-50 rounded-lg">
                     {getIcon(item.icon)}
                   </div>
-                  <div className="flex items-center">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`h-4 w-4 ${
-                          star <= item.rating.score ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
-                    <span className="ml-2 text-sm text-gray-500">
-                      ({item.rating.count})
-                    </span>
+                  <div className="flex items-center gap-2">
+                    {item.addon && (
+                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700">
+                        Add-on
+                      </span>
+                    )}
+                    {item.vnf && (
+                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                        VNF
+                      </span>
+                    )}
+                    {item.api && (
+                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
+                        API
+                      </span>
+                    )}
                   </div>
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">{item.name}</h3>
-                <p className="text-sm text-gray-500">{item.description}</p>
+                <p className="text-xs text-gray-500 mb-2">{item.provider}</p>
+                <p className="text-sm text-gray-600">{item.description}</p>
+                <div className="flex items-center mt-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`h-3.5 w-3.5 ${
+                        star <= item.rating.score ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                      }`}
+                    />
+                  ))}
+                  <span className="ml-2 text-xs text-gray-500">
+                    {item.rating.score} ({item.rating.count})
+                  </span>
+                </div>
               </div>
 
               <div className="p-4 flex-1">
@@ -418,24 +895,27 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               </div>
 
               <div className="p-4 mt-auto border-t border-gray-100">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-left">
+                    <div className="text-xs text-gray-500">Starting at</div>
+                    <div className="text-lg font-bold text-gray-900">
+                      ${item.basePrice}
+                      <span className="text-sm font-normal text-gray-500">/mo</span>
+                    </div>
+                  </div>
+                  {item.popularity >= 90 && (
+                    <div className="flex items-center text-xs text-emerald-600 font-medium">
+                      <Zap className="h-3.5 w-3.5 mr-1" />
+                      Popular
+                    </div>
+                  )}
+                </div>
                 <button
-                  onClick={() => item.id === 'internet-to-cloud' && handleSelectItem(item)}
-                  disabled={item.id !== 'internet-to-cloud'}
-                  className={`
-                    w-full inline-flex items-center justify-center px-6 py-3 rounded-lg
-                    font-medium transition-all duration-200 text-sm
-                    ${item.id !== 'internet-to-cloud'
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : `
-                        bg-[#003184] text-white
-                        hover:bg-[#002255]
-                        focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2
-                        active:bg-[#002255] active:transform active:scale-[0.98]
-                      `
-                    }
-                  `}
+                  onClick={() => handleSelectItem(item)}
+                  className="w-full inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-all duration-200 text-sm bg-[#003184] text-white hover:bg-[#002255] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 active:bg-[#002255] active:transform active:scale-[0.98]"
                 >
-                  {item.id === 'internet-to-cloud' ? 'Select Plan' : 'Coming Soon'}
+                  {item.addon || item.vnf || item.api ? 'Add to Connection' : 'Select Plan'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </button>
               </div>
             </div>
