@@ -169,11 +169,11 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:ml-8 lg:flex lg:space-x-8">
+            <div className="hidden lg:ml-8 lg:flex lg:space-x-8 lg:items-center">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.href;
-                
+
                 return (
                   <Link
                     key={item.href}
@@ -181,7 +181,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
                     onMouseEnter={() => setHoveredItem(item.href)}
                     onMouseLeave={() => setHoveredItem(null)}
                     className={`
-                      group relative inline-flex items-center px-1 pt-1 pb-2 border-b-2 text-sm font-medium no-rounded
+                      group relative inline-flex items-center px-1 border-b-2 text-sm font-medium no-rounded
                       transition-all duration-200
                       ${isActive
                         ? 'border-brand-blue text-brand-blue'
