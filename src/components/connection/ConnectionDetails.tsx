@@ -19,7 +19,7 @@ import { useEditableField } from '../../hooks/useEditableField';
 export function ConnectionDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const connection = useStore(state => state.connections.find(c => c.id.toString() === id));
+  const connection = useStore(state => state.connections.find(c => c.id === id));
   const updateConnection = useStore(state => state.updateConnection);
   const removeConnection = useStore(state => state.removeConnection);
   const [activeTab, setActiveTab] = useState<ConnectionTabType>('overview');
