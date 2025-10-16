@@ -181,7 +181,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
                     onMouseEnter={() => setHoveredItem(item.href)}
                     onMouseLeave={() => setHoveredItem(null)}
                     className={`
-                      group relative inline-flex items-center px-1 border-b-2 text-sm font-medium no-rounded
+                      group relative inline-flex items-center px-1 pb-1 border-b-2 text-sm font-medium no-rounded
                       transition-all duration-200
                       ${isActive
                         ? 'border-brand-blue text-brand-blue'
