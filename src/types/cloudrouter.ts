@@ -6,6 +6,10 @@ export interface CloudRouter {
   description: string;
   status: 'active' | 'inactive' | 'provisioning' | 'error';
   location: string;
+  locations?: string[];
+  vendor?: string;
+  vendors?: string[];
+  pool?: string;
   createdAt: string;
   updatedAt?: string;
   connectionId: string;
