@@ -287,9 +287,8 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
             />
 
             {/* Additional Info */}
-            <ConnectionCardMetrics 
-              bandwidth={connection.bandwidth}
-              location={connection.location}
+            <ConnectionCardMetrics
+              connection={connection}
               billingInfo={billingInfo}
               performance={connection.performance}
             />

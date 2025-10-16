@@ -13,6 +13,11 @@ export interface Connection {
   bandwidth: string;
   location: string;
   provider?: CloudProvider;
+  providers?: CloudProvider[];
+  locations?: string[];
+  datacenters?: string[];
+  cloudRouterCount?: number;
+  linkCount?: number;
   createdAt?: string;
   performance?: {
     latency: string;
