@@ -333,18 +333,16 @@ export function LinkSection({
       <LinkStatusSummary links={links} />
       
       {/* Links Table */}
-      <div className="overflow-x-auto">
-        <LinkTable 
-          links={filteredLinks}
-          sortField={sortField}
-          sortDirection={sortDirection}
-          onSort={handleSort}
-          onEdit={handleEditLink}
-          onDelete={handleDeleteLink}
-          searchQuery={searchQuery}
-          showCloudRouter={true}
-        />
-      </div>
+      <LinkTable
+        links={filteredLinks}
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onSort={handleSort}
+        onEdit={handleEditLink}
+        onDelete={handleDeleteLink}
+        searchQuery={searchQuery}
+        showCloudRouter={true}
+      />
 
       {/* Modals */}
       <VLANModal
