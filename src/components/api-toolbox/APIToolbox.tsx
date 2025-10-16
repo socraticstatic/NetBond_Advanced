@@ -141,24 +141,21 @@ export function APIToolbox() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-                <Code className="h-8 w-8 mr-3 text-blue-600" />
-                API Toolbox
-              </h1>
-              <p className="mt-2 text-lg text-gray-600">
-                Connect external APIs and enhance your network with dynamic data integrations
-              </p>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button
-                variant="outline"
-                onClick={() => navigate('/create')}
-              >
-                Cancel
-              </Button>
-            </div>
+          <div className="flex items-center justify-center space-x-4 mb-4">
+            <button
+              onClick={() => navigate('/create')}
+              className="text-brand-blue hover:text-brand-darkBlue flex items-center text-sm font-medium"
+            >
+              Change Creation Mode
+            </button>
+          </div>
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900">
+              API Toolbox
+            </h1>
+            <p className="mt-2 text-lg text-gray-600">
+              Connect external APIs and enhance your network with dynamic data integrations
+            </p>
           </div>
         </div>
 
