@@ -48,7 +48,8 @@ export function BaseTable<T>({
       )}
 
       {/* Table */}
-      <div className="min-w-full divide-y divide-gray-200">
+      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div className="min-w-full divide-y divide-gray-200">
         <div className="bg-gray-50">
           <div className="min-w-full table">
             <div className="table-header-group">
@@ -149,6 +150,7 @@ export function BaseTable<T>({
               )}
             </div>
           </div>
+        </div>
         </div>
       </div>
     </>
