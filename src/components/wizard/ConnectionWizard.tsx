@@ -194,7 +194,11 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
     }
   };
 
-  const handleModeChange = (newMode: WizardMode) => {
+  const handleModeChange = (newMode: WizardMode | 'api') => {
+    if (newMode === 'api') {
+      navigate('/api-toolbox');
+      return;
+    }
     setMode(newMode);
     setStep(0);
     setConfig({});

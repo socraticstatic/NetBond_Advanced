@@ -16,9 +16,15 @@ import { LoadingSpinner } from './components/common/LoadingSpinner';
 import { AsyncBoundary } from './components/common/AsyncBoundary';
 
 // Optimized lazy loading with better error handling
-const LazyConnectionWizard = lazy(() => 
-  import('./components/wizard/ConnectionWizard').then(module => ({ 
-    default: module.ConnectionWizard 
+const LazyConnectionWizard = lazy(() =>
+  import('./components/wizard/ConnectionWizard').then(module => ({
+    default: module.ConnectionWizard
+  }))
+);
+
+const LazyAPIToolbox = lazy(() =>
+  import('./components/api-toolbox/APIToolbox').then(module => ({
+    default: module.APIToolbox
   }))
 );
 
@@ -152,7 +158,7 @@ function App() {
                               const connectionName = typeof config === 'object' && config !== null
                                 ? (config as any).name || 'New Connection'
                                 : 'New Connection';
-                              
+
                               window.addToast?.({
                                 type: 'success',
                                 title: 'Connection Created',
@@ -169,6 +175,14 @@ function App() {
                         />
                       </Suspense>
                     </SubNav>
+                  </AsyncBoundary>
+                } />
+
+                <Route path="/api-toolbox" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyAPIToolbox />
+                    </Suspense>
                   </AsyncBoundary>
                 } />
                 

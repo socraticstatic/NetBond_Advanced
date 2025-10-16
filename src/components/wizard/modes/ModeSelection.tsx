@@ -28,10 +28,11 @@ export function ModeSelection({ onModeSelect, onCancel }: ModeSelectionProps) {
     {
       id: 'api',
       name: 'API Toolbox',
-      description: 'Create your connection using JSON and API endpoints',
+      description: 'Connect external APIs and enhance your network with dynamic data',
       icon: Code,
       color: 'green',
-      disabled: true
+      badge: 'New',
+      disabled: false
     }
   ];
 
