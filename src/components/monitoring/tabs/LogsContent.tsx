@@ -137,8 +137,8 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-      <div className="p-4 border-b border-gray-200 flex flex-wrap gap-4 items-center">
-        <div className="flex-1 relative">
+      <div className="p-4 border-b border-gray-200 flex flex-wrap gap-4 items-center min-w-[1000px]">
+        <div className="flex-1 relative min-w-[300px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
           <input
             type="text"
@@ -186,7 +186,8 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
       
       {/* Filters Panel */}
       {showFilters && (
-        <div className="p-4 bg-gray-50 border-b border-gray-200">
+        <div className="p-4 bg-gray-50 border-b border-gray-200 overflow-x-auto">
+          <div className="min-w-[1000px]">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
               <h3 className="text-sm font-medium text-gray-700 mb-2">Log Types</h3>
@@ -273,12 +274,14 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
               </div>
             </div>
           </div>
+          </div>
         </div>
       )}
       
       {/* Active Filters */}
       {(selectedTypes.length > 0 || selectedSeverities.length > 0 || searchQuery) && (
-        <div className="p-3 border-b border-gray-200 bg-gray-50 flex flex-wrap gap-2">
+        <div className="p-3 border-b border-gray-200 bg-gray-50 overflow-x-auto">
+          <div className="flex flex-wrap gap-2 min-w-[1000px]">
           {selectedTypes.map(type => (
             <span
               key={type}
@@ -332,12 +335,13 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
           >
             Clear all
           </button>
+          </div>
         </div>
       )}
 
       {/* Logs Table */}
       <div className="overflow-x-auto">
-        <table className="w-full divide-y divide-gray-200">
+        <table className="w-full divide-y divide-gray-200 min-w-[1000px]">
           <thead className="bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
