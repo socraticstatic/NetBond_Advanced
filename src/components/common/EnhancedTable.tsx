@@ -112,15 +112,15 @@ function EnhancedTableComponent<T>({
 
   return (
     <div className="flex flex-col">
-      <div className="w-full overflow-x-auto overflow-hidden">
-        <table className="w-full divide-y divide-gray-200">
+      <div className="w-full overflow-hidden">
+        <table className="w-full table-fixed divide-y divide-gray-200">
           <thead className={`bg-gray-50 ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.id}
                   scope="col"
-                  className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
+                  className={`px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
                     column.sortable ? 'cursor-pointer select-none hover:bg-gray-100' : ''
                   }`}
                   onClick={() => handleSort(column)}
@@ -158,7 +158,7 @@ function EnhancedTableComponent<T>({
               <tr>
                 <td
                   colSpan={columns.length + (rowActions ? 1 : 0)}
-                  className="px-6 py-12 text-center text-gray-500"
+                  className="px-3 py-8 text-center text-gray-500"
                 >
                   {emptyMessage}
                 </td>
@@ -171,12 +171,12 @@ function EnhancedTableComponent<T>({
                   onClick={() => onRowClick?.(item)}
                 >
                   {columns.map((column) => (
-                    <td key={column.id} className="px-6 py-4">
+                    <td key={column.id} className="px-3 py-2 truncate">
                       {column.render(item)}
                     </td>
                   ))}
                   {rowActions && (
-                    <td className="px-6 py-4 text-right text-sm font-medium">
+                    <td className="px-3 py-2 text-right text-sm font-medium w-16">
                       {rowActions(item)}
                     </td>
                   )}

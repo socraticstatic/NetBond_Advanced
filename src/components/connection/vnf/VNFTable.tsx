@@ -108,9 +108,9 @@ export function VNFTable({
       label: 'Type',
       sortable: true,
       sortKey: 'type',
-      width: '120px',
+      width: '12%',
       render: (vnf) => (
-        <span className="text-sm text-gray-900">{getTypeName(vnf.type)}</span>
+        <span className="text-sm text-gray-900 truncate block">{getTypeName(vnf.type)}</span>
       )
     },
     {
@@ -118,9 +118,9 @@ export function VNFTable({
       label: 'Vendor',
       sortable: true,
       sortKey: 'vendor',
-      width: '120px',
+      width: '12%',
       render: (vnf) => (
-        <div className="text-sm text-gray-900">{vnf.vendor}</div>
+        <div className="text-sm text-gray-900 truncate">{vnf.vendor}</div>
       )
     },
     {
@@ -128,7 +128,7 @@ export function VNFTable({
       label: 'Status',
       sortable: true,
       sortKey: 'status',
-      width: '100px',
+      width: '10%',
       render: (vnf) => (
         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(vnf.status)}`}>
           {vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)}
@@ -140,9 +140,9 @@ export function VNFTable({
       label: 'Cloud Router',
       sortable: true,
       sortKey: 'cloudRouterId',
-      width: '140px',
+      width: '15%',
       render: (vnf) => (
-        <span className="text-sm text-gray-900">{getCloudRouterName(vnf.cloudRouterId)}</span>
+        <span className="text-sm text-gray-900 truncate block">{getCloudRouterName(vnf.cloudRouterId)}</span>
       )
     },
     {
@@ -150,9 +150,9 @@ export function VNFTable({
       label: 'Throughput',
       sortable: true,
       sortKey: 'throughput',
-      width: '100px',
+      width: '11%',
       render: (vnf) => (
-        <span className="text-sm text-gray-500">{vnf.throughput || 'N/A'}</span>
+        <span className="text-sm text-gray-500 truncate block">{vnf.throughput || 'N/A'}</span>
       )
     },
     {
@@ -160,7 +160,7 @@ export function VNFTable({
       label: 'License',
       sortable: true,
       sortKey: 'licenseExpiry',
-      width: '100px',
+      width: '10%',
       render: (vnf) => (
         <span className="text-sm text-gray-500">
           {vnf.licenseExpiry ? new Date(vnf.licenseExpiry).toLocaleDateString() : 'N/A'}

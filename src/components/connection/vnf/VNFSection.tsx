@@ -217,14 +217,12 @@ export function VNFSection({
       <div className="p-6">
         {filteredVNFs.length > 0 ? (
           viewMode === 'table' ? (
-            <div className="overflow-x-auto">
-              <VNFTable 
-                vnfs={filteredVNFs} 
-                cloudRouters={cloudRouters}
-                onEdit={onEdit} 
-                onDelete={onDelete}
-              />
-            </div>
+            <VNFTable
+              vnfs={filteredVNFs}
+              cloudRouters={cloudRouters}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredVNFs.map(vnf => (
