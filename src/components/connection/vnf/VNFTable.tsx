@@ -84,7 +84,7 @@ export function VNFTable({
       sortable: true,
       sortKey: 'name',
       render: (vnf) => (
-        <div className="flex items-center">
+        <div className="flex items-center min-w-0">
           <div className="flex-shrink-0">
             <div className={`p-2 rounded-lg ${
               vnf.type === 'firewall' ? 'bg-red-100' :
@@ -96,9 +96,9 @@ export function VNFTable({
               {getTypeIcon(vnf.type)}
             </div>
           </div>
-          <div className="ml-4">
-            <div className="text-sm font-medium text-gray-900">{vnf.name}</div>
-            <div className="text-sm text-gray-500">{vnf.description}</div>
+          <div className="ml-3 min-w-0">
+            <div className="text-sm font-medium text-gray-900 truncate">{vnf.name}</div>
+            <div className="text-xs text-gray-500 truncate">{vnf.description}</div>
           </div>
         </div>
       )
@@ -108,25 +108,19 @@ export function VNFTable({
       label: 'Type',
       sortable: true,
       sortKey: 'type',
-      width: '150px',
+      width: '120px',
       render: (vnf) => (
-        <div className="flex items-center">
-          {getTypeIcon(vnf.type)}
-          <span className="ml-2 text-sm text-gray-900">{getTypeName(vnf.type)}</span>
-        </div>
+        <span className="text-sm text-gray-900">{getTypeName(vnf.type)}</span>
       )
     },
     {
       id: 'vendor',
-      label: 'Vendor/Model',
+      label: 'Vendor',
       sortable: true,
       sortKey: 'vendor',
-      width: '180px',
+      width: '120px',
       render: (vnf) => (
-        <div>
-          <div className="text-sm text-gray-900">{vnf.vendor}</div>
-          <div className="text-xs text-gray-500">{vnf.model} {vnf.version && `v${vnf.version}`}</div>
-        </div>
+        <div className="text-sm text-gray-900 truncate">{vnf.vendor}</div>
       )
     },
     {
@@ -134,7 +128,7 @@ export function VNFTable({
       label: 'Status',
       sortable: true,
       sortKey: 'status',
-      width: '120px',
+      width: '100px',
       render: (vnf) => (
         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(vnf.status)}`}>
           {vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)}
@@ -146,12 +140,9 @@ export function VNFTable({
       label: 'Cloud Router',
       sortable: true,
       sortKey: 'cloudRouterId',
-      width: '160px',
+      width: '140px',
       render: (vnf) => (
-        <div className="flex items-center">
-          <RouterIcon className="h-4 w-4 text-gray-400 mr-2" />
-          <span className="text-sm text-gray-900">{getCloudRouterName(vnf.cloudRouterId)}</span>
-        </div>
+        <span className="text-sm text-gray-900 truncate">{getCloudRouterName(vnf.cloudRouterId)}</span>
       )
     },
     {
@@ -159,17 +150,17 @@ export function VNFTable({
       label: 'Throughput',
       sortable: true,
       sortKey: 'throughput',
-      width: '120px',
+      width: '100px',
       render: (vnf) => (
         <span className="text-sm text-gray-500">{vnf.throughput || 'N/A'}</span>
       )
     },
     {
       id: 'licenseExpiry',
-      label: 'License Expiry',
+      label: 'License',
       sortable: true,
       sortKey: 'licenseExpiry',
-      width: '130px',
+      width: '100px',
       render: (vnf) => (
         <span className="text-sm text-gray-500">
           {vnf.licenseExpiry ? new Date(vnf.licenseExpiry).toLocaleDateString() : 'N/A'}
