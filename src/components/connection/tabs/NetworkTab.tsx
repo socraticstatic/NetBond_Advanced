@@ -719,11 +719,11 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
           />
 
           {/* Table Content */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             {/* Cloud Routers Table */}
             {activeTableSection === 'cloudrouters' && (
-              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <>
+                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center">
                     <Router className="h-5 w-5 text-brand-blue mr-2" />
                     <h3 className="text-lg font-medium text-gray-900">Cloud Routers</h3>
@@ -744,13 +744,13 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
                   onDelete={handleDeleteCloudRouter}
                   connectionBandwidth={connection.bandwidth}
                 />
-              </div>
+              </>
             )}
 
             {/* Links/VLANs Table */}
             {activeTableSection === 'links' && (
-              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <>
+                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center">
                     <Network className="h-5 w-5 text-brand-blue mr-2" />
                     <h3 className="text-lg font-medium text-gray-900">Links (VLANs)</h3>
@@ -784,13 +784,13 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
                   searchQuery=""
                   showCloudRouter={true}
                 />
-              </div>
+              </>
             )}
 
             {/* VNFs Table */}
             {activeTableSection === 'vnfs' && (
-              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <>
+                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center">
                     <Shield className="h-5 w-5 text-brand-blue mr-2" />
                     <h3 className="text-lg font-medium text-gray-900">VNF Functions</h3>
@@ -815,7 +815,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
                   onEdit={handleEditVNF}
                   onDelete={handleDeleteVNF}
                 />
-              </div>
+              </>
             )}
           </div>
         </div>
