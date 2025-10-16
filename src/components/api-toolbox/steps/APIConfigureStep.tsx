@@ -97,10 +97,10 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
             <button
               key={type.value}
               onClick={() => onChange({ ...config, authType: type.value as any })}
-              className={`p-4 border-2 rounded-lg text-left transition-all ${
+              className={`p-4 border text-left transition-all ${
                 config.authType === type.value
-                  ? 'border-blue-600 bg-blue-50'
-                  : 'border-gray-200 hover:border-blue-300'
+                  ? 'border-gray-900 bg-white shadow-sm'
+                  : 'border-gray-200 bg-white hover:border-gray-400'
               }`}
             >
               <div className="text-2xl mb-2">{type.icon}</div>
