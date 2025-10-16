@@ -164,9 +164,9 @@ export function EnhancedMetricsTab() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Real-Time Network Metrics</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Near Real-Time Network Metrics</h2>
           <p className="text-sm text-gray-600 mt-1">
-            Live monitoring with 2-second refresh intervals
+            Monitoring updates every 2 seconds
           </p>
         </div>
         <div className="flex items-center space-x-2">
