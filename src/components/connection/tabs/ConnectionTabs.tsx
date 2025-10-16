@@ -1,4 +1,5 @@
-import { 
+import { ReactNode } from 'react';
+import {
   Activity, Shield, History, Terminal, Settings,
   Network, Router, BarChart2, Users, DollarSign, Code
 } from 'lucide-react';
