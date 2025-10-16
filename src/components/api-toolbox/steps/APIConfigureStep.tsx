@@ -14,11 +14,11 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
   const [connectionStatus, setConnectionStatus] = useState<'success' | 'error' | null>(null);
 
   const authTypes = [
-    { value: 'none', label: 'No Authentication', icon: '🌐', description: 'Public API with no auth' },
-    { value: 'apiKey', label: 'API Key', icon: '🔑', description: 'Header or query parameter' },
-    { value: 'bearer', label: 'Bearer Token', icon: '🎫', description: 'OAuth 2.0 token' },
-    { value: 'oauth2', label: 'OAuth 2.0', icon: '🔐', description: 'Full OAuth flow' },
-    { value: 'basic', label: 'Basic Auth', icon: '👤', description: 'Username and password' }
+    { value: 'none', label: 'No Authentication', description: 'Public API with no auth' },
+    { value: 'apiKey', label: 'API Key', description: 'Header or query parameter' },
+    { value: 'bearer', label: 'Bearer Token', description: 'OAuth 2.0 token' },
+    { value: 'oauth2', label: 'OAuth 2.0', description: 'Full OAuth flow' },
+    { value: 'basic', label: 'Basic Auth', description: 'Username and password' }
   ];
 
   const testConnection = () => {
@@ -103,7 +103,6 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
                   : 'border-gray-200 bg-white hover:border-gray-400'
               }`}
             >
-              <div className="text-2xl mb-2">{type.icon}</div>
               <div className="text-sm font-medium text-gray-900">{type.label}</div>
               <div className="text-xs text-gray-500 mt-1">{type.description}</div>
             </button>
