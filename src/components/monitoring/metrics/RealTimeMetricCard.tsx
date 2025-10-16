@@ -171,7 +171,9 @@ export function RealTimeMetricCard({
         {/* Value */}
         <div className="mb-3">
           <div className="flex items-baseline space-x-2">
-            <span className="text-3xl font-bold text-gray-900">{value}</span>
+            <span className="text-3xl font-bold text-gray-900">
+              {typeof value === 'number' ? value.toFixed(5).replace(/\.?0+$/, '') : value}
+            </span>
             {unit && <span className="text-sm font-medium text-gray-600">{unit}</span>}
           </div>
         </div>
@@ -181,11 +183,11 @@ export function RealTimeMetricCard({
           {trend && (
             <div className={`flex items-center space-x-1 text-xs font-medium ${getTrendColor()}`}>
               {getTrendIcon()}
-              <span>{trend.percentage}%</span>
+              <span>{trend.percentage.toFixed(2)}%</span>
               <span className="text-gray-500">vs {trend.timeframe}</span>
             </div>
           )}
-          <div className={`px-2 py-1 rounded-full text-xs font-semibold ${styles.badge}`}>
+          <div className={`px-2 py-1 text-xs font-semibold ${styles.badge}`}>
             {status === 'healthy' && <CheckCircle className="inline h-3 w-3 mr-1 -mt-0.5" />}
             {status === 'warning' && <AlertTriangle className="inline h-3 w-3 mr-1 -mt-0.5" />}
             {status === 'critical' && <AlertTriangle className="inline h-3 w-3 mr-1 -mt-0.5" />}
