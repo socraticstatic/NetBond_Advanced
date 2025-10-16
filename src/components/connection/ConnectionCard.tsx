@@ -279,14 +279,8 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
             connection={connection}
           />
 
-          <div className="p-4 space-y-4">
-            {/* Bandwidth Progress Bar */}
-            <ConnectionCardProgress 
-              performance={connection.performance}
-              bandwidth={connection.bandwidth}
-            />
-
-            {/* Additional Info */}
+          <div className="p-4">
+            {/* Connection Metrics */}
             <ConnectionCardMetrics
               connection={connection}
               billingInfo={billingInfo}

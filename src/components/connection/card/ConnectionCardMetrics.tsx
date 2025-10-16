@@ -1,4 +1,4 @@
-import { Activity, Router, Network, Building2, MapPin, Cloud } from 'lucide-react';
+import { Router, Globe, TrendingUp, DollarSign } from 'lucide-react';
 import { Connection } from '../../../types';
 
 interface ConnectionCardMetricsProps {
@@ -26,15 +26,20 @@ export function ConnectionCardMetrics({
   const datacenters = connection.datacenters || [];
   const cloudRouterCount = connection.cloudRouterCount || 0;
   const linkCount = connection.linkCount || 0;
+  const bandwidthUtil = performance?.bandwidthUtilization || 0;
 
-  const getLocationDisplay = () => {
-    if (locations.length === 0) return 'No locations';
-    if (locations.length === 1) return locations[0];
-    if (locations.length === 2) return locations.join(', ');
-    return `${locations[0]}, ${locations[1]}, +${locations.length - 2}`;
+  const getNetworkSummary = () => {
+    const parts = [];
+    if (cloudRouterCount > 0) {
+      parts.push(`${cloudRouterCount} Router${cloudRouterCount !== 1 ? 's' : ''}`);
+    }
+    if (linkCount > 0) {
+      parts.push(`${linkCount} Link${linkCount !== 1 ? 's' : ''}`);
+    }
+    return parts.length > 0 ? parts.join(' • ') : 'Not configured';
   };
 
-  const getInfrastructureSummary = () => {
+  const getGeographicSummary = () => {
     const parts = [];
 
     if (providers.length > 1) {
@@ -43,69 +48,109 @@ export function ConnectionCardMetrics({
       parts.push(providers[0]);
     }
 
-    if (cloudRouterCount > 0) {
-      parts.push(`${cloudRouterCount} Router${cloudRouterCount !== 1 ? 's' : ''}`);
-    }
-
-    if (linkCount > 0) {
-      parts.push(`${linkCount} Link${linkCount !== 1 ? 's' : ''}`);
+    if (locations.length > 1) {
+      parts.push(`${locations.length} Cities`);
+    } else if (locations.length === 1) {
+      parts.push(locations[0]);
     }
 
     if (datacenters.length > 0) {
-      if (datacenters.length === 1) {
-        parts.push(datacenters[0]);
-      } else {
-        parts.push(`${datacenters.length} Datacenters`);
-      }
+      parts.push(`${datacenters.length} DC${datacenters.length !== 1 ? 's' : ''}`);
     }
 
-    return parts;
+    return parts.length > 0 ? parts.join(' • ') : 'Not configured';
   };
 
-  const infrastructureParts = getInfrastructureSummary();
-  const fullInfraText = infrastructureParts.join(' • ');
-  const displayInfraText = infrastructureParts.length > 2
-    ? `${infrastructureParts.slice(0, 2).join(', ')}...`
-    : infrastructureParts.join(', ');
+  const getUtilizationColor = () => {
+    if (bandwidthUtil > 90) return 'text-red-600';
+    if (bandwidthUtil > 80) return 'text-amber-600';
+    if (bandwidthUtil > 60) return 'text-blue-600';
+    return 'text-green-600';
+  };
+
+  const getUtilizationBgColor = () => {
+    if (bandwidthUtil > 90) return 'bg-red-50';
+    if (bandwidthUtil > 80) return 'bg-amber-50';
+    if (bandwidthUtil > 60) return 'bg-blue-50';
+    return 'bg-green-50';
+  };
+
+  const networkSummary = getNetworkSummary();
+  const geographicSummary = getGeographicSummary();
+  const utilizationColor = getUtilizationColor();
+  const utilizationBgColor = getUtilizationBgColor();
+
+  const allLocations = locations.join(', ');
+  const allProviders = providers.join(', ');
+  const allDatacenters = datacenters.join(', ');
+  const geographicTooltip = [allProviders, allLocations, allDatacenters].filter(Boolean).join(' • ');
 
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {/* Locations */}
-      <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-        <MapPin className="h-4 w-4 text-gray-600" />
-        <div className="min-w-0">
-          <span className="text-xs text-gray-500">Locations</span>
-          <p className="text-sm font-medium text-gray-900 truncate" title={locations.join(', ')}>
-            {getLocationDisplay()}
-          </p>
+    <div className="space-y-3">
+      {/* Top Row: Network Resources & Geographic Scope */}
+      <div className="grid grid-cols-2 gap-3">
+        {/* Network Resources */}
+        <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
+          <Router className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+          <div className="min-w-0 flex-1">
+            <span className="text-xs font-medium text-blue-900 block mb-0.5">Network Resources</span>
+            <p className="text-sm font-semibold text-blue-700 truncate" title={networkSummary}>
+              {networkSummary}
+            </p>
+          </div>
+        </div>
+
+        {/* Geographic Scope */}
+        <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+          <Globe className="h-4 w-4 text-gray-600 mt-0.5 flex-shrink-0" />
+          <div className="min-w-0 flex-1">
+            <span className="text-xs font-medium text-gray-700 block mb-0.5">Geographic Scope</span>
+            <p className="text-sm font-semibold text-gray-900 truncate" title={geographicTooltip}>
+              {geographicSummary}
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Infrastructure - Show providers, routers, links, datacenters */}
-      <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-        {providers.length > 1 || cloudRouterCount > 0 || datacenters.length > 0 ? (
-          <Building2 className="h-4 w-4 text-blue-600" />
-        ) : providers.length === 1 ? (
-          <Cloud className="h-4 w-4 text-gray-600" />
-        ) : (
-          <Router className="h-4 w-4 text-gray-600" />
-        )}
-        <div className="min-w-0">
-          <span className="text-xs text-gray-500">Infrastructure</span>
-          <p className="text-sm font-medium text-gray-900 truncate" title={fullInfraText}>
-            {infrastructureParts.length > 0 ? displayInfraText : 'Not configured'}
-          </p>
+      {/* Bottom Row: Utilization & Monthly Cost */}
+      <div className="grid grid-cols-2 gap-3">
+        {/* Utilization */}
+        <div className={`flex items-start space-x-3 p-3 ${utilizationBgColor} rounded-lg border ${
+          bandwidthUtil > 90 ? 'border-red-200' :
+          bandwidthUtil > 80 ? 'border-amber-200' :
+          bandwidthUtil > 60 ? 'border-blue-200' :
+          'border-green-200'
+        }`}>
+          <TrendingUp className={`h-4 w-4 ${utilizationColor} mt-0.5 flex-shrink-0`} />
+          <div className="min-w-0 flex-1">
+            <span className={`text-xs font-medium block mb-0.5 ${
+              bandwidthUtil > 90 ? 'text-red-900' :
+              bandwidthUtil > 80 ? 'text-amber-900' :
+              bandwidthUtil > 60 ? 'text-blue-900' :
+              'text-green-900'
+            }`}>Utilization</span>
+            <p className={`text-sm font-semibold ${utilizationColor}`}>
+              {bandwidthUtil}% of {connection.bandwidth}
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* Billing */}
-      <div className={`flex flex-col p-3 ${billingInfo.bgColor} rounded-lg border border-${billingInfo.color}-200`}>
-        <div className="text-xs text-gray-500 mb-1">{billingInfo.type}</div>
-        <div className="text-sm font-semibold text-gray-900">
-          {billingInfo.cost ? formatCurrency(billingInfo.cost) : '-'}
-        </div>
-        <div className={`text-xs font-medium ${billingInfo.textColor}`}>
-          {billingInfo.label}
+        {/* Monthly Cost */}
+        <div className={`flex items-start space-x-3 p-3 ${billingInfo.bgColor} rounded-lg border border-${billingInfo.color}-200`}>
+          <DollarSign className={`h-4 w-4 ${billingInfo.textColor} mt-0.5 flex-shrink-0`} />
+          <div className="min-w-0 flex-1">
+            <span className={`text-xs font-medium block mb-0.5 ${
+              billingInfo.bgColor === 'bg-green-50' ? 'text-green-900' :
+              billingInfo.bgColor === 'bg-brand-lightBlue' ? 'text-blue-900' :
+              'text-gray-900'
+            }`}>Monthly Cost</span>
+            <p className="text-sm font-semibold text-gray-900">
+              {billingInfo.cost ? formatCurrency(billingInfo.cost) : '-'}
+            </p>
+            <span className={`text-xs font-medium ${billingInfo.textColor}`}>
+              {billingInfo.label}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -116,7 +161,7 @@ function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
   }).format(amount);
 }
