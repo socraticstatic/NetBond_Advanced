@@ -21,17 +21,17 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex items-center justify-center min-h-screen px-4 py-8">
         {/* Background overlay */}
-        <div 
-          className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" 
+        <div
+          className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
           onClick={onClose}
         />
 
         {/* Modal panel */}
-        <div className={`relative inline-block w-full px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:p-6 ${sizeClasses[size]}`}>
+        <div className={`relative w-full max-h-[calc(100vh-4rem)] flex flex-col px-4 pt-5 pb-4 text-left transition-all transform bg-white rounded-lg shadow-xl sm:p-6 ${sizeClasses[size]}`}>
           {/* Close button */}
-          <div className="absolute top-0 right-0 pt-4 pr-4">
+          <div className="absolute top-0 right-0 pt-4 pr-4 z-10">
             <Button
               onClick={onClose}
               variant="outline"
@@ -43,13 +43,15 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
 
           {/* Title */}
           {title && (
-            <div className="mb-4">
+            <div className="mb-4 flex-shrink-0">
               <h3 className="text-lg font-medium text-gray-900">{title}</h3>
             </div>
           )}
 
           {/* Content */}
-          {children}
+          <div className="overflow-y-auto flex-1">
+            {children}
+          </div>
         </div>
       </div>
     </div>

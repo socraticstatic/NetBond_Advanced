@@ -143,8 +143,8 @@ export function CloudRouterModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full mx-4 overflow-hidden">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[calc(100vh-2rem)] overflow-hidden flex flex-col">
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <h3 className="text-lg font-medium text-gray-900 flex items-center">
             <Router className="h-5 w-5 text-brand-blue mr-2" />
@@ -158,8 +158,8 @@ export function CloudRouterModal({
           </button>
         </div>
         
-        <form onSubmit={handleSubmit}>
-          <div className="p-6 max-h-[70vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
+          <div className="p-6 flex-1 overflow-y-auto">
             {/* Warning message when editing */}
             {isEditMode && (
               <div className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start">
