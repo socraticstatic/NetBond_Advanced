@@ -16,9 +16,21 @@ if (!rootElement) {
 } else {
   try {
     const root = createRoot(rootElement);
-    
+
+    // Use basename for GitHub Pages deployment
+    const basename = import.meta.env.PROD ? '/att-netbond-sdci' : '';
+
+    // Handle GitHub Pages SPA redirect
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirect = urlParams.get('redirect');
+    if (redirect) {
+      // Remove the redirect parameter and navigate to the actual path
+      const newUrl = window.location.pathname + redirect;
+      window.history.replaceState(null, '', newUrl);
+    }
+
     root.render(
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <App />
       </BrowserRouter>
     );
