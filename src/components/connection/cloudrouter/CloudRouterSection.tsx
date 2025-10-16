@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Filter, Download, Router, Settings, ChevronDown, ChevronUp, Network } from 'lucide-react';
+import { Plus, Filter, Download, GitBranch, Settings, ChevronDown, ChevronUp, Network } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { CloudRouterCard } from './CloudRouterCard';
@@ -91,7 +91,7 @@ export function CloudRouterSection({
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
         <div className="flex items-center">
-          <Router className="h-5 w-5 text-brand-blue mr-2" />
+          <GitBranch className="h-5 w-5 text-brand-blue mr-2" />
           <h3 className="text-lg font-medium text-gray-900">Cloud Routers</h3>
         </div>
         <div className="flex items-center space-x-2">
@@ -184,7 +184,7 @@ export function CloudRouterSection({
       {/* Cloud Router Status Summary */}
       <div className="p-4 bg-gray-50 border-b border-gray-200">
         <div className="flex items-start space-x-2">
-          <Router className="h-5 w-5 text-brand-blue mt-0.5" />
+          <GitBranch className="h-5 w-5 text-brand-blue mt-0.5" />
           <div>
             <p className="text-sm text-gray-700">
               <span className="font-medium">Cloud Router Status:</span> {cloudRouters.filter(r => r.status === 'active').length} active, {cloudRouters.filter(r => r.status !== 'active').length} inactive
@@ -200,7 +200,7 @@ export function CloudRouterSection({
       <div className="p-6">
         {filteredCloudRouters.length === 0 ? (
           <div className="text-center py-12">
-            <Router className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+            <GitBranch className="h-12 w-12 mx-auto text-gray-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-1">No Cloud Routers</h3>
             <p className="text-gray-500 mb-6">Add cloud routers to manage your network connections</p>
             <Button
