@@ -32,7 +32,7 @@ export function LinkTable({
       label: 'VLAN ID',
       sortable: true,
       sortKey: 'vlanId',
-      width: '90px',
+      width: '8%',
       render: (link) => (
         <div className="text-sm font-medium text-gray-900">{link.vlanId}</div>
       )
@@ -42,8 +42,9 @@ export function LinkTable({
       label: 'Name',
       sortable: true,
       sortKey: 'name',
+      width: '25%',
       render: (link) => (
-        <div className="text-sm font-medium text-gray-900">{link.name}</div>
+        <div className="text-sm font-medium text-gray-900 truncate">{link.name}</div>
       )
     },
     {
@@ -51,7 +52,7 @@ export function LinkTable({
       label: 'Status',
       sortable: true,
       sortKey: 'status',
-      width: '100px',
+      width: '10%',
       render: (link) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
           link.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
@@ -65,17 +66,17 @@ export function LinkTable({
       label: 'Bandwidth',
       sortable: true,
       sortKey: 'bandwidth',
-      width: '110px',
+      width: '12%',
       render: (link) => (
-        <div className="text-sm font-medium text-gray-900">{link.bandwidth || 'N/A'}</div>
+        <div className="text-sm font-medium text-gray-900 truncate">{link.bandwidth || 'N/A'}</div>
       )
     },
     {
       id: 'ipSubnet',
       label: 'IP Subnet',
-      width: '140px',
+      width: '15%',
       render: (link) => (
-        <div className="text-sm font-mono text-gray-700">{link.ipSubnet || 'N/A'}</div>
+        <div className="text-sm font-mono text-gray-700 truncate">{link.ipSubnet || 'N/A'}</div>
       )
     },
     {
@@ -83,7 +84,7 @@ export function LinkTable({
       label: 'Created',
       sortable: true,
       sortKey: 'createdAt',
-      width: '100px',
+      width: '10%',
       render: (link) => (
         <div className="text-sm text-gray-500">
           {new Date(link.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' })}
@@ -97,9 +98,9 @@ export function LinkTable({
     label: 'Cloud Router',
     sortable: true,
     sortKey: 'cloudRouterId',
-    width: '140px',
+    width: '15%',
     render: (link) => (
-      <div className="text-sm font-medium text-gray-900">{link.cloudRouterName || 'N/A'}</div>
+      <div className="text-sm font-medium text-gray-900 truncate">{link.cloudRouterName || 'N/A'}</div>
     )
   };
 
