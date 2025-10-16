@@ -4,7 +4,6 @@ import { DashboardLayout } from './components/common/layouts';
 import { SubNav } from './components/navigation/SubNav';
 import { ConnectionGrid } from './components/ConnectionGrid';
 import { ToastContainer } from './components/common/ToastContainer';
-import { Footer } from './components/common/Footer';
 import { ConnectionTabs } from './components/connection/ConnectionTabs';
 import { useStore } from './store/useStore';
 import { ThemeProvider } from './components/ThemeProvider';
@@ -316,7 +315,6 @@ function App() {
                 } />
               </Routes>
             </main>
-            <Footer />
           </DashboardLayout>
         </ErrorBoundary>
         
