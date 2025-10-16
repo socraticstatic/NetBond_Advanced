@@ -195,31 +195,61 @@ export function ConnectionDetails() {
             <p className="text-lg font-medium text-gray-900">{connection.type}</p>
           </div>
 
-          {/* Group Card */}
+          {/* Pool Card */}
           <div className="bg-white p-6 rounded-lg border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Group</h3>
+              <h3 className="text-sm font-medium text-gray-500">Pool</h3>
               <Users className="h-5 w-5 text-gray-400" />
             </div>
-            <p className="text-lg font-medium text-gray-900">No group assigned</p>
+            <p className="text-lg font-medium text-gray-900">{connection.configuration?.pool || 'Default'}</p>
           </div>
 
-          {/* Location Card */}
+          {/* Locations Card */}
           <div className="bg-white p-6 rounded-lg border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Location</h3>
+              <h3 className="text-sm font-medium text-gray-500">Locations</h3>
               <Globe className="h-5 w-5 text-gray-400" />
             </div>
-            <p className="text-lg font-medium text-gray-900">{connection.location}</p>
+            <div className="flex flex-wrap gap-1">
+              {connection.locations && connection.locations.length > 0 ? (
+                connection.locations.slice(0, 2).map((loc, i) => (
+                  <span key={i} className="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded font-medium">
+                    {loc}
+                  </span>
+                ))
+              ) : (
+                <p className="text-sm font-medium text-gray-900">{connection.location}</p>
+              )}
+              {connection.locations && connection.locations.length > 2 && (
+                <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded font-medium">
+                  +{connection.locations.length - 2}
+                </span>
+              )}
+            </div>
           </div>
 
-          {/* Vendor Card */}
+          {/* Vendors Card */}
           <div className="bg-white p-6 rounded-lg border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Vendor</h3>
+              <h3 className="text-sm font-medium text-gray-500">Vendors</h3>
               <Cloud className="h-5 w-5 text-gray-400" />
             </div>
-            <p className="text-lg font-medium text-gray-900">{connection.provider || 'N/A'}</p>
+            <div className="flex flex-wrap gap-1">
+              {connection.providers && connection.providers.length > 0 ? (
+                connection.providers.slice(0, 2).map((vendor, i) => (
+                  <span key={i} className="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded font-medium">
+                    {vendor}
+                  </span>
+                ))
+              ) : (
+                <p className="text-sm font-medium text-gray-900">{connection.provider || 'N/A'}</p>
+              )}
+              {connection.providers && connection.providers.length > 2 && (
+                <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded font-medium">
+                  +{connection.providers.length - 2}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
