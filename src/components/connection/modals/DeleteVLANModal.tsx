@@ -2,23 +2,23 @@ import { useState } from 'react';
 import { X, Trash2, AlertTriangle } from 'lucide-react';
 import { Button } from '../../common/Button';
 
-interface DeleteLinkModalProps {
+interface DeleteVLANModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  linkName: string;
-  linkId: number;
+  vlanName: string;
+  vlanId: number;
 }
 
-export function DeleteLinkModal({ 
-  isOpen, 
-  onClose, 
-  onConfirm, 
-  linkName, 
-  linkId 
-}: DeleteLinkModalProps) {
+export function DeleteVLANModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  vlanName,
+  vlanId
+}: DeleteVLANModalProps) {
   const [confirmText, setConfirmText] = useState('');
-  const expectedText = `delete ${linkId}`;
+  const expectedText = `delete ${vlanId}`;
   const isConfirmEnabled = confirmText.toLowerCase() === expectedText;
 
   if (!isOpen) return null;
@@ -48,7 +48,7 @@ export function DeleteLinkModal({
             <div className="ml-4">
               <h4 className="text-base font-medium text-gray-900">Are you sure you want to delete this Link?</h4>
               <p className="mt-1 text-sm text-gray-500">
-                Link <span className="font-semibold">{linkName}</span> (ID: {linkId}) will be permanently removed.
+                Link <span className="font-semibold">{vlanName}</span> (VLAN: {vlanId}) will be permanently removed.
                 This action cannot be undone.
               </p>
             </div>
@@ -73,14 +73,14 @@ export function DeleteLinkModal({
           {/* Confirmation input */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              To confirm, type <span className="font-mono font-semibold">delete {linkId}</span>
+              To confirm, type <span className="font-mono font-semibold">delete {vlanId}</span>
             </label>
             <input
               type="text"
               value={confirmText}
               onChange={(e) => setConfirmText(e.target.value)}
               className="form-control"
-              placeholder={`delete ${linkId}`}
+              placeholder={`delete ${vlanId}`}
             />
           </div>
         </div>
@@ -111,4 +111,4 @@ export function DeleteLinkModal({
 }
 
 // For backward compatibility
-;
+export const DeleteLinkModal = DeleteVLANModal;
