@@ -6,6 +6,7 @@ import {
   Globe, Lock, Key, FileJson, Plug, Network, Sparkles, Link2
 } from 'lucide-react';
 import { Button } from '../common/Button';
+import { PhaseIndicator } from '../wizard/PhaseIndicator';
 import { APIImportStep } from './steps/APIImportStep';
 import { APIConfigureStep } from './steps/APIConfigureStep';
 import { APIMappingStep } from './steps/APIMappingStep';
@@ -75,46 +76,24 @@ export function APIToolbox() {
     }
   });
 
-  const steps = [
-    {
-      number: 1,
-      title: 'Import API',
-      description: 'Import OpenAPI/Swagger or JSON definition',
-      icon: Upload,
-      component: APIImportStep
-    },
-    {
-      number: 2,
-      title: 'Configure',
-      description: 'Set authentication and connection details',
-      icon: Key,
-      component: APIConfigureStep
-    },
-    {
-      number: 3,
-      title: 'Map Data',
-      description: 'Map API data to network connections',
-      icon: Link2,
-      component: APIMappingStep
-    },
-    {
-      number: 4,
-      title: 'Test',
-      description: 'Test API connectivity and responses',
-      icon: PlayCircle,
-      component: APITestStep
-    },
-    {
-      number: 5,
-      title: 'Review',
-      description: 'Review and deploy your API integration',
-      icon: Check,
-      component: APIReviewStep
-    }
+  const STEPS = [
+    { title: 'Import API', description: 'Import OpenAPI/Swagger or JSON definition' },
+    { title: 'Configure', description: 'Set authentication and connection details' },
+    { title: 'Map Data', description: 'Map API data to network connections' },
+    { title: 'Test', description: 'Test API connectivity and responses' },
+    { title: 'Review', description: 'Review and deploy your API integration' }
+  ];
+
+  const stepComponents = [
+    APIImportStep,
+    APIConfigureStep,
+    APIMappingStep,
+    APITestStep,
+    APIReviewStep
   ];
 
   const handleNext = () => {
-    if (currentStep < steps.length) {
+    if (currentStep < STEPS.length) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -139,7 +118,7 @@ export function APIToolbox() {
     navigate('/create');
   };
 
-  const CurrentStepComponent = steps[currentStep - 1].component;
+  const CurrentStepComponent = stepComponents[currentStep - 1];
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8">
@@ -150,6 +129,14 @@ export function APIToolbox() {
         >
           Change Creation Mode
         </button>
+      </div>
+
+      <div className="max-w-4xl mx-auto mb-12">
+        <PhaseIndicator
+          phases={STEPS}
+          currentPhase={currentStep - 1}
+          className="w-full"
+        />
       </div>
 
       <div className="max-w-3xl mx-auto">
@@ -175,7 +162,7 @@ export function APIToolbox() {
                 Back
               </Button>
             )}
-            {currentStep < steps.length ? (
+            {currentStep < STEPS.length ? (
               <Button
                 variant="primary"
                 onClick={handleNext}
