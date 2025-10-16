@@ -153,6 +153,9 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
       description: 'Main cloud router for production workloads',
       status: 'active',
       location: 'US East',
+      locations: ['New York', 'Boston', 'Washington DC'],
+      vendors: ['Cisco', 'Juniper'],
+      pool: 'Production',
       createdAt: '2024-01-05T10:00:00Z',
       updatedAt: '2024-03-10T15:30:00Z',
       connectionId: connection.id.toString(),
@@ -200,6 +203,9 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
       description: 'Backup cloud router for disaster recovery',
       status: 'active',
       location: 'US West',
+      locations: ['San Francisco', 'Los Angeles', 'Seattle'],
+      vendors: ['Arista', 'Nokia'],
+      pool: 'DR',
       createdAt: '2024-01-07T11:30:00Z',
       updatedAt: '2024-03-05T09:15:00Z',
       connectionId: connection.id.toString(),
@@ -594,6 +600,15 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
             <span className="text-3xl font-bold text-blue-900">{cloudRouters.length}</span>
           </div>
           <p className="text-sm font-medium text-blue-700">Cloud Routers</p>
+          {cloudRouters.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {Array.from(new Set(cloudRouters.flatMap(cr => cr.locations || [cr.location]).filter(Boolean))).slice(0, 3).map((loc, i) => (
+                <span key={i} className="text-xs px-1.5 py-0.5 bg-blue-200 text-blue-800 rounded">
+                  {loc}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
@@ -604,6 +619,11 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
             </span>
           </div>
           <p className="text-sm font-medium text-green-700">Links (VLANs)</p>
+          {cloudRouters.length > 0 && (
+            <p className="text-xs text-green-600 mt-2">
+              Across {cloudRouters.length} router{cloudRouters.length !== 1 ? 's' : ''}
+            </p>
+          )}
         </div>
 
         <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200">
@@ -612,16 +632,36 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
             <span className="text-3xl font-bold text-orange-900">{vnfs.length}</span>
           </div>
           <p className="text-sm font-medium text-orange-700">VNF Functions</p>
+          {vnfs.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {Array.from(new Set(vnfs.map(vnf => vnf.vendor).filter(Boolean))).slice(0, 2).map((vendor, i) => (
+                <span key={i} className="text-xs px-1.5 py-0.5 bg-orange-200 text-orange-800 rounded">
+                  {vendor}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 border border-gray-200">
+        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 border border-purple-200">
           <div className="flex items-center justify-between mb-2">
-            <Activity className="h-8 w-8 text-gray-600" />
-            <span className="text-3xl font-bold text-gray-900">
-              {vnfs.reduce((sum, vnf) => sum + (vnf.linkIds?.length || 0), 0)}
+            <Activity className="h-8 w-8 text-purple-600" />
+            <span className="text-3xl font-bold text-purple-900">
+              {Array.from(new Set(cloudRouters.map(cr => cr.pool).filter(Boolean))).length || 1}
             </span>
           </div>
-          <p className="text-sm font-medium text-gray-700">Total Associations</p>
+          <p className="text-sm font-medium text-purple-700">
+            {Array.from(new Set(cloudRouters.map(cr => cr.pool).filter(Boolean))).length > 1 ? 'Pools' : 'Pool'}
+          </p>
+          {cloudRouters.some(cr => cr.pool) && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {Array.from(new Set(cloudRouters.map(cr => cr.pool).filter(Boolean))).slice(0, 2).map((pool, i) => (
+                <span key={i} className="text-xs px-1.5 py-0.5 bg-purple-200 text-purple-800 rounded">
+                  {pool}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -786,11 +826,26 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
                         <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${getStatusBadge(router.status)}`}>
                           {router.status}
                         </span>
+                        {router.pool && (
+                          <span className="px-2 py-0.5 text-xs bg-purple-100 text-purple-700 rounded-full">
+                            Pool: {router.pool}
+                          </span>
+                        )}
                         <span className="px-2 py-0.5 text-xs bg-gray-100 text-gray-700 rounded-full">
                           {router.links.length} Link{router.links.length !== 1 ? 's' : ''}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-600 mt-0.5">{router.description} • {router.location}</p>
+                      <p className="text-sm text-gray-600 mt-0.5">
+                        {router.description}
+                        {router.locations && router.locations.length > 0 ? (
+                          <span> • {router.locations.join(', ')}</span>
+                        ) : (
+                          <span> • {router.location}</span>
+                        )}
+                        {router.vendors && router.vendors.length > 0 && (
+                          <span> • {router.vendors.join(', ')}</span>
+                        )}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
