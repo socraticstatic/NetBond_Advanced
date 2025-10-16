@@ -171,12 +171,12 @@ function EnhancedTableComponent<T>({
                   onClick={() => onRowClick?.(item)}
                 >
                   {columns.map((column) => (
-                    <td key={column.id} className="px-6 py-4 whitespace-nowrap">
+                    <td key={column.id} className="px-6 py-4">
                       {column.render(item)}
                     </td>
                   ))}
                   {rowActions && (
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 py-4 text-right text-sm font-medium">
                       {rowActions(item)}
                     </td>
                   )}

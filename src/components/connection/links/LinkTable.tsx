@@ -43,7 +43,7 @@ export function LinkTable({
       sortable: true,
       sortKey: 'name',
       render: (link) => (
-        <div className="text-sm font-medium text-gray-900 truncate">{link.name}</div>
+        <div className="text-sm font-medium text-gray-900">{link.name}</div>
       )
     },
     {
@@ -75,7 +75,7 @@ export function LinkTable({
       label: 'IP Subnet',
       width: '140px',
       render: (link) => (
-        <div className="text-sm font-mono text-gray-700 truncate">{link.ipSubnet || 'N/A'}</div>
+        <div className="text-sm font-mono text-gray-700">{link.ipSubnet || 'N/A'}</div>
       )
     },
     {
@@ -99,7 +99,7 @@ export function LinkTable({
     sortKey: 'cloudRouterId',
     width: '140px',
     render: (link) => (
-      <div className="text-sm font-medium text-gray-900 truncate">{link.cloudRouterName || 'N/A'}</div>
+      <div className="text-sm font-medium text-gray-900">{link.cloudRouterName || 'N/A'}</div>
     )
   };
 

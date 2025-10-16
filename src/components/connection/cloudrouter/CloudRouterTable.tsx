@@ -57,15 +57,15 @@ export function CloudRouterTable({
       sortable: true,
       sortKey: 'name',
       render: (router) => (
-        <div className="flex items-center min-w-0">
+        <div className="flex items-center">
           <div className="flex-shrink-0">
             <div className="p-2 bg-brand-lightBlue rounded-lg">
               <Router className="h-4 w-4 text-brand-blue" />
             </div>
           </div>
-          <div className="ml-3 min-w-0">
-            <div className="text-sm font-medium text-gray-900 truncate">{router.name}</div>
-            <div className="text-xs text-gray-500 truncate">{router.description}</div>
+          <div className="ml-3">
+            <div className="text-sm font-medium text-gray-900">{router.name}</div>
+            <div className="text-xs text-gray-500">{router.description}</div>
           </div>
         </div>
       )

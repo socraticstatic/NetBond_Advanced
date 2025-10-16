@@ -651,6 +651,14 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
                 <Router className="h-5 w-5 text-brand-blue mr-2" />
                 <h3 className="text-lg font-medium text-gray-900">Cloud Routers</h3>
               </div>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleAddCloudRouter}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Cloud Router
+              </Button>
             </div>
             <CloudRouterTable
               cloudRouters={cloudRouters}
@@ -668,6 +676,19 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
                 <Network className="h-5 w-5 text-brand-blue mr-2" />
                 <h3 className="text-lg font-medium text-gray-900">Links (VLANs)</h3>
               </div>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  if (cloudRouters.length > 0) {
+                    handleAddLink(cloudRouters[0].id);
+                  }
+                }}
+                disabled={cloudRouters.length === 0}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Link
+              </Button>
             </div>
             <LinkTable
               links={allLinks}
@@ -693,6 +714,19 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
                 <Shield className="h-5 w-5 text-brand-blue mr-2" />
                 <h3 className="text-lg font-medium text-gray-900">VNF Functions</h3>
               </div>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  if (cloudRouters.length > 0) {
+                    handleAddVNF(cloudRouters[0].id);
+                  }
+                }}
+                disabled={cloudRouters.length === 0}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add VNF
+              </Button>
             </div>
             <VNFTable
               vnfs={vnfsWithRouters}
