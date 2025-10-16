@@ -3,6 +3,21 @@
 ## Overview
 The application now uses an enhanced table component designed to handle large datasets efficiently, including hundreds or thousands of VLANs/Links, VNFs, and Cloud Routers.
 
+## Accessing the Tables
+
+Navigate to any Connection Details page, then:
+
+1. Click on the **Network** tab in the sub-navigation
+2. Look for the view toggle at the top right with two buttons:
+   - **Hierarchy** (tree icon): Traditional expandable tree view
+   - **Tables** (list icon): Robust paginated tables
+3. Click **"Tables"** to see the enhanced table views
+
+The Tables view displays three separate paginated tables:
+- **Cloud Routers Table**: All cloud routers with sortable columns
+- **Links (VLANs) Table**: All links across all routers with pagination
+- **VNF Functions Table**: All VNFs with filtering and sorting
+
 ## Key Features
 
 ### 1. Pagination
