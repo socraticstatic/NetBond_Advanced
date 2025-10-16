@@ -57,15 +57,15 @@ export function CloudRouterTable({
       sortable: true,
       sortKey: 'name',
       render: (router) => (
-        <div className="flex items-center">
+        <div className="flex items-center min-w-0">
           <div className="flex-shrink-0">
             <div className="p-2 bg-brand-lightBlue rounded-lg">
-              <Router className="h-5 w-5 text-brand-blue" />
+              <Router className="h-4 w-4 text-brand-blue" />
             </div>
           </div>
-          <div className="ml-4">
-            <div className="text-sm font-medium text-gray-900">{router.name}</div>
-            <div className="text-sm text-gray-500">{router.description}</div>
+          <div className="ml-3 min-w-0">
+            <div className="text-sm font-medium text-gray-900 truncate">{router.name}</div>
+            <div className="text-xs text-gray-500 truncate">{router.description}</div>
           </div>
         </div>
       )
@@ -75,7 +75,7 @@ export function CloudRouterTable({
       label: 'Status',
       sortable: true,
       sortKey: 'status',
-      width: '120px',
+      width: '100px',
       render: (router) => (
         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
           router.status === 'active' ? 'bg-green-100 text-green-800' :
@@ -88,101 +88,59 @@ export function CloudRouterTable({
       )
     },
     {
-      id: 'bandwidth',
-      label: 'Available Bandwidth',
-      width: '180px',
-      render: (router) => {
-        const routerBandwidthUsed = getBandwidthUsedByRouter(router);
-        return (
-          <div className="flex flex-col">
-            <span className="text-sm text-gray-900">{availableBandwidth.toFixed(1)} Gbps available</span>
-            <span className="text-xs text-gray-400">Using: {routerBandwidthUsed.toFixed(1)} Gbps</span>
-          </div>
-        );
-      }
-    },
-    {
       id: 'links',
       label: 'Links',
       sortable: true,
       sortKey: 'links',
-      width: '120px',
+      width: '80px',
       render: (router) => (
         <div className="flex items-center">
-          <Network className="h-4 w-4 text-gray-400 mr-2" />
-          <span className="text-sm text-gray-900">{router.links?.length || 0} links</span>
+          <Network className="h-4 w-4 text-gray-400 mr-1" />
+          <span className="text-sm text-gray-900">{router.links?.length || 0}</span>
         </div>
       )
     },
     {
       id: 'vnfs',
-      label: 'VNF Functions',
-      width: '180px',
+      label: 'VNFs',
+      width: '80px',
       render: (router) => {
         const vnfCount = vnfCountByRouter[router.id] || 0;
-        const routerVNFs = vnfs.filter(vnf => vnf.cloudRouterId === router.id);
         return (
           <div className="flex items-center">
-            <Shield className="h-4 w-4 text-gray-400 mr-2" />
-            <span className="text-sm text-gray-900">{vnfCount} VNFs</span>
-            {vnfCount > 0 && (
-              <div className="ml-2 flex -space-x-1">
-                {routerVNFs.slice(0, 3).map((vnf) => (
-                  <div
-                    key={vnf.id}
-                    className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                      vnf.type === 'firewall' ? 'bg-red-100' :
-                      vnf.type === 'sdwan' ? 'bg-purple-100' :
-                      vnf.type === 'router' ? 'bg-blue-100' :
-                      vnf.type === 'vnat' ? 'bg-green-100' :
-                      'bg-gray-100'
-                    }`}
-                    title={`${vnf.name} (${vnf.type})`}
-                  >
-                    <span className="text-xs font-bold">{vnf.name.charAt(0).toUpperCase()}</span>
-                  </div>
-                ))}
-                {vnfCount > 3 && (
-                  <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold">
-                    +{vnfCount - 3}
-                  </div>
-                )}
-              </div>
-            )}
+            <Shield className="h-4 w-4 text-gray-400 mr-1" />
+            <span className="text-sm text-gray-900">{vnfCount}</span>
           </div>
         );
       }
     },
     {
-      id: 'policies',
-      label: 'Policies',
+      id: 'bandwidth',
+      label: 'Bandwidth',
       width: '120px',
-      render: (router) => (
-        <div className="flex items-center">
-          <Settings className="h-4 w-4 text-gray-400 mr-2" />
-          <span className="text-sm text-gray-900">
-            {router.policies ? Object.keys(router.policies).length : 0} policies
-          </span>
-        </div>
-      )
+      render: (router) => {
+        const routerBandwidthUsed = getBandwidthUsedByRouter(router);
+        return (
+          <div className="text-sm text-gray-900">{routerBandwidthUsed.toFixed(1)} Gbps</div>
+        );
+      }
     },
     {
       id: 'createdAt',
       label: 'Created',
       sortable: true,
       sortKey: 'createdAt',
-      width: '120px',
+      width: '100px',
       render: (router) => (
         <span className="text-sm text-gray-500">
-          {new Date(router.createdAt).toLocaleDateString()}
+          {new Date(router.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' })}
         </span>
       )
     }
   ];
 
   return (
-    <div className="overflow-x-auto">
-      <EnhancedTable
+    <EnhancedTable
         data={cloudRouters}
         columns={columns}
         keyExtractor={(router) => router.id}
@@ -214,6 +172,5 @@ export function CloudRouterTable({
           />
         )}
       />
-    </div>
   );
 }
