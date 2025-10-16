@@ -8,6 +8,11 @@ button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-bt
   @apply rounded-full !important;
 }
 
+/* Quick Action buttons - subtle rounded corners */
+.quick-action-btn {
+  border-radius: 0.375rem !important;
+}
+
 /* Navigation tabs should NOT be rounded */
 nav button,
 .nav-item,
