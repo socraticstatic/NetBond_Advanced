@@ -135,170 +135,61 @@ export function APIToolbox() {
     navigate('/manage');
   };
 
+  const handleCancel = () => {
+    navigate('/create');
+  };
+
   const CurrentStepComponent = steps[currentStep - 1].component;
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <div className="flex items-center justify-center space-x-4 mb-4">
-            <button
-              onClick={() => navigate('/create')}
-              className="text-brand-blue hover:text-brand-darkBlue flex items-center text-sm font-medium"
-            >
-              Change Creation Mode
-            </button>
-          </div>
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900">
-              API Toolbox
-            </h1>
-            <p className="mt-2 text-lg text-gray-600">
-              Connect external APIs and enhance your network with dynamic data integrations
-            </p>
-          </div>
-        </div>
+    <div className="bg-white rounded-2xl shadow-xl p-8">
+      <div className="flex items-center justify-center space-x-4 mb-8">
+        <button
+          onClick={handleCancel}
+          className="text-brand-blue hover:text-brand-darkBlue flex items-center"
+        >
+          Change Creation Mode
+        </button>
+      </div>
 
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="border-b border-gray-200 bg-white px-8 py-6">
-            <div className="flex items-center justify-between">
-              {steps.map((step, index) => {
-                const Icon = step.icon;
-                const isActive = currentStep === step.number;
-                const isCompleted = currentStep > step.number;
+      <div className="max-w-3xl mx-auto">
+        <CurrentStepComponent
+          config={apiConfig}
+          onChange={setApiConfig}
+          onNext={handleNext}
+        />
 
-                return (
-                  <div key={step.number} className="flex items-center">
-                    <div className="flex flex-col items-center">
-                      <div
-                        className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all ${
-                          isActive
-                            ? 'border-blue-600 bg-blue-600 text-white shadow-lg'
-                            : isCompleted
-                            ? 'border-green-500 bg-green-500 text-white'
-                            : 'border-gray-300 bg-white text-gray-400'
-                        }`}
-                      >
-                        {isCompleted ? (
-                          <Check className="h-6 w-6" />
-                        ) : (
-                          <Icon className="h-6 w-6" />
-                        )}
-                      </div>
-                      <div className="mt-2 text-center">
-                        <div
-                          className={`text-sm font-medium ${
-                            isActive ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-500'
-                          }`}
-                        >
-                          {step.title}
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1 max-w-[120px]">
-                          {step.description}
-                        </div>
-                      </div>
-                    </div>
-                    {index < steps.length - 1 && (
-                      <div
-                        className={`w-24 h-0.5 mx-4 mb-8 transition-all ${
-                          currentStep > step.number ? 'bg-green-500' : 'bg-gray-300'
-                        }`}
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="p-8">
-            <CurrentStepComponent
-              config={apiConfig}
-              onChange={setApiConfig}
-              onNext={handleNext}
-            />
-          </div>
-
-          <div className="border-t border-gray-200 bg-gray-50 px-8 py-6">
-            <div className="flex items-center justify-between">
-              <div>
-                {currentStep > 1 && (
-                  <Button
-                    variant="outline"
-                    onClick={handleBack}
-                    icon={ArrowLeft}
-                  >
-                    Back
-                  </Button>
-                )}
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="text-sm text-gray-500">
-                  Step {currentStep} of {steps.length}
-                </div>
-                {currentStep < steps.length ? (
-                  <Button
-                    variant="primary"
-                    onClick={handleNext}
-                  >
-                    Continue
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                ) : (
-                  <Button
-                    variant="primary"
-                    onClick={handleComplete}
-                  >
-                    <Check className="mr-2 h-4 w-4" />
-                    Complete Setup
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-start">
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <Sparkles className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-sm font-medium text-gray-900">Smart Integration</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Automatically detects API schema and suggests optimal mappings
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-start">
-              <div className="p-3 bg-green-50 rounded-lg">
-                <Zap className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-sm font-medium text-gray-900">Real-time Sync</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  Keep your network data synchronized with external systems
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-start">
-              <div className="p-3 bg-purple-50 rounded-lg">
-                <Lock className="h-6 w-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
-                <h3 className="text-sm font-medium text-gray-900">Enterprise Security</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  OAuth2, API keys, and secure credential management
-                </p>
-              </div>
-            </div>
+        <div className="mt-12 flex justify-between">
+          <Button
+            variant="outline"
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+          <div className="space-x-4">
+            {currentStep > 1 && (
+              <Button
+                variant="outline"
+                onClick={handleBack}
+              >
+                Back
+              </Button>
+            )}
+            {currentStep < steps.length ? (
+              <Button
+                variant="primary"
+                onClick={handleNext}
+              >
+                Next
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                onClick={handleComplete}
+              >
+                Complete Setup
+              </Button>
+            )}
           </div>
         </div>
       </div>
