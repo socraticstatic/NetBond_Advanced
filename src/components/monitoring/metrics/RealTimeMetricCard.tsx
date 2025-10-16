@@ -184,7 +184,6 @@ export function RealTimeMetricCard({
             <div className={`flex items-center space-x-1 text-xs font-medium ${getTrendColor()}`}>
               {getTrendIcon()}
               <span>{trend.percentage.toFixed(2)}%</span>
-              <span className="text-gray-500">vs {trend.timeframe}</span>
             </div>
           )}
           <div className={`px-2 py-1 text-xs font-semibold ${styles.badge}`}>
