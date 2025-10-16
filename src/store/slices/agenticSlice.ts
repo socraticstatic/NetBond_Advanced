@@ -16,7 +16,7 @@ export interface AgenticSlice {
 
 export const createAgenticSlice: StateCreator<AgenticSlice> = (set) => ({
   agenticSettings: {
-    enabled: false,
+    enabled: true,
     autoResolve: false,
     notificationPreference: 'all',
     autoTicketCreation: false,
