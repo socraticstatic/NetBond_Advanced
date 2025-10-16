@@ -145,6 +145,9 @@ export interface MarketplaceItem {
     support: string;
   };
   disabled?: boolean;
+  addon?: boolean;
+  vnf?: boolean;
+  api?: boolean;
 }
 
 export interface MarketplaceFilter {
