@@ -57,7 +57,7 @@ export function MonitoringDashboard({ connections }: MonitoringDashboardProps) {
             {activeTab === 'metrics' && <MetricsTab />}
             {activeTab === 'alerts' && <AlertsTab />}
             {activeTab === 'logs' && <LogsTab />}
-            {activeTab === 'reports' && <ReportingSection defaultTab="standard" />}
+            {activeTab === 'reports' && <ReportingSection selectedConnection="all" timeRange="1h" defaultTab="standard" />}
           </Suspense>
         </AsyncBoundary>
       </div>

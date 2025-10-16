@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ReportTemplates } from '../../configure/reporting/ReportTemplates';
-import { Settings, Calendar, BookTemplate as Template, ShieldCheck } from 'lucide-react';
+import { StandardReports } from './StandardReports';
+import { CustomTemplates } from './CustomTemplates';
+import { ScheduledReports } from './ScheduledReports';
+import { ComplianceReports } from './ComplianceReports';
+import { FileText, Calendar, BookTemplate as Template, ShieldCheck } from 'lucide-react';
 
 interface ReportingProps {
   selectedConnection: string;
@@ -24,7 +27,7 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
   }, [location, defaultTab]);
 
   const tabs = [
-    { id: 'standard', label: 'Standard Reports', icon: Settings },
+    { id: 'standard', label: 'Standard Reports', icon: FileText },
     { id: 'templates', label: 'Templates', icon: Template },
     { id: 'scheduled', label: 'Scheduled', icon: Calendar },
     { id: 'compliance', label: 'Compliance', icon: ShieldCheck }
@@ -33,28 +36,13 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
   const renderContent = () => {
     switch (activeTab) {
       case 'standard':
-        return (
-          <div className="text-center py-12 text-gray-500">
-            <Settings className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-            <p>Standard Reports - Coming Soon</p>
-          </div>
-        );
+        return <StandardReports />;
       case 'templates':
-        return <ReportTemplates />;
+        return <CustomTemplates />;
       case 'scheduled':
-        return (
-          <div className="text-center py-12 text-gray-500">
-            <Calendar className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-            <p>Scheduled Reports - Coming Soon</p>
-          </div>
-        );
+        return <ScheduledReports />;
       case 'compliance':
-        return (
-          <div className="text-center py-12 text-gray-500">
-            <ShieldCheck className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-            <p>Compliance Reports - Coming Soon</p>
-          </div>
-        );
+        return <ComplianceReports />;
       default:
         return null;
     }
