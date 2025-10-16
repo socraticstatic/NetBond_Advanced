@@ -20,12 +20,9 @@ export function APIReviewStep({ config, onChange, onNext }: APIReviewStepProps) 
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">Review & Deploy</h2>
-        <p className="text-gray-600">
-          Review your API integration settings before deployment
-        </p>
-      </div>
+      <h3 className="text-xl font-semibold text-gray-900 text-center mb-8">
+        Review & Deploy
+      </h3>
 
       <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
         <div className="flex items-start">

@@ -31,12 +31,9 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">Configure API Connection</h2>
-        <p className="text-gray-600">
-          Set up authentication credentials and connection parameters
-        </p>
-      </div>
+      <h3 className="text-xl font-semibold text-gray-900 text-center mb-8">
+        Configure API Connection
+      </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>

@@ -60,12 +60,9 @@ export function APIMappingStep({ config, onChange, onNext }: APIMappingStepProps
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">Map API Data</h2>
-        <p className="text-gray-600">
-          Define how API data should be mapped to your network connections
-        </p>
-      </div>
+      <h3 className="text-xl font-semibold text-gray-900 text-center mb-8">
+        Map API Data
+      </h3>
 
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4">
         <div className="flex items-center justify-between">
