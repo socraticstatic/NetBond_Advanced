@@ -112,29 +112,8 @@ export function ConnectionCardMetrics({
         </div>
       </div>
 
-      {/* Bottom Row: Utilization & Monthly Cost */}
-      <div className="grid grid-cols-2 gap-3">
-        {/* Utilization */}
-        <div className={`flex items-start space-x-3 p-3 ${utilizationBgColor} rounded-lg border ${
-          bandwidthUtil > 90 ? 'border-red-200' :
-          bandwidthUtil > 80 ? 'border-amber-200' :
-          bandwidthUtil > 60 ? 'border-blue-200' :
-          'border-green-200'
-        }`}>
-          <TrendingUp className={`h-4 w-4 ${utilizationColor} mt-0.5 flex-shrink-0`} />
-          <div className="min-w-0 flex-1">
-            <span className={`text-xs font-medium block mb-0.5 ${
-              bandwidthUtil > 90 ? 'text-red-900' :
-              bandwidthUtil > 80 ? 'text-amber-900' :
-              bandwidthUtil > 60 ? 'text-blue-900' :
-              'text-green-900'
-            }`}>Utilization</span>
-            <p className={`text-sm font-semibold ${utilizationColor}`}>
-              {bandwidthUtil}% of {connection.bandwidth}
-            </p>
-          </div>
-        </div>
-
+      {/* Bottom Row: Monthly Cost */}
+      <div>
         {/* Monthly Cost */}
         <div className={`flex items-start space-x-3 p-3 ${billingInfo.bgColor} rounded-lg border border-${billingInfo.color}-200`}>
           <DollarSign className={`h-4 w-4 ${billingInfo.textColor} mt-0.5 flex-shrink-0`} />
