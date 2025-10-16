@@ -14,6 +14,8 @@ import { Link } from '../../../types';
 import { CloudRouterTable } from '../cloudrouter/CloudRouterTable';
 import { VNFTable } from '../vnf/VNFTable';
 import { LinkTable } from '../links/LinkTable';
+import { VerticalTabGroup } from '../../navigation/VerticalTabGroup';
+import { TabItem } from '../../../types/navigation';
 
 interface NetworkTabProps {
   connection: Connection;
@@ -23,6 +25,9 @@ interface NetworkTabProps {
 export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
   // View mode: 'hierarchy' or 'table'
   const [viewMode, setViewMode] = useState<'hierarchy' | 'table'>('hierarchy');
+
+  // Active section in table view
+  const [activeTableSection, setActiveTableSection] = useState<'cloudrouters' | 'links' | 'vnfs'>('cloudrouters');
 
   // Expansion state for hierarchical view
   const [expandedRouters, setExpandedRouters] = useState<Set<string>>(new Set());
@@ -521,6 +526,28 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
       undefined
   }));
 
+  // Vertical tabs for table view
+  const tableTabs: TabItem[] = [
+    {
+      id: 'cloudrouters',
+      label: 'Cloud Routers',
+      icon: <Router className="h-5 w-5" />,
+      count: cloudRouters.length
+    },
+    {
+      id: 'links',
+      label: 'Links (VLANs)',
+      icon: <Network className="h-5 w-5" />,
+      count: allLinks.length
+    },
+    {
+      id: 'vnfs',
+      label: 'VNF Functions',
+      icon: <Shield className="h-5 w-5" />,
+      count: vnfs.length
+    }
+  ];
+
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
@@ -683,97 +710,113 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
 
       {/* Table View */}
       {viewMode === 'table' && (
-        <div className="space-y-6">
-          {/* Cloud Routers Table */}
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-              <div className="flex items-center">
-                <Router className="h-5 w-5 text-brand-blue mr-2" />
-                <h3 className="text-lg font-medium text-gray-900">Cloud Routers</h3>
-              </div>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={handleAddCloudRouter}
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Cloud Router
-              </Button>
-            </div>
-            <CloudRouterTable
-              cloudRouters={cloudRouters}
-              vnfs={vnfsWithRouters}
-              onEdit={handleEditCloudRouter}
-              onDelete={handleDeleteCloudRouter}
-              connectionBandwidth={connection.bandwidth}
-            />
-          </div>
+        <div className="flex gap-6">
+          {/* Vertical Navigation */}
+          <VerticalTabGroup
+            tabs={tableTabs}
+            activeTab={activeTableSection}
+            onChange={(id) => setActiveTableSection(id as 'cloudrouters' | 'links' | 'vnfs')}
+          />
 
-          {/* Links/VLANs Table */}
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-              <div className="flex items-center">
-                <Network className="h-5 w-5 text-brand-blue mr-2" />
-                <h3 className="text-lg font-medium text-gray-900">Links (VLANs)</h3>
+          {/* Table Content */}
+          <div className="flex-1">
+            {/* Cloud Routers Table */}
+            {activeTableSection === 'cloudrouters' && (
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Router className="h-5 w-5 text-brand-blue mr-2" />
+                    <h3 className="text-lg font-medium text-gray-900">Cloud Routers</h3>
+                  </div>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={handleAddCloudRouter}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Cloud Router
+                  </Button>
+                </div>
+                <CloudRouterTable
+                  cloudRouters={cloudRouters}
+                  vnfs={vnfsWithRouters}
+                  onEdit={handleEditCloudRouter}
+                  onDelete={handleDeleteCloudRouter}
+                  connectionBandwidth={connection.bandwidth}
+                />
               </div>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => {
-                  if (cloudRouters.length > 0) {
-                    handleAddLink(cloudRouters[0].id);
-                  }
-                }}
-                disabled={cloudRouters.length === 0}
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Link
-              </Button>
-            </div>
-            <LinkTable
-              links={allLinks}
-              sortField="vlanId"
-              sortDirection="asc"
-              onSort={() => {}}
-              onEdit={(link) => {
-                const router = cloudRouters.find(r => r.id === link.cloudRouterId);
-                if (router) {
-                  handleEditLink(link, router.id);
-                }
-              }}
-              onDelete={handleDeleteLink}
-              searchQuery=""
-              showCloudRouter={true}
-            />
-          </div>
+            )}
 
-          {/* VNFs Table */}
-          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-              <div className="flex items-center">
-                <Shield className="h-5 w-5 text-brand-blue mr-2" />
-                <h3 className="text-lg font-medium text-gray-900">VNF Functions</h3>
+            {/* Links/VLANs Table */}
+            {activeTableSection === 'links' && (
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Network className="h-5 w-5 text-brand-blue mr-2" />
+                    <h3 className="text-lg font-medium text-gray-900">Links (VLANs)</h3>
+                  </div>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      if (cloudRouters.length > 0) {
+                        handleAddLink(cloudRouters[0].id);
+                      }
+                    }}
+                    disabled={cloudRouters.length === 0}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Link
+                  </Button>
+                </div>
+                <LinkTable
+                  links={allLinks}
+                  sortField="vlanId"
+                  sortDirection="asc"
+                  onSort={() => {}}
+                  onEdit={(link) => {
+                    const router = cloudRouters.find(r => r.id === link.cloudRouterId);
+                    if (router) {
+                      handleEditLink(link, router.id);
+                    }
+                  }}
+                  onDelete={handleDeleteLink}
+                  searchQuery=""
+                  showCloudRouter={true}
+                />
               </div>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => {
-                  if (cloudRouters.length > 0) {
-                    handleAddVNF(cloudRouters[0].id);
-                  }
-                }}
-                disabled={cloudRouters.length === 0}
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add VNF
-              </Button>
-            </div>
-            <VNFTable
-              vnfs={vnfsWithRouters}
-              cloudRouters={cloudRouters}
-              onEdit={handleEditVNF}
-              onDelete={handleDeleteVNF}
-            />
+            )}
+
+            {/* VNFs Table */}
+            {activeTableSection === 'vnfs' && (
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Shield className="h-5 w-5 text-brand-blue mr-2" />
+                    <h3 className="text-lg font-medium text-gray-900">VNF Functions</h3>
+                  </div>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      if (cloudRouters.length > 0) {
+                        handleAddVNF(cloudRouters[0].id);
+                      }
+                    }}
+                    disabled={cloudRouters.length === 0}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add VNF
+                  </Button>
+                </div>
+                <VNFTable
+                  vnfs={vnfsWithRouters}
+                  cloudRouters={cloudRouters}
+                  onEdit={handleEditVNF}
+                  onDelete={handleDeleteVNF}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
