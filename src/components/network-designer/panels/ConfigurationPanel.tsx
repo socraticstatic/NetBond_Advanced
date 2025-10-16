@@ -102,7 +102,7 @@ export function ConfigurationPanel({
               key={tab.id}
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
               className={`
-                w-full flex items-center px-4 py-3 text-sm font-medium no-rounded
+                w-full flex items-center px-4 py-3 text-sm font-medium network-config-tab
                 transition-colors duration-200
                 ${activeTab === tab.id
                   ? 'bg-white border-l-2 border-brand-blue text-brand-blue'
