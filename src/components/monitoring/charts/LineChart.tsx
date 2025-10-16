@@ -9,10 +9,10 @@ interface LineChartProps {
 const LineChart = memo(function LineChart({ data, options = {} }: LineChartProps) {
   const [isChartReady, setIsChartReady] = useState(false);
   const [chartComponent, setChartComponent] = useState<any>(null);
-  
+
   useEffect(() => {
     let mounted = true;
-    
+
     const loadChartJs = async () => {
       try {
         // Only import what we absolutely need
@@ -20,10 +20,35 @@ const LineChart = memo(function LineChart({ data, options = {} }: LineChartProps
           import('react-chartjs-2'),
           import('chart.js/auto') // Auto registration is more efficient
         ]);
-        
+
         if (!mounted) return;
-        
-        setChartComponent(<Line data={data} options={options} />);
+
+        // Default options to make chart responsive and fill container
+        const defaultOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                display: false
+              }
+            },
+            y: {
+              grid: {
+                display: true,
+                color: 'rgba(0, 0, 0, 0.05)'
+              }
+            }
+          },
+          ...options
+        };
+
+        setChartComponent(<Line data={data} options={defaultOptions} />);
         setIsChartReady(true);
       } catch (error) {
         console.error('Failed to load chart:', error);
@@ -32,9 +57,9 @@ const LineChart = memo(function LineChart({ data, options = {} }: LineChartProps
         }
       }
     };
-    
+
     loadChartJs();
-    
+
     return () => {
       mounted = false;
     };
