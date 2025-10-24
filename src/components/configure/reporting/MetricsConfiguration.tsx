@@ -48,7 +48,7 @@ export function MetricsConfiguration() {
       case 'performance':
         return 'bg-brand-lightBlue text-brand-blue';
       case 'security':
-        return 'bg-red-100 text-red-800';
+        return 'bg-indigo-100 text-indigo-800';
       case 'usage':
         return 'bg-green-100 text-green-800';
       default:

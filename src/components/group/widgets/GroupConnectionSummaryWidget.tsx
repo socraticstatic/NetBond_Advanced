@@ -81,7 +81,7 @@ export function GroupConnectionSummaryWidget({ group, connections }: GroupConnec
     switch(provider) {
       case 'AWS': return 'text-amber-500';
       case 'Azure': return 'text-blue-500';
-      case 'Google': return 'text-red-500';
+      case 'Google': return 'text-blue-600';
       default: return 'text-gray-500';
     }
   };

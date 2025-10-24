@@ -59,7 +59,7 @@ export function ResourceInventoryWidget() {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Inactive</span>
-                <span className="text-red-600">{resource.inactive}</span>
+                <span className="text-gray-600">{resource.inactive}</span>
               </div>
             </div>
           </div>
