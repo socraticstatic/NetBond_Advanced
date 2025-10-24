@@ -115,8 +115,8 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
 
           <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
             <div className="flex items-center mb-4">
-              <div className="p-2 bg-red-50 rounded-lg">
-                <Shield className="h-5 w-5 text-red-500" />
+              <div className="p-2 bg-indigo-50 rounded-lg">
+                <Shield className="h-5 w-5 text-indigo-500" />
               </div>
               <h4 className="ml-3 text-base font-medium text-gray-900">VNFs</h4>
             </div>
@@ -185,11 +185,11 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
           <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
-                <Shield className="h-5 w-5 text-red-500 mr-2" />
+                <Shield className="h-5 w-5 text-indigo-500 mr-2" />
                 <h4 className="text-base font-medium text-gray-900">VNFs by Type</h4>
               </div>
               <div>
-                <span className="px-2 py-1 bg-red-50 text-red-700 rounded-full text-xs font-medium">
+                <span className="px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-medium">
                   {networkMetrics.totalVNFs} total
                 </span>
               </div>
@@ -199,7 +199,7 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
                 <div key={type} className="flex items-center justify-between">
                   <div className="flex items-center">
                     <div className={`h-3 w-3 rounded-full ${
-                      type === 'firewall' ? 'bg-red-500' :
+                      type === 'firewall' ? 'bg-indigo-500' :
                       type === 'sdwan' ? 'bg-purple-500' :
                       type === 'router' ? 'bg-blue-500' :
                       type === 'vnat' ? 'bg-green-500' :

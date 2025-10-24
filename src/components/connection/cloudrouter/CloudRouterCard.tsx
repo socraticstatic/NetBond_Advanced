@@ -52,7 +52,7 @@ export function CloudRouterCard({
   // Get VNF type icon
   const getVnfIcon = (type: string) => {
     switch(type) {
-      case 'firewall': return <Shield className="h-4 w-4 text-red-500" />;
+      case 'firewall': return <Shield className="h-4 w-4 text-indigo-500" />;
       case 'sdwan': return <Network className="h-4 w-4 text-purple-500" />;
       case 'router': return <Router className="h-4 w-4 text-blue-500" />;
       case 'vnat': return <Network className="h-4 w-4 text-green-500" />;

@@ -480,14 +480,14 @@ export function VNFModal({
                     >
                       <div className="flex items-center space-x-3 mb-2">
                         <div className={`p-2 rounded-lg ${
-                          template.type === 'firewall' ? 'bg-red-100' :
+                          template.type === 'firewall' ? 'bg-indigo-100' :
                           template.type === 'sdwan' ? 'bg-purple-100' :
                           template.type === 'router' ? 'bg-blue-100' :
                           template.type === 'vnat' ? 'bg-green-100' :
                           'bg-gray-100'
                         }`}>
                           <Icon className={`h-6 w-6 ${
-                            template.type === 'firewall' ? 'text-red-500' :
+                            template.type === 'firewall' ? 'text-indigo-500' :
                             template.type === 'sdwan' ? 'text-purple-500' :
                             template.type === 'router' ? 'text-blue-500' :
                             template.type === 'vnat' ? 'text-green-500' :
