@@ -17,111 +17,91 @@ interface Report {
 
 const availableReports: Report[] = [
   {
-    id: 'connection-performance',
-    name: 'Connection Performance Report',
-    description: 'Comprehensive analysis of latency, throughput, packet loss, and uptime metrics across all connections',
-    category: 'performance',
+    id: 'report-1-connection-inventory',
+    name: 'Report 1: Connection Inventory & Segmentation',
+    description: 'Total NetBond connections with breakdown by type (AVPN, Internet, Cloud to Cloud), bandwidth tiers, data center regions, cloud providers (AWS, Azure, Google, Oracle), IPE sites, and average connections per customer',
+    category: 'operations',
     lastGenerated: '2024-03-10T15:30:00Z',
-    frequency: 'daily',
-    format: 'PDF',
-    size: '2.4 MB',
-    status: 'ready'
-  },
-  {
-    id: 'network-health',
-    name: 'Network Health Summary',
-    description: 'Overall network status including active connections, bandwidth utilization, and service availability',
-    category: 'performance',
-    lastGenerated: '2024-03-10T14:00:00Z',
-    frequency: 'daily',
-    format: 'PDF',
-    size: '1.8 MB',
-    status: 'ready'
-  },
-  {
-    id: 'bandwidth-analysis',
-    name: 'Bandwidth Utilization Analysis',
-    description: 'Detailed breakdown of bandwidth consumption patterns, peak usage times, and capacity planning insights',
-    category: 'performance',
-    lastGenerated: '2024-03-09T23:45:00Z',
     frequency: 'weekly',
     format: 'Excel',
-    size: '3.2 MB',
+    size: '2.1 MB',
     status: 'ready'
   },
   {
-    id: 'security-audit',
-    name: 'Security Audit Report',
-    description: 'Comprehensive security analysis including firewall events, DDoS protection metrics, and compliance status',
-    category: 'security',
-    lastGenerated: '2024-03-10T08:00:00Z',
-    frequency: 'daily',
-    format: 'PDF',
-    size: '4.1 MB',
-    status: 'ready'
-  },
-  {
-    id: 'incident-summary',
-    name: 'Incident & Downtime Summary',
-    description: 'Complete log of network incidents, downtime events, root cause analysis, and resolution times',
+    id: 'report-2-ipe-capacity',
+    name: 'Report 2: IPE Capacity & Provider Coverage',
+    description: 'NetBond-enabled IPE sites by region with provider on-ramp counts, total installed capacity per IPE site (aggregated and per provider), and utilization metrics for capacity planning',
     category: 'operations',
+    lastGenerated: '2024-03-10T14:00:00Z',
+    frequency: 'weekly',
+    format: 'Excel',
+    size: '1.9 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-3-utilization-analysis',
+    name: 'Report 3: Connection Utilization Analysis',
+    description: 'Connection utilization per IPE site showing installed capacity, average and max utilization at busiest hours, aggregated by site and portal level with trending data',
+    category: 'performance',
     lastGenerated: '2024-03-10T12:00:00Z',
+    frequency: 'daily',
+    format: 'Excel',
+    size: '3.4 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-4-weekly-trends',
+    name: 'Report 4: Weekly Connection Trends',
+    description: 'Weekly analysis of new connections added (by site and provider), new customers, upgraded and downgraded connections by MBC changes, deactivated connections, and trend visualization',
+    category: 'operations',
+    lastGenerated: '2024-03-10T08:00:00Z',
     frequency: 'weekly',
     format: 'PDF',
-    size: '1.5 MB',
+    size: '2.8 MB',
     status: 'ready'
   },
   {
-    id: 'billing-summary',
-    name: 'Billing & Cost Summary',
-    description: 'Detailed billing breakdown by connection, service charges, usage fees, and cost trends',
+    id: 'report-5-revenue-metrics',
+    name: 'Report 5: Revenue & Financial Metrics',
+    description: 'Monthly NetBond revenue with 12-month trends, total billed connections, average revenue per connection (ARPC), average MBC trends, and overall utilization trends',
     category: 'billing',
     lastGenerated: '2024-03-01T00:00:00Z',
     frequency: 'monthly',
     format: 'Excel',
-    size: '2.8 MB',
-    status: 'stale'
-  },
-  {
-    id: 'cost-optimization',
-    name: 'Cost Optimization Report',
-    description: 'Analysis of spending patterns with recommendations for cost savings and resource optimization',
-    category: 'billing',
-    lastGenerated: '2024-03-08T16:30:00Z',
-    frequency: 'monthly',
-    format: 'PDF',
-    size: '3.5 MB',
+    size: '2.5 MB',
     status: 'ready'
   },
   {
-    id: 'sla-compliance',
-    name: 'SLA Compliance Report',
-    description: 'Service level agreement adherence tracking with uptime percentages and penalty calculations',
+    id: 'report-6-service-reliability',
+    name: 'Report 6: Service Reliability & VLAN Status',
+    description: 'Total VLANs and connection status (active, inactive, deactivated), service disruption impact by site and region, and average downtime minutes per connection',
     category: 'operations',
-    lastGenerated: '2024-03-09T18:00:00Z',
-    frequency: 'monthly',
+    lastGenerated: '2024-03-10T10:00:00Z',
+    frequency: 'weekly',
+    format: 'PDF',
+    size: '1.7 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-7-customer-detail',
+    name: 'Report 7: Per Customer Connection Report',
+    description: 'Individual customer view showing all connections (active/inactive), connection sizes, VLAN counts, breakdown by provider and cloud regions, geographic distribution, and utilization metrics (average and max)',
+    category: 'operations',
+    lastGenerated: '2024-03-10T09:00:00Z',
+    frequency: 'on-demand',
     format: 'PDF',
     size: '1.2 MB',
     status: 'ready'
   },
   {
-    id: 'capacity-planning',
-    name: 'Capacity Planning Report',
-    description: 'Forecasting analysis for bandwidth needs, growth projections, and infrastructure scaling recommendations',
-    category: 'performance',
-    lastGenerated: null,
-    frequency: 'on-demand',
-    format: 'PDF',
-    status: 'ready'
-  },
-  {
-    id: 'raw-metrics',
-    name: 'Raw Metrics Export',
-    description: 'Complete export of all telemetry data for custom analysis and integration with external tools',
-    category: 'operations',
-    lastGenerated: null,
-    frequency: 'on-demand',
-    format: 'CSV',
+    id: 'report-8-customer-analytics',
+    name: 'Report 8: Customer Count & Analytics (PM Report)',
+    description: 'Total customer count by geographic region, net adds per month, average connections per customer by region, average monthly spend per customer, and overall ARPU (average revenue per user)',
+    category: 'billing',
+    lastGenerated: '2024-03-08T16:30:00Z',
+    frequency: 'monthly',
+    format: 'Excel',
+    size: '1.8 MB',
     status: 'ready'
   }
 ];
@@ -212,7 +192,7 @@ export function StandardReports() {
         <div>
           <h3 className="text-lg font-semibold text-gray-900">Standard Reports</h3>
           <p className="text-sm text-gray-600 mt-1">
-            Pre-configured reports for common monitoring and analysis needs
+            NetBond service reports for inventory, capacity, utilization, trends, and customer analytics
           </p>
         </div>
         <Button
