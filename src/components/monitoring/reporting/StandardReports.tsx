@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, Download, Calendar, TrendingUp, Activity, DollarSign, Shield, Eye, ChevronDown, Filter, Search } from 'lucide-react';
+import { FileText, Download, Calendar, TrendingUp, Activity, DollarSign, Shield, Eye, ChevronDown, Filter, Search, LayoutGrid, List } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { useMonitoring } from '../context/MonitoringContext';
 
@@ -131,6 +131,7 @@ export function StandardReports() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [generatingReports, setGeneratingReports] = useState<Set<string>>(new Set());
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
 
   const getCategoryIcon = (category: Report['category']) => {
     switch (category) {
@@ -207,7 +208,7 @@ export function StandardReports() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-900">Standard Reports</h3>
           <p className="text-sm text-gray-600 mt-1">
@@ -230,7 +231,7 @@ export function StandardReports() {
         </Button>
       </div>
 
-      {/* Filters */}
+      {/* Filters & View Toggle */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -257,19 +258,44 @@ export function StandardReports() {
           </select>
           <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
         </div>
+        <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
+          <button
+            onClick={() => setViewMode('card')}
+            className={`p-2 rounded-full transition-colors ${
+              viewMode === 'card'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-400 hover:text-gray-500'
+            }`}
+            title="Card View"
+          >
+            <LayoutGrid className="h-5 w-5" />
+          </button>
+          <button
+            onClick={() => setViewMode('table')}
+            className={`p-2 rounded-full transition-colors ${
+              viewMode === 'table'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-400 hover:text-gray-500'
+            }`}
+            title="Table View"
+          >
+            <List className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
-      {/* Reports Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {filteredReports.map((report) => {
-          const Icon = getCategoryIcon(report.category);
-          const isGenerating = generatingReports.has(report.id);
+      {/* Reports View */}
+      {viewMode === 'card' ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {filteredReports.map((report) => {
+            const Icon = getCategoryIcon(report.category);
+            const isGenerating = generatingReports.has(report.id);
 
-          return (
-            <div
-              key={report.id}
-              className="card p-6 hover:shadow-lg transition-shadow"
-            >
+            return (
+              <div
+                key={report.id}
+                className="card p-6 hover:shadow-lg transition-shadow"
+              >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">
@@ -357,6 +383,124 @@ export function StandardReports() {
           );
         })}
       </div>
+      ) : (
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Report Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Category
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Format
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Frequency
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Last Generated
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredReports.map((report) => {
+                const Icon = getCategoryIcon(report.category);
+                const isGenerating = generatingReports.has(report.id);
+
+                return (
+                  <tr key={report.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-gray-100 rounded-lg">
+                          <Icon className="h-4 w-4 text-gray-600" />
+                        </div>
+                        <div className="ml-3">
+                          <div className="text-sm font-medium text-gray-900">{report.name}</div>
+                          <div className="text-xs text-gray-500">{report.size || 'N/A'}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(report.category)}`}>
+                        {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                        {report.format}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">
+                      {report.frequency}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {report.lastGenerated ? (
+                        <div className="flex items-center">
+                          <Calendar className="h-3.5 w-3.5 mr-1.5 text-gray-400" />
+                          <span>
+                            {new Date(report.lastGenerated).toLocaleDateString()} {new Date(report.lastGenerated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">Never</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {getStatusBadge(isGenerating ? 'generating' : report.status)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex items-center justify-end space-x-2">
+                        {report.lastGenerated && (
+                          <>
+                            <button
+                              onClick={() => {
+                                window.addToast?.({
+                                  type: 'info',
+                                  title: 'Preview',
+                                  message: `Opening preview for ${report.name}`,
+                                  duration: 3000
+                                });
+                              }}
+                              className="text-gray-600 hover:text-gray-900 p-1"
+                              title="Preview"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDownloadReport(report)}
+                              className="text-gray-600 hover:text-gray-900 p-1"
+                              title="Download"
+                            >
+                              <Download className="h-4 w-4" />
+                            </button>
+                          </>
+                        )}
+                        <button
+                          onClick={() => handleGenerateReport(report.id)}
+                          disabled={isGenerating}
+                          className="text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Generate"
+                        >
+                          <FileText className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {filteredReports.length === 0 && (
         <div className="text-center py-12">

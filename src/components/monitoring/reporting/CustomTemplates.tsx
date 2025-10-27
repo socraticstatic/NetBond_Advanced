@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, Edit, Trash2, Copy, Download, Plus, Settings, Layout, Filter, Star, Clock } from 'lucide-react';
+import { FileText, Edit, Trash2, Copy, Download, Plus, Settings, Layout, Filter, Star, Clock, LayoutGrid, List } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { Modal } from '../../common/Modal';
 
@@ -125,6 +125,7 @@ export function CustomTemplates() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedType, setSelectedType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
 
   const getTypeColor = (type: Template['type']) => {
     switch (type) {
@@ -267,7 +268,7 @@ export function CustomTemplates() {
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Filters & View Toggle */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
           <input
@@ -293,15 +294,40 @@ export function CustomTemplates() {
             </button>
           ))}
         </div>
+        <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
+          <button
+            onClick={() => setViewMode('card')}
+            className={`p-2 rounded-full transition-colors ${
+              viewMode === 'card'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-400 hover:text-gray-500'
+            }`}
+            title="Card View"
+          >
+            <LayoutGrid className="h-5 w-5" />
+          </button>
+          <button
+            onClick={() => setViewMode('table')}
+            className={`p-2 rounded-full transition-colors ${
+              viewMode === 'table'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-400 hover:text-gray-500'
+            }`}
+            title="Table View"
+          >
+            <List className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
-      {/* Templates Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {filteredTemplates.map((template) => (
-          <div
-            key={template.id}
-            className="card p-6 hover:shadow-lg transition-shadow"
-          >
+      {/* Templates View */}
+      {viewMode === 'card' ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {filteredTemplates.map((template) => (
+            <div
+              key={template.id}
+              className="card p-6 hover:shadow-lg transition-shadow"
+            >
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-start space-x-3 flex-1">
                 <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">
@@ -402,6 +428,119 @@ export function CustomTemplates() {
           </div>
         ))}
       </div>
+      ) : (
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Template Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Type
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Format
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Usage Count
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Created By
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Last Modified
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredTemplates.map((template) => (
+                <tr key={template.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-gray-100 rounded-lg">
+                        <FileText className="h-4 w-4 text-gray-600" />
+                      </div>
+                      <div className="ml-3">
+                        <div className="flex items-center space-x-2">
+                          <div className="text-sm font-medium text-gray-900">{template.name}</div>
+                          {template.isDefault && (
+                            <Star className="h-3.5 w-3.5 text-yellow-500 fill-current" />
+                          )}
+                        </div>
+                        <div className="text-xs text-gray-500 truncate max-w-xs">{template.description}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(template.type)}`}>
+                      {template.type}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                      {template.format}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {template.usageCount} uses
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {template.createdBy}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    {new Date(template.lastModified).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div className="flex items-center justify-end space-x-2">
+                      <button
+                        onClick={() => {
+                          window.addToast?.({
+                            type: 'info',
+                            title: 'Edit Template',
+                            message: `Opening editor for "${template.name}"`,
+                            duration: 2000
+                          });
+                        }}
+                        className="text-gray-600 hover:text-gray-900 p-1"
+                        title="Edit"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDuplicate(template)}
+                        className="text-gray-600 hover:text-gray-900 p-1"
+                        title="Duplicate"
+                      >
+                        <Copy className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDownload(template)}
+                        className="text-gray-600 hover:text-gray-900 p-1"
+                        title="Download"
+                      >
+                        <Download className="h-4 w-4" />
+                      </button>
+                      {!template.isDefault && (
+                        <button
+                          onClick={() => handleDelete(template.id)}
+                          className="text-red-600 hover:text-red-700 p-1"
+                          title="Delete"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {filteredTemplates.length === 0 && (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
