@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Calendar, Clock, Mail, Users, Play, Pause, Edit, Trash2, Plus, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { Modal } from '../../common/Modal';
+import { ScheduleForm, ScheduleFormData } from './ScheduleForm';
+import { ConfirmDialog } from '../../common/ConfirmDialog';
 
 interface ScheduledReport {
   id: string;
@@ -96,37 +98,205 @@ const scheduledReports: ScheduledReport[] = [
   }
 ];
 
+const availableReportTypes = [
+  { id: 'report-1', name: 'Connection Inventory & Segmentation' },
+  { id: 'report-2', name: 'IPE Capacity & Data Center Analysis' },
+  { id: 'report-3', name: 'Connection & Cloud Router Utilization Analysis' },
+  { id: 'report-4', name: 'Weekly Connection Trends' },
+  { id: 'report-5', name: 'Service Reliability & Link Status' },
+  { id: 'report-6', name: 'NetBond Security & Access Report' },
+  { id: 'report-7', name: 'Customer & Connection Growth' },
+  { id: 'report-8', name: 'Revenue & Financial Metrics' },
+  { id: 'report-9', name: 'Cloud Provider Distribution' },
+  { id: 'report-10', name: 'Regional & Geographic Analysis' },
+  { id: 'report-11', name: 'MBC Utilization & Optimization' },
+  { id: 'report-12', name: 'Customer Churn & Retention' },
+  { id: 'report-13', name: 'Provider Performance Comparison' },
+  { id: 'report-14', name: 'Link Cost & Economics Analysis' },
+  { id: 'report-15', name: 'Data Center Provider Analysis' },
+  { id: 'report-16', name: 'Cloud Router Aggregation & Link Analysis' },
+  { id: 'report-17', name: 'Connection Hierarchy & Resource Analysis' }
+];
+
 export function ScheduledReports() {
   const [reports, setReports] = useState(scheduledReports);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedReport, setSelectedReport] = useState<ScheduledReport | null>(null);
+  const [reportToDelete, setReportToDelete] = useState<ScheduledReport | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const calculateNextRun = (schedule: ScheduleFormData): string => {
+    const now = new Date();
+    const [hours, minutes] = schedule.schedule.time.split(':').map(Number);
+    const nextRun = new Date(now);
+    nextRun.setHours(hours, minutes, 0, 0);
+
+    switch (schedule.frequency) {
+      case 'daily':
+        if (nextRun <= now) {
+          nextRun.setDate(nextRun.getDate() + 1);
+        }
+        break;
+
+      case 'weekly':
+        const targetDay = schedule.schedule.dayOfWeek ?? 0;
+        const currentDay = nextRun.getDay();
+        let daysUntilNext = (targetDay - currentDay + 7) % 7;
+        if (daysUntilNext === 0 && nextRun <= now) {
+          daysUntilNext = 7;
+        }
+        nextRun.setDate(nextRun.getDate() + daysUntilNext);
+        break;
+
+      case 'monthly':
+        const targetDayOfMonth = schedule.schedule.dayOfMonth ?? 1;
+        nextRun.setDate(targetDayOfMonth);
+        if (nextRun <= now) {
+          nextRun.setMonth(nextRun.getMonth() + 1);
+        }
+        break;
+
+      case 'quarterly':
+        const targetQuarterDay = schedule.schedule.dayOfMonth ?? 1;
+        nextRun.setDate(targetQuarterDay);
+        const currentQuarter = Math.floor(nextRun.getMonth() / 3);
+        const nextQuarterMonth = (currentQuarter + 1) * 3;
+        nextRun.setMonth(nextQuarterMonth);
+        if (nextRun <= now) {
+          nextRun.setMonth(nextQuarterMonth + 3);
+        }
+        break;
+    }
+
+    return nextRun.toISOString();
+  };
+
+  const handleCreateSchedule = (formData: ScheduleFormData) => {
+    setIsProcessing(true);
+
+    try {
+      const newSchedule: ScheduledReport = {
+        id: `schedule-${Date.now()}`,
+        name: formData.name,
+        reportType: formData.reportType,
+        frequency: formData.frequency,
+        schedule: formData.schedule,
+        format: formData.format,
+        recipients: formData.recipients,
+        status: formData.status,
+        lastRun: null,
+        nextRun: calculateNextRun(formData),
+        totalRuns: 0,
+        successRate: 100,
+        includeConnectionIds: formData.includeConnectionIds
+      };
+
+      setReports(prev => [...prev, newSchedule]);
+      setShowCreateModal(false);
+
+      window.addToast?.({
+        type: 'success',
+        title: 'Schedule Created',
+        message: `"${formData.name}" has been scheduled successfully`,
+        duration: 3000
+      });
+    } catch (error) {
+      window.addToast?.({
+        type: 'error',
+        title: 'Error Creating Schedule',
+        message: 'Failed to create schedule. Please try again.',
+        duration: 4000
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleUpdateSchedule = (formData: ScheduleFormData) => {
+    if (!selectedReport) return;
+
+    setIsProcessing(true);
+
+    try {
+      setReports(prev => prev.map(report =>
+        report.id === selectedReport.id
+          ? {
+              ...report,
+              name: formData.name,
+              reportType: formData.reportType,
+              frequency: formData.frequency,
+              schedule: formData.schedule,
+              format: formData.format,
+              recipients: formData.recipients,
+              status: formData.status,
+              nextRun: calculateNextRun(formData),
+              includeConnectionIds: formData.includeConnectionIds
+            }
+          : report
+      ));
+
+      setShowEditModal(false);
+      setSelectedReport(null);
+
+      window.addToast?.({
+        type: 'success',
+        title: 'Schedule Updated',
+        message: `"${formData.name}" has been updated successfully`,
+        duration: 3000
+      });
+    } catch (error) {
+      window.addToast?.({
+        type: 'error',
+        title: 'Error Updating Schedule',
+        message: 'Failed to update schedule. Please try again.',
+        duration: 4000
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const toggleReportStatus = (id: string) => {
-    setReports(prev => prev.map(report =>
-      report.id === id
-        ? { ...report, status: report.status === 'active' ? 'paused' : 'active' }
-        : report
+    const report = reports.find(r => r.id === id);
+    if (!report) return;
+
+    setReports(prev => prev.map(r =>
+      r.id === id
+        ? { ...r, status: r.status === 'active' ? 'paused' : 'active' }
+        : r
     ));
 
-    const report = reports.find(r => r.id === id);
     window.addToast?.({
       type: 'success',
-      title: report?.status === 'active' ? 'Report Paused' : 'Report Activated',
-      message: `Schedule for "${report?.name}" has been ${report?.status === 'active' ? 'paused' : 'activated'}`,
+      title: report.status === 'active' ? 'Schedule Paused' : 'Schedule Activated',
+      message: `"${report.name}" has been ${report.status === 'active' ? 'paused' : 'activated'}`,
       duration: 3000
     });
   };
 
-  const deleteReport = (id: string) => {
-    const report = reports.find(r => r.id === id);
-    setReports(prev => prev.filter(r => r.id !== id));
+  const handleDeleteConfirm = () => {
+    if (!reportToDelete) return;
 
-    window.addToast?.({
-      type: 'success',
-      title: 'Schedule Deleted',
-      message: `"${report?.name}" has been removed`,
-      duration: 3000
-    });
+    try {
+      setReports(prev => prev.filter(r => r.id !== reportToDelete.id));
+
+      window.addToast?.({
+        type: 'success',
+        title: 'Schedule Deleted',
+        message: `"${reportToDelete.name}" has been removed`,
+        duration: 3000
+      });
+    } catch (error) {
+      window.addToast?.({
+        type: 'error',
+        title: 'Error Deleting Schedule',
+        message: 'Failed to delete schedule. Please try again.',
+        duration: 4000
+      });
+    } finally {
+      setReportToDelete(null);
+    }
   };
 
   const getFrequencyLabel = (frequency: ScheduledReport['frequency']) => {
@@ -305,12 +475,7 @@ export function ScheduledReports() {
                 <button
                   onClick={() => {
                     setSelectedReport(report);
-                    window.addToast?.({
-                      type: 'info',
-                      title: 'Edit Schedule',
-                      message: 'Opening schedule editor',
-                      duration: 2000
-                    });
+                    setShowEditModal(true);
                   }}
                   className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
                   title="Edit schedule"
@@ -318,11 +483,7 @@ export function ScheduledReports() {
                   <Edit className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => {
-                    if (confirm(`Are you sure you want to delete "${report.name}"?`)) {
-                      deleteReport(report.id);
-                    }
-                  }}
+                  onClick={() => setReportToDelete(report)}
                   className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                   title="Delete schedule"
                 >
@@ -362,42 +523,63 @@ export function ScheduledReports() {
       {showCreateModal && (
         <Modal
           isOpen={showCreateModal}
-          onClose={() => setShowCreateModal(false)}
+          onClose={() => !isProcessing && setShowCreateModal(false)}
           title="Create Scheduled Report"
+          size="large"
         >
           <div className="p-6">
-            <p className="text-gray-600 mb-4">
-              Schedule configuration interface would be implemented here with options for:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-sm text-gray-600 mb-6">
-              <li>Report type selection</li>
-              <li>Frequency and timing configuration</li>
-              <li>Format selection (PDF, CSV, Excel)</li>
-              <li>Recipient management</li>
-              <li>Connection filtering</li>
-              <li>Custom parameters</li>
-            </ul>
-            <div className="flex justify-end space-x-3">
-              <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
-                Cancel
-              </Button>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  setShowCreateModal(false);
-                  window.addToast?.({
-                    type: 'success',
-                    title: 'Schedule Created',
-                    message: 'Your report schedule has been created successfully',
-                    duration: 3000
-                  });
-                }}
-              >
-                Create Schedule
-              </Button>
-            </div>
+            <ScheduleForm
+              onSubmit={handleCreateSchedule}
+              onCancel={() => setShowCreateModal(false)}
+              availableReports={availableReportTypes}
+            />
           </div>
         </Modal>
+      )}
+
+      {/* Edit Schedule Modal */}
+      {showEditModal && selectedReport && (
+        <Modal
+          isOpen={showEditModal}
+          onClose={() => !isProcessing && setShowEditModal(false)}
+          title="Edit Scheduled Report"
+          size="large"
+        >
+          <div className="p-6">
+            <ScheduleForm
+              onSubmit={handleUpdateSchedule}
+              onCancel={() => {
+                setShowEditModal(false);
+                setSelectedReport(null);
+              }}
+              availableReports={availableReportTypes}
+              initialData={{
+                id: selectedReport.id,
+                name: selectedReport.name,
+                reportType: selectedReport.reportType,
+                frequency: selectedReport.frequency,
+                schedule: selectedReport.schedule,
+                format: selectedReport.format,
+                recipients: selectedReport.recipients,
+                status: selectedReport.status,
+                includeConnectionIds: selectedReport.includeConnectionIds
+              }}
+            />
+          </div>
+        </Modal>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      {reportToDelete && (
+        <ConfirmDialog
+          isOpen={!!reportToDelete}
+          onClose={() => setReportToDelete(null)}
+          onConfirm={handleDeleteConfirm}
+          title="Delete Scheduled Report"
+          message={`Are you sure you want to delete "${reportToDelete.name}"? This action cannot be undone.`}
+          confirmLabel="Delete Schedule"
+          variant="danger"
+        />
       )}
     </div>
   );
