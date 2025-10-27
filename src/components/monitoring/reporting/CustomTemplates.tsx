@@ -213,6 +213,54 @@ const initialTemplates: Template[] = [
     isDefault: true,
     usageCount: 72,
     sections: ['Optimization Summary', 'MBC Opportunities', 'Link Optimization', 'Provider Optimization', 'Cost Savings', 'Action Plan']
+  },
+  {
+    id: '17',
+    name: 'Data Center Provider Report',
+    description: 'Comprehensive analysis by data center provider (Cisco Jasper, Equinix, Databank, CoreWeave) with IPE count, connections, Links, VNFs, capacity, and revenue metrics',
+    type: 'Performance',
+    lastModified: '2024-03-10T12:30:00Z',
+    format: 'Excel',
+    createdBy: 'infrastructure@company.com',
+    isDefault: false,
+    usageCount: 46,
+    sections: ['Provider Overview', 'Revenue by Provider', 'Cloud Provider On-Ramps', 'Efficiency Metrics', 'Top IPE Sites', 'Growth Analysis']
+  },
+  {
+    id: '18',
+    name: 'Cloud Router Aggregation Dashboard',
+    description: 'Cloud Router level analysis showing Links aggregated within each Cloud Router, VNFs per Link, capacity utilization, and optimization opportunities',
+    type: 'Performance',
+    lastModified: '2024-03-10T09:15:00Z',
+    format: 'PDF',
+    createdBy: 'netops@company.com',
+    isDefault: false,
+    usageCount: 54,
+    sections: ['Cloud Router Distribution', 'Capacity & Utilization', 'Links per CR', 'VNF Distribution', 'Optimization Opportunities', 'Trends']
+  },
+  {
+    id: '19',
+    name: 'Connection Hierarchy Report',
+    description: 'Full hierarchy view: Connections > Cloud Routers > Links > VNFs/IPEs with resource distribution, averages at each level, and capacity analysis',
+    type: 'Performance',
+    lastModified: '2024-03-09T14:45:00Z',
+    format: 'PDF',
+    createdBy: 'architecture@company.com',
+    isDefault: true,
+    usageCount: 68,
+    sections: ['Hierarchy Overview', 'Resource Distribution', 'Links per Connection', 'VNF Distribution', 'IPE Associations', 'Capacity Analysis']
+  },
+  {
+    id: '20',
+    name: 'IPE & Data Center Capacity',
+    description: 'IPE capacity analysis by data center provider showing installed capacity, utilization, Links per IPE, VNFs per IPE, and expansion recommendations',
+    type: 'Performance',
+    lastModified: '2024-03-10T11:00:00Z',
+    format: 'Excel',
+    createdBy: 'capacity@company.com',
+    isDefault: false,
+    usageCount: 41,
+    sections: ['IPE Capacity', 'Data Center Provider', 'Links per IPE', 'VNFs per IPE', 'Utilization', 'Expansion Planning']
   }
 ];
 
