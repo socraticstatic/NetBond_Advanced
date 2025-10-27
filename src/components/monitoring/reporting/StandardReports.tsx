@@ -395,12 +395,6 @@ export function StandardReports() {
                   Category
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Format
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Frequency
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Last Generated
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -425,7 +419,10 @@ export function StandardReports() {
                         </div>
                         <div className="ml-3">
                           <div className="text-sm font-medium text-gray-900">{report.name}</div>
-                          <div className="text-xs text-gray-500">{report.size || 'N/A'}</div>
+                          <div className="text-xs text-gray-500">
+                            {report.format} • {report.frequency}
+                            {report.size && ` • ${report.size}`}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -434,20 +431,12 @@ export function StandardReports() {
                         {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
-                        {report.format}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">
-                      {report.frequency}
-                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                       {report.lastGenerated ? (
                         <div className="flex items-center">
                           <Calendar className="h-3.5 w-3.5 mr-1.5 text-gray-400" />
                           <span>
-                            {new Date(report.lastGenerated).toLocaleDateString()} {new Date(report.lastGenerated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            {new Date(report.lastGenerated).toLocaleDateString()}
                           </span>
                         </div>
                       ) : (
