@@ -20,7 +20,7 @@ const availableReports: Report[] = [
   {
     id: 'report-1-connection-inventory',
     name: 'Report 1: Connection Inventory & Segmentation',
-    description: 'Total NetBond connections with breakdown by type (AVPN, Internet, Cloud to Cloud), bandwidth tiers, data center regions, cloud providers (AWS, Azure, Google, Oracle), Intelligent Peripheral Equipment (IPE), and average connections per customer',
+    description: 'Total NetBond connections with breakdown by type (Cloud to Cloud, Internet to Cloud, Site to Cloud, VPN to Cloud, Datacenter to Cloud), bandwidth tiers, data center regions, cloud providers (AWS, Azure, Google, Oracle), Intelligent Peripheral Equipment (IPE), and average connections per customer',
     category: 'operations',
     lastGenerated: '2024-03-10T15:30:00Z',
     frequency: 'weekly',
@@ -178,11 +178,22 @@ export function StandardReports() {
         return {
           summary: [
             { label: 'Total NetBond Connections', value: '1,247', trend: '+12%' },
-            { label: 'AVPN Connections', value: '542', trend: '+8%' },
-            { label: 'Internet Connections', value: '389', trend: '+15%' },
-            { label: 'Cloud to Cloud', value: '316', trend: '+18%' }
+            { label: 'Cloud to Cloud', value: '316', trend: '+18%' },
+            { label: 'Internet to Cloud', value: '289', trend: '+15%' },
+            { label: 'Site to Cloud', value: '342', trend: '+10%' }
           ],
           tables: [
+            {
+              title: 'Total Number of Connection Types and Breakdown',
+              headers: ['Connection Type', 'Count', 'Percentage'],
+              rows: [
+                ['Cloud to Cloud', '316', '25.3%'],
+                ['Internet to Cloud', '289', '23.2%'],
+                ['Site to Cloud', '342', '27.4%'],
+                ['VPN to Cloud', '187', '15.0%'],
+                ['Datacenter to Cloud', '113', '9.1%']
+              ]
+            },
             {
               title: 'Connection Segmentation by Bandwidth Tier',
               headers: ['Bandwidth', 'Count', 'Percentage'],
