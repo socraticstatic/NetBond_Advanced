@@ -16,7 +16,7 @@ export function ReportTemplates() {
     {
       id: '1',
       name: 'Monthly Performance Report',
-      description: 'Comprehensive performance metrics for all connections',
+      description: 'Comprehensive NetBond connection utilization metrics per IPE site with bandwidth analysis',
       type: 'Performance',
       lastModified: '2024-03-10T15:30:00Z',
       format: 'PDF'
@@ -24,7 +24,7 @@ export function ReportTemplates() {
     {
       id: '2',
       name: 'Security Audit Log',
-      description: 'Detailed security events and compliance status',
+      description: 'Detailed NetBond connection access logs, security events, and compliance status',
       type: 'Security',
       lastModified: '2024-03-09T12:45:00Z',
       format: 'CSV'
@@ -32,7 +32,7 @@ export function ReportTemplates() {
     {
       id: '3',
       name: 'Bandwidth Usage Analysis',
-      description: 'Bandwidth consumption patterns and trends',
+      description: 'NetBond connection types, utilization per IPE, link status, and bandwidth consumption trends',
       type: 'Usage',
       lastModified: '2024-03-08T09:15:00Z',
       format: 'Excel'

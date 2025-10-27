@@ -27,7 +27,7 @@ const scheduledReports: ScheduledReport[] = [
   {
     id: '1',
     name: 'Daily Performance Summary',
-    reportType: 'Connection Performance Report',
+    reportType: 'Connection Utilization Analysis',
     frequency: 'daily',
     schedule: { time: '08:00' },
     format: 'PDF',
@@ -41,7 +41,7 @@ const scheduledReports: ScheduledReport[] = [
   {
     id: '2',
     name: 'Weekly Security Audit',
-    reportType: 'Security Audit Report',
+    reportType: 'NetBond Security & Access Report',
     frequency: 'weekly',
     schedule: { time: '23:00', dayOfWeek: 0 },
     format: 'PDF',
@@ -55,7 +55,7 @@ const scheduledReports: ScheduledReport[] = [
   {
     id: '3',
     name: 'Monthly Billing Summary',
-    reportType: 'Billing & Cost Summary',
+    reportType: 'Revenue & Financial Metrics',
     frequency: 'monthly',
     schedule: { time: '00:00', dayOfMonth: 1 },
     format: 'Excel',
@@ -69,7 +69,7 @@ const scheduledReports: ScheduledReport[] = [
   {
     id: '4',
     name: 'Weekly Bandwidth Analysis',
-    reportType: 'Bandwidth Utilization Analysis',
+    reportType: 'IPE Capacity & Provider Coverage',
     frequency: 'weekly',
     schedule: { time: '06:00', dayOfWeek: 1 },
     format: 'Excel',
@@ -83,7 +83,7 @@ const scheduledReports: ScheduledReport[] = [
   {
     id: '5',
     name: 'Quarterly SLA Report',
-    reportType: 'SLA Compliance Report',
+    reportType: 'Service Reliability & Link Status',
     frequency: 'quarterly',
     schedule: { time: '09:00', dayOfMonth: 1 },
     format: 'PDF',
