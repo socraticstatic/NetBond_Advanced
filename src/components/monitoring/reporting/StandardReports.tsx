@@ -20,7 +20,7 @@ const availableReports: Report[] = [
   {
     id: 'report-1-connection-inventory',
     name: 'Report 1: Connection Inventory & Segmentation',
-    description: 'Total NetBond connections with breakdown by type (Cloud to Cloud, Internet to Cloud, Site to Cloud, VPN to Cloud, Datacenter to Cloud), bandwidth tiers, data center regions, cloud providers (AWS, Azure, Google, Oracle), Intelligent Peripheral Equipment (IPE), and average connections per customer',
+    description: 'Total NetBond connections with breakdown by type (Cloud to Cloud, Internet to Cloud, Site to Cloud, VPN to Cloud, Datacenter to Cloud), bandwidth tiers, data center regions, cloud providers (AWS, Azure, Google, Oracle), Infrastructure Provider Edge Router (IPE), and average connections per customer',
     category: 'operations',
     lastGenerated: '2024-03-10T15:30:00Z',
     frequency: 'weekly',
@@ -31,7 +31,7 @@ const availableReports: Report[] = [
   {
     id: 'report-2-ipe-capacity',
     name: 'Report 2: IPE Capacity & Data Center Analysis',
-    description: 'Total Intelligent Peripheral Equipment (IPE) by data center provider (Cisco Jasper, Equinix, Databank, CoreWeave) and region with cloud provider on-ramp counts, total installed capacity per IPE, Links per IPE, VNFs per IPE, and utilization for capacity planning',
+    description: 'Total Infrastructure Provider Edge Router (IPE) by data center provider (Cisco Jasper, Equinix, Databank, CoreWeave) and region with cloud provider on-ramp counts, total installed capacity per IPE, Links per IPE, VNFs per IPE, and utilization for capacity planning',
     category: 'operations',
     lastGenerated: '2024-03-10T14:00:00Z',
     frequency: 'weekly',
@@ -324,7 +324,7 @@ export function StandardReports() {
               ]
             },
             {
-              title: 'Connections per Intelligent Peripheral Equipment (IPE)',
+              title: 'Connections per Infrastructure Provider Edge Router (IPE)',
               headers: ['IPE', 'Connections', 'Utilization'],
               rows: [
                 ['Dallas-1', '142', '68%'],
