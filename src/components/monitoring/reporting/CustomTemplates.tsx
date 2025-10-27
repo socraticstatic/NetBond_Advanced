@@ -440,13 +440,7 @@ export function CustomTemplates() {
                   Type
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Format
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Usage Count
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Created By
+                  Usage
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Last Modified
@@ -471,7 +465,9 @@ export function CustomTemplates() {
                             <Star className="h-3.5 w-3.5 text-yellow-500 fill-current" />
                           )}
                         </div>
-                        <div className="text-xs text-gray-500 truncate max-w-xs">{template.description}</div>
+                        <div className="text-xs text-gray-500">
+                          {template.format} • {template.createdBy}
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -480,16 +476,8 @@ export function CustomTemplates() {
                       {template.type}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
-                      {template.format}
-                    </span>
-                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {template.usageCount} uses
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {template.createdBy}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {new Date(template.lastModified).toLocaleDateString()}
