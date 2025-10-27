@@ -25,98 +25,98 @@ const initialTemplates: Template[] = [
   {
     id: '1',
     name: 'Executive Summary Dashboard',
-    description: 'High-level overview with key metrics and trends for executive reporting',
+    description: 'High-level overview of NetBond connections, IPE capacity, utilization, revenue, and service reliability',
     type: 'Performance',
     lastModified: '2024-03-10T15:30:00Z',
     format: 'PDF',
     createdBy: 'System',
     isDefault: true,
     usageCount: 145,
-    sections: ['Overview', 'Network Health', 'Cost Summary', 'Incidents']
+    sections: ['Connection Inventory', 'IPE Capacity', 'Utilization Analysis', 'Revenue Metrics', 'Link Status']
   },
   {
     id: '2',
     name: 'Detailed Security Audit',
-    description: 'Comprehensive security analysis including firewall logs, threats, and compliance',
+    description: 'Comprehensive security analysis for NetBond connections including access logs, threats, and compliance',
     type: 'Security',
     lastModified: '2024-03-09T12:45:00Z',
     format: 'PDF',
     createdBy: 'System',
     isDefault: true,
     usageCount: 87,
-    sections: ['Security Events', 'Threat Analysis', 'Access Logs', 'Compliance Status']
+    sections: ['Security Events', 'Connection Access', 'Threat Analysis', 'Compliance Status']
   },
   {
     id: '3',
     name: 'Monthly Bandwidth Report',
-    description: 'Detailed analysis of bandwidth consumption patterns and capacity planning',
+    description: 'Detailed analysis of NetBond connection utilization per IPE site with bandwidth consumption patterns',
     type: 'Usage',
     lastModified: '2024-03-08T09:15:00Z',
     format: 'Excel',
     createdBy: 'System',
     isDefault: true,
     usageCount: 112,
-    sections: ['Usage Statistics', 'Peak Times', 'Growth Trends', 'Recommendations']
+    sections: ['Connection Utilization', 'IPE Capacity', 'Peak Times', 'Growth Trends', 'Capacity Planning']
   },
   {
     id: '4',
     name: 'Cost Analysis & Optimization',
-    description: 'Financial breakdown with cost optimization recommendations',
+    description: 'NetBond revenue metrics, ARPC trends, billed connections, and MBC analysis with optimization recommendations',
     type: 'Billing',
     lastModified: '2024-03-07T14:20:00Z',
     format: 'Excel',
     createdBy: 'finance@company.com',
     isDefault: false,
     usageCount: 64,
-    sections: ['Cost Breakdown', 'Trends', 'Optimization Opportunities', 'Forecasts']
+    sections: ['Revenue Breakdown', 'ARPC Trends', 'MBC Analysis', 'Optimization Opportunities', 'Forecasts']
   },
   {
     id: '5',
     name: 'SLA Performance Report',
-    description: 'Service level agreement compliance tracking and uptime analysis',
+    description: 'NetBond service reliability with link status, service disruptions per site/region, and downtime analysis',
     type: 'Performance',
     lastModified: '2024-03-06T11:10:00Z',
     format: 'PDF',
     createdBy: 'ops@company.com',
     isDefault: false,
     usageCount: 53,
-    sections: ['SLA Metrics', 'Uptime Analysis', 'Incident Impact', 'Penalties']
+    sections: ['Link Status', 'Connection Status', 'Service Disruptions', 'Downtime Analysis', 'SLA Compliance']
   },
   {
     id: '6',
     name: 'Network Telemetry Export',
-    description: 'Raw metrics export for integration with external analytics platforms',
+    description: 'Raw NetBond connection metrics, IPE utilization, and link status export for external analytics',
     type: 'Custom',
     lastModified: '2024-03-05T16:45:00Z',
     format: 'JSON',
     createdBy: 'data@company.com',
     isDefault: false,
     usageCount: 28,
-    sections: ['Raw Metrics', 'Time Series Data', 'Event Logs', 'Metadata']
+    sections: ['Connection Metrics', 'IPE Utilization', 'Link Status', 'Time Series Data', 'Event Logs', 'Metadata']
   },
   {
     id: '7',
     name: 'Capacity Planning Report',
-    description: 'Forecasting and capacity planning with growth projections',
+    description: 'IPE capacity analysis, connection utilization trends, provider coverage, and growth projections',
     type: 'Performance',
     lastModified: '2024-03-04T10:30:00Z',
     format: 'PDF',
     createdBy: 'netops@company.com',
     isDefault: false,
     usageCount: 41,
-    sections: ['Current Utilization', 'Growth Trends', 'Projections', 'Recommendations']
+    sections: ['IPE Capacity', 'Current Utilization', 'Provider Coverage', 'Growth Trends', 'Projections', 'Recommendations']
   },
   {
     id: '8',
     name: 'Incident Response Summary',
-    description: 'Comprehensive incident tracking with root cause analysis',
+    description: 'NetBond service disruptions per site/region, connections impacted, downtime analysis, and remediation',
     type: 'Security',
     lastModified: '2024-03-03T08:15:00Z',
     format: 'PDF',
     createdBy: 'incidents@company.com',
     isDefault: false,
     usageCount: 37,
-    sections: ['Incident Timeline', 'Impact Analysis', 'Root Cause', 'Remediation']
+    sections: ['Service Disruptions', 'Connections Impacted', 'IPE Site Impact', 'Downtime Minutes', 'Root Cause', 'Remediation']
   }
 ];
 
