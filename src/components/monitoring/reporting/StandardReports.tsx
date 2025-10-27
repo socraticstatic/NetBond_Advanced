@@ -141,7 +141,7 @@ const availableReports: Report[] = [
   {
     id: 'report-12-ipe-revenue',
     name: 'Report 12: IPE Revenue & Profitability Analysis',
-    description: 'Total revenue per IPE site, revenue per region, capacity utilization impact on revenue, installed capacity ROI, and IPE site profitability rankings',
+    description: 'Total revenue per IPE, revenue per region, capacity utilization impact on revenue, installed capacity ROI, and IPE profitability rankings',
     category: 'billing',
     lastGenerated: '2024-03-08T08:30:00Z',
     frequency: 'monthly',
@@ -347,7 +347,7 @@ export function StandardReports() {
           tables: [
             {
               title: 'IPE by Data Center Provider',
-              headers: ['Data Center Provider', 'IPE Sites', 'Total Links', 'Total VNFs', 'Installed Capacity', 'Avg Utilization'],
+              headers: ['Data Center Provider', 'IPEs', 'Total Links', 'Total VNFs', 'Installed Capacity', 'Avg Utilization'],
               rows: [
                 ['Equinix', '18', '1,742', '894', '687 Gbps', '78%'],
                 ['Cisco Jasper', '12', '1,198', '612', '458 Gbps', '72%'],
@@ -377,8 +377,8 @@ export function StandardReports() {
               ]
             },
             {
-              title: 'Total Installed Capacity per IPE Site',
-              headers: ['IPE Site', 'AWS', 'Azure', 'Google', 'Oracle', 'Total Capacity', 'Utilization'],
+              title: 'Total Installed Capacity per IPE',
+              headers: ['IPE', 'AWS', 'Azure', 'Google', 'Oracle', 'Total Capacity', 'Utilization'],
               rows: [
                 ['Dallas-1', '30 Gbps', '25 Gbps', '25 Gbps', '20 Gbps', '100 Gbps', '68%'],
                 ['NYC-2', '40 Gbps', '35 Gbps', '30 Gbps', '—', '105 Gbps', '72%'],
@@ -394,13 +394,13 @@ export function StandardReports() {
           summary: [
             { label: 'Peak Hour Utilization (Max)', value: '82%', trend: '+7%' },
             { label: 'Average Utilization', value: '64%', trend: '+3%' },
-            { label: 'IPE Sites Over 80%', value: '8', trend: '+2' },
+            { label: 'IPEs Over 80%', value: '8', trend: '+2' },
             { label: 'Total Installed Capacity', value: '2.4 Tbps', trend: '+240 Gbps' }
           ],
           tables: [
             {
-              title: 'Total Connection Utilization per IPE Site',
-              headers: ['IPE Site', 'Installed Capacity', 'Avg Utilization', 'Max Utilization (Busiest Hour)', 'Status'],
+              title: 'Total Connection Utilization per IPE',
+              headers: ['IPE', 'Installed Capacity', 'Avg Utilization', 'Max Utilization (Busiest Hour)', 'Status'],
               rows: [
                 ['Dallas-1', '100 Gbps', '68%', '85%', 'Healthy'],
                 ['NYC-2', '105 Gbps', '72%', '89%', 'Monitor'],
@@ -452,7 +452,7 @@ export function StandardReports() {
               ]
             },
             {
-              title: 'New Connections per Week by IPE Site and Provider',
+              title: 'New Connections per Week by IPE and Provider',
               headers: ['Site', 'AWS', 'Azure', 'Google', 'Oracle', 'Total'],
               rows: [
                 ['Dallas-1', '5', '4', '3', '2', '14'],
@@ -562,7 +562,7 @@ export function StandardReports() {
             },
             {
               title: 'Service Disruption Impact per Site/Region',
-              headers: ['Region', 'IPE Sites', 'Connections Impacted', 'Incidents', 'Avg Downtime per Connection'],
+              headers: ['Region', 'IPEs', 'Connections Impacted', 'Incidents', 'Avg Downtime per Connection'],
               rows: [
                 ['US East', '3', '47', '2', '12 min'],
                 ['US West', '2', '23', '1', '6 min'],
@@ -885,15 +885,15 @@ export function StandardReports() {
       case 'report-12-ipe-revenue':
         return {
           summary: [
-            { label: 'Total IPE Sites', value: '42', trend: '+2 new sites' },
+            { label: 'Total IPEs', value: '42', trend: '+2 new sites' },
             { label: 'Total IPE Revenue', value: '$2.80M/mo', trend: '+$215K MoM' },
             { label: 'Avg Revenue per IPE', value: '$66,667', trend: '+$5,119' },
             { label: 'Most Profitable IPE', value: '$142,800', trend: 'NYC-2' }
           ],
           tables: [
             {
-              title: 'Revenue per IPE Site',
-              headers: ['IPE Site', 'Connections', 'Total Revenue', 'Avg per Connection', 'Capacity Util', 'ROI Score'],
+              title: 'Revenue per IPE',
+              headers: ['IPE', 'Connections', 'Total Revenue', 'Avg per Connection', 'Capacity Util', 'ROI Score'],
               rows: [
                 ['NYC-2', '158', '$442,530', '$2,801', '72%', '98/100'],
                 ['Dallas-1', '142', '$398,420', '$2,806', '68%', '96/100'],
@@ -905,7 +905,7 @@ export function StandardReports() {
             },
             {
               title: 'IPE Revenue by Region',
-              headers: ['Region', 'IPE Sites', 'Total Connections', 'Total Revenue', 'Avg per Site', 'Growth'],
+              headers: ['Region', 'IPEs', 'Total Connections', 'Total Revenue', 'Avg per Site', 'Growth'],
               rows: [
                 ['US East', '11', '387', '$950,472', '$86,407', '+12.4%'],
                 ['US West', '9', '342', '$790,704', '$87,856', '+10.8%'],
@@ -915,7 +915,7 @@ export function StandardReports() {
             },
             {
               title: 'IPE Capacity ROI Analysis',
-              headers: ['IPE Site', 'Installed Capacity', 'Utilization', 'Monthly Revenue', 'Revenue per Gbps', 'Status'],
+              headers: ['IPE', 'Installed Capacity', 'Utilization', 'Monthly Revenue', 'Revenue per Gbps', 'Status'],
               rows: [
                 ['NYC-2', '105 Gbps', '72%', '$442,530', '$4,215', 'Optimal'],
                 ['Dallas-1', '100 Gbps', '68%', '$398,420', '$3,984', 'Optimal'],
@@ -925,8 +925,8 @@ export function StandardReports() {
               ]
             },
             {
-              title: 'IPE Site Profitability Rankings',
-              headers: ['Rank', 'IPE Site', 'Revenue', 'Efficiency', 'Growth Rate', 'Customer Satisfaction'],
+              title: 'IPE Profitability Rankings',
+              headers: ['Rank', 'IPE', 'Revenue', 'Efficiency', 'Growth Rate', 'Customer Satisfaction'],
               rows: [
                 ['1', 'NYC-2', '$442,530', '98%', '+14.2%', '4.8/5'],
                 ['2', 'Dallas-1', '$398,420', '96%', '+12.8%', '4.7/5'],
@@ -1073,14 +1073,14 @@ export function StandardReports() {
         return {
           summary: [
             { label: 'Total Data Center Providers', value: '4', trend: 'Cisco Jasper, Equinix, Databank, CoreWeave' },
-            { label: 'Total IPE Sites', value: '42', trend: '+2 new sites' },
+            { label: 'Total IPEs', value: '42', trend: '+2 new sites' },
             { label: 'Most Utilized Provider', value: 'Equinix', trend: '18 sites, 78% avg util' },
             { label: 'Highest Revenue', value: '$1.24M/mo', trend: 'Equinix' }
           ],
           tables: [
             {
               title: 'Data Center Provider Overview',
-              headers: ['Provider', 'IPE Sites', 'Total Connections', 'Total Links', 'Total VNFs', 'Installed Capacity', 'Avg Utilization'],
+              headers: ['Provider', 'IPEs', 'Total Connections', 'Total Links', 'Total VNFs', 'Installed Capacity', 'Avg Utilization'],
               rows: [
                 ['Equinix', '18', '562', '1,742', '894', '687 Gbps', '78%'],
                 ['Cisco Jasper', '12', '387', '1,198', '612', '458 Gbps', '72%'],
@@ -1119,8 +1119,8 @@ export function StandardReports() {
               ]
             },
             {
-              title: 'Top IPE Sites by Data Center Provider',
-              headers: ['IPE Site', 'Provider', 'Connections', 'Links', 'Revenue', 'Utilization'],
+              title: 'Top IPEs by Data Center Provider',
+              headers: ['IPE', 'Provider', 'Connections', 'Links', 'Revenue', 'Utilization'],
               rows: [
                 ['NYC-2 (Equinix)', 'Equinix', '158', '489', '$442,530', '72%'],
                 ['Dallas-1 (Cisco Jasper)', 'Cisco Jasper', '142', '440', '$398,420', '68%'],
