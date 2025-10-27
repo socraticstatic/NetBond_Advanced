@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { FileText, Download, Calendar, TrendingUp, Activity, DollarSign, Shield, Eye, ChevronDown, Filter, Search, LayoutGrid, List } from 'lucide-react';
+import { FileText, Download, Calendar, TrendingUp, Activity, DollarSign, Shield, Eye, ChevronDown, Filter, Search, LayoutGrid, List, X } from 'lucide-react';
 import { Button } from '../../common/Button';
+import { Modal } from '../../common/Modal';
 import { useMonitoring } from '../context/MonitoringContext';
 
 interface Report {
@@ -112,6 +113,7 @@ export function StandardReports() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [generatingReports, setGeneratingReports] = useState<Set<string>>(new Set());
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+  const [previewReport, setPreviewReport] = useState<Report | null>(null);
 
   const getCategoryIcon = (category: Report['category']) => {
     switch (category) {
@@ -168,6 +170,266 @@ export function StandardReports() {
       message: `Downloading ${report.name}`,
       duration: 3000
     });
+  };
+
+  const getReportPreviewData = (reportId: string) => {
+    switch (reportId) {
+      case 'report-1-connection-inventory':
+        return {
+          summary: [
+            { label: 'Total NetBond Connections', value: '1,247', trend: '+12%' },
+            { label: 'AVPN Connections', value: '542', trend: '+8%' },
+            { label: 'Internet Connections', value: '389', trend: '+15%' },
+            { label: 'Cloud to Cloud', value: '316', trend: '+18%' }
+          ],
+          tables: [
+            {
+              title: 'Connections by Bandwidth Tier',
+              headers: ['Bandwidth', 'Count', 'Percentage'],
+              rows: [
+                ['500 Mbps', '287', '23%'],
+                ['1 Gbps', '421', '34%'],
+                ['10 Gbps', '389', '31%'],
+                ['100 Gbps', '150', '12%']
+              ]
+            },
+            {
+              title: 'Connections by Provider',
+              headers: ['Provider', 'Connections', 'Avg per Customer'],
+              rows: [
+                ['AWS', '456', '3.2'],
+                ['Azure', '398', '2.8'],
+                ['Google Cloud', '247', '2.1'],
+                ['Oracle Cloud', '146', '1.9']
+              ]
+            }
+          ]
+        };
+
+      case 'report-2-ipe-capacity':
+        return {
+          summary: [
+            { label: 'Total IPE Sites', value: '42', trend: '+2' },
+            { label: 'NetBond Enabled', value: '38', trend: '90%' },
+            { label: 'Total Capacity', value: '2.4 Tbps', trend: '+240 Gbps' },
+            { label: 'Avg Utilization', value: '67%', trend: '+5%' }
+          ],
+          tables: [
+            {
+              title: 'IPE Sites by Region',
+              headers: ['Region', 'Sites', 'Total Capacity', 'Utilization'],
+              rows: [
+                ['US East', '12', '720 Gbps', '72%'],
+                ['US West', '10', '640 Gbps', '68%'],
+                ['Europe', '8', '580 Gbps', '65%'],
+                ['Asia Pacific', '8', '460 Gbps', '58%']
+              ]
+            },
+            {
+              title: 'Provider Coverage per IPE',
+              headers: ['IPE Site', 'AWS', 'Azure', 'GCP', 'Oracle'],
+              rows: [
+                ['Dallas-1', '✓', '✓', '✓', '✓'],
+                ['NYC-2', '✓', '✓', '✓', '—'],
+                ['SFO-1', '✓', '✓', '✓', '✓'],
+                ['London-1', '✓', '✓', '—', '—']
+              ]
+            }
+          ]
+        };
+
+      case 'report-3-utilization-analysis':
+        return {
+          summary: [
+            { label: 'Peak Hour Utilization', value: '82%', trend: '+7%' },
+            { label: 'Average Utilization', value: '64%', trend: '+3%' },
+            { label: 'Sites Over 80%', value: '8', trend: '+2' },
+            { label: 'Capacity Available', value: '680 Gbps', trend: '-40 Gbps' }
+          ],
+          tables: [
+            {
+              title: 'Utilization by IPE Site',
+              headers: ['Site', 'Capacity', 'Avg Util', 'Peak Util', 'Status'],
+              rows: [
+                ['Dallas-1', '100 Gbps', '68%', '85%', 'Healthy'],
+                ['NYC-2', '120 Gbps', '72%', '89%', 'Monitor'],
+                ['SFO-1', '80 Gbps', '58%', '72%', 'Healthy'],
+                ['Chicago-1', '90 Gbps', '76%', '92%', 'Plan Upgrade']
+              ]
+            },
+            {
+              title: 'Portal Level Utilization',
+              headers: ['Portal', 'Connections', 'Avg Util', 'Max Util'],
+              rows: [
+                ['Enterprise Portal', '847', '71%', '94%'],
+                ['SMB Portal', '289', '54%', '78%'],
+                ['Partner Portal', '111', '62%', '83%']
+              ]
+            }
+          ]
+        };
+
+      case 'report-4-weekly-trends':
+        return {
+          summary: [
+            { label: 'New Connections', value: '47', trend: '+12 vs last week' },
+            { label: 'Upgraded', value: '23', trend: '+5' },
+            { label: 'Downgraded', value: '8', trend: '-2' },
+            { label: 'Deactivated', value: '12', trend: '-3' }
+          ],
+          tables: [
+            {
+              title: 'Weekly Connection Activity',
+              headers: ['Week', 'New', 'Upgraded', 'Downgraded', 'Deactivated', 'Net Change'],
+              rows: [
+                ['Week 1', '35', '18', '10', '15', '+28'],
+                ['Week 2', '42', '21', '8', '13', '+42'],
+                ['Week 3', '38', '19', '12', '14', '+31'],
+                ['Week 4', '47', '23', '8', '12', '+50']
+              ]
+            },
+            {
+              title: 'New Connections by Provider',
+              headers: ['Provider', 'This Week', 'Last Week', 'Change'],
+              rows: [
+                ['AWS', '18', '14', '+29%'],
+                ['Azure', '16', '12', '+33%'],
+                ['Google Cloud', '9', '7', '+29%'],
+                ['Oracle Cloud', '4', '2', '+100%']
+              ]
+            }
+          ]
+        };
+
+      case 'report-5-revenue-metrics':
+        return {
+          summary: [
+            { label: 'Monthly Revenue', value: '$2.8M', trend: '+8.2%' },
+            { label: 'Billed Connections', value: '1,235', trend: '+47' },
+            { label: 'ARPC', value: '$2,267', trend: '+$124' },
+            { label: 'Average MBC', value: '4.2 Gbps', trend: '+0.3 Gbps' }
+          ],
+          tables: [
+            {
+              title: '12-Month Revenue Trend',
+              headers: ['Month', 'Revenue', 'Connections', 'ARPC', 'Growth'],
+              rows: [
+                ['Jan 2024', '$2.58M', '1,188', '$2,172', '+6.2%'],
+                ['Feb 2024', '$2.64M', '1,205', '$2,190', '+2.3%'],
+                ['Mar 2024', '$2.72M', '1,221', '$2,228', '+3.0%'],
+                ['Apr 2024', '$2.80M', '1,235', '$2,267', '+2.9%']
+              ]
+            },
+            {
+              title: 'Revenue by Connection Type',
+              headers: ['Type', 'Connections', 'Revenue', 'ARPC'],
+              rows: [
+                ['AVPN', '542', '$1,465K', '$2,702'],
+                ['Internet', '389', '$687K', '$1,766'],
+                ['Cloud to Cloud', '316', '$648K', '$2,051']
+              ]
+            }
+          ]
+        };
+
+      case 'report-6-service-reliability':
+        return {
+          summary: [
+            { label: 'Total VLANs', value: '3,847', trend: '+142' },
+            { label: 'Active Connections', value: '1,235', trend: '+47' },
+            { label: 'Service Disruptions', value: '7', trend: '-3' },
+            { label: 'Avg Downtime', value: '8.4 min', trend: '-2.1 min' }
+          ],
+          tables: [
+            {
+              title: 'Connection Status Overview',
+              headers: ['Status', 'Connections', 'VLANs', 'Percentage'],
+              rows: [
+                ['Active', '1,235', '3,847', '99.0%'],
+                ['Inactive', '8', '14', '0.6%'],
+                ['Deactivated', '4', '7', '0.3%']
+              ]
+            },
+            {
+              title: 'Service Disruptions by Region',
+              headers: ['Region', 'Incidents', 'Connections Impacted', 'Avg Downtime'],
+              rows: [
+                ['US East', '2', '47', '12 min'],
+                ['US West', '1', '23', '6 min'],
+                ['Europe', '3', '68', '15 min'],
+                ['Asia Pacific', '1', '19', '8 min']
+              ]
+            }
+          ]
+        };
+
+      case 'report-7-customer-detail':
+        return {
+          summary: [
+            { label: 'Active Connections', value: '8', trend: '+2' },
+            { label: 'Total VLANs', value: '24', trend: '+6' },
+            { label: 'Avg Utilization', value: '58%', trend: '+4%' },
+            { label: 'Peak Utilization', value: '89%', trend: '+8%' }
+          ],
+          tables: [
+            {
+              title: 'My Connections',
+              headers: ['Connection ID', 'Type', 'Size', 'VLANs', 'Status'],
+              rows: [
+                ['NB-47289', 'AWS Direct Connect', '10 Gbps', '4', 'Active'],
+                ['NB-47291', 'Azure ExpressRoute', '5 Gbps', '3', 'Active'],
+                ['NB-47305', 'Google Cloud Interconnect', '10 Gbps', '5', 'Active'],
+                ['NB-47312', 'AWS Direct Connect', '1 Gbps', '2', 'Active']
+              ]
+            },
+            {
+              title: 'Connections by Cloud Region',
+              headers: ['Provider', 'Region', 'Connections', 'Total Capacity'],
+              rows: [
+                ['AWS', 'us-east-1', '3', '16 Gbps'],
+                ['Azure', 'eastus', '2', '8 Gbps'],
+                ['Google Cloud', 'us-central1', '2', '15 Gbps'],
+                ['Oracle', 'us-ashburn-1', '1', '5 Gbps']
+              ]
+            }
+          ]
+        };
+
+      case 'report-8-customer-analytics':
+        return {
+          summary: [
+            { label: 'Total Customers', value: '427', trend: '+18' },
+            { label: 'Net Adds (MTD)', value: '+18', trend: '+6' },
+            { label: 'Avg Connections', value: '2.9', trend: '+0.2' },
+            { label: 'Avg Monthly Spend', value: '$6,553', trend: '+$342' }
+          ],
+          tables: [
+            {
+              title: 'Customers by Region',
+              headers: ['Region', 'Customers', 'Avg Connections', 'Avg Spend', 'Net Adds'],
+              rows: [
+                ['US East', '147', '3.2', '$7,234', '+8'],
+                ['US West', '122', '2.9', '$6,521', '+5'],
+                ['Europe', '98', '2.7', '$6,189', '+3'],
+                ['Asia Pacific', '60', '2.4', '$5,432', '+2']
+              ]
+            },
+            {
+              title: 'Customer Growth Metrics',
+              headers: ['Month', 'New Customers', 'Churned', 'Net Adds', 'Total'],
+              rows: [
+                ['January', '22', '4', '+18', '409'],
+                ['February', '19', '6', '+13', '422'],
+                ['March', '24', '5', '+19', '441'],
+                ['April (MTD)', '21', '3', '+18', '459']
+              ]
+            }
+          ]
+        };
+
+      default:
+        return null;
+    }
   };
 
   const filteredReports = availableReports.filter(report => {
@@ -324,14 +586,7 @@ export function StandardReports() {
                     <Button
                       variant="secondary"
                       size="sm"
-                      onClick={() => {
-                        window.addToast?.({
-                          type: 'info',
-                          title: 'Preview',
-                          message: `Opening preview for ${report.name}`,
-                          duration: 3000
-                        });
-                      }}
+                      onClick={() => setPreviewReport(report)}
                       className="flex-1"
                     >
                       <Eye className="h-4 w-4 mr-1.5" />
@@ -431,14 +686,7 @@ export function StandardReports() {
                         {report.lastGenerated && (
                           <>
                             <button
-                              onClick={() => {
-                                window.addToast?.({
-                                  type: 'info',
-                                  title: 'Preview',
-                                  message: `Opening preview for ${report.name}`,
-                                  duration: 3000
-                                });
-                              }}
+                              onClick={() => setPreviewReport(report)}
                               className="text-gray-600 hover:text-gray-900 p-1"
                               title="Preview"
                             >
@@ -479,6 +727,115 @@ export function StandardReports() {
             Try adjusting your search or filter criteria
           </p>
         </div>
+      )}
+
+      {/* Report Preview Modal */}
+      {previewReport && (
+        <Modal
+          isOpen={true}
+          onClose={() => setPreviewReport(null)}
+          title={previewReport.name}
+          size="xl"
+        >
+          <div className="space-y-6">
+            {(() => {
+              const previewData = getReportPreviewData(previewReport.id);
+              if (!previewData) return null;
+
+              return (
+                <>
+                  {/* Summary Cards */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {previewData.summary.map((item, idx) => (
+                      <div key={idx} className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-lg p-4">
+                        <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                          {item.label}
+                        </div>
+                        <div className="flex items-baseline justify-between">
+                          <div className="text-2xl font-bold text-gray-900">
+                            {item.value}
+                          </div>
+                          <div className="text-xs font-semibold text-green-600">
+                            {item.trend}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Data Tables */}
+                  {previewData.tables.map((table, tableIdx) => (
+                    <div key={tableIdx} className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                      <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+                        <h4 className="text-sm font-semibold text-gray-900">{table.title}</h4>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                          <thead className="bg-gray-50">
+                            <tr>
+                              {table.headers.map((header, headerIdx) => (
+                                <th
+                                  key={headerIdx}
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  {header}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-200">
+                            {table.rows.map((row, rowIdx) => (
+                              <tr key={rowIdx} className="hover:bg-gray-50 transition-colors">
+                                {row.map((cell, cellIdx) => (
+                                  <td
+                                    key={cellIdx}
+                                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                                  >
+                                    {cell}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+                    <Button
+                      variant="secondary"
+                      onClick={() => setPreviewReport(null)}
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      icon={Download}
+                      onClick={() => {
+                        handleDownloadReport(previewReport);
+                        setPreviewReport(null);
+                      }}
+                    >
+                      Download Report
+                    </Button>
+                    <Button
+                      variant="primary"
+                      icon={FileText}
+                      onClick={() => {
+                        handleGenerateReport(previewReport.id);
+                        setPreviewReport(null);
+                      }}
+                    >
+                      Generate New
+                    </Button>
+                  </div>
+                </>
+              );
+            })()}
+          </div>
+        </Modal>
       )}
     </div>
   );
