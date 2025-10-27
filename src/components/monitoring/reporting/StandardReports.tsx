@@ -104,6 +104,72 @@ const availableReports: Report[] = [
     format: 'Excel',
     size: '1.8 MB',
     status: 'ready'
+  },
+  {
+    id: 'report-9-arpc-analysis',
+    name: 'Report 9: ARPC & Revenue Per Connection Analysis',
+    description: 'Average Revenue Per Connection (ARPC) breakdown by connection type, provider, region, and bandwidth tier with month-over-month trends and revenue optimization opportunities',
+    category: 'billing',
+    lastGenerated: '2024-03-10T14:30:00Z',
+    frequency: 'monthly',
+    format: 'Excel',
+    size: '2.3 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-10-mbc-cost',
+    name: 'Report 10: MBC Cost Analysis & Optimization',
+    description: 'Maximum Billable Capacity (MBC) analysis showing current MBC per connection, actual utilization vs MBC, cost per Gbps, upgrade/downgrade recommendations, and potential cost savings',
+    category: 'billing',
+    lastGenerated: '2024-03-10T12:15:00Z',
+    frequency: 'weekly',
+    format: 'Excel',
+    size: '2.7 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-11-provider-cost',
+    name: 'Report 11: Provider Cost Comparison & Analysis',
+    description: 'Cost comparison across providers (AWS, Azure, Google, Oracle) by region, connection type, bandwidth tier, total spend per provider, ARPC by provider, and cost efficiency metrics',
+    category: 'billing',
+    lastGenerated: '2024-03-09T10:00:00Z',
+    frequency: 'monthly',
+    format: 'PDF',
+    size: '1.9 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-12-ipe-revenue',
+    name: 'Report 12: IPE Revenue & Profitability Analysis',
+    description: 'Total revenue per IPE site, revenue per region, capacity utilization impact on revenue, installed capacity ROI, and IPE site profitability rankings',
+    category: 'billing',
+    lastGenerated: '2024-03-08T08:30:00Z',
+    frequency: 'monthly',
+    format: 'Excel',
+    size: '2.4 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-13-cost-forecast',
+    name: 'Report 13: Revenue Forecast & Growth Projections',
+    description: 'Revenue forecasting based on historical trends, new connection pipeline, MBC upgrade trends, customer growth projections, and 12-month revenue outlook by provider and region',
+    category: 'billing',
+    lastGenerated: '2024-03-07T15:45:00Z',
+    frequency: 'monthly',
+    format: 'PDF',
+    size: '2.1 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-14-link-cost',
+    name: 'Report 14: Link Cost & Economics Analysis',
+    description: 'Cost per Link analysis, average Links per connection, revenue per Link, Link utilization economics, and cost efficiency by connection type and provider',
+    category: 'billing',
+    lastGenerated: '2024-03-10T11:00:00Z',
+    frequency: 'weekly',
+    format: 'Excel',
+    size: '2.0 MB',
+    status: 'ready'
   }
 ];
 
@@ -606,6 +672,354 @@ export function StandardReports() {
                 ['February', '$2.64M', '1,205', '$2,190', '+$18'],
                 ['March', '$2.72M', '1,221', '$2,228', '+$38'],
                 ['April (Current)', '$2.80M', '1,235', '$2,267', '+$39']
+              ]
+            }
+          ]
+        };
+
+      case 'report-9-arpc-analysis':
+        return {
+          summary: [
+            { label: 'Overall ARPC', value: '$2,267', trend: '+$124 MoM' },
+            { label: 'Highest ARPC (Provider)', value: '$2,845', trend: 'AWS' },
+            { label: 'Highest ARPC (Type)', value: '$3,120', trend: 'Cloud to Cloud' },
+            { label: 'Optimization Potential', value: '$142K/mo', trend: '+$28K vs last month' }
+          ],
+          tables: [
+            {
+              title: 'ARPC Breakdown by Connection Type',
+              headers: ['Connection Type', 'Total Connections', 'Total Revenue', 'ARPC', 'MoM Change'],
+              rows: [
+                ['Cloud to Cloud', '316', '$986,320', '$3,120', '+$156'],
+                ['Site to Cloud', '342', '$889,530', '$2,601', '+$98'],
+                ['Internet to Cloud', '289', '$635,830', '$2,200', '+$112'],
+                ['VPN to Cloud', '187', '$392,720', '$2,100', '+$87'],
+                ['Datacenter to Cloud', '113', '$225,600', '$1,996', '+$45']
+              ]
+            },
+            {
+              title: 'ARPC by Provider',
+              headers: ['Provider', 'Connections', 'Total Revenue', 'ARPC', 'YoY Change'],
+              rows: [
+                ['AWS', '456', '$1,297,320', '$2,845', '+14.2%'],
+                ['Azure', '398', '$954,620', '$2,398', '+11.8%'],
+                ['Google', '247', '$542,940', '$2,198', '+8.5%'],
+                ['Oracle', '146', '$285,120', '$1,953', '+6.2%']
+              ]
+            },
+            {
+              title: 'ARPC by Region',
+              headers: ['Region', 'Connections', 'Avg ARPC', 'Revenue Contribution', '%'],
+              rows: [
+                ['US East', '387', '$2,456', '$950,472', '33.9%'],
+                ['US West', '342', '$2,312', '$790,704', '28.2%'],
+                ['Europe', '298', '$2,187', '$651,726', '23.3%'],
+                ['Asia Pacific', '220', '$2,045', '$449,900', '16.0%']
+              ]
+            },
+            {
+              title: 'ARPC by Bandwidth Tier',
+              headers: ['Bandwidth', 'Connections', 'ARPC', 'Revenue', 'Cost per Gbps'],
+              rows: [
+                ['100 Gbps', '150', '$8,450', '$1,267,500', '$84.50'],
+                ['10 Gbps', '389', '$3,280', '$1,275,920', '$328.00'],
+                ['1 Gbps', '421', '$1,890', '$795,690', '$1,890.00'],
+                ['500 Mbps', '287', '$1,245', '$357,315', '$2,490.00']
+              ]
+            }
+          ]
+        };
+
+      case 'report-10-mbc-cost':
+        return {
+          summary: [
+            { label: 'Avg MBC per Connection', value: '4.8 Gbps', trend: '+0.3 Gbps MoM' },
+            { label: 'Underutilized (<60%)', value: '234 connections', trend: '18.9%' },
+            { label: 'Right-sized (60-85%)', value: '847 connections', trend: '68.5%' },
+            { label: 'Potential Savings', value: '$89K/mo', trend: 'Downgrade opportunities' }
+          ],
+          tables: [
+            {
+              title: 'MBC vs Actual Utilization Analysis',
+              headers: ['Utilization Band', 'Connections', 'Avg MBC', 'Avg Utilization', 'Action', 'Est. Savings'],
+              rows: [
+                ['<40% (Under)', '87', '5.2 Gbps', '32%', 'Consider Downgrade', '$42,300/mo'],
+                ['40-60% (Low)', '147', '4.8 Gbps', '52%', 'Monitor', '$28,400/mo'],
+                ['60-85% (Optimal)', '847', '4.7 Gbps', '74%', 'No Action', '$0'],
+                ['85-95% (High)', '123', '6.1 Gbps', '89%', 'Monitor', '$0'],
+                ['>95% (Critical)', '43', '7.8 Gbps', '97%', 'Consider Upgrade', 'Revenue Opportunity']
+              ]
+            },
+            {
+              title: 'MBC Cost per Connection Type',
+              headers: ['Connection Type', 'Avg MBC', 'Avg Cost per Gbps', 'Monthly Cost', 'Avg Utilization'],
+              rows: [
+                ['Cloud to Cloud', '6.2 Gbps', '$503', '$3,119', '78%'],
+                ['Site to Cloud', '5.1 Gbps', '$510', '$2,601', '76%'],
+                ['Internet to Cloud', '4.2 Gbps', '$524', '$2,201', '71%'],
+                ['VPN to Cloud', '3.8 Gbps', '$553', '$2,101', '68%'],
+                ['Datacenter to Cloud', '3.2 Gbps', '$624', '$1,997', '64%']
+              ]
+            },
+            {
+              title: 'Upgrade/Downgrade Recommendations',
+              headers: ['Connection ID', 'Current MBC', 'Utilization', 'Recommendation', 'Monthly Impact'],
+              rows: [
+                ['NB-47289', '10 Gbps', '32%', 'Downgrade to 5 Gbps', '-$1,640 savings'],
+                ['NB-47291', '5 Gbps', '96%', 'Upgrade to 10 Gbps', '+$1,300 revenue'],
+                ['NB-47305', '10 Gbps', '28%', 'Downgrade to 5 Gbps', '-$1,640 savings'],
+                ['NB-47312', '1 Gbps', '94%', 'Upgrade to 5 Gbps', '+$1,050 revenue'],
+                ['NB-47156', '5 Gbps', '38%', 'Downgrade to 1 Gbps', '-$710 savings']
+              ]
+            },
+            {
+              title: 'MBC Trends by Provider',
+              headers: ['Provider', 'Avg MBC', 'Change MoM', 'Upgraded This Month', 'Downgraded This Month'],
+              rows: [
+                ['AWS', '5.2 Gbps', '+0.4 Gbps', '18', '8'],
+                ['Azure', '4.7 Gbps', '+0.3 Gbps', '16', '5'],
+                ['Google', '4.3 Gbps', '+0.2 Gbps', '9', '4'],
+                ['Oracle', '3.9 Gbps', '+0.1 Gbps', '4', '2']
+              ]
+            }
+          ]
+        };
+
+      case 'report-11-provider-cost':
+        return {
+          summary: [
+            { label: 'Total Monthly Revenue', value: '$2.80M', trend: '+8.2% MoM' },
+            { label: 'Most Revenue (Provider)', value: '$1.30M', trend: 'AWS (46.3%)' },
+            { label: 'Highest ARPC', value: '$2,845', trend: 'AWS' },
+            { label: 'Most Efficient', value: '$84.50/Gbps', trend: '100 Gbps connections' }
+          ],
+          tables: [
+            {
+              title: 'Provider Revenue & Cost Comparison',
+              headers: ['Provider', 'Connections', 'Total Revenue', 'ARPC', 'Market Share', 'MoM Growth'],
+              rows: [
+                ['AWS', '456', '$1,297,320', '$2,845', '46.3%', '+9.2%'],
+                ['Azure', '398', '$954,620', '$2,398', '34.1%', '+8.4%'],
+                ['Google', '247', '$542,940', '$2,198', '19.4%', '+6.8%'],
+                ['Oracle', '146', '$285,120', '$1,953', '10.2%', '+5.1%']
+              ]
+            },
+            {
+              title: 'Provider Cost by Region',
+              headers: ['Provider', 'US East', 'US West', 'Europe', 'Asia Pacific', 'Total'],
+              rows: [
+                ['AWS', '$442,320', '$398,200', '$287,900', '$168,900', '$1,297,320'],
+                ['Azure', '$324,560', '$289,840', '$221,350', '$118,870', '$954,620'],
+                ['Google', '$183,192', '$164,232', '$122,058', '$73,458', '$542,940'],
+                ['Oracle', '$96,738', '$86,832', '$51,282', '$50,268', '$285,120']
+              ]
+            },
+            {
+              title: 'Provider Cost by Connection Type',
+              headers: ['Connection Type', 'AWS', 'Azure', 'Google', 'Oracle', 'Total'],
+              rows: [
+                ['Cloud to Cloud', '$389,460', '$312,980', '$189,540', '$94,340', '$986,320'],
+                ['Site to Cloud', '$356,040', '$267,030', '$162,780', '$103,680', '$889,530'],
+                ['Internet to Cloud', '$254,330', '$190,990', '$114,600', '$75,910', '$635,830'],
+                ['VPN to Cloud', '$157,090', '$117,810', '$70,720', '$47,100', '$392,720'],
+                ['Datacenter to Cloud', '$90,240', '$67,680', '$45,120', '$22,560', '$225,600']
+              ]
+            },
+            {
+              title: 'Cost Efficiency Metrics by Provider',
+              headers: ['Provider', 'Avg Cost per Gbps', 'Avg MBC', 'Utilization', 'Efficiency Score'],
+              rows: [
+                ['AWS', '$547', '5.2 Gbps', '76%', '94/100'],
+                ['Azure', '$510', '4.7 Gbps', '73%', '91/100'],
+                ['Google', '$511', '4.3 Gbps', '71%', '88/100'],
+                ['Oracle', '$501', '3.9 Gbps', '68%', '85/100']
+              ]
+            }
+          ]
+        };
+
+      case 'report-12-ipe-revenue':
+        return {
+          summary: [
+            { label: 'Total IPE Sites', value: '42', trend: '+2 new sites' },
+            { label: 'Total IPE Revenue', value: '$2.80M/mo', trend: '+$215K MoM' },
+            { label: 'Avg Revenue per IPE', value: '$66,667', trend: '+$5,119' },
+            { label: 'Most Profitable IPE', value: '$142,800', trend: 'NYC-2' }
+          ],
+          tables: [
+            {
+              title: 'Revenue per IPE Site',
+              headers: ['IPE Site', 'Connections', 'Total Revenue', 'Avg per Connection', 'Capacity Util', 'ROI Score'],
+              rows: [
+                ['NYC-2', '158', '$442,530', '$2,801', '72%', '98/100'],
+                ['Dallas-1', '142', '$398,420', '$2,806', '68%', '96/100'],
+                ['Chicago-1', '134', '$378,240', '$2,823', '76%', '94/100'],
+                ['SFO-1', '127', '$342,580', '$2,697', '58%', '89/100'],
+                ['Atlanta-1', '118', '$312,890', '$2,652', '65%', '91/100'],
+                ['Seattle-1', '104', '$268,340', '$2,580', '62%', '87/100']
+              ]
+            },
+            {
+              title: 'IPE Revenue by Region',
+              headers: ['Region', 'IPE Sites', 'Total Connections', 'Total Revenue', 'Avg per Site', 'Growth'],
+              rows: [
+                ['US East', '11', '387', '$950,472', '$86,407', '+12.4%'],
+                ['US West', '9', '342', '$790,704', '$87,856', '+10.8%'],
+                ['Europe', '8', '298', '$651,726', '$81,466', '+8.9%'],
+                ['Asia Pacific', '7', '220', '$449,900', '$64,271', '+7.2%']
+              ]
+            },
+            {
+              title: 'IPE Capacity ROI Analysis',
+              headers: ['IPE Site', 'Installed Capacity', 'Utilization', 'Monthly Revenue', 'Revenue per Gbps', 'Status'],
+              rows: [
+                ['NYC-2', '105 Gbps', '72%', '$442,530', '$4,215', 'Optimal'],
+                ['Dallas-1', '100 Gbps', '68%', '$398,420', '$3,984', 'Optimal'],
+                ['Chicago-1', '90 Gbps', '76%', '$378,240', '$4,203', 'Consider Expansion'],
+                ['SFO-1', '80 Gbps', '58%', '$342,580', '$4,282', 'Underutilized'],
+                ['Atlanta-1', '95 Gbps', '65%', '$312,890', '$3,294', 'Optimal']
+              ]
+            },
+            {
+              title: 'IPE Site Profitability Rankings',
+              headers: ['Rank', 'IPE Site', 'Revenue', 'Efficiency', 'Growth Rate', 'Customer Satisfaction'],
+              rows: [
+                ['1', 'NYC-2', '$442,530', '98%', '+14.2%', '4.8/5'],
+                ['2', 'Dallas-1', '$398,420', '96%', '+12.8%', '4.7/5'],
+                ['3', 'Chicago-1', '$378,240', '94%', '+11.5%', '4.6/5'],
+                ['4', 'SFO-1', '$342,580', '89%', '+9.2%', '4.5/5'],
+                ['5', 'Atlanta-1', '$312,890', '91%', '+10.1%', '4.6/5']
+              ]
+            }
+          ]
+        };
+
+      case 'report-13-cost-forecast':
+        return {
+          summary: [
+            { label: '12-Month Forecast', value: '$37.2M', trend: '+18.5% YoY' },
+            { label: 'Next Quarter Projection', value: '$8.9M', trend: '+$1.2M vs Q1' },
+            { label: 'New Connection Pipeline', value: '127 connections', trend: '$342K/mo potential' },
+            { label: 'Confidence Level', value: '94%', trend: 'High confidence' }
+          ],
+          tables: [
+            {
+              title: '12-Month Revenue Forecast',
+              headers: ['Month', 'Projected Revenue', 'New Connections', 'Upgrades', 'Total Connections', 'Growth Rate'],
+              rows: [
+                ['Apr 2024', '$2.89M', '52', '21', '1,289', '+3.2%'],
+                ['May 2024', '$2.98M', '48', '19', '1,337', '+3.1%'],
+                ['Jun 2024', '$3.08M', '54', '23', '1,391', '+3.4%'],
+                ['Jul 2024', '$3.18M', '51', '20', '1,442', '+3.2%'],
+                ['Aug 2024', '$3.26M', '47', '18', '1,489', '+2.5%'],
+                ['Sep 2024', '$3.35M', '49', '22', '1,538', '+2.8%'],
+                ['Oct 2024', '$3.44M', '53', '24', '1,591', '+2.7%'],
+                ['Nov 2024', '$3.52M', '46', '19', '1,637', '+2.3%'],
+                ['Dec 2024', '$3.61M', '50', '21', '1,687', '+2.6%']
+              ]
+            },
+            {
+              title: 'Revenue Forecast by Provider',
+              headers: ['Provider', 'Current Revenue', 'Q2 Projection', 'Q3 Projection', 'Q4 Projection', 'YoY Growth'],
+              rows: [
+                ['AWS', '$1,297,320', '$1,426,052', '$1,568,457', '$1,725,303', '+19.2%'],
+                ['Azure', '$954,620', '$1,050,082', '$1,155,090', '$1,270,599', '+18.4%'],
+                ['Google', '$542,940', '$597,234', '$656,957', '$722,653', '+16.8%'],
+                ['Oracle', '$285,120', '$313,632', '$344,995', '$379,495', '+15.2%']
+              ]
+            },
+            {
+              title: 'New Connection Pipeline Impact',
+              headers: ['Status', 'Connections', 'Estimated MBC', 'Monthly Revenue', 'Expected Close', 'Probability'],
+              rows: [
+                ['Contract Signed', '23', '115 Gbps', '$78,200', 'Apr 2024', '95%'],
+                ['Final Review', '34', '178 Gbps', '$112,400', 'May 2024', '85%'],
+                ['Proposal Stage', '41', '198 Gbps', '$98,600', 'Jun 2024', '65%'],
+                ['Discovery', '29', '142 Gbps', '$52,800', 'Jul 2024', '45%']
+              ]
+            },
+            {
+              title: 'MBC Upgrade Trend Forecast',
+              headers: ['Quarter', 'Expected Upgrades', 'Avg MBC Increase', 'Revenue Impact', 'Expected Downgrades', 'Net Impact'],
+              rows: [
+                ['Q2 2024', '63', '+2.8 Gbps', '+$189,000', '16', '+$163,800'],
+                ['Q3 2024', '68', '+3.1 Gbps', '+$204,000', '14', '+$181,600'],
+                ['Q4 2024', '72', '+3.2 Gbps', '+$218,400', '15', '+$194,400']
+              ]
+            },
+            {
+              title: 'Revenue Growth by Region Forecast',
+              headers: ['Region', 'Current', 'Q2 2024', 'Q3 2024', 'Q4 2024', 'Growth Rate'],
+              rows: [
+                ['US East', '$950,472', '$1,045,519', '$1,150,071', '$1,265,078', '+18.5%'],
+                ['US West', '$790,704', '$869,774', '$956,752', '$1,052,427', '+18.9%'],
+                ['Europe', '$651,726', '$716,899', '$788,589', '$867,448', '+17.2%'],
+                ['Asia Pacific', '$449,900', '$494,890', '$544,379', '$598,817', '+16.8%']
+              ]
+            }
+          ]
+        };
+
+      case 'report-14-link-cost':
+        return {
+          summary: [
+            { label: 'Total Active Links', value: '3,847', trend: '+142 links' },
+            { label: 'Avg Links per Connection', value: '3.1', trend: '+0.2' },
+            { label: 'Revenue per Link', value: '$728', trend: '+$42' },
+            { label: 'Most Efficient', value: '3.8 Links', trend: 'Cloud to Cloud' }
+          ],
+          tables: [
+            {
+              title: 'Cost per Link Analysis',
+              headers: ['Connection Type', 'Total Links', 'Total Connections', 'Avg Links/Conn', 'Revenue/Link', 'Cost Efficiency'],
+              rows: [
+                ['Cloud to Cloud', '1,201', '316', '3.8', '$821', 'Excellent'],
+                ['Site to Cloud', '1,061', '342', '3.1', '$838', 'Excellent'],
+                ['Internet to Cloud', '896', '289', '3.1', '$710', 'Good'],
+                ['VPN to Cloud', '542', '187', '2.9', '$725', 'Good'],
+                ['Datacenter to Cloud', '338', '113', '3.0', '$667', 'Fair']
+              ]
+            },
+            {
+              title: 'Link Utilization Economics',
+              headers: ['Link Utilization', 'Links', 'Avg Revenue/Link', 'Total Revenue', 'Optimization Status'],
+              rows: [
+                ['High (>80%)', '1,234', '$842', '$1,039,428', 'Optimal - Monitor for upgrades'],
+                ['Medium (60-80%)', '2,089', '$728', '$1,520,792', 'Optimal - No action needed'],
+                ['Low (40-60%)', '401', '$645', '$258,645', 'Review - Possible consolidation'],
+                ['Very Low (<40%)', '123', '$512', '$62,976', 'Action - Consider deactivation']
+              ]
+            },
+            {
+              title: 'Average Links per Connection by Provider',
+              headers: ['Provider', 'Total Links', 'Total Connections', 'Avg Links/Connection', 'Link Cost', 'Change MoM'],
+              rows: [
+                ['AWS', '1,459', '456', '3.2', '$889', '+4.2%'],
+                ['Azure', '1,234', '398', '3.1', '$774', '+3.8%'],
+                ['Google', '765', '247', '3.1', '$710', '+2.9%'],
+                ['Oracle', '453', '146', '3.1', '$629', '+2.1%']
+              ]
+            },
+            {
+              title: 'Link Cost Efficiency by Connection Type and Provider',
+              headers: ['Connection Type', 'AWS', 'Azure', 'Google', 'Oracle', 'Avg'],
+              rows: [
+                ['Cloud to Cloud', '$878', '$812', '$798', '$745', '$821'],
+                ['Site to Cloud', '$892', '$842', '$821', '$798', '$838'],
+                ['Internet to Cloud', '$745', '$712', '$689', '$672', '$710'],
+                ['VPN to Cloud', '$768', '$732', '$701', '$689', '$725'],
+                ['Datacenter to Cloud', '$712', '$672', '$645', '$621', '$667']
+              ]
+            },
+            {
+              title: 'Link Economics Optimization Opportunities',
+              headers: ['Opportunity', 'Links Affected', 'Current Revenue', 'Potential Revenue', 'Monthly Impact', 'Priority'],
+              rows: [
+                ['Consolidate underutilized links', '123', '$62,976', '$0', '-$62,976 cost', 'High'],
+                ['Upgrade high-utilization links', '87', '$73,254', '$94,500', '+$21,246 revenue', 'High'],
+                ['Right-size medium links', '234', '$151,020', '$168,900', '+$17,880 revenue', 'Medium'],
+                ['Optimize provider mix', '456', '$331,968', '$362,880', '+$30,912 revenue', 'Medium'],
+                ['Deactivate inactive links', '23', '$11,776', '$0', '-$11,776 cost', 'Low']
               ]
             }
           ]
