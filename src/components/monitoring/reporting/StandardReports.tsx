@@ -30,8 +30,8 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-2-ipe-capacity',
-    name: 'Report 2: IPE Capacity & Provider Coverage',
-    description: 'Total Intelligent Peripheral Equipment (IPE) that are NetBond enabled by region with provider on-ramp counts per location, total installed capacity per IPE (aggregated and per provider), and utilization for capacity planning',
+    name: 'Report 2: IPE Capacity & Data Center Analysis',
+    description: 'Total Intelligent Peripheral Equipment (IPE) by data center provider (Cisco Jasper, Equinix, Databank, CoreWeave) and region with cloud provider on-ramp counts, total installed capacity per IPE, Links per IPE, VNFs per IPE, and utilization for capacity planning',
     category: 'operations',
     lastGenerated: '2024-03-10T14:00:00Z',
     frequency: 'weekly',
@@ -41,8 +41,8 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-3-utilization-analysis',
-    name: 'Report 3: Connection Utilization Analysis',
-    description: 'Total connection utilization per Intelligent Peripheral Equipment (IPE) site with installed capacity, average and max utilization at busiest hour, aggregated per site and portal level',
+    name: 'Report 3: Connection & Cloud Router Utilization Analysis',
+    description: 'Connection utilization per IPE with Cloud Router aggregation showing total Links per Cloud Router, VNFs per Link, installed capacity, average and max utilization at busiest hour, aggregated per site, data center provider, and portal level',
     category: 'performance',
     lastGenerated: '2024-03-10T12:00:00Z',
     frequency: 'daily',
@@ -169,6 +169,39 @@ const availableReports: Report[] = [
     frequency: 'weekly',
     format: 'Excel',
     size: '2.0 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-15-datacenter-provider',
+    name: 'Report 15: Data Center Provider Analysis',
+    description: 'Comprehensive breakdown by data center provider (Cisco Jasper, Equinix, Databank, CoreWeave) showing IPE count, total connections, Links, VNFs, capacity, utilization, revenue, and cost efficiency per provider',
+    category: 'operations',
+    lastGenerated: '2024-03-10T13:45:00Z',
+    frequency: 'monthly',
+    format: 'Excel',
+    size: '2.6 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-16-cloudrouter-aggregation',
+    name: 'Report 16: Cloud Router Aggregation & Link Analysis',
+    description: 'Cloud Router level aggregation showing connections per Cloud Router, total Links within each Cloud Router, VNFs per Link, Link utilization, Cloud Router capacity, and optimization opportunities',
+    category: 'operations',
+    lastGenerated: '2024-03-10T10:30:00Z',
+    frequency: 'weekly',
+    format: 'Excel',
+    size: '3.1 MB',
+    status: 'ready'
+  },
+  {
+    id: 'report-17-hierarchy-analysis',
+    name: 'Report 17: Connection Hierarchy & Resource Analysis',
+    description: 'Full hierarchy analysis: Connections > Cloud Routers > Links > VNFs/IPEs showing resource distribution, average Links per Connection, average VNFs per Link, IPE associations, and capacity at each level',
+    category: 'operations',
+    lastGenerated: '2024-03-09T16:00:00Z',
+    frequency: 'weekly',
+    format: 'PDF',
+    size: '2.9 MB',
     status: 'ready'
   }
 ];
@@ -307,29 +340,40 @@ export function StandardReports() {
         return {
           summary: [
             { label: 'Total IPE', value: '42', trend: '+2' },
-            { label: 'NetBond Enabled IPE', value: '38', trend: '90.5%' },
-            { label: 'Total Installed Capacity', value: '2.4 Tbps', trend: '+240 Gbps' },
-            { label: 'Total Utilization', value: '67%', trend: '+5%' }
+            { label: 'Data Center Providers', value: '4', trend: 'Cisco Jasper, Equinix, Databank, CoreWeave' },
+            { label: 'Total Installed Capacity', value: '5.9 Tbps', trend: '+240 Gbps' },
+            { label: 'Total Links', value: '3,847', trend: 'Avg 91.6 per IPE' }
           ],
           tables: [
             {
-              title: 'NetBond-Enabled IPE by Region',
-              headers: ['Region', 'Total IPE', 'NetBond Enabled', 'Geo Regions', 'Local Regions'],
+              title: 'IPE by Data Center Provider',
+              headers: ['Data Center Provider', 'IPE Sites', 'Total Links', 'Total VNFs', 'Installed Capacity', 'Avg Utilization'],
               rows: [
-                ['US East', '12', '11', '3', '8'],
-                ['US West', '10', '9', '2', '7'],
-                ['Europe', '8', '8', '4', '4'],
-                ['Asia Pacific', '8', '7', '3', '4']
+                ['Equinix', '18', '1,742', '894', '687 Gbps', '78%'],
+                ['Cisco Jasper', '12', '1,198', '612', '458 Gbps', '72%'],
+                ['Databank', '8', '676', '345', '312 Gbps', '68%'],
+                ['CoreWeave', '4', '231', '118', '95 Gbps', '65%']
               ]
             },
             {
-              title: 'Provider On-Ramps per IPE Location',
-              headers: ['IPE Location', 'AWS', 'Azure', 'Google', 'Oracle', 'Total Providers'],
+              title: 'NetBond-Enabled IPE by Region & Data Center',
+              headers: ['Region', 'Equinix', 'Cisco Jasper', 'Databank', 'CoreWeave', 'Total IPE'],
               rows: [
-                ['Dallas-1', '✓', '✓', '✓', '✓', '4'],
-                ['NYC-2', '✓', '✓', '✓', '—', '3'],
-                ['SFO-1', '✓', '✓', '✓', '✓', '4'],
-                ['London-1', '✓', '✓', '—', '—', '2']
+                ['US East', '5', '4', '2', '0', '11'],
+                ['US West', '4', '3', '2', '0', '9'],
+                ['Europe', '5', '3', '2', '2', '12'],
+                ['Asia Pacific', '4', '2', '2', '2', '10']
+              ]
+            },
+            {
+              title: 'Cloud Provider On-Ramps per IPE Location',
+              headers: ['IPE Location', 'Data Center', 'AWS', 'Azure', 'Google', 'Oracle', 'Total'],
+              rows: [
+                ['Dallas-1', 'Cisco Jasper', '✓', '✓', '✓', '✓', '4'],
+                ['NYC-2', 'Equinix', '✓', '✓', '✓', '—', '3'],
+                ['SFO-1', 'Databank', '✓', '✓', '✓', '✓', '4'],
+                ['London-1', 'Equinix', '✓', '✓', '—', '—', '2'],
+                ['Chicago-1', 'Equinix', '✓', '✓', '✓', '✓', '4']
               ]
             },
             {
@@ -1020,6 +1064,205 @@ export function StandardReports() {
                 ['Right-size medium links', '234', '$151,020', '$168,900', '+$17,880 revenue', 'Medium'],
                 ['Optimize provider mix', '456', '$331,968', '$362,880', '+$30,912 revenue', 'Medium'],
                 ['Deactivate inactive links', '23', '$11,776', '$0', '-$11,776 cost', 'Low']
+              ]
+            }
+          ]
+        };
+
+      case 'report-15-datacenter-provider':
+        return {
+          summary: [
+            { label: 'Total Data Center Providers', value: '4', trend: 'Cisco Jasper, Equinix, Databank, CoreWeave' },
+            { label: 'Total IPE Sites', value: '42', trend: '+2 new sites' },
+            { label: 'Most Utilized Provider', value: 'Equinix', trend: '18 sites, 78% avg util' },
+            { label: 'Highest Revenue', value: '$1.24M/mo', trend: 'Equinix' }
+          ],
+          tables: [
+            {
+              title: 'Data Center Provider Overview',
+              headers: ['Provider', 'IPE Sites', 'Total Connections', 'Total Links', 'Total VNFs', 'Installed Capacity', 'Avg Utilization'],
+              rows: [
+                ['Equinix', '18', '562', '1,742', '894', '687 Gbps', '78%'],
+                ['Cisco Jasper', '12', '387', '1,198', '612', '458 Gbps', '72%'],
+                ['Databank', '8', '218', '676', '345', '312 Gbps', '68%'],
+                ['CoreWeave', '4', '80', '231', '118', '95 Gbps', '65%']
+              ]
+            },
+            {
+              title: 'Revenue per Data Center Provider',
+              headers: ['Provider', 'Monthly Revenue', 'ARPC', 'Revenue per IPE', 'Revenue per Gbps', 'Growth Rate'],
+              rows: [
+                ['Equinix', '$1,244,320', '$2,214', '$69,129', '$1,812', '+12.4%'],
+                ['Cisco Jasper', '$924,540', '$2,389', '$77,045', '$2,019', '+10.8%'],
+                ['Databank', '$478,960', '$2,197', '$59,870', '$1,535', '+8.2%'],
+                ['CoreWeave', '$152,180', '$1,902', '$38,045', '$1,603', '+15.6%']
+              ]
+            },
+            {
+              title: 'Cloud Provider On-Ramps per Data Center',
+              headers: ['Data Center Provider', 'AWS On-Ramps', 'Azure On-Ramps', 'Google On-Ramps', 'Oracle On-Ramps', 'Total'],
+              rows: [
+                ['Equinix', '18', '18', '16', '12', '64'],
+                ['Cisco Jasper', '12', '12', '10', '8', '42'],
+                ['Databank', '8', '7', '6', '4', '25'],
+                ['CoreWeave', '4', '4', '3', '2', '13']
+              ]
+            },
+            {
+              title: 'Data Center Provider Efficiency Metrics',
+              headers: ['Provider', 'Connections per IPE', 'Links per IPE', 'VNFs per IPE', 'Capacity per IPE', 'Efficiency Score'],
+              rows: [
+                ['Equinix', '31.2', '96.8', '49.7', '38.2 Gbps', '96/100'],
+                ['Cisco Jasper', '32.3', '99.8', '51.0', '38.2 Gbps', '94/100'],
+                ['Databank', '27.3', '84.5', '43.1', '39.0 Gbps', '89/100'],
+                ['CoreWeave', '20.0', '57.8', '29.5', '23.8 Gbps', '87/100']
+              ]
+            },
+            {
+              title: 'Top IPE Sites by Data Center Provider',
+              headers: ['IPE Site', 'Provider', 'Connections', 'Links', 'Revenue', 'Utilization'],
+              rows: [
+                ['NYC-2 (Equinix)', 'Equinix', '158', '489', '$442,530', '72%'],
+                ['Dallas-1 (Cisco Jasper)', 'Cisco Jasper', '142', '440', '$398,420', '68%'],
+                ['Chicago-1 (Equinix)', 'Equinix', '134', '415', '$378,240', '76%'],
+                ['SFO-1 (Databank)', 'Databank', '127', '394', '$342,580', '58%'],
+                ['Atlanta-1 (Cisco Jasper)', 'Cisco Jasper', '118', '366', '$312,890', '65%']
+              ]
+            }
+          ]
+        };
+
+      case 'report-16-cloudrouter-aggregation':
+        return {
+          summary: [
+            { label: 'Total Cloud Routers', value: '487', trend: '+23 this month' },
+            { label: 'Avg Links per Cloud Router', value: '7.9', trend: '+0.4' },
+            { label: 'Total Aggregated Links', value: '3,847', trend: '+142 links' },
+            { label: 'Avg VNFs per Link', value: '1.3', trend: '4,999 total VNFs' }
+          ],
+          tables: [
+            {
+              title: 'Cloud Router Distribution by Connection Type',
+              headers: ['Connection Type', 'Connections', 'Cloud Routers', 'Avg CR per Conn', 'Total Links', 'Avg Links per CR'],
+              rows: [
+                ['Cloud to Cloud', '316', '158', '0.5', '1,201', '7.6'],
+                ['Site to Cloud', '342', '171', '0.5', '1,061', '6.2'],
+                ['Internet to Cloud', '289', '89', '0.3', '896', '10.1'],
+                ['VPN to Cloud', '187', '56', '0.3', '542', '9.7'],
+                ['Datacenter to Cloud', '113', '45', '0.4', '338', '7.5']
+              ]
+            },
+            {
+              title: 'Cloud Router Capacity & Utilization',
+              headers: ['Cloud Router Tier', 'Count', 'Avg Capacity', 'Avg Links', 'Avg Utilization', 'Status'],
+              rows: [
+                ['Large (>10 Links)', '87', '52 Gbps', '14.2', '82%', 'High utilization'],
+                ['Medium (5-10 Links)', '234', '28 Gbps', '7.4', '74%', 'Optimal'],
+                ['Small (2-4 Links)', '142', '12 Gbps', '3.1', '68%', 'Optimal'],
+                ['Minimal (1 Link)', '24', '5 Gbps', '1.0', '54%', 'Consider consolidation']
+              ]
+            },
+            {
+              title: 'Links within Cloud Routers by Provider',
+              headers: ['Provider', 'Cloud Routers', 'Total Links', 'Avg Links per CR', 'Avg VNFs per Link', 'Total VNFs'],
+              rows: [
+                ['AWS', '183', '1,459', '8.0', '1.4', '2,043'],
+                ['Azure', '162', '1,234', '7.6', '1.3', '1,604'],
+                ['Google', '98', '765', '7.8', '1.2', '918'],
+                ['Oracle', '58', '453', '7.8', '1.1', '498']
+              ]
+            },
+            {
+              title: 'VNF Distribution per Link',
+              headers: ['VNFs per Link', 'Link Count', 'Percentage', 'Total VNFs', 'Avg Revenue per Link'],
+              rows: [
+                ['1 VNF', '2,847', '74.0%', '2,847', '$698'],
+                ['2 VNFs', '789', '20.5%', '1,578', '$842'],
+                ['3 VNFs', '178', '4.6%', '534', '$956'],
+                ['4+ VNFs', '33', '0.9%', '156', '$1,124']
+              ]
+            },
+            {
+              title: 'Cloud Router Optimization Opportunities',
+              headers: ['Opportunity', 'Cloud Routers', 'Current Links', 'Potential Impact', 'Priority', 'Est. Savings'],
+              rows: [
+                ['Consolidate single-link CRs', '24', '24', 'Reduce CR count', 'High', '$18,400/mo'],
+                ['Expand high-utilization CRs', '87', '1,235', 'Add capacity', 'High', 'Revenue opportunity'],
+                ['Optimize Link distribution', '45', '287', 'Balance load', 'Medium', '$12,300/mo'],
+                ['Right-size CR capacity', '78', '542', 'Adjust bandwidth', 'Medium', '$24,600/mo']
+              ]
+            }
+          ]
+        };
+
+      case 'report-17-hierarchy-analysis':
+        return {
+          summary: [
+            { label: 'Total Connections', value: '1,247', trend: '+12%' },
+            { label: 'Total Cloud Routers', value: '487', trend: '0.4 CR per Connection' },
+            { label: 'Total Links', value: '3,847', trend: '3.1 Links per Connection' },
+            { label: 'Total VNFs', value: '4,999', trend: '1.3 VNFs per Link' }
+          ],
+          tables: [
+            {
+              title: 'Connection Hierarchy Overview',
+              headers: ['Level', 'Total Count', 'Avg per Parent', 'Capacity', 'Utilization', 'Revenue Contribution'],
+              rows: [
+                ['Connections', '1,247', 'N/A', '5,986 Gbps', '72%', '$2,800,000'],
+                ['Cloud Routers', '487', '0.39 per Connection', '5,986 Gbps', '72%', '$2,800,000'],
+                ['Links', '3,847', '7.9 per Cloud Router', '5,986 Gbps', '72%', '$2,800,000'],
+                ['VNFs', '4,999', '1.3 per Link', 'N/A', 'N/A', 'Processing capacity'],
+                ['IPE Associations', '42 sites', 'Multiple per Link', '5,986 Gbps', '73%', 'Infrastructure']
+              ]
+            },
+            {
+              title: 'Resource Distribution by Connection Type',
+              headers: ['Connection Type', 'Connections', 'Cloud Routers', 'Links', 'VNFs', 'Avg VNFs per Conn'],
+              rows: [
+                ['Cloud to Cloud', '316', '158', '1,201', '1,681', '5.3'],
+                ['Site to Cloud', '342', '171', '1,061', '1,380', '4.0'],
+                ['Internet to Cloud', '289', '89', '896', '1,165', '4.0'],
+                ['VPN to Cloud', '187', '56', '542', '704', '3.8'],
+                ['Datacenter to Cloud', '113', '45', '338', '439', '3.9']
+              ]
+            },
+            {
+              title: 'Links per Connection Distribution',
+              headers: ['Links per Connection', 'Connection Count', 'Percentage', 'Total Links', 'Total Cloud Routers', 'Avg CR per Conn'],
+              rows: [
+                ['1-2 Links', '234', '18.8%', '398', '234', '1.0'],
+                ['3-4 Links', '547', '43.9%', '1,826', '274', '0.5'],
+                ['5-8 Links', '389', '31.2%', '2,334', '195', '0.5'],
+                ['9+ Links', '77', '6.2%', '693', '39', '0.5']
+              ]
+            },
+            {
+              title: 'VNF per Link Distribution by Provider',
+              headers: ['Provider', 'Total Links', '1 VNF', '2 VNFs', '3 VNFs', '4+ VNFs', 'Avg VNFs per Link'],
+              rows: [
+                ['AWS', '1,459', '1,051', '321', '70', '17', '1.4'],
+                ['Azure', '1,234', '914', '251', '56', '13', '1.3'],
+                ['Google', '765', '573', '153', '33', '6', '1.2'],
+                ['Oracle', '453', '339', '89', '21', '4', '1.1']
+              ]
+            },
+            {
+              title: 'IPE Association per Link',
+              headers: ['IPE per Link', 'Link Count', 'Percentage', 'Total IPE Associations', 'Avg Links per IPE'],
+              rows: [
+                ['1 IPE', '3,458', '89.9%', '3,458', '82.3'],
+                ['2 IPEs (Redundant)', '356', '9.3%', '712', '17.0'],
+                ['3+ IPEs (Multi-site)', '33', '0.9%', '112', '2.7']
+              ]
+            },
+            {
+              title: 'Capacity Distribution Across Hierarchy',
+              headers: ['Level', 'Total Capacity', 'Utilized Capacity', 'Available Capacity', 'Utilization %', 'Growth Potential'],
+              rows: [
+                ['Connection Level', '5,986 Gbps', '4,310 Gbps', '1,676 Gbps', '72%', '+1,676 Gbps'],
+                ['Cloud Router Level', '5,986 Gbps', '4,310 Gbps', '1,676 Gbps', '72%', 'Matches connection'],
+                ['Link Level (Aggregated)', '5,986 Gbps', '4,310 Gbps', '1,676 Gbps', '72%', 'Matches connection'],
+                ['IPE Level', '5,986 Gbps', '4,369 Gbps', '1,617 Gbps', '73%', 'Physical infrastructure']
               ]
             }
           ]
