@@ -49,7 +49,7 @@ const initialTemplates: Template[] = [
   {
     id: '3',
     name: 'Monthly Bandwidth Report',
-    description: 'Detailed analysis of NetBond connection utilization per IPE site with bandwidth consumption patterns',
+    description: 'Detailed analysis of NetBond connection utilization per IPE with bandwidth consumption patterns',
     type: 'Usage',
     lastModified: '2024-03-08T09:15:00Z',
     format: 'Excel',
@@ -116,7 +116,7 @@ const initialTemplates: Template[] = [
     createdBy: 'incidents@company.com',
     isDefault: false,
     usageCount: 37,
-    sections: ['Service Disruptions', 'Connections Impacted', 'IPE Site Impact', 'Downtime Minutes', 'Root Cause', 'Remediation']
+    sections: ['Service Disruptions', 'Connections Impacted', 'IPE Impact', 'Downtime Minutes', 'Root Cause', 'Remediation']
   },
   {
     id: '9',
@@ -157,7 +157,7 @@ const initialTemplates: Template[] = [
   {
     id: '12',
     name: 'IPE Profitability Analysis',
-    description: 'Revenue and profitability metrics per IPE site including capacity ROI, revenue per Gbps, and site rankings',
+    description: 'Revenue and profitability metrics per IPE including capacity ROI, revenue per Gbps, and site rankings',
     type: 'Billing',
     lastModified: '2024-03-08T14:15:00Z',
     format: 'Excel',
@@ -224,7 +224,7 @@ const initialTemplates: Template[] = [
     createdBy: 'infrastructure@company.com',
     isDefault: false,
     usageCount: 46,
-    sections: ['Provider Overview', 'Revenue by Provider', 'Cloud Provider On-Ramps', 'Efficiency Metrics', 'Top IPE Sites', 'Growth Analysis']
+    sections: ['Provider Overview', 'Revenue by Provider', 'Cloud Provider On-Ramps', 'Efficiency Metrics', 'Top IPEs', 'Growth Analysis']
   },
   {
     id: '18',
