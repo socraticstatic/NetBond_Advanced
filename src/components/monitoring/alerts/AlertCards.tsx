@@ -15,7 +15,7 @@ function AlertCards({ selectedConnection, connections }: AlertCardsProps) {
     >
       {({ filteredAlerts, dismissAlert, activeFilters }) => (
         <AlertList
-          alerts={filteredAlerts}
+          alerts={filteredAlerts(selectedConnection)}
           onDismiss={dismissAlert}
         />
       )}

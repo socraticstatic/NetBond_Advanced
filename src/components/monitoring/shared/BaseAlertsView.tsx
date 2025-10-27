@@ -9,7 +9,7 @@ interface BaseAlertsViewProps {
   connections: Connection[];
   selectedConnection: string;
   children: (props: {
-    filteredAlerts: Array<any>;
+    filteredAlerts: (connectionId?: string) => Array<any>;
     dismissAlert: ReturnType<typeof useAlerts>['dismissAlert'];
     activeFilters: ReturnType<typeof useAlerts>['activeFilters'];
   }) => ReactNode;
@@ -35,8 +35,8 @@ export function BaseAlertsView({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const refreshTimerRef = useRef<number | null>(null);
   
-  // Get filtered alerts based on current filters and selected connection
-  const filteredAlerts = getFilteredAlerts(selectedConnection);
+  // Get filtered alerts function to pass to children
+  const filteredAlerts = getFilteredAlerts;
   
   // Clean up any timers on unmount
   useEffect(() => {
