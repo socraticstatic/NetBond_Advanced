@@ -117,6 +117,102 @@ const initialTemplates: Template[] = [
     isDefault: false,
     usageCount: 37,
     sections: ['Service Disruptions', 'Connections Impacted', 'IPE Site Impact', 'Downtime Minutes', 'Root Cause', 'Remediation']
+  },
+  {
+    id: '9',
+    name: 'ARPC Optimization Report',
+    description: 'Average Revenue Per Connection analysis by provider, connection type, region, and bandwidth tier with revenue optimization recommendations',
+    type: 'Billing',
+    lastModified: '2024-03-10T13:20:00Z',
+    format: 'Excel',
+    createdBy: 'finance@company.com',
+    isDefault: false,
+    usageCount: 52,
+    sections: ['ARPC by Connection Type', 'ARPC by Provider', 'ARPC by Region', 'ARPC by Bandwidth', 'Optimization Opportunities', 'Trends']
+  },
+  {
+    id: '10',
+    name: 'MBC Cost Analysis Dashboard',
+    description: 'Maximum Billable Capacity analysis with utilization vs MBC comparison, cost per Gbps, and upgrade/downgrade recommendations',
+    type: 'Billing',
+    lastModified: '2024-03-10T11:45:00Z',
+    format: 'Excel',
+    createdBy: 'finance@company.com',
+    isDefault: false,
+    usageCount: 48,
+    sections: ['MBC vs Utilization', 'Cost per Connection Type', 'Upgrade Recommendations', 'Downgrade Opportunities', 'MBC Trends', 'Savings Analysis']
+  },
+  {
+    id: '11',
+    name: 'Provider Revenue Comparison',
+    description: 'Comprehensive cost comparison across cloud providers showing revenue, ARPC, market share, and cost efficiency by region and connection type',
+    type: 'Billing',
+    lastModified: '2024-03-09T16:30:00Z',
+    format: 'PDF',
+    createdBy: 'strategy@company.com',
+    isDefault: false,
+    usageCount: 61,
+    sections: ['Provider Revenue', 'Cost by Region', 'Cost by Connection Type', 'Efficiency Metrics', 'Market Share', 'Growth Trends']
+  },
+  {
+    id: '12',
+    name: 'IPE Profitability Analysis',
+    description: 'Revenue and profitability metrics per IPE site including capacity ROI, revenue per Gbps, and site rankings',
+    type: 'Billing',
+    lastModified: '2024-03-08T14:15:00Z',
+    format: 'Excel',
+    createdBy: 'operations@company.com',
+    isDefault: false,
+    usageCount: 39,
+    sections: ['Revenue per IPE', 'Regional Revenue', 'Capacity ROI', 'Profitability Rankings', 'Growth Metrics', 'Optimization']
+  },
+  {
+    id: '13',
+    name: 'Revenue Forecast & Projections',
+    description: '12-month revenue forecast based on historical trends, new connection pipeline, MBC upgrades, and customer growth projections',
+    type: 'Billing',
+    lastModified: '2024-03-07T10:00:00Z',
+    format: 'PDF',
+    createdBy: 'strategy@company.com',
+    isDefault: false,
+    usageCount: 44,
+    sections: ['12-Month Forecast', 'Provider Projections', 'Pipeline Impact', 'MBC Upgrade Trends', 'Regional Growth', 'Confidence Analysis']
+  },
+  {
+    id: '14',
+    name: 'Link Economics Report',
+    description: 'Cost per Link analysis, revenue per Link, Link utilization economics, and cost efficiency by connection type and provider',
+    type: 'Billing',
+    lastModified: '2024-03-10T09:30:00Z',
+    format: 'Excel',
+    createdBy: 'finance@company.com',
+    isDefault: false,
+    usageCount: 35,
+    sections: ['Cost per Link', 'Link Utilization', 'Links per Provider', 'Link Efficiency', 'Optimization Opportunities', 'Trends']
+  },
+  {
+    id: '15',
+    name: 'Customer Spend Analysis',
+    description: 'Per-customer revenue analysis with spend per month, ARPU breakdown, connection distribution, and customer value metrics',
+    type: 'Billing',
+    lastModified: '2024-03-09T15:45:00Z',
+    format: 'PDF',
+    createdBy: 'sales@company.com',
+    isDefault: false,
+    usageCount: 58,
+    sections: ['Customer Revenue', 'Spend per Region', 'ARPU Analysis', 'Customer Segmentation', 'Value Metrics', 'Growth Opportunities']
+  },
+  {
+    id: '16',
+    name: 'Cost Optimization Dashboard',
+    description: 'Comprehensive cost optimization analysis combining MBC utilization, Link efficiency, provider costs, and actionable savings recommendations',
+    type: 'Billing',
+    lastModified: '2024-03-10T14:00:00Z',
+    format: 'Excel',
+    createdBy: 'cfo@company.com',
+    isDefault: true,
+    usageCount: 72,
+    sections: ['Optimization Summary', 'MBC Opportunities', 'Link Optimization', 'Provider Optimization', 'Cost Savings', 'Action Plan']
   }
 ];
 
