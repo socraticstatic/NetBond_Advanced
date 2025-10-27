@@ -1377,85 +1377,87 @@ export function StandardReports() {
             return (
               <div
                 key={report.id}
-                className="card p-6 hover:shadow-lg transition-shadow"
+                className="card p-6 hover:shadow-lg transition-shadow flex flex-col"
               >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">
-                    <Icon className="h-5 w-5 text-gray-600" />
+                <div className="flex-1">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">
+                        <Icon className="h-5 w-5 text-gray-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-base font-semibold text-gray-900 mb-1">
+                          {report.name}
+                        </h4>
+                        <p className="text-sm text-gray-600 leading-relaxed">
+                          {report.description}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-base font-semibold text-gray-900 mb-1">
-                      {report.name}
-                    </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {report.description}
-                    </p>
+
+                  <div className="flex items-center flex-wrap gap-2 mb-4">
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(report.category)}`}>
+                      {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
+                    </span>
+                    {getStatusBadge(isGenerating ? 'generating' : report.status)}
+                    <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                      {report.format}
+                    </span>
+                    <span className="px-2 py-1 text-xs text-gray-500">
+                      {report.frequency}
+                    </span>
                   </div>
-                </div>
-              </div>
 
-              <div className="flex items-center flex-wrap gap-2 mb-4">
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(report.category)}`}>
-                  {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
-                </span>
-                {getStatusBadge(isGenerating ? 'generating' : report.status)}
-                <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
-                  {report.format}
-                </span>
-                <span className="px-2 py-1 text-xs text-gray-500">
-                  {report.frequency}
-                </span>
-              </div>
-
-              {report.lastGenerated && (
-                <div className="flex items-center text-xs text-gray-500 mb-4">
-                  <Calendar className="h-3.5 w-3.5 mr-1.5" />
-                  <span>
-                    Last generated: {new Date(report.lastGenerated).toLocaleDateString()} at{' '}
-                    {new Date(report.lastGenerated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                  {report.size && (
-                    <span className="ml-2 text-gray-400">• {report.size}</span>
+                  {report.lastGenerated && (
+                    <div className="flex items-center text-xs text-gray-500 mb-4">
+                      <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                      <span>
+                        Last generated: {new Date(report.lastGenerated).toLocaleDateString()} at{' '}
+                        {new Date(report.lastGenerated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                      {report.size && (
+                        <span className="ml-2 text-gray-400">• {report.size}</span>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
 
-              <div className="flex items-center space-x-2">
-                {report.lastGenerated && (
-                  <>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => setPreviewReport(report)}
-                      className="flex-1"
-                    >
-                      <Eye className="h-4 w-4 mr-1.5" />
-                      Preview
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => handleDownloadReport(report)}
-                      className="flex-1"
-                    >
-                      <Download className="h-4 w-4 mr-1.5" />
-                      Download
-                    </Button>
-                  </>
-                )}
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => handleGenerateReport(report.id)}
-                  disabled={isGenerating}
-                  className="flex-1"
-                >
-                  <FileText className="h-4 w-4 mr-1.5" />
-                  {isGenerating ? 'Generating...' : 'Generate'}
-                </Button>
+                <div className="flex items-center space-x-2 mt-4">
+                  {report.lastGenerated && (
+                    <>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => setPreviewReport(report)}
+                        className="flex-1"
+                      >
+                        <Eye className="h-4 w-4 mr-1.5" />
+                        Preview
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => handleDownloadReport(report)}
+                        className="flex-1"
+                      >
+                        <Download className="h-4 w-4 mr-1.5" />
+                        Download
+                      </Button>
+                    </>
+                  )}
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => handleGenerateReport(report.id)}
+                    disabled={isGenerating}
+                    className="flex-1"
+                  >
+                    <FileText className="h-4 w-4 mr-1.5" />
+                    {isGenerating ? 'Generating...' : 'Generate'}
+                  </Button>
+                </div>
               </div>
-            </div>
           );
         })}
       </div>
