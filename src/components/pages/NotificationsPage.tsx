@@ -6,7 +6,8 @@ import { Button } from '../common/Button';
 
 export function NotificationsPage() {
   const [activeTab, setActiveTab] = useState<'notifications' | 'preferences' | 'settings'>('notifications');
-  const { preferences, settings, updatePreferences, updateSettings, toggleChannel } = useStore();
+  const [filterStatus, setFilterStatus] = useState<'all' | 'unread' | 'read'>('all');
+  const { notifications, preferences, settings, updatePreferences, updateSettings, toggleChannel, markAsRead, markAllAsRead, archiveNotification, deleteNotification } = useStore();
 
   const categoryConfig = [
     {
@@ -127,6 +128,63 @@ export function NotificationsPage() {
     });
   };
 
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'critical':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'high':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'low':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'system':
+        return <Settings className="h-5 w-5" />;
+      case 'activity':
+        return <Activity className="h-5 w-5" />;
+      case 'security':
+        return <Shield className="h-5 w-5" />;
+      case 'billing':
+        return <DollarSign className="h-5 w-5" />;
+      case 'alert':
+        return <AlertTriangle className="h-5 w-5" />;
+      default:
+        return <Bell className="h-5 w-5" />;
+    }
+  };
+
+  const getRelativeTime = (timestamp: string) => {
+    const now = Date.now();
+    const time = new Date(timestamp).getTime();
+    const diff = now - time;
+
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    return `${days}d ago`;
+  };
+
+  const filteredNotifications = notifications
+    .filter(notif => !notif.archived)
+    .filter(notif => {
+      if (filterStatus === 'all') return true;
+      if (filterStatus === 'unread') return !notif.read;
+      if (filterStatus === 'read') return notif.read;
+      return true;
+    });
+
+  const unreadCount = notifications.filter(n => !n.read && !n.archived).length;
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
@@ -183,10 +241,177 @@ export function NotificationsPage() {
         {/* Tab Content */}
         <div className="p-6">
           {activeTab === 'notifications' && (
-            <div className="text-center py-12">
-              <Bell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No notifications yet</h3>
-              <p className="text-sm text-gray-500">When you receive notifications, they'll appear here</p>
+            <div>
+              {/* Notification Actions Bar */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => setFilterStatus('all')}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      filterStatus === 'all'
+                        ? 'bg-brand-blue text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    All ({notifications.filter(n => !n.archived).length})
+                  </button>
+                  <button
+                    onClick={() => setFilterStatus('unread')}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      filterStatus === 'unread'
+                        ? 'bg-brand-blue text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Unread ({unreadCount})
+                  </button>
+                  <button
+                    onClick={() => setFilterStatus('read')}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      filterStatus === 'read'
+                        ? 'bg-brand-blue text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Read ({notifications.filter(n => n.read && !n.archived).length})
+                  </button>
+                </div>
+                {unreadCount > 0 && (
+                  <button
+                    onClick={() => {
+                      markAllAsRead();
+                      window.addToast({
+                        type: 'success',
+                        title: 'All Marked as Read',
+                        message: `${unreadCount} notifications marked as read`,
+                        duration: 3000
+                      });
+                    }}
+                    className="text-sm text-brand-blue hover:text-brand-darkBlue font-medium"
+                  >
+                    Mark all as read
+                  </button>
+                )}
+              </div>
+
+              {/* Notifications List */}
+              {filteredNotifications.length === 0 ? (
+                <div className="text-center py-12">
+                  <Bell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No notifications</h3>
+                  <p className="text-sm text-gray-500">
+                    {filterStatus === 'unread' && 'You have no unread notifications'}
+                    {filterStatus === 'read' && 'You have no read notifications'}
+                    {filterStatus === 'all' && 'You have no notifications'}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {filteredNotifications.map((notification) => (
+                    <div
+                      key={notification.id}
+                      className={`relative border rounded-lg p-4 transition-all hover:shadow-md ${
+                        notification.read ? 'bg-white' : 'bg-blue-50 border-blue-200'
+                      }`}
+                    >
+                      <div className="flex items-start">
+                        {/* Icon */}
+                        <div className={`flex-shrink-0 p-2 rounded-lg ${
+                          notification.type === 'security' ? 'bg-red-100 text-red-600' :
+                          notification.type === 'activity' ? 'bg-green-100 text-green-600' :
+                          notification.type === 'billing' ? 'bg-yellow-100 text-yellow-600' :
+                          notification.type === 'alert' ? 'bg-orange-100 text-orange-600' :
+                          'bg-blue-100 text-blue-600'
+                        }`}>
+                          {getTypeIcon(notification.type)}
+                        </div>
+
+                        {/* Content */}
+                        <div className="ml-4 flex-1 min-w-0">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <h3 className={`text-sm font-medium ${notification.read ? 'text-gray-900' : 'text-gray-900 font-semibold'}`}>
+                                  {notification.title}
+                                </h3>
+                                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${getPriorityColor(notification.priority)}`}>
+                                  {notification.priority}
+                                </span>
+                              </div>
+                              <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
+                              <div className="flex items-center space-x-4">
+                                <span className="text-xs text-gray-500">{getRelativeTime(notification.timestamp)}</span>
+                                {notification.actionUrl && notification.actionLabel && (
+                                  <a
+                                    href={notification.actionUrl}
+                                    className="text-xs text-brand-blue hover:text-brand-darkBlue font-medium"
+                                  >
+                                    {notification.actionLabel} →
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex items-center space-x-2 ml-4">
+                              {!notification.read && (
+                                <button
+                                  onClick={() => {
+                                    markAsRead(notification.id);
+                                    window.addToast({
+                                      type: 'success',
+                                      title: 'Marked as Read',
+                                      message: 'Notification marked as read',
+                                      duration: 2000
+                                    });
+                                  }}
+                                  className="p-1.5 text-gray-400 hover:text-brand-blue rounded-lg hover:bg-gray-100 transition-colors"
+                                  title="Mark as read"
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </button>
+                              )}
+                              <button
+                                onClick={() => {
+                                  archiveNotification(notification.id);
+                                  window.addToast({
+                                    type: 'success',
+                                    title: 'Archived',
+                                    message: 'Notification archived',
+                                    duration: 2000
+                                  });
+                                }}
+                                className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                                title="Archive"
+                              >
+                                <Archive className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  deleteNotification(notification.id);
+                                  window.addToast({
+                                    type: 'success',
+                                    title: 'Deleted',
+                                    message: 'Notification deleted',
+                                    duration: 2000
+                                  });
+                                }}
+                                className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-gray-100 transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {!notification.read && (
+                        <div className="absolute top-4 left-0 w-1 h-8 bg-brand-blue rounded-r" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
