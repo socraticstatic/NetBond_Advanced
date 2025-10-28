@@ -1379,51 +1379,56 @@ export function StandardReports() {
                 key={report.id}
                 className="card p-6 hover:shadow-lg transition-shadow flex flex-col"
               >
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">
-                        <Icon className="h-5 w-5 text-gray-600" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-base font-semibold text-gray-900 mb-1">
-                          {report.name}
-                        </h4>
-                        <p className="text-sm text-gray-600 leading-relaxed">
-                          {report.description}
-                        </p>
-                      </div>
+                {/* Header and Description */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">
+                      <Icon className="h-5 w-5 text-gray-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-base font-semibold text-gray-900 mb-1">
+                        {report.name}
+                      </h4>
+                      <p className="text-sm text-gray-600 leading-relaxed">
+                        {report.description}
+                      </p>
                     </div>
                   </div>
-
-                  <div className="flex items-center flex-wrap gap-2 mb-4">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(report.category)}`}>
-                      {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
-                    </span>
-                    {getStatusBadge(isGenerating ? 'generating' : report.status)}
-                    <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
-                      {report.format}
-                    </span>
-                    <span className="px-2 py-1 text-xs text-gray-500">
-                      {report.frequency}
-                    </span>
-                  </div>
-
-                  {report.lastGenerated && (
-                    <div className="flex items-center text-xs text-gray-500 mb-4">
-                      <Calendar className="h-3.5 w-3.5 mr-1.5" />
-                      <span>
-                        Last generated: {new Date(report.lastGenerated).toLocaleDateString()} at{' '}
-                        {new Date(report.lastGenerated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                      {report.size && (
-                        <span className="ml-2 text-gray-400">• {report.size}</span>
-                      )}
-                    </div>
-                  )}
                 </div>
 
-                <div className="flex items-center space-x-2 mt-4">
+                {/* Spacer to push content to bottom */}
+                <div className="flex-1"></div>
+
+                {/* Filter Pills - Pinned to bottom */}
+                <div className="flex items-center flex-wrap gap-2 mb-3">
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(report.category)}`}>
+                    {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
+                  </span>
+                  {getStatusBadge(isGenerating ? 'generating' : report.status)}
+                  <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                    {report.format}
+                  </span>
+                  <span className="px-2 py-1 text-xs text-gray-500">
+                    {report.frequency}
+                  </span>
+                </div>
+
+                {/* Last Generated - Pinned to bottom */}
+                {report.lastGenerated && (
+                  <div className="flex items-center text-xs text-gray-500 mb-4">
+                    <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                    <span>
+                      Last generated: {new Date(report.lastGenerated).toLocaleDateString()} at{' '}
+                      {new Date(report.lastGenerated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    {report.size && (
+                      <span className="ml-2 text-gray-400">• {report.size}</span>
+                    )}
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-2">
                   {report.lastGenerated && (
                     <>
                       <Button
