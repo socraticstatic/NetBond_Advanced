@@ -21,7 +21,7 @@ export function Step6Review({ wizard, onPrevious, onSubmit, isSubmitting = false
         <div className="p-6 border-2 border-gray-200 rounded-xl bg-white">
           <div className="flex items-center space-x-3 mb-4">
             <Router className="w-5 h-5 text-brand-blue" />
-            <h3 className="text-lg font-semibold text-gray-900">Router Name</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Cloud Router Name</h3>
           </div>
           <p className="text-gray-700 ml-8">{wizard.routerName}</p>
         </div>
