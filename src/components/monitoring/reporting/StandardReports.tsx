@@ -19,7 +19,7 @@ interface Report {
 const availableReports: Report[] = [
   {
     id: 'report-1-connection-inventory',
-    name: 'Report 1: Connection Inventory & Segmentation',
+    name: 'Connection Inventory & Segmentation',
     description: 'Total NetBond connections with breakdown by type (Cloud to Cloud, Internet to Cloud, Site to Cloud, VPN to Cloud, Datacenter to Cloud), bandwidth tiers, data center regions, cloud providers (AWS, Azure, Google, Oracle), Infrastructure Provider Edge Router (IPE), and average connections per customer',
     category: 'operations',
     lastGenerated: '2024-03-10T15:30:00Z',
@@ -30,7 +30,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-2-ipe-capacity',
-    name: 'Report 2: IPE Capacity & Data Center Analysis',
+    name: 'IPE Capacity & Data Center Analysis',
     description: 'Total Infrastructure Provider Edge Router (IPE) by data center provider (Cisco Jasper, Equinix, Databank, CoreWeave) and region with cloud provider on-ramp counts, total installed capacity per IPE, Links per IPE, VNFs per IPE, and utilization for capacity planning',
     category: 'operations',
     lastGenerated: '2024-03-10T14:00:00Z',
@@ -41,7 +41,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-3-utilization-analysis',
-    name: 'Report 3: Connection & Cloud Router Utilization Analysis',
+    name: 'Connection & Cloud Router Utilization Analysis',
     description: 'Connection utilization per IPE with Cloud Router aggregation showing total Links per Cloud Router, VNFs per Link, installed capacity, average and max utilization at busiest hour, aggregated per site, data center provider, and portal level',
     category: 'performance',
     lastGenerated: '2024-03-10T12:00:00Z',
@@ -52,7 +52,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-4-weekly-trends',
-    name: 'Report 4: Weekly Connection Trends',
+    name: 'Weekly Connection Trends',
     description: 'Weekly trends showing new connections added per week/site/provider, newly added customers per IPE and provider, upgraded/downgraded connections by MBC, deactivated connections, with trend visualization',
     category: 'operations',
     lastGenerated: '2024-03-10T08:00:00Z',
@@ -63,7 +63,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-5-revenue-metrics',
-    name: 'Report 5: Revenue & Financial Metrics',
+    name: 'Revenue & Financial Metrics',
     description: 'Total revenue per month for NetBond with last 12 months trend, total billed connections per month, average revenue per connection trends, average MBC trends, and average utilization of all aggregated connections',
     category: 'billing',
     lastGenerated: '2024-03-01T00:00:00Z',
@@ -74,7 +74,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-6-service-reliability',
-    name: 'Report 6: Service Reliability & Link Status',
+    name: 'Service Reliability & Link Status',
     description: 'Total aggregated Links for NetBond, active/inactive/deactivated connections, active/inactive Links, connections impacted per site/region due to service disruption, and average minutes of service disruption',
     category: 'operations',
     lastGenerated: '2024-03-10T10:00:00Z',
@@ -85,7 +85,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-7-customer-detail',
-    name: 'Report 7: Per Customer Connection Report',
+    name: 'Per Customer Connection Report',
     description: 'Individual customer report showing my connections (active/inactive/deactivated), connection size and number of Links per connection, breakdown by provider and cloud region location, geographic regions, and utilization (average and max)',
     category: 'operations',
     lastGenerated: '2024-03-10T09:00:00Z',
@@ -96,7 +96,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-8-customer-analytics',
-    name: 'Report 8: Customer Count & Analytics (PM Report)',
+    name: 'Customer Count & Analytics (PM Report)',
     description: 'Total number of customers by geographic region, net adds per month, average connections per customer per region, average spend per month per customer, and average spend per connection overall (ARPU)',
     category: 'billing',
     lastGenerated: '2024-03-08T16:30:00Z',
@@ -107,7 +107,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-9-arpc-analysis',
-    name: 'Report 9: ARPC & Revenue Per Connection Analysis',
+    name: 'ARPC & Revenue Per Connection Analysis',
     description: 'Average Revenue Per Connection (ARPC) breakdown by connection type, provider, region, and bandwidth tier with month-over-month trends and revenue optimization opportunities',
     category: 'billing',
     lastGenerated: '2024-03-10T14:30:00Z',
@@ -118,7 +118,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-10-mbc-cost',
-    name: 'Report 10: MBC Cost Analysis & Optimization',
+    name: 'MBC Cost Analysis & Optimization',
     description: 'Maximum Billable Capacity (MBC) analysis showing current MBC per connection, actual utilization vs MBC, cost per Gbps, upgrade/downgrade recommendations, and potential cost savings',
     category: 'billing',
     lastGenerated: '2024-03-10T12:15:00Z',
@@ -129,7 +129,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-11-provider-cost',
-    name: 'Report 11: Provider Cost Comparison & Analysis',
+    name: 'Provider Cost Comparison & Analysis',
     description: 'Cost comparison across providers (AWS, Azure, Google, Oracle) by region, connection type, bandwidth tier, total spend per provider, ARPC by provider, and cost efficiency metrics',
     category: 'billing',
     lastGenerated: '2024-03-09T10:00:00Z',
@@ -140,7 +140,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-12-ipe-revenue',
-    name: 'Report 12: IPE Revenue & Profitability Analysis',
+    name: 'IPE Revenue & Profitability Analysis',
     description: 'Total revenue per IPE, revenue per region, capacity utilization impact on revenue, installed capacity ROI, and IPE profitability rankings',
     category: 'billing',
     lastGenerated: '2024-03-08T08:30:00Z',
@@ -151,7 +151,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-13-cost-forecast',
-    name: 'Report 13: Revenue Forecast & Growth Projections',
+    name: 'Revenue Forecast & Growth Projections',
     description: 'Revenue forecasting based on historical trends, new connection pipeline, MBC upgrade trends, customer growth projections, and 12-month revenue outlook by provider and region',
     category: 'billing',
     lastGenerated: '2024-03-07T15:45:00Z',
@@ -162,7 +162,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-14-link-cost',
-    name: 'Report 14: Link Cost & Economics Analysis',
+    name: 'Link Cost & Economics Analysis',
     description: 'Cost per Link analysis, average Links per connection, revenue per Link, Link utilization economics, and cost efficiency by connection type and provider',
     category: 'billing',
     lastGenerated: '2024-03-10T11:00:00Z',
@@ -173,7 +173,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-15-datacenter-provider',
-    name: 'Report 15: Data Center Provider Analysis',
+    name: 'Data Center Provider Analysis',
     description: 'Comprehensive breakdown by data center provider (Cisco Jasper, Equinix, Databank, CoreWeave) showing IPE count, total connections, Links, VNFs, capacity, utilization, revenue, and cost efficiency per provider',
     category: 'operations',
     lastGenerated: '2024-03-10T13:45:00Z',
@@ -184,7 +184,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-16-cloudrouter-aggregation',
-    name: 'Report 16: Cloud Router Aggregation & Link Analysis',
+    name: 'Cloud Router Aggregation & Link Analysis',
     description: 'Cloud Router level aggregation showing connections per Cloud Router, total Links within each Cloud Router, VNFs per Link, Link utilization, Cloud Router capacity, and optimization opportunities',
     category: 'operations',
     lastGenerated: '2024-03-10T10:30:00Z',
@@ -195,7 +195,7 @@ const availableReports: Report[] = [
   },
   {
     id: 'report-17-hierarchy-analysis',
-    name: 'Report 17: Connection Hierarchy & Resource Analysis',
+    name: 'Connection Hierarchy & Resource Analysis',
     description: 'Full hierarchy analysis: Connections > Cloud Routers > Links > VNFs/IPEs showing resource distribution, average Links per Connection, average VNFs per Link, IPE associations, and capacity at each level',
     category: 'operations',
     lastGenerated: '2024-03-09T16:00:00Z',
