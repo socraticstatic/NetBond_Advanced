@@ -1,4 +1,4 @@
-import { Globe, Lock, Network } from 'lucide-react';
+import { Globe, Lock, Network, Cog } from 'lucide-react';
 import { ConnectionType } from '../../../types/connection';
 import { WizardState } from '../../../hooks/useWizard';
 
@@ -7,24 +7,60 @@ const CONNECTION_TYPES = [
     type: 'Internet to Cloud' as ConnectionType,
     icon: Globe,
     description: 'High-performance internet connectivity to cloud services',
+    features: [
+      'High-bandwidth dedicated internet access',
+      'Low latency to major cloud providers',
+      'Built-in DDoS protection',
+      'Scalable bandwidth options',
+    ],
     disabled: false,
   },
   {
     type: 'Cloud to Cloud' as ConnectionType,
     icon: Lock,
     description: 'Secure connectivity between cloud environments',
+    features: [
+      'Private secure connections',
+      'Multi-cloud architecture support',
+      'Enhanced data transfer speeds',
+      'Reduced egress costs',
+    ],
+    disabled: true,
+  },
+  {
+    type: 'VPN to Cloud' as ConnectionType,
+    icon: Lock,
+    description: 'Securely links your network to cloud services',
+    features: [
+      'Encrypted site-to-cloud VPN',
+      'Managed VPN gateway',
+      'Multiple tunnel support',
+      'Automatic failover capability',
+    ],
     disabled: true,
   },
   {
     type: 'DataCenter/CoLocation to Cloud' as ConnectionType,
     icon: Network,
     description: 'Direct connectivity from data centers to cloud services',
+    features: [
+      'Private dedicated connections',
+      'Low latency direct peering',
+      'Carrier-neutral connectivity',
+      'Multiple bandwidth tiers',
+    ],
     disabled: true,
   },
   {
     type: 'Site to Cloud' as ConnectionType,
     icon: Network,
     description: 'Secure branch connectivity to cloud services',
+    features: [
+      'SD-WAN ready infrastructure',
+      'Branch office optimization',
+      'Quality of Service (QoS)',
+      'Centralized management',
+    ],
     disabled: true,
   },
 ];
@@ -49,7 +85,7 @@ export function Step2ConnectionType({ wizard, onUpdateWizard, onNext, onPrevious
       </div>
 
       <div className="max-w-3xl mx-auto space-y-4">
-        {CONNECTION_TYPES.map(({ type, icon: Icon, description, disabled }) => (
+        {CONNECTION_TYPES.map(({ type, icon: Icon, description, features, disabled }) => (
           <div key={type} className="relative">
             <button
               onClick={() => !disabled && handleSelect(type)}
@@ -65,13 +101,13 @@ export function Step2ConnectionType({ wizard, onUpdateWizard, onNext, onPrevious
                 }
               `}
             >
-              <div className="flex items-center">
+              <div className="flex items-start">
                 <Icon
-                  className={`h-8 w-8 ${
+                  className={`h-8 w-8 mt-1 ${
                     wizard.connectionType === type ? 'text-brand-blue' : 'text-gray-400'
                   }`}
                 />
-                <div className="ml-4">
+                <div className="ml-4 flex-1">
                   <div
                     className={`text-lg font-semibold ${
                       wizard.connectionType === type ? 'text-brand-blue' : 'text-gray-900'
@@ -79,7 +115,18 @@ export function Step2ConnectionType({ wizard, onUpdateWizard, onNext, onPrevious
                   >
                     {type}
                   </div>
-                  <div className="text-sm text-gray-600 mt-1">{description}</div>
+                  <div className="text-sm text-gray-600 mt-1 mb-4">{description}</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {features.map((feature, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center text-sm text-gray-600"
+                      >
+                        <Cog className="h-4 w-4 mr-2 text-gray-400 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </button>
