@@ -428,17 +428,31 @@ export function UserProfile() {
               </div>
               <select
                 value={securitySettings.sessionTimeout}
-                onChange={(e) => setSecuritySettings({
-                  ...securitySettings,
-                  sessionTimeout: parseInt(e.target.value)
-                })}
-                disabled={!isEditing}
+                onChange={(e) => {
+                  const newTimeout = parseInt(e.target.value);
+                  if (newTimeout >= 15) {
+                    setSecuritySettings({
+                      ...securitySettings,
+                      sessionTimeout: newTimeout
+                    });
+                    window.addToast({
+                      type: 'success',
+                      title: 'Session Timeout Updated',
+                      message: `Session timeout set to ${newTimeout} minutes`,
+                      duration: 3000
+                    });
+                  }
+                }}
                 className="rounded-full border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
               >
                 <option value={15}>15 minutes</option>
                 <option value={30}>30 minutes</option>
+                <option value={45}>45 minutes</option>
                 <option value={60}>60 minutes</option>
+                <option value={90}>90 minutes</option>
                 <option value={120}>120 minutes</option>
+                <option value={180}>180 minutes</option>
+                <option value={240}>240 minutes</option>
               </select>
             </div>
           </div>
