@@ -65,13 +65,13 @@ export function AnomalyTab() {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
+        <div className="flex items-center space-x-1 border border-gray-200 rounded-lg p-1 bg-white">
           <button
             onClick={() => setActiveView('anomalies')}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
               activeView === 'anomalies'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
           >
             <div className="flex items-center space-x-2">
@@ -81,10 +81,10 @@ export function AnomalyTab() {
           </button>
           <button
             onClick={() => setActiveView('insights')}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
               activeView === 'insights'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
           >
             <div className="flex items-center space-x-2">
