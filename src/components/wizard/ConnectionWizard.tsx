@@ -381,6 +381,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   wizard={wizard}
                   onUpdateWizard={updateWizard}
                   onNext={nextStep}
+                  onCancel={handleCancel}
                 />
               )}
 
@@ -437,14 +438,17 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               </div>
             )}
 
-            <div className="mt-8 max-w-6xl mx-auto">
-              <button
-                onClick={handleCancel}
-                className="px-8 py-3 border-2 border-gray-300 rounded-full font-semibold text-gray-700 hover:bg-gray-50 transition-all duration-200"
-              >
-                Cancel
-              </button>
-            </div>
+            {/* Cancel button for steps 2-6 (step 1 has its own buttons) */}
+            {wizard.step > 1 && (
+              <div className="mt-8 max-w-6xl mx-auto">
+                <button
+                  onClick={handleCancel}
+                  className="px-8 py-3 border-2 border-gray-300 rounded-full font-semibold text-gray-700 hover:bg-gray-50 transition-all duration-200"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
           </>
         );
     }
