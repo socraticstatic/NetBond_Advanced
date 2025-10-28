@@ -150,30 +150,45 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
     if (isPending) return;
 
     const newStatus = connection.status === 'Active' ? 'Inactive' : 'Active';
-    setIsPending(true);
+    const isActivating = newStatus === 'Active';
 
-    // Show initial toast
-    window.addToast({
-      type: 'info',
-      title: 'Status Change Initiated',
-      message: `Connection status change typically takes 7 minutes to complete. A notification will appear when finished.`,
-      duration: 6000
-    });
+    if (isActivating) {
+      // Activating: Show timer countdown (7 seconds emulating 7 minutes)
+      setIsPending(true);
 
-    // Simulate status change after 7 seconds (emulating 7 minutes)
-    setTimeout(() => {
+      // Show initial toast
+      window.addToast({
+        type: 'info',
+        title: 'Activation Initiated',
+        message: `Connection activation typically takes 7 minutes to complete. A notification will appear when finished.`,
+        duration: 6000
+      });
+
+      // Simulate activation after 7 seconds (emulating 7 minutes)
+      setTimeout(() => {
+        updateConnection(connection.id, { status: newStatus });
+        setIsPending(false);
+        setProgress(0);
+        setRemainingTime(420);
+
+        window.addToast({
+          type: 'success',
+          title: 'Connection Activated',
+          message: `Connection is now Active`,
+          duration: 3000
+        });
+      }, 7000);
+    } else {
+      // Deactivating: Instant change, no timer
       updateConnection(connection.id, { status: newStatus });
-      setIsPending(false);
-      setProgress(0);
-      setRemainingTime(420);
 
       window.addToast({
         type: 'success',
-        title: 'Status Updated',
-        message: `Connection is now ${newStatus}`,
+        title: 'Connection Deactivated',
+        message: `Connection is now Inactive`,
         duration: 3000
       });
-    }, 7000);
+    }
   };
 
   const getHealthStatus = () => {
