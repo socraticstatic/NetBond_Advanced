@@ -31,6 +31,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   const [isMinimized, setIsMinimized] = useState(isMinimizedProp);
   const [isPending, setIsPending] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [remainingTime, setRemainingTime] = useState(420);
   const [isEditingName, setIsEditingName] = useState(connection.name.startsWith('Internet to'));
   const [nodeName, setNodeName] = useState(connection.name);
   const [nameError, setNameError] = useState<string | null>(null);
@@ -41,22 +42,27 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
     setIsMinimized(isMinimizedProp);
   }, [isMinimizedProp]);
 
-  // Progress bar animation
+  // Progress bar and countdown timer animation
   useEffect(() => {
     if (isPending) {
       const startTime = Date.now();
-      const duration = 15000; // 15 seconds
+      const duration = 7000; // 7 seconds to emulate 7 minutes
+      const totalSeconds = 420; // 7 minutes = 420 seconds
 
       const updateProgress = () => {
         const elapsed = Date.now() - startTime;
         const newProgress = Math.min((elapsed / duration) * 100, 100);
+        const secondsRemaining = Math.max(0, Math.ceil(totalSeconds - (elapsed / duration) * totalSeconds));
+
         setProgress(newProgress);
+        setRemainingTime(secondsRemaining);
 
         if (newProgress < 100) {
           requestAnimationFrame(updateProgress);
         } else {
           setIsPending(false);
           setProgress(0);
+          setRemainingTime(420);
         }
       };
 
@@ -150,23 +156,24 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
     window.addToast({
       type: 'info',
       title: 'Status Change Initiated',
-      message: `Connection status change typically takes 6 minutes to complete. A notification will appear when finished.`,
+      message: `Connection status change typically takes 7 minutes to complete. A notification will appear when finished.`,
       duration: 6000
     });
 
-    // Simulate status change after 15 seconds
+    // Simulate status change after 7 seconds (emulating 7 minutes)
     setTimeout(() => {
       updateConnection(connection.id, { status: newStatus });
       setIsPending(false);
       setProgress(0);
-      
+      setRemainingTime(420);
+
       window.addToast({
         type: 'success',
         title: 'Status Updated',
         message: `Connection is now ${newStatus}`,
         duration: 3000
       });
-    }, 15000);
+    }, 7000);
   };
 
   const getHealthStatus = () => {
@@ -249,7 +256,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
 
       {isMinimized ? (
         // Minimized View
-        <ConnectionCardMinimized 
+        <ConnectionCardMinimized
           connection={connection}
           groups={groups}
           getStatusDotColor={getStatusDotColor}
@@ -257,6 +264,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
           handleToggleStatus={handleToggleStatus}
           isPending={isPending}
           progress={progress}
+          remainingTime={remainingTime}
           navigate={navigate}
           onMaximize={() => setIsMinimized(false)}
           showEffects={showEffects}
@@ -295,11 +303,12 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
           </div>
 
           {/* Status */}
-          <ConnectionCardStatus 
+          <ConnectionCardStatus
             status={connection.status}
             bandwidthUtilization={connection.performance?.bandwidthUtilization || 0}
             isPending={isPending}
             progress={progress}
+            remainingTime={remainingTime}
             handleToggleStatus={handleToggleStatus}
             healthStatus={healthStatus}
             showEffects={showEffects}

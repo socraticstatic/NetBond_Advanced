@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Layers, ChevronRight, Play, Pause } from 'lucide-react';
+import { Layers, ChevronRight, Play, Pause, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { IconButton } from '../../common/IconButton';
 import { Group } from '../../../types/group';
@@ -12,6 +12,7 @@ interface ConnectionCardMinimizedProps {
   handleToggleStatus: (e: React.MouseEvent) => void;
   isPending: boolean;
   progress: number;
+  remainingTime: number;
   navigate: (path: string) => void;
   onMaximize: () => void;
   showEffects: boolean;
@@ -29,10 +30,17 @@ export function ConnectionCardMinimized({
   handleToggleStatus,
   isPending,
   progress,
+  remainingTime,
   navigate,
   onMaximize,
   showEffects
 }: ConnectionCardMinimizedProps) {
+  // Format time as MM:SS
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
   return (
     <div className="h-full p-4 flex items-center">
       {/* Left Side: Icon and Name */}
@@ -108,19 +116,8 @@ export function ConnectionCardMinimized({
           >
             {isPending ? (
               <span className="flex items-center">
-                <motion.div
-                  className="h-2 w-2 bg-brand-blue rounded-full mr-1.5"
-                  animate={{ 
-                    scale: [1, 1.5, 1],
-                    opacity: [1, 0.6, 1],
-                  }}
-                  transition={{
-                    duration: 1,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-                Pending...
+                <Clock className="h-3 w-3 mr-1.5" />
+                <span className="font-mono text-xs font-semibold">{formatTime(remainingTime)}</span>
               </span>
             ) : connection.status === 'Active' ? (
               <>
