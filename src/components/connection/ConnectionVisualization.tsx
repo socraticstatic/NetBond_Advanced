@@ -33,21 +33,52 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
     const sourceNode: NetworkNode = {
       id: 'source-1',
       type: 'source',
-      x: width * 0.25,
+      x: width * 0.15,
       y: height * 0.5 - 32,
       name: 'Your Network',
       status: connection.status === 'Active' ? 'active' : 'inactive',
       config: {
         location: connection.location,
-        connectionType: connection.type // Add connection type to help determine icon
+        connectionType: connection.type
       }
     };
-    
+
+    const newNodes: NetworkNode[] = [sourceNode];
+    const newEdges: NetworkEdge[] = [];
+
+    // IPE node (physical infrastructure layer)
+    if (connection.primaryIPE) {
+      const ipeNode: NetworkNode = {
+        id: 'ipe-1',
+        type: 'router',
+        x: width * 0.5,
+        y: height * 0.5 - 32,
+        name: connection.primaryIPE,
+        status: connection.status === 'Active' ? 'active' : 'inactive',
+        config: {
+          label: 'Physical IPE',
+          description: 'Infrastructure Provider Edge Router',
+          type: 'IPE'
+        }
+      };
+      newNodes.push(ipeNode);
+
+      // Edge from source to IPE
+      newEdges.push({
+        id: 'edge-source-ipe',
+        source: 'source-1',
+        target: 'ipe-1',
+        type: 'Virtual Connection',
+        bandwidth: connection.bandwidth,
+        status: connection.status === 'Active' ? 'active' : 'inactive'
+      });
+    }
+
     // Target node (cloud provider)
     const targetNode: NetworkNode = {
       id: 'destination-1',
       type: 'destination',
-      x: width * 0.75,
+      x: width * 0.85,
       y: height * 0.5 - 32,
       name: connection.provider || 'Cloud Provider',
       status: connection.status === 'Active' ? 'active' : 'inactive',
@@ -56,23 +87,39 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
         region: connection.location
       }
     };
-    
-    // Create edge between nodes with visible styling
-    const edge: NetworkEdge = {
-      id: 'edge-1',
-      source: 'source-1',
-      target: 'destination-1',
-      type: connection.type,
-      bandwidth: connection.bandwidth,
-      status: connection.status === 'Active' ? 'active' : 'inactive',
-      metrics: {
-        latency: connection.performance?.latency,
-        packetLoss: connection.performance?.packetLoss
-      }
-    };
-    
-    setNodes([sourceNode, targetNode]);
-    setEdges([edge]);
+    newNodes.push(targetNode);
+
+    // Edge from IPE to destination (or source to destination if no IPE)
+    if (connection.primaryIPE) {
+      newEdges.push({
+        id: 'edge-ipe-dest',
+        source: 'ipe-1',
+        target: 'destination-1',
+        type: 'Cloud On-Ramp',
+        bandwidth: connection.bandwidth,
+        status: connection.status === 'Active' ? 'active' : 'inactive',
+        metrics: {
+          latency: connection.performance?.latency,
+          packetLoss: connection.performance?.packetLoss
+        }
+      });
+    } else {
+      newEdges.push({
+        id: 'edge-1',
+        source: 'source-1',
+        target: 'destination-1',
+        type: connection.type,
+        bandwidth: connection.bandwidth,
+        status: connection.status === 'Active' ? 'active' : 'inactive',
+        metrics: {
+          latency: connection.performance?.latency,
+          packetLoss: connection.performance?.packetLoss
+        }
+      });
+    }
+
+    setNodes(newNodes);
+    setEdges(newEdges);
     
     // Update on resize
     const handleResize = () => {
@@ -84,9 +131,11 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
       
       setNodes(prevNodes => prevNodes.map(node => {
         if (node.id === 'source-1') {
-          return { ...node, x: newWidth * 0.25, y: newHeight * 0.5 - 32 };
+          return { ...node, x: newWidth * 0.15, y: newHeight * 0.5 - 32 };
+        } else if (node.id === 'ipe-1') {
+          return { ...node, x: newWidth * 0.5, y: newHeight * 0.5 - 32 };
         } else if (node.id === 'destination-1') {
-          return { ...node, x: newWidth * 0.75, y: newHeight * 0.5 - 32 };
+          return { ...node, x: newWidth * 0.85, y: newHeight * 0.5 - 32 };
         }
         return node;
       }));

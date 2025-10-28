@@ -18,6 +18,9 @@ export interface Connection {
   datacenters?: string[];
   cloudRouterCount?: number;
   linkCount?: number;
+  primaryIPE?: string;
+  secondaryIPE?: string;
+  ipeRedundancy?: boolean;
   createdAt?: string;
   performance?: {
     latency: string;
@@ -118,9 +121,12 @@ export interface Link {
   mtu?: number;
   qosPriority?: number;
   type?: 'data' | 'voice' | 'management' | 'storage' | 'guest' | 'dmz' | 'other';
+  ipeId?: string;
+  ipeName?: string;
+  ipeLocation?: string;
   createdAt: string;
   updatedAt?: string;
-  linkBandwidth?: string; // Add bandwidth field for links
+  linkBandwidth?: string;
 }
 
 export type ViewMode = 'grid' | 'list' | 'topology';

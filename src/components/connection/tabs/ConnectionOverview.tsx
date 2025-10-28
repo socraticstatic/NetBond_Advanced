@@ -1,6 +1,7 @@
 import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup } from 'lucide-react';
 import { Connection } from '../../../types';
 import { ConnectionVisualization } from '../ConnectionVisualization';
+import { IPEInfoTooltip } from '../../common/IPEInfoTooltip';
 
 interface ConnectionOverviewProps {
   connection: Connection;
@@ -58,7 +59,37 @@ export function ConnectionOverview({ connection }: ConnectionOverviewProps) {
               <span className="text-sm text-gray-700">Cloud Provider</span>
               <span className="text-sm font-medium text-gray-900">{connection.provider || 'N/A'}</span>
             </div>
+
+            {connection.primaryIPE && (
+              <>
+                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="flex items-center">
+                    <Server className="h-4 w-4 text-blue-600 mr-2" />
+                    <span className="text-sm text-gray-700">Primary IPE</span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">{connection.primaryIPE}</span>
+                </div>
+                {connection.secondaryIPE && (
+                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex items-center">
+                      <Server className="h-4 w-4 text-green-600 mr-2" />
+                      <span className="text-sm text-gray-700">Secondary IPE (Redundant)</span>
+                    </div>
+                    <span className="text-sm font-medium text-gray-900">{connection.secondaryIPE}</span>
+                  </div>
+                )}
+              </>
+            )}
           </div>
+
+          {connection.primaryIPE && (
+            <div className="mt-4 pt-4 border-t border-gray-100 flex items-start space-x-2">
+              <IPEInfoTooltip variant="connection" className="flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-gray-500">
+                <strong>IPE (Infrastructure Provider Edge Router)</strong> is the physical router at the data center where your virtual connection runs. It provides the actual network capacity and cloud provider on-ramps.
+              </p>
+            </div>
+          )}
         </div>
         
         {/* Security Overview */}

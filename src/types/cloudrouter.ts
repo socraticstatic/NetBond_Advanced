@@ -10,6 +10,9 @@ export interface CloudRouter {
   vendor?: string;
   vendors?: string[];
   pool?: string;
+  ipeId?: string;
+  ipeName?: string;
+  ipeLocation?: string;
   createdAt: string;
   updatedAt?: string;
   connectionId: string;

@@ -1,4 +1,4 @@
-import { Edit2, Trash2 } from 'lucide-react';
+import { Edit2, Trash2, Server } from 'lucide-react';
 import { VLAN } from '../modals/VLANModal';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { useState } from 'react';
@@ -104,9 +104,29 @@ export function LinkTable({
     )
   };
 
+  const ipeColumn: TableColumn<LinkType> = {
+    id: 'ipe',
+    label: 'Physical IPE',
+    sortable: true,
+    sortKey: 'ipeName',
+    width: '12%',
+    render: (link) => (
+      <div className="flex items-center">
+        {link.ipeName ? (
+          <>
+            <Server className="h-3 w-3 text-blue-600 mr-1.5" />
+            <span className="text-sm font-medium text-gray-900 truncate">{link.ipeName}</span>
+          </>
+        ) : (
+          <span className="text-sm text-gray-400">N/A</span>
+        )}
+      </div>
+    )
+  };
+
   const columns = showCloudRouter
-    ? [...baseColumns.slice(0, 3), cloudRouterColumn, ...baseColumns.slice(3)]
-    : baseColumns;
+    ? [...baseColumns.slice(0, 3), cloudRouterColumn, ipeColumn, ...baseColumns.slice(3)]
+    : [...baseColumns.slice(0, 3), ipeColumn, ...baseColumns.slice(3)];
 
   return (
     <EnhancedTable
