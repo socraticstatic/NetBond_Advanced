@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe } from 'lucide-react';
 import { Button } from '../common/Button';
 
 export function UserProfile() {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80');
   
@@ -465,14 +467,7 @@ export function UserProfile() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => {
-                window.addToast({
-                  type: 'info',
-                  title: 'Notification Preferences',
-                  message: 'Notification settings page coming soon',
-                  duration: 3000
-                });
-              }}
+              onClick={() => navigate('/notifications')}
             >
               Manage Notifications
             </Button>
