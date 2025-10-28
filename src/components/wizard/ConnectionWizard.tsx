@@ -1,20 +1,21 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, Suspense, lazy } from 'react';
-import { WizardProgress } from './WizardProgress';
-import { useWizard } from '../../hooks/useWizard';
+import { Globe, Server, Cloud } from 'lucide-react';
+import { PhaseIndicator } from './PhaseIndicator';
 import { CloudProvider, ConnectionType, BandwidthOption, LocationOption, ConnectionConfig } from '../../types/connection';
-import { Step1RouterNaming } from './screens/Step1RouterNaming';
-import { Step2ConnectionType } from './screens/Step2ConnectionType';
-import { Step3ProviderSelection } from './screens/Step3ProviderSelection';
-import { Step4ResiliencySelection } from './screens/Step4ResiliencySelection';
-import { Step5LocationBandwidth } from './screens/Step5LocationBandwidth';
-import { Step6Review } from './screens/Step6Review';
+import { ProviderSelection } from './screens/ProviderSelection';
+import { ConnectionTypeSelection } from './screens/ConnectionTypeSelection';
+import { ConnectionConfiguration } from './screens/ConnectionConfiguration';
+import { AdvancedSettings } from './screens/AdvancedSettings';
+import { ReviewConfiguration } from './screens/ReviewConfiguration';
 import { ModeSelection } from './modes';
 import { useStore } from '../../store/useStore';
+import { Button } from '../common/Button';
+import { NetworkAI } from './NetworkAI';
 import { Connection, NetworkNode, NetworkEdge } from '../../types';
 import { AsyncBoundary } from '../common/AsyncBoundary';
 import { ErrorBoundary } from '../common/ErrorBoundary';
-import { handleApiError } from '../../utils/errorHandling';
+import { tryCatch, handleApiError } from '../../utils/errorHandling';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 
 // Lazy load the NetworkDesigner component with improved error handling and loading states
@@ -28,7 +29,13 @@ const LazyNetworkDesigner = lazy(() =>
     })
 );
 
-const TOTAL_STEPS = 6;
+const STEPS = [
+  { title: 'Choose Provider', description: 'Select your cloud service provider' },
+  { title: 'Connection Type', description: 'Select how you want to connect' },
+  { title: 'Configuration', description: 'Set bandwidth and location' },
+  { title: 'Advanced Settings', description: 'Tailor your network settings' },
+  { title: 'Review', description: 'Review your selections' }
+];
 
 type WizardMode = 'step-by-step' | 'visual';
 
@@ -51,34 +58,37 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   const addConnection = useStore(state => state.addConnection);
   const updateConnection = useStore(state => state.updateConnection);
   const connections = useStore(state => state.connections);
-
+  
   // Check for state passed via router navigation
   const locationState = location.state as any;
-
+  
   // If in edit mode or if mode is specified in location state, use that mode
-  const initialMode = editMode || (locationState?.editMode) ? 'visual' :
-                     locationState?.mode ? locationState.mode as WizardMode :
+  const initialMode = editMode || (locationState?.editMode) ? 'visual' : 
+                     locationState?.mode ? locationState.mode as WizardMode : 
                      null;
-
+                     
   // Get initialConnection from props or location state
   const connectionToEdit = initialConnection || locationState?.initialConnection;
   const isEditMode = editMode || locationState?.editMode || false;
-
+  
   // Initialize with mode from navigation state or props
   const [mode, setMode] = useState<WizardMode | null>(initialMode);
+  const [step, setStep] = useState(0);
+  const [config, setConfig] = useState<Partial<ConnectionConfig>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showAI, setShowAI] = useState(true);
 
-  // Use the new wizard hook for step-by-step mode
-  const {
-    wizard,
-    updateWizard,
-    nextStep,
-    prevStep,
-    toggleProvider,
-    updateProviderConfig,
-    reset
-  } = useWizard();
+  // Persistent state for all selections
+  const [selectedProvider, setSelectedProvider] = useState<CloudProvider>();
+  const [selectedType, setSelectedType] = useState<ConnectionType>();
+  const [selectedBandwidth, setSelectedBandwidth] = useState<BandwidthOption>();
+  const [selectedLocation, setSelectedLocation] = useState<LocationOption>();
+  const [billingChoice, setBillingChoice] = useState<BillingChoice>({
+    planId: 'pay-as-you-go',
+    term: 'monthly',
+    addons: []
+  });
 
   // For visual editor, convert connection to nodes and edges
   const [initialNodes, setInitialNodes] = useState<NetworkNode[]>([]);
@@ -86,7 +96,25 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
 
   // Initialize from existing connection if provided
   useEffect(() => {
-    if (connectionToEdit && mode === 'visual') {
+    if (connectionToEdit) {
+      // Log initialization information
+      console.log("Initializing connection wizard with connection:", connectionToEdit);
+      
+      // Set basic config values safely
+      tryCatch(() => {
+        setSelectedProvider(connectionToEdit.provider as CloudProvider);
+        setSelectedType(connectionToEdit.type as ConnectionType);
+        setSelectedBandwidth(connectionToEdit.bandwidth as BandwidthOption);
+        setSelectedLocation(connectionToEdit.location as LocationOption);
+        
+        if (connectionToEdit.billing) {
+          setBillingChoice({
+            planId: connectionToEdit.billing.planId || 'pay-as-you-go',
+            term: connectionToEdit.billing.term || 'monthly',
+            addons: connectionToEdit.billing.addons || []
+          });
+        }
+        
         // For visual mode, set up initial nodes and edges
         if (mode === 'visual') {
           console.log("Setting up visual editor with connection data:", connectionToEdit);
@@ -140,8 +168,21 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
             setInitialEdges([edge]);
           }
         }
+      }, () => {
+        console.error('Error initializing connection data');
+      });
     }
   }, [connectionToEdit, mode, locationState]);
+
+  // Update config when selections change
+  useEffect(() => {
+    setConfig({
+      provider: selectedProvider,
+      type: selectedType,
+      bandwidth: selectedBandwidth,
+      location: selectedLocation
+    });
+  }, [selectedProvider, selectedType, selectedBandwidth, selectedLocation]);
 
   const handleCancel = () => {
     if (isEditMode && connectionToEdit) {
@@ -159,8 +200,40 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       return;
     }
     setMode(newMode);
-    reset();
+    setStep(0);
+    setConfig({});
+    setBillingChoice({
+      planId: 'pay-as-you-go',
+      term: 'monthly',
+      addons: []
+    });
     setError(null);
+  };
+
+  const updateConfig = (updates: Partial<ConnectionConfig>) => {
+    setConfig(prev => ({ ...prev, ...updates }));
+  };
+
+  const updateBillingChoice = (updates: Partial<BillingChoice>) => {
+    setBillingChoice(prev => ({ ...prev, ...updates }));
+  };
+
+  const canProceed = () => {
+    // For standard flow
+    switch (step) {
+      case 0:
+        return !!selectedProvider;
+      case 1:
+        return !!selectedType;
+      case 2:
+        return !!selectedBandwidth && !!selectedLocation;
+      case 3:
+        return true; // Advanced settings are optional
+      case 4:
+        return true; // Review step
+      default:
+        return false;
+    }
   };
 
   const handleComplete = async (config: ConnectionConfig | Connection[]) => {
@@ -212,61 +285,66 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
         return;
       }
 
-      // Standard wizard flow - create connections for each provider
-      // This handles the new wizard format where we can select multiple providers
+      // Standard wizard flow - create a single connection
+      
+      // Generate connection name
+      const baseName = `Internet to ${config.provider} Cloud`;
+      let connectionName = baseName;
+      let counter = 1;
 
-      try {
-        // Create a connection for each selected provider
-        for (const provider of wizard.selectedProviders) {
-          const providerConfig = wizard.providerConfigurations[provider];
+      // Check for duplicate names and append a number if needed
+      while (connections.some(conn => conn.name.toLowerCase() === connectionName.toLowerCase())) {
+        connectionName = `${baseName} (${counter})`;
+        counter++;
+      }
 
-          // Generate connection name
-          const baseName = `${wizard.routerName} - ${provider} - ${providerConfig.location}`;
-          let connectionName = baseName;
-          let counter = 1;
-
-          // Check for duplicate names and append a number if needed
-          while (connections.some(conn => conn.name.toLowerCase() === connectionName.toLowerCase())) {
-            connectionName = `${baseName} (${counter})`;
-            counter++;
-          }
-
-          // Create the new connection object with inactive status
-          const newConnection = {
-            name: connectionName,
-            type: wizard.connectionType as ConnectionType,
-            status: 'Inactive' as const,
-            bandwidth: providerConfig.bandwidth as string,
-            location: providerConfig.location as string,
-            provider: provider,
-            features: {
-              dedicatedConnection: true,
-              redundantPath: wizard.resiliencyLevel === 'maximum',
-              autoScaling: false,
-              loadBalancing: false
-            },
-            security: {
-              encryption: 'AES-256',
-              firewall: true,
-              ddosProtection: true,
-              ipSecEnabled: true
-            },
-            performance: {
-              latency: '<10ms',
-              packetLoss: '<0.1%',
-              jitter: '<2ms',
-              uptime: '99.9%',
-              throughput: '0%',
-              tunnels: 'Inactive',
-              bandwidthUtilization: 0,
-              currentUsage: '0 Gbps',
-              utilizationTrend: [0, 0, 0, 0, 0, 0, 0]
-            }
-          };
-
-          await addConnection(newConnection);
+      // Create the new connection object with inactive status
+      const newConnection = {
+        name: connectionName,
+        type: `Internet to ${config.provider} Cloud`,
+        status: 'Inactive',
+        bandwidth: config.bandwidth,
+        location: config.location,
+        provider: config.provider,
+        features: {
+          dedicatedConnection: true,
+          redundantPath: config.redundancy || false,
+          autoScaling: false,
+          loadBalancing: false
+        },
+        security: {
+          encryption: 'AES-256',
+          firewall: true,
+          ddosProtection: true,
+          ipSecEnabled: true
+        },
+        performance: {
+          latency: '<10ms',
+          packetLoss: '<0.1%',
+          jitter: '<2ms',
+          uptime: '99.9%',
+          throughput: '0%',
+          tunnels: 'Inactive',
+          bandwidthUtilization: 0,
+          currentUsage: '0 Gbps',
+          utilizationTrend: [0, 0, 0, 0, 0, 0, 0]
+        },
+        configuration: config.configuration || {},
+        billing: {
+          planId: billingChoice.planId,
+          term: billingChoice.term,
+          addons: billingChoice.addons,
+          baseFee: billingChoice.planId === '36-months' ? 1999.99 : 999.99,
+          usage: 0,
+          total: billingChoice.planId === '36-months' ? 1999.99 : 999.99,
+          currency: 'USD'
         }
+      };
 
+      // Add to local store - handle potential network errors
+      try {
+        await addConnection(newConnection);
+        
         // Navigate to manage page after a short delay
         setTimeout(() => {
           navigate('/manage');
@@ -284,6 +362,25 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
     }
   };
 
+  // Apply AI suggestion
+  const handleAISuggestion = (suggestion: any) => {
+    try {
+      if (suggestion.provider) {
+        setSelectedProvider(suggestion.provider);
+      }
+      if (suggestion.type) {
+        setSelectedType(suggestion.type);
+      }
+      if (suggestion.bandwidth) {
+        setSelectedBandwidth(suggestion.bandwidth);
+      }
+      if (suggestion.location) {
+        setSelectedLocation(suggestion.location);
+      }
+    } catch (error) {
+      console.error('Error applying AI suggestion:', error);
+    }
+  };
 
   // If no mode is selected, show the mode selection screen
   if (!mode) {
@@ -364,91 +461,184 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       default:
         return (
           <>
-            <div className="flex items-center justify-center mb-8">
+            <div className="flex items-center justify-center space-x-4 mb-8">
               <button
                 onClick={() => setMode(null)}
-                className="text-brand-blue hover:text-brand-darkBlue flex items-center text-sm font-medium"
+                className="text-brand-blue hover:text-brand-darkBlue flex items-center"
               >
                 Change Creation Mode
               </button>
+              
+              <div className="flex items-center">
+                {/* Removed the pulsing dot span, keeping only the static indicator */}
+                <div className="relative mr-2">
+                  <div className="h-4 w-4 bg-[#003184] rounded-full">
+                  </div>
+                </div>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showAI}
+                    onChange={(e) => setShowAI(e.target.checked)}
+                    className="sr-only"
+                  />
+                  <div className={`relative inline-block w-10 h-5 transition-colors duration-200 ease-in-out rounded-full ${
+                    showAI ? 'bg-[#003184]' : 'bg-gray-200'
+                  }`}>
+                    <div className={`absolute inset-y-0 left-0 w-5 h-5 transition duration-200 ease-in-out transform bg-white rounded-full ${
+                      showAI ? 'translate-x-5' : 'translate-x-0'
+                    } shadow-md`}></div>
+                  </div>
+                  <span className="ml-2 text-sm font-medium text-gray-700">
+                    AI Assistant
+                  </span>
+                </label>
+              </div>
             </div>
 
-            <WizardProgress currentStep={wizard.step} totalSteps={TOTAL_STEPS} />
+            <div className="max-w-4xl mx-auto mb-12">
+              <PhaseIndicator
+                phases={STEPS}
+                currentPhase={step}
+                className="w-full"
+              />
+            </div>
 
-            <div className="max-w-6xl mx-auto">
-              {wizard.step === 1 && (
-                <Step1RouterNaming
-                  wizard={wizard}
-                  onUpdateWizard={updateWizard}
-                  onNext={nextStep}
-                  onCancel={handleCancel}
+            <div className="max-w-3xl mx-auto relative">
+              {/* AI Assistant */}
+              {showAI && (
+                <NetworkAI 
+                  provider={selectedProvider}
+                  type={selectedType}
+                  bandwidth={selectedBandwidth}
+                  location={selectedLocation}
+                  step={step}
+                  onNextStep={() => setStep(s => Math.min(s + 1, STEPS.length - 1))}
+                  onSuggestion={handleAISuggestion}
+                />
+              )}
+              
+              {step === 0 && (
+                <ProviderSelection
+                  selectedProvider={selectedProvider}
+                  onSelect={(provider) => {
+                    setSelectedProvider(provider);
+                    setStep(1);
+                  }}
+                  billingChoice={billingChoice}
+                  onBillingChange={updateBillingChoice}
                 />
               )}
 
-              {wizard.step === 2 && (
-                <Step2ConnectionType
-                  wizard={wizard}
-                  onUpdateWizard={updateWizard}
-                  onNext={nextStep}
-                  onPrevious={prevStep}
+              {step === 1 && (
+                <ConnectionTypeSelection
+                  selectedType={selectedType}
+                  provider={selectedProvider}
+                  onSelect={(type) => {
+                    setSelectedType(type);
+                    setStep(2);
+                  }}
+                  billingChoice={billingChoice}
+                  onBillingChange={updateBillingChoice}
                 />
               )}
 
-              {wizard.step === 3 && (
-                <Step3ProviderSelection
-                  wizard={wizard}
-                  onToggleProvider={toggleProvider}
-                  onNext={nextStep}
-                  onPrevious={prevStep}
+              {step === 2 && (
+                <ConnectionConfiguration
+                  selectedLocation={selectedLocation}
+                  selectedBandwidth={selectedBandwidth}
+                  provider={selectedProvider}
+                  type={selectedType}
+                  billingChoice={billingChoice}
+                  onLocationSelect={setSelectedLocation}
+                  onBandwidthSelect={setSelectedBandwidth}
+                  onBillingChange={updateBillingChoice}
                 />
               )}
 
-              {wizard.step === 4 && (
-                <Step4ResiliencySelection
-                  wizard={wizard}
-                  onUpdateWizard={updateWizard}
-                  onNext={nextStep}
-                  onPrevious={prevStep}
+              {step === 3 && (
+                <AdvancedSettings
+                  config={{
+                    provider: selectedProvider,
+                    type: selectedType,
+                    bandwidth: selectedBandwidth,
+                    location: selectedLocation,
+                    ...config
+                  }}
+                  onConfigChange={updateConfig}
+                  billingChoice={billingChoice}
+                  onBillingChange={updateBillingChoice}
                 />
               )}
 
-              {wizard.step === 5 && (
-                <Step5LocationBandwidth
-                  wizard={wizard}
-                  onUpdateProviderConfig={updateProviderConfig}
-                  onNext={nextStep}
-                  onPrevious={prevStep}
-                />
-              )}
-
-              {wizard.step === 6 && (
-                <Step6Review
-                  wizard={wizard}
-                  onPrevious={prevStep}
-                  onSubmit={() => handleComplete(wizard as any)}
-                  isSubmitting={isSubmitting}
+              {step === 4 && (
+                <ReviewConfiguration 
+                  config={{
+                    provider: selectedProvider,
+                    type: selectedType,
+                    bandwidth: selectedBandwidth,
+                    location: selectedLocation,
+                    ...config
+                  }}
+                  billingChoice={billingChoice}
                 />
               )}
             </div>
 
             {/* Error message */}
             {error && (
-              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg max-w-6xl mx-auto">
+              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-sm text-red-700">{error}</p>
               </div>
             )}
 
-            {/* Cancel button for steps 2-6 (step 1 has its own buttons) */}
-            {wizard.step > 1 && (
-              <div className="mt-8 max-w-6xl mx-auto">
-                <button
-                  onClick={handleCancel}
-                  className="px-8 py-3 border-2 border-gray-300 rounded-full font-semibold text-gray-700 hover:bg-gray-50 transition-all duration-200"
-                >
-                  Cancel
-                </button>
+            <div className="mt-12 flex justify-between">
+              <Button
+                variant="outline"
+                onClick={handleCancel}
+              >
+                Cancel
+              </Button>
+              <div className="space-x-4">
+                {step > 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setStep(step - 1)}
+                  >
+                    Back
+                  </Button>
+                )}
+                {step === STEPS.length - 1 ? (
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      if (selectedProvider && selectedType && selectedBandwidth && selectedLocation) {
+                        handleComplete({
+                          provider: selectedProvider,
+                          type: selectedType,
+                          bandwidth: selectedBandwidth,
+                          location: selectedLocation,
+                          ...config
+                        });
+                      } else {
+                        setError('Please complete all required fields before creating the connection.');
+                      }
+                    }}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Creating...' : 'Create Connection'}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    onClick={() => setStep(step + 1)}
+                    disabled={!canProceed()}
+                  >
+                    Next
+                  </Button>
+                )}
               </div>
-            )}
+            </div>
           </>
         );
     }
