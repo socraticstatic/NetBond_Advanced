@@ -23,8 +23,8 @@ export function Step1RouterNaming({ wizard, onUpdateWizard, onNext }: Step1Route
   return (
     <div className="space-y-8">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-3">Cloud Router Name</h2>
-        <p className="text-gray-600">Enter a name for your cloud router</p>
+        <h2 className="text-3xl font-bold text-gray-900 mb-3">Router Name</h2>
+        <p className="text-gray-600">Enter a name for your router</p>
       </div>
 
       <div className="max-w-2xl mx-auto space-y-6">
