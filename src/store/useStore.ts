@@ -11,6 +11,7 @@ import { createGroupSlice, GroupSlice } from './slices/groupSlice';
 import { createRuleSlice, RuleSlice } from './slices/ruleSlice';
 import { createAgenticSlice, AgenticSlice } from './slices/agenticSlice';
 import { createAPIToolboxSlice, APIToolboxSlice } from './slices/apiToolboxSlice';
+import { createNotificationSlice, NotificationSlice } from './slices/notificationSlice';
 import { sampleConnections, sampleUsers, sampleGroups } from '../data/sampleData';
 import { safeJsonParse } from '../utils/errorHandling';
 
@@ -51,7 +52,8 @@ interface Store extends
   GroupSlice,
   RuleSlice,
   AgenticSlice,
-  APIToolboxSlice {}
+  APIToolboxSlice,
+  NotificationSlice {}
 
 // Create store with persisted or sample data
 export const useStore = create<Store>((set, get) => {
@@ -80,6 +82,7 @@ export const useStore = create<Store>((set, get) => {
     ...createRuleSlice(set, get),
     ...createAgenticSlice(set),
     ...createAPIToolboxSlice(set, get),
+    ...createNotificationSlice(set),
     ...initialState,
 
     // Add a reset function to clear everything (useful for development/testing)
