@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Bell, Settings, Activity, Shield, DollarSign, AlertTriangle, Mail, Smartphone, Monitor, CheckCircle, Archive, Trash2, Eye, EyeOff, Volume2, VolumeX, Moon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Bell, Settings, Activity, Shield, DollarSign, AlertTriangle, Mail, Smartphone, Monitor, CheckCircle, Archive, Trash2, Eye, EyeOff, Volume2, VolumeX, Moon, ArrowLeft } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { NotificationChannel } from '../../types/notification';
 import { Button } from '../common/Button';
 
 export function NotificationsPage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'notifications' | 'preferences' | 'settings'>('notifications');
   const [filterStatus, setFilterStatus] = useState<'all' | 'unread' | 'read'>('all');
   const { notifications, preferences, settings, updatePreferences, updateSettings, toggleChannel, markAsRead, markAllAsRead, archiveNotification, deleteNotification } = useStore();
@@ -187,7 +189,15 @@ export function NotificationsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Header with Back Button */}
       <div className="mb-8">
+        <button
+          onClick={() => navigate('/profile')}
+          className="flex items-center text-sm text-gray-600 hover:text-brand-blue mb-4 transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 mr-1" />
+          Back to Profile
+        </button>
         <h1 className="text-2xl font-bold text-gray-900">Notification Center</h1>
         <p className="mt-1 text-sm text-gray-500">Manage your notification preferences and delivery channels</p>
       </div>

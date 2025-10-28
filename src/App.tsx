@@ -267,14 +267,9 @@ function App() {
 
                 <Route path="/notifications" element={
                   <AsyncBoundary fallback={<LoadingFallback />}>
-                    <SubNav
-                      title="Notifications"
-                      description="View and manage your notifications"
-                    >
-                      <Suspense fallback={<LoadingFallback />}>
-                        <LazyNotificationsPage />
-                      </Suspense>
-                    </SubNav>
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyNotificationsPage />
+                    </Suspense>
                   </AsyncBoundary>
                 } />
 
