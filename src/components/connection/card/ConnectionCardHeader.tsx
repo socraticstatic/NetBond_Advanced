@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { Edit2, Minimize2, Sparkles } from 'lucide-react';
+import { Edit2, Minimize2 } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { IconButton } from '../../common/IconButton';
 import { ConnectionOverflowMenu } from '../ConnectionOverflowMenu';
-import { sampleAnomalies } from '../../../data/sampleData';
 
 interface ConnectionCardHeaderProps {
   name: string;
@@ -43,44 +42,36 @@ export function ConnectionCardHeader({
   // Get provider logo based on provider name
   const getProviderLogo = () => {
     if (!connection.provider) return icon;
-
+    
     switch(connection.provider.toLowerCase()) {
       case 'aws':
         return (
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg"
-            alt="AWS"
-            className="h-6 w-6"
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" 
+            alt="AWS" 
+            className="h-6 w-6" 
           />
         );
       case 'azure':
         return (
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg"
-            alt="Azure"
-            className="h-6 w-6"
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" 
+            alt="Azure" 
+            className="h-6 w-6" 
           />
         );
       case 'google':
         return (
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg"
-            alt="Google Cloud"
-            className="h-6 w-6"
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" 
+            alt="Google Cloud" 
+            className="h-6 w-6" 
           />
         );
       default:
         return icon;
     }
   };
-
-  const getAnomalyCount = () => {
-    return sampleAnomalies.filter(
-      anomaly => anomaly.connectionId === connection.id && anomaly.status === 'active'
-    ).length;
-  };
-
-  const anomalyCount = getAnomalyCount();
 
   return (
     <div className="p-4 border-b border-gray-100">
@@ -118,14 +109,8 @@ export function ConnectionCardHeader({
             <p className="text-xs text-gray-500">{type}</p>
           </div>
         </div>
-
+        
         <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
-          {anomalyCount > 0 && (
-            <div className="flex items-center space-x-1 px-2 py-1 bg-amber-50 border border-amber-200 rounded-full">
-              <Sparkles className="h-3 w-3 text-amber-600" />
-              <span className="text-xs font-semibold text-amber-700">{anomalyCount}</span>
-            </div>
-          )}
           <IconButton
             icon={<Minimize2 className="h-4 w-4" />}
             onClick={onMinimize}

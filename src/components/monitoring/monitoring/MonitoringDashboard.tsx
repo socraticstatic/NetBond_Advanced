@@ -13,7 +13,6 @@ import { AsyncBoundary } from '../../common/AsyncBoundary';
 const OverviewTab = lazy(() => import('../tabs/OverviewTab').then(module => ({ default: module.OverviewTab })));
 const MetricsTab = lazy(() => import('../tabs/MetricsTab').then(module => ({ default: module.MetricsTab })));
 const AlertsTab = lazy(() => import('../tabs/AlertsTab').then(module => ({ default: module.AlertsTab })));
-const AnomalyTab = lazy(() => import('../tabs/AnomalyTab').then(module => ({ default: module.AnomalyTab })));
 const LogsTab = lazy(() => import('../tabs/LogsTab').then(module => ({ default: module.LogsTab })));
 const ReportingSection = lazy(() => import('../reporting/ReportingSection').then(module => ({ default: module.ReportingSection })));
 
@@ -57,7 +56,6 @@ export function MonitoringDashboard({ connections }: MonitoringDashboardProps) {
             {activeTab === 'overview' && <OverviewTab />}
             {activeTab === 'metrics' && <MetricsTab />}
             {activeTab === 'alerts' && <AlertsTab />}
-            {activeTab === 'anomalies' && <AnomalyTab />}
             {activeTab === 'logs' && <LogsTab />}
             {activeTab === 'reports' && <ReportingSection selectedConnection="all" timeRange="1h" defaultTab="standard" />}
           </Suspense>

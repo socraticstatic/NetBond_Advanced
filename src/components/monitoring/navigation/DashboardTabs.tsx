@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
-import { Activity, FileText, Bell, TrendingUp, History, Sparkles } from 'lucide-react';
+import { Activity, FileText, Bell, TrendingUp, History } from 'lucide-react';
 import { TabGroup } from '../../navigation/TabGroup';
 
-export type MonitoringTabType = 'overview' | 'metrics' | 'alerts' | 'anomalies' | 'logs' | 'reports';
+export type MonitoringTabType = 'overview' | 'metrics' | 'alerts' | 'logs' | 'reports';
 
 interface DashboardTabsProps {
   activeTab: MonitoringTabType;
@@ -15,7 +15,6 @@ export function DashboardTabs({ activeTab, onChange, className = '' }: Dashboard
     { id: 'overview', label: 'Overview', icon: <Activity className="h-5 w-5 mr-2" /> },
     { id: 'metrics', label: 'Detailed Metrics', icon: <TrendingUp className="h-5 w-5 mr-2" /> },
     { id: 'alerts', label: 'Alerts', icon: <Bell className="h-5 w-5 mr-2" /> },
-    { id: 'anomalies', label: 'Anomaly Detection', icon: <Sparkles className="h-5 w-5 mr-2" /> },
     { id: 'logs', label: 'Logs', icon: <History className="h-5 w-5 mr-2" /> },
     { id: 'reports', label: 'Reports', icon: <FileText className="h-5 w-5 mr-2" /> }
   ];

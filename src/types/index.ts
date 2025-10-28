@@ -6,4 +6,3 @@ export * from './metric';
 export * from './navigation';
 export * from './group';
 export * from './vnf';
-export * from './anomaly';
