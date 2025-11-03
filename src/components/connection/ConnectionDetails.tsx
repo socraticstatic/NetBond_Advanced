@@ -206,7 +206,7 @@ export function ConnectionDetails() {
               <h3 className="text-sm font-medium text-gray-500">Pool</h3>
               <Users className="h-5 w-5 text-gray-400" />
             </div>
-            <p className="text-lg font-medium text-gray-900">{connection.configuration?.pool || 'Default'}</p>
+            <p className="text-lg font-medium text-gray-900">{connection.poolName || connection.pool || 'None'}</p>
           </div>
 
           {/* Locations Card */}
