@@ -3,7 +3,7 @@ import { X, AlertTriangle, Plus, Info, Network, Shield, Settings, Globe, Router 
 import { Button } from '../../common/Button';
 import { FormField } from '../../form/FormField';
 import { VNF, VNFType, VNFInterface, VNFTemplate } from '../../../types/vnf';
-import { CloudRouter } from '../../../types/cloudrouter';
+import { Link } from '../../../types/connection';
 
 // Utility function to get user-friendly VNF type names
 const getTypeName = (type: VNFType): string => {
@@ -136,18 +136,18 @@ interface VNFModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (vnf: VNF) => void;
-  vnf?: VNF; // If provided, we're in edit mode
+  vnf?: VNF;
   connectionId: string;
-  cloudRouters: CloudRouter[];
+  links: Link[];
 }
 
-export function VNFModal({ 
-  isOpen, 
-  onClose, 
-  onSave, 
-  vnf, 
+export function VNFModal({
+  isOpen,
+  onClose,
+  onSave,
+  vnf,
   connectionId,
-  cloudRouters
+  links
 }: VNFModalProps) {
   const isEditMode = !!vnf;
   const [showVnfTooltip, setShowVnfTooltip] = useState(false);
@@ -166,19 +166,19 @@ export function VNFModal({
   const [highAvailability, setHighAvailability] = useState(false);
   const [managementIP, setManagementIP] = useState('');
   const [routingProtocols, setRoutingProtocols] = useState<string[]>([]);
-  const [cloudRouterId, setCloudRouterId] = useState<string>('');
-  
+  const [linkId, setLinkId] = useState<string>('');
+
   // New interface form
   const [newInterface, setNewInterface] = useState<Partial<VNFInterface>>({
     name: '',
     type: 'lan',
     status: 'down'
   });
-  
+
   // Template selection
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
   const [showTemplates, setShowTemplates] = useState(!isEditMode);
-  
+
   // Validation state
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -199,8 +199,8 @@ export function VNFModal({
       setHighAvailability(vnf.configuration?.highAvailability || false);
       setManagementIP(vnf.configuration?.managementIP || '');
       setRoutingProtocols(vnf.configuration?.routingProtocols || []);
-      setCloudRouterId(vnf.cloudRouterId || '');
-      
+      setLinkId(vnf.linkId || '');
+
       // Hide templates in edit mode
       setShowTemplates(false);
     } else {
@@ -226,7 +226,7 @@ export function VNFModal({
     setManagementIP('');
     setRoutingProtocols([]);
     setSelectedTemplate('');
-    setCloudRouterId('');
+    setLinkId('');
   };
 
   // Apply template settings
@@ -240,7 +240,7 @@ export function VNFModal({
     setModel(template.model || '');
     setThroughput(template.throughput);
     setDescription(template.description);
-    
+
     // Set configuration from template
     if (template.defaultConfiguration) {
       if (template.defaultConfiguration.interfaces) {
@@ -252,16 +252,16 @@ export function VNFModal({
           ...iface
         })) as VNFInterface[]);
       }
-      
+
       if (template.defaultConfiguration.routingProtocols) {
         setRoutingProtocols(template.defaultConfiguration.routingProtocols);
       }
-      
+
       if (template.defaultConfiguration.highAvailability !== undefined) {
         setHighAvailability(template.defaultConfiguration.highAvailability);
       }
     }
-    
+
     // Move to configuration form
     setShowTemplates(false);
     setSelectedTemplate(templateId);
@@ -279,8 +279,8 @@ export function VNFModal({
       newErrors.vendor = 'Vendor is required';
     }
 
-    if (!cloudRouterId) {
-      newErrors.cloudRouterId = 'Cloud Router is required';
+    if (!linkId) {
+      newErrors.linkId = 'Link is required';
     }
 
     if (managementIP && !isValidIP(managementIP)) {
@@ -296,7 +296,7 @@ export function VNFModal({
     if (!ipRegex.test(ip)) {
       return false;
     }
-    
+
     return ip.split('.').every(octet => {
       const num = parseInt(octet, 10);
       return num >= 0 && num <= 255;
@@ -323,14 +323,14 @@ export function VNFModal({
     };
 
     setInterfaces([...interfaces, newIf]);
-    
+
     // Reset form
     setNewInterface({
       name: '',
       type: 'lan',
       status: 'down'
     });
-    
+
     // Clear any errors
     if (errors.newInterface) {
       const { newInterface, ...restErrors } = errors;
@@ -353,7 +353,7 @@ export function VNFModal({
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -379,7 +379,7 @@ export function VNFModal({
       createdAt: isEditMode && vnf ? vnf.createdAt : new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       connectionId,
-      cloudRouterId
+      linkId
     };
 
     onSave(vnfData);
@@ -410,7 +410,7 @@ export function VNFModal({
               <h3 className="text-lg font-medium text-gray-900 flex items-center">
                 Configure Virtual Network Function
                 <div className="relative ml-2">
-                  <Info 
+                  <Info
                     className="h-4 w-4 text-gray-400 cursor-help"
                     onMouseEnter={() => setShowVnfTooltip(true)}
                     onMouseLeave={() => setShowVnfTooltip(false)}
@@ -425,7 +425,7 @@ export function VNFModal({
                 </div>
               </h3>
             )}
-            
+
             {selectedTemplate && !showTemplates && (
               <span className="ml-2 px-2.5 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
                 {VNF_TEMPLATES.find(t => t.id === selectedTemplate)?.name}
@@ -454,7 +454,7 @@ export function VNFModal({
             </div>
           </div>
         )}
-        
+
         {/* Body */}
         <div className="px-6 py-4 flex-1 overflow-y-auto">
           {showTemplates ? (
@@ -463,17 +463,17 @@ export function VNFModal({
               <p className="text-sm text-gray-500">
                 Choose a template to quickly configure a pre-defined virtual network function, or create a custom VNF.
               </p>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {VNF_TEMPLATES.map(template => {
                   const Icon = template.icon;
                   return (
-                    <div 
+                    <div
                       key={template.id}
                       className={`
                         border rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow ${
-                          selectedTemplate === template.id 
-                            ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500/50' 
+                          selectedTemplate === template.id
+                            ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500/50'
                             : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50/50'
                         }`}
                       onClick={() => applyTemplate(template.id)}
@@ -499,9 +499,9 @@ export function VNFModal({
                           <span className="text-xs text-gray-500">{template.vendor} {template.model}</span>
                         </div>
                       </div>
-                      
+
                       <p className="text-sm text-gray-600 mb-2 line-clamp-2">{template.description}</p>
-                      
+
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">{getTypeName(template.type)}</span>
                         <span className="font-medium text-gray-900">{template.throughput}</span>
@@ -510,7 +510,7 @@ export function VNFModal({
                   );
                 })}
               </div>
-              
+
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <div className="flex items-start">
                   <Info className="h-5 w-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
@@ -532,9 +532,9 @@ export function VNFModal({
                 {/* Basic VNF Information */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="col-span-1">
-                    <FormField 
-                      label="VNF Name" 
-                      error={errors.name} 
+                    <FormField
+                      label="VNF Name"
+                      error={errors.name}
                       required
                     >
                       <input
@@ -546,10 +546,10 @@ export function VNFModal({
                       />
                     </FormField>
                   </div>
-                  
+
                   <div className="col-span-1">
-                    <FormField 
-                      label="VNF Type" 
+                    <FormField
+                      label="VNF Type"
                       required
                     >
                       <select
@@ -565,11 +565,11 @@ export function VNFModal({
                       </select>
                     </FormField>
                   </div>
-                  
+
                   <div className="col-span-1">
-                    <FormField 
-                      label="Vendor" 
-                      error={errors.vendor} 
+                    <FormField
+                      label="Vendor"
+                      error={errors.vendor}
                       required
                     >
                       <input
@@ -581,9 +581,9 @@ export function VNFModal({
                       />
                     </FormField>
                   </div>
-                  
+
                   <div className="col-span-1">
-                    <FormField 
+                    <FormField
                       label="Model"
                     >
                       <input
@@ -595,9 +595,9 @@ export function VNFModal({
                       />
                     </FormField>
                   </div>
-                  
+
                   <div className="col-span-1">
-                    <FormField 
+                    <FormField
                       label="Version"
                     >
                       <input
@@ -609,10 +609,10 @@ export function VNFModal({
                       />
                     </FormField>
                   </div>
-                  
+
                   <div className="col-span-1">
-                    <FormField 
-                      label="Status" 
+                    <FormField
+                      label="Status"
                       required
                     >
                       <select
@@ -627,9 +627,9 @@ export function VNFModal({
                       </select>
                     </FormField>
                   </div>
-                  
+
                   <div className="col-span-1">
-                    <FormField 
+                    <FormField
                       label="Throughput"
                     >
                       <input
@@ -641,9 +641,9 @@ export function VNFModal({
                       />
                     </FormField>
                   </div>
-                  
+
                   <div className="col-span-1">
-                    <FormField 
+                    <FormField
                       label="License Expiry Date"
                     >
                       <input
@@ -654,28 +654,31 @@ export function VNFModal({
                       />
                     </FormField>
                   </div>
-                  
+
                   <div className="col-span-1">
-                    <FormField 
-                      label="Cloud Router"
-                      error={errors.cloudRouterId}
+                    <FormField
+                      label="Link"
+                      error={errors.linkId}
                       required
+                      helpText="Select the link this VNF will be associated with"
                     >
                       <select
-                        value={cloudRouterId}
-                        onChange={(e) => setCloudRouterId(e.target.value)}
+                        value={linkId}
+                        onChange={(e) => setLinkId(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       >
-                        <option value="">Select a Cloud Router</option>
-                        {cloudRouters.map(router => (
-                          <option key={router.id} value={router.id}>{router.name}</option>
+                        <option value="">Select a Link</option>
+                        {links.map(link => (
+                          <option key={link.id} value={link.id}>
+                            {link.name} (VLAN {link.vlanId})
+                          </option>
                         ))}
                       </select>
                     </FormField>
                   </div>
-                  
+
                   <div className="col-span-2">
-                    <FormField 
+                    <FormField
                       label="Description"
                     >
                       <textarea
@@ -714,7 +717,7 @@ export function VNFModal({
                     {/* Network Interfaces Section */}
                     <div>
                       <h3 className="text-base font-medium text-gray-900 mb-4">Network Interfaces</h3>
-                      
+
                       {/* Existing interfaces table */}
                       {interfaces.length > 0 && (
                         <div className="overflow-x-auto mb-4 border border-gray-200 rounded-lg">
@@ -765,7 +768,7 @@ export function VNFModal({
                           </table>
                         </div>
                       )}
-                      
+
                       {/* Add new interface form */}
                       <div className="bg-white p-4 rounded-lg border border-gray-200 mb-4">
                         <h4 className="text-sm font-medium text-gray-900 mb-3">Add Network Interface</h4>
@@ -782,7 +785,7 @@ export function VNFModal({
                               placeholder="e.g., WAN1, LAN1"
                             />
                           </FormField>
-                          
+
                           <FormField
                             label="Interface Type"
                           >
@@ -797,7 +800,7 @@ export function VNFModal({
                               <option value="ha">High Availability</option>
                             </select>
                           </FormField>
-                          
+
                           <FormField
                             label="Interface Status"
                           >
@@ -811,7 +814,7 @@ export function VNFModal({
                             </select>
                           </FormField>
                         </div>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                           <FormField
                             label="IP Address (optional)"
@@ -824,7 +827,7 @@ export function VNFModal({
                               placeholder="e.g., 192.168.1.1"
                             />
                           </FormField>
-                          
+
                           <FormField
                             label="Subnet Mask (optional)"
                           >
@@ -836,7 +839,7 @@ export function VNFModal({
                               placeholder="e.g., 255.255.255.0"
                             />
                           </FormField>
-                          
+
                           <FormField
                             label="VLAN ID (optional)"
                           >
@@ -851,7 +854,7 @@ export function VNFModal({
                             />
                           </FormField>
                         </div>
-                        
+
                         <div className="flex justify-end">
                           <Button
                             type="button"
@@ -879,10 +882,10 @@ export function VNFModal({
                             <span className="text-sm text-gray-700">Enable High Availability (HA)</span>
                           </label>
                         </div>
-                        
+
                         {/* Management IP */}
-                        <FormField 
-                          label="Management IP Address" 
+                        <FormField
+                          label="Management IP Address"
                           error={errors.managementIP}
                         >
                           <input
@@ -893,7 +896,7 @@ export function VNFModal({
                             placeholder="e.g., 192.168.1.10"
                           />
                         </FormField>
-                        
+
                         {/* Routing Protocols */}
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
