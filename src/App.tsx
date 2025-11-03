@@ -14,6 +14,9 @@ import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { GroupGrid } from './components/GroupGrid';
 import { LoadingSpinner } from './components/common/LoadingSpinner';
 import { AsyncBoundary } from './components/common/AsyncBoundary';
+import { ProductTour } from './components/tour/ProductTour';
+import { useTour } from './hooks/useTour';
+import { mainAppTour } from './data/tourSteps';
 
 // Optimized lazy loading with better error handling
 const LazyConnectionWizard = lazy(() =>
@@ -64,9 +67,15 @@ const LazyNotificationsPage = lazy(() =>
   }))
 );
 
-const LazyHelpResourcesPage = lazy(() => 
-  import('./components/pages/HelpResourcesPage').then(module => ({ 
-    default: module.HelpResourcesPage 
+const LazyHelpResourcesPage = lazy(() =>
+  import('./components/pages/HelpResourcesPage').then(module => ({
+    default: module.HelpResourcesPage
+  }))
+);
+
+const LazyGlossaryPage = lazy(() =>
+  import('./components/pages/GlossaryPage').then(module => ({
+    default: module.GlossaryPage
   }))
 );
 
@@ -109,14 +118,20 @@ function App() {
   const [activeTab, setActiveTab] = useState<'connections' | 'marketplace' | 'groups' | 'control-center'>('connections');
   const [isInitializing, setIsInitializing] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const tour = useTour('main-app');
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    const initApp = () => setTimeout(() => setIsInitializing(false), 300);
-    
+    const initApp = () => setTimeout(() => {
+      setIsInitializing(false);
+      if (!tour.hasCompleted && !isMobile) {
+        setTimeout(() => tour.startTour(), 1000);
+      }
+    }, 300);
+
     checkMobile();
     initApp();
-    
+
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
@@ -286,6 +301,14 @@ function App() {
                   </AsyncBoundary>
                 } />
 
+                <Route path="/glossary" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyGlossaryPage />
+                    </Suspense>
+                  </AsyncBoundary>
+                } />
+
                 <Route path="/connections/:id/*" element={
                   <AsyncBoundary fallback={<LoadingFallback />}>
                     <Suspense fallback={<LoadingFallback />}>
@@ -327,13 +350,20 @@ function App() {
           </DashboardLayout>
         </ErrorBoundary>
         
-        <MobileMenu 
+        <MobileMenu
           isOpen={false}
           onClose={() => {}}
           userInfo={userInfo}
           notifications={3}
         />
         <SmartAssistant />
+        <ProductTour
+          steps={mainAppTour}
+          isOpen={tour.isOpen}
+          onClose={tour.closeTour}
+          onComplete={tour.completeTour}
+          storageKey="tour-main-app-completed"
+        />
       </ThemeProvider>
     </NavigationStateProvider>
   );
