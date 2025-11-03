@@ -1,49 +1,72 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HelpCircle, Book, FileText, Mail, PlayCircle, Zap, ArrowRight } from 'lucide-react';
+import { HelpCircle, Book, FileText, Mail, PlayCircle, Zap, ArrowRight, BookOpen, Compass } from 'lucide-react';
 import { Button } from '../common/Button';
+import { useTour } from '../../hooks/useTour';
 
 export function HelpResourcesPage() {
   const [showBanner, setShowBanner] = useState(true);
   const navigate = useNavigate();
+  const tour = useTour('main-app');
 
   const helpOptions = [
+    {
+      icon: BookOpen,
+      title: 'Network Glossary',
+      description: 'Learn networking terms and concepts',
+      link: '/glossary',
+      color: 'bg-blue-50 text-blue-600',
+      action: () => navigate('/glossary')
+    },
+    {
+      icon: Compass,
+      title: 'Interactive Tour',
+      description: 'Take a guided tour of the platform',
+      link: '#',
+      color: 'bg-purple-50 text-purple-600',
+      action: () => {
+        tour.resetTour();
+        tour.startTour();
+      }
+    },
     {
       icon: Book,
       title: 'Documentation',
       description: 'Read our comprehensive guides',
       link: '/support',
-      color: 'bg-blue-50 text-blue-600'
+      color: 'bg-green-50 text-green-600'
     },
     {
       icon: PlayCircle,
       title: 'Video Tutorials',
       description: 'Learn through step-by-step videos',
       link: '/support',
-      color: 'bg-purple-50 text-purple-600'
+      color: 'bg-teal-50 text-teal-600'
     },
     {
       icon: FileText,
       title: 'Knowledge Base',
       description: 'Browse articles and FAQs',
       link: '/support',
-      color: 'bg-green-50 text-green-600'
+      color: 'bg-orange-50 text-orange-600'
     },
     {
       icon: Mail,
       title: 'Email Support',
       description: 'Get help from our support team',
       link: 'mailto:support@example.com',
-      color: 'bg-amber-50 text-amber-600'
+      color: 'bg-red-50 text-red-600'
     }
   ];
 
-  const handleOptionClick = (link: string) => {
+  const handleOptionClick = (option: typeof helpOptions[0]) => {
     setShowBanner(false);
-    if (link.startsWith('mailto:')) {
-      window.location.href = link;
-    } else {
-      navigate(link);
+    if (option.action) {
+      option.action();
+    } else if (option.link.startsWith('mailto:')) {
+      window.location.href = option.link;
+    } else if (option.link !== '#') {
+      navigate(option.link);
     }
   };
 
@@ -132,6 +155,40 @@ export function HelpResourcesPage() {
                 </div>
                 <p className="text-sm text-gray-500 mb-4">{option.description}</p>
                 <ul className="space-y-3">
+                  {option.title === 'Network Glossary' && (
+                    <>
+                      <li className="flex items-center text-sm text-gray-600">
+                        <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2" />
+                        Connection & Cloud Routers
+                      </li>
+                      <li className="flex items-center text-sm text-gray-600">
+                        <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2" />
+                        Links (VLANs) & VNFs
+                      </li>
+                      <li className="flex items-center text-sm text-gray-600">
+                        <div className="h-1.5 w-1.5 rounded-full bg-blue-500 mr-2" />
+                        IPE & Infrastructure
+                      </li>
+                    </>
+                  )}
+
+                  {option.title === 'Interactive Tour' && (
+                    <>
+                      <li className="flex items-center text-sm text-gray-600">
+                        <div className="h-1.5 w-1.5 rounded-full bg-purple-500 mr-2" />
+                        Platform Overview
+                      </li>
+                      <li className="flex items-center text-sm text-gray-600">
+                        <div className="h-1.5 w-1.5 rounded-full bg-purple-500 mr-2" />
+                        Core Concepts Explained
+                      </li>
+                      <li className="flex items-center text-sm text-gray-600">
+                        <div className="h-1.5 w-1.5 rounded-full bg-purple-500 mr-2" />
+                        Navigation & Features
+                      </li>
+                    </>
+                  )}
+
                   {option.title === 'Documentation' && (
                     <>
                       <li className="flex items-center text-sm text-gray-600">
@@ -205,8 +262,9 @@ export function HelpResourcesPage() {
                 <Button
                   variant="secondary"
                   className="w-full justify-center"
+                  onClick={() => handleOptionClick(option)}
                 >
-                  Learn More
+                  {option.title === 'Interactive Tour' ? 'Start Tour' : option.title === 'Network Glossary' ? 'Open Glossary' : 'Learn More'}
                 </Button>
               </div>
             </div>

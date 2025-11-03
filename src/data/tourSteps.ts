@@ -1,0 +1,141 @@
+import { TourStep } from '../components/tour/ProductTour';
+
+export const mainAppTour: TourStep[] = [
+  {
+    id: 'welcome',
+    title: 'Welcome to NetBond SDCI',
+    description: 'This quick tour will help you understand the core concepts and navigation. You can skip this anytime or restart it later from the Help menu.',
+    placement: 'center'
+  },
+  {
+    id: 'navigation',
+    title: 'Main Navigation',
+    description: 'Use the main navigation to access different areas: Manage connections, Monitor performance, Configure settings, and more. The navigation adapts based on your role and permissions.',
+    targetSelector: 'nav[aria-label="Main navigation"]',
+    placement: 'bottom',
+    highlightPadding: 12
+  },
+  {
+    id: 'connections',
+    title: 'Your Connections',
+    description: 'A Connection is your dedicated network path to cloud providers. Each Connection contains Cloud Routers that handle routing and traffic management. Think of it as the highway system connecting different locations.',
+    targetSelector: 'main',
+    placement: 'center'
+  },
+  {
+    id: 'create-connection',
+    title: 'Create New Connections',
+    description: 'Click here to start creating a new connection. You can choose between a step-by-step wizard or a visual network designer. The wizard guides you through provider selection, connection type, bandwidth, and configuration.',
+    targetSelector: 'a[href="/create"]',
+    placement: 'bottom',
+    highlightPadding: 8
+  },
+  {
+    id: 'connection-types',
+    title: 'Connection Types Explained',
+    description: 'Connections have different types: Internet to Cloud (public internet), Cloud to Cloud (direct cloud-to-cloud), CoLocation to Cloud (from data center), VPN to Cloud (encrypted tunnel), and Site to Cloud (from office). Each has different performance and security characteristics.',
+    placement: 'center'
+  },
+  {
+    id: 'cloud-routers',
+    title: 'Cloud Routers',
+    description: 'Inside each Connection, you\'ll find Cloud Routers (virtual routing nodes). These handle BGP routing, traffic management, and can have multiple Links attached. Think of them as smart interchanges on your network highway.',
+    placement: 'center'
+  },
+  {
+    id: 'links-vlans',
+    title: 'Links (VLANs)',
+    description: 'Links are virtual network segments (VLANs) within a Cloud Router. Each Link has its own routing settings, IP subnet, and QoS priority. You can attach VNFs (network services) to Links for security and routing. Links are like dedicated lanes on the highway.',
+    placement: 'center'
+  },
+  {
+    id: 'vnfs',
+    title: 'VNFs (Virtual Network Functions)',
+    description: 'VNFs are software-based network services like firewalls, SD-WAN appliances, or routers. They attach to Links to provide security, routing, or other network functions. Adding a firewall VNF is like installing a security checkpoint on a specific lane.',
+    placement: 'center'
+  },
+  {
+    id: 'ipe',
+    title: 'IPE (Infrastructure Provider Edge)',
+    description: 'IPE Routers are the physical network hardware at data center facilities. Your virtual Connections and Links run on these physical devices. The IPE provides actual bandwidth capacity and connectivity to cloud providers. It\'s the ground beneath your virtual highway.',
+    placement: 'center'
+  },
+  {
+    id: 'monitoring',
+    title: 'Network Monitoring',
+    description: 'Monitor your network performance in real-time. Track latency, packet loss, bandwidth usage, and set up alerts. The monitoring dashboard gives you complete visibility into your network health.',
+    targetSelector: 'a[href="/monitor"]',
+    placement: 'bottom',
+    highlightPadding: 8
+  },
+  {
+    id: 'help',
+    title: 'Help & Glossary',
+    description: 'Access the complete glossary anytime from the Help menu. You\'ll find detailed explanations, examples, and visual aids for all networking terms. Hover over any term with a help icon to see quick tooltips.',
+    targetSelector: 'button[aria-label*="help" i], a[href="/support"]',
+    placement: 'left',
+    highlightPadding: 8
+  },
+  {
+    id: 'complete',
+    title: 'You\'re All Set!',
+    description: 'You now understand the core concepts: Connections contain Cloud Routers, which have Links (VLANs), which can have VNFs attached. All running on physical IPE hardware. Start exploring and remember - help is always available!',
+    placement: 'center'
+  }
+];
+
+export const connectionDetailTour: TourStep[] = [
+  {
+    id: 'connection-overview',
+    title: 'Connection Overview',
+    description: 'This is the detailed view of your connection. Here you can see all Cloud Routers, Links, and VNFs associated with this connection.',
+    placement: 'center'
+  },
+  {
+    id: 'cloud-routers-tab',
+    title: 'Cloud Routers',
+    description: 'View and manage all Cloud Routers (virtual routing nodes) within this connection. Each router can have multiple Links and its own routing configuration.',
+    targetSelector: 'button:has-text("Cloud Routers"), [role="tab"]:has-text("Cloud Routers")',
+    placement: 'bottom'
+  },
+  {
+    id: 'links-tab',
+    title: 'Links (VLANs)',
+    description: 'Manage your Links (VLANs) here. Each Link is a virtual network segment with its own routing settings, IP subnet, QoS priority, and attached VNFs.',
+    targetSelector: 'button:has-text("Links"), [role="tab"]:has-text("Links")',
+    placement: 'bottom'
+  },
+  {
+    id: 'routing-settings',
+    title: 'Routing Settings',
+    description: 'Configure how traffic flows through your network. Set up BGP, route filters, AS numbers, MTU settings, and Quality of Service parameters for each Link.',
+    placement: 'center'
+  }
+];
+
+export const wizardTour: TourStep[] = [
+  {
+    id: 'wizard-intro',
+    title: 'Connection Wizard',
+    description: 'This wizard will guide you through creating a new connection step by step. We\'ll help you choose a provider, connection type, bandwidth, and configure all settings.',
+    placement: 'center'
+  },
+  {
+    id: 'provider-selection',
+    title: 'Choose Your Cloud Provider',
+    description: 'Select which cloud provider you want to connect to: AWS, Azure, Google Cloud, Oracle, or others. Each provider has different capabilities and pricing.',
+    placement: 'center'
+  },
+  {
+    id: 'connection-type',
+    title: 'Select Connection Type',
+    description: 'Choose how you want to connect: Internet to Cloud, Cloud to Cloud, CoLocation to Cloud, VPN to Cloud, or Site to Cloud. The type determines performance, security, and cost.',
+    placement: 'center'
+  },
+  {
+    id: 'bandwidth',
+    title: 'Choose Bandwidth',
+    description: 'Select the data transfer capacity you need, from 100 Mbps to 100 Gbps. Bandwidth determines how much traffic can flow simultaneously.',
+    placement: 'center'
+  }
+];
