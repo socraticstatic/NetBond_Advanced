@@ -28,7 +28,7 @@ export function DeleteVNFModal({
       case 'firewall': return 'Firewall';
       case 'sdwan': return 'SD-WAN';
       case 'router': return 'Router';
-      case 'vnat': return 'Virtual NAT';
+      case 'vnat': return 'NAT';
       case 'custom': return 'Custom VNF';
       default: return type;
     }

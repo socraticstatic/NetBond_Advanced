@@ -1,4 +1,4 @@
-import { Edit2, Trash2, Server } from 'lucide-react';
+import { Edit2, Trash2, Eye } from 'lucide-react';
 import { VLAN } from '../modals/VLANModal';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { useState } from 'react';
@@ -32,7 +32,7 @@ export function LinkTable({
       label: 'VLAN ID',
       sortable: true,
       sortKey: 'vlanId',
-      width: '8%',
+      width: '12%',
       render: (link) => (
         <div className="text-sm font-medium text-gray-900">{link.vlanId}</div>
       )
@@ -42,9 +42,14 @@ export function LinkTable({
       label: 'Name',
       sortable: true,
       sortKey: 'name',
-      width: '25%',
+      width: '35%',
       render: (link) => (
-        <div className="text-sm font-medium text-gray-900 truncate">{link.name}</div>
+        <div>
+          <div className="text-sm font-medium text-gray-900 truncate">{link.name}</div>
+          {link.description && (
+            <div className="text-xs text-gray-500 truncate mt-0.5">{link.description}</div>
+          )}
+        </div>
       )
     },
     {
@@ -52,7 +57,7 @@ export function LinkTable({
       label: 'Status',
       sortable: true,
       sortKey: 'status',
-      width: '10%',
+      width: '15%',
       render: (link) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
           link.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
@@ -62,33 +67,11 @@ export function LinkTable({
       )
     },
     {
-      id: 'bandwidth',
-      label: 'Bandwidth',
-      sortable: true,
-      sortKey: 'bandwidth',
-      width: '12%',
-      render: (link) => (
-        <div className="text-sm font-medium text-gray-900 truncate">{link.bandwidth || 'N/A'}</div>
-      )
-    },
-    {
       id: 'ipSubnet',
       label: 'IP Subnet',
-      width: '15%',
+      width: '20%',
       render: (link) => (
-        <div className="text-sm font-mono text-gray-700 truncate">{link.ipSubnet || 'N/A'}</div>
-      )
-    },
-    {
-      id: 'createdAt',
-      label: 'Created',
-      sortable: true,
-      sortKey: 'createdAt',
-      width: '10%',
-      render: (link) => (
-        <div className="text-sm text-gray-500">
-          {new Date(link.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' })}
-        </div>
+        <div className="text-sm font-mono text-gray-700 truncate">{link.ipSubnet || '—'}</div>
       )
     }
   ];
@@ -98,35 +81,15 @@ export function LinkTable({
     label: 'Cloud Router',
     sortable: true,
     sortKey: 'cloudRouterId',
-    width: '15%',
+    width: '18%',
     render: (link) => (
-      <div className="text-sm font-medium text-gray-900 truncate">{link.cloudRouterName || 'N/A'}</div>
-    )
-  };
-
-  const ipeColumn: TableColumn<LinkType> = {
-    id: 'ipe',
-    label: 'Physical IPE',
-    sortable: true,
-    sortKey: 'ipeName',
-    width: '12%',
-    render: (link) => (
-      <div className="flex items-center">
-        {link.ipeName ? (
-          <>
-            <Server className="h-3 w-3 text-blue-600 mr-1.5" />
-            <span className="text-sm font-medium text-gray-900 truncate">{link.ipeName}</span>
-          </>
-        ) : (
-          <span className="text-sm text-gray-400">N/A</span>
-        )}
-      </div>
+      <div className="text-sm font-medium text-gray-900 truncate">{link.cloudRouterName || '—'}</div>
     )
   };
 
   const columns = showCloudRouter
-    ? [...baseColumns.slice(0, 3), cloudRouterColumn, ipeColumn, ...baseColumns.slice(3)]
-    : [...baseColumns.slice(0, 3), ipeColumn, ...baseColumns.slice(3)];
+    ? [baseColumns[0], baseColumns[1], cloudRouterColumn, baseColumns[2], baseColumns[3]]
+    : baseColumns;
 
   return (
     <EnhancedTable
@@ -140,6 +103,12 @@ export function LinkTable({
       rowActions={(link) => (
         <OverflowMenu
           items={[
+            {
+              id: 'view',
+              label: 'View Details',
+              icon: <Eye className="h-4 w-4" />,
+              onClick: () => onEdit(link)
+            },
             {
               id: 'edit',
               label: 'Edit Link',
