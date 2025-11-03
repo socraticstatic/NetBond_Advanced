@@ -172,7 +172,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
             <div className="hidden lg:ml-8 lg:flex lg:space-x-8 lg:items-center lg:h-full">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = location.pathname === item.href;
+                const isActive = location.pathname.startsWith(item.href);
 
                 return (
                   <Link
@@ -181,8 +181,8 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
                     onMouseEnter={() => setHoveredItem(item.href)}
                     onMouseLeave={() => setHoveredItem(null)}
                     className={`
-                      group relative inline-flex items-center px-1 border-b-2 text-sm font-medium no-rounded
-                      transition-all duration-200
+                      group relative inline-flex items-center px-1 py-4 border-b-2 text-sm font-medium no-rounded
+                      transition-all duration-200 h-full
                       ${isActive
                         ? 'border-fw-active text-fw-link'
                         : 'border-transparent text-fw-bodyLight hover:border-fw-secondary hover:text-fw-body'
