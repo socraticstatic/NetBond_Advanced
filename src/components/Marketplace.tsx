@@ -581,7 +581,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
   return (
     <div className="flex gap-6">
       {/* Categories Sidebar */}
-      <div className="w-72 shrink-0 space-y-6">
+      <div className="w-72 shrink-0 space-y-6 animate-in fade-in slide-in-from-left duration-500">
         {/* Collections Grid */}
         <CollectionGrid
           collections={[
@@ -666,14 +666,33 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
       </div>
 
       <div className="flex-1 space-y-6 relative">
+        {/* Hero Section */}
+        <div className="bg-gradient-to-br from-[#003184] via-[#0047BB] to-[#005CDB] rounded-2xl p-8 shadow-xl text-white mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center mb-3">
+                <Sparkles className="h-6 w-6 mr-2" />
+                <h1 className="text-2xl font-bold">Network Marketplace</h1>
+              </div>
+              <p className="text-blue-100 text-sm max-w-xl">
+                Discover enterprise-grade network solutions, security add-ons, and managed services. Build your perfect infrastructure.
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="text-3xl font-bold">{getFilteredItems().length}</div>
+              <div className="text-blue-100 text-sm">Available Services</div>
+            </div>
+          </div>
+        </div>
+
         {/* Tabs */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-1.5">
           <div className="flex space-x-1">
             <button
               onClick={() => setActiveTab('all')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                 activeTab === 'all'
-                  ? 'bg-[#003184] text-white'
+                  ? 'bg-[#003184] text-white shadow-md scale-105'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
@@ -681,9 +700,9 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('connections')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                 activeTab === 'connections'
-                  ? 'bg-[#003184] text-white'
+                  ? 'bg-[#003184] text-white shadow-md scale-105'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
@@ -694,9 +713,9 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('addons')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                 activeTab === 'addons'
-                  ? 'bg-[#003184] text-white'
+                  ? 'bg-[#003184] text-white shadow-md scale-105'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
@@ -707,9 +726,9 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('vnf')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                 activeTab === 'vnf'
-                  ? 'bg-[#003184] text-white'
+                  ? 'bg-[#003184] text-white shadow-md scale-105'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
@@ -720,9 +739,9 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('api')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                 activeTab === 'api'
-                  ? 'bg-[#003184] text-white'
+                  ? 'bg-[#003184] text-white shadow-md scale-105'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
@@ -733,9 +752,9 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('managed')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                 activeTab === 'managed'
-                  ? 'bg-[#003184] text-white'
+                  ? 'bg-[#003184] text-white shadow-md scale-105'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
@@ -748,7 +767,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
           <div className="flex items-center justify-between gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -757,7 +776,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                 placeholder="Search marketplace..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               />
             </div>
             <div className="flex items-center space-x-4">
@@ -786,12 +805,16 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
           {getFilteredItems().map((item, index) => (
             <div
               key={item.id}
-              className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col relative"
+              className="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-2xl hover:border-[#003184] hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-hidden"
             >
+              {/* Gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#003184]/0 to-[#003184]/0 group-hover:from-[#003184]/5 group-hover:to-transparent transition-all duration-300 pointer-events-none" />
+
               {/* Recommendation badge on the first item */}
               {index === 0 && (
                 <div className="absolute -top-3 -right-3 z-10">
-                  <div className="flex items-center px-3 py-1.5 rounded-full bg-[#003184] text-white text-xs font-medium shadow-lg">
+                  <div className="flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold shadow-lg animate-pulse">
+                    <Star className="h-3 w-3 mr-1 fill-current" />
                     Top Pick
                   </div>
                 </div>
@@ -800,16 +823,16 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               {/* Recommendation badge for the second item */}
               {index === 1 && (
                 <div className="absolute -top-3 -right-3 z-10">
-                  <div className="flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 to-[#003184] text-white text-xs font-medium shadow-lg">
-                    <Zap className="h-3 w-3 mr-1.5" />
+                  <div className="flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 via-[#003184] to-blue-600 text-white text-xs font-bold shadow-lg">
+                    <Zap className="h-3 w-3 mr-1.5 fill-current" />
                     Recommended
                   </div>
                 </div>
               )}
-              
-              <div className="p-4 border-b border-gray-100">
+
+              <div className="relative p-5 border-b border-gray-100">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="p-2 bg-gray-50 rounded-lg">
+                  <div className="p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-sm group-hover:shadow-md transition-all">
                     {getIcon(item.icon)}
                   </div>
                   <div className="flex items-center gap-2">
@@ -830,9 +853,9 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                     )}
                   </div>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">{item.name}</h3>
-                <p className="text-xs text-gray-500 mb-2">{item.provider}</p>
-                <p className="text-sm text-gray-600">{item.description}</p>
+                <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#003184] transition-colors">{item.name}</h3>
+                <p className="text-xs text-gray-500 mb-2 font-medium">{item.provider}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
                 <div className="flex items-center mt-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
@@ -848,7 +871,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                 </div>
               </div>
 
-              <div className="p-4 flex-1">
+              <div className="relative p-5 flex-1">
                 <div className="space-y-4">
                   <div className="flex flex-wrap gap-2">
                     {item.features.map((feature, index) => (
@@ -894,28 +917,28 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                 </div>
               </div>
 
-              <div className="p-4 mt-auto border-t border-gray-100">
-                <div className="flex items-center justify-between mb-3">
+              <div className="relative p-5 mt-auto border-t border-gray-100 bg-gradient-to-br from-gray-50 to-white">
+                <div className="flex items-center justify-between mb-4">
                   <div className="text-left">
-                    <div className="text-xs text-gray-500">Starting at</div>
-                    <div className="text-lg font-bold text-gray-900">
+                    <div className="text-xs text-gray-500 font-medium">Starting at</div>
+                    <div className="text-2xl font-bold text-gray-900">
                       ${item.basePrice}
                       <span className="text-sm font-normal text-gray-500">/mo</span>
                     </div>
                   </div>
                   {item.popularity >= 90 && (
-                    <div className="flex items-center text-xs text-emerald-600 font-medium">
-                      <Zap className="h-3.5 w-3.5 mr-1" />
+                    <div className="flex items-center px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">
+                      <Zap className="h-3.5 w-3.5 mr-1 fill-current" />
                       Popular
                     </div>
                   )}
                 </div>
                 <button
                   onClick={() => handleSelectItem(item)}
-                  className="w-full inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-all duration-200 text-sm bg-[#003184] text-white hover:bg-[#002255] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 active:bg-[#002255] active:transform active:scale-[0.98]"
+                  className="w-full inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold transition-all duration-200 text-sm bg-gradient-to-r from-[#003184] to-[#0047BB] text-white hover:from-[#002255] hover:to-[#003184] hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#003184] focus:ring-offset-2 active:scale-95 group/btn"
                 >
-                  {item.addon || item.vnf || item.api ? 'Add to Connection' : 'Select Plan'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <span>{item.addon || item.vnf || item.api ? 'Add to Connection' : 'Select Plan'}</span>
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>
