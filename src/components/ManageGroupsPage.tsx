@@ -184,6 +184,9 @@ export function ManageGroupsPage() {
                 >
                   Create Pool
                 </Button>
+                <FilterButton
+                  onClick={() => setShowFilters(!showFilters)}
+                />
                 <Button
                   variant="outline"
                   icon={Download}
@@ -191,9 +194,6 @@ export function ManageGroupsPage() {
                 >
                   Export
                 </Button>
-                <FilterButton
-                  onClick={() => setShowFilters(!showFilters)}
-                />
               </div>
 
               {/* Expanded Filters */}
