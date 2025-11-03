@@ -139,8 +139,8 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
   };
 
   return (
-    <nav 
-      className="bg-white border-b border-gray-200"
+    <nav
+      className="bg-fw-base border-b border-fw-secondary"
       role="navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -150,7 +150,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
             {/* Hamburger Menu Button - Now next to the logo */}
             <button
               onClick={() => setIsVerticalNav(!isVerticalNav)}
-              className="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 no-rounded"
+              className="p-2 text-fw-bodyLight hover:text-fw-body hover:bg-fw-wash no-rounded"
               data-nav-toggle="true"
             >
               <Menu className="h-6 w-6" />
@@ -163,8 +163,8 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
               tabIndex={0}
             >
               <div className="flex items-center">
-                <span className="text-xl font-bold text-gray-900">AT&T</span>
-                <span className="ml-3 text-xl font-semibold text-brand-blue">NetBond® Advanced</span>
+                <span className="text-xl font-bold text-fw-heading">AT&T</span>
+                <span className="ml-3 text-xl font-semibold text-fw-link">NetBond® Advanced</span>
               </div>
             </div>
 
@@ -184,15 +184,15 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
                       group relative inline-flex items-center px-1 border-b-2 text-sm font-medium no-rounded
                       transition-all duration-200
                       ${isActive
-                        ? 'border-brand-blue text-brand-blue'
-                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                        ? 'border-fw-active text-fw-link'
+                        : 'border-transparent text-fw-bodyLight hover:border-fw-secondary hover:text-fw-body'
                       }
                     `}
                   >
                     <Icon className={`
                       h-4 w-4 mr-2 transition-transform duration-200
                       ${hoveredItem === item.href ? 'scale-110' : ''}
-                      ${isActive ? 'text-brand-blue' : 'text-gray-400'}
+                      ${isActive ? 'text-fw-link' : 'text-fw-bodyLight'}
                     `} 
                     />
                     <span className={`
@@ -204,18 +204,18 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
 
                     {/* Enhanced Tooltip */}
                     {hoveredItem === item.href && (
-                      <div 
-                        className="absolute top-full mt-4 p-4 bg-white rounded-lg shadow-lg border border-gray-100 w-64" style={{ zIndex: 50 }}
+                      <div
+                        className="absolute top-full mt-4 p-4 bg-fw-base rounded-lg shadow-lg border border-fw-secondary w-64" style={{ zIndex: 50 }}
                       >
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-900">{item.label}</span>
-                            <Icon className="h-4 w-4 text-gray-400" />
+                            <span className="text-sm font-medium text-fw-heading">{item.label}</span>
+                            <Icon className="h-4 w-4 text-fw-bodyLight" />
                           </div>
-                          <p className="whitespace-normal text-xs text-gray-600">{item.description}</p>
+                          <p className="whitespace-normal text-xs text-fw-bodyLight">{item.description}</p>
                         </div>
                         <div className="absolute -top-1 left-1/2 transform -translate-x-1/2">
-                          <div className="border-x-4 border-x-transparent border-b-4 border-b-white"></div>
+                          <div className="border-x-4 border-x-transparent border-b-4 border-b-fw-base"></div>
                         </div>
                       </div>
                     )}
@@ -230,9 +230,9 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
             {!isMenuOpen && !isMobile && (
               <>
                 <SearchBar onSearch={onSearch} />
-                <div className="h-6 w-px bg-gray-200" />
+                <div className="h-6 w-px bg-fw-secondary" />
                 <HelpButton />
-                <div className="h-6 w-px bg-gray-200" />
+                <div className="h-6 w-px bg-fw-secondary" />
                 <NotificationsButton count={notifications} />
                 <UserMenu
                   name={userInfo.name}

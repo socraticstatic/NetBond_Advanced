@@ -17,16 +17,16 @@ export function FormField({
 }: FormFieldProps) {
   return (
     <div className="space-y-1">
-      <label className="block text-sm font-medium text-gray-700">
+      <label className="block text-sm font-medium text-fw-body">
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="text-fw-error ml-1">*</span>}
       </label>
       {children}
       {helpText && (
-        <p className="text-sm text-gray-500">{helpText}</p>
+        <p className="text-sm text-fw-bodyLight">{helpText}</p>
       )}
       {error && (
-        <p className="text-sm text-red-600">{error}</p>
+        <p className="text-sm text-fw-error">{error}</p>
       )}
     </div>
   );

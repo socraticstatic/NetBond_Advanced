@@ -8,32 +8,108 @@ export default {
         sans: ['ATTAleckSans', 'Inter var', 'system-ui', 'sans-serif'],
       },
       colors: {
+        // AT&T Flywheel Design System - Light Mode Colors
+        fw: {
+          // Base Colors
+          'att-blue': 'rgb(0 159 219)', // Primary brand
+          'functional-blue': 'rgb(0 116 179)', // Interactive elements
+          'cobalt-700': 'rgb(0 56 143)', // Strong CTAs
+          'cobalt-600': 'rgb(0 87 184)', // Hover states
+          'cobalt-100': 'rgb(230 240 250)', // Very light blue for ghost buttons
+          'white': 'rgb(255 255 255)',
+          'black': 'rgb(0 0 0)',
+
+          // Flywheel Gray Scale
+          'gray-100': 'rgb(248 250 251)', // Lightest backgrounds
+          'gray-200': 'rgb(243 244 246)', // Subtle backgrounds
+          'gray-300': 'rgb(220 223 227)', // Borders, dividers
+          'gray-400': 'rgb(189 194 199)', // Disabled states
+          'gray-500': 'rgb(135 140 148)', // Muted elements
+          'gray-600': 'rgb(104 110 116)', // Secondary text
+          'gray-700': 'rgb(69 75 82)', // Body text
+          'gray-800': 'rgb(29 35 41)', // Dark text
+          'gray-900': 'rgb(19 23 27)', // Headings
+
+          // Semantic Colors
+          'green-600': 'rgb(45 126 36)', // Success
+          'orange-600': 'rgb(234 113 47)', // Warning
+          'red-600': 'rgb(199 0 50)', // Error
+        },
+        // Legacy colors for gradual migration
         gray: {
-          50: '#F9FAFB',
-          100: '#F3F4F6',
-          200: '#E5E7EB',
-          300: '#D1D5DB',
-          400: '#9CA3AF',
-          500: '#6B7280',
-          600: '#4B5563',
-          700: '#374151',
-          800: '#1F2937',
-          900: '#111827',
+          50: 'rgb(248 250 251)',
+          100: 'rgb(243 244 246)',
+          200: 'rgb(220 223 227)',
+          300: 'rgb(220 223 227)',
+          400: 'rgb(189 194 199)',
+          500: 'rgb(135 140 148)',
+          600: 'rgb(104 110 116)',
+          700: 'rgb(69 75 82)',
+          800: 'rgb(29 35 41)',
+          900: 'rgb(19 23 27)',
         },
         brand: {
-          blue: '#003184',
-          lightBlue: '#E6F6FD',
-          darkBlue: '#002255',
-          accent: '#00A3E0',
-          neutral: '#607D8B',
+          blue: 'rgb(0 56 143)', // Cobalt 700 for CTAs
+          lightBlue: 'rgb(230 246 253)',
+          darkBlue: 'rgb(0 56 143)',
+          accent: 'rgb(0 159 219)', // AT&T Blue
+          neutral: 'rgb(104 110 116)',
         },
         complementary: {
           teal: '#00A3A6',
-          orange: '#FF7900',
+          orange: 'rgb(234 113 47)', // Flywheel Orange
           amber: '#F59E0B',
-          green: '#2E8B57',
+          green: 'rgb(45 126 36)', // Flywheel Green
           purple: '#6B5B95',
         }
+      },
+      textColor: {
+        // Flywheel Text Tokens
+        'fw-heading': 'rgb(19 23 27)', // Gray 900
+        'fw-body': 'rgb(69 75 82)', // Gray 700
+        'fw-bodyLight': 'rgb(104 110 116)', // Gray 600
+        'fw-disabled': 'rgb(135 140 148)', // Gray 500
+        'fw-legal': 'rgb(104 110 116)', // Gray 600
+        'fw-link': 'rgb(0 116 179)', // Functional Blue
+        'fw-linkHover': 'rgb(0 87 184)', // Cobalt 600
+        'fw-linkPrimary': 'rgb(255 255 255)', // White
+        'fw-linkSecondary': 'rgb(0 56 143)', // Cobalt 700
+        'fw-success': 'rgb(45 126 36)', // Green 600
+        'fw-warn': 'rgb(234 113 47)', // Orange 600
+        'fw-error': 'rgb(199 0 50)', // Red 600
+        'fw-info': 'rgb(0 116 179)', // Functional Blue
+      },
+      backgroundColor: {
+        // Flywheel Background Tokens
+        'fw-base': 'rgb(255 255 255)', // White
+        'fw-wash': 'rgb(248 250 251)', // Gray 100
+        'fw-neutral': 'rgb(243 244 246)', // Gray 200
+        'fw-accent': 'rgb(230 246 253)', // AT&T Blue 000 - very light
+        'fw-primary': 'rgb(0 56 143)', // Cobalt 700
+        'fw-ctaPrimary': 'rgb(0 56 143)', // Cobalt 700
+        'fw-ctaPrimaryHover': 'rgb(0 87 184)', // Cobalt 600
+        'fw-ctaGhost': 'rgb(230 240 250)', // Cobalt 100
+        'fw-disabled': 'rgb(220 223 227)', // Gray 300
+        'fw-success': 'rgb(45 126 36)', // Green 600
+        'fw-warn': 'rgb(234 113 47)', // Orange 600
+        'fw-error': 'rgb(199 0 50)', // Red 600
+      },
+      borderColor: {
+        // Flywheel Border Tokens
+        'fw-primary': 'rgb(104 110 116)', // Gray 600
+        'fw-secondary': 'rgb(220 223 227)', // Gray 300
+        'fw-active': 'rgb(0 116 179)', // Functional Blue
+        'fw-hover': 'rgb(0 116 179)', // Functional Blue
+        'fw-focus': 'rgb(29 35 41)', // Gray 800
+        'fw-disabled': 'rgb(220 223 227)', // Gray 300
+        'fw-success': 'rgb(45 126 36)', // Green 600
+        'fw-warn': 'rgb(234 113 47)', // Orange 600
+        'fw-error': 'rgb(199 0 50)', // Red 600
+        'fw-ctaPrimary': 'rgb(0 56 143)', // Cobalt 700
+      },
+      ringColor: {
+        // Flywheel Focus Ring Tokens
+        'fw-active': 'rgb(0 116 179)', // Functional Blue
       },
       borderRadius: {
         'full': '9999px',

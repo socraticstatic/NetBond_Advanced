@@ -74,10 +74,10 @@ export function ConnectionCardHeader({
   };
 
   return (
-    <div className="p-4 border-b border-gray-100">
+    <div className="p-4 border-b border-fw-secondary">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="p-2 bg-gray-50 rounded-lg">
+          <div className="p-2 bg-fw-wash rounded-lg">
             {getProviderLogo()}
           </div>
           <div>
@@ -90,23 +90,23 @@ export function ConnectionCardHeader({
                   onChange={onNameChange}
                   onBlur={onNameSubmit}
                   onKeyDown={onNameKeyDown}
-                  className={`w-full px-2 py-1 text-sm font-medium bg-white border ${nameError ? 'border-red-500' : 'border-brand-blue'} rounded focus:outline-none focus:ring-2 focus:ring-brand-blue`}
+                  className={`w-full px-2 py-1 text-sm font-medium bg-fw-base border ${nameError ? 'border-fw-error' : 'border-fw-active'} rounded focus:outline-none focus:ring-2 focus:ring-fw-active`}
                   placeholder="Enter connection name"
                   onClick={(e) => e.stopPropagation()}
                 />
                 {nameError && (
-                  <p className="text-xs text-red-500 mt-1">{nameError}</p>
+                  <p className="text-xs text-fw-error mt-1">{nameError}</p>
                 )}
               </div>
             ) : (
-              <h3 
-                className="text-sm font-medium text-gray-900 cursor-text"
+              <h3
+                className="text-sm font-medium text-fw-heading cursor-text"
                 onClick={onEditNameClick}
               >
                 {name}
               </h3>
             )}
-            <p className="text-xs text-gray-500">{type}</p>
+            <p className="text-xs text-fw-bodyLight">{type}</p>
           </div>
         </div>
         
