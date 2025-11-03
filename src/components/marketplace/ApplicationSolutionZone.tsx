@@ -112,9 +112,16 @@ export function ApplicationSolutionZone() {
             return (
               <div
                 key={solution.id}
-                className="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group flex flex-col"
+                className="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all duration-200 overflow-visible group flex flex-col relative"
               >
-                <div className={`bg-gradient-to-r ${colors.gradient} p-6 text-white min-h-[180px] flex flex-col`}>
+                {solution.popular && (
+                  <div className="absolute -top-3 -right-3 z-50">
+                    <div className="px-2 py-1 bg-yellow-400 bg-opacity-90 rounded-full shadow-lg">
+                      <Star className="h-4 w-4 text-yellow-900" fill="currentColor" />
+                    </div>
+                  </div>
+                )}
+                <div className={`bg-gradient-to-r ${colors.gradient} p-6 text-white min-h-[180px] flex flex-col rounded-t-xl`}>
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-white bg-opacity-20 rounded-lg backdrop-blur-sm">
@@ -125,11 +132,6 @@ export function ApplicationSolutionZone() {
                         <p className="text-sm text-white text-opacity-90">{solution.category}</p>
                       </div>
                     </div>
-                    {solution.popular && (
-                      <div className="px-2 py-1 bg-yellow-400 bg-opacity-90 rounded-full">
-                        <Star className="h-4 w-4 text-yellow-900" fill="currentColor" />
-                      </div>
-                    )}
                   </div>
                   <p className="text-sm text-white text-opacity-90 line-clamp-3">{solution.description}</p>
                 </div>
