@@ -15,6 +15,7 @@ export interface VLAN {
   mtu?: number;
   qosPriority?: number;
   type?: 'data' | 'voice' | 'management' | 'storage' | 'guest' | 'dmz' | 'other' | 'application';
+  cloudRouterIds: string[];
   createdAt: string;
   updatedAt?: string;
   bandwidth?: string; // Added bandwidth field
@@ -58,6 +59,7 @@ export function VLANModal({
   const [trafficType, setTrafficType] = useState<VLAN['type']>('data');
   const [linkType, setLinkType] = useState<'Layer 1' | 'Layer 2' | 'Layer 3'>('Layer 3');
   const [bandwidth, setBandwidth] = useState<string>('1');
+  const [cloudRouterIds, setCloudRouterIds] = useState<string[]>(selectedCloudRouterId ? [selectedCloudRouterId] : []);
 
   // Routing state
   const [routingProtocol, setRoutingProtocol] = useState<'bgp' | 'static' | 'none'>('bgp');
@@ -91,6 +93,7 @@ export function VLANModal({
       setMtu(vlan.mtu || 1500);
       setQosPriority(vlan.qosPriority || 0);
       setTrafficType(vlan.type || 'data');
+      setCloudRouterIds(vlan.cloudRouterIds || []);
       // Set bandwidth if available, otherwise default to 1
       setBandwidth(vlan.bandwidth ? vlan.bandwidth.replace(/[^\d.]/g, '') : '1');
       // Default to Layer 3 for existing VLANs if not specified
@@ -115,6 +118,10 @@ export function VLANModal({
   // Field validation
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
+
+    if (cloudRouterIds.length === 0) {
+      newErrors.cloudRouterIds = 'At least one cloud router must be selected';
+    }
 
     if (!name.trim()) {
       newErrors.name = 'Name is required';
@@ -235,6 +242,7 @@ export function VLANModal({
       mtu: mtu !== 1500 ? mtu : undefined,
       qosPriority: qosPriority !== 0 ? qosPriority : undefined,
       type: trafficType,
+      cloudRouterIds,
       bandwidth: `${bandwidth} Gbps` // Add bandwidth to the VLAN data
     };
 
@@ -308,12 +316,46 @@ export function VLANModal({
       <div>
           <form id="vlan-form" onSubmit={handleSubmit}>
             <div className="space-y-6">
+              {/* Cloud Router Association */}
+              <div>
+                <FormField
+                  label="Cloud Routers"
+                  error={errors.cloudRouterIds}
+                  required
+                  helpText="Select one or more cloud routers this link will be associated with"
+                >
+                  <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3">
+                    {cloudRouters.length === 0 ? (
+                      <p className="text-sm text-gray-500">No cloud routers available</p>
+                    ) : (
+                      cloudRouters.map(router => (
+                        <label key={router.id} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                          <input
+                            type="checkbox"
+                            checked={cloudRouterIds.includes(router.id)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setCloudRouterIds([...cloudRouterIds, router.id]);
+                              } else {
+                                setCloudRouterIds(cloudRouterIds.filter(id => id !== router.id));
+                              }
+                            }}
+                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          />
+                          <span className="text-sm text-gray-700">{router.name}</span>
+                        </label>
+                      ))
+                    )}
+                  </div>
+                </FormField>
+              </div>
+
               {/* Basic VLAN Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="col-span-1">
-                  <FormField 
-                    label="Link Name" 
-                    error={errors.name} 
+                  <FormField
+                    label="Link Name"
+                    error={errors.name}
                     required
                   >
                     <input
