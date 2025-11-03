@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Minimize2 } from 'lucide-react';
 import { Group } from '../../types/group';
 import { motion } from 'framer-motion';
 import {
   GroupCardHeader,
   GroupCardMetrics,
   GroupCardFooter,
-  GroupCardInfo
+  GroupCardProgress,
+  GroupCardStatus
 } from './card';
 import { GroupOverflowMenu } from './GroupOverflowMenu';
+import { IconButton } from '../common/IconButton';
 
 interface GroupCardProps {
   group: Group;
@@ -19,7 +21,6 @@ interface GroupCardProps {
 
 export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardProps) {
   const navigate = useNavigate();
-  const [isHovered, setIsHovered] = useState(false);
   const [isExpanded, setIsExpanded] = useState(!isMinimized);
 
   useEffect(() => {
@@ -31,39 +32,74 @@ export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardPro
     navigate(`/groups/${group.id}`);
   };
 
+  const handleCardClick = () => {
+    navigate(`/groups/${group.id}`);
+  };
+
   return (
     <motion.div
-      className="bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md flex flex-col h-full cursor-pointer overflow-hidden"
+      className="relative bg-fw-base rounded-xl border border-fw-secondary shadow-sm hover:shadow-md transition-all duration-300 ease-in-out transform hover:translate-y-[-2px] cursor-pointer"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      onClick={() => navigate(`/groups/${group.id}`)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onClick={handleCardClick}
     >
-      <GroupCardHeader group={group}>
-        <div className="flex items-center space-x-1">
+      {isMinimized ? (
+        <div className="p-4 flex items-center justify-between">
+          <div className="flex items-center space-x-3 flex-1 min-w-0">
+            <div className="p-2 bg-fw-wash rounded-lg">
+              <svg className="h-5 w-5 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-sm font-medium text-fw-heading truncate">{group.name}</h3>
+              <p className="text-xs text-fw-bodyLight truncate">{group.description}</p>
+            </div>
+          </div>
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setIsExpanded(!isExpanded);
+              setIsExpanded(true);
             }}
             className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
-            aria-label={isExpanded ? 'Collapse' : 'Expand'}
+            aria-label="Expand"
           >
-            {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </button>
-          <GroupOverflowMenu group={group} onDelete={onDelete} />
         </div>
-      </GroupCardHeader>
-
-      {isExpanded && (
+      ) : (
         <>
-          <div className="p-5 space-y-5 flex-1">
+          <GroupCardHeader group={group}>
+            <div className="flex items-center space-x-2">
+              <IconButton
+                icon={<Minimize2 className="h-4 w-4" />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsExpanded(false);
+                }}
+                variant="ghost"
+                size="sm"
+                title="Minimize"
+              />
+              <GroupOverflowMenu group={group} onDelete={onDelete} />
+            </div>
+          </GroupCardHeader>
+
+          <div className="p-4 space-y-4">
+            {/* Performance Progress Bar */}
+            <GroupCardProgress group={group} />
+
+            {/* Pool Metrics */}
             <GroupCardMetrics group={group} />
-            <GroupCardInfo group={group} />
           </div>
 
+          {/* Status */}
+          <GroupCardStatus group={group} />
+
+          {/* Action */}
           <GroupCardFooter onManageClick={handleManageClick} />
         </>
       )}
