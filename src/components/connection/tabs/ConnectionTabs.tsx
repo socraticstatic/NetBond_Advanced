@@ -29,8 +29,8 @@ interface ConnectionTabsProps {
 }
 
 const TABS: Tab[] = [
-  { id: 'overview', label: 'Details', icon: <Activity className="h-5 w-5 mr-2" /> },
-  { id: 'network', label: 'Network', icon: <Network className="h-5 w-5 mr-2" /> },
+  { id: 'overview', label: 'Overview', icon: <Activity className="h-5 w-5 mr-2" /> },
+  { id: 'network', label: 'Details', icon: <Network className="h-5 w-5 mr-2" /> },
   { id: 'qos', label: 'QoS', icon: <BarChart2 className="h-5 w-5 mr-2" />, disabled: true },
   { id: 'security', label: 'Security', icon: <Shield className="h-5 w-5 mr-2" />, disabled: true },
   { id: 'api', label: 'API', icon: <Code className="h-5 w-5 mr-2" />, disabled: true },
