@@ -1,371 +1,499 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Users, Search, Plus, Edit2, Trash2, User, Network as NetworkIcon, Filter, Download, Building, CreditCard, Activity, Globe } from 'lucide-react';
-import { BaseTable } from '../../common/BaseTable';
+import { useState } from 'react';
+import { Shield, Settings, Tag, Users } from 'lucide-react';
+import { VerticalTabGroup } from '../../navigation/VerticalTabGroup';
+import { TabItem } from '../../../types/navigation';
 import { Button } from '../../common/Button';
-import { OverflowMenu } from '../../common/OverflowMenu';
-import { Group } from '../../../types/group';
-import { useStore } from '../../../store/useStore';
-import { AddGroupModal } from './AddGroupModal';
-import { ConfirmDialog } from '../../common/ConfirmDialog';
-import { formatAddress } from '../../../utils/groups';
 
 interface GroupManagementProps {
-  searchQuery: string;
+  searchQuery?: string;
 }
 
 export function GroupManagement({ searchQuery }: GroupManagementProps) {
-  const navigate = useNavigate();
-  const groups = useStore(state => state.groups);
-  const removeGroup = useStore(state => state.removeGroup);
-  const connections = useStore(state => state.connections);
-  const users = useStore(state => state.users);
-  const addGroup = useStore(state => state.addGroup);
+  const [activeView, setActiveView] = useState<'policies' | 'templates' | 'categorization' | 'permissions'>('policies');
 
-  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showConfirmDelete, setShowConfirmDelete] = useState<string | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState({
-    type: [] as Array<Group['type']>,
-    status: [] as Array<Group['status']>
+  const [policies, setPolicies] = useState({
+    requireApprovalForPoolCreation: true,
+    allowUserManagedPools: false,
+    enforcePoolTypes: true,
+    maxMembersPerPool: 50,
+    maxConnectionsPerPool: 100,
+    requireCostCenter: true,
+    inheritBillingFromParent: true
   });
 
-  useEffect(() => {
-    setLocalSearchQuery(searchQuery);
-  }, [searchQuery]);
-
-  // Filter groups based on search query and filters
-  const filteredGroups = groups.filter(group => {
-    const searchLower = (localSearchQuery || '').toLowerCase();
-    const matchesSearch = !searchLower || 
-      group.name.toLowerCase().includes(searchLower) ||
-      (group.description || '').toLowerCase().includes(searchLower);
-    
-    if (!matchesSearch) return false;
-
-    // Type filter
-    const matchesType = !filters.type.length || filters.type.includes(group.type);
-    
-    // Status filter
-    const matchesStatus = !filters.status.length || filters.status.includes(group.status);
-    
-    return matchesType && matchesStatus;
+  const [templates, setTemplates] = useState({
+    enableTemplates: true,
+    availableTemplates: [
+      { id: 'dept', name: 'Department Pool', enabled: true },
+      { id: 'project', name: 'Project Pool', enabled: true },
+      { id: 'business', name: 'Business Unit Pool', enabled: true },
+      { id: 'team', name: 'Team Pool', enabled: false }
+    ]
   });
 
-  const handleDeleteGroup = (id: string) => {
-    removeGroup(id);
-    setShowConfirmDelete(null);
-    
+  const [categorization, setCategorization] = useState({
+    requiredTags: ['environment', 'cost-center', 'owner'],
+    allowCustomTags: true,
+    enforceTagFormat: false,
+    autoTagging: true
+  });
+
+  const [permissions, setPermissions] = useState({
+    poolOwnersCanManageMembers: true,
+    poolOwnersCanManageConnections: true,
+    poolOwnersCanManageBilling: false,
+    allowCrossPoolResourceSharing: false,
+    enforceRBAC: true
+  });
+
+  const handleSaveSettings = () => {
     window.addToast({
       type: 'success',
-      title: 'Group Deleted',
-      message: 'Group has been removed successfully.',
+      title: 'Settings Saved',
+      message: 'Pool policies updated successfully',
       duration: 3000
     });
   };
 
-  const handleViewGroup = (id: string) => {
-    navigate(`/configure/groups/${id}`);
-  };
-
-  const handleAddGroup = async (newGroup: Omit<Group, 'id' | 'createdAt'>) => {
-    // Generate ID and createdAt
-    const groupToAdd = {
-      ...newGroup,
-      id: `group-${Date.now()}`,
-      createdAt: new Date().toISOString()
-    } as Group;
-    
-    try {
-      await addGroup(groupToAdd);
-      setShowAddModal(false);
-      
-      window.addToast({
-        type: 'success',
-        title: 'Group Created',
-        message: 'Group has been created successfully',
-        duration: 3000
-      });
-    } catch (error) {
-      console.error('Error creating group:', error);
-      window.addToast({
-        type: 'error',
-        title: 'Error',
-        message: 'Failed to create group. Please try again.',
-        duration: 3000
-      });
-    }
-  };
-
-  // Get group type color
-  const getGroupTypeColor = (type: Group['type']) => {
-    switch (type) {
-      case 'business':
-        return 'bg-blue-100 text-blue-800';
-      case 'department':
-        return 'bg-purple-100 text-purple-800';
-      case 'project':
-        return 'bg-green-100 text-green-800';
-      case 'team':
-        return 'bg-amber-100 text-amber-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const columns = [
-    {
-      id: 'name',
-      label: 'Name',
-      sortable: true,
-      width: '30%',
-      render: (group: Group) => (
-        <div className="max-w-[200px]">
-          <div className="text-sm font-medium text-gray-900 truncate">{group.name}</div>
-          <div className="text-sm text-gray-500 truncate">{group.description || 'No description'}</div>
-        </div>
-      )
-    },
-    {
-      id: 'type',
-      label: 'Type',
-      sortable: true,
-      width: '15%',
-      render: (group: Group) => (
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getGroupTypeColor(group.type)} capitalize`}>
-          {group.type}
-        </span>
-      )
-    },
-    {
-      id: 'connections',
-      label: 'Connections',
-      sortable: true,
-      width: '17%',
-      render: (group: Group) => (
-        <div className="flex items-center">
-          <NetworkIcon className="h-4 w-4 text-gray-400 mr-2" />
-          <span className="text-sm text-gray-900">{group.connectionIds.length}</span>
-        </div>
-      )
-    },
-    {
-      id: 'members',
-      label: 'Members',
-      sortable: true,
-      width: '17%',
-      render: (group: Group) => (
-        <div className="flex items-center">
-          <User className="h-4 w-4 text-gray-400 mr-2" />
-          <span className="text-sm text-gray-900">{group.userIds.length}</span>
-        </div>
-      )
-    },
-    {
-      id: 'status',
-      label: 'Status',
-      sortable: true,
-      width: '21%',
-      render: (group: Group) => (
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-          group.status === 'active' 
-            ? 'bg-green-100 text-green-800' 
-            : group.status === 'inactive'
-              ? 'bg-gray-100 text-gray-800'
-              : 'bg-red-100 text-red-800'
-        } capitalize`}>
-          {group.status}
-        </span>
-      )
-    }
+  const tabs: TabItem[] = [
+    { id: 'policies', label: 'Pool Policies', icon: <Shield className="h-5 w-5 mr-2" /> },
+    { id: 'templates', label: 'Pool Templates', icon: <Settings className="h-5 w-5 mr-2" /> },
+    { id: 'categorization', label: 'Categorization', icon: <Tag className="h-5 w-5 mr-2" /> },
+    { id: 'permissions', label: 'Permissions', icon: <Users className="h-5 w-5 mr-2" /> }
   ];
 
   return (
     <div className="p-6">
-      {/* Search and Controls */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 mb-6">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search groups..."
-              value={localSearchQuery || ''}
-              onChange={(e) => setLocalSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
-            />
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="primary"
-              icon={Plus}
-              onClick={() => setShowAddModal(true)}
-            >
-              Create Pool
-            </Button>
-            <Button
-              variant="outline"
-              icon={Download}
-              onClick={() => {
-                window.addToast({
-                  type: 'success',
-                  title: 'Export Complete',
-                  message: 'Groups have been exported successfully',
-                  duration: 3000
-                });
-              }}
-            >
-              Export
-            </Button>
-            <Button
-              variant="outline"
-              icon={Filter}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              Filters
-            </Button>
+      {/* Help Banner */}
+      <div className="mb-6 bg-gradient-to-r from-fw-wash to-fw-base border border-fw-secondary rounded-lg p-4">
+        <div className="flex items-start">
+          <Shield className="h-6 w-6 text-fw-link mr-3 flex-shrink-0" />
+          <div>
+            <h3 className="text-sm font-medium text-fw-heading">Pool Governance</h3>
+            <p className="text-sm text-fw-bodyLight mt-1">
+              Configure account-wide policies for pool creation, organization, and management. These settings define how resources can be grouped and shared across your organization.
+            </p>
           </div>
         </div>
+      </div>
 
-        {/* Expanded Filters */}
-        {showFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Group Type</h4>
-                <div className="space-y-2">
-                  {['business', 'department', 'project', 'team', 'custom'].map((type) => (
-                    <label key={type} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={filters.type.includes(type as Group['type'])}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setFilters({...filters, type: [...filters.type, type as Group['type']]});
-                          } else {
-                            setFilters({...filters, type: filters.type.filter(t => t !== type)});
-                          }
-                        }}
-                        className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
-                      />
-                      <span className="ml-2 text-sm text-gray-700 capitalize">{type}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Status</h4>
-                <div className="space-y-2">
-                  {['active', 'inactive', 'suspended'].map((status) => (
-                    <label key={status} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={filters.status.includes(status as Group['status'])}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setFilters({...filters, status: [...filters.status, status as Group['status']]});
-                          } else {
-                            setFilters({...filters, status: filters.status.filter(s => s !== status)});
-                          }
-                        }}
-                        className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
-                      />
-                      <span className="ml-2 text-sm text-gray-700 capitalize">{status}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+      <div className="flex">
+        <VerticalTabGroup
+          tabs={tabs}
+          activeTab={activeView}
+          onChange={(tab) => setActiveView(tab as typeof activeView)}
+        />
 
-              <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Advanced Filters</h4>
-                <div className="space-y-2">
-                  <label className="flex items-center">
+        <div className="flex-1 pl-6">
+          {/* Pool Policies */}
+          {activeView === 'policies' && (
+            <div className="space-y-6">
+              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+                <h3 className="text-lg font-semibold text-fw-heading mb-4">Pool Creation & Management Policies</h3>
+                <p className="text-sm text-fw-bodyLight mb-6">
+                  Control how pools can be created and managed across your organization.
+                </p>
+
+                <div className="space-y-4">
+                  <label className="flex items-start space-x-3">
                     <input
                       type="checkbox"
-                      className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                      checked={policies.requireApprovalForPoolCreation}
+                      onChange={(e) => setPolicies({...policies, requireApprovalForPoolCreation: e.target.checked})}
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Has Connections</span>
+                    <div>
+                      <span className="text-sm font-medium text-fw-body">Require Approval for Pool Creation</span>
+                      <p className="text-xs text-fw-bodyLight mt-1">All pool creation requests must be approved by an administrator</p>
+                    </div>
                   </label>
-                  <label className="flex items-center">
+
+                  <label className="flex items-start space-x-3">
                     <input
                       type="checkbox"
-                      className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                      checked={policies.allowUserManagedPools}
+                      onChange={(e) => setPolicies({...policies, allowUserManagedPools: e.target.checked})}
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Has Members</span>
+                    <div>
+                      <span className="text-sm font-medium text-fw-body">Allow User-Managed Pools</span>
+                      <p className="text-xs text-fw-bodyLight mt-1">Enable non-admin users to create and manage their own pools (within limits)</p>
+                    </div>
                   </label>
-                  <label className="flex items-center">
+
+                  <label className="flex items-start space-x-3">
                     <input
                       type="checkbox"
-                      className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                      checked={policies.enforcePoolTypes}
+                      onChange={(e) => setPolicies({...policies, enforcePoolTypes: e.target.checked})}
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Has Addresses</span>
+                    <div>
+                      <span className="text-sm font-medium text-fw-body">Enforce Pool Types</span>
+                      <p className="text-xs text-fw-bodyLight mt-1">Pools must be categorized using predefined types (Department, Project, Business Unit, etc.)</p>
+                    </div>
                   </label>
+
+                  <label className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={policies.requireCostCenter}
+                      onChange={(e) => setPolicies({...policies, requireCostCenter: e.target.checked})}
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                    />
+                    <div>
+                      <span className="text-sm font-medium text-fw-body">Require Cost Center Assignment</span>
+                      <p className="text-xs text-fw-bodyLight mt-1">Every pool must be associated with a cost center for billing allocation</p>
+                    </div>
+                  </label>
+
+                  <label className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={policies.inheritBillingFromParent}
+                      onChange={(e) => setPolicies({...policies, inheritBillingFromParent: e.target.checked})}
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                    />
+                    <div>
+                      <span className="text-sm font-medium text-fw-body">Inherit Billing from Parent Pool</span>
+                      <p className="text-xs text-fw-bodyLight mt-1">Child pools automatically inherit billing settings from parent pools</p>
+                    </div>
+                  </label>
+
+                  <div className="pt-4 border-t border-fw-secondary">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-fw-body mb-2">Maximum Members Per Pool</label>
+                        <input
+                          type="number"
+                          value={policies.maxMembersPerPool}
+                          onChange={(e) => setPolicies({...policies, maxMembersPerPool: parseInt(e.target.value)})}
+                          className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-link focus:border-fw-link"
+                        />
+                        <p className="text-xs text-fw-bodyLight mt-1">Maximum number of users that can be added to a single pool</p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-fw-body mb-2">Maximum Connections Per Pool</label>
+                        <input
+                          type="number"
+                          value={policies.maxConnectionsPerPool}
+                          onChange={(e) => setPolicies({...policies, maxConnectionsPerPool: parseInt(e.target.value)})}
+                          className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-link focus:border-fw-link"
+                        />
+                        <p className="text-xs text-fw-bodyLight mt-1">Maximum number of connections that can be assigned to a pool</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex justify-end">
+                  <Button variant="primary" onClick={handleSaveSettings}>
+                    Save Policies
+                  </Button>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {/* Pool Templates */}
+          {activeView === 'templates' && (
+            <div className="space-y-6">
+              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+                <h3 className="text-lg font-semibold text-fw-heading mb-4">Pool Templates</h3>
+                <p className="text-sm text-fw-bodyLight mb-6">
+                  Define standard pool templates that provide consistent structures and settings for common organizational patterns.
+                </p>
+
+                <div className="space-y-6">
+                  <label className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      checked={templates.enableTemplates}
+                      onChange={(e) => setTemplates({...templates, enableTemplates: e.target.checked})}
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                    />
+                    <div>
+                      <span className="text-sm font-medium text-fw-body">Enable Pool Templates</span>
+                      <p className="text-xs text-fw-bodyLight mt-1">Allow users to create pools from predefined templates</p>
+                    </div>
+                  </label>
+
+                  {templates.enableTemplates && (
+                    <div className="pt-4 border-t border-fw-secondary">
+                      <h4 className="text-sm font-semibold text-fw-heading mb-4">Available Templates</h4>
+                      <div className="space-y-3">
+                        {templates.availableTemplates.map((template) => (
+                          <div key={template.id} className="flex items-center justify-between p-4 bg-fw-wash rounded-lg">
+                            <div className="flex items-center space-x-3">
+                              <input
+                                type="checkbox"
+                                checked={template.enabled}
+                                onChange={(e) => {
+                                  const updated = templates.availableTemplates.map(t =>
+                                    t.id === template.id ? {...t, enabled: e.target.checked} : t
+                                  );
+                                  setTemplates({...templates, availableTemplates: updated});
+                                }}
+                                className="h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                              />
+                              <div>
+                                <p className="text-sm font-medium text-fw-body">{template.name}</p>
+                                <p className="text-xs text-fw-bodyLight">
+                                  {template.id === 'dept' && 'Organize resources by department with automatic cost allocation'}
+                                  {template.id === 'project' && 'Group connections and users by project with time-based lifecycle'}
+                                  {template.id === 'business' && 'Manage resources at business unit level with hierarchical billing'}
+                                  {template.id === 'team' && 'Small team-based pools with flexible permissions'}
+                                </p>
+                              </div>
+                            </div>
+                            <Button variant="outline" size="sm" onClick={() => {}}>
+                              Configure
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mt-4">
+                        <Button variant="outline" icon={Settings}>
+                          Create Custom Template
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-6 flex justify-end">
+                  <Button variant="primary" onClick={handleSaveSettings}>
+                    Save Templates
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Categorization */}
+          {activeView === 'categorization' && (
+            <div className="space-y-6">
+              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+                <h3 className="text-lg font-semibold text-fw-heading mb-4">Pool Categorization & Tagging</h3>
+                <p className="text-sm text-fw-bodyLight mb-6">
+                  Define tagging standards and categorization rules to ensure consistent pool organization.
+                </p>
+
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-fw-body mb-2">Required Tags</label>
+                    <p className="text-xs text-fw-bodyLight mb-3">
+                      These tags must be present on all pools
+                    </p>
+                    <div className="space-y-2">
+                      {categorization.requiredTags.map((tag, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+                          <span className="text-sm text-fw-body font-mono">{tag}</span>
+                          <button
+                            onClick={() => {
+                              const updated = categorization.requiredTags.filter((_, i) => i !== index);
+                              setCategorization({...categorization, requiredTags: updated});
+                            }}
+                            className="text-xs text-fw-error hover:text-fw-errorHover"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-3">
+                      <Button variant="outline" size="sm">
+                        Add Required Tag
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-fw-secondary space-y-4">
+                    <label className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={categorization.allowCustomTags}
+                        onChange={(e) => setCategorization({...categorization, allowCustomTags: e.target.checked})}
+                        className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      />
+                      <div>
+                        <span className="text-sm font-medium text-fw-body">Allow Custom Tags</span>
+                        <p className="text-xs text-fw-bodyLight mt-1">Users can add additional tags beyond required ones</p>
+                      </div>
+                    </label>
+
+                    <label className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={categorization.enforceTagFormat}
+                        onChange={(e) => setCategorization({...categorization, enforceTagFormat: e.target.checked})}
+                        className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      />
+                      <div>
+                        <span className="text-sm font-medium text-fw-body">Enforce Tag Format</span>
+                        <p className="text-xs text-fw-bodyLight mt-1">Tags must follow a defined format (e.g., key:value)</p>
+                      </div>
+                    </label>
+
+                    <label className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        checked={categorization.autoTagging}
+                        onChange={(e) => setCategorization({...categorization, autoTagging: e.target.checked})}
+                        className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      />
+                      <div>
+                        <span className="text-sm font-medium text-fw-body">Auto-Tagging</span>
+                        <p className="text-xs text-fw-bodyLight mt-1">Automatically apply tags based on pool type and organizational hierarchy</p>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div className="pt-4 border-t border-fw-secondary">
+                    <h4 className="text-sm font-semibold text-fw-heading mb-3">Tag Governance Rules</h4>
+                    <div className="bg-fw-wash p-4 rounded-lg space-y-2 text-xs text-fw-bodyLight">
+                      <p>• All tags are automatically propagated to connections within the pool</p>
+                      <p>• Cost center tags are used for billing allocation and reporting</p>
+                      <p>• Environment tags (dev, staging, prod) determine default security policies</p>
+                      <p>• Owner tags are used for notification routing and approval workflows</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex justify-end">
+                  <Button variant="primary" onClick={handleSaveSettings}>
+                    Save Categorization Rules
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Permissions */}
+          {activeView === 'permissions' && (
+            <div className="space-y-6">
+              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+                <h3 className="text-lg font-semibold text-fw-heading mb-4">Pool Permissions & Access Control</h3>
+                <p className="text-sm text-fw-bodyLight mb-6">
+                  Define default permissions and access control policies for pool owners and members.
+                </p>
+
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-sm font-semibold text-fw-heading mb-3">Pool Owner Permissions</h4>
+                    <div className="space-y-3">
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="checkbox"
+                          checked={permissions.poolOwnersCanManageMembers}
+                          onChange={(e) => setPermissions({...permissions, poolOwnersCanManageMembers: e.target.checked})}
+                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        />
+                        <div>
+                          <span className="text-sm font-medium text-fw-body">Manage Pool Members</span>
+                          <p className="text-xs text-fw-bodyLight mt-1">Pool owners can add/remove users from their pools</p>
+                        </div>
+                      </label>
+
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="checkbox"
+                          checked={permissions.poolOwnersCanManageConnections}
+                          onChange={(e) => setPermissions({...permissions, poolOwnersCanManageConnections: e.target.checked})}
+                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        />
+                        <div>
+                          <span className="text-sm font-medium text-fw-body">Manage Pool Connections</span>
+                          <p className="text-xs text-fw-bodyLight mt-1">Pool owners can assign/unassign connections to their pools</p>
+                        </div>
+                      </label>
+
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="checkbox"
+                          checked={permissions.poolOwnersCanManageBilling}
+                          onChange={(e) => setPermissions({...permissions, poolOwnersCanManageBilling: e.target.checked})}
+                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        />
+                        <div>
+                          <span className="text-sm font-medium text-fw-body">Manage Billing Settings</span>
+                          <p className="text-xs text-fw-bodyLight mt-1">Pool owners can modify cost center and billing allocation</p>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-fw-secondary">
+                    <h4 className="text-sm font-semibold text-fw-heading mb-3">Access Control</h4>
+                    <div className="space-y-3">
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="checkbox"
+                          checked={permissions.allowCrossPoolResourceSharing}
+                          onChange={(e) => setPermissions({...permissions, allowCrossPoolResourceSharing: e.target.checked})}
+                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        />
+                        <div>
+                          <span className="text-sm font-medium text-fw-body">Allow Cross-Pool Resource Sharing</span>
+                          <p className="text-xs text-fw-bodyLight mt-1">Enable connections and resources to be shared across multiple pools</p>
+                        </div>
+                      </label>
+
+                      <label className="flex items-start space-x-3">
+                        <input
+                          type="checkbox"
+                          checked={permissions.enforceRBAC}
+                          onChange={(e) => setPermissions({...permissions, enforceRBAC: e.target.checked})}
+                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        />
+                        <div>
+                          <span className="text-sm font-medium text-fw-body">Enforce Role-Based Access Control</span>
+                          <p className="text-xs text-fw-bodyLight mt-1">Apply strict RBAC rules based on user roles within pools</p>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-fw-secondary">
+                    <h4 className="text-sm font-semibold text-fw-heading mb-3">Default Role Mappings</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+                        <div>
+                          <p className="text-sm font-medium text-fw-body">Pool Owner</p>
+                          <p className="text-xs text-fw-bodyLight">Full control over pool resources and settings</p>
+                        </div>
+                        <span className="text-xs text-fw-success font-medium">Active</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+                        <div>
+                          <p className="text-sm font-medium text-fw-body">Pool Admin</p>
+                          <p className="text-xs text-fw-bodyLight">Can manage members and view billing</p>
+                        </div>
+                        <span className="text-xs text-fw-success font-medium">Active</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+                        <div>
+                          <p className="text-sm font-medium text-fw-body">Pool Member</p>
+                          <p className="text-xs text-fw-bodyLight">Read access to pool connections and metrics</p>
+                        </div>
+                        <span className="text-xs text-fw-success font-medium">Active</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex justify-end">
+                  <Button variant="primary" onClick={handleSaveSettings}>
+                    Save Permissions
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-
-      <BaseTable
-        columns={columns}
-        data={filteredGroups}
-        keyField="id"
-        onRowClick={(group) => handleViewGroup(group.id)}
-        actions={(group) => (
-          <OverflowMenu
-            items={[
-              {
-                id: 'view',
-                label: 'View Details',
-                icon: <Users className="h-4 w-4" />,
-                onClick: () => handleViewGroup(group.id)
-              },
-              {
-                id: 'edit',
-                label: 'Edit Group',
-                icon: <Edit2 className="h-4 w-4" />,
-                onClick: () => handleViewGroup(group.id)
-              },
-              {
-                id: 'delete',
-                label: 'Delete Group',
-                icon: <Trash2 className="h-4 w-4" />,
-                onClick: () => setShowConfirmDelete(group.id),
-                variant: 'danger'
-              }
-            ]}
-          />
-        )}
-        emptyState={
-          <div className="text-center py-12">
-            <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500">No groups found</p>
-          </div>
-        }
-      />
-      
-      {/* Add Group Modal */}
-      <AddGroupModal
-        isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        onSave={handleAddGroup}
-        users={users}
-        connections={connections}
-      />
-
-      {/* Confirm Delete Dialog */}
-      <ConfirmDialog
-        isOpen={!!showConfirmDelete}
-        onClose={() => setShowConfirmDelete(null)}
-        onConfirm={() => showConfirmDelete && handleDeleteGroup(showConfirmDelete)}
-        title="Delete Group"
-        message="Are you sure you want to delete this group? This action cannot be undone and will remove all group associations."
-        confirmText="Delete"
-        confirmVariant="danger"
-      />
     </div>
   );
 }
