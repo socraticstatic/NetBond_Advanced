@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Plus, Filter, Download, Shield, Settings, Network, Router as RouterIcon, Globe, Info } from 'lucide-react';
+import { Plus, Shield } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { VNF, VNFType } from '../../../types/vnf';
-import { VNFCard } from './VNFCard';
 import { VNFTable } from './VNFTable';
 import { CloudRouter } from '../../../types/cloudrouter';
 
@@ -15,240 +14,175 @@ interface VNFSectionProps {
   connectionId: string;
 }
 
-export function VNFSection({ 
-  vnfs, 
+export function VNFSection({
+  vnfs,
   cloudRouters,
-  onAdd, 
-  onEdit, 
-  onDelete,
-  connectionId 
+  onAdd,
+  onEdit,
+  onDelete
 }: VNFSectionProps) {
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [searchQuery, setSearchQuery] = useState('');
   const [vnfTypeFilter, setVnfTypeFilter] = useState<VNFType | 'all'>('all');
-  const [cloudRouterFilter, setCloudRouterFilter] = useState<string>('all');
-  const [showInfoTooltip, setShowInfoTooltip] = useState(false);
 
-  // Filter VNFs by type and cloud router
+  // Filter VNFs
   const filteredVNFs = vnfs.filter(vnf => {
     const matchesType = vnfTypeFilter === 'all' || vnf.type === vnfTypeFilter;
-    const matchesRouter = cloudRouterFilter === 'all' || vnf.cloudRouterId === cloudRouterFilter;
-    return matchesType && matchesRouter;
+
+    if (!searchQuery) return matchesType;
+
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = (
+      vnf.name.toLowerCase().includes(searchLower) ||
+      vnf.vendor?.toLowerCase().includes(searchLower) ||
+      vnf.type.toLowerCase().includes(searchLower)
+    );
+
+    return matchesType && matchesSearch;
   });
 
+  // Count VNFs by type
+  const vnfsByType = {
+    firewall: vnfs.filter(v => v.type === 'firewall').length,
+    sdwan: vnfs.filter(v => v.type === 'sdwan').length,
+    router: vnfs.filter(v => v.type === 'router').length,
+    vnat: vnfs.filter(v => v.type === 'vnat').length,
+    other: vnfs.filter(v => !['firewall', 'sdwan', 'router', 'vnat'].includes(v.type)).length
+  };
+
+  const activeVNFs = vnfs.filter(v => v.status === 'active').length;
+
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
-      <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-        <h3 className="text-lg font-medium text-gray-900 flex items-center">
-          <Shield className="h-5 w-5 text-brand-blue mr-2" />
-          Network Functions (VNFs)
-          <div className="relative ml-2 group">
-            <Info 
-              className="h-4 w-4 text-gray-400 cursor-help" 
-              onMouseEnter={() => setShowInfoTooltip(true)}
-              onMouseLeave={() => setShowInfoTooltip(false)}
-            />
-            {showInfoTooltip && (
-              <div className="absolute z-10 left-0 top-full mt-2 w-72 p-3 bg-gray-900 text-white text-sm rounded-lg shadow-lg">
-                <p>
-                  <strong>VNF</strong> is a Network Function - software-based network services such as firewalls, routers, load balancers, and other network services deployed on standard compute infrastructure.
-                </p>
-              </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Network Functions</h2>
+          <p className="text-sm text-gray-600 mt-1">
+            Manage network function instances and their configurations
+          </p>
+        </div>
+        <Button
+          variant="primary"
+          size="sm"
+          icon={<Plus className="h-4 w-4" />}
+          onClick={onAdd}
+        >
+          Add Network Function
+        </Button>
+      </div>
+
+      {/* Summary Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-blue-900">Active VNFs</p>
+              <p className="text-2xl font-bold text-blue-700 mt-1">{activeVNFs}</p>
+            </div>
+            <Shield className="h-8 w-8 text-blue-600 opacity-50" />
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 border border-red-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-red-900">Firewalls</p>
+              <p className="text-2xl font-bold text-red-700 mt-1">{vnfsByType.firewall}</p>
+            </div>
+            <Shield className="h-8 w-8 text-red-600 opacity-50" />
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-green-900">SD-WAN</p>
+              <p className="text-2xl font-bold text-green-700 mt-1">{vnfsByType.sdwan}</p>
+            </div>
+            <Shield className="h-8 w-8 text-green-600 opacity-50" />
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 border border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-900">Routers</p>
+              <p className="text-2xl font-bold text-gray-700 mt-1">{vnfsByType.router}</p>
+            </div>
+            <Shield className="h-8 w-8 text-gray-600 opacity-50" />
+          </div>
+        </div>
+      </div>
+
+      {/* Table Card */}
+      <div className="bg-white rounded-lg border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+          <h3 className="text-lg font-medium text-gray-900">All Network Functions</h3>
+          <div className="flex items-center space-x-3">
+            {/* Type Filter */}
+            <select
+              value={vnfTypeFilter}
+              onChange={(e) => setVnfTypeFilter(e.target.value as VNFType | 'all')}
+              className="form-control text-sm border-gray-300"
+            >
+              <option value="all">All Types</option>
+              <option value="firewall">Firewall</option>
+              <option value="sdwan">SD-WAN</option>
+              <option value="router">Router</option>
+              <option value="vnat">NAT</option>
+              <option value="custom">Custom</option>
+            </select>
+
+            {/* Search */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search VNFs..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm w-64"
+              />
+              <svg
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {filteredVNFs.length === 0 ? (
+          <div className="text-center py-16">
+            <Shield className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              {searchQuery || vnfTypeFilter !== 'all' ? 'No VNFs found' : 'No network functions'}
+            </h3>
+            <p className="text-gray-500 mb-6">
+              {searchQuery || vnfTypeFilter !== 'all'
+                ? 'Try adjusting your filters'
+                : 'Get started by adding your first network function'}
+            </p>
+            {!searchQuery && vnfTypeFilter === 'all' && (
+              <Button variant="primary" icon={<Plus className="h-4 w-4" />} onClick={onAdd}>
+                Add Network Function
+              </Button>
             )}
           </div>
-        </h3>
-        <div className="flex items-center space-x-2">
-          {/* View Mode Toggle */}
-          <div className="flex items-center bg-gray-100 rounded-lg p-1 mr-2">
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-md transition-colors ${
-                viewMode === 'grid' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'
-              }`}
-              aria-label="Grid view"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="7" height="7" />
-                <rect x="14" y="3" width="7" height="7" />
-                <rect x="3" y="14" width="7" height="7" />
-                <rect x="14" y="14" width="7" height="7" />
-              </svg>
-            </button>
-            <button
-              onClick={() => setViewMode('table')}
-              className={`p-2 rounded-md transition-colors ${
-                viewMode === 'table' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'
-              }`}
-              aria-label="Table view"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            </button>
-          </div>
-
-          <Button
-            variant="outline"
-            size="sm"
-            icon={Filter}
-            className="text-gray-600"
-          >
-            Filter
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            icon={Download}
-            className="text-gray-600"
-            onClick={() => {
-              window.addToast({
-                type: 'success',
-                title: 'Export Complete',
-                message: 'VNF data has been exported',
-                duration: 3000
-              });
-            }}
-          >
-            Export
-          </Button>
-          <Button
-            variant="primary"
-            size="sm"
-            icon={Plus}
-            onClick={onAdd}
-          >
-            Add VNF
-          </Button>
-        </div>
-      </div>
-
-      {/* Filter Tabs */}
-      <div className="p-4 bg-gray-50 border-b border-gray-200">
-        <div className="flex flex-wrap gap-2">
-          {/* VNF Type Filters */}
-          <div className="flex flex-wrap gap-2 mr-6">
-            <button
-              onClick={() => setVnfTypeFilter('all')}
-              className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                vnfTypeFilter === 'all'
-                  ? 'bg-brand-blue text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <Shield className="h-4 w-4 mr-1.5" />
-              All VNFs
-            </button>
-            <button
-              onClick={() => setVnfTypeFilter('firewall')}
-              className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                vnfTypeFilter === 'firewall'
-                  ? 'bg-red-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <Shield className="h-4 w-4 mr-1.5" />
-              Firewall
-            </button>
-            <button
-              onClick={() => setVnfTypeFilter('sdwan')}
-              className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                vnfTypeFilter === 'sdwan'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <Globe className="h-4 w-4 mr-1.5" />
-              SD-WAN
-            </button>
-            <button
-              onClick={() => setVnfTypeFilter('router')}
-              className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                vnfTypeFilter === 'router'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <RouterIcon className="h-4 w-4 mr-1.5" />
-              Router
-            </button>
-            <button
-              onClick={() => setVnfTypeFilter('vnat')}
-              className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                vnfTypeFilter === 'vnat'
-                  ? 'bg-green-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <Network className="h-4 w-4 mr-1.5" />
-              vNAT
-            </button>
-            <button
-              onClick={() => setVnfTypeFilter('custom')}
-              className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                vnfTypeFilter === 'custom'
-                  ? 'bg-gray-800 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <Settings className="h-4 w-4 mr-1.5" />
-              Custom
-            </button>
-          </div>
-
-          {/* Cloud Router Filter */}
-          <div className="flex items-center">
-            <span className="text-sm text-gray-700 mr-2">Cloud Router:</span>
-            <select
-              value={cloudRouterFilter}
-              onChange={(e) => setCloudRouterFilter(e.target.value)}
-              className="form-control text-sm"
-            >
-              <option value="all">All Cloud Routers</option>
-              {cloudRouters.map(router => (
-                <option key={router.id} value={router.id}>{router.name}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Content - Either Grid or Table */}
-      <div className="p-6">
-        {filteredVNFs.length > 0 ? (
-          viewMode === 'table' ? (
-            <VNFTable
-              vnfs={filteredVNFs}
-              cloudRouters={cloudRouters}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredVNFs.map(vnf => (
-                <VNFCard 
-                  key={vnf.id} 
-                  vnf={vnf} 
-                  cloudRouter={cloudRouters.find(cr => cr.id === vnf.cloudRouterId)}
-                  onEdit={() => onEdit(vnf)}
-                  onDelete={() => onDelete(vnf)}
-                />
-              ))}
-            </div>
-          )
         ) : (
-          <div className="col-span-3 text-center py-12">
-            <Settings className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-1">No Virtual Network Functions</h3>
-            <p className="text-gray-500 mb-6">Add virtual network functions to enhance your network capabilities</p>
-            <Button
-              variant="primary"
-              icon={Plus}
-              onClick={onAdd}
-            >
-              Add VNF
-            </Button>
-          </div>
+          <VNFTable
+            vnfs={filteredVNFs}
+            cloudRouters={cloudRouters}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
         )}
       </div>
     </div>

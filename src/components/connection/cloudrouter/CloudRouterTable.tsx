@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GitBranch, Network, Settings, Shield, Edit2, Trash2 } from 'lucide-react';
+import { GitBranch, Network, Shield, Edit2, Trash2, Eye, MapPin } from 'lucide-react';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { VNF } from '../../../types/vnf';
@@ -56,17 +56,24 @@ export function CloudRouterTable({
       label: 'Name',
       sortable: true,
       sortKey: 'name',
+      width: '35%',
       render: (router) => (
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <div className="p-2 bg-brand-lightBlue rounded-lg">
-              <GitBranch className="h-4 w-4 text-brand-blue" />
-            </div>
-          </div>
-          <div className="ml-3">
-            <div className="text-sm font-medium text-gray-900">{router.name}</div>
-            <div className="text-xs text-gray-500">{router.description}</div>
-          </div>
+        <div>
+          <div className="text-sm font-medium text-gray-900">{router.name}</div>
+          {router.description && (
+            <div className="text-xs text-gray-500 truncate mt-0.5">{router.description}</div>
+          )}
+        </div>
+      )
+    },
+    {
+      id: 'location',
+      label: 'Location',
+      width: '20%',
+      render: (router) => (
+        <div className="flex items-center text-sm text-gray-700">
+          <MapPin className="h-3.5 w-3.5 text-gray-400 mr-1.5" />
+          {router.location || '—'}
         </div>
       )
     },
@@ -75,9 +82,9 @@ export function CloudRouterTable({
       label: 'Status',
       sortable: true,
       sortKey: 'status',
-      width: '100px',
+      width: '15%',
       render: (router) => (
-        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+        <span className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full ${
           router.status === 'active' ? 'bg-green-100 text-green-800' :
           router.status === 'inactive' ? 'bg-gray-100 text-gray-800' :
           router.status === 'provisioning' ? 'bg-blue-100 text-blue-800' :
@@ -88,28 +95,21 @@ export function CloudRouterTable({
       )
     },
     {
-      id: 'links',
-      label: 'Links',
-      sortable: true,
-      sortKey: 'links',
-      width: '80px',
-      render: (router) => (
-        <div className="flex items-center">
-          <Network className="h-4 w-4 text-gray-400 mr-1" />
-          <span className="text-sm text-gray-900">{router.links?.length || 0}</span>
-        </div>
-      )
-    },
-    {
-      id: 'vnfs',
-      label: 'VNFs',
-      width: '80px',
+      id: 'resources',
+      label: 'Resources',
+      width: '15%',
       render: (router) => {
         const vnfCount = vnfCountByRouter[router.id] || 0;
         return (
-          <div className="flex items-center">
-            <Shield className="h-4 w-4 text-gray-400 mr-1" />
-            <span className="text-sm text-gray-900">{vnfCount}</span>
+          <div className="flex items-center space-x-3 text-sm text-gray-700">
+            <div className="flex items-center">
+              <Network className="h-3.5 w-3.5 text-gray-400 mr-1" />
+              <span>{router.links?.length || 0}</span>
+            </div>
+            <div className="flex items-center">
+              <Shield className="h-3.5 w-3.5 text-gray-400 mr-1" />
+              <span>{vnfCount}</span>
+            </div>
           </div>
         );
       }
@@ -117,25 +117,15 @@ export function CloudRouterTable({
     {
       id: 'bandwidth',
       label: 'Bandwidth',
-      width: '120px',
+      width: '15%',
       render: (router) => {
         const routerBandwidthUsed = getBandwidthUsedByRouter(router);
         return (
-          <div className="text-sm text-gray-900">{routerBandwidthUsed.toFixed(1)} Gbps</div>
+          <div className="text-sm text-gray-900">
+            {routerBandwidthUsed > 0 ? `${routerBandwidthUsed.toFixed(1)} Gbps` : '—'}
+          </div>
         );
       }
-    },
-    {
-      id: 'createdAt',
-      label: 'Created',
-      sortable: true,
-      sortKey: 'createdAt',
-      width: '100px',
-      render: (router) => (
-        <span className="text-sm text-gray-500">
-          {new Date(router.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' })}
-        </span>
-      )
     }
   ];
 
@@ -152,14 +142,20 @@ export function CloudRouterTable({
           <OverflowMenu
             items={[
               {
+                id: 'view',
+                label: 'View Details',
+                icon: <Eye className="h-4 w-4" />,
+                onClick: () => onEdit(router)
+              },
+              {
                 id: 'edit',
-                label: 'Edit Cloud Router',
+                label: 'Edit Router',
                 icon: <Edit2 className="h-4 w-4" />,
                 onClick: () => onEdit(router)
               },
               {
                 id: 'delete',
-                label: 'Delete Cloud Router',
+                label: 'Delete Router',
                 icon: <Trash2 className="h-4 w-4" />,
                 onClick: () => onDelete(router),
                 variant: 'danger'
