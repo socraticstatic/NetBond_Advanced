@@ -92,126 +92,131 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-lg font-medium text-gray-900">Group Connections</h3>
-        <div className="flex items-center space-x-3">
-          <div className="relative">
+    <div className="p-6 space-y-6">
+      {/* Search and Controls */}
+      <div className="bg-white p-4 rounded-lg border border-gray-200">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
               placeholder="Search connections..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
             />
           </div>
-          <Button
-            variant="outline"
-            icon={Download}
-            onClick={() => {
-              const csv = [
-                ['Name', 'Type', 'Status', 'Bandwidth', 'Location'].join(','),
-                ...filteredConnections.map(conn => 
-                  [conn.name, conn.type, conn.status, conn.bandwidth, conn.location].join(',')
-                )
-              ].join('\n');
-              
-              const blob = new Blob([csv], { type: 'text/csv' });
-              const url = URL.createObjectURL(blob);
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = `${group.name}_connections.csv`;
-              link.click();
-              URL.revokeObjectURL(url);
-              
-              window.addToast({
-                type: 'success',
-                title: 'Export Complete',
-                message: 'Connections exported successfully',
-                duration: 3000
-              });
-            }}
-          >
-            Export
-          </Button>
-          <Button
-            variant="primary"
-            icon={PlusCircle}
-            onClick={() => setShowAddModal(true)}
-          >
-            Add Connection
-          </Button>
-        </div>
-      </div>
-      
-      {filteredConnections.length === 0 ? (
-        <div className="bg-gray-50 rounded-lg p-8 text-center">
-          <p className="text-gray-500 mb-4">No connections in this group yet</p>
-          <Button
-            variant="primary"
-            icon={PlusCircle}
-            onClick={() => setShowAddModal(true)}
-          >
-            Add Connection
-          </Button>
-        </div>
-      ) : (
-        <BaseTable
-          columns={[
-            {
-              id: 'name',
-              label: 'Name',
-              render: (item: Connection) => (
-                <div>
-                  <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                  <div className="text-xs text-gray-500">{item.type}</div>
-                </div>
-              )
-            },
-            {
-              id: 'status',
-              label: 'Status',
-              render: (item: Connection) => getStatusDisplay(item.status)
-            },
-            {
-              id: 'bandwidth',
-              label: 'Bandwidth',
-              render: (item: Connection) => (
-                <div className="text-sm text-gray-900">{item.bandwidth}</div>
-              )
-            },
-            {
-              id: 'location',
-              label: 'Location',
-              render: (item: Connection) => (
-                <div className="text-sm text-gray-900">{item.location}</div>
-              )
-            }
-          ]}
-          data={filteredConnections}
-          keyField="id"
-          onRowClick={(item) => window.location.href = `/connections/${item.id}`}
-          actions={(item) => (
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="primary"
+              icon={PlusCircle}
+              onClick={() => setShowAddModal(true)}
+            >
+              Add Connection
+            </Button>
             <Button
               variant="outline"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowRemoveConfirm(item.id.toString());
+              icon={Download}
+              onClick={() => {
+                const csv = [
+                  ['Name', 'Type', 'Status', 'Bandwidth', 'Location'].join(','),
+                  ...filteredConnections.map(conn =>
+                    [conn.name, conn.type, conn.status, conn.bandwidth, conn.location].join(',')
+                  )
+                ].join('\n');
+
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${group.name}_connections.csv`;
+                link.click();
+                URL.revokeObjectURL(url);
+
+                window.addToast({
+                  type: 'success',
+                  title: 'Export Complete',
+                  message: 'Connections exported successfully',
+                  duration: 3000
+                });
               }}
-              className="text-red-600 hover:bg-red-50 hover:border-red-300"
             >
-              Remove
+              Export
             </Button>
-          )}
-          emptyState={
-            <div className="text-center py-8">
-              <p className="text-gray-500">No connections match your search criteria</p>
-            </div>
-          }
-        />
-      )}
+          </div>
+        </div>
+      </div>
+
+      {/* Connections Table */}
+      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        {filteredConnections.length === 0 ? (
+          <div className="p-8 text-center">
+            <p className="text-gray-500 mb-4">No connections in this group yet</p>
+            <Button
+              variant="primary"
+              icon={PlusCircle}
+              onClick={() => setShowAddModal(true)}
+            >
+              Add Connection
+            </Button>
+          </div>
+        ) : (
+          <BaseTable
+            columns={[
+              {
+                id: 'name',
+                label: 'Name',
+                render: (item: Connection) => (
+                  <div>
+                    <div className="text-sm font-medium text-gray-900">{item.name}</div>
+                    <div className="text-xs text-gray-500">{item.type}</div>
+                  </div>
+                )
+              },
+              {
+                id: 'status',
+                label: 'Status',
+                render: (item: Connection) => getStatusDisplay(item.status)
+              },
+              {
+                id: 'bandwidth',
+                label: 'Bandwidth',
+                render: (item: Connection) => (
+                  <div className="text-sm text-gray-900">{item.bandwidth}</div>
+                )
+              },
+              {
+                id: 'location',
+                label: 'Location',
+                render: (item: Connection) => (
+                  <div className="text-sm text-gray-900">{item.location}</div>
+                )
+              }
+            ]}
+            data={filteredConnections}
+            keyField="id"
+            onRowClick={(item) => window.location.href = `/connections/${item.id}`}
+            actions={(item) => (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowRemoveConfirm(item.id.toString());
+                }}
+                className="text-red-600 hover:bg-red-50 hover:border-red-300"
+              >
+                Remove
+              </Button>
+            )}
+            emptyState={
+              <div className="text-center py-8">
+                <p className="text-gray-500">No connections match your search criteria</p>
+              </div>
+            }
+          />
+        )}
+      </div>
       
       {/* Add Connections Modal */}
       {showAddModal && (
