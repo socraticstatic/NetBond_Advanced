@@ -265,75 +265,54 @@ export function LinkSection({
   });
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200">
-      <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-        <div className="flex items-center">
-          <Network className="h-5 w-5 text-brand-blue mr-2" />
-          <h3 className="text-lg font-medium text-gray-900">Virtual Links</h3>
-          <span className="relative ml-1 group">
-            <span className="cursor-help text-xs text-gray-500">i</span>
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-              Virtual Link (VLAN): A logical network segment that allows devices to communicate as if they were on the same physical network, even when they are on different physical segments.
-            </div>
-          </span>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Links</h2>
+          <p className="text-sm text-gray-600 mt-1">
+            Manage network links (VLANs) and their configurations
+          </p>
         </div>
-        <div className="flex items-center space-x-2">
-          {/* Cloud Router Filter */}
-          <select
-            value={selectedCloudRouter}
-            onChange={(e) => setSelectedCloudRouter(e.target.value)}
-            className="form-control text-sm border-gray-300"
-          >
-            <option value="all">All Cloud Routers</option>
-            {cloudRouters.map(router => (
-              <option key={router.id} value={router.id}>{router.name}</option>
-            ))}
-          </select>
-          
-          <LinkSearchBar 
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
-          <Button
-            variant="outline"
-            size="sm"
-            icon={Filter}
-            className="text-gray-600"
-          >
-            Filter
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            icon={Download}
-            className="text-gray-600"
-            onClick={() => {
-              window.addToast({
-                type: 'success',
-                title: 'Export Complete',
-                message: 'Link data has been exported',
-                duration: 3000
-              });
-            }}
-          >
-            Export
-          </Button>
-          <Button
-            variant="primary"
-            size="sm"
-            icon={Plus}
-            onClick={handleAddLink}
-          >
-            Add Link
-          </Button>
-        </div>
+        <Button
+          variant="primary"
+          size="sm"
+          icon={<Plus className="h-4 w-4" />}
+          onClick={handleAddLink}
+        >
+          Add Link
+        </Button>
       </div>
 
       {/* Link Status Summary */}
       <LinkStatusSummary links={links} />
-      
-      {/* Links Table */}
-      <LinkTable
+
+      {/* Table Card */}
+      <div className="bg-white rounded-lg border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+          <h3 className="text-lg font-medium text-gray-900">All Links</h3>
+          <div className="flex items-center space-x-3">
+            {/* Cloud Router Filter */}
+            <select
+              value={selectedCloudRouter}
+              onChange={(e) => setSelectedCloudRouter(e.target.value)}
+              className="form-control text-sm border-gray-300"
+            >
+              <option value="all">All Cloud Routers</option>
+              {cloudRouters.map(router => (
+                <option key={router.id} value={router.id}>{router.name}</option>
+              ))}
+            </select>
+
+            <LinkSearchBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+          </div>
+        </div>
+
+        {/* Links Table */}
+        <LinkTable
         links={filteredLinks}
         sortField={sortField}
         sortDirection={sortDirection}
@@ -343,6 +322,7 @@ export function LinkSection({
         searchQuery={searchQuery}
         showCloudRouter={true}
       />
+      </div>
 
       {/* Modals */}
       <VLANModal

@@ -16,7 +16,7 @@ const getTypeName = (type: VNFType): string => {
     case 'router':
       return 'Router';
     case 'vnat':
-      return 'Virtual NAT';
+      return 'NAT';
     case 'custom':
       return 'Custom';
     default:
@@ -54,7 +54,7 @@ const VNF_TEMPLATES: VNFTemplate[] = [
   {
     id: 'template-cisco-vna',
     name: 'Cisco vNA Router',
-    description: 'Virtualized network appliance router for flexible deployment',
+    description: 'Network appliance router for flexible deployment',
     type: 'router',
     vendor: 'Cisco',
     model: 'vNA',
@@ -123,7 +123,7 @@ const VNF_TEMPLATES: VNFTemplate[] = [
   {
     id: 'template-custom',
     name: 'Custom VNF',
-    description: 'Configure your own custom virtual network function',
+    description: 'Configure your own custom network function',
     type: 'custom',
     vendor: 'Custom',
     throughput: 'Variable',
@@ -398,12 +398,12 @@ export function VNFModal({
   const drawerTitle = (
     <div className="flex items-center">
       {isEditMode ? (
-        'Edit Virtual Network Function'
+        'Edit Network Function'
       ) : showTemplates ? (
         'Select VNF Template'
       ) : (
         <>
-          Configure Virtual Network Function
+          Configure Network Function
           <div className="relative ml-2">
             <Info
               className="h-4 w-4 text-gray-400 cursor-help"
@@ -413,7 +413,7 @@ export function VNFModal({
             {showVnfTooltip && (
               <div className="absolute z-10 left-0 top-full mt-1 w-72 p-3 bg-gray-900 text-white text-sm rounded-lg">
                 <p>
-                  <strong>VNF</strong> is a Virtual Network Function, which is a software implementation of a network function traditionally performed by dedicated hardware. VNFs include virtual firewalls, routers, load balancers, and other network services that run on standard servers rather than specialized hardware.
+                  <strong>VNF</strong> is a Network Function - software-based network services such as firewalls, routers, load balancers, and other network services deployed on standard compute infrastructure.
                 </p>
               </div>
             )}
@@ -477,7 +477,7 @@ export function VNFModal({
             /* Template Selection View */
             <div className="space-y-6">
               <p className="text-sm text-gray-500">
-                Choose a template to quickly configure a pre-defined virtual network function, or create a custom VNF.
+                Choose a template to quickly configure a pre-defined network function, or create a custom VNF.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

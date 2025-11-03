@@ -40,7 +40,7 @@ export function VNFSection({
       <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
         <h3 className="text-lg font-medium text-gray-900 flex items-center">
           <Shield className="h-5 w-5 text-brand-blue mr-2" />
-          Virtual Network Functions (VNFs)
+          Network Functions (VNFs)
           <div className="relative ml-2 group">
             <Info 
               className="h-4 w-4 text-gray-400 cursor-help" 
@@ -50,7 +50,7 @@ export function VNFSection({
             {showInfoTooltip && (
               <div className="absolute z-10 left-0 top-full mt-2 w-72 p-3 bg-gray-900 text-white text-sm rounded-lg shadow-lg">
                 <p>
-                  <strong>VNF</strong> is a Virtual Network Function, which is a software implementation of a network function traditionally performed by dedicated hardware. VNFs include virtual firewalls, routers, load balancers, and other network services that run on standard servers rather than specialized hardware.
+                  <strong>VNF</strong> is a Network Function - software-based network services such as firewalls, routers, load balancers, and other network services deployed on standard compute infrastructure.
                 </p>
               </div>
             )}
