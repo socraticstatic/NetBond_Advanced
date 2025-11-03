@@ -88,7 +88,7 @@ export function CloudRouterSection({
         <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-blue-900">Active Routers</p>
+              <p className="text-sm font-medium text-blue-900">Active Cloud Routers</p>
               <p className="text-2xl font-bold text-blue-700 mt-1">
                 {cloudRouters.filter(r => r.status === 'active').length}
               </p>
