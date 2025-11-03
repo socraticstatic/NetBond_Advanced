@@ -85,9 +85,14 @@ export function ConnectionDetails() {
   };
 
   const renderContent = () => {
+    // These numbers match the sample data in NetworkTab
+    const cloudRoutersCount = 2;
+    const linksCount = 4;
+    const vnfsCount = 2;
+
     switch (activeTab) {
       case 'overview':
-        return <ConnectionOverview connection={connection} />;
+        return <ConnectionOverview connection={connection} cloudRoutersCount={cloudRoutersCount} linksCount={linksCount} vnfsCount={vnfsCount} />;
       case 'network':
         return <NetworkTab connection={connection} isEditing={isEditing} />;
       case 'routing':
@@ -110,7 +115,7 @@ export function ConnectionDetails() {
           </div>
         );
       default:
-        return <ConnectionOverview connection={connection} />;
+        return <ConnectionOverview connection={connection} cloudRoutersCount={cloudRoutersCount} linksCount={linksCount} vnfsCount={vnfsCount} />;
     }
   };
 
