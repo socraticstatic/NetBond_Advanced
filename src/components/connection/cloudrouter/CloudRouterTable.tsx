@@ -63,7 +63,8 @@ export function CloudRouterTable({
             <div className="text-xs text-gray-500 truncate mt-0.5">{router.description}</div>
           )}
         </div>
-      )
+      ),
+      csvRender: (router) => router.name
     },
     {
       id: 'status',
@@ -79,7 +80,8 @@ export function CloudRouterTable({
         }`}>
           {router.status.charAt(0).toUpperCase() + router.status.slice(1)}
         </span>
-      )
+      ),
+      csvRender: (router) => router.status.charAt(0).toUpperCase() + router.status.slice(1)
     },
     {
       id: 'resources',
@@ -89,7 +91,8 @@ export function CloudRouterTable({
           <Network className="h-3.5 w-3.5 text-gray-400 mr-1" />
           <span>{router.links?.length || 0}</span>
         </div>
-      )
+      ),
+      csvRender: (router) => String(router.links?.length || 0)
     }
   ];
 
@@ -102,6 +105,8 @@ export function CloudRouterTable({
         pageSize={50}
         showPagination={cloudRouters.length > 50}
         stickyHeader={true}
+        exportFilename="cloud-routers.csv"
+        showExport={true}
         rowActions={(router) => (
           <OverflowMenu
             items={[

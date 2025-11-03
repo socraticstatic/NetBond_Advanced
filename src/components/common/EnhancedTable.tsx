@@ -1,5 +1,6 @@
 import { useState, useMemo, memo, ReactNode } from 'react';
-import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download } from 'lucide-react';
+import { downloadCSV } from '../../utils/downloadCSV';
 
 export interface TableColumn<T> {
   id: string;
@@ -8,6 +9,7 @@ export interface TableColumn<T> {
   sortKey?: keyof T;
   width?: string;
   render: (item: T) => ReactNode;
+  csvRender?: (item: T) => string;
 }
 
 interface EnhancedTableProps<T> {
@@ -20,6 +22,8 @@ interface EnhancedTableProps<T> {
   showPagination?: boolean;
   stickyHeader?: boolean;
   rowActions?: (item: T) => ReactNode;
+  exportFilename?: string;
+  showExport?: boolean;
 }
 
 function EnhancedTableComponent<T>({
@@ -32,6 +36,8 @@ function EnhancedTableComponent<T>({
   showPagination = true,
   stickyHeader = true,
   rowActions,
+  exportFilename = 'export.csv',
+  showExport = true,
 }: EnhancedTableProps<T>) {
   const [sortField, setSortField] = useState<keyof T | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -81,6 +87,22 @@ function EnhancedTableComponent<T>({
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
   };
 
+  const handleExport = () => {
+    const headers = columns.map(col => col.label).join(',');
+    const rows = sortedData.map(item => {
+      return columns.map(col => {
+        if (col.csvRender) {
+          return `"${col.csvRender(item).replace(/"/g, '""')}"`;
+        }
+        const value = col.sortKey ? String(item[col.sortKey] ?? '') : '';
+        return `"${value.replace(/"/g, '""')}"`;
+      }).join(',');
+    });
+
+    const csv = [headers, ...rows].join('\n');
+    downloadCSV(csv, exportFilename);
+  };
+
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
     const maxVisible = 7;
@@ -112,6 +134,17 @@ function EnhancedTableComponent<T>({
 
   return (
     <div className="flex flex-col">
+      {showExport && data.length > 0 && (
+        <div className="flex justify-end mb-3">
+          <button
+            onClick={handleExport}
+            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Export CSV
+          </button>
+        </div>
+      )}
       <div className="w-full overflow-visible">
         <table className="w-full divide-y divide-gray-200">
           <thead className={`bg-gray-50 ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
