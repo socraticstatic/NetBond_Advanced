@@ -124,6 +124,7 @@ export interface Link {
   ipeId?: string;
   ipeName?: string;
   ipeLocation?: string;
+  cloudRouterId: string;
   createdAt: string;
   updatedAt?: string;
   linkBandwidth?: string;
