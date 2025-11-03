@@ -113,7 +113,7 @@ export function ApplicationSolutionZone() {
             return (
               <div
                 key={solution.id}
-                className="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group"
+                className="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group flex flex-col"
               >
                 <div className={`bg-gradient-to-r ${colors.gradient} p-6 text-white`}>
                   <div className="flex items-start justify-between mb-3">
@@ -135,12 +135,12 @@ export function ApplicationSolutionZone() {
                   <p className="text-sm text-white text-opacity-90">{solution.description}</p>
                 </div>
 
-                <div className="p-6 space-y-4">
+                <div className="p-6 space-y-4 flex-1 flex flex-col">
                   <div>
                     <h5 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Common Use Cases</h5>
-                    <ul className="space-y-1">
+                    <ul className="space-y-1.5">
                       {solution.useCases.slice(0, 3).map((useCase, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
+                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
                           <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0 mt-0.5" />
                           <span>{useCase}</span>
                         </li>
@@ -153,8 +153,8 @@ export function ApplicationSolutionZone() {
                     </ul>
                   </div>
 
-                  <div className={`${colors.bg} ${colors.border} border rounded-lg p-3`}>
-                    <h5 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+                  <div className={`${colors.bg} ${colors.border} border rounded-lg p-4`}>
+                    <h5 className="text-xs font-semibold text-gray-700 mb-3 uppercase tracking-wide">
                       Recommended Setup
                     </h5>
                     <div className="space-y-2 text-sm">
@@ -175,26 +175,28 @@ export function ApplicationSolutionZone() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                    <div>
-                      <div className="flex items-center gap-1 text-gray-600">
+                  <div className="flex-1"></div>
+
+                  <div className="pt-4 border-t border-gray-200 space-y-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-1.5 text-gray-600">
                         <Clock className="h-4 w-4" />
-                        <span className="text-xs">{solution.estimatedSetupTime}</span>
+                        <span>{solution.estimatedSetupTime}</span>
                       </div>
-                      <div className="flex items-center gap-1 text-gray-900 mt-1">
-                        <DollarSign className="h-5 w-5" />
-                        <span className="text-lg font-bold">{solution.monthlyStartingPrice}</span>
+                      <div className="flex items-baseline gap-0.5">
+                        <DollarSign className="h-4 w-4 text-gray-700" />
+                        <span className="text-lg font-bold text-gray-900">{solution.monthlyStartingPrice}</span>
                         <span className="text-xs text-gray-600">/month</span>
                       </div>
                     </div>
                     <Button
                       variant="primary"
-                      size="sm"
+                      size="md"
                       onClick={() => handleBuildNetwork(solution)}
-                      className={`bg-gradient-to-r ${colors.gradient} hover:opacity-90`}
+                      className={`w-full bg-gradient-to-r ${colors.gradient} hover:opacity-90`}
                     >
                       Configure
-                      <ArrowRight className="h-4 w-4 ml-1" />
+                      <ArrowRight className="h-4 w-4 ml-2" />
                     </Button>
                   </div>
                 </div>
