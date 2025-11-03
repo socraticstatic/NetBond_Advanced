@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Layers, User, Network, CreditCard, Activity, Edit2, Trash2 } from 'lucide-react';
+import { ArrowLeft, Layers, User, Network, CreditCard, Activity, Edit2, Trash2, Tag } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { SubNav } from './navigation/SubNav';
-import { GroupDetailHeader } from './group-detail/GroupDetailHeader';
-import { GroupMetricsPanel } from './group-detail/GroupMetricsPanel';
-import { GroupContactsSection } from './group-detail/GroupContactsSection';
-import { VerticalTabGroup } from './navigation/VerticalTabGroup';
 import { ConfirmDialog } from './common/ConfirmDialog';
+import { Button } from './common/Button';
+import { IconButton } from './common/IconButton';
+import { useEditableField } from '../hooks/useEditableField';
 import { GroupOverview } from './configure/groups/tabs/GroupOverview';
 import { GroupMembers } from './configure/groups/tabs/GroupMembers';
 import { GroupConnections } from './configure/groups/tabs/GroupConnections';
@@ -15,10 +14,18 @@ import { GroupBilling } from './configure/groups/tabs/GroupBilling';
 import { GroupPerformance } from './configure/groups/tabs/GroupPerformance';
 import { GroupSettings } from './configure/groups/tabs/GroupSettings';
 import { GroupNetworkTab } from './configure/groups/tabs/GroupNetworkTab';
-import { TabItem } from '../types/navigation';
-import { GroupConnectionSummaryWidget } from './group/widgets/GroupConnectionSummaryWidget';
-import { GroupPerformanceWidget } from './group/widgets/GroupPerformanceWidget';
-import { AsyncBoundary } from './common/AsyncBoundary';
+
+type GroupTabType = 'overview' | 'members' | 'connections' | 'network' | 'billing' | 'performance' | 'settings';
+
+const tabs: { id: GroupTabType; label: string }[] = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'members', label: 'Members' },
+  { id: 'connections', label: 'Connections' },
+  { id: 'network', label: 'Network' },
+  { id: 'billing', label: 'Billing' },
+  { id: 'performance', label: 'Performance' },
+  { id: 'settings', label: 'Settings' }
+];
 
 export function GroupDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -27,28 +34,52 @@ export function GroupDetailsPage() {
   const users = useStore(state => state.users);
   const connections = useStore(state => state.connections);
   const removeGroup = useStore(state => state.removeGroup);
-  
-  const [activeTab, setActiveTab] = useState('overview');
+  const updateGroup = useStore(state => state.updateGroup);
+
+  const [activeTab, setActiveTab] = useState<GroupTabType>('overview');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  
-  // Find the group by ID
+  const [isEditing, setIsEditing] = useState(false);
+
   const group = groups.find(g => g.id === id);
-  
-  // Map connection IDs to actual connection objects
-  const groupConnections = connections.filter(conn => 
+
+  const {
+    isEditing: isEditingName,
+    value: newName,
+    error: nameError,
+    setValue: setNewName,
+    handleStartEdit: startEditingName,
+    handleSave: handleSaveName,
+    handleCancel: handleCancelEdit
+  } = useEditableField({
+    initialValue: group?.name || '',
+    onSave: (name) => {
+      if (group) {
+        updateGroup(group.id, { name });
+        window.addToast({
+          type: 'success',
+          title: 'Name Updated',
+          message: 'Pool name has been updated successfully.',
+          duration: 3000
+        });
+      }
+    },
+    validate: (name) => {
+      if (!name.trim()) return 'Pool name cannot be empty';
+    }
+  });
+
+  const groupConnections = connections.filter(conn =>
     group?.connectionIds.includes(conn.id)
   );
-  
-  // Map user IDs to actual user objects
-  const groupUsers = users.filter(user => 
+
+  const groupUsers = users.filter(user =>
     group?.userIds.includes(user.id)
   );
 
-  // If group not found, navigate back to groups page
   useEffect(() => {
     if (!group && id) {
       navigate('/groups');
-      
+
       window.addToast({
         type: 'error',
         title: 'Pool Not Found',
@@ -59,7 +90,7 @@ export function GroupDetailsPage() {
   }, [group, id, navigate]);
 
   if (!group) {
-    return null; // Will redirect due to the useEffect
+    return null;
   }
 
   const handleDeleteGroup = async () => {
@@ -71,119 +102,200 @@ export function GroupDetailsPage() {
     }
   };
 
-  const tabs: TabItem[] = [
-    { id: 'overview', label: 'Overview', icon: <Layers className="h-5 w-5 mr-2" /> },
-    { id: 'members', label: 'Members', icon: <User className="h-5 w-5 mr-2" /> },
-    { id: 'connections', label: 'Connections', icon: <Network className="h-5 w-5 mr-2" /> },
-    { id: 'network', label: 'Network', icon: <Layers className="h-5 w-5 mr-2" /> },
-    { id: 'billing', label: 'Billing', icon: <CreditCard className="h-5 w-5 mr-2" /> },
-    { id: 'performance', label: 'Performance', icon: <Activity className="h-5 w-5 mr-2" /> },
-    { id: 'settings', label: 'Settings', icon: <Edit2 className="h-5 w-5 mr-2" /> }
-  ];
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return <GroupOverview group={group} connections={groupConnections} users={groupUsers} />;
+      case 'members':
+        return <GroupMembers group={group} users={groupUsers} allUsers={users} />;
+      case 'connections':
+        return <GroupConnections group={group} connections={groupConnections} allConnections={connections} />;
+      case 'network':
+        return <GroupNetworkTab group={group} connections={groupConnections} />;
+      case 'billing':
+        return <GroupBilling group={group} connections={groupConnections} />;
+      case 'performance':
+        return <GroupPerformance group={group} connections={groupConnections} />;
+      case 'settings':
+        return <GroupSettings group={group} />;
+      default:
+        return <GroupOverview group={group} connections={groupConnections} users={groupUsers} />;
+    }
+  };
 
   return (
-    <>
+    <div className="min-h-screen">
       <SubNav
-        title={group.name}
-        description={group.description}
+        title={
+          isEditingName ? (
+            <div className="flex items-center space-x-2">
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                className={`px-3 py-2 text-2xl font-bold bg-white border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  nameError ? 'border-red-500' : 'border-gray-300'
+                }`}
+                autoFocus
+              />
+              <div className="flex items-center space-x-2">
+                <IconButton
+                  icon={<Edit2 className="h-5 w-5" />}
+                  onClick={handleSaveName}
+                  variant="success"
+                  title="Save"
+                />
+                <IconButton
+                  icon={<Trash2 className="h-5 w-5" />}
+                  onClick={handleCancelEdit}
+                  variant="danger"
+                  title="Cancel"
+                />
+              </div>
+              {nameError && (
+                <span className="text-sm text-red-500">{nameError}</span>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center space-x-2">
+              <span>{group.name}</span>
+              <IconButton
+                icon={<Edit2 className="h-5 w-5" />}
+                onClick={startEditingName}
+                variant="ghost"
+                title="Edit Name"
+              />
+            </div>
+          )
+        }
+        description={`${group.type.charAt(0).toUpperCase() + group.type.slice(1)} Pool - ${group.description}`}
         action={{
           label: 'Back to Pools',
           icon: <ArrowLeft className="h-5 w-5 mr-2" />,
-          to: "/groups"
+          onClick: () => navigate('/groups')
         }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <GroupDetailHeader 
-          group={group} 
-          onDeleteClick={() => setShowDeleteConfirm(true)} 
-        />
-        
-        {/* Group Connection Widgets - New Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <AsyncBoundary>
-            <GroupConnectionSummaryWidget
-              group={group}
-              connections={connections}
-            />
-          </AsyncBoundary>
-          
-          <AsyncBoundary>
-            <GroupPerformanceWidget
-              group={group}
-              connections={connections}
-            />
-          </AsyncBoundary>
-        </div>
-        
         {/* Quick Stats */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-8 overflow-hidden">
-          <GroupMetricsPanel 
-            group={group} 
-            connections={groupConnections} 
-            users={groupUsers} 
-          />
-        </div>
-
-        {/* Contact & Address Cards */}
-        <GroupContactsSection group={group} />
-
-        {/* Tabs and Content Area */}
-        <div className="flex">
-          <VerticalTabGroup
-            tabs={tabs}
-            activeTab={activeTab}
-            onChange={setActiveTab}
-          />
-
-          <div className="flex-1 pl-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              {activeTab === 'overview' && (
-                <GroupOverview 
-                  group={group} 
-                  connections={groupConnections} 
-                  users={groupUsers}
-                />
-              )}
-              {activeTab === 'members' && (
-                <GroupMembers 
-                  group={group} 
-                  users={groupUsers}
-                  allUsers={users}
-                />
-              )}
-              {activeTab === 'connections' && (
-                <GroupConnections 
-                  group={group} 
-                  connections={groupConnections}
-                  allConnections={connections}
-                />
-              )}
-              {activeTab === 'network' && (
-                <GroupNetworkTab
-                  group={group}
-                  connections={groupConnections}
-                />
-              )}
-              {activeTab === 'billing' && (
-                <GroupBilling 
-                  group={group} 
-                  connections={groupConnections}
-                />
-              )}
-              {activeTab === 'performance' && (
-                <GroupPerformance 
-                  group={group} 
-                  connections={groupConnections}
-                />
-              )}
-              {activeTab === 'settings' && (
-                <GroupSettings 
-                  group={group}
-                />
-              )}
+        <div className="grid grid-cols-5 gap-6 mb-8">
+          {/* Status Card */}
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-500">Status</h3>
+              <Activity className="h-5 w-5 text-gray-400" />
+            </div>
+            <div className="flex items-center">
+              <div className={`h-3 w-3 rounded-full ${
+                group.status === 'active' ? 'bg-green-500' : 'bg-gray-300'
+              }`} />
+              <span className="ml-2 text-lg font-medium text-gray-900 capitalize">
+                {group.status}
+              </span>
             </div>
           </div>
+
+          {/* Type Card */}
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-500">Type</h3>
+              <Tag className="h-5 w-5 text-gray-400" />
+            </div>
+            <p className="text-lg font-medium text-gray-900 capitalize">{group.type}</p>
+          </div>
+
+          {/* Members Card */}
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-500">Members</h3>
+              <User className="h-5 w-5 text-gray-400" />
+            </div>
+            <p className="text-lg font-medium text-gray-900">
+              {group.userIds.length} {group.userIds.length === 1 ? 'User' : 'Users'}
+            </p>
+          </div>
+
+          {/* Connections Card */}
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-500">Connections</h3>
+              <Network className="h-5 w-5 text-gray-400" />
+            </div>
+            <p className="text-lg font-medium text-gray-900">
+              {group.connectionIds.length} Active
+            </p>
+          </div>
+
+          {/* Monthly Cost Card */}
+          <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-500">Monthly Cost</h3>
+              <CreditCard className="h-5 w-5 text-gray-400" />
+            </div>
+            <p className="text-lg font-medium text-gray-900">
+              ${group.billing?.monthlyRate?.toFixed(0) || '0'}
+            </p>
+          </div>
+        </div>
+
+        {/* Action Bar */}
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            {/* Status Badge */}
+            <Button
+              variant={group.status === 'active' ? 'primary' : 'outline'}
+              className={group.status === 'active' ? 'bg-green-600 hover:bg-green-700' : ''}
+            >
+              {group.status === 'active' ? 'Active' : 'Inactive'}
+            </Button>
+
+            {/* Delete Button */}
+            <Button
+              variant="outline"
+              icon={Trash2}
+              onClick={() => setShowDeleteConfirm(true)}
+              className="text-red-600 border-red-200 hover:bg-red-50"
+            >
+              Delete
+            </Button>
+          </div>
+
+          <Button
+            variant={isEditing ? 'primary' : 'outline'}
+            icon={Edit2}
+            onClick={() => setIsEditing(!isEditing)}
+            className={isEditing ? 'bg-green-600 hover:bg-green-700' : ''}
+          >
+            {isEditing ? 'Save Changes' : 'Manage Settings'}
+          </Button>
+        </div>
+
+        {/* Tabs */}
+        <div className="mb-8">
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex space-x-8">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`
+                    whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm
+                    ${activeTab === tab.id
+                      ? 'border-brand-blue text-brand-blue'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    }
+                  `}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="bg-white rounded-lg shadow-sm">
+          {renderContent()}
         </div>
       </div>
 
@@ -198,6 +310,6 @@ export function GroupDetailsPage() {
         confirmText="Delete"
         confirmVariant="danger"
       />
-    </>
+    </div>
   );
 }
