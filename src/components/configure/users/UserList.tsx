@@ -122,17 +122,17 @@ export function UserList({ searchQuery }: UserListProps) {
             </Button>
             <Button
               variant="outline"
-              icon={Download}
-              onClick={() => {}}
-            >
-              Export
-            </Button>
-            <Button
-              variant="outline"
               icon={Filter}
               onClick={() => {}}
             >
               Filters
+            </Button>
+            <Button
+              variant="outline"
+              icon={Download}
+              onClick={() => {}}
+            >
+              Export
             </Button>
           </div>
         </div>

@@ -214,6 +214,16 @@ export function ConnectionList({
             />
           </div>
           <div className="flex items-center space-x-4">
+            <FilterButton
+              onClick={() => {
+                window.addToast({
+                  type: 'info',
+                  title: 'Filters',
+                  message: 'Filter options coming soon',
+                  duration: 3000
+                });
+              }}
+            />
             <Button
               variant="outline"
               icon={Download}
@@ -228,16 +238,6 @@ export function ConnectionList({
             >
               Export
             </Button>
-            <FilterButton
-              onClick={() => {
-                window.addToast({
-                  type: 'info',
-                  title: 'Filters',
-                  message: 'Filter options coming soon',
-                  duration: 3000
-                });
-              }}
-            />
           </div>
         </div>
       </div>
