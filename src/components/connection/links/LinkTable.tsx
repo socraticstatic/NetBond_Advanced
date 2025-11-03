@@ -34,7 +34,8 @@ export function LinkTable({
       sortKey: 'vlanId',
       render: (link) => (
         <div className="text-sm font-medium text-gray-900">{link.vlanId}</div>
-      )
+      ),
+      csvRender: (link) => String(link.vlanId)
     },
     {
       id: 'name',
@@ -48,7 +49,8 @@ export function LinkTable({
             <div className="text-xs text-gray-500 truncate mt-0.5">{link.description}</div>
           )}
         </div>
-      )
+      ),
+      csvRender: (link) => link.name
     },
     {
       id: 'status',
@@ -61,7 +63,8 @@ export function LinkTable({
         }`}>
           {link.status.charAt(0).toUpperCase() + link.status.slice(1)}
         </span>
-      )
+      ),
+      csvRender: (link) => link.status.charAt(0).toUpperCase() + link.status.slice(1)
     }
   ];
 
@@ -72,7 +75,8 @@ export function LinkTable({
     sortKey: 'cloudRouterId',
     render: (link) => (
       <div className="text-sm font-medium text-gray-900 truncate">{link.cloudRouterName || '—'}</div>
-    )
+    ),
+    csvRender: (link) => link.cloudRouterName || 'Not assigned'
   };
 
   const columns = showCloudRouter
@@ -88,6 +92,8 @@ export function LinkTable({
       pageSize={100}
       showPagination={links.length > 100}
       stickyHeader={true}
+      exportFilename="links.csv"
+      showExport={true}
       rowActions={(link) => (
         <OverflowMenu
           items={[

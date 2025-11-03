@@ -49,10 +49,14 @@ export function OverflowMenu({
       const spaceBelow = viewportHeight - rect.bottom;
       const spaceRight = viewportWidth - rect.right;
 
-      setMenuPosition({
-        top: spaceBelow < menuHeight ? rect.top - menuHeight + 40 : rect.bottom + 4,
-        left: spaceRight < menuWidth ? rect.left - menuWidth + rect.width : rect.left
-      });
+      let top = spaceBelow < menuHeight ? rect.top - menuHeight + 40 : rect.bottom + 4;
+      let left = rect.right - menuWidth;
+
+      if (left < 8) {
+        left = 8;
+      }
+
+      setMenuPosition({ top, left });
     }
   }, [isOpen]);
 

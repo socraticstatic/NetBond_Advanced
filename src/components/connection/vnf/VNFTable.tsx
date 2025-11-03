@@ -101,7 +101,8 @@ export function VNFTable({
             <div className="text-xs text-gray-500">{vnf.description}</div>
           </div>
         </div>
-      )
+      ),
+      csvRender: (vnf) => vnf.name
     },
     {
       id: 'type',
@@ -110,7 +111,8 @@ export function VNFTable({
       sortKey: 'type',
       render: (vnf) => (
         <span className="text-sm text-gray-900 truncate block">{getTypeName(vnf.type)}</span>
-      )
+      ),
+      csvRender: (vnf) => getTypeName(vnf.type)
     },
     {
       id: 'status',
@@ -121,7 +123,8 @@ export function VNFTable({
         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(vnf.status)}`}>
           {vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)}
         </span>
-      )
+      ),
+      csvRender: (vnf) => vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)
     }
   ];
 
@@ -134,6 +137,8 @@ export function VNFTable({
       pageSize={50}
       showPagination={vnfs.length > 50}
       stickyHeader={true}
+      exportFilename="network-functions.csv"
+      showExport={true}
       rowActions={(vnf) => (
         <OverflowMenu
           items={[
