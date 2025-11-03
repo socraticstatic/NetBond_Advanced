@@ -1,4 +1,4 @@
-import { Pause, Play, Clock } from 'lucide-react';
+import { Pause, Play } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface ConnectionCardStatusProps {
@@ -29,12 +29,6 @@ export function ConnectionCardStatus({
   healthStatus,
   showEffects
 }: ConnectionCardStatusProps) {
-  // Format time as MM:SS
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
   return (
     <div className="p-4 border-t border-gray-100">
       <div className="flex items-center justify-between mt-4">
@@ -58,18 +52,16 @@ export function ConnectionCardStatus({
           animate={isPending ? {
             backgroundColor: ['rgba(230, 246, 253, 0.6)', 'rgba(230, 246, 253, 1)', 'rgba(230, 246, 253, 0.6)'],
             borderColor: ['rgba(0, 159, 219, 0.1)', 'rgba(0, 159, 219, 0.3)', 'rgba(0, 159, 219, 0.1)'],
-            transition: { 
-              repeat: Infinity, 
+            transition: {
+              repeat: Infinity,
               duration: 1.8,
-              ease: "easeInOut" 
+              ease: "easeInOut"
             }
           } : {}}
         >
           {isPending ? (
             <span className="flex items-center">
-              <Clock className="h-4 w-4 mr-2" />
-              <span className="font-mono font-semibold">{formatTime(remainingTime)}</span>
-              <span className="ml-2 text-xs opacity-75">remaining</span>
+              <span>Activating...</span>
             </span>
           ) : status === 'Active' ? (
             <>

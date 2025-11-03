@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Layers, ChevronRight, Play, Pause, Clock } from 'lucide-react';
+import { Layers, ChevronRight, Play, Pause } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { IconButton } from '../../common/IconButton';
 import { Group } from '../../../types/group';
@@ -35,12 +35,6 @@ export function ConnectionCardMinimized({
   onMaximize,
   showEffects
 }: ConnectionCardMinimizedProps) {
-  // Format time as MM:SS
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
   return (
     <div className="h-full p-4 flex items-center">
       {/* Left Side: Icon and Name */}
@@ -107,17 +101,16 @@ export function ConnectionCardMinimized({
             // Add pulse animation when pending
             animate={isPending ? {
               backgroundColor: ['rgba(230, 246, 253, 0.8)', 'rgba(230, 246, 253, 1)', 'rgba(230, 246, 253, 0.8)'],
-              transition: { 
-                repeat: Infinity, 
+              transition: {
+                repeat: Infinity,
                 duration: 1.5,
-                ease: "easeInOut" 
+                ease: "easeInOut"
               }
             } : {}}
           >
             {isPending ? (
               <span className="flex items-center">
-                <Clock className="h-3 w-3 mr-1.5" />
-                <span className="font-mono text-xs font-semibold">{formatTime(remainingTime)}</span>
+                Activating...
               </span>
             ) : connection.status === 'Active' ? (
               <>
