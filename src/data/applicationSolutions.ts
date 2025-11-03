@@ -1,4 +1,4 @@
-import { Briefcase, Users, ShoppingCart, DollarSign, FileText, Wrench, MessageSquare, Database, TrendingUp, Package, HeartPulse, GraduationCap } from 'lucide-react';
+import { Briefcase, Users, ShoppingCart, DollarSign, FileText, Wrench, MessageSquare, Database, TrendingUp, Package, HeartPulse, GraduationCap, Network, Shield, Video, Phone, Server, Cloud } from 'lucide-react';
 
 export interface ApplicationSolution {
   id: string;
@@ -405,6 +405,198 @@ export const applicationSolutions: ApplicationSolution[] = [
     ],
     estimatedSetupTime: '1-2 business days',
     monthlyStartingPrice: 500,
+    popular: false
+  },
+  {
+    id: 'cisco-webex',
+    name: 'Cisco Webex',
+    category: 'Collaboration',
+    description: 'Enterprise video conferencing and collaboration platform',
+    useCases: [
+      'Video Conferencing',
+      'Team Messaging',
+      'Screen Sharing',
+      'Meeting Recording',
+      'Webinar Hosting'
+    ],
+    icon: Video,
+    color: 'blue',
+    providers: ['AWS', 'Azure', 'Google Cloud'],
+    recommendedSetup: {
+      connectionType: 'Internet to Cloud',
+      bandwidth: '500 Mbps',
+      redundancy: true,
+      qos: true,
+      security: ['End-to-end encryption', 'DDoS protection', 'Zero-trust security']
+    },
+    benefits: [
+      'Crystal-clear video quality',
+      'Low latency for real-time collaboration',
+      'Secure enterprise communications',
+      'Reliable for global teams'
+    ],
+    estimatedSetupTime: '1-2 business days',
+    monthlyStartingPrice: 550,
+    popular: true
+  },
+  {
+    id: 'akamai-cdn',
+    name: 'Akamai CDN',
+    category: 'Industry',
+    description: 'Global content delivery network for high-performance web experiences',
+    useCases: [
+      'Content Delivery',
+      'Web Application Acceleration',
+      'Media Streaming',
+      'API Acceleration',
+      'Security & DDoS Protection'
+    ],
+    icon: Network,
+    color: 'cyan',
+    providers: ['Multi-Cloud'],
+    recommendedSetup: {
+      connectionType: 'Internet to Cloud',
+      bandwidth: '10 Gbps',
+      redundancy: true,
+      qos: true,
+      security: ['DDoS mitigation', 'Web application firewall', 'Bot management']
+    },
+    benefits: [
+      'Ultra-fast content delivery worldwide',
+      'Reduced latency for end users',
+      'Enhanced security and reliability',
+      'Optimized for high-traffic applications'
+    ],
+    estimatedSetupTime: '2-3 business days',
+    monthlyStartingPrice: 1200,
+    popular: true
+  },
+  {
+    id: 'zoom',
+    name: 'Zoom',
+    category: 'Collaboration',
+    description: 'Video conferencing and virtual meeting platform',
+    useCases: [
+      'Video Meetings',
+      'Webinars',
+      'Team Chat',
+      'Phone System',
+      'Conference Rooms'
+    ],
+    icon: Video,
+    color: 'blue',
+    providers: ['AWS', 'Oracle Cloud'],
+    recommendedSetup: {
+      connectionType: 'Internet to Cloud',
+      bandwidth: '300 Mbps',
+      redundancy: true,
+      qos: true,
+      security: ['End-to-end encryption', 'Waiting rooms', 'Meeting passwords']
+    },
+    benefits: [
+      'High-quality video and audio',
+      'Low latency for smooth meetings',
+      'Reliable for large-scale webinars',
+      'Secure virtual communications'
+    ],
+    estimatedSetupTime: '1 business day',
+    monthlyStartingPrice: 400,
+    popular: true
+  },
+  {
+    id: 'twilio',
+    name: 'Twilio',
+    category: 'Collaboration',
+    description: 'Cloud communications platform for messaging, voice, and video',
+    useCases: [
+      'SMS & MMS Messaging',
+      'Voice & Video APIs',
+      'WhatsApp Business',
+      'Programmable Chat',
+      'Customer Engagement'
+    ],
+    icon: Phone,
+    color: 'red',
+    providers: ['AWS'],
+    recommendedSetup: {
+      connectionType: 'Cloud to Cloud',
+      bandwidth: '1 Gbps',
+      redundancy: true,
+      qos: true,
+      security: ['API authentication', 'TLS encryption', 'Rate limiting']
+    },
+    benefits: [
+      'Low latency for real-time communications',
+      'Reliable message delivery',
+      'Scalable for high-volume applications',
+      'Secure API connectivity'
+    ],
+    estimatedSetupTime: '1-2 business days',
+    monthlyStartingPrice: 600,
+    popular: true
+  },
+  {
+    id: 'coreweave',
+    name: 'CoreWeave',
+    category: 'Industry',
+    description: 'Specialized cloud infrastructure for GPU-accelerated computing and AI',
+    useCases: [
+      'AI Model Training',
+      'Machine Learning Inference',
+      'Visual Effects Rendering',
+      'Scientific Computing',
+      'Crypto Mining'
+    ],
+    icon: Server,
+    color: 'purple',
+    providers: ['CoreWeave Cloud'],
+    recommendedSetup: {
+      connectionType: 'Cloud to Cloud',
+      bandwidth: '10 Gbps',
+      redundancy: true,
+      qos: true,
+      security: ['Private connectivity', 'Network isolation', 'DDoS protection']
+    },
+    benefits: [
+      'Ultra-low latency for GPU workloads',
+      'High-bandwidth data transfer',
+      'Optimized for AI/ML pipelines',
+      'Dedicated GPU resources'
+    ],
+    estimatedSetupTime: '2-4 business days',
+    monthlyStartingPrice: 1800,
+    popular: false
+  },
+  {
+    id: 'ibm-cloud',
+    name: 'IBM Cloud',
+    category: 'Industry',
+    description: 'Enterprise cloud platform with AI, security, and hybrid cloud capabilities',
+    useCases: [
+      'Watson AI Services',
+      'Hybrid Cloud Integration',
+      'Blockchain Solutions',
+      'Quantum Computing',
+      'Enterprise Applications'
+    ],
+    icon: Cloud,
+    color: 'blue',
+    providers: ['IBM Cloud'],
+    recommendedSetup: {
+      connectionType: 'Cloud to Cloud',
+      bandwidth: '10 Gbps',
+      redundancy: true,
+      qos: true,
+      security: ['IBM Cloud Direct Link', 'Private networking', 'Encryption at rest/transit']
+    },
+    benefits: [
+      'Optimized for enterprise workloads',
+      'Low latency for Watson AI',
+      'Secure hybrid cloud connectivity',
+      'Compliance-ready infrastructure'
+    ],
+    estimatedSetupTime: '3-5 business days',
+    monthlyStartingPrice: 1500,
     popular: false
   }
 ];
