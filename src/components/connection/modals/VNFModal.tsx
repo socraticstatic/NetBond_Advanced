@@ -167,7 +167,7 @@ export function VNFModal({
   const [highAvailability, setHighAvailability] = useState(false);
   const [managementIP, setManagementIP] = useState('');
   const [routingProtocols, setRoutingProtocols] = useState<string[]>([]);
-  const [linkId, setLinkId] = useState<string>('');
+  const [linkIds, setLinkIds] = useState<string[]>([]);
 
   // New interface form
   const [newInterface, setNewInterface] = useState<Partial<VNFInterface>>({
@@ -200,7 +200,7 @@ export function VNFModal({
       setHighAvailability(vnf.configuration?.highAvailability || false);
       setManagementIP(vnf.configuration?.managementIP || '');
       setRoutingProtocols(vnf.configuration?.routingProtocols || []);
-      setLinkId(vnf.linkId || '');
+      setLinkIds(vnf.linkIds || []);
 
       // Hide templates in edit mode
       setShowTemplates(false);
@@ -227,7 +227,7 @@ export function VNFModal({
     setManagementIP('');
     setRoutingProtocols([]);
     setSelectedTemplate('');
-    setLinkId('');
+    setLinkIds([]);
   };
 
   // Apply template settings
@@ -272,16 +272,16 @@ export function VNFModal({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
+    if (linkIds.length === 0) {
+      newErrors.linkIds = 'At least one link must be selected';
+    }
+
     if (!name.trim()) {
       newErrors.name = 'Name is required';
     }
 
     if (!vendor.trim()) {
       newErrors.vendor = 'Vendor is required';
-    }
-
-    if (!linkId) {
-      newErrors.linkId = 'Link is required';
     }
 
     if (managementIP && !isValidIP(managementIP)) {
@@ -380,7 +380,7 @@ export function VNFModal({
       createdAt: isEditMode && vnf ? vnf.createdAt : new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       connectionId,
-      linkId
+      linkIds
     };
 
     onSave(vnfData);
@@ -671,25 +671,36 @@ export function VNFModal({
                     </FormField>
                   </div>
 
-                  <div className="col-span-1">
+                  <div className="col-span-2">
                     <FormField
-                      label="Link"
-                      error={errors.linkId}
+                      label="Links"
+                      error={errors.linkIds}
                       required
-                      helpText="Select the link this VNF will be associated with"
+                      helpText="Select one or more links this VNF will be associated with"
                     >
-                      <select
-                        value={linkId}
-                        onChange={(e) => setLinkId(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      >
-                        <option value="">Select a Link</option>
-                        {links.map(link => (
-                          <option key={link.id} value={link.id}>
-                            {link.name} (VLAN {link.vlanId})
-                          </option>
-                        ))}
-                      </select>
+                      <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3">
+                        {links.length === 0 ? (
+                          <p className="text-sm text-gray-500">No links available</p>
+                        ) : (
+                          links.map(link => (
+                            <label key={link.id} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                              <input
+                                type="checkbox"
+                                checked={linkIds.includes(link.id)}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setLinkIds([...linkIds, link.id]);
+                                  } else {
+                                    setLinkIds(linkIds.filter(id => id !== link.id));
+                                  }
+                                }}
+                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                              />
+                              <span className="text-sm text-gray-700">{link.name} (VLAN {link.vlanId})</span>
+                            </label>
+                          ))
+                        )}
+                      </div>
                     </FormField>
                   </div>
 
