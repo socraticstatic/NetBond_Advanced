@@ -580,30 +580,117 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Tabs */}
-      <div className="flex gap-2 border-b border-gray-200">
-        <button
-          onClick={() => setActiveTab('all')}
-          className={`px-4 py-2 font-medium transition-all duration-200 border-b-2 ${
-            activeTab === 'all'
-              ? 'border-blue-600 text-blue-600'
-              : 'border-transparent text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          Browse Products
-        </button>
-        <button
-          onClick={() => setActiveTab('solutions')}
-          className={`px-4 py-2 font-medium transition-all duration-200 border-b-2 ${
-            activeTab === 'solutions'
-              ? 'border-blue-600 text-blue-600'
-              : 'border-transparent text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          Browse Solutions
-        </button>
-      </div>
+    <div className="flex gap-6">
+      {/* Categories Sidebar - Only show for Browse Products */}
+      {activeTab !== 'solutions' && (
+        <div className="w-72 shrink-0 space-y-6 animate-in fade-in slide-in-from-left duration-500">
+          <CollectionGrid
+            collections={[
+              {
+                id: 'personal-devices',
+                name: 'Personal Devices',
+                description: 'IoT and device connectivity',
+                icon: Smartphone,
+                count: 2,
+                color: 'pink'
+              },
+              {
+                id: 'ai',
+                name: 'AI & ML',
+                description: 'AI/ML optimized networking',
+                icon: Cpu,
+                count: 2,
+                color: 'purple'
+              }
+            ]}
+            selectedCategories={[]}
+            onCategoryToggle={() => {}}
+            className="bg-white rounded-lg p-4 border border-gray-200"
+          />
+
+          <CategoryGrid
+            categories={[
+              {
+                id: 'business-continuity',
+                name: 'Business Continuity',
+                description: 'Ensure uninterrupted operations',
+                icon: Clock,
+                count: 3,
+                color: 'blue'
+              },
+              {
+                id: 'secure-collaboration',
+                name: 'Secure Collaboration',
+                description: 'Enable secure team productivity',
+                icon: Users,
+                count: 2,
+                color: 'purple'
+              },
+              {
+                id: 'global-expansion',
+                name: 'Global Expansion',
+                description: 'Extend your business worldwide',
+                icon: Building,
+                count: 2,
+                color: 'amber'
+              },
+              {
+                id: 'data-protection',
+                name: 'Data Protection',
+                description: 'Safeguard critical business data',
+                icon: Shield,
+                count: 1,
+                color: 'rose'
+              },
+              {
+                id: 'hybrid-workforce',
+                name: 'Hybrid Workforce',
+                description: 'Support remote and office teams',
+                icon: Home,
+                count: 2,
+                color: 'emerald'
+              },
+              {
+                id: 'digital-transformation',
+                name: 'Digital Transformation',
+                description: 'Accelerate business innovation',
+                icon: Zap,
+                count: 3,
+                color: 'cyan'
+              }
+            ]}
+            selectedCategories={[]}
+            onCategoryToggle={() => {}}
+            title="Browse by Category"
+            className="bg-white rounded-lg p-4 border border-gray-200"
+          />
+        </div>
+      )}
+
+      <div className="flex-1 space-y-6">
+        {/* Tabs */}
+        <div className="flex gap-6 border-b border-gray-200">
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`pb-3 font-medium transition-all duration-200 border-b-2 -mb-px ${
+              activeTab === 'all'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Browse Products
+          </button>
+          <button
+            onClick={() => setActiveTab('solutions')}
+            className={`pb-3 font-medium transition-all duration-200 border-b-2 -mb-px ${
+              activeTab === 'solutions'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Browse Solutions
+          </button>
+        </div>
 
       {/* Application Solution Zone */}
       {activeTab === 'solutions' && (
@@ -893,6 +980,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
         </div>
         </>
       )}
+      </div>
     </div>
   );
 }
