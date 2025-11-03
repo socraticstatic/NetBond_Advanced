@@ -40,6 +40,7 @@ export function LinkSection({
         updatedAt: '2024-03-20T14:22:00Z',
         cloudRouterName: 'Cloud Router A',
         cloudRouterId: 'cr-1',
+        cloudRouterIds: ['cr-1'],
         bandwidth: '5 Gbps'
       },
       {
@@ -57,6 +58,7 @@ export function LinkSection({
         updatedAt: '2024-02-18T11:30:00Z',
         cloudRouterName: 'Cloud Router A',
         cloudRouterId: 'cr-1',
+        cloudRouterIds: ['cr-1'],
         bandwidth: '2 Gbps'
       },
       {
@@ -74,6 +76,7 @@ export function LinkSection({
         updatedAt: '2024-03-05T16:10:00Z',
         cloudRouterName: 'Cloud Router B',
         cloudRouterId: 'cr-2',
+        cloudRouterIds: ['cr-2'],
         bandwidth: '1 Gbps'
       },
       {
@@ -90,6 +93,7 @@ export function LinkSection({
         createdAt: '2024-02-10T13:20:00Z',
         cloudRouterName: 'Cloud Router B',
         cloudRouterId: 'cr-2',
+        cloudRouterIds: ['cr-2'],
         bandwidth: '2 Gbps'
       }
     ]
@@ -335,6 +339,8 @@ export function LinkSection({
         vlan={editingLink}
         connectionId={connection.id.toString()}
         availableBandwidth={availableBandwidth}
+        cloudRouters={cloudRouters}
+        selectedCloudRouterId={selectedCloudRouter !== 'all' ? selectedCloudRouter : undefined}
       />
 
       {/* Delete Link Confirmation Modal */}
