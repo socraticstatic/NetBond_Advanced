@@ -1,0 +1,341 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Sparkles, ArrowRight, CheckCircle, Clock, DollarSign, Shield, Zap, TrendingUp, Star } from 'lucide-react';
+import { applicationSolutions, solutionCategories, getPopularSolutions, getSolutionsByCategory, ApplicationSolution } from '../../data/applicationSolutions';
+import { Button } from '../common/Button';
+
+export function ApplicationSolutionZone() {
+  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedSolution, setSelectedSolution] = useState<ApplicationSolution | null>(null);
+
+  const displaySolutions = selectedCategory
+    ? getSolutionsByCategory(selectedCategory)
+    : getPopularSolutions();
+
+  const handleBuildNetwork = (solution: ApplicationSolution) => {
+    setSelectedSolution(solution);
+  };
+
+  const handleStartSetup = () => {
+    if (selectedSolution) {
+      navigate('/create', {
+        state: {
+          template: {
+            name: `${selectedSolution.name} Network`,
+            connectionType: selectedSolution.recommendedSetup.connectionType,
+            bandwidth: selectedSolution.recommendedSetup.bandwidth,
+            provider: selectedSolution.providers[0],
+            purpose: selectedSolution.name,
+            useCases: selectedSolution.useCases
+          }
+        }
+      });
+    }
+  };
+
+  const colorClasses: Record<string, { bg: string; text: string; border: string; gradient: string }> = {
+    blue: {
+      bg: 'bg-blue-50',
+      text: 'text-blue-700',
+      border: 'border-blue-200',
+      gradient: 'from-blue-500 to-blue-600'
+    },
+    indigo: {
+      bg: 'bg-indigo-50',
+      text: 'text-indigo-700',
+      border: 'border-indigo-200',
+      gradient: 'from-indigo-500 to-indigo-600'
+    },
+    green: {
+      bg: 'bg-green-50',
+      text: 'text-green-700',
+      border: 'border-green-200',
+      gradient: 'from-green-500 to-green-600'
+    },
+    cyan: {
+      bg: 'bg-cyan-50',
+      text: 'text-cyan-700',
+      border: 'border-cyan-200',
+      gradient: 'from-cyan-500 to-cyan-600'
+    },
+    purple: {
+      bg: 'bg-purple-50',
+      text: 'text-purple-700',
+      border: 'border-purple-200',
+      gradient: 'from-purple-500 to-purple-600'
+    },
+    orange: {
+      bg: 'bg-orange-50',
+      text: 'text-orange-700',
+      border: 'border-orange-200',
+      gradient: 'from-orange-500 to-orange-600'
+    },
+    pink: {
+      bg: 'bg-pink-50',
+      text: 'text-pink-700',
+      border: 'border-pink-200',
+      gradient: 'from-pink-500 to-pink-600'
+    },
+    red: {
+      bg: 'bg-red-50',
+      text: 'text-red-700',
+      border: 'border-red-200',
+      gradient: 'from-red-500 to-red-600'
+    }
+  };
+
+  return (
+    <div className="space-y-8">
+      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl">
+        <div className="flex items-start gap-4">
+          <div className="p-3 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
+            <Sparkles className="h-8 w-8" />
+          </div>
+          <div className="flex-1">
+            <h2 className="text-3xl font-bold mb-2">Solution Builder</h2>
+            <p className="text-blue-100 text-lg mb-4">
+              Build optimized network connections for your business applications
+            </p>
+            <p className="text-white text-opacity-90 leading-relaxed">
+              Select the application you want to connect, and we'll configure the ideal network infrastructure with the right bandwidth, security, and redundancy for your specific use case.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Browse by Category</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+              selectedCategory === null
+                ? 'border-blue-600 bg-blue-50 shadow-md'
+                : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm'
+            }`}
+          >
+            <Star className={`h-6 w-6 mx-auto mb-2 ${selectedCategory === null ? 'text-blue-600' : 'text-gray-600'}`} />
+            <div className={`text-sm font-medium ${selectedCategory === null ? 'text-blue-900' : 'text-gray-700'}`}>
+              Popular
+            </div>
+          </button>
+
+          {solutionCategories.map((category) => {
+            const Icon = category.icon;
+            const isSelected = selectedCategory === category.id;
+            const colors = colorClasses[category.color];
+
+            return (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(isSelected ? null : category.id)}
+                className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                  isSelected
+                    ? `${colors.border} ${colors.bg} shadow-md`
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+                }`}
+              >
+                <Icon className={`h-6 w-6 mx-auto mb-2 ${isSelected ? colors.text : 'text-gray-600'}`} />
+                <div className={`text-sm font-medium ${isSelected ? colors.text : 'text-gray-700'}`}>
+                  {category.name.split(' ')[0]}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          {selectedCategory ? solutionCategories.find(c => c.id === selectedCategory)?.name : 'Popular Solutions'}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {displaySolutions.map((solution) => {
+            const Icon = solution.icon;
+            const colors = colorClasses[solution.color];
+
+            return (
+              <div
+                key={solution.id}
+                className="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group"
+              >
+                <div className={`bg-gradient-to-r ${colors.gradient} p-6 text-white`}>
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-white bg-opacity-20 rounded-lg backdrop-blur-sm">
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <h4 className="text-xl font-bold">{solution.name}</h4>
+                        <p className="text-sm text-white text-opacity-90">{solution.category}</p>
+                      </div>
+                    </div>
+                    {solution.popular && (
+                      <div className="px-2 py-1 bg-yellow-400 bg-opacity-90 rounded-full">
+                        <Star className="h-4 w-4 text-yellow-900" fill="currentColor" />
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-sm text-white text-opacity-90">{solution.description}</p>
+                </div>
+
+                <div className="p-6 space-y-4">
+                  <div>
+                    <h5 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Common Use Cases</h5>
+                    <ul className="space-y-1">
+                      {solution.useCases.slice(0, 3).map((useCase, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
+                          <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0 mt-0.5" />
+                          <span>{useCase}</span>
+                        </li>
+                      ))}
+                      {solution.useCases.length > 3 && (
+                        <li className="text-xs text-gray-500 ml-6">
+                          +{solution.useCases.length - 3} more
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+
+                  <div className={`${colors.bg} ${colors.border} border rounded-lg p-3`}>
+                    <h5 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+                      Recommended Setup
+                    </h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center gap-2">
+                        <Zap className={`h-4 w-4 ${colors.text}`} />
+                        <span className="text-gray-700">{solution.recommendedSetup.connectionType}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className={`h-4 w-4 ${colors.text}`} />
+                        <span className="text-gray-700">{solution.recommendedSetup.bandwidth}</span>
+                      </div>
+                      {solution.recommendedSetup.redundancy && (
+                        <div className="flex items-center gap-2">
+                          <Shield className={`h-4 w-4 ${colors.text}`} />
+                          <span className="text-gray-700">Redundancy Enabled</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                    <div>
+                      <div className="flex items-center gap-1 text-gray-600">
+                        <Clock className="h-4 w-4" />
+                        <span className="text-xs">{solution.estimatedSetupTime}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-gray-900 mt-1">
+                        <DollarSign className="h-5 w-5" />
+                        <span className="text-lg font-bold">{solution.monthlyStartingPrice}</span>
+                        <span className="text-xs text-gray-600">/month</span>
+                      </div>
+                    </div>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => handleBuildNetwork(solution)}
+                      className={`bg-gradient-to-r ${colors.gradient} hover:opacity-90`}
+                    >
+                      Configure
+                      <ArrowRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {selectedSolution && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black bg-opacity-70 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
+            <div className={`bg-gradient-to-r ${colorClasses[selectedSolution.color].gradient} p-6 text-white`}>
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
+                    <selectedSolution.icon className="h-8 w-8" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold">{selectedSolution.name} Network</h3>
+                    <p className="text-white text-opacity-90">Pre-configured network solution</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedSolution(null)}
+                  className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+                >
+                  <ArrowRight className="h-5 w-5 rotate-90" />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div>
+                <h4 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">What You'll Get</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {selectedSolution.benefits.map((benefit, idx) => (
+                    <div key={idx} className="flex items-start gap-2 p-3 bg-green-50 rounded-lg border border-green-200">
+                      <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm text-gray-700">{benefit}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">Security Features</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {selectedSolution.recommendedSetup.security.map((feature, idx) => (
+                    <div key={idx} className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                      <Shield className="h-4 w-4 text-blue-600" />
+                      <span className="text-sm text-gray-700">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+                <h4 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">Setup Summary</h4>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <div className="text-xs text-gray-600 mb-1">Connection Type</div>
+                    <div className="text-sm font-semibold text-gray-900">{selectedSolution.recommendedSetup.connectionType}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-600 mb-1">Bandwidth</div>
+                    <div className="text-sm font-semibold text-gray-900">{selectedSolution.recommendedSetup.bandwidth}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-600 mb-1">Cloud Provider</div>
+                    <div className="text-sm font-semibold text-gray-900">{selectedSolution.providers.join(', ')}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-600 mb-1">Setup Time</div>
+                    <div className="text-sm font-semibold text-gray-900">{selectedSolution.estimatedSetupTime}</div>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-1 mb-4">
+                  <span className="text-sm text-gray-600">Starting at</span>
+                  <span className="text-3xl font-bold text-gray-900">${selectedSolution.monthlyStartingPrice}</span>
+                  <span className="text-sm text-gray-600">/month</span>
+                </div>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  onClick={handleStartSetup}
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                >
+                  Start Configuration
+                  <ArrowRight className="h-5 w-5 ml-2" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

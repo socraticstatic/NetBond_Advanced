@@ -8,6 +8,7 @@ import { MarketplaceItem, MarketplaceFilter, MarketplaceCategory } from '../type
 import { Button } from './common/Button';
 import { CategoryGrid } from './marketplace/CategoryGrid';
 import { CollectionGrid } from './marketplace/CollectionGrid';
+import { ApplicationSolutionZone } from './marketplace/ApplicationSolutionZone';
 
 interface MarketplaceProps {
   onSelectItem: (item: MarketplaceItem) => void;
@@ -512,7 +513,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
   });
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<'popular' | 'rating' | 'price'>('popular');
-  const [activeTab, setActiveTab] = useState<'all' | 'connections' | 'addons' | 'vnf' | 'api' | 'managed'>('all');
+  const [activeTab, setActiveTab] = useState<'solutions' | 'all' | 'connections' | 'addons' | 'vnf' | 'api' | 'managed'>('solutions');
 
   const getIcon = (iconType: string) => {
     switch (iconType) {
@@ -666,17 +667,49 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
       </div>
 
       <div className="flex-1 space-y-6 relative">
-        {/* Hero Section */}
-        <div className="bg-gradient-to-br from-[#003184] via-[#0047BB] to-[#005CDB] rounded-2xl p-8 shadow-xl text-white mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center mb-3">
-                <Sparkles className="h-6 w-6 mr-2" />
-                <h1 className="text-2xl font-bold">Network Marketplace</h1>
-              </div>
-              <p className="text-blue-100 text-sm max-w-xl">
-                Discover enterprise-grade network solutions, security add-ons, and managed services. Build your perfect infrastructure.
-              </p>
+        {/* Tabs */}
+        <div className="flex gap-2 border-b border-gray-200 mb-6">
+          <button
+            onClick={() => setActiveTab('solutions')}
+            className={`px-4 py-2 font-medium transition-all duration-200 border-b-2 ${
+              activeTab === 'solutions'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Solution Builder
+          </button>
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`px-4 py-2 font-medium transition-all duration-200 border-b-2 ${
+              activeTab === 'all'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Browse Products
+          </button>
+        </div>
+
+        {/* Application Solution Zone */}
+        {activeTab === 'solutions' && (
+          <ApplicationSolutionZone />
+        )}
+
+        {/* Traditional Marketplace */}
+        {activeTab !== 'solutions' && (
+          <>
+            {/* Hero Section */}
+            <div className="bg-gradient-to-br from-[#003184] via-[#0047BB] to-[#005CDB] rounded-2xl p-8 shadow-xl text-white mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center mb-3">
+                    <Sparkles className="h-6 w-6 mr-2" />
+                    <h1 className="text-2xl font-bold">Network Marketplace</h1>
+                  </div>
+                  <p className="text-blue-100 text-sm max-w-xl">
+                    Discover enterprise-grade network solutions, security add-ons, and managed services. Build your perfect infrastructure.
+                  </p>
             </div>
             <div className="text-right">
               <div className="text-3xl font-bold">{getFilteredItems().length}</div>
@@ -944,6 +977,8 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </div>
           ))}
         </div>
+          </>
+        )}
       </div>
     </div>
   );
