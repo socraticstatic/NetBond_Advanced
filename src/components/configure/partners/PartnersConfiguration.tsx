@@ -146,6 +146,13 @@ export function PartnersConfiguration() {
           </div>
           <div className="flex items-center space-x-4">
             <Button
+              variant="primary"
+              icon={Plus}
+              onClick={handleAddPartner}
+            >
+              Add Partner
+            </Button>
+            <Button
               variant="outline"
               icon={Filter}
               onClick={() => setShowFilters(!showFilters)}
@@ -158,13 +165,6 @@ export function PartnersConfiguration() {
               onClick={handleExport}
             >
               Export
-            </Button>
-            <Button
-              variant="primary"
-              icon={Plus}
-              onClick={handleAddPartner}
-            >
-              Add Partner
             </Button>
           </div>
         </div>
