@@ -137,8 +137,7 @@ export function VNFTable({
       pageSize={50}
       showPagination={vnfs.length > 50}
       stickyHeader={true}
-      exportFilename="network-functions.csv"
-      showExport={true}
+      showExport={false}
       rowActions={(vnf) => (
         <OverflowMenu
           items={[

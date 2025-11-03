@@ -116,31 +116,15 @@ export function VNFSection({
 
       {/* Table Card */}
       <div className="bg-white rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900">All Network Functions</h3>
-          <div className="flex items-center space-x-3">
-            {/* Type Filter */}
-            <select
-              value={vnfTypeFilter}
-              onChange={(e) => setVnfTypeFilter(e.target.value as VNFType | 'all')}
-              className="form-control text-sm border-gray-300"
-            >
-              <option value="all">All Types</option>
-              <option value="firewall">Firewall</option>
-              <option value="sdwan">SD-WAN</option>
-              <option value="router">Router</option>
-              <option value="vnat">NAT</option>
-              <option value="custom">Custom</option>
-            </select>
-
-            {/* Search */}
-            <div className="relative">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center justify-between gap-4">
+            <div className="relative flex-1 max-w-md">
               <input
                 type="text"
                 placeholder="Search VNFs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm w-64"
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm w-full"
               />
               <svg
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4"
@@ -155,6 +139,52 @@ export function VNFSection({
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
+            </div>
+            <div className="flex items-center gap-3">
+              <select
+                value={vnfTypeFilter}
+                onChange={(e) => setVnfTypeFilter(e.target.value as VNFType | 'all')}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                <option value="all">All Types</option>
+                <option value="firewall">Firewall</option>
+                <option value="sdwan">SD-WAN</option>
+                <option value="router">Router</option>
+                <option value="vnat">NAT</option>
+                <option value="custom">Custom</option>
+              </select>
+              <button
+                onClick={() => {
+                  const getTypeName = (type: VNFType) => {
+                    switch(type) {
+                      case 'firewall': return 'Firewall';
+                      case 'sdwan': return 'SD-WAN';
+                      case 'router': return 'Router';
+                      case 'vnat': return 'NAT';
+                      case 'custom': return 'Custom';
+                      default: return type.toUpperCase();
+                    }
+                  };
+                  const headers = ['Name', 'Type', 'Status'].join(',');
+                  const rows = filteredVNFs.map(vnf =>
+                    `"${vnf.name}","${getTypeName(vnf.type)}","${vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)}"`
+                  );
+                  const csv = [headers, ...rows].join('\n');
+                  const blob = new Blob([csv], { type: 'text/csv' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'network-functions.csv';
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Export
+              </button>
             </div>
           </div>
         </div>

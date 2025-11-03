@@ -293,25 +293,64 @@ export function LinkSection({
 
       {/* Table Card */}
       <div className="bg-white rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900">All Links</h3>
-          <div className="flex items-center space-x-3">
-            {/* Cloud Router Filter */}
-            <select
-              value={selectedCloudRouter}
-              onChange={(e) => setSelectedCloudRouter(e.target.value)}
-              className="form-control text-sm border-gray-300"
-            >
-              <option value="all">All Cloud Routers</option>
-              {cloudRouters.map(router => (
-                <option key={router.id} value={router.id}>{router.name}</option>
-              ))}
-            </select>
-
-            <LinkSearchBar
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-            />
+        <div className="px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center justify-between gap-4">
+            <div className="relative flex-1 max-w-md">
+              <input
+                type="text"
+                placeholder="Search links..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm w-full"
+              />
+              <svg
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+            <div className="flex items-center gap-3">
+              <select
+                value={selectedCloudRouter}
+                onChange={(e) => setSelectedCloudRouter(e.target.value)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                <option value="all">All Cloud Routers</option>
+                {cloudRouters.map(router => (
+                  <option key={router.id} value={router.id}>{router.name}</option>
+                ))}
+              </select>
+              <button
+                onClick={() => {
+                  const headers = ['VLAN ID', 'Name', 'Status', 'Cloud Router'].join(',');
+                  const rows = filteredLinks.map(link =>
+                    `"${link.vlanId}","${link.name}","${link.status.charAt(0).toUpperCase() + link.status.slice(1)}","${link.cloudRouterName || 'Not assigned'}"`
+                  );
+                  const csv = [headers, ...rows].join('\n');
+                  const blob = new Blob([csv], { type: 'text/csv' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = 'links.csv';
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Export
+              </button>
+            </div>
           </div>
         </div>
 
