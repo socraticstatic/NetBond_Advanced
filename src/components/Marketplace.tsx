@@ -622,65 +622,63 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
           </div>
         </div>
 
-        {/* Category Grid - Only show for Browse Products */}
-        {activeTab !== 'solutions' && (
-          <CategoryGrid
-            categories={[
-              {
-                id: 'business-continuity',
-                name: 'Business Continuity',
-                description: 'Ensure uninterrupted operations',
-                icon: Clock,
-                count: 3,
-                color: 'blue'
-              },
-              {
-                id: 'secure-collaboration',
-                name: 'Secure Collaboration',
-                description: 'Enable secure team productivity',
-                icon: Users,
-                count: 2,
-                color: 'purple'
-              },
-              {
-                id: 'global-expansion',
-                name: 'Global Expansion',
-                description: 'Extend your business worldwide',
-                icon: Building,
-                count: 2,
-                color: 'amber'
-              },
-              {
-                id: 'data-protection',
-                name: 'Data Protection',
-                description: 'Safeguard critical business data',
-                icon: Shield,
-                count: 1,
-                color: 'rose'
-              },
-              {
-                id: 'hybrid-workforce',
-                name: 'Hybrid Workforce',
-                description: 'Support remote and office teams',
-                icon: Home,
-                count: 2,
-                color: 'emerald'
-              },
-              {
-                id: 'digital-transformation',
-                name: 'Digital Transformation',
-                description: 'Accelerate business innovation',
-                icon: Zap,
-                count: 3,
-                color: 'cyan'
-              }
-            ]}
-            selectedCategories={[]}
-            onCategoryToggle={() => {}}
-            title="Browse by Category"
-            className="bg-white rounded-lg p-4 border border-gray-200"
-          />
-        )}
+        {/* Category Grid - Always visible */}
+        <CategoryGrid
+          categories={[
+            {
+              id: 'business-continuity',
+              name: 'Business Continuity',
+              description: 'Ensure uninterrupted operations',
+              icon: Clock,
+              count: 3,
+              color: 'blue'
+            },
+            {
+              id: 'secure-collaboration',
+              name: 'Secure Collaboration',
+              description: 'Enable secure team productivity',
+              icon: Users,
+              count: 2,
+              color: 'purple'
+            },
+            {
+              id: 'global-expansion',
+              name: 'Global Expansion',
+              description: 'Extend your business worldwide',
+              icon: Building,
+              count: 2,
+              color: 'amber'
+            },
+            {
+              id: 'data-protection',
+              name: 'Data Protection',
+              description: 'Safeguard critical business data',
+              icon: Shield,
+              count: 1,
+              color: 'rose'
+            },
+            {
+              id: 'hybrid-workforce',
+              name: 'Hybrid Workforce',
+              description: 'Support remote and office teams',
+              icon: Home,
+              count: 2,
+              color: 'emerald'
+            },
+            {
+              id: 'digital-transformation',
+              name: 'Digital Transformation',
+              description: 'Accelerate business innovation',
+              icon: Zap,
+              count: 3,
+              color: 'cyan'
+            }
+          ]}
+          selectedCategories={[]}
+          onCategoryToggle={() => {}}
+          title="Browse by Category"
+          className="bg-white rounded-lg p-4 border border-gray-200"
+        />
       </div>
 
       <div className="flex-1 space-y-6">
