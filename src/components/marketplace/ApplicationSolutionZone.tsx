@@ -178,10 +178,6 @@ export function ApplicationSolutionZone() {
 
                   <div className="pt-4 border-t border-gray-200 space-y-3">
                     <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-1.5 text-gray-600">
-                        <Clock className="h-4 w-4" />
-                        <span>{solution.estimatedSetupTime}</span>
-                      </div>
                       <div className="flex items-baseline gap-0.5">
                         <DollarSign className="h-4 w-4 text-gray-700" />
                         <span className="text-lg font-bold text-gray-900">{solution.monthlyStartingPrice}</span>
