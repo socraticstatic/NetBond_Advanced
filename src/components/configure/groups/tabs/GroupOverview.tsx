@@ -96,7 +96,7 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
               <div className="p-2 bg-green-50 rounded-lg">
                 <Layers className="h-5 w-5 text-green-500" />
               </div>
-              <h4 className="ml-3 text-base font-medium text-gray-900">VLANs</h4>
+              <h4 className="ml-3 text-base font-medium text-gray-900">Links</h4>
             </div>
             <div className="flex items-baseline justify-between">
               <div className="text-2xl font-bold text-gray-900">{networkMetrics.totalVLANs}</div>
@@ -107,7 +107,7 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
                 onClick={() => navigate(`/groups/${group.id}/network`)}
                 className="text-sm text-brand-blue hover:text-brand-darkBlue flex items-center"
               >
-                View VLANs
+                View Links
                 <ArrowRight className="h-4 w-4 ml-1" />
               </button>
             </div>
@@ -145,7 +145,7 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
                 <Layers className="h-5 w-5 text-green-500 mr-2" />
-                <h4 className="text-base font-medium text-gray-900">VLANs by Type</h4>
+                <h4 className="text-base font-medium text-gray-900">Links by Type</h4>
               </div>
               <div>
                 <span className="px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">
@@ -177,7 +177,7 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
                 className="w-full"
                 onClick={() => navigate(`/groups/${group.id}/network`)}
               >
-                View All VLANs
+                View All Links
               </Button>
             </div>
           </div>
