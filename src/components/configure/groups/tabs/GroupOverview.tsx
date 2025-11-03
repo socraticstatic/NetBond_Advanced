@@ -10,15 +10,25 @@ interface GroupOverviewProps {
 }
 
 export function GroupOverview({ group, connections, users }: GroupOverviewProps) {
+  // Helper function to parse bandwidth string to number (in Gbps)
+  const parseBandwidth = (bandwidth: string): number => {
+    if (!bandwidth) return 0;
+    const match = bandwidth.match(/(\d+(?:\.\d+)?)\s*(Gbps|Mbps)/i);
+    if (!match) return 0;
+    const value = parseFloat(match[1]);
+    const unit = match[2].toLowerCase();
+    return unit === 'mbps' ? value / 1000 : value;
+  };
+
   // Calculate aggregated metrics from connections
   const activeConnections = connections.filter(c => c.status === 'Active').length;
-  const totalBandwidth = connections.reduce((sum, c) => sum + (c.bandwidth || 0), 0);
+  const totalBandwidth = connections.reduce((sum, c) => sum + parseBandwidth(c.bandwidth), 0);
   const avgUtilization = connections.length > 0
-    ? connections.reduce((sum, c) => sum + (Math.random() * 100), 0) / connections.length
+    ? connections.reduce((sum, c) => sum + (c.performance?.bandwidthUtilization || 0), 0) / connections.length
     : 0;
 
   // Calculate cumulative billing
-  const monthlyConnectionCost = connections.reduce((sum, c) => sum + (c.monthlyCost || 250), 0);
+  const monthlyConnectionCost = connections.reduce((sum, c) => sum + (c.billing?.total || 250), 0);
   const totalMonthlyCost = group.billing?.monthlyRate || monthlyConnectionCost;
 
   // Performance health calculations
