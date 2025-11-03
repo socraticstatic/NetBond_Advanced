@@ -114,7 +114,7 @@ export function ApplicationSolutionZone() {
                 key={solution.id}
                 className="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group flex flex-col"
               >
-                <div className={`bg-gradient-to-r ${colors.gradient} p-6 text-white min-h-[160px] flex flex-col`}>
+                <div className={`bg-gradient-to-r ${colors.gradient} p-6 text-white h-[160px] flex flex-col`}>
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-white bg-opacity-20 rounded-lg backdrop-blur-sm">
@@ -131,7 +131,7 @@ export function ApplicationSolutionZone() {
                       </div>
                     )}
                   </div>
-                  <p className="text-sm text-white text-opacity-90">{solution.description}</p>
+                  <p className="text-sm text-white text-opacity-90 line-clamp-3">{solution.description}</p>
                 </div>
 
                 <div className="p-6 space-y-4 flex-1 flex flex-col">
