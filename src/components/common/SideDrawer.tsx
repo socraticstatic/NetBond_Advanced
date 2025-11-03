@@ -12,10 +12,10 @@ interface SideDrawerProps {
 }
 
 const sizeClasses = {
-  sm: 'max-w-md',
-  md: 'max-w-2xl',
-  lg: 'max-w-4xl',
-  xl: 'max-w-6xl'
+  sm: 'max-w-sm',
+  md: 'max-w-lg',
+  lg: 'max-w-2xl',
+  xl: 'max-w-4xl'
 };
 
 export function SideDrawer({ isOpen, onClose, title, children, size = 'lg', footer }: SideDrawerProps) {
