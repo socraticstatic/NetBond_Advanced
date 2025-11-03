@@ -829,30 +829,30 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
           {getFilteredItems().map((item, index) => (
             <div
               key={item.id}
-              className="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-2xl hover:border-[#003184] hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-hidden"
+              className="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-2xl hover:border-[#003184] hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-visible"
             >
-              {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#003184]/0 to-[#003184]/0 group-hover:from-[#003184]/5 group-hover:to-transparent transition-all duration-300 pointer-events-none" />
-
               {/* Recommendation badge on the first item */}
               {index === 0 && (
-                <div className="absolute -top-3 -right-3 z-10">
+                <div className="absolute -top-3 -right-3 z-50">
                   <div className="flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold shadow-lg animate-pulse">
                     <Star className="h-3 w-3 mr-1 fill-current" />
                     Top Pick
                   </div>
                 </div>
               )}
-              
+
               {/* Recommendation badge for the second item */}
               {index === 1 && (
-                <div className="absolute -top-3 -right-3 z-10">
+                <div className="absolute -top-3 -right-3 z-50">
                   <div className="flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 via-[#003184] to-blue-600 text-white text-xs font-bold shadow-lg">
                     <Zap className="h-3 w-3 mr-1.5 fill-current" />
                     Recommended
                   </div>
                 </div>
               )}
+
+              {/* Gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#003184]/0 to-[#003184]/0 group-hover:from-[#003184]/5 group-hover:to-transparent transition-all duration-300 pointer-events-none rounded-xl" />
 
               <div className="relative p-5 border-b border-gray-100">
                 <div className="flex items-center justify-between mb-3">

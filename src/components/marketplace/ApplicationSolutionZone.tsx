@@ -82,7 +82,7 @@ export function ApplicationSolutionZone() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" style={{ isolation: 'auto' }}>
       <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
@@ -104,7 +104,7 @@ export function ApplicationSolutionZone() {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Available Solutions
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ isolation: 'auto' }}>
           {displaySolutions.map((solution) => {
             const Icon = solution.icon;
             const colors = colorClasses[solution.color];
