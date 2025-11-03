@@ -112,7 +112,7 @@ function EnhancedTableComponent<T>({
 
   return (
     <div className="flex flex-col">
-      <div className="w-full overflow-x-auto">
+      <div className="w-full overflow-visible">
         <table className="w-full divide-y divide-gray-200">
           <thead className={`bg-gray-50 ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
             <tr>

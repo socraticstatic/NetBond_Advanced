@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { MoreVertical } from 'lucide-react';
 
 interface OverflowMenuItem {
@@ -17,16 +18,17 @@ interface OverflowMenuProps {
   onOpenChange?: (isOpen: boolean) => void;
 }
 
-export function OverflowMenu({ 
-  items, 
-  containerRef, 
+export function OverflowMenu({
+  items,
+  containerRef,
   className = '',
   isOpen: controlledIsOpen,
-  onOpenChange 
+  onOpenChange
 }: OverflowMenuProps) {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const isOpen = controlledIsOpen ?? internalIsOpen;
   const setIsOpen = (value: boolean) => {
@@ -38,9 +40,23 @@ export function OverflowMenu({
   };
 
   useEffect(() => {
+    if (isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      const menuHeight = 200;
+      const viewportHeight = window.innerHeight;
+      const spaceBelow = viewportHeight - rect.bottom;
+
+      setMenuPosition({
+        top: spaceBelow < menuHeight ? rect.top - menuHeight + 40 : rect.bottom + 4,
+        left: rect.right - 192
+      });
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
-        menuRef.current && 
+        menuRef.current &&
         !menuRef.current.contains(event.target as Node) &&
         !buttonRef.current?.contains(event.target as Node)
       ) {
@@ -54,46 +70,25 @@ export function OverflowMenu({
     }
   }, [isOpen]);
 
-  // Calculate dropdown position
-  const getDropdownStyles = () => {
-    if (!containerRef?.current || !menuRef.current || !buttonRef.current) return {};
-
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const buttonRect = buttonRef.current.getBoundingClientRect();
-    const menuRect = menuRef.current.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    
-    const spaceBelow = viewportHeight - buttonRect.bottom;
-    const shouldShowAbove = spaceBelow < menuRect.height;
-
-    return {
-      position: 'absolute' as const,
-      top: shouldShowAbove ? 'auto' : buttonRect.height + 4,
-      bottom: shouldShowAbove ? buttonRect.height + 4 : 'auto',
-      right: 0,
-      zIndex: 40
-    };
-  };
-
   const handleItemClick = (item: OverflowMenuItem) => {
     item.onClick();
     setIsOpen(false);
   };
 
   return (
-    <div className={`relative ${className}`} ref={menuRef}>
+    <>
       <button
         ref={buttonRef}
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+        className={`p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors ${className}`}
       >
         <MoreVertical className="h-5 w-5" />
       </button>
 
-      {isOpen && (
+      {isOpen && createPortal(
         <>
           <div
             className="fixed inset-0"
@@ -103,9 +98,14 @@ export function OverflowMenu({
               setIsOpen(false);
             }}
           />
-          <div 
-            className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100"
-            style={getDropdownStyles()}
+          <div
+            ref={menuRef}
+            className="fixed w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+            style={{
+              top: menuPosition.top,
+              left: menuPosition.left,
+              zIndex: 50
+            }}
           >
             <div className="py-1" role="menu">
               {items.map((item) => (
@@ -129,8 +129,9 @@ export function OverflowMenu({
               ))}
             </div>
           </div>
-        </>
+        </>,
+        document.body
       )}
-    </div>
+    </>
   );
 }
