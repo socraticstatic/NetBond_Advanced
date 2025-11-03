@@ -126,9 +126,7 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
 
   return (
     <div className="fixed inset-0 z-[9999]">
-      <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm animate-in fade-in duration-300" />
-
-      {targetRect && step.targetSelector && (
+      {targetRect && step.targetSelector ? (
         <>
           <div
             className="absolute rounded-lg animate-in fade-in zoom-in-95 duration-300"
@@ -137,8 +135,9 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
               left: targetRect.left - (step.highlightPadding || 8),
               width: targetRect.width + (step.highlightPadding || 8) * 2,
               height: targetRect.height + (step.highlightPadding || 8) * 2,
-              boxShadow: '0 0 0 4px rgba(59, 130, 246, 0.5), 0 0 0 9999px rgba(0, 0, 0, 0.6)',
-              pointerEvents: 'none'
+              boxShadow: '0 0 0 4px rgba(59, 130, 246, 0.6), 0 0 0 9999px rgba(0, 0, 0, 0.75)',
+              pointerEvents: 'none',
+              zIndex: 10000
             }}
           />
 
@@ -149,12 +148,15 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
               left: targetRect.left - (step.highlightPadding || 8) - 4,
               width: targetRect.width + (step.highlightPadding || 8) * 2 + 8,
               height: targetRect.height + (step.highlightPadding || 8) * 2 + 8,
-              border: '2px solid rgba(59, 130, 246, 0.8)',
-              borderRadius: '0.5rem',
-              pointerEvents: 'none'
+              border: '3px solid rgba(59, 130, 246, 0.9)',
+              borderRadius: '0.75rem',
+              pointerEvents: 'none',
+              zIndex: 10001
             }}
           />
         </>
+      ) : (
+        <div className="absolute inset-0 bg-black bg-opacity-70 animate-in fade-in duration-300" />
       )}
 
       <div
@@ -164,7 +166,8 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
           top: tooltipPosition.top,
           left: tooltipPosition.left,
           maxWidth: '420px',
-          width: step.placement === 'center' ? '420px' : 'auto'
+          width: step.placement === 'center' ? '420px' : 'auto',
+          zIndex: 10002
         }}
       >
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 text-white">
