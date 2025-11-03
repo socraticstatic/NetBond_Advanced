@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { X, Tag, AlertTriangle, Plus, CheckCircle, HelpCircle, Info } from 'lucide-react';
+import { Tag, AlertTriangle, Plus, CheckCircle, HelpCircle, Info } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { FormField } from '../../form/FormField';
+import { SideDrawer } from '../../common/SideDrawer';
 
 export interface VLAN {
   id: string;
@@ -211,46 +212,59 @@ export function VLANModal({
     onClose();
   };
 
-  if (!isOpen) return null;
+  const drawerTitle = (
+    <div className="flex items-center">
+      <span>{isEditMode ? 'Edit Link' : 'Add New Link'}</span>
+      {isEditMode && (
+        <span className="ml-2 px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-full">
+          ID: {vlan?.vlanId}
+        </span>
+      )}
+    </div>
+  );
+
+  const drawerFooter = (
+    <div className="flex justify-end space-x-3">
+      <Button
+        variant="outline"
+        onClick={onClose}
+      >
+        Cancel
+      </Button>
+      <Button
+        variant="primary"
+        type="submit"
+        form="vlan-form"
+      >
+        {isEditMode ? 'Update Link' : 'Create Link'}
+      </Button>
+    </div>
+  );
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[calc(100vh-2rem)] overflow-hidden flex flex-col">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h3 className="text-lg font-medium text-gray-900 flex items-center">
-            {isEditMode ? 'Edit Link' : 'Add New Link'}
-            {isEditMode && (
-              <span className="ml-2 px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-full">
-                ID: {vlan?.vlanId}
-              </span>
-            )}
-          </h3>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-500"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        {/* Warning message when editing */}
-        {isEditMode && (
-          <div className="m-6 mb-0 bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start">
-            <AlertTriangle className="h-5 w-5 text-amber-500 mt-0.5 mr-3 flex-shrink-0" />
-            <div>
-              <p className="text-sm text-amber-800 font-medium">
-                Warning: Editing Link Configuration
-              </p>
-              <p className="text-sm text-amber-700 mt-1">
-                Changes to link settings may impact network traffic. Ensure all connected systems are properly configured for the updated settings.
-              </p>
-            </div>
+    <SideDrawer
+      isOpen={isOpen}
+      onClose={onClose}
+      title={drawerTitle as any}
+      size="lg"
+      footer={drawerFooter}
+    >
+      {/* Warning message when editing */}
+      {isEditMode && (
+        <div className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start">
+          <AlertTriangle className="h-5 w-5 text-amber-500 mt-0.5 mr-3 flex-shrink-0" />
+          <div>
+            <p className="text-sm text-amber-800 font-medium">
+              Warning: Editing Link Configuration
+            </p>
+            <p className="text-sm text-amber-700 mt-1">
+              Changes to link settings may impact network traffic. Ensure all connected systems are properly configured for the updated settings.
+            </p>
           </div>
-        )}
-        
-        {/* Body - Form */}
-        <div className="px-6 py-4 flex-1 overflow-y-auto">
+        </div>
+      )}
+
+      <div>
           <form id="vlan-form" onSubmit={handleSubmit}>
             <div className="space-y-6">
               {/* Basic VLAN Information */}
@@ -530,60 +544,8 @@ export function VLANModal({
               )}
             </div>
           </form>
-        </div>
-
-        {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
-          <Button
-            variant="outline"
-            onClick={onClose}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            type="submit"
-            form="vlan-form"
-          >
-            {isEditMode ? 'Update Link' : 'Create Link'}
-          </Button>
-        </div>
       </div>
-
-      {/* Add custom styles for form fields within the VLAN modal */}
-      <style jsx>{`
-        /* Custom styles for VLAN modal inputs */
-        .vlan-input {
-          border-radius: 0.375rem !important; /* More squared corners */
-          transition: all 0.2s ease;
-        }
-        
-        .vlan-input:focus {
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
-          outline: none;
-          border-radius: 0.375rem !important; /* Maintain squared corners on focus */
-        }
-        
-        /* Ensure all form elements in the VLAN modal use the custom style */
-        #vlan-form input[type="text"],
-        #vlan-form input[type="number"],
-        #vlan-form select,
-        #vlan-form textarea {
-          border-radius: 0.375rem !important;
-        }
-        
-        #vlan-form input[type="text"]:focus,
-        #vlan-form input[type="number"]:focus,
-        #vlan-form select:focus,
-        #vlan-form textarea:focus {
-          border-radius: 0.375rem !important;
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
-          outline: none;
-        }
-      `}</style>
-    </div>
+    </SideDrawer>
   );
 }
 
