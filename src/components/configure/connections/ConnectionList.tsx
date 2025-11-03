@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MoreVertical, Edit2, Trash2, Play, Pause, Search, Filter, Download } from 'lucide-react';
+import { MoreVertical, Edit2, Trash2, Play, Pause, Search, Filter, Download, ChevronRight } from 'lucide-react';
 import { Connection } from '../../../types';
 import { BaseTable } from '../../common/BaseTable';
 import { OverflowMenu } from '../../common/OverflowMenu';
@@ -9,7 +9,7 @@ import { useStore } from '../../../store/useStore';
 
 interface ConnectionListProps {
   searchQuery: string;
-  onSelect: (id: string) => void;
+  onSelect: (id: string, name: string) => void;
   selectedConnection: string | null;
   onUpdateConnection?: (id: string, updates: Partial<Connection>) => void;
 }
@@ -94,6 +94,19 @@ export function ConnectionList({
 
   const columns = [
     {
+      id: 'select',
+      label: '',
+      render: (connection: Connection) => (
+        <div className="flex items-center justify-center">
+          {selectedConnection === connection.id.toString() ? (
+            <div className="h-2 w-2 rounded-full bg-fw-success" />
+          ) : (
+            <ChevronRight className="h-5 w-5 text-gray-400" />
+          )}
+        </div>
+      )
+    },
+    {
       id: 'name',
       label: 'Name',
       sortable: true,
@@ -172,6 +185,21 @@ export function ConnectionList({
 
   return (
     <>
+      {/* Help Banner */}
+      <div className="mb-4 bg-gradient-to-r from-fw-wash to-fw-base border border-fw-secondary rounded-lg p-4">
+        <div className="flex items-start">
+          <div className="flex-shrink-0">
+            <Activity className="h-6 w-6 text-fw-link" />
+          </div>
+          <div className="ml-3 flex-1">
+            <h3 className="text-sm font-medium text-fw-heading">Connection Management</h3>
+            <p className="text-sm text-fw-bodyLight mt-1">
+              Click on any connection row to select it, then use the <strong>Logs</strong> or <strong>Test</strong> tabs to view detailed information.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Search and Controls */}
       <div className="bg-white p-4 rounded-lg border border-gray-200 mb-6">
         <div className="flex items-center justify-between gap-4">
@@ -219,9 +247,11 @@ export function ConnectionList({
           columns={columns}
           data={filteredConnections}
           keyField="id"
-          onRowClick={(connection) => onSelect(connection.id.toString())}
-          rowClassName={(connection) => 
-            selectedConnection === connection.id.toString() ? 'bg-brand-lightBlue' : ''
+          onRowClick={(connection) => onSelect(connection.id.toString(), connection.name)}
+          rowClassName={(connection) =>
+            selectedConnection === connection.id.toString()
+              ? 'bg-fw-wash border-l-4 border-fw-link hover:bg-fw-wash cursor-pointer'
+              : 'hover:bg-gray-50 cursor-pointer transition-colors'
           }
           actions={(connection) => (
             <OverflowMenu
