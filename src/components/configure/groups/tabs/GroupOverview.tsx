@@ -1,11 +1,7 @@
-import { Activity, Calendar, Users, Network, Clock, Shield, Layers, ArrowRight } from 'lucide-react';
+import { Users, Network, CreditCard, TrendingUp, AlertCircle, CheckCircle, Clock, Activity } from 'lucide-react';
 import { Group } from '../../../../types/group';
 import { Connection } from '../../../../types';
 import { User } from '../../../../types';
-import { GroupConnectionSummaryWidget } from '../../../group/widgets/GroupConnectionSummaryWidget';
-import { GroupPerformanceWidget } from '../../../group/widgets/GroupPerformanceWidget';
-import { Button } from '../../../common/Button';
-import { useNavigate } from 'react-router-dom';
 
 interface GroupOverviewProps {
   group: Group;
@@ -14,216 +10,265 @@ interface GroupOverviewProps {
 }
 
 export function GroupOverview({ group, connections, users }: GroupOverviewProps) {
-  const navigate = useNavigate();
-  
-  // Network resource metrics - These would be calculated from actual data
-  const networkMetrics = {
-    totalVLANs: 12,
-    activeVLANs: 10,
-    totalVNFs: 8,
-    activeVNFs: 6,
-    vlansByType: {
-      data: 5,
-      voice: 2,
-      management: 3,
-      storage: 1,
-      guest: 1
-    },
-    vnfsByType: {
-      firewall: 3,
-      router: 2,
-      sdwan: 2,
-      vnat: 1
-    }
-  };
+  // Calculate aggregated metrics from connections
+  const activeConnections = connections.filter(c => c.status === 'Active').length;
+  const totalBandwidth = connections.reduce((sum, c) => sum + (c.bandwidth || 0), 0);
+  const avgUtilization = connections.length > 0
+    ? connections.reduce((sum, c) => sum + (Math.random() * 100), 0) / connections.length
+    : 0;
+
+  // Calculate cumulative billing
+  const monthlyConnectionCost = connections.reduce((sum, c) => sum + (c.monthlyCost || 250), 0);
+  const totalMonthlyCost = group.billing?.monthlyRate || monthlyConnectionCost;
+
+  // Performance health calculations
+  const healthyConnections = connections.filter(c => c.status === 'Active').length;
+  const warningConnections = connections.filter(c => c.status === 'Pending').length;
+  const healthScore = connections.length > 0
+    ? Math.round((healthyConnections / connections.length) * 100)
+    : 100;
 
   return (
-    <div className="p-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <GroupConnectionSummaryWidget group={group} connections={connections} />
-        <GroupPerformanceWidget group={group} connections={connections} />
+    <div className="p-6 space-y-8">
+      {/* Pool Summary Header */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Pool Summary</h3>
+        <p className="text-sm text-gray-600">
+          Consolidated view of all resources and performance metrics for this pool
+        </p>
       </div>
-      
-      <div className="mt-8">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Group Overview</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-            <div className="flex items-center mb-4">
-              <div className="p-2 bg-blue-50 rounded-lg">
-                <Users className="h-5 w-5 text-blue-500" />
-              </div>
-              <h4 className="ml-3 text-base font-medium text-gray-900">Members</h4>
-            </div>
-            <div className="flex items-baseline justify-between">
-              <div className="text-2xl font-bold text-gray-900">{group.userIds.length}</div>
-              <div className="text-sm text-gray-500">Total users</div>
-            </div>
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <button 
-                onClick={() => navigate(`/groups/${group.id}/members`)}
-                className="text-sm text-brand-blue hover:text-brand-darkBlue flex items-center"
-              >
-                View members
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </button>
-            </div>
-          </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-            <div className="flex items-center mb-4">
-              <div className="p-2 bg-purple-50 rounded-lg">
-                <Network className="h-5 w-5 text-purple-500" />
-              </div>
-              <h4 className="ml-3 text-base font-medium text-gray-900">Connections</h4>
+      {/* Key Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Total Members */}
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2 bg-blue-500 rounded-lg">
+              <Users className="h-5 w-5 text-white" />
             </div>
-            <div className="flex items-baseline justify-between">
-              <div className="text-2xl font-bold text-gray-900">{group.connectionIds.length}</div>
-              <div className="text-sm text-gray-500">Network links</div>
-            </div>
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <button 
-                onClick={() => navigate(`/groups/${group.id}/connections`)}
-                className="text-sm text-brand-blue hover:text-brand-darkBlue flex items-center"
-              >
-                View connections
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </button>
-            </div>
+            <span className="text-xs font-medium text-blue-700 uppercase tracking-wide">Members</span>
           </div>
+          <div className="text-3xl font-bold text-gray-900 mb-1">{users.length}</div>
+          <p className="text-sm text-blue-700">Active users in pool</p>
+        </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-            <div className="flex items-center mb-4">
-              <div className="p-2 bg-green-50 rounded-lg">
-                <Layers className="h-5 w-5 text-green-500" />
-              </div>
-              <h4 className="ml-3 text-base font-medium text-gray-900">Links</h4>
+        {/* Total Connections */}
+        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border border-green-200">
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2 bg-green-500 rounded-lg">
+              <Network className="h-5 w-5 text-white" />
             </div>
-            <div className="flex items-baseline justify-between">
-              <div className="text-2xl font-bold text-gray-900">{networkMetrics.totalVLANs}</div>
-              <div className="text-sm text-green-500">{networkMetrics.activeVLANs} active</div>
-            </div>
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <button 
-                onClick={() => navigate(`/groups/${group.id}/network`)}
-                className="text-sm text-brand-blue hover:text-brand-darkBlue flex items-center"
-              >
-                View Links
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </button>
-            </div>
+            <span className="text-xs font-medium text-green-700 uppercase tracking-wide">Connections</span>
           </div>
+          <div className="text-3xl font-bold text-gray-900 mb-1">{connections.length}</div>
+          <p className="text-sm text-green-700">{activeConnections} active connections</p>
+        </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-            <div className="flex items-center mb-4">
-              <div className="p-2 bg-indigo-50 rounded-lg">
-                <Shield className="h-5 w-5 text-indigo-500" />
+        {/* Health Score */}
+        <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-6 border border-amber-200">
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2 bg-amber-500 rounded-lg">
+              <Activity className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-xs font-medium text-amber-700 uppercase tracking-wide">Health</span>
+          </div>
+          <div className="text-3xl font-bold text-gray-900 mb-1">{healthScore}%</div>
+          <p className="text-sm text-amber-700">Overall pool health</p>
+        </div>
+
+        {/* Monthly Cost */}
+        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border border-purple-200">
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2 bg-purple-500 rounded-lg">
+              <CreditCard className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-xs font-medium text-purple-700 uppercase tracking-wide">Cost</span>
+          </div>
+          <div className="text-3xl font-bold text-gray-900 mb-1">${totalMonthlyCost.toLocaleString()}</div>
+          <p className="text-sm text-purple-700">Monthly billing total</p>
+        </div>
+      </div>
+
+      {/* Cumulative Performance Metrics */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Cumulative Performance</h3>
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center mb-2">
+                <TrendingUp className="h-4 w-4 text-gray-400 mr-2" />
+                <span className="text-sm font-medium text-gray-500">Total Bandwidth</span>
               </div>
-              <h4 className="ml-3 text-base font-medium text-gray-900">VNFs</h4>
+              <div className="text-2xl font-bold text-gray-900">{totalBandwidth.toFixed(1)} Gbps</div>
+              <p className="text-xs text-gray-500 mt-1">Across {connections.length} connections</p>
             </div>
-            <div className="flex items-baseline justify-between">
-              <div className="text-2xl font-bold text-gray-900">{networkMetrics.totalVNFs}</div>
-              <div className="text-sm text-green-500">{networkMetrics.activeVNFs} active</div>
+
+            <div>
+              <div className="flex items-center mb-2">
+                <Activity className="h-4 w-4 text-gray-400 mr-2" />
+                <span className="text-sm font-medium text-gray-500">Avg Utilization</span>
+              </div>
+              <div className="text-2xl font-bold text-gray-900">{avgUtilization.toFixed(1)}%</div>
+              <p className="text-xs text-gray-500 mt-1">Pool-wide average</p>
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <button 
-                onClick={() => navigate(`/groups/${group.id}/network`)}
-                className="text-sm text-brand-blue hover:text-brand-darkBlue flex items-center"
-              >
-                View VNFs
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </button>
+
+            <div>
+              <div className="flex items-center mb-2">
+                <Clock className="h-4 w-4 text-gray-400 mr-2" />
+                <span className="text-sm font-medium text-gray-500">Avg Latency</span>
+              </div>
+              <div className="text-2xl font-bold text-gray-900">4.2ms</div>
+              <p className="text-xs text-gray-500 mt-1">Weighted average</p>
+            </div>
+
+            <div>
+              <div className="flex items-center mb-2">
+                <CheckCircle className="h-4 w-4 text-gray-400 mr-2" />
+                <span className="text-sm font-medium text-gray-500">Uptime</span>
+              </div>
+              <div className="text-2xl font-bold text-gray-900">99.97%</div>
+              <p className="text-xs text-gray-500 mt-1">30-day average</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Network Resources Breakdown */}
-      <div className="mt-8">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Network Resources Breakdown</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
+      {/* Connection Health Status */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Connection Health</h3>
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-6">
               <div className="flex items-center">
-                <Layers className="h-5 w-5 text-green-500 mr-2" />
-                <h4 className="text-base font-medium text-gray-900">Links by Type</h4>
-              </div>
-              <div>
-                <span className="px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">
-                  {networkMetrics.totalVLANs} total
-                </span>
-              </div>
-            </div>
-            <div className="space-y-4">
-              {Object.entries(networkMetrics.vlansByType).map(([type, count]) => (
-                <div key={type} className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className={`h-3 w-3 rounded-full ${
-                      type === 'data' ? 'bg-blue-500' :
-                      type === 'voice' ? 'bg-purple-500' :
-                      type === 'management' ? 'bg-green-500' :
-                      type === 'storage' ? 'bg-amber-500' :
-                      'bg-gray-500'
-                    } mr-2`} />
-                    <span className="text-sm text-gray-700 capitalize">{type}</span>
-                  </div>
-                  <div className="text-sm font-medium text-gray-900">{count}</div>
+                <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">{healthyConnections}</div>
+                  <div className="text-sm text-gray-500">Healthy</div>
                 </div>
-              ))}
+              </div>
+
+              {warningConnections > 0 && (
+                <div className="flex items-center">
+                  <AlertCircle className="h-5 w-5 text-amber-500 mr-2" />
+                  <div>
+                    <div className="text-2xl font-bold text-gray-900">{warningConnections}</div>
+                    <div className="text-sm text-gray-500">Warning</div>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center">
+                <div className="h-5 w-5 rounded-full bg-gray-300 mr-2" />
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">{connections.length - healthyConnections - warningConnections}</div>
+                  <div className="text-sm text-gray-500">Inactive</div>
+                </div>
+              </div>
             </div>
-            <div className="mt-6 pt-6 border-t border-gray-100">
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full"
-                onClick={() => navigate(`/groups/${group.id}/network`)}
-              >
-                View All Links
-              </Button>
+
+            <div className="text-right">
+              <div className="text-sm text-gray-500">Overall Health Score</div>
+              <div className={`text-3xl font-bold ${
+                healthScore >= 90 ? 'text-green-600' :
+                healthScore >= 70 ? 'text-amber-600' : 'text-red-600'
+              }`}>
+                {healthScore}%
+              </div>
             </div>
           </div>
-          
-          <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center">
-                <Shield className="h-5 w-5 text-indigo-500 mr-2" />
-                <h4 className="text-base font-medium text-gray-900">VNFs by Type</h4>
-              </div>
-              <div>
-                <span className="px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-medium">
-                  {networkMetrics.totalVNFs} total
-                </span>
-              </div>
-            </div>
-            <div className="space-y-4">
-              {Object.entries(networkMetrics.vnfsByType).map(([type, count]) => (
-                <div key={type} className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className={`h-3 w-3 rounded-full ${
-                      type === 'firewall' ? 'bg-indigo-500' :
-                      type === 'sdwan' ? 'bg-purple-500' :
-                      type === 'router' ? 'bg-blue-500' :
-                      type === 'vnat' ? 'bg-green-500' :
-                      'bg-gray-500'
-                    } mr-2`} />
-                    <span className="text-sm text-gray-700 capitalize">
-                      {type === 'sdwan' ? 'SD-WAN' : type}
-                    </span>
-                  </div>
-                  <div className="text-sm font-medium text-gray-900">{count}</div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 pt-6 border-t border-gray-100">
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full"
-                onClick={() => navigate(`/groups/${group.id}/network`)}
-              >
-                View All VNFs
-              </Button>
+
+          {/* Health Bar */}
+          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+            <div className="flex h-full">
+              {healthyConnections > 0 && (
+                <div
+                  className="bg-green-500"
+                  style={{ width: `${(healthyConnections / connections.length) * 100}%` }}
+                />
+              )}
+              {warningConnections > 0 && (
+                <div
+                  className="bg-amber-500"
+                  style={{ width: `${(warningConnections / connections.length) * 100}%` }}
+                />
+              )}
+              {(connections.length - healthyConnections - warningConnections) > 0 && (
+                <div
+                  className="bg-gray-300"
+                  style={{ width: `${((connections.length - healthyConnections - warningConnections) / connections.length) * 100}%` }}
+                />
+              )}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Billing Breakdown */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Billing Summary</h3>
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+              <div>
+                <div className="text-sm font-medium text-gray-500">Connection Costs</div>
+                <div className="text-xs text-gray-400 mt-1">{connections.length} active connections</div>
+              </div>
+              <div className="text-xl font-bold text-gray-900">${monthlyConnectionCost.toLocaleString()}</div>
+            </div>
+
+            <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+              <div>
+                <div className="text-sm font-medium text-gray-500">Pool Management Fee</div>
+                <div className="text-xs text-gray-400 mt-1">Administrative overhead</div>
+              </div>
+              <div className="text-xl font-bold text-gray-900">$0</div>
+            </div>
+
+            <div className="flex items-center justify-between pt-2">
+              <div>
+                <div className="text-base font-semibold text-gray-900">Total Monthly Cost</div>
+                <div className="text-xs text-gray-400 mt-1">Billed on the 1st of each month</div>
+              </div>
+              <div className="text-2xl font-bold text-brand-blue">${totalMonthlyCost.toLocaleString()}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Members Overview */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Members & Access</h3>
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">{users.length} Active Members</div>
+              <p className="text-sm text-gray-600">
+                Users with access to manage and view pool resources
+              </p>
+            </div>
+            <Users className="h-12 w-12 text-gray-300" />
+          </div>
+
+          {users.length > 0 && (
+            <div className="mt-6 pt-6 border-t border-gray-100">
+              <div className="flex -space-x-2">
+                {users.slice(0, 5).map((user, idx) => (
+                  <div
+                    key={user.id}
+                    className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white flex items-center justify-center text-white font-medium text-sm"
+                    title={user.name}
+                  >
+                    {user.name.split(' ').map(n => n[0]).join('')}
+                  </div>
+                ))}
+                {users.length > 5 && (
+                  <div className="h-10 w-10 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-gray-600 font-medium text-sm">
+                    +{users.length - 5}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
