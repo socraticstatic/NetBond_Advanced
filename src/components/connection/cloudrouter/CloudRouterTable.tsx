@@ -56,7 +56,6 @@ export function CloudRouterTable({
       label: 'Name',
       sortable: true,
       sortKey: 'name',
-      width: '35%',
       render: (router) => (
         <div>
           <div className="text-sm font-medium text-gray-900">{router.name}</div>
@@ -67,22 +66,10 @@ export function CloudRouterTable({
       )
     },
     {
-      id: 'location',
-      label: 'Location',
-      width: '20%',
-      render: (router) => (
-        <div className="flex items-center text-sm text-gray-700">
-          <MapPin className="h-3.5 w-3.5 text-gray-400 mr-1.5" />
-          {router.location || '—'}
-        </div>
-      )
-    },
-    {
       id: 'status',
       label: 'Status',
       sortable: true,
       sortKey: 'status',
-      width: '15%',
       render: (router) => (
         <span className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full ${
           router.status === 'active' ? 'bg-green-100 text-green-800' :
@@ -96,36 +83,13 @@ export function CloudRouterTable({
     },
     {
       id: 'resources',
-      label: 'Resources',
-      width: '15%',
-      render: (router) => {
-        const vnfCount = vnfCountByRouter[router.id] || 0;
-        return (
-          <div className="flex items-center space-x-3 text-sm text-gray-700">
-            <div className="flex items-center">
-              <Network className="h-3.5 w-3.5 text-gray-400 mr-1" />
-              <span>{router.links?.length || 0}</span>
-            </div>
-            <div className="flex items-center">
-              <Shield className="h-3.5 w-3.5 text-gray-400 mr-1" />
-              <span>{vnfCount}</span>
-            </div>
-          </div>
-        );
-      }
-    },
-    {
-      id: 'bandwidth',
-      label: 'Bandwidth',
-      width: '15%',
-      render: (router) => {
-        const routerBandwidthUsed = getBandwidthUsedByRouter(router);
-        return (
-          <div className="text-sm text-gray-900">
-            {routerBandwidthUsed > 0 ? `${routerBandwidthUsed.toFixed(1)} Gbps` : '—'}
-          </div>
-        );
-      }
+      label: 'Links',
+      render: (router) => (
+        <div className="flex items-center text-sm text-gray-700">
+          <Network className="h-3.5 w-3.5 text-gray-400 mr-1" />
+          <span>{router.links?.length || 0}</span>
+        </div>
+      )
     }
   ];
 

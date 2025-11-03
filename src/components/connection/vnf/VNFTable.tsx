@@ -108,19 +108,8 @@ export function VNFTable({
       label: 'Type',
       sortable: true,
       sortKey: 'type',
-      width: '12%',
       render: (vnf) => (
         <span className="text-sm text-gray-900 truncate block">{getTypeName(vnf.type)}</span>
-      )
-    },
-    {
-      id: 'vendor',
-      label: 'Vendor',
-      sortable: true,
-      sortKey: 'vendor',
-      width: '12%',
-      render: (vnf) => (
-        <div className="text-sm text-gray-900 truncate">{vnf.vendor}</div>
       )
     },
     {
@@ -128,42 +117,9 @@ export function VNFTable({
       label: 'Status',
       sortable: true,
       sortKey: 'status',
-      width: '10%',
       render: (vnf) => (
         <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(vnf.status)}`}>
           {vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)}
-        </span>
-      )
-    },
-    {
-      id: 'cloudRouter',
-      label: 'Cloud Router',
-      sortable: true,
-      sortKey: 'cloudRouterId',
-      width: '15%',
-      render: (vnf) => (
-        <span className="text-sm text-gray-900 truncate block">{getCloudRouterName(vnf.cloudRouterId)}</span>
-      )
-    },
-    {
-      id: 'throughput',
-      label: 'Throughput',
-      sortable: true,
-      sortKey: 'throughput',
-      width: '11%',
-      render: (vnf) => (
-        <span className="text-sm text-gray-500 truncate block">{vnf.throughput || 'N/A'}</span>
-      )
-    },
-    {
-      id: 'licenseExpiry',
-      label: 'License',
-      sortable: true,
-      sortKey: 'licenseExpiry',
-      width: '10%',
-      render: (vnf) => (
-        <span className="text-sm text-gray-500">
-          {vnf.licenseExpiry ? new Date(vnf.licenseExpiry).toLocaleDateString() : 'N/A'}
         </span>
       )
     }
