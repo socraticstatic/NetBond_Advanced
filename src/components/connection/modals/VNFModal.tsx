@@ -4,6 +4,7 @@ import { Button } from '../../common/Button';
 import { FormField } from '../../form/FormField';
 import { VNF, VNFType, VNFInterface, VNFTemplate } from '../../../types/vnf';
 import { Link } from '../../../types/connection';
+import { SideDrawer } from '../../common/SideDrawer';
 
 // Utility function to get user-friendly VNF type names
 const getTypeName = (type: VNFType): string => {
@@ -394,54 +395,69 @@ export function VNFModal({
     }
   };
 
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[calc(100vh-2rem)] overflow-hidden flex flex-col">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <div className="flex items-center">
-            {isEditMode ? (
-              <h3 className="text-lg font-medium text-gray-900">Edit Virtual Network Function</h3>
-            ) : showTemplates ? (
-              <h3 className="text-lg font-medium text-gray-900">Select VNF Template</h3>
-            ) : (
-              <h3 className="text-lg font-medium text-gray-900 flex items-center">
-                Configure Virtual Network Function
-                <div className="relative ml-2">
-                  <Info
-                    className="h-4 w-4 text-gray-400 cursor-help"
-                    onMouseEnter={() => setShowVnfTooltip(true)}
-                    onMouseLeave={() => setShowVnfTooltip(false)}
-                  />
-                  {showVnfTooltip && (
-                    <div className="absolute z-10 left-0 top-full mt-1 w-72 p-3 bg-gray-900 text-white text-sm rounded-lg">
-                      <p>
-                        <strong>VNF</strong> is a Virtual Network Function, which is a software implementation of a network function traditionally performed by dedicated hardware. VNFs include virtual firewalls, routers, load balancers, and other network services that run on standard servers rather than specialized hardware.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </h3>
-            )}
-
-            {selectedTemplate && !showTemplates && (
-              <span className="ml-2 px-2.5 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                {VNF_TEMPLATES.find(t => t.id === selectedTemplate)?.name}
-              </span>
+  const drawerTitle = (
+    <div className="flex items-center">
+      {isEditMode ? (
+        'Edit Virtual Network Function'
+      ) : showTemplates ? (
+        'Select VNF Template'
+      ) : (
+        <>
+          Configure Virtual Network Function
+          <div className="relative ml-2">
+            <Info
+              className="h-4 w-4 text-gray-400 cursor-help"
+              onMouseEnter={() => setShowVnfTooltip(true)}
+              onMouseLeave={() => setShowVnfTooltip(false)}
+            />
+            {showVnfTooltip && (
+              <div className="absolute z-10 left-0 top-full mt-1 w-72 p-3 bg-gray-900 text-white text-sm rounded-lg">
+                <p>
+                  <strong>VNF</strong> is a Virtual Network Function, which is a software implementation of a network function traditionally performed by dedicated hardware. VNFs include virtual firewalls, routers, load balancers, and other network services that run on standard servers rather than specialized hardware.
+                </p>
+              </div>
             )}
           </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-500"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+        </>
+      )}
+      {selectedTemplate && !showTemplates && (
+        <span className="ml-2 px-2.5 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+          {VNF_TEMPLATES.find(t => t.id === selectedTemplate)?.name}
+        </span>
+      )}
+    </div>
+  );
 
-        {/* Warning message when editing */}
-        {isEditMode && (
+  const drawerFooter = (
+    <div className="flex justify-between">
+      <Button
+        variant="outline"
+        onClick={handleBack}
+      >
+        {showTemplates ? 'Cancel' : 'Back'}
+      </Button>
+
+      {!showTemplates && (
+        <Button
+          variant="primary"
+          type="submit"
+          form="vnf-form"
+        >
+          {isEditMode ? 'Update VNF' : 'Create VNF'}
+        </Button>
+      )}
+    </div>
+  );
+
+  return (
+    <SideDrawer
+      isOpen={isOpen}
+      onClose={onClose}
+      title={drawerTitle as any}
+      size="xl"
+      footer={drawerFooter}
+    >
+      {isEditMode && (
           <div className="m-6 mb-0 bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start">
             <AlertTriangle className="h-5 w-5 text-amber-500 mt-0.5 mr-3 flex-shrink-0" />
             <div>
@@ -925,26 +941,6 @@ export function VNFModal({
           )}
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between">
-          <Button
-            variant="outline"
-            onClick={handleBack}
-          >
-            {showTemplates ? 'Cancel' : 'Back'}
-          </Button>
-
-          {!showTemplates && (
-            <Button
-              variant="primary"
-              type="submit"
-              form="vnf-form"
-            >
-              {isEditMode ? 'Update VNF' : 'Create VNF'}
-            </Button>
-          )}
-        </div>
-      </div>
-    </div>
+    </SideDrawer>
   );
 }
