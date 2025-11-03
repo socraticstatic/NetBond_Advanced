@@ -39,46 +39,12 @@ export function ConnectionCardHeader({
 }: ConnectionCardHeaderProps) {
   const nameInputRef = useRef<HTMLInputElement>(null);
 
-  // Get provider logo based on provider name
-  const getProviderLogo = () => {
-    if (!connection.provider) return icon;
-    
-    switch(connection.provider.toLowerCase()) {
-      case 'aws':
-        return (
-          <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" 
-            alt="AWS" 
-            className="h-6 w-6" 
-          />
-        );
-      case 'azure':
-        return (
-          <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" 
-            alt="Azure" 
-            className="h-6 w-6" 
-          />
-        );
-      case 'google':
-        return (
-          <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" 
-            alt="Google Cloud" 
-            className="h-6 w-6" 
-          />
-        );
-      default:
-        return icon;
-    }
-  };
-
   return (
     <div className="p-4 border-b border-fw-secondary">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="p-2 bg-fw-wash rounded-lg">
-            {getProviderLogo()}
+            {icon}
           </div>
           <div>
             {isEditingName ? (
