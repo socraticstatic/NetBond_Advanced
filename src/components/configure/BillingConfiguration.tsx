@@ -430,6 +430,13 @@ export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfig
                     <div className="space-y-2">
                       <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
                         <div>
+                          <p className="text-sm font-medium text-fw-body">Globus</p>
+                          <p className="text-xs text-fw-bodyLight">Sync billing and invoicing with Globus</p>
+                        </div>
+                        <Button variant="outline" size="sm">Configure</Button>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+                        <div>
                           <p className="text-sm font-medium text-fw-body">SAP ERP Integration</p>
                           <p className="text-xs text-fw-bodyLight">Export billing data to SAP</p>
                         </div>
