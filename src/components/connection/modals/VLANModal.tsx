@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Tag, AlertTriangle, Plus, CheckCircle, HelpCircle, Info } from 'lucide-react';
+import { Tag, AlertTriangle, Plus, CheckCircle, HelpCircle, Info, X, GitBranch, Route, Network } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { FormField } from '../../form/FormField';
 import { SideDrawer } from '../../common/SideDrawer';
@@ -58,7 +58,22 @@ export function VLANModal({
   const [trafficType, setTrafficType] = useState<VLAN['type']>('data');
   const [linkType, setLinkType] = useState<'Layer 1' | 'Layer 2' | 'Layer 3'>('Layer 3');
   const [bandwidth, setBandwidth] = useState<string>('1');
-  
+
+  // Routing state
+  const [routingProtocol, setRoutingProtocol] = useState<'bgp' | 'static' | 'none'>('bgp');
+  const [localAsn, setLocalAsn] = useState<string>('');
+  const [remoteAsn, setRemoteAsn] = useState<string>('');
+  const [bgpPassword, setBgpPassword] = useState<string>('');
+  const [staticRoutes, setStaticRoutes] = useState<Array<{destination: string, nextHop: string}>>([]);
+  const [newRouteDestination, setNewRouteDestination] = useState('');
+  const [newRouteNextHop, setNewRouteNextHop] = useState('');
+  const [routeFilters, setRouteFilters] = useState<Array<{prefix: string, action: 'permit' | 'deny'}>>([]);
+  const [newFilterPrefix, setNewFilterPrefix] = useState('');
+  const [newFilterAction, setNewFilterAction] = useState<'permit' | 'deny'>('permit');
+  const [bfdEnabled, setBfdEnabled] = useState(false);
+  const [bfdInterval, setBfdInterval] = useState<number>(300);
+  const [bfdMultiplier, setBfdMultiplier] = useState<number>(3);
+
   // Validation state
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -167,6 +182,32 @@ export function VLANModal({
       e.preventDefault();
       handleAddTag();
     }
+  };
+
+  // Handle static routes
+  const handleAddStaticRoute = () => {
+    if (newRouteDestination.trim() && newRouteNextHop.trim()) {
+      setStaticRoutes([...staticRoutes, { destination: newRouteDestination, nextHop: newRouteNextHop }]);
+      setNewRouteDestination('');
+      setNewRouteNextHop('');
+    }
+  };
+
+  const handleRemoveStaticRoute = (index: number) => {
+    setStaticRoutes(staticRoutes.filter((_, i) => i !== index));
+  };
+
+  // Handle route filters
+  const handleAddRouteFilter = () => {
+    if (newFilterPrefix.trim()) {
+      setRouteFilters([...routeFilters, { prefix: newFilterPrefix, action: newFilterAction }]);
+      setNewFilterPrefix('');
+      setNewFilterAction('permit');
+    }
+  };
+
+  const handleRemoveRouteFilter = (index: number) => {
+    setRouteFilters(routeFilters.filter((_, i) => i !== index));
   };
 
   // Handle form submission
@@ -454,6 +495,276 @@ export function VLANModal({
                       </div>
                     )}
                   </FormField>
+                </div>
+              </div>
+
+              {/* Routing Configuration Section */}
+              <div className="pt-6 border-t-2 border-gray-300">
+                <div className="flex items-center mb-4">
+                  <GitBranch className="h-5 w-5 text-blue-600 mr-2" />
+                  <h3 className="text-lg font-semibold text-gray-900">Routing Configuration</h3>
+                </div>
+
+                <div className="space-y-6 bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  {/* Routing Protocol Selection */}
+                  <div>
+                    <FormField label="Routing Protocol" required>
+                      <select
+                        value={routingProtocol}
+                        onChange={(e) => setRoutingProtocol(e.target.value as 'bgp' | 'static' | 'none')}
+                        className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="bgp">BGP (Border Gateway Protocol)</option>
+                        <option value="static">Static Routes</option>
+                        <option value="none">No Routing</option>
+                      </select>
+                    </FormField>
+                  </div>
+
+                  {/* BGP Configuration */}
+                  {routingProtocol === 'bgp' && (
+                    <div className="space-y-4 bg-white p-4 rounded-lg border border-blue-300">
+                      <div className="flex items-center mb-2">
+                        <Network className="h-4 w-4 text-blue-600 mr-2" />
+                        <h4 className="text-sm font-semibold text-gray-900">BGP Settings</h4>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          label="Local ASN"
+                          required
+                          helpText="Your Autonomous System Number"
+                        >
+                          <input
+                            type="text"
+                            value={localAsn}
+                            onChange={(e) => setLocalAsn(e.target.value)}
+                            className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="e.g., 65001"
+                          />
+                        </FormField>
+
+                        <FormField
+                          label="Remote ASN"
+                          required
+                          helpText="Peer's Autonomous System Number"
+                        >
+                          <input
+                            type="text"
+                            value={remoteAsn}
+                            onChange={(e) => setRemoteAsn(e.target.value)}
+                            className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="e.g., 65002"
+                          />
+                        </FormField>
+
+                        <FormField
+                          label="BGP MD5 Password"
+                          helpText="Optional authentication"
+                        >
+                          <input
+                            type="password"
+                            value={bgpPassword}
+                            onChange={(e) => setBgpPassword(e.target.value)}
+                            className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Leave empty for no auth"
+                          />
+                        </FormField>
+
+                        <div className="flex items-center">
+                          <label className="flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={bfdEnabled}
+                              onChange={(e) => setBfdEnabled(e.target.checked)}
+                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                            />
+                            <span className="ml-2 text-sm font-medium text-gray-700">
+                              Enable BFD (Bidirectional Forwarding Detection)
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {bfdEnabled && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 p-4 bg-gray-50 rounded border border-gray-300">
+                          <FormField
+                            label="BFD Interval (ms)"
+                            helpText="Detection interval"
+                          >
+                            <input
+                              type="number"
+                              value={bfdInterval}
+                              onChange={(e) => setBfdInterval(parseInt(e.target.value))}
+                              className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              min="50"
+                              max="1000"
+                              step="50"
+                            />
+                          </FormField>
+
+                          <FormField
+                            label="BFD Multiplier"
+                            helpText="Missed packets before failure"
+                          >
+                            <input
+                              type="number"
+                              value={bfdMultiplier}
+                              onChange={(e) => setBfdMultiplier(parseInt(e.target.value))}
+                              className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              min="2"
+                              max="10"
+                              step="1"
+                            />
+                          </FormField>
+                        </div>
+                      )}
+
+                      {/* Route Filters */}
+                      <div className="mt-6">
+                        <FormField
+                          label="Route Filters (Prefix Lists)"
+                          helpText="Control which routes to accept/advertise"
+                        >
+                          <div className="space-y-3">
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                value={newFilterPrefix}
+                                onChange={(e) => setNewFilterPrefix(e.target.value)}
+                                className="vlan-input flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="e.g., 10.0.0.0/8"
+                              />
+                              <select
+                                value={newFilterAction}
+                                onChange={(e) => setNewFilterAction(e.target.value as 'permit' | 'deny')}
+                                className="vlan-input px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              >
+                                <option value="permit">Permit</option>
+                                <option value="deny">Deny</option>
+                              </select>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={handleAddRouteFilter}
+                                disabled={!newFilterPrefix.trim()}
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
+
+                            {routeFilters.length > 0 && (
+                              <div className="space-y-2">
+                                {routeFilters.map((filter, index) => (
+                                  <div key={index} className="flex items-center justify-between bg-white p-3 rounded border border-gray-200">
+                                    <div className="flex items-center space-x-3">
+                                      <span className="text-sm font-mono text-gray-700">{filter.prefix}</span>
+                                      <span className={`px-2 py-0.5 text-xs font-medium rounded ${
+                                        filter.action === 'permit'
+                                          ? 'bg-green-100 text-green-700'
+                                          : 'bg-red-100 text-red-700'
+                                      }`}>
+                                        {filter.action}
+                                      </span>
+                                    </div>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleRemoveRouteFilter(index)}
+                                      className="text-gray-400 hover:text-red-600"
+                                    >
+                                      <X className="h-4 w-4" />
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </FormField>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Static Routes Configuration */}
+                  {routingProtocol === 'static' && (
+                    <div className="space-y-4 bg-white p-4 rounded-lg border border-blue-300">
+                      <div className="flex items-center mb-2">
+                        <Route className="h-4 w-4 text-blue-600 mr-2" />
+                        <h4 className="text-sm font-semibold text-gray-900">Static Routes</h4>
+                      </div>
+
+                      <FormField
+                        label="Add Static Route"
+                        helpText="Define static routes for this link"
+                      >
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-2 gap-2">
+                            <input
+                              type="text"
+                              value={newRouteDestination}
+                              onChange={(e) => setNewRouteDestination(e.target.value)}
+                              className="vlan-input px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              placeholder="Destination (e.g., 10.0.0.0/24)"
+                            />
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                value={newRouteNextHop}
+                                onChange={(e) => setNewRouteNextHop(e.target.value)}
+                                className="vlan-input flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Next Hop (e.g., 192.168.1.1)"
+                              />
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={handleAddStaticRoute}
+                                disabled={!newRouteDestination.trim() || !newRouteNextHop.trim()}
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+
+                          {staticRoutes.length > 0 && (
+                            <div className="space-y-2">
+                              {staticRoutes.map((route, index) => (
+                                <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded border border-gray-200">
+                                  <div className="flex items-center space-x-3">
+                                    <span className="text-sm font-mono text-gray-700">{route.destination}</span>
+                                    <span className="text-gray-400">→</span>
+                                    <span className="text-sm font-mono text-gray-700">{route.nextHop}</span>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveStaticRoute(index)}
+                                    className="text-gray-400 hover:text-red-600"
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </FormField>
+                    </div>
+                  )}
+
+                  {/* No Routing Info */}
+                  {routingProtocol === 'none' && (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-start">
+                        <Info className="h-5 w-5 text-gray-500 mt-0.5 mr-3 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm text-gray-700 font-medium">No Routing Protocol Selected</p>
+                          <p className="text-sm text-gray-600 mt-1">
+                            This link will not participate in dynamic routing. Layer 2 switching will be used for traffic forwarding.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
