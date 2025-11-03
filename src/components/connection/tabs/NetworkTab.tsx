@@ -377,20 +377,20 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
             <CloudRouterSection
               cloudRouters={cloudRouters}
               vnfs={vnfs}
-              onAddCloudRouter={handleAddCloudRouter}
-              onEditCloudRouter={handleEditCloudRouter}
-              onDeleteCloudRouter={handleDeleteCloudRouter}
-              connectionBandwidth={connection.bandwidth}
+              onAdd={handleAddCloudRouter}
+              onEdit={handleEditCloudRouter}
+              onDelete={handleDeleteCloudRouter}
+              connectionId={connection.id.toString()}
+              connection={connection}
             />
           )}
 
           {/* Links Section */}
           {activeSection === 'links' && (
             <LinkSection
+              connection={connection}
               cloudRouters={cloudRouters}
-              onAddLink={handleAddLink}
-              onEditLink={handleEditLink}
-              onDeleteLink={handleDeleteLink}
+              allLinks={getAllLinks()}
             />
           )}
 
@@ -398,10 +398,11 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
           {activeSection === 'vnfs' && (
             <VNFSection
               vnfs={vnfs}
-              links={getAllLinks()}
-              onAddVNF={handleAddVNF}
-              onEditVNF={handleEditVNF}
-              onDeleteVNF={handleDeleteVNF}
+              cloudRouters={cloudRouters}
+              onAdd={handleAddVNF}
+              onEdit={handleEditVNF}
+              onDelete={handleDeleteVNF}
+              connectionId={connection.id.toString()}
             />
           )}
 
