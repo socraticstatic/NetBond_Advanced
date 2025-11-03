@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Connection } from '../../../types';
 import { Group } from '../../../types/group';
 import { ConnectionVisualization } from '../ConnectionVisualization';
@@ -10,10 +11,10 @@ import { Group as GroupIcon, ChevronRight } from 'lucide-react';
 interface TopologyViewProps {
   connections: Connection[];
   groups: Group[];
-  onSelect: (id: string) => void;
 }
 
-export function TopologyView({ connections, groups, onSelect }: TopologyViewProps) {
+export function TopologyView({ connections, groups }: TopologyViewProps) {
+  const navigate = useNavigate();
   const [hoveredConnection, setHoveredConnection] = useState<string | null>(null);
   const removeConnection = useStore(state => state.removeConnection);
 
@@ -46,7 +47,7 @@ export function TopologyView({ connections, groups, onSelect }: TopologyViewProp
             `}
             onMouseEnter={() => setHoveredConnection(connection.id.toString())}
             onMouseLeave={() => setHoveredConnection(null)}
-            onClick={() => onSelect(connection.id.toString())}
+            onClick={() => navigate(`/connections/${connection.id}`)}
           >
             {/* Header Section */}
             <div className="px-6 py-4 border-b border-gray-100">

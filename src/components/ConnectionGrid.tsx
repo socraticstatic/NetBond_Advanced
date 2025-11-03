@@ -378,23 +378,20 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
           </div>
         ) : viewMode === 'list' ? (
           <div className="overflow-x-auto">
-            <ListView 
-              connections={filteredConnections} 
+            <ListView
+              connections={filteredConnections}
               groups={groups}
-              onSelect={(id) => window.location.href = `/connections/${id}`} 
             />
           </div>
         ) : viewMode === 'topology' ? (
-          <TopologyView 
-            connections={filteredConnections} 
+          <TopologyView
+            connections={filteredConnections}
             groups={groups}
-            onSelect={(id) => window.location.href = `/connections/${id}`} 
           />
         ) : (
-          <GridView 
-            connections={filteredConnections} 
+          <GridView
+            connections={filteredConnections}
             groups={groups}
-            onSelect={(id) => window.location.href = `/connections/${id}`}
             isMinimized={areAllMinimized}
           />
         )}

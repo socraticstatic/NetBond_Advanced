@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Activity, Network, Globe, Group as GroupIcon } from 'lucide-react';
 import type { Connection, ColumnConfig } from '../../../types';
 import type { Group } from '../../../types/group';
@@ -10,7 +11,6 @@ import { getGroupsForConnection } from '../../../utils/groups';
 interface ListViewProps {
   connections: Connection[];
   groups: Group[];
-  onSelect: (id: string) => void;
 }
 
 const DEFAULT_COLUMNS: ColumnConfig[] = [
@@ -24,7 +24,8 @@ const DEFAULT_COLUMNS: ColumnConfig[] = [
   { id: 'provider', label: 'Provider', visible: true, sortable: true, width: '10%' } // New column
 ];
 
-export function ListView({ connections, groups, onSelect }: ListViewProps) {
+export function ListView({ connections, groups }: ListViewProps) {
+  const navigate = useNavigate();
   const [columns, setColumns] = useState<ColumnConfig[]>(DEFAULT_COLUMNS);
   const [sortField, setSortField] = useState<keyof Connection>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -225,7 +226,7 @@ export function ListView({ connections, groups, onSelect }: ListViewProps) {
             sortedConnections.map((connection, rowIndex) => (
               <tr
                 key={connection.id}
-                onClick={() => onSelect(connection.id.toString())}
+                onClick={() => navigate(`/connections/${connection.id}`)}
                 className="hover:bg-gray-50 cursor-pointer"
                 role="row"
                 aria-rowindex={rowIndex + 1}
