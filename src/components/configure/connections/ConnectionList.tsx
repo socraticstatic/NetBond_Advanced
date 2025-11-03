@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MoreVertical, Edit2, Trash2, Play, Pause, Search, Filter, Download, ChevronRight } from 'lucide-react';
+import { MoreVertical, Edit2, Trash2, Play, Pause, Search, Filter, Download, ChevronRight, Activity } from 'lucide-react';
 import { Connection } from '../../../types';
 import { BaseTable } from '../../common/BaseTable';
 import { OverflowMenu } from '../../common/OverflowMenu';
