@@ -158,12 +158,12 @@
 
 .nav-item:hover {
   color: var(--nav-text-hover);
-  background-color: var(--color-gray-50);
+  background-color: rgb(248 250 251);
 }
 
 .nav-item.active {
   color: var(--nav-text-active);
-  background-color: var(--color-brand-blue-50);
+  background-color: rgb(230 246 253);
 }
 
 .nav-item.active .nav-icon {
@@ -172,7 +172,7 @@
 
 .nav-icon {
   margin-right: 0.75rem;
-  color: var(--color-gray-400);
+  color: rgb(104 110 116);
 }
 
 /* Table Styles */

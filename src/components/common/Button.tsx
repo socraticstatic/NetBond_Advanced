@@ -32,10 +32,10 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
   };
 
   const variantStyles = {
-    primary: 'bg-[#003184] text-white hover:bg-[#002255] focus:ring-[#003184]',
-    secondary: 'bg-white text-[#003184] border border-[#003184] hover:bg-[#f0f4fa]',
-    outline: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-600',
+    primary: 'bg-fw-ctaPrimary text-fw-linkPrimary hover:bg-fw-ctaPrimaryHover focus:ring-2 focus:ring-fw-active focus:ring-offset-2 border border-fw-ctaPrimary transition-all',
+    secondary: 'bg-transparent text-fw-linkSecondary hover:bg-fw-neutral border border-fw-secondary transition-all',
+    outline: 'bg-fw-base border border-fw-secondary text-fw-body hover:bg-fw-wash transition-all',
+    danger: 'bg-fw-error text-fw-linkPrimary hover:bg-[rgb(159_0_40)] focus:ring-2 focus:ring-fw-error border border-fw-error transition-all',
   };
 
   const iconSizeClass = size === 'sm' ? 'h-4 w-4' : 'h-5 w-5';

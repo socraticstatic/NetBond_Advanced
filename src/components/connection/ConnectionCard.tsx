@@ -230,9 +230,9 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
     <motion.div 
       className={`
         relative
-        bg-white rounded-xl border border-gray-200
-        shadow-[0_2px_4px_rgba(0,0,0,0.05)]
-        hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)]
+        bg-fw-base rounded-xl border border-fw-secondary
+        shadow-sm
+        hover:shadow-md
         transition-all duration-300 ease-in-out
         transform hover:translate-y-[-2px]
         ${isMinimized ? 'h-[88px]' : ''}
@@ -252,9 +252,9 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
     >
       {/* Progress Bar */}
       {isPending && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gray-100 rounded-t-xl overflow-hidden">
-          <motion.div 
-            className="h-full bg-brand-blue transition-all duration-300 ease-linear"
+        <div className="absolute top-0 left-0 right-0 h-1 bg-fw-neutral rounded-t-xl overflow-hidden">
+          <motion.div
+            className="h-full bg-fw-link transition-all duration-300 ease-linear"
             style={{ width: `${progress}%` }}
             // Add pulse animation to the progress bar
             animate={{
