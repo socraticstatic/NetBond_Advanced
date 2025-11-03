@@ -112,6 +112,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
           ipSubnet: '10.1.0.0/24',
           bandwidth: '5 Gbps',
           description: 'Production traffic',
+          cloudRouterIds: ['cr-1'],
           createdAt: '2024-01-10T00:00:00Z'
         },
         {
@@ -122,6 +123,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
           ipSubnet: '10.2.0.0/24',
           bandwidth: '2 Gbps',
           description: 'Development environment',
+          cloudRouterIds: ['cr-1'],
           createdAt: '2024-01-15T00:00:00Z'
         }
       ],
@@ -149,6 +151,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
           ipSubnet: '10.3.0.0/24',
           bandwidth: '3 Gbps',
           description: 'Backup link',
+          cloudRouterIds: ['cr-2'],
           createdAt: '2024-02-01T00:00:00Z'
         }
       ],
@@ -236,17 +239,24 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
   };
 
   const handleSaveLink = (linkData: Partial<Link>) => {
-    if (!selectedCloudRouterId) return;
+    // Links now have cloudRouterIds array, so we need to update all associated cloud routers
+    const cloudRouterIdsToUpdate = linkData.cloudRouterIds || [];
+
+    if (cloudRouterIdsToUpdate.length === 0) return;
 
     setCloudRouters(
       cloudRouters.map((router) => {
-        if (router.id === selectedCloudRouterId) {
+        // If this router should have this link
+        if (cloudRouterIdsToUpdate.includes(router.id)) {
           const updatedLinks = editingLink
             ? (router.links || []).map((l) => (l.id === editingLink.id ? { ...l, ...linkData } : l))
             : [...(router.links || []), linkData as Link];
           return { ...router, links: updatedLinks };
+        } else {
+          // Remove link from routers that should no longer have it
+          const filteredLinks = (router.links || []).filter(l => l.id !== linkData.id);
+          return { ...router, links: filteredLinks };
         }
-        return router;
       })
     );
 
@@ -459,6 +469,8 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
         vlan={editingLink as any}
         connectionId={connection.id.toString()}
         availableBandwidth={10}
+        cloudRouters={cloudRouters}
+        selectedCloudRouterId={selectedCloudRouterId}
       />
 
       <DeleteVLANModal

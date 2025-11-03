@@ -34,15 +34,19 @@ interface VLANModalProps {
   vlan?: VLAN; // If provided, we're in edit mode
   connectionId: string;
   availableBandwidth?: number; // Available bandwidth in Gbps
+  cloudRouters: Array<{ id: string; name: string }>;
+  selectedCloudRouterId?: string;
 }
 
-export function VLANModal({ 
-  isOpen, 
-  onClose, 
-  onSave, 
-  vlan, 
+export function VLANModal({
+  isOpen,
+  onClose,
+  onSave,
+  vlan,
   connectionId,
-  availableBandwidth = 10
+  availableBandwidth = 10,
+  cloudRouters,
+  selectedCloudRouterId
 }: VLANModalProps) {
   const isEditMode = !!vlan;
 
