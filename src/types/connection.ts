@@ -16,6 +16,8 @@ export interface Connection {
   providers?: CloudProvider[];
   locations?: string[];
   datacenters?: string[];
+  pool?: string; // Pool/Group ID this connection belongs to
+  poolName?: string; // Pool/Group name for display
   cloudRouterCount?: number;
   linkCount?: number;
   primaryIPE?: string;
