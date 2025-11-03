@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sparkles, ArrowRight, CheckCircle, Clock, DollarSign, Shield, Zap, TrendingUp, Star } from 'lucide-react';
 import { applicationSolutions, solutionCategories, getPopularSolutions, getSolutionsByCategory, ApplicationSolution } from '../../data/applicationSolutions';
-import { Button } from '../common/Button';
 
 export function ApplicationSolutionZone() {
   const navigate = useNavigate();
@@ -115,7 +114,7 @@ export function ApplicationSolutionZone() {
                 key={solution.id}
                 className="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden group flex flex-col"
               >
-                <div className={`bg-gradient-to-r ${colors.gradient} p-6 text-white`}>
+                <div className={`bg-gradient-to-r ${colors.gradient} p-6 text-white min-h-[160px] flex flex-col`}>
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-white bg-opacity-20 rounded-lg backdrop-blur-sm">
@@ -189,15 +188,13 @@ export function ApplicationSolutionZone() {
                         <span className="text-xs text-gray-600">/month</span>
                       </div>
                     </div>
-                    <Button
-                      variant="primary"
-                      size="md"
+                    <button
                       onClick={() => handleBuildNetwork(solution)}
-                      className={`w-full bg-gradient-to-r ${colors.gradient} hover:opacity-90`}
+                      className="w-full inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold transition-all duration-200 text-sm bg-gradient-to-r from-[#003184] to-[#0047BB] text-white hover:from-[#002255] hover:to-[#003184] hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#003184] focus:ring-offset-2 active:scale-95 group/btn"
                     >
-                      Configure
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
+                      <span>Select Plan</span>
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -279,15 +276,13 @@ export function ApplicationSolutionZone() {
                   <span className="text-3xl font-bold text-gray-900">${selectedSolution.monthlyStartingPrice}</span>
                   <span className="text-sm text-gray-600">/month</span>
                 </div>
-                <Button
-                  variant="primary"
-                  size="lg"
+                <button
                   onClick={handleStartSetup}
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                  className="w-full inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold transition-all duration-200 text-sm bg-gradient-to-r from-[#003184] to-[#0047BB] text-white hover:from-[#002255] hover:to-[#003184] hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#003184] focus:ring-offset-2 active:scale-95 group/btn"
                 >
-                  Start Configuration
-                  <ArrowRight className="h-5 w-5 ml-2" />
-                </Button>
+                  <span>Select Plan</span>
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                </button>
               </div>
             </div>
           </div>
