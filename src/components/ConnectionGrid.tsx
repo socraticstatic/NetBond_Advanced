@@ -85,14 +85,6 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
             />
           </div>
-          <Button
-            variant="outline"
-            icon={Filter}
-            onClick={() => setShowFilters(true)}
-            size="md"
-          >
-            Filters
-          </Button>
           <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
             <button
               onClick={() => setViewMode('grid')}
@@ -140,15 +132,23 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
           )}
           <Button
             variant="outline"
+            icon={Filter}
+            onClick={() => setShowFilters(true)}
+            size="md"
+          >
+            Filters
+          </Button>
+          <Button
+            variant="outline"
             icon={Download}
             onClick={() => {
               const csv = [
                 ['Name', 'Type', 'Status', 'Bandwidth', 'Location'].join(','),
-                ...filteredConnections.map(c => 
+                ...filteredConnections.map(c =>
                   [c.name, c.type, c.status, c.bandwidth, c.location].join(',')
                 )
               ].join('\n');
-              
+
               const blob = new Blob([csv], { type: 'text/csv' });
               const url = URL.createObjectURL(blob);
               const link = document.createElement('a');
@@ -156,7 +156,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
               link.download = 'connections.csv';
               link.click();
               URL.revokeObjectURL(url);
-              
+
               window.addToast({
                 type: 'success',
                 title: 'Export Complete',
