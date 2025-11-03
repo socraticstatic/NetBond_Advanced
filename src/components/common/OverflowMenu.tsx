@@ -42,13 +42,16 @@ export function OverflowMenu({
   useEffect(() => {
     if (isOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
+      const menuWidth = 192;
       const menuHeight = 200;
       const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
       const spaceBelow = viewportHeight - rect.bottom;
+      const spaceRight = viewportWidth - rect.right;
 
       setMenuPosition({
         top: spaceBelow < menuHeight ? rect.top - menuHeight + 40 : rect.bottom + 4,
-        left: rect.right - 192
+        left: spaceRight < menuWidth ? rect.left - menuWidth + rect.width : rect.left
       });
     }
   }, [isOpen]);
