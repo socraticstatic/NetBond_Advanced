@@ -1,15 +1,60 @@
-import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup } from 'lucide-react';
+import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Router, Link2, Box } from 'lucide-react';
 import { Connection } from '../../../types';
 import { ConnectionVisualization } from '../ConnectionVisualization';
 import { IPEInfoTooltip } from '../../common/IPEInfoTooltip';
 
 interface ConnectionOverviewProps {
   connection: Connection;
+  cloudRoutersCount?: number;
+  linksCount?: number;
+  vnfsCount?: number;
 }
 
-export function ConnectionOverview({ connection }: ConnectionOverviewProps) {
+export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCount = 0, vnfsCount = 0 }: ConnectionOverviewProps) {
   return (
     <div className="space-y-6">
+      {/* Network Architecture Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg border border-blue-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center mb-2">
+                <Router className="h-5 w-5 text-blue-600 mr-2" />
+                <p className="text-sm font-medium text-gray-600">Cloud Routers</p>
+              </div>
+              <p className="text-3xl font-bold text-gray-900">{connection.cloudRouterCount || cloudRoutersCount}</p>
+              <p className="text-xs text-gray-500 mt-1">Virtual routing instances</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-green-50 to-white rounded-lg border border-green-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center mb-2">
+                <Link2 className="h-5 w-5 text-green-600 mr-2" />
+                <p className="text-sm font-medium text-gray-600">Links (VLANs)</p>
+              </div>
+              <p className="text-3xl font-bold text-gray-900">{connection.linkCount || linksCount}</p>
+              <p className="text-xs text-gray-500 mt-1">Virtual network segments</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-50 to-white rounded-lg border border-purple-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center mb-2">
+                <Box className="h-5 w-5 text-purple-600 mr-2" />
+                <p className="text-sm font-medium text-gray-600">VNFs</p>
+              </div>
+              <p className="text-3xl font-bold text-gray-900">{vnfsCount}</p>
+              <p className="text-xs text-gray-500 mt-1">Virtual network functions</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Network Visualization */}
       <div className="bg-white rounded-lg border border-gray-200 overflow-visible">
         <div className="px-6 py-4 border-b border-gray-100">
@@ -90,6 +135,78 @@ export function ConnectionOverview({ connection }: ConnectionOverviewProps) {
               </p>
             </div>
           )}
+        </div>
+
+        {/* Network Architecture Explanation */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="flex items-center mb-4">
+            <Network className="h-5 w-5 text-blue-500 mr-2" />
+            <h3 className="text-lg font-medium text-gray-900">Network Architecture</h3>
+          </div>
+
+          <div className="space-y-4">
+            <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                    <Router className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+                <div className="ml-3">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-1">Cloud Routers</h4>
+                  <p className="text-sm text-gray-600">
+                    Virtual routing instances that provide connectivity to cloud providers and other networks. Each cloud router can be associated with multiple links.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center">
+              <div className="text-gray-400">↓</div>
+            </div>
+
+            <div className="p-4 bg-green-50 rounded-lg border border-green-100">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                    <Link2 className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+                <div className="ml-3">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-1">Links (VLANs)</h4>
+                  <p className="text-sm text-gray-600">
+                    Virtual network segments that connect to one or more cloud routers. Links provide Layer 2/3 connectivity and can carry traffic for multiple VNFs.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center">
+              <div className="text-gray-400">↓</div>
+            </div>
+
+            <div className="p-4 bg-purple-50 rounded-lg border border-purple-100">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center">
+                    <Box className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+                <div className="ml-3">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-1">Virtual Network Functions</h4>
+                  <p className="text-sm text-gray-600">
+                    Software-based network services (firewalls, load balancers, SD-WAN) that run on one or more links. VNFs provide advanced networking capabilities.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <p className="text-xs text-gray-500">
+              <strong>Hierarchy:</strong> Connection → Cloud Routers ← Links (many-to-many) → VNFs (many-to-many)
+            </p>
+          </div>
         </div>
         
         {/* Security Overview */}
