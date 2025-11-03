@@ -714,7 +714,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
           <div className="flex space-x-2">
             <button
               onClick={() => setActiveTab('all')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'all'
                   ? 'bg-[#003184] text-white shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -724,7 +724,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('connections')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'connections'
                   ? 'bg-[#003184] text-white shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -737,7 +737,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('addons')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'addons'
                   ? 'bg-[#003184] text-white shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -750,7 +750,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('vnf')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'vnf'
                   ? 'bg-[#003184] text-white shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -763,7 +763,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('api')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'api'
                   ? 'bg-[#003184] text-white shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -776,7 +776,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('managed')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'managed'
                   ? 'bg-[#003184] text-white shadow-sm'
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
