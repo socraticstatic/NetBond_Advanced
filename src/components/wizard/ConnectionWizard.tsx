@@ -61,20 +61,31 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   
   // Check for state passed via router navigation
   const locationState = location.state as any;
-  
+
+  // Check if there's a template from the application solution zone
+  const template = locationState?.template;
+
   // If in edit mode or if mode is specified in location state, use that mode
-  const initialMode = editMode || (locationState?.editMode) ? 'visual' : 
-                     locationState?.mode ? locationState.mode as WizardMode : 
+  const initialMode = editMode || (locationState?.editMode) ? 'visual' :
+                     locationState?.mode ? locationState.mode as WizardMode :
+                     template ? 'step-by-step' : // If there's a template, go to wizard mode
                      null;
-                     
+
   // Get initialConnection from props or location state
   const connectionToEdit = initialConnection || locationState?.initialConnection;
   const isEditMode = editMode || locationState?.editMode || false;
-  
+
   // Initialize with mode from navigation state or props
   const [mode, setMode] = useState<WizardMode | null>(initialMode);
-  const [step, setStep] = useState(0);
-  const [config, setConfig] = useState<Partial<ConnectionConfig>>({});
+  const [step, setStep] = useState(template ? 1 : 0); // Skip provider selection if template exists
+  const [config, setConfig] = useState<Partial<ConnectionConfig>>(
+    template ? {
+      provider: template.provider as CloudProvider,
+      connectionType: template.connectionType as ConnectionType,
+      bandwidth: template.bandwidth as BandwidthOption,
+      name: template.name
+    } : {}
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showAI, setShowAI] = useState(true);
