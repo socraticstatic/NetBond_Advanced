@@ -139,6 +139,13 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
             </Button>
             <Button
               variant="outline"
+              icon={Filter}
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              Filters
+            </Button>
+            <Button
+              variant="outline"
               icon={Download}
               onClick={() => {
                 window.addToast({
@@ -150,13 +157,6 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
               }}
             >
               Export
-            </Button>
-            <Button
-              variant="outline"
-              icon={Filter}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              Filters
             </Button>
           </div>
         </div>
