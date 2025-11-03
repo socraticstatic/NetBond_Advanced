@@ -18,7 +18,8 @@ export function TabGroup({ tabs, activeTab, onChange, className = '' }: TabGroup
             onClick={() => !tab.disabled && onChange(tab.id)}
             disabled={tab.disabled}
             className={`
-              flex items-center whitespace-nowrap pt-1 pb-3 px-1 border-b-2 font-medium text-sm no-rounded
+              flex items-center whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm no-rounded
+              transition-colors duration-200
               ${tab.disabled
                 ? 'border-transparent text-gray-300 cursor-not-allowed'
                 : activeTab === tab.id
