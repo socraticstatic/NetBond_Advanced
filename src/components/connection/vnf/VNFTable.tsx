@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Router as RouterIcon, Network, Settings, Shield, Globe, Edit2, Trash2 } from 'lucide-react';
+import { Router as RouterIcon, Network, Settings, Shield, Globe, Edit2, Trash2, Eye } from 'lucide-react';
 import { VNF } from '../../../types/vnf';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { CloudRouter } from '../../../types/cloudrouter';
@@ -47,9 +47,9 @@ export function VNFTable({
       case 'router':
         return 'Router';
       case 'vnat':
-        return 'Virtual NAT';
+        return 'NAT';
       case 'custom':
-        return 'Custom VNF';
+        return 'Custom';
       default:
         return type.toUpperCase();
     }
@@ -174,7 +174,7 @@ export function VNFTable({
       data={vnfs}
       columns={columns}
       keyExtractor={(vnf) => vnf.id}
-      emptyMessage="No virtual network functions configured"
+      emptyMessage="No network functions configured"
       pageSize={50}
       showPagination={vnfs.length > 50}
       stickyHeader={true}
@@ -182,14 +182,20 @@ export function VNFTable({
         <OverflowMenu
           items={[
             {
+              id: 'view',
+              label: 'View Details',
+              icon: <Eye className="h-4 w-4" />,
+              onClick: () => onEdit(vnf)
+            },
+            {
               id: 'edit',
-              label: 'Edit VNF',
+              label: 'Edit Function',
               icon: <Edit2 className="h-4 w-4" />,
               onClick: () => onEdit(vnf)
             },
             {
               id: 'delete',
-              label: 'Delete VNF',
+              label: 'Delete Function',
               icon: <Trash2 className="h-4 w-4" />,
               onClick: () => onDelete(vnf),
               variant: 'danger'
