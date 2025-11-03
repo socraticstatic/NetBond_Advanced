@@ -112,8 +112,8 @@ function EnhancedTableComponent<T>({
 
   return (
     <div className="flex flex-col">
-      <div className="w-full overflow-hidden">
-        <table className="w-full table-fixed divide-y divide-gray-200">
+      <div className="w-full overflow-x-auto">
+        <table className="w-full divide-y divide-gray-200">
           <thead className={`bg-gray-50 ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
             <tr>
               {columns.map((column) => (
@@ -147,7 +147,7 @@ function EnhancedTableComponent<T>({
                 </th>
               ))}
               {rowActions && (
-                <th scope="col" className="relative px-6 py-3">
+                <th scope="col" className="relative px-6 py-3 w-20">
                   <span className="sr-only">Actions</span>
                 </th>
               )}
@@ -176,8 +176,10 @@ function EnhancedTableComponent<T>({
                     </td>
                   ))}
                   {rowActions && (
-                    <td className="px-3 py-2 text-right text-sm font-medium w-16">
-                      {rowActions(item)}
+                    <td className="px-3 py-2 text-right text-sm font-medium whitespace-nowrap">
+                      <div onClick={(e) => e.stopPropagation()}>
+                        {rowActions(item)}
+                      </div>
                     </td>
                   )}
                 </tr>
