@@ -196,6 +196,7 @@ export function GroupNetworkTab({ group, connections }: GroupNetworkTabProps) {
         onSave={handleSaveVNF}
         vnf={editingVNF}
         connectionId={connections[0]?.id.toString() || 'conn-001'}
+        links={[]}
       />
 
       {/* Delete VNF Confirmation Modal */}

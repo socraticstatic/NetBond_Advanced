@@ -1107,8 +1107,7 @@ export function NetworkTab({ connection, isEditing = false }: NetworkTabProps) {
         onSave={handleSaveVNF}
         vnf={editingVNF}
         connectionId={connection.id.toString()}
-        cloudRouters={cloudRouters}
-        selectedLinkId={selectedCloudRouterId}
+        links={allLinks}
       />
 
       {deletingVNF && (

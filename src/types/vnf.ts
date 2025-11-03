@@ -29,6 +29,7 @@ export interface VNF {
   icon?: typeof LucideIcon;
   description?: string;
   connectionId: string;
+  linkId?: string;
 }
 
 export interface VNFInterface {
