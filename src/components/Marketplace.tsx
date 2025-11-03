@@ -581,48 +581,49 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
 
   return (
     <div className="flex gap-6">
-      {/* Categories Sidebar - Only show for Browse Products */}
-      {activeTab !== 'solutions' && (
-        <div className="w-72 shrink-0 space-y-6 animate-in fade-in slide-in-from-left duration-500">
-          {/* Main Tabs - Replacing Featured Collections */}
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">Browse</h3>
-            <div className="space-y-2">
-              <button
-                onClick={() => setActiveTab('all')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
-                  activeTab === 'all'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-                }`}
-              >
-                <Network className="h-5 w-5" />
-                <div className="text-left">
-                  <div className="font-medium text-sm">Browse Products</div>
-                  <div className={`text-xs ${activeTab === 'all' ? 'text-blue-100' : 'text-gray-500'}`}>
-                    Network services & add-ons
-                  </div>
+      {/* Sidebar - Always visible */}
+      <div className="w-72 shrink-0 space-y-6 animate-in fade-in slide-in-from-left duration-500">
+        {/* Main Tabs */}
+        <div className="bg-white rounded-lg p-4 border border-gray-200">
+          <h3 className="text-sm font-semibold text-gray-900 mb-3">Browse</h3>
+          <div className="space-y-2">
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
+                activeTab === 'all'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
+              <Network className="h-5 w-5" />
+              <div className="text-left">
+                <div className="font-medium text-sm">Browse Products</div>
+                <div className={`text-xs ${activeTab === 'all' ? 'text-blue-100' : 'text-gray-500'}`}>
+                  Network services & add-ons
                 </div>
-              </button>
-              <button
-                onClick={() => setActiveTab('solutions')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
-                  activeTab === 'solutions'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-                }`}
-              >
-                <Sparkles className="h-5 w-5" />
-                <div className="text-left">
-                  <div className="font-medium text-sm">Browse Solutions</div>
-                  <div className={`text-xs ${activeTab === 'solutions' ? 'text-blue-100' : 'text-gray-500'}`}>
-                    App-specific configurations
-                  </div>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('solutions')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
+                activeTab === 'solutions'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
+              <Sparkles className="h-5 w-5" />
+              <div className="text-left">
+                <div className="font-medium text-sm">Browse Solutions</div>
+                <div className={`text-xs ${activeTab === 'solutions' ? 'text-blue-100' : 'text-gray-500'}`}>
+                  App-specific configurations
                 </div>
-              </button>
-            </div>
+              </div>
+            </button>
           </div>
+        </div>
 
+        {/* Category Grid - Only show for Browse Products */}
+        {activeTab !== 'solutions' && (
           <CategoryGrid
             categories={[
               {
@@ -679,32 +680,10 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             title="Browse by Category"
             className="bg-white rounded-lg p-4 border border-gray-200"
           />
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="flex-1 space-y-6">
-        {/* Tabs for Solutions view (when sidebar is hidden) */}
-        {activeTab === 'solutions' && (
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <div className="flex gap-2">
-              <button
-                onClick={() => setActiveTab('all')}
-                className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 border border-gray-200 transition-all duration-200"
-              >
-                <Network className="h-4 w-4" />
-                Browse Products
-              </button>
-              <button
-                onClick={() => setActiveTab('solutions')}
-                className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium bg-blue-600 text-white shadow-sm"
-              >
-                <Sparkles className="h-4 w-4" />
-                Browse Solutions
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Application Solution Zone */}
         {activeTab === 'solutions' && (
           <ApplicationSolutionZone />
