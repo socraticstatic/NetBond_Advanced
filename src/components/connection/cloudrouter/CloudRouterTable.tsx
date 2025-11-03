@@ -105,8 +105,7 @@ export function CloudRouterTable({
         pageSize={50}
         showPagination={cloudRouters.length > 50}
         stickyHeader={true}
-        exportFilename="cloud-routers.csv"
-        showExport={true}
+        showExport={false}
         rowActions={(router) => (
           <OverflowMenu
             items={[

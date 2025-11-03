@@ -92,8 +92,7 @@ export function LinkTable({
       pageSize={100}
       showPagination={links.length > 100}
       stickyHeader={true}
-      exportFilename="links.csv"
-      showExport={true}
+      showExport={false}
       rowActions={(link) => (
         <OverflowMenu
           items={[
