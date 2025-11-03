@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Layers } from 'lucide-react';
 import { Group } from '../../../types/group';
+import { StatusBadge } from '../../common/StatusBadge';
 
 interface GroupCardHeaderProps {
   group: Group;
@@ -63,17 +64,8 @@ export function GroupCardHeader({ group, children }: GroupCardHeaderProps) {
 
         {/* Status Badges */}
         <div className="flex items-center justify-between mt-4">
-          <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold shadow-sm ${
-            group.status === 'active' ? 'bg-green-100 text-green-800 border-green-200' : 
-            group.status === 'inactive' ? 'bg-gray-100 text-gray-800 border-gray-200' : 
-            'bg-red-100 text-red-800 border-red-200'
-          }`}>
-            {group.status === 'active' && <span className="h-2 w-2 bg-green-500 rounded-full mr-1.5"></span>}
-            {group.status === 'inactive' && <span className="h-2 w-2 bg-gray-500 rounded-full mr-1.5"></span>}
-            {group.status === 'suspended' && <span className="h-2 w-2 bg-red-500 rounded-full mr-1.5"></span>}
-            {group.status.charAt(0).toUpperCase() + group.status.slice(1)}
-          </span>
-          
+          <StatusBadge status={group.status} size="md" />
+
           <div className="flex items-center space-x-2">
             {/* Group Type Badge */}
             <span className={`px-2.5 py-1 ${getGroupTypeColor()} rounded-full text-xs font-medium capitalize`}>

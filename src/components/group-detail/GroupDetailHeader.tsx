@@ -1,6 +1,7 @@
 import { Edit2, Trash2, Download } from 'lucide-react';
 import { Group } from '../../types/group';
 import { Button } from '../common/Button';
+import { StatusBadge } from '../common/StatusBadge';
 
 interface GroupDetailHeaderProps {
   group: Group;
@@ -49,15 +50,7 @@ export function GroupDetailHeader({ group, onDeleteClick }: GroupDetailHeaderPro
               <span className={`px-3 py-1 text-xs font-medium rounded-full capitalize ${getGroupTypeColor()}`}>
                 {group.type}
               </span>
-              <span className={`px-3 py-1 text-xs font-medium rounded-full capitalize ${
-                group.status === 'active' 
-                  ? 'bg-green-100 text-green-800' 
-                  : group.status === 'inactive'
-                    ? 'bg-gray-100 text-gray-800'
-                    : 'bg-red-100 text-red-800'
-              }`}>
-                {group.status}
-              </span>
+              <StatusBadge status={group.status} size="md" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">{group.name}</h2>
             <p className="text-gray-600">{group.description}</p>
