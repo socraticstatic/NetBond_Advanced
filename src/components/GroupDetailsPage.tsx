@@ -13,15 +13,13 @@ import { GroupConnections } from './configure/groups/tabs/GroupConnections';
 import { GroupBilling } from './configure/groups/tabs/GroupBilling';
 import { GroupPerformance } from './configure/groups/tabs/GroupPerformance';
 import { GroupSettings } from './configure/groups/tabs/GroupSettings';
-import { GroupNetworkTab } from './configure/groups/tabs/GroupNetworkTab';
 
-type GroupTabType = 'overview' | 'members' | 'connections' | 'network' | 'billing' | 'performance' | 'settings';
+type GroupTabType = 'overview' | 'members' | 'connections' | 'billing' | 'performance' | 'settings';
 
 const tabs: { id: GroupTabType; label: string }[] = [
   { id: 'overview', label: 'Overview' },
   { id: 'members', label: 'Members' },
   { id: 'connections', label: 'Connections' },
-  { id: 'network', label: 'Network' },
   { id: 'billing', label: 'Billing' },
   { id: 'performance', label: 'Performance' },
   { id: 'settings', label: 'Settings' }
@@ -110,8 +108,6 @@ export function GroupDetailsPage() {
         return <GroupMembers group={group} users={groupUsers} allUsers={users} />;
       case 'connections':
         return <GroupConnections group={group} connections={groupConnections} allConnections={connections} />;
-      case 'network':
-        return <GroupNetworkTab group={group} connections={groupConnections} />;
       case 'billing':
         return <GroupBilling group={group} connections={groupConnections} />;
       case 'performance':
