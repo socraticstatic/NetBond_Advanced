@@ -6,12 +6,9 @@ import { Button } from '../common/Button';
 
 export function ApplicationSolutionZone() {
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedSolution, setSelectedSolution] = useState<ApplicationSolution | null>(null);
 
-  const displaySolutions = selectedCategory
-    ? getSolutionsByCategory(selectedCategory)
-    : getPopularSolutions();
+  const displaySolutions = applicationSolutions;
 
   const handleBuildNetwork = (solution: ApplicationSolution) => {
     setSelectedSolution(solution);
@@ -105,50 +102,8 @@ export function ApplicationSolutionZone() {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Browse by Category</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-          <button
-            onClick={() => setSelectedCategory(null)}
-            className={`p-4 rounded-xl border-2 transition-all duration-200 ${
-              selectedCategory === null
-                ? 'border-blue-600 bg-blue-50 shadow-md'
-                : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm'
-            }`}
-          >
-            <Star className={`h-6 w-6 mx-auto mb-2 ${selectedCategory === null ? 'text-blue-600' : 'text-gray-600'}`} />
-            <div className={`text-sm font-medium ${selectedCategory === null ? 'text-blue-900' : 'text-gray-700'}`}>
-              Popular
-            </div>
-          </button>
-
-          {solutionCategories.map((category) => {
-            const Icon = category.icon;
-            const isSelected = selectedCategory === category.id;
-            const colors = colorClasses[category.color];
-
-            return (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(isSelected ? null : category.id)}
-                className={`p-4 rounded-xl border-2 transition-all duration-200 ${
-                  isSelected
-                    ? `${colors.border} ${colors.bg} shadow-md`
-                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
-                }`}
-              >
-                <Icon className={`h-6 w-6 mx-auto mb-2 ${isSelected ? colors.text : 'text-gray-600'}`} />
-                <div className={`text-sm font-medium ${isSelected ? colors.text : 'text-gray-700'}`}>
-                  {category.name.split(' ')[0]}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          {selectedCategory ? solutionCategories.find(c => c.id === selectedCategory)?.name : 'Popular Solutions'}
+          Available Solutions
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {displaySolutions.map((solution) => {
