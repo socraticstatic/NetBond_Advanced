@@ -2,7 +2,9 @@ import { useState } from 'react';
 import {
   Layers, TrendingUp, AlertTriangle, Zap, Activity, Filter,
   Search, Download, Settings, Plus, Clock, ArrowUpDown, ExternalLink,
-  Eye, BarChart3, Wifi, Server, CheckCircle2, XCircle, AlertCircle
+  Eye, BarChart3, Wifi, Server, CheckCircle2, XCircle, AlertCircle,
+  Video, Cloud, Package, Video as VideoCamera, Code as CodeIcon,
+  Film, MessageSquare, PieChart
 } from 'lucide-react';
 import { Button } from '../../common/Button';
 
@@ -30,7 +32,6 @@ interface NetworkApp {
     message: string;
     timestamp: string;
   }>;
-  icon: string;
 }
 
 const mockApps: NetworkApp[] = [
@@ -43,8 +44,7 @@ const mockApps: NetworkApp[] = [
     users: 847,
     latency: 23,
     packets: { sent: 2847293, received: 2845012, lost: 2281 },
-    anomalies: [],
-    icon: '🎥'
+    anomalies: []
   },
   {
     id: 'app-2',
@@ -62,8 +62,7 @@ const mockApps: NetworkApp[] = [
         message: 'Bandwidth usage 40% above average',
         timestamp: '12 minutes ago'
       }
-    ],
-    icon: '☁️'
+    ]
   },
   {
     id: 'app-3',
@@ -74,8 +73,7 @@ const mockApps: NetworkApp[] = [
     users: 1243,
     latency: 12,
     packets: { sent: 4829384, received: 4827021, lost: 2363 },
-    anomalies: [],
-    icon: '📦'
+    anomalies: []
   },
   {
     id: 'app-4',
@@ -93,8 +91,7 @@ const mockApps: NetworkApp[] = [
         message: 'Latency increased by 12ms',
         timestamp: '8 minutes ago'
       }
-    ],
-    icon: '📹'
+    ]
   },
   {
     id: 'app-5',
@@ -105,8 +102,7 @@ const mockApps: NetworkApp[] = [
     users: 298,
     latency: 15,
     packets: { sent: 892374, received: 891023, lost: 1351 },
-    anomalies: [],
-    icon: '💻'
+    anomalies: []
   },
   {
     id: 'app-6',
@@ -124,8 +120,7 @@ const mockApps: NetworkApp[] = [
         message: 'Blocked by corporate policy',
         timestamp: '2 hours ago'
       }
-    ],
-    icon: '🎬'
+    ]
   },
   {
     id: 'app-7',
@@ -136,8 +131,7 @@ const mockApps: NetworkApp[] = [
     users: 892,
     latency: 19,
     packets: { sent: 1473829, received: 1472194, lost: 1635 },
-    anomalies: [],
-    icon: '💬'
+    anomalies: []
   },
   {
     id: 'app-8',
@@ -148,16 +142,15 @@ const mockApps: NetworkApp[] = [
     users: 12,
     latency: 21,
     packets: { sent: 129384, received: 128471, lost: 913 },
-    anomalies: [],
-    icon: '📊'
+    anomalies: []
   }
 ];
 
 const availableApps = [
-  { id: 'avail-1', name: 'Datadog', category: 'monitoring', description: 'Network performance monitoring', icon: '📈' },
-  { id: 'avail-2', name: 'Splunk', category: 'analytics', description: 'Log analysis and SIEM', icon: '🔍' },
-  { id: 'avail-3', name: 'Palo Alto', category: 'security', description: 'Next-gen firewall', icon: '🛡️' },
-  { id: 'avail-4', name: 'Cisco SD-WAN', category: 'networking', description: 'Software-defined WAN', icon: '🌐' }
+  { id: 'avail-1', name: 'Datadog', category: 'monitoring', description: 'Network performance monitoring' },
+  { id: 'avail-2', name: 'Splunk', category: 'analytics', description: 'Log analysis and SIEM' },
+  { id: 'avail-3', name: 'Palo Alto', category: 'security', description: 'Next-gen firewall' },
+  { id: 'avail-4', name: 'Cisco SD-WAN', category: 'networking', description: 'Software-defined WAN' }
 ];
 
 export function AppsConfiguration() {
@@ -219,6 +212,32 @@ export function AppsConfiguration() {
       case 'low': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
+  };
+
+  const getAppIcon = (appName: string) => {
+    const iconMap: Record<string, any> = {
+      'Microsoft Teams': Video,
+      'Salesforce': Cloud,
+      'AWS S3': Package,
+      'Zoom': VideoCamera,
+      'GitHub': CodeIcon,
+      'Netflix Corporate': Film,
+      'Slack': MessageSquare,
+      'Tableau': PieChart
+    };
+    const IconComponent = iconMap[appName] || Server;
+    return <IconComponent className="h-5 w-5 text-gray-600" />;
+  };
+
+  const getAvailableAppIcon = (appName: string) => {
+    const iconMap: Record<string, any> = {
+      'Datadog': BarChart3,
+      'Splunk': Search,
+      'Palo Alto': Shield,
+      'Cisco SD-WAN': Wifi
+    };
+    const IconComponent = iconMap[appName] || Server;
+    return <IconComponent className="h-6 w-6 text-gray-600" />;
   };
 
   return (
@@ -402,7 +421,9 @@ export function AppsConfiguration() {
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <span className="text-2xl mr-3">{app.icon}</span>
+                        <div className="p-2 bg-gray-100 rounded-lg mr-3">
+                          {getAppIcon(app.name)}
+                        </div>
                         <div>
                           <div className="font-medium text-gray-900">{app.name}</div>
                           <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${getCategoryColor(app.category)}`}>
@@ -501,7 +522,9 @@ export function AppsConfiguration() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {availableApps.map((app) => (
             <div key={app.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 hover:shadow-md transition-all">
-              <div className="text-3xl mb-2">{app.icon}</div>
+              <div className="p-3 bg-gray-100 rounded-lg inline-flex mb-3">
+                {getAvailableAppIcon(app.name)}
+              </div>
               <h4 className="font-semibold text-gray-900">{app.name}</h4>
               <p className="text-xs text-gray-600 mt-1">{app.description}</p>
               <Button variant="secondary" size="sm" className="w-full mt-3" icon={<Plus className="h-4 w-4" />}>
