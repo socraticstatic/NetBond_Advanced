@@ -11,6 +11,7 @@ import { VersioningConfiguration } from './tabs/VersioningConfiguration';
 import { BillingConfiguration } from './tabs/BillingConfiguration';
 import { ConnectionLogs } from '../configure/connections/ConnectionLogs';
 import { NetworkTab } from './tabs/NetworkTab';
+import { APIConfiguration } from './tabs/APIConfiguration';
 import { IconButton } from '../common/IconButton';
 import { Button } from '../common/Button';
 import { ConfirmDialog } from '../common/ConfirmDialog';
@@ -105,9 +106,10 @@ export function ConnectionDetails() {
         return <BillingConfiguration isEditing={isEditing} />;
       case 'logs':
         return <ConnectionLogs connectionId={connection.id.toString()} />;
+      case 'api':
+        return <APIConfiguration />;
       case 'qos':
       case 'security':
-      case 'api':
       case 'test':
         return (
           <div className="p-6 text-center text-gray-500">
