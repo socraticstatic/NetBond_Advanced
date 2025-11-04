@@ -160,8 +160,7 @@ export function SmartAssistant() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          style={{ borderRadius: '24px' }}
-          className="inline-flex items-center justify-center w-14 h-14 p-0 shadow-lg relative group bg-fw-ctaPrimary text-fw-linkPrimary hover:bg-fw-ctaPrimaryHover focus:ring-2 focus:ring-fw-active focus:ring-offset-2 border border-fw-ctaPrimary transition-all font-medium"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 relative group"
           aria-label="Open AI assistant"
         >
           <Sparkles className="h-6 w-6" />
