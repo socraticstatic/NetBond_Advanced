@@ -1,11 +1,20 @@
 /* Button styles */
 
 /* Base button styles */
-button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab),
-.btn:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab),
-.button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab),
-[class*='btn-']:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab) {
+button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab, .toggle-switch),
+.btn:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab, .toggle-switch),
+.button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab, .toggle-switch),
+[class*='btn-']:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab, .toggle-switch) {
   @apply rounded-md !important;
+}
+
+/* Toggle Switch - Always rounded-full (pills) */
+.toggle-switch {
+  @apply rounded-full !important;
+}
+
+.toggle-switch > span {
+  @apply rounded-full !important;
 }
 
 /* Quick Action buttons - subtle rounded corners */
