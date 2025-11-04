@@ -131,7 +131,7 @@ export function GlossaryPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1 space-y-2 max-h-[calc(100vh-24rem)] overflow-y-auto pr-2">
+          <div className="lg:col-span-1 space-y-2">
             {filteredTerms.map((term) => {
               const Icon = term.icon;
               const isSelected = selectedTerm === term.id;
