@@ -10,6 +10,7 @@ interface ButtonProps {
   className?: string;
   type?: 'button' | 'submit' | 'reset';
   size?: 'sm' | 'md' | 'lg';
+  style?: React.CSSProperties;
 }
 
 const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
@@ -22,6 +23,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
   className = '',
   type = 'button',
   size = 'md',
+  style,
 }, ref) => {
   const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors rounded-full';
 
@@ -61,6 +63,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
       type={type}
       onClick={onClick}
       disabled={disabled}
+      style={style}
       className={`
         ${baseStyles}
         ${sizeStyles[size]}
