@@ -72,7 +72,7 @@ export const mainAppTour: TourStep[] = [
     id: 'help',
     title: 'Help & Glossary',
     description: 'Access the complete glossary anytime from the Help menu. You\'ll find detailed explanations, examples, and visual aids for all networking terms. Hover over any term with a help icon to see quick tooltips.',
-    targetSelector: 'button[aria-label*="help" i], a[href="/support"]',
+    targetSelector: 'button:has(svg.lucide-help-circle)',
     placement: 'left',
     highlightPadding: 8
   },
