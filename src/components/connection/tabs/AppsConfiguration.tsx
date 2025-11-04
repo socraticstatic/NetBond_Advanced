@@ -4,7 +4,7 @@ import {
   Search, Download, Settings, Plus, Clock, ArrowUpDown, ExternalLink,
   Eye, BarChart3, Wifi, Server, CheckCircle2, XCircle, AlertCircle,
   Video, Cloud, Package, Video as VideoCamera, Code as CodeIcon,
-  Film, MessageSquare, PieChart
+  Film, MessageSquare, PieChart, Shield
 } from 'lucide-react';
 import { Button } from '../../common/Button';
 
