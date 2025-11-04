@@ -10,10 +10,42 @@ export const mainAppTour: TourStep[] = [
   {
     id: 'navigation',
     title: 'Main Navigation',
-    description: 'Use the main navigation to access different areas: Manage connections, Monitor performance, Configure settings, and more. The navigation adapts based on your role and permissions.',
+    description: 'The navigation follows your workflow lifecycle: Create new connections, Manage individual connections, Monitor performance and health, and Configure global settings. Each simple verb represents a core job you need to do. This task-centric approach matches how you naturally think about your work, not technical concepts.',
     targetSelector: 'nav[aria-label="Main navigation"]',
     placement: 'bottom',
     highlightPadding: 12
+  },
+  {
+    id: 'create-nav',
+    title: '1. Create',
+    description: 'Start your journey here. Create establishes new network connections to cloud providers. This is where new infrastructure begins - whether you need a connection to AWS, Azure, Google Cloud, or others.',
+    targetSelector: 'a[href="/create"]',
+    placement: 'bottom',
+    highlightPadding: 8
+  },
+  {
+    id: 'manage-nav',
+    title: '2. Manage',
+    description: 'Manage is your daily workspace for individual connections. Here you view connection details, add cloud routers, configure links (VLANs), attach network functions (VNFs), and modify existing infrastructure. This is where connections live and evolve.',
+    targetSelector: 'a[href="/manage"]',
+    placement: 'bottom',
+    highlightPadding: 8
+  },
+  {
+    id: 'monitor-nav',
+    title: '3. Monitor',
+    description: 'Monitor provides real-time visibility into network health and performance. Track metrics like latency, bandwidth usage, packet loss, and errors. Set up alerts, view logs, and generate reports. This is your operational command center.',
+    targetSelector: 'a[href="/monitor"]',
+    placement: 'bottom',
+    highlightPadding: 8
+  },
+  {
+    id: 'configure-nav',
+    title: '4. Configure',
+    description: 'Configure handles organization-wide settings that apply across all connections. Manage users and permissions, set billing preferences, establish policies, integrate with partners, and define system defaults. These are your global controls.',
+    targetSelector: 'a[href="/configure"]',
+    placement: 'bottom',
+    highlightPadding: 8
   },
   {
     id: 'connections',
@@ -21,14 +53,6 @@ export const mainAppTour: TourStep[] = [
     description: 'A Connection is your dedicated network path to cloud providers. Each Connection contains Cloud Routers that handle routing and traffic management. Think of it as the highway system connecting different locations.',
     targetSelector: 'main',
     placement: 'center'
-  },
-  {
-    id: 'create-connection',
-    title: 'Create New Connections',
-    description: 'Click here to start creating a new connection. You can choose between a step-by-step wizard or a visual network designer. The wizard guides you through provider selection, connection type, bandwidth, and configuration.',
-    targetSelector: 'a[href="/create"]',
-    placement: 'bottom',
-    highlightPadding: 8
   },
   {
     id: 'connection-types',
@@ -59,14 +83,6 @@ export const mainAppTour: TourStep[] = [
     title: 'IPE (Infrastructure Provider Edge)',
     description: 'IPE Routers are the physical network hardware at data center facilities. Your virtual Connections and Links run on these physical devices. The IPE provides actual bandwidth capacity and connectivity to cloud providers. It\'s the ground beneath your virtual highway.',
     placement: 'center'
-  },
-  {
-    id: 'monitoring',
-    title: 'Network Monitoring',
-    description: 'Monitor your network performance in real-time. Track latency, packet loss, bandwidth usage, and set up alerts. The monitoring dashboard gives you complete visibility into your network health.',
-    targetSelector: 'a[href="/monitor"]',
-    placement: 'bottom',
-    highlightPadding: 8
   },
   {
     id: 'help',
