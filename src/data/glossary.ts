@@ -39,9 +39,9 @@ export const glossaryTerms: GlossaryTerm[] = [
     term: 'Cloud Router',
     category: 'core',
     shortDefinition: 'A virtual router node that manages traffic within your connection',
-    detailedDefinition: 'A Cloud Router (also called a Cloud Node) is a virtual routing instance within your Connection. It handles BGP routing, traffic management, and can have multiple Links (VLANs) attached to it. Cloud Routers provide the logical separation and routing intelligence for your network traffic.',
-    example: 'If a Connection is a highway system, a Cloud Router is like a smart interchange that decides which exit (Link/VLAN) your traffic should take based on destination and routing rules.',
-    relatedTerms: ['connection', 'link', 'vlan', 'routing'],
+    detailedDefinition: 'A Cloud Router (also known as a Cloud Node in AT&T engineering terminology) is a virtual routing instance that serves as a connection hub within your Connection. It handles BGP routing, traffic management, and can have multiple Links (VLANs) attached to it. A single Connection can contain one, some, or many Cloud Routers depending on the Connection Type (Cloud to Cloud, Site to Cloud, VPN to Cloud, CoLocation/Datacenter to Cloud, or Internet to Cloud). Cloud Routers provide the logical separation and routing intelligence needed to manage complex network topologies.',
+    example: 'If a Connection is a highway system, a Cloud Router is like a smart interchange hub that decides which exit (Link/VLAN) your traffic should take based on destination and routing rules. For a Cloud to Cloud connection spanning multiple regions, you might have several Cloud Routers acting as regional hubs.',
+    relatedTerms: ['connection', 'link', 'vlan', 'routing', 'connection-type'],
     icon: Router,
     visualAid: 'hierarchy'
   },
