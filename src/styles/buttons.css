@@ -5,7 +5,7 @@ button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-bt
 .btn:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab),
 .button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab),
 [class*='btn-']:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab) {
-  @apply rounded-full !important;
+  @apply rounded-md !important;
 }
 
 /* Quick Action buttons - subtle rounded corners */
