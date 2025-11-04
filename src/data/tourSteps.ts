@@ -3,7 +3,7 @@ import { TourStep } from '../components/tour/ProductTour';
 export const mainAppTour: TourStep[] = [
   {
     id: 'welcome',
-    title: 'Welcome to Netbond Advanced',
+    title: 'Welcome to NetBond Advanced',
     description: 'This quick tour will help you understand the core concepts and navigation. You can skip this anytime or restart it later from the Help menu.',
     placement: 'center'
   },
