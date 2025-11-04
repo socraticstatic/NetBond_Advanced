@@ -23,7 +23,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
   type = 'button',
   size = 'md',
 }, ref) => {
-  const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors';
+  const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors rounded-full';
 
   const sizeStyles = {
     sm: 'text-sm px-3 py-1.5',
