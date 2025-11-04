@@ -160,17 +160,11 @@ export function SmartAssistant() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 relative group"
+          className="flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 relative group"
           aria-label="Open AI assistant"
         >
-          <Sparkles className="h-6 w-6" />
-          <span className="absolute -top-1 -right-1 flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
-          </span>
-          <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            Try Natural Language Commands
-          </div>
+          <Sparkles className="h-5 w-5 flex-shrink-0" />
+          <span className="text-sm font-medium whitespace-nowrap">AI Assistant</span>
         </button>
       )}
 
