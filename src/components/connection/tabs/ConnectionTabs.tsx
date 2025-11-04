@@ -1,14 +1,14 @@
 import { ReactNode } from 'react';
 import {
   Activity, Shield, History, Terminal, Settings,
-  Network, Router, BarChart2, Users, DollarSign, Code
+  Network, Router, Layers, Users, DollarSign, Code
 } from 'lucide-react';
 
 export type ConnectionTabType =
   | 'overview'
   | 'network'
   | 'security'
-  | 'qos'
+  | 'apps'
   | 'access'
   | 'versions'
   | 'billing'
@@ -31,7 +31,7 @@ interface ConnectionTabsProps {
 const TABS: Tab[] = [
   { id: 'overview', label: 'Overview', icon: <Activity className="h-5 w-5 mr-2" /> },
   { id: 'network', label: 'Details', icon: <Network className="h-5 w-5 mr-2" /> },
-  { id: 'qos', label: 'QoS', icon: <BarChart2 className="h-5 w-5 mr-2" />, disabled: true },
+  { id: 'apps', label: 'Apps', icon: <Layers className="h-5 w-5 mr-2" /> },
   { id: 'security', label: 'Security', icon: <Shield className="h-5 w-5 mr-2" />, disabled: true },
   { id: 'api', label: 'API', icon: <Code className="h-5 w-5 mr-2" /> },
   { id: 'access', label: 'Access', icon: <Users className="h-5 w-5 mr-2" /> },

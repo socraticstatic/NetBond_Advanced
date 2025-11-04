@@ -12,6 +12,7 @@ import { BillingConfiguration } from './tabs/BillingConfiguration';
 import { ConnectionLogs } from '../configure/connections/ConnectionLogs';
 import { NetworkTab } from './tabs/NetworkTab';
 import { APIConfiguration } from './tabs/APIConfiguration';
+import { AppsConfiguration } from './tabs/AppsConfiguration';
 import { IconButton } from '../common/IconButton';
 import { Button } from '../common/Button';
 import { ConfirmDialog } from '../common/ConfirmDialog';
@@ -108,7 +109,8 @@ export function ConnectionDetails() {
         return <ConnectionLogs connectionId={connection.id.toString()} />;
       case 'api':
         return <APIConfiguration />;
-      case 'qos':
+      case 'apps':
+        return <AppsConfiguration />;
       case 'security':
       case 'test':
         return (
