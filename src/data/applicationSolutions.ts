@@ -1,4 +1,4 @@
-import { Briefcase, Users, ShoppingCart, DollarSign, FileText, Wrench, MessageSquare, Database, TrendingUp, Package, HeartPulse, GraduationCap, Network, Shield, Video, Phone, Server, Cloud } from 'lucide-react';
+import { Briefcase, Users, ShoppingCart, MessageSquare, Database, TrendingUp } from 'lucide-react';
 
 export interface ApplicationSolution {
   id: string;
@@ -6,7 +6,7 @@ export interface ApplicationSolution {
   category: 'ERP' | 'HCM' | 'CRM' | 'Collaboration' | 'Analytics' | 'Industry';
   description: string;
   useCases: string[];
-  icon: any;
+  logo?: string;
   color: string;
   providers: string[];
   recommendedSetup: {
@@ -35,7 +35,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Time & Attendance Tracking',
       'Financial Planning & Analysis'
     ],
-    icon: Briefcase,
+    logo: 'https://logo.clearbit.com/workday.com',
     color: 'blue',
     providers: ['AWS', 'Google Cloud'],
     recommendedSetup: {
@@ -67,7 +67,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Asset Management',
       'Procurement & Sourcing'
     ],
-    icon: Database,
+    logo: 'https://logo.clearbit.com/sap.com',
     color: 'indigo',
     providers: ['AWS', 'Azure', 'Google Cloud'],
     recommendedSetup: {
@@ -99,7 +99,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Asset Management',
       'Employee Service Portal'
     ],
-    icon: Wrench,
+    logo: 'https://logo.clearbit.com/servicenow.com',
     color: 'green',
     providers: ['AWS', 'Azure'],
     recommendedSetup: {
@@ -131,7 +131,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Commerce Cloud',
       'Analytics & Reporting'
     ],
-    icon: ShoppingCart,
+    logo: 'https://logo.clearbit.com/salesforce.com',
     color: 'cyan',
     providers: ['AWS'],
     recommendedSetup: {
@@ -163,7 +163,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Risk Management',
       'Revenue Management'
     ],
-    icon: DollarSign,
+    logo: 'https://logo.clearbit.com/oracle.com',
     color: 'red',
     providers: ['Oracle Cloud'],
     recommendedSetup: {
@@ -195,7 +195,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Field Service Management',
       'Supply Chain Visibility'
     ],
-    icon: TrendingUp,
+    logo: 'https://logo.clearbit.com/microsoft.com',
     color: 'blue',
     providers: ['Azure'],
     recommendedSetup: {
@@ -227,7 +227,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Video Conferencing',
       'Workflow Automation'
     ],
-    icon: MessageSquare,
+    logo: 'https://logo.clearbit.com/slack.com',
     color: 'purple',
     providers: ['AWS'],
     recommendedSetup: {
@@ -259,7 +259,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Dashboard Creation',
       'Embedded Analytics'
     ],
-    icon: TrendingUp,
+    logo: 'https://logo.clearbit.com/tableau.com',
     color: 'orange',
     providers: ['AWS'],
     recommendedSetup: {
@@ -291,7 +291,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Care Coordination',
       'Population Health Analytics'
     ],
-    icon: HeartPulse,
+    logo: 'https://logo.clearbit.com/epic.com',
     color: 'pink',
     providers: ['AWS', 'Azure', 'Google Cloud'],
     recommendedSetup: {
@@ -323,7 +323,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Content Distribution',
       'Video Streaming'
     ],
-    icon: GraduationCap,
+    logo: 'https://logo.clearbit.com/instructure.com',
     color: 'green',
     providers: ['AWS'],
     recommendedSetup: {
@@ -355,7 +355,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'E-commerce Integration',
       'Business Intelligence'
     ],
-    icon: Package,
+    logo: 'https://logo.clearbit.com/netsuite.com',
     color: 'red',
     providers: ['Oracle Cloud'],
     recommendedSetup: {
@@ -387,7 +387,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Customer Analytics',
       'Multi-channel Support'
     ],
-    icon: Users,
+    logo: 'https://logo.clearbit.com/zendesk.com',
     color: 'green',
     providers: ['AWS'],
     recommendedSetup: {
@@ -419,7 +419,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Meeting Recording',
       'Webinar Hosting'
     ],
-    icon: Video,
+    logo: 'https://logo.clearbit.com/webex.com',
     color: 'blue',
     providers: ['AWS', 'Azure', 'Google Cloud'],
     recommendedSetup: {
@@ -451,7 +451,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'API Acceleration',
       'Security & DDoS Protection'
     ],
-    icon: Network,
+    logo: 'https://logo.clearbit.com/akamai.com',
     color: 'cyan',
     providers: ['Multi-Cloud'],
     recommendedSetup: {
@@ -483,7 +483,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Phone System',
       'Conference Rooms'
     ],
-    icon: Video,
+    logo: 'https://logo.clearbit.com/zoom.us',
     color: 'blue',
     providers: ['AWS', 'Oracle Cloud'],
     recommendedSetup: {
@@ -515,7 +515,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Programmable Chat',
       'Customer Engagement'
     ],
-    icon: Phone,
+    logo: 'https://logo.clearbit.com/twilio.com',
     color: 'red',
     providers: ['AWS'],
     recommendedSetup: {
@@ -547,7 +547,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Scientific Computing',
       'Crypto Mining'
     ],
-    icon: Server,
+    logo: 'https://logo.clearbit.com/coreweave.com',
     color: 'purple',
     providers: ['CoreWeave Cloud'],
     recommendedSetup: {
@@ -579,7 +579,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Quantum Computing',
       'Enterprise Applications'
     ],
-    icon: Cloud,
+    logo: 'https://logo.clearbit.com/ibm.com',
     color: 'blue',
     providers: ['IBM Cloud'],
     recommendedSetup: {

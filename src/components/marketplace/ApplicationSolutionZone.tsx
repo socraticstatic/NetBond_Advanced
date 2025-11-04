@@ -106,7 +106,6 @@ export function ApplicationSolutionZone() {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ isolation: 'auto' }}>
           {displaySolutions.map((solution) => {
-            const Icon = solution.icon;
             const colors = colorClasses[solution.color];
 
             return (
@@ -124,9 +123,11 @@ export function ApplicationSolutionZone() {
                 <div className={`bg-gradient-to-r ${colors.gradient} p-6 text-white min-h-[180px] flex flex-col rounded-t-xl`}>
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-white bg-opacity-20 rounded-lg backdrop-blur-sm">
-                        <Icon className="h-6 w-6" />
-                      </div>
+                      {solution.logo && (
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                          <img src={solution.logo} alt={`${solution.name} logo`} className="h-8 w-8 object-contain" />
+                        </div>
+                      )}
                       <div>
                         <h4 className="text-xl font-bold">{solution.name}</h4>
                         <p className="text-sm text-white text-opacity-90">{solution.category}</p>
@@ -207,9 +208,11 @@ export function ApplicationSolutionZone() {
             <div className={`bg-gradient-to-r ${colorClasses[selectedSolution.color].gradient} p-6 text-white`}>
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
-                    <selectedSolution.icon className="h-8 w-8" />
-                  </div>
+                  {selectedSolution.logo && (
+                    <div className="p-3 bg-white rounded-xl shadow-sm">
+                      <img src={selectedSolution.logo} alt={`${selectedSolution.name} logo`} className="h-10 w-10 object-contain" />
+                    </div>
+                  )}
                   <div>
                     <h3 className="text-2xl font-bold">{selectedSolution.name} Network</h3>
                     <p className="text-white text-opacity-90">Pre-configured network solution</p>
