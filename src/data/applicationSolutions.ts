@@ -579,7 +579,7 @@ export const applicationSolutions: ApplicationSolution[] = [
       'Quantum Computing',
       'Enterprise Applications'
     ],
-    logo: 'https://logo.clearbit.com/ibm.com',
+    logo: 'https://logo.clearbit.com/cloud.ibm.com',
     color: 'blue',
     providers: ['IBM Cloud'],
     recommendedSetup: {
