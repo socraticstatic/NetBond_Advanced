@@ -461,36 +461,26 @@ export function AppsConfiguration() {
       </div>
 
       {/* Applications Table */}
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
+      <div className="overflow-x-auto">
+        <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Application
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Bandwidth
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Users
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Latency
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Packet Loss
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   QoS Priority
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Anomalies
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -504,7 +494,7 @@ export function AppsConfiguration() {
                     className="hover:bg-gray-50 transition-colors cursor-pointer"
                     onClick={() => setSelectedApp(app.id)}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-3">
                       <div className="flex items-center">
                         <div className="p-2 bg-gray-100 rounded-lg mr-3">
                           {getAppIcon(app.name)}
@@ -517,42 +507,24 @@ export function AppsConfiguration() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
                         {getStatusIcon(app.status)}
                         <span className="text-sm text-gray-900 capitalize">{app.status}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>
-                        <div className="text-sm font-semibold text-gray-900">
-                          {app.bandwidth.current.toFixed(1)} {app.bandwidth.unit}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          avg: {app.bandwidth.average.toFixed(1)} | peak: {app.bandwidth.peak.toFixed(1)}
-                        </div>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="text-sm font-semibold text-gray-900">
+                        {app.bandwidth.current.toFixed(1)} {app.bandwidth.unit}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{app.users.toLocaleString()}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <div className="flex items-center">
                         <Wifi className="h-4 w-4 text-gray-400 mr-1" />
                         <span className="text-sm text-gray-900">{app.latency}ms</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm">
-                        <span className={`font-medium ${parseFloat(packetLossPercent) > 0.1 ? 'text-red-600' : 'text-green-600'}`}>
-                          {packetLossPercent}%
-                        </span>
-                        <div className="text-xs text-gray-500">
-                          {app.packets.lost.toLocaleString()} lost
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       {app.qos ? (
                         <button
                           onClick={(e) => {
@@ -576,24 +548,7 @@ export function AppsConfiguration() {
                         </button>
                       )}
                     </td>
-                    <td className="px-6 py-4">
-                      {app.anomalies.length > 0 ? (
-                        <div className="space-y-1">
-                          {app.anomalies.slice(0, 1).map((anomaly, idx) => (
-                            <div key={idx} className={`text-xs px-2 py-1 rounded border ${getSeverityColor(anomaly.severity)}`}>
-                              <div className="font-medium">{anomaly.type.replace('-', ' ')}</div>
-                              <div>{anomaly.message}</div>
-                            </div>
-                          ))}
-                          {app.anomalies.length > 1 && (
-                            <div className="text-xs text-gray-500">+{app.anomalies.length - 1} more</div>
-                          )}
-                        </div>
-                      ) : (
-                        <span className="text-sm text-gray-400">None</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                    <td className="px-4 py-3 whitespace-nowrap text-right">
                       <div className="flex items-center justify-end space-x-2">
                         <button
                           onClick={(e) => e.stopPropagation()}
@@ -626,7 +581,6 @@ export function AppsConfiguration() {
               })}
             </tbody>
           </table>
-        </div>
       </div>
 
       {/* Available Apps to Deploy */}
