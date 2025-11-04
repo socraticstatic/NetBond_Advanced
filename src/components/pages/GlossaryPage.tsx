@@ -140,7 +140,7 @@ export function GlossaryPage() {
                 <button
                   key={term.id}
                   onClick={() => setSelectedTerm(term.id)}
-                  className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                  className={`w-full p-4 rounded-lg border-2 transition-all duration-200 text-left ${
                     isSelected
                       ? 'border-blue-600 bg-gradient-to-br from-blue-50 to-indigo-50 shadow-md scale-[1.02]'
                       : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm'
