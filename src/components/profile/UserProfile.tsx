@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe } from 'lucide-react';
+import { User, Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe, Link2 } from 'lucide-react';
 import { Button } from '../common/Button';
 
 export function UserProfile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80');
-  
+
   const [formData, setFormData] = useState({
     name: 'Emilio Estevez',
     email: 'emilio.estevez@att.com',
@@ -16,7 +16,7 @@ export function UserProfile() {
     department: 'Cloud Solutions',
     role: 'Administrator'
   });
-  
+
   const [securitySettings, setSecuritySettings] = useState({
     twoFactorEnabled: true,
     passwordLastChanged: '2023-12-15',
@@ -26,6 +26,13 @@ export function UserProfile() {
       sms: false,
       app: true
     }
+  });
+
+  const [businessCenterIntegration, setBusinessCenterIntegration] = useState({
+    enabled: false,
+    username: 'eestevez',
+    lastSync: null as string | null,
+    syncStatus: 'Not connected' as 'Not connected' | 'Connected' | 'Syncing' | 'Error'
   });
 
   // User preferences
@@ -458,6 +465,181 @@ export function UserProfile() {
               </select>
             </div>
           </div>
+        </div>
+
+        {/* Business Center Integration */}
+        <div className="px-6 py-6 border-t border-gray-200">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-lg font-medium text-gray-900">Business Center Integration</h2>
+              <p className="text-sm text-gray-500 mt-1">Connect to AT&T Business Center for unified account management</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={businessCenterIntegration.enabled}
+                onChange={() => {
+                  const newEnabled = !businessCenterIntegration.enabled;
+                  setBusinessCenterIntegration({
+                    ...businessCenterIntegration,
+                    enabled: newEnabled,
+                    syncStatus: newEnabled ? 'Connected' : 'Not connected',
+                    lastSync: newEnabled ? new Date().toISOString() : null
+                  });
+                  window.addToast({
+                    type: newEnabled ? 'success' : 'info',
+                    title: `Business Center ${newEnabled ? 'Connected' : 'Disconnected'}`,
+                    message: newEnabled
+                      ? 'Your profile is now synced with Business Center'
+                      : 'Business Center integration has been disabled',
+                    duration: 3000
+                  });
+                }}
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+            </label>
+          </div>
+
+          {businessCenterIntegration.enabled && (
+            <div className="space-y-4 bg-brand-lightBlue/30 p-4 rounded-lg border border-brand-blue/20">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start space-x-3">
+                  <div className="p-2 bg-brand-blue rounded-lg">
+                    <Link2 className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <h3 className="text-sm font-medium text-gray-900">Connection Status</h3>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                        businessCenterIntegration.syncStatus === 'Connected'
+                          ? 'bg-green-100 text-green-800'
+                          : businessCenterIntegration.syncStatus === 'Syncing'
+                          ? 'bg-blue-100 text-blue-800'
+                          : businessCenterIntegration.syncStatus === 'Error'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {businessCenterIntegration.syncStatus}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {businessCenterIntegration.lastSync
+                        ? `Last synced: ${new Date(businessCenterIntegration.lastSync).toLocaleString()}`
+                        : 'Not yet synced'
+                      }
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setBusinessCenterIntegration({
+                      ...businessCenterIntegration,
+                      syncStatus: 'Syncing',
+                    });
+                    setTimeout(() => {
+                      setBusinessCenterIntegration({
+                        ...businessCenterIntegration,
+                        syncStatus: 'Connected',
+                        lastSync: new Date().toISOString()
+                      });
+                      window.addToast({
+                        type: 'success',
+                        title: 'Sync Complete',
+                        message: 'Your profile data has been synchronized with Business Center',
+                        duration: 3000
+                      });
+                    }, 2000);
+                  }}
+                >
+                  Sync Now
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-brand-blue/20">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Business Center Username
+                  </label>
+                  <input
+                    type="text"
+                    value={businessCenterIntegration.username}
+                    onChange={(e) => setBusinessCenterIntegration({
+                      ...businessCenterIntegration,
+                      username: e.target.value
+                    })}
+                    className="rounded-full w-full border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue text-sm"
+                    placeholder="Enter Business Center username"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Your AT&T Business Center account username
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Password
+                  </label>
+                  <div className="flex space-x-2">
+                    <input
+                      type="password"
+                      value="••••••••"
+                      disabled
+                      className="rounded-full w-full border-gray-300 shadow-sm bg-gray-50 text-sm"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        window.addToast({
+                          type: 'info',
+                          title: 'Update Password',
+                          message: 'Password update dialog coming soon',
+                          duration: 3000
+                        });
+                      }}
+                    >
+                      Update
+                    </Button>
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Securely stored and encrypted
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-brand-blue/20">
+                <h4 className="text-sm font-medium text-gray-900 mb-2">Synchronized Data</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  <div className="flex items-center text-xs text-gray-600">
+                    <CheckCircle className="h-3.5 w-3.5 text-green-600 mr-1.5" />
+                    Account Info
+                  </div>
+                  <div className="flex items-center text-xs text-gray-600">
+                    <CheckCircle className="h-3.5 w-3.5 text-green-600 mr-1.5" />
+                    Billing Data
+                  </div>
+                  <div className="flex items-center text-xs text-gray-600">
+                    <CheckCircle className="h-3.5 w-3.5 text-green-600 mr-1.5" />
+                    Service Status
+                  </div>
+                  <div className="flex items-center text-xs text-gray-600">
+                    <CheckCircle className="h-3.5 w-3.5 text-green-600 mr-1.5" />
+                    Support Tickets
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!businessCenterIntegration.enabled && (
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <p className="text-sm text-gray-600">
+                Enable Business Center integration to access unified account management, billing data synchronization, and streamlined support workflows.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Notification Preferences */}
