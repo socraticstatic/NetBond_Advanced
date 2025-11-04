@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Zap, Maximize2, Minimize2, Sparkles, HelpCircle } from 'lucide-react';
+import { MessageSquare, X, Send, Zap, Maximize2, Minimize2, Sparkles, HelpCircle, RotateCcw, CheckCircle2 } from 'lucide-react';
 import { Button } from './common/Button';
 import { OperationCard } from './common/OperationCard';
 import {
@@ -24,6 +24,8 @@ export function SmartAssistant() {
   ]);
   const [isThinking, setIsThinking] = useState(false);
   const [showExamples, setShowExamples] = useState(true);
+  const [processingOperation, setProcessingOperation] = useState(false);
+  const [completedOperations, setCompletedOperations] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -89,13 +91,59 @@ export function SmartAssistant() {
     handleSendMessage(prompt);
   };
 
-  const handleOperationAction = () => {
+  const handleOperationAction = (messageId: string, operationType: string) => {
+    setProcessingOperation(true);
+    setCompletedOperations(prev => new Set(prev).add(messageId));
+
     window.addToast?.({
-      type: 'success',
-      title: 'Operation Scheduled',
-      message: 'Your network operation has been scheduled and will execute as planned.',
-      duration: 4000
+      type: 'info',
+      title: 'Processing Operation',
+      message: 'Executing your network operation...',
+      duration: 2000
     });
+
+    setTimeout(() => {
+      const successMessage: MockMessage = {
+        id: (Date.now() + 2).toString(),
+        role: 'assistant',
+        content: getSuccessMessage(operationType),
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, successMessage]);
+      setProcessingOperation(false);
+
+      window.addToast?.({
+        type: 'success',
+        title: 'Operation Complete',
+        message: 'Your network operation has been successfully executed!',
+        duration: 4000
+      });
+    }, 2000);
+  };
+
+  const getSuccessMessage = (operationType: string) => {
+    const messages: Record<string, string> = {
+      capacity: "Perfect! I've scheduled the capacity scaling operation. Your bandwidth will automatically increase at the specified time and revert when the event concludes. You'll receive notifications before each change.",
+      cost: "Excellent! I've applied the cost optimization plan. Your monthly spending will decrease by 23% starting next billing cycle, and all connections will maintain their SLA guarantees. The changes are now active.",
+      monitoring: "All systems are operating normally. I'll continue monitoring your connections and will alert you immediately if any metrics fall outside expected ranges.",
+      troubleshoot: "Great! I've applied the routing optimization fix. Latency should improve within 2-3 minutes. I'll monitor the connection and confirm once performance returns to normal levels.",
+      schedule: "Your connection setup has been initiated. You'll receive updates as the provisioning progresses. Expected completion time is 5-7 business days."
+    };
+    return messages[operationType] || "Operation completed successfully!";
+  };
+
+  const handleResetConversation = () => {
+    setMessages([
+      {
+        id: '1',
+        role: 'assistant',
+        content: defaultResponses.greeting,
+        timestamp: new Date()
+      }
+    ]);
+    setShowExamples(true);
+    setCompletedOperations(new Set());
   };
 
   const getIconComponent = (iconName: string) => {
@@ -105,7 +153,7 @@ export function SmartAssistant() {
 
   const containerClasses = isExpanded
     ? 'fixed inset-4 z-50 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col'
-    : 'absolute bottom-16 right-0 mb-2 w-[420px] bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden';
+    : 'absolute bottom-16 right-0 mb-2 w-[440px] bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden flex flex-col max-h-[600px]';
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -128,27 +176,38 @@ export function SmartAssistant() {
 
       {isOpen && (
         <div className={containerClasses}>
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-cyan-50 flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <div className="p-2 bg-white rounded-lg shadow-sm">
-                <Sparkles className="h-5 w-5 text-blue-600" />
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 via-cyan-50 to-blue-50 flex-shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="p-2 bg-white rounded-lg shadow-sm">
+                  <Sparkles className="h-5 w-5 text-blue-600" />
+                </div>
+                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
               </div>
               <div>
                 <h3 className="text-sm font-semibold text-gray-900">NetBond AI Assistant</h3>
                 <p className="text-xs text-gray-600">Natural Language Network Management</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <button
+                onClick={handleResetConversation}
+                className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                aria-label="Reset conversation"
+                title="Start new conversation"
+              >
+                <RotateCcw className="h-4 w-4" />
+              </button>
               <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-white rounded-lg transition-colors"
+                className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                 aria-label={isExpanded ? 'Minimize' : 'Maximize'}
               >
                 {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-white rounded-lg transition-colors"
+                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                 aria-label="Close assistant"
               >
                 <X className="h-4 w-4" />
@@ -166,34 +225,40 @@ export function SmartAssistant() {
                   <div className={`max-w-[85%] ${msg.role === 'user' ? 'order-2' : 'order-1'}`}>
                     {msg.role === 'assistant' && (
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="p-1.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
+                        <div className="p-1.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg shadow-sm">
                           <Zap className="h-3 w-3 text-white" />
                         </div>
-                        <span className="text-xs font-medium text-gray-600">AI Assistant</span>
+                        <span className="text-xs font-medium text-gray-700">AI Assistant</span>
                       </div>
                     )}
                     <div
-                      className={`rounded-2xl px-4 py-3 ${
+                      className={`rounded-2xl px-4 py-3 shadow-sm ${
                         msg.role === 'user'
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-gradient-to-br from-blue-600 to-blue-700 text-white'
                           : 'bg-white border border-gray-200 text-gray-900'
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-line">{msg.content}</p>
+                      <p className="text-sm whitespace-pre-line leading-relaxed">{msg.content}</p>
                     </div>
                     {msg.operationCard && (
                       <div className="mt-3">
                         <OperationCard
                           card={msg.operationCard}
-                          onAction={handleOperationAction}
+                          onAction={() => handleOperationAction(msg.id, msg.operationCard!.type)}
+                          isProcessing={processingOperation}
+                          isCompleted={completedOperations.has(msg.id)}
                         />
                       </div>
                     )}
-                    {msg.role === 'user' && (
-                      <div className="text-xs text-gray-500 mt-1 text-right">
-                        {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </div>
-                    )}
+                    <div className="text-xs text-gray-500 mt-1.5 flex items-center gap-2">
+                      <span>{msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      {msg.role === 'assistant' && msg.operationCard && completedOperations.has(msg.id) && (
+                        <span className="flex items-center gap-1 text-green-600 font-medium">
+                          <CheckCircle2 className="h-3 w-3" />
+                          Completed
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -202,12 +267,12 @@ export function SmartAssistant() {
                 <div className="flex justify-start">
                   <div className="max-w-[85%]">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="p-1.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg">
+                      <div className="p-1.5 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg shadow-sm">
                         <Zap className="h-3 w-3 text-white" />
                       </div>
-                      <span className="text-xs font-medium text-gray-600">AI Assistant</span>
+                      <span className="text-xs font-medium text-gray-700">AI Assistant</span>
                     </div>
-                    <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
+                    <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm">
                       <div className="flex items-center gap-2">
                         <div className="flex gap-1">
                           <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
@@ -222,9 +287,11 @@ export function SmartAssistant() {
               )}
 
               {showExamples && messages.length === 1 && (
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <div className="bg-white rounded-xl border-2 border-gray-200 p-4 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
-                    <HelpCircle className="h-4 w-4 text-blue-600" />
+                    <div className="p-1.5 bg-blue-50 rounded-lg">
+                      <HelpCircle className="h-4 w-4 text-blue-600" />
+                    </div>
                     <h4 className="text-sm font-semibold text-gray-900">Try these examples:</h4>
                   </div>
                   <div className="grid grid-cols-1 gap-2">
@@ -234,11 +301,11 @@ export function SmartAssistant() {
                         onClick={() => handleExampleClick(example.prompt)}
                         className="flex items-start gap-3 p-3 text-left bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-lg transition-all group"
                       >
-                        <div className="p-1.5 bg-white rounded-lg group-hover:bg-blue-100 transition-colors">
+                        <div className="p-1.5 bg-white rounded-lg group-hover:bg-blue-100 transition-colors shadow-sm">
                           {getIconComponent(example.icon)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium text-gray-900 mb-1">{example.label}</div>
+                          <div className="text-xs font-semibold text-gray-900 mb-1">{example.label}</div>
                           <div className="text-xs text-gray-600 line-clamp-2">{example.prompt}</div>
                         </div>
                       </button>
@@ -253,7 +320,7 @@ export function SmartAssistant() {
 
           <div className="p-4 border-t border-gray-200 bg-white flex-shrink-0">
             <div className="max-w-3xl mx-auto">
-              <div className="relative flex items-center bg-gray-50 rounded-full border-2 border-gray-200 focus-within:border-blue-400 transition-colors">
+              <div className="relative flex items-center bg-gray-50 rounded-full border-2 border-gray-200 focus-within:border-blue-400 focus-within:shadow-md transition-all">
                 <input
                   ref={inputRef}
                   type="text"
@@ -261,20 +328,20 @@ export function SmartAssistant() {
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type a command in plain English..."
-                  className="flex-1 py-3 pl-4 pr-12 bg-transparent border-none focus:outline-none text-sm"
+                  className="flex-1 py-3 pl-5 pr-12 bg-transparent border-none focus:outline-none text-sm placeholder:text-gray-400"
                   disabled={isThinking}
                 />
                 <button
                   onClick={() => handleSendMessage()}
                   disabled={!message.trim() || isThinking}
-                  className="absolute right-2 p-2 rounded-full text-white bg-gradient-to-br from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed transition-all shadow-lg disabled:shadow-none"
+                  className="absolute right-2 p-2.5 rounded-full text-white bg-gradient-to-br from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed transition-all shadow-lg disabled:shadow-none hover:shadow-xl"
                   aria-label="Send message"
                 >
                   <Send className="h-4 w-4" />
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-2 text-center">
-                This is a demonstration with pre-scripted responses
+                Demo mode with pre-scripted AI responses
               </p>
             </div>
           </div>
