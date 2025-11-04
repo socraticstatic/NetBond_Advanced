@@ -4,9 +4,19 @@ import {
   Search, Download, Settings, Plus, Clock, ArrowUpDown, ExternalLink,
   Eye, BarChart3, Wifi, Server, CheckCircle2, XCircle, AlertCircle,
   Video, Cloud, Package, Video as VideoCamera, Code as CodeIcon,
-  Film, MessageSquare, PieChart, Shield
+  Film, MessageSquare, PieChart, Shield, Gauge, X
 } from 'lucide-react';
 import { Button } from '../../common/Button';
+import { Modal } from '../../common/Modal';
+
+interface QoSPolicy {
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  bandwidthLimit?: number;
+  bandwidthGuarantee?: number;
+  latencyTarget?: number;
+  jitterTarget?: number;
+  packetLossTarget?: number;
+}
 
 interface NetworkApp {
   id: string;
@@ -32,6 +42,7 @@ interface NetworkApp {
     message: string;
     timestamp: string;
   }>;
+  qos?: QoSPolicy;
 }
 
 const mockApps: NetworkApp[] = [
@@ -44,7 +55,14 @@ const mockApps: NetworkApp[] = [
     users: 847,
     latency: 23,
     packets: { sent: 2847293, received: 2845012, lost: 2281 },
-    anomalies: []
+    anomalies: [],
+    qos: {
+      priority: 'critical',
+      bandwidthGuarantee: 150,
+      latencyTarget: 30,
+      jitterTarget: 10,
+      packetLossTarget: 0.1
+    }
   },
   {
     id: 'app-2',
@@ -62,7 +80,13 @@ const mockApps: NetworkApp[] = [
         message: 'Bandwidth usage 40% above average',
         timestamp: '12 minutes ago'
       }
-    ]
+    ],
+    qos: {
+      priority: 'high',
+      bandwidthGuarantee: 100,
+      latencyTarget: 50,
+      packetLossTarget: 0.5
+    }
   },
   {
     id: 'app-3',
@@ -73,7 +97,13 @@ const mockApps: NetworkApp[] = [
     users: 1243,
     latency: 12,
     packets: { sent: 4829384, received: 4827021, lost: 2363 },
-    anomalies: []
+    anomalies: [],
+    qos: {
+      priority: 'medium',
+      bandwidthLimit: 500,
+      latencyTarget: 100,
+      packetLossTarget: 1.0
+    }
   },
   {
     id: 'app-4',
@@ -91,7 +121,14 @@ const mockApps: NetworkApp[] = [
         message: 'Latency increased by 12ms',
         timestamp: '8 minutes ago'
       }
-    ]
+    ],
+    qos: {
+      priority: 'critical',
+      bandwidthGuarantee: 200,
+      latencyTarget: 30,
+      jitterTarget: 15,
+      packetLossTarget: 0.1
+    }
   },
   {
     id: 'app-5',
@@ -102,7 +139,13 @@ const mockApps: NetworkApp[] = [
     users: 298,
     latency: 15,
     packets: { sent: 892374, received: 891023, lost: 1351 },
-    anomalies: []
+    anomalies: [],
+    qos: {
+      priority: 'medium',
+      bandwidthGuarantee: 50,
+      latencyTarget: 100,
+      packetLossTarget: 1.0
+    }
   },
   {
     id: 'app-6',
@@ -131,7 +174,13 @@ const mockApps: NetworkApp[] = [
     users: 892,
     latency: 19,
     packets: { sent: 1473829, received: 1472194, lost: 1635 },
-    anomalies: []
+    anomalies: [],
+    qos: {
+      priority: 'high',
+      bandwidthGuarantee: 75,
+      latencyTarget: 50,
+      packetLossTarget: 0.5
+    }
   },
   {
     id: 'app-8',
@@ -160,8 +209,10 @@ export function AppsConfiguration() {
   const [sortBy, setSortBy] = useState<'bandwidth' | 'users' | 'latency' | 'name'>('bandwidth');
   const [showAnomaliesOnly, setShowAnomaliesOnly] = useState(false);
   const [selectedApp, setSelectedApp] = useState<string | null>(null);
+  const [qosModalApp, setQosModalApp] = useState<NetworkApp | null>(null);
+  const [apps, setApps] = useState<NetworkApp[]>(mockApps);
 
-  const filteredApps = mockApps
+  const filteredApps = apps
     .filter(app => {
       const matchesSearch = app.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = filterCategory === 'all' || app.category === filterCategory;
@@ -179,10 +230,10 @@ export function AppsConfiguration() {
       }
     });
 
-  const totalBandwidth = mockApps.reduce((sum, app) => sum + app.bandwidth.current, 0);
-  const totalUsers = mockApps.reduce((sum, app) => sum + app.users, 0);
-  const activeApps = mockApps.filter(app => app.status === 'active').length;
-  const totalAnomalies = mockApps.reduce((sum, app) => sum + app.anomalies.length, 0);
+  const totalBandwidth = apps.reduce((sum, app) => sum + app.bandwidth.current, 0);
+  const totalUsers = apps.reduce((sum, app) => sum + app.users, 0);
+  const activeApps = apps.filter(app => app.status === 'active').length;
+  const totalAnomalies = apps.reduce((sum, app) => sum + app.anomalies.length, 0);
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
@@ -238,6 +289,37 @@ export function AppsConfiguration() {
     };
     const IconComponent = iconMap[appName] || Server;
     return <IconComponent className="h-6 w-6 text-gray-600" />;
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'medium': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'low': return 'bg-gray-100 text-gray-800 border-gray-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  const handleSaveQoS = (updatedPolicy: QoSPolicy) => {
+    if (!qosModalApp) return;
+
+    setApps(prevApps =>
+      prevApps.map(app =>
+        app.id === qosModalApp.id
+          ? { ...app, qos: updatedPolicy }
+          : app
+      )
+    );
+
+    setQosModalApp(null);
+
+    window.addToast({
+      type: 'success',
+      title: 'QoS Policy Updated',
+      message: `Quality of Service settings for ${qosModalApp.name} have been updated.`,
+      duration: 3000
+    });
   };
 
   return (
@@ -403,6 +485,9 @@ export function AppsConfiguration() {
                   Packet Loss
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  QoS Priority
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Anomalies
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -467,6 +552,30 @@ export function AppsConfiguration() {
                         </div>
                       </div>
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {app.qos ? (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setQosModalApp(app);
+                          }}
+                          className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded border ${getPriorityColor(app.qos.priority)} hover:shadow-sm transition-all`}
+                        >
+                          <Gauge className="h-3 w-3 mr-1" />
+                          {app.qos.priority.toUpperCase()}
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setQosModalApp(app);
+                          }}
+                          className="text-xs text-gray-500 hover:text-gray-700 underline"
+                        >
+                          Set QoS
+                        </button>
+                      )}
+                    </td>
                     <td className="px-6 py-4">
                       {app.anomalies.length > 0 ? (
                         <div className="space-y-1">
@@ -487,12 +596,24 @@ export function AppsConfiguration() {
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="flex items-center justify-end space-x-2">
                         <button
+                          onClick={(e) => e.stopPropagation()}
                           className="p-1 hover:bg-gray-100 rounded transition-colors"
                           title="View Details"
                         >
                           <Eye className="h-4 w-4 text-gray-600" />
                         </button>
                         <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setQosModalApp(app);
+                          }}
+                          className="p-1 hover:bg-gray-100 rounded transition-colors"
+                          title="Configure QoS"
+                        >
+                          <Gauge className="h-4 w-4 text-gray-600" />
+                        </button>
+                        <button
+                          onClick={(e) => e.stopPropagation()}
                           className="p-1 hover:bg-gray-100 rounded transition-colors"
                           title="Settings"
                         >
@@ -538,7 +659,7 @@ export function AppsConfiguration() {
       {/* Export and Actions */}
       <div className="flex items-center justify-between">
         <div className="text-sm text-gray-600">
-          Showing {filteredApps.length} of {mockApps.length} applications
+          Showing {filteredApps.length} of {apps.length} applications
         </div>
         <div className="flex space-x-2">
           <Button variant="secondary" icon={<Download className="h-4 w-4" />}>
@@ -549,6 +670,199 @@ export function AppsConfiguration() {
           </Button>
         </div>
       </div>
+
+      {/* QoS Configuration Modal */}
+      {qosModalApp && (
+        <QoSModal
+          app={qosModalApp}
+          onClose={() => setQosModalApp(null)}
+          onSave={handleSaveQoS}
+        />
+      )}
     </div>
+  );
+}
+
+interface QoSModalProps {
+  app: NetworkApp;
+  onClose: () => void;
+  onSave: (policy: QoSPolicy) => void;
+}
+
+function QoSModal({ app, onClose, onSave }: QoSModalProps) {
+  const [priority, setPriority] = useState<QoSPolicy['priority']>(app.qos?.priority || 'medium');
+  const [bandwidthLimit, setBandwidthLimit] = useState<string>(app.qos?.bandwidthLimit?.toString() || '');
+  const [bandwidthGuarantee, setBandwidthGuarantee] = useState<string>(app.qos?.bandwidthGuarantee?.toString() || '');
+  const [latencyTarget, setLatencyTarget] = useState<string>(app.qos?.latencyTarget?.toString() || '');
+  const [jitterTarget, setJitterTarget] = useState<string>(app.qos?.jitterTarget?.toString() || '');
+  const [packetLossTarget, setPacketLossTarget] = useState<string>(app.qos?.packetLossTarget?.toString() || '');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const policy: QoSPolicy = {
+      priority,
+      ...(bandwidthLimit && { bandwidthLimit: parseFloat(bandwidthLimit) }),
+      ...(bandwidthGuarantee && { bandwidthGuarantee: parseFloat(bandwidthGuarantee) }),
+      ...(latencyTarget && { latencyTarget: parseFloat(latencyTarget) }),
+      ...(jitterTarget && { jitterTarget: parseFloat(jitterTarget) }),
+      ...(packetLossTarget && { packetLossTarget: parseFloat(packetLossTarget) })
+    };
+
+    onSave(policy);
+  };
+
+  return (
+    <Modal isOpen={true} onClose={onClose} title={`Configure QoS for ${app.name}`}>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Priority Selection */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Priority Level
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            {(['critical', 'high', 'medium', 'low'] as const).map((level) => (
+              <button
+                key={level}
+                type="button"
+                onClick={() => setPriority(level)}
+                className={`px-4 py-3 text-sm font-medium rounded-lg border-2 transition-all ${
+                  priority === level
+                    ? level === 'critical'
+                      ? 'border-red-500 bg-red-50 text-red-800'
+                      : level === 'high'
+                      ? 'border-orange-500 bg-orange-50 text-orange-800'
+                      : level === 'medium'
+                      ? 'border-blue-500 bg-blue-50 text-blue-800'
+                      : 'border-gray-500 bg-gray-50 text-gray-800'
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                <Gauge className="h-4 w-4 inline mr-2" />
+                {level.charAt(0).toUpperCase() + level.slice(1)}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-xs text-gray-500">
+            {priority === 'critical' && 'Mission-critical applications with highest priority'}
+            {priority === 'high' && 'Important business applications with elevated priority'}
+            {priority === 'medium' && 'Standard business applications with normal priority'}
+            {priority === 'low' && 'Best-effort traffic with lowest priority'}
+          </p>
+        </div>
+
+        {/* Bandwidth Configuration */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Bandwidth Limit (Mbps)
+            </label>
+            <input
+              type="number"
+              value={bandwidthLimit}
+              onChange={(e) => setBandwidthLimit(e.target.value)}
+              placeholder="No limit"
+              min="0"
+              step="0.1"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p className="mt-1 text-xs text-gray-500">Maximum bandwidth allowed</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Bandwidth Guarantee (Mbps)
+            </label>
+            <input
+              type="number"
+              value={bandwidthGuarantee}
+              onChange={(e) => setBandwidthGuarantee(e.target.value)}
+              placeholder="No guarantee"
+              min="0"
+              step="0.1"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p className="mt-1 text-xs text-gray-500">Minimum bandwidth reserved</p>
+          </div>
+        </div>
+
+        {/* Performance Targets */}
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Latency Target (ms)
+            </label>
+            <input
+              type="number"
+              value={latencyTarget}
+              onChange={(e) => setLatencyTarget(e.target.value)}
+              placeholder="No target"
+              min="0"
+              step="1"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Jitter Target (ms)
+            </label>
+            <input
+              type="number"
+              value={jitterTarget}
+              onChange={(e) => setJitterTarget(e.target.value)}
+              placeholder="No target"
+              min="0"
+              step="1"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Packet Loss (%)
+            </label>
+            <input
+              type="number"
+              value={packetLossTarget}
+              onChange={(e) => setPacketLossTarget(e.target.value)}
+              placeholder="No target"
+              min="0"
+              max="100"
+              step="0.01"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        {/* Current Metrics */}
+        <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+          <h4 className="text-sm font-semibold text-gray-900 mb-3">Current Performance</h4>
+          <div className="grid grid-cols-3 gap-4 text-sm">
+            <div>
+              <div className="text-gray-600">Bandwidth</div>
+              <div className="font-semibold text-gray-900">{app.bandwidth.current.toFixed(1)} Mbps</div>
+            </div>
+            <div>
+              <div className="text-gray-600">Latency</div>
+              <div className="font-semibold text-gray-900">{app.latency}ms</div>
+            </div>
+            <div>
+              <div className="text-gray-600">Packet Loss</div>
+              <div className="font-semibold text-gray-900">
+                {((app.packets.lost / app.packets.sent) * 100).toFixed(3)}%
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <Button type="button" variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" variant="primary">
+            Save QoS Policy
+          </Button>
+        </div>
+      </form>
+    </Modal>
   );
 }
