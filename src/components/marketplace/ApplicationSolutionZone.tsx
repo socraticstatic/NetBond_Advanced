@@ -115,26 +115,26 @@ export function ApplicationSolutionZone() {
               >
                 {solution.popular && (
                   <div className="absolute -top-3 -right-3 z-50">
-                    <div className="px-2 py-1 bg-yellow-400 bg-opacity-90 rounded-full shadow-lg">
-                      <Star className="h-4 w-4 text-yellow-900" fill="currentColor" />
+                    <div className="px-3 py-1.5 bg-[#003184] rounded-full shadow-md">
+                      <Star className="h-4 w-4 text-white" fill="currentColor" />
                     </div>
                   </div>
                 )}
-                <div className={`bg-gradient-to-r ${colors.gradient} p-6 text-white min-h-[180px] flex flex-col rounded-t-xl`}>
+                <div className="p-6 border-b border-gray-200 bg-gradient-to-b from-gray-50 to-white">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       {solution.logo && (
-                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                        <div className="p-2 bg-white rounded-lg shadow-sm border border-gray-200">
                           <img src={solution.logo} alt={`${solution.name} logo`} className="h-8 w-8 object-contain" />
                         </div>
                       )}
                       <div>
-                        <h4 className="text-xl font-bold">{solution.name}</h4>
-                        <p className="text-sm text-white text-opacity-90">{solution.category}</p>
+                        <h4 className="text-xl font-bold text-gray-900">{solution.name}</h4>
+                        <p className="text-sm text-gray-600">{solution.category}</p>
                       </div>
                     </div>
                   </div>
-                  <p className="text-sm text-white text-opacity-90 line-clamp-3">{solution.description}</p>
+                  <p className="text-sm text-gray-600 line-clamp-3">{solution.description}</p>
                 </div>
 
                 <div className="p-6 space-y-4 flex-1 flex flex-col">
@@ -143,7 +143,7 @@ export function ApplicationSolutionZone() {
                     <ul className="space-y-1.5">
                       {solution.useCases.slice(0, 3).map((useCase, idx) => (
                         <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
-                          <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0 mt-0.5" />
+                          <CheckCircle className="h-4 w-4 text-[#003184] flex-shrink-0 mt-0.5" />
                           <span>{useCase}</span>
                         </li>
                       ))}
@@ -205,24 +205,24 @@ export function ApplicationSolutionZone() {
       {selectedSolution && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black bg-opacity-70 animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
-            <div className={`bg-gradient-to-r ${colorClasses[selectedSolution.color].gradient} p-6 text-white`}>
+            <div className="bg-gradient-to-b from-gray-50 to-white p-6 border-b border-gray-200">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
                   {selectedSolution.logo && (
-                    <div className="p-3 bg-white rounded-xl shadow-sm">
+                    <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-200">
                       <img src={selectedSolution.logo} alt={`${selectedSolution.name} logo`} className="h-10 w-10 object-contain" />
                     </div>
                   )}
                   <div>
-                    <h3 className="text-2xl font-bold">{selectedSolution.name} Network</h3>
-                    <p className="text-white text-opacity-90">Pre-configured network solution</p>
+                    <h3 className="text-2xl font-bold text-gray-900">{selectedSolution.name} Network</h3>
+                    <p className="text-gray-600">Pre-configured network solution</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setSelectedSolution(null)}
-                  className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
-                  <ArrowRight className="h-5 w-5 rotate-90" />
+                  <ArrowRight className="h-5 w-5 rotate-90 text-gray-600" />
                 </button>
               </div>
             </div>
@@ -232,8 +232,8 @@ export function ApplicationSolutionZone() {
                 <h4 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">What You'll Get</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {selectedSolution.benefits.map((benefit, idx) => (
-                    <div key={idx} className="flex items-start gap-2 p-3 bg-green-50 rounded-lg border border-green-200">
-                      <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div key={idx} className="flex items-start gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                      <CheckCircle className="h-5 w-5 text-[#003184] flex-shrink-0 mt-0.5" />
                       <span className="text-sm text-gray-700">{benefit}</span>
                     </div>
                   ))}
@@ -245,7 +245,7 @@ export function ApplicationSolutionZone() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {selectedSolution.recommendedSetup.security.map((feature, idx) => (
                     <div key={idx} className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
-                      <Shield className="h-4 w-4 text-blue-600" />
+                      <Shield className="h-4 w-4 text-[#003184]" />
                       <span className="text-sm text-gray-700">{feature}</span>
                     </div>
                   ))}
