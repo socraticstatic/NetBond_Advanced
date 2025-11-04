@@ -44,7 +44,7 @@ const MARKETPLACE_ITEMS: MarketplaceItem[] = [
   },
   {
     id: 'aws-direct',
-    provider: 'AWS',
+    provider: '24 hour Internet',
     name: 'AT&T Direct Connect',
     description: 'Dedicated network connection to AT&T cloud services',
     type: 'Direct Connect',
