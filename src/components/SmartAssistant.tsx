@@ -160,7 +160,7 @@ export function SmartAssistant() {
       {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
-          className="w-14 h-14 !p-0 shadow-lg rounded-xl relative group"
+          className="w-14 h-14 !p-0 shadow-lg !rounded-2xl relative group"
           aria-label="Open AI assistant"
         >
           <Sparkles className="h-6 w-6" />
