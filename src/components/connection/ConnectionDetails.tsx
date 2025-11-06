@@ -26,6 +26,8 @@ import { VNFModal } from './modals/VNFModal';
 import { DeleteVNFModal } from './modals/DeleteVNFModal';
 import { CloudRouterModal } from './cloudrouter/CloudRouterModal';
 import { DeleteCloudRouterModal } from './cloudrouter/DeleteCloudRouterModal';
+import { MobileConnectionDetails } from './MobileConnectionDetails';
+import { useIsMobile } from '../../hooks/useMobileDetection';
 
 export function ConnectionDetails() {
   const { id } = useParams();
@@ -33,6 +35,7 @@ export function ConnectionDetails() {
   const connection = useStore(state => state.connections.find(c => c.id === id));
   const updateConnection = useStore(state => state.updateConnection);
   const removeConnection = useStore(state => state.removeConnection);
+  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<ConnectionTabType>('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -216,6 +219,11 @@ export function ConnectionDetails() {
   }, [connection, navigate]);
 
   if (!connection) return null;
+
+  // Use mobile view if on mobile device
+  if (isMobile) {
+    return <MobileConnectionDetails connection={connection} />;
+  }
 
   const handleToggleStatus = () => {
     const newStatus = connection.status === 'Active' ? 'Inactive' : 'Active';

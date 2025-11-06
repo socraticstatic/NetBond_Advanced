@@ -2,11 +2,13 @@ import { useState, useMemo } from 'react';
 import { GridView } from './connection/views/GridView';
 import { ListView } from './connection/views/ListView';
 import { TopologyView } from './connection/views/TopologyView';
+import { MobileConnectionGrid } from './connection/MobileConnectionGrid';
 import { Search, Filter, LayoutGrid, List, Network, Download, Minimize2, Maximize2, Group as GroupIcon, X } from 'lucide-react';
 import { Connection, ViewMode } from '../types';
 import { Button } from './common/Button';
 import { useStore } from '../store/useStore';
 import { getGroupsForConnection } from '../utils/groups';
+import { useIsMobile } from '../hooks/useMobileDetection';
 
 interface ConnectionGridProps {
   connections: Connection[];
@@ -14,7 +16,8 @@ interface ConnectionGridProps {
 
 export function ConnectionGrid({ connections }: ConnectionGridProps) {
   const groups = useStore(state => state.groups);
-  
+  const isMobile = useIsMobile();
+
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
@@ -70,6 +73,11 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
     searchQuery,
     filters
   });
+
+  // Use mobile view if on mobile device
+  if (isMobile) {
+    return <MobileConnectionGrid connections={connections} />;
+  }
 
   return (
     <div className="space-y-6 min-h-[calc(100vh-16rem)] pb-12">

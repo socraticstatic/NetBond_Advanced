@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { 
-  Layers, Search, Filter, Download, Plus, LayoutGrid, List, Minimize2, Maximize2, Group as GroupIcon, X 
+import {
+  Layers, Search, Filter, Download, Plus, LayoutGrid, List, Minimize2, Maximize2, Group as GroupIcon, X
 } from 'lucide-react';
 import { Group } from '../types/group';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,8 @@ import { FilterButton } from './common/FilterButton';
 import { useStore } from '../store/useStore';
 import { AddGroupModal } from './configure/groups/AddGroupModal';
 import { GroupCardView, GroupListView } from './group/views';
+import { MobileGroupGrid } from './group/MobileGroupGrid';
+import { useIsMobile } from '../hooks/useMobileDetection';
 
 interface GroupGridProps {
   groups: Group[];
@@ -20,7 +22,8 @@ export function GroupGrid({ groups }: GroupGridProps) {
   const connections = useStore(state => state.connections);
   const users = useStore(state => state.users);
   const addGroup = useStore(state => state.addGroup);
-  
+  const isMobile = useIsMobile();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
@@ -50,6 +53,11 @@ export function GroupGrid({ groups }: GroupGridProps) {
       return matchesType && matchesStatus;
     });
   }, [groups, searchQuery, filters]);
+
+  // Use mobile view if on mobile device
+  if (isMobile) {
+    return <MobileGroupGrid groups={groups} />;
+  }
 
   const handleDeleteGroup = (id: string) => {
     if (window.confirm('Are you sure you want to delete this pool? This action cannot be undone.')) {
