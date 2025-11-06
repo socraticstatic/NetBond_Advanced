@@ -226,7 +226,7 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
           animate={{ scale: 1 }}
           transition={{ delay: 0.3, type: "spring", stiffness: 260, damping: 20 }}
           onClick={() => navigate('/create')}
-          className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-brand-blue to-brand-darkBlue text-white rounded-full shadow-lg hover:shadow-xl transition-shadow flex items-center justify-center z-50"
+          className="fixed bottom-6 right-20 w-14 h-14 bg-gradient-to-br from-brand-blue to-brand-darkBlue text-white rounded-full shadow-lg hover:shadow-xl transition-shadow flex items-center justify-center z-40"
           aria-label="Create connection"
         >
           <Plus className="h-6 w-6" />
