@@ -702,25 +702,184 @@ interface QoSManagementViewProps {
 }
 
 function QoSManagementView({ apps, onEditQoS, getPriorityColor, getAppIcon }: QoSManagementViewProps) {
+  const [viewMode, setViewMode] = useState<'category' | 'individual'>('category');
+  const [showCategoryQoSModal, setShowCategoryQoSModal] = useState<string | null>(null);
   const appsWithQoS = apps.filter(app => app.qos);
   const appsWithoutQoS = apps.filter(app => !app.qos);
 
+  // Category-based QoS defaults
+  const categoryDefaults: Record<string, QoSPolicy> = {
+    communication: { priority: 'critical', bandwidthGuarantee: 150, latencyTarget: 30, jitterTarget: 10, packetLossTarget: 0.1 },
+    productivity: { priority: 'high', bandwidthGuarantee: 100, latencyTarget: 50, packetLossTarget: 0.5 },
+    'cloud-storage': { priority: 'medium', bandwidthLimit: 500, latencyTarget: 100, packetLossTarget: 1.0 },
+    development: { priority: 'medium', bandwidthGuarantee: 50, latencyTarget: 100, packetLossTarget: 1.0 },
+    security: { priority: 'high', bandwidthGuarantee: 100, latencyTarget: 50, packetLossTarget: 0.5 },
+    streaming: { priority: 'low', bandwidthLimit: 200, latencyTarget: 200, packetLossTarget: 2.0 }
+  };
+
+  const getCategoryIcon = (category: string) => {
+    const iconMap: Record<string, any> = {
+      communication: Video,
+      productivity: Cloud,
+      'cloud-storage': Package,
+      development: CodeIcon,
+      security: Shield,
+      streaming: Film
+    };
+    const IconComponent = iconMap[category] || Server;
+    return <IconComponent className="h-6 w-6" />;
+  };
+
+  const getCategoryLabel = (category: string) => {
+    return category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  };
+
+  // Group apps by category
+  const appsByCategory = apps.reduce((acc, app) => {
+    if (!acc[app.category]) {
+      acc[app.category] = [];
+    }
+    acc[app.category].push(app);
+    return acc;
+  }, {} as Record<string, NetworkApp[]>);
+
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">QoS Policies Overview</h3>
-        <div className="grid grid-cols-4 gap-4 mb-6">
-          {(['critical', 'high', 'medium', 'low'] as const).map(priority => {
-            const count = appsWithQoS.filter(app => app.qos?.priority === priority).length;
-            return (
-              <div key={priority} className={`p-4 rounded-lg border ${getPriorityColor(priority)}`}>
-                <div className="text-sm font-medium mb-1">{priority.toUpperCase()}</div>
-                <div className="text-2xl font-bold">{count}</div>
-                <div className="text-xs mt-1">Applications</div>
-              </div>
-            );
-          })}
+      {/* View Mode Toggle */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
+          <button
+            onClick={() => setViewMode('category')}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              viewMode === 'category'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            By Category
+          </button>
+          <button
+            onClick={() => setViewMode('individual')}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              viewMode === 'individual'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Individual Apps
+          </button>
         </div>
+      </div>
+
+      {viewMode === 'category' ? (
+        <>
+          {/* Category-Based QoS Management */}
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">QoS by Application Type</h3>
+                <p className="text-sm text-gray-600 mt-1">Configure QoS policies for entire application categories</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {Object.entries(appsByCategory).map(([category, categoryApps]) => {
+                const defaultPolicy = categoryDefaults[category];
+                const activeApps = categoryApps.filter(app => app.status === 'active').length;
+                const totalBandwidth = categoryApps.reduce((sum, app) => sum + app.bandwidth.current, 0);
+
+                return (
+                  <div key={category} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-gray-100 rounded-lg">
+                          {getCategoryIcon(category)}
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">{getCategoryLabel(category)}</h4>
+                          <p className="text-xs text-gray-600">{categoryApps.length} applications</p>
+                        </div>
+                      </div>
+                      {defaultPolicy && (
+                        <span className={`px-2 py-1 text-xs font-medium rounded border ${getPriorityColor(defaultPolicy.priority)}`}>
+                          {defaultPolicy.priority.toUpperCase()}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="space-y-2 mb-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Active Apps:</span>
+                        <span className="font-medium text-gray-900">{activeApps} / {categoryApps.length}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Total Bandwidth:</span>
+                        <span className="font-medium text-gray-900">{totalBandwidth.toFixed(1)} Mbps</span>
+                      </div>
+                      {defaultPolicy && (
+                        <>
+                          {defaultPolicy.bandwidthGuarantee && (
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Guarantee:</span>
+                              <span className="font-medium text-gray-900">{defaultPolicy.bandwidthGuarantee} Mbps</span>
+                            </div>
+                          )}
+                          {defaultPolicy.latencyTarget && (
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Latency Target:</span>
+                              <span className="font-medium text-gray-900">{defaultPolicy.latencyTarget}ms</span>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="w-full"
+                      icon={<Settings className="h-4 w-4" />}
+                      onClick={() => setShowCategoryQoSModal(category)}
+                    >
+                      Configure Category QoS
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Info Box */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start space-x-3">
+              <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <h4 className="text-sm font-semibold text-blue-900 mb-1">Category-Based QoS</h4>
+                <p className="text-sm text-blue-800">
+                  Set default QoS policies for application categories. When you add new applications, they'll automatically inherit
+                  the QoS settings from their category. You can still override individual app settings if needed.
+                </p>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* Individual App QoS Management */}
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">QoS Policies Overview</h3>
+            <div className="grid grid-cols-4 gap-4 mb-6">
+              {(['critical', 'high', 'medium', 'low'] as const).map(priority => {
+                const count = appsWithQoS.filter(app => app.qos?.priority === priority).length;
+                return (
+                  <div key={priority} className={`p-4 rounded-lg border ${getPriorityColor(priority)}`}>
+                    <div className="text-sm font-medium mb-1">{priority.toUpperCase()}</div>
+                    <div className="text-2xl font-bold">{count}</div>
+                    <div className="text-xs mt-1">Applications</div>
+                  </div>
+                );
+              })}
+            </div>
 
         <div className="space-y-4">
           <div>
@@ -783,8 +942,81 @@ function QoSManagementView({ apps, onEditQoS, getPriorityColor, getAppIcon }: Qo
               </div>
             </div>
           )}
-        </div>
-      </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Category QoS Modal (placeholder - would open similar QoS modal for category defaults) */}
+      {showCategoryQoSModal && (
+        <Modal
+          isOpen={true}
+          onClose={() => setShowCategoryQoSModal(null)}
+          title={`Configure QoS for ${getCategoryLabel(showCategoryQoSModal)}`}
+        >
+          <div className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start space-x-3">
+                <Info className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                <div className="text-sm text-blue-800">
+                  <p className="font-medium mb-1">Category Default QoS Policy</p>
+                  <p>This policy will be applied to all applications in the {getCategoryLabel(showCategoryQoSModal)} category.
+                  Individual apps can override these settings if needed.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h4 className="text-sm font-semibold text-gray-900 mb-3">Current Settings</h4>
+              {categoryDefaults[showCategoryQoSModal] && (
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Priority:</span>
+                    <span className={`px-2 py-0.5 text-xs font-medium rounded border ${getPriorityColor(categoryDefaults[showCategoryQoSModal].priority)}`}>
+                      {categoryDefaults[showCategoryQoSModal].priority.toUpperCase()}
+                    </span>
+                  </div>
+                  {categoryDefaults[showCategoryQoSModal].bandwidthGuarantee && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Bandwidth Guarantee:</span>
+                      <span className="font-medium">{categoryDefaults[showCategoryQoSModal].bandwidthGuarantee} Mbps</span>
+                    </div>
+                  )}
+                  {categoryDefaults[showCategoryQoSModal].latencyTarget && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Latency Target:</span>
+                      <span className="font-medium">{categoryDefaults[showCategoryQoSModal].latencyTarget}ms</span>
+                    </div>
+                  )}
+                  {categoryDefaults[showCategoryQoSModal].packetLossTarget && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Packet Loss Target:</span>
+                      <span className="font-medium">{categoryDefaults[showCategoryQoSModal].packetLossTarget}%</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+              <Button variant="secondary" onClick={() => setShowCategoryQoSModal(null)}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={() => {
+                window.addToast({
+                  type: 'success',
+                  title: 'Category QoS Updated',
+                  message: `QoS settings for ${getCategoryLabel(showCategoryQoSModal)} have been updated.`,
+                  duration: 3000
+                });
+                setShowCategoryQoSModal(null);
+              }}>
+                Save Category QoS
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }
