@@ -63,13 +63,6 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
     }
   ];
 
-  // Close menu when route changes
-  useEffect(() => {
-    if (isOpen) {
-      onClose();
-    }
-  }, [location.pathname]);
-
   // Prevent body scrolling when menu is open
   useEffect(() => {
     if (isOpen) {
@@ -82,13 +75,15 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
     };
   }, [isOpen]);
 
-  const handleNavigation = (path: string, disabled: boolean) => {
+  const handleNavigation = (path: string, disabled: boolean = false) => {
     if (disabled) {
       // Do nothing for disabled items
       return;
     }
-    navigate(path);
-    onClose();
+    onClose(); // Close first for smooth transition
+    setTimeout(() => {
+      navigate(path);
+    }, 100); // Small delay allows the menu to start closing animation
   };
 
   return (
@@ -133,9 +128,9 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
                 <h2 className="ml-2 text-lg font-semibold text-gray-900">Menu</h2>
               </div>
               <div className="flex items-center space-x-2">
-                <button 
+                <button
                   className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
-                  onClick={() => navigate('/notifications')}
+                  onClick={() => handleNavigation('/notifications')}
                 >
                   <div className="relative">
                     <Bell className="h-6 w-6" />
@@ -146,9 +141,9 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
                     )}
                   </div>
                 </button>
-                <button 
+                <button
                   className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
-                  onClick={() => navigate('/support')}
+                  onClick={() => handleNavigation('/support')}
                 >
                   <HelpCircle className="h-6 w-6" />
                 </button>
@@ -190,9 +185,9 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
                   <p className="text-sm text-gray-500">{userInfo.role}</p>
                   <p className="text-xs text-gray-400">{userInfo.account}</p>
                 </div>
-                <button 
+                <button
                   className="ml-auto p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200"
-                  onClick={() => navigate('/profile')}
+                  onClick={() => handleNavigation('/profile')}
                 >
                   <ChevronRight className="h-5 w-5" />
                 </button>
