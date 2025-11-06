@@ -11,12 +11,21 @@ import { VersioningConfiguration } from './tabs/VersioningConfiguration';
 import { BillingConfiguration } from './tabs/BillingConfiguration';
 import { ConnectionLogs } from '../configure/connections/ConnectionLogs';
 import { NetworkTab } from './tabs/NetworkTab';
+import { LinksTab } from './tabs/LinksTab';
+import { VNFTab } from './tabs/VNFTab';
 import { APIConfiguration } from './tabs/APIConfiguration';
 import { AppsConfiguration } from './tabs/AppsConfiguration';
 import { IconButton } from '../common/IconButton';
 import { Button } from '../common/Button';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { useEditableField } from '../../hooks/useEditableField';
+import { VNF } from '../../types/vnf';
+import { CloudRouter } from '../../types/cloudrouter';
+import { Link } from '../../types';
+import { VNFModal } from './modals/VNFModal';
+import { DeleteVNFModal } from './modals/DeleteVNFModal';
+import { CloudRouterModal } from './cloudrouter/CloudRouterModal';
+import { DeleteCloudRouterModal } from './cloudrouter/DeleteCloudRouterModal';
 
 export function ConnectionDetails() {
   const { id } = useParams();
@@ -27,6 +36,152 @@ export function ConnectionDetails() {
   const [activeTab, setActiveTab] = useState<ConnectionTabType>('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // VNF state management
+  const [showAddVNFModal, setShowAddVNFModal] = useState(false);
+  const [editingVNF, setEditingVNF] = useState<VNF | undefined>();
+  const [deletingVNF, setDeletingVNF] = useState<VNF | undefined>();
+  const [vnfs, setVnfs] = useState<(VNF & { linkIds?: string[] })[]>([
+    {
+      id: 'vnf-1',
+      name: 'Edge Firewall',
+      type: 'firewall',
+      vendor: 'Palo Alto Networks',
+      model: 'VM-Series',
+      version: '10.2.3',
+      status: 'active',
+      throughput: '5 Gbps',
+      licenseExpiry: '2025-06-30T00:00:00Z',
+      linkIds: ['link-1', 'link-2'],
+      configuration: {
+        interfaces: [
+          { id: 'if-1', name: 'WAN1', type: 'wan', ipAddress: '203.0.113.10', subnetMask: '255.255.255.0', status: 'up' },
+          { id: 'if-2', name: 'LAN1', type: 'lan', ipAddress: '10.0.0.1', subnetMask: '255.255.255.0', status: 'up' }
+        ],
+        routingProtocols: ['BGP', 'OSPF'],
+        highAvailability: true,
+        managementIP: '192.168.1.10'
+      },
+      createdAt: '2024-01-10T12:00:00Z',
+      updatedAt: '2024-03-15T09:30:00Z',
+      description: 'Primary edge firewall for cloud connectivity',
+      connectionId: connection?.id.toString() || ''
+    },
+    {
+      id: 'vnf-2',
+      name: 'Branch SD-WAN',
+      type: 'sdwan',
+      vendor: 'Versa Networks',
+      model: 'FlexVNF',
+      version: '21.1.2',
+      status: 'active',
+      throughput: '2 Gbps',
+      linkIds: ['link-3'],
+      configuration: {
+        interfaces: [
+          { id: 'if-1', name: 'WAN1', type: 'wan', ipAddress: '203.0.113.20', subnetMask: '255.255.255.0', status: 'up' },
+          { id: 'if-2', name: 'WAN2', type: 'wan', ipAddress: '198.51.100.20', subnetMask: '255.255.255.0', status: 'up' }
+        ],
+        routingProtocols: ['BGP'],
+        highAvailability: false,
+        managementIP: '192.168.1.20'
+      },
+      createdAt: '2024-01-15T14:30:00Z',
+      updatedAt: '2024-02-20T10:15:00Z',
+      description: 'SD-WAN for branch office connectivity',
+      connectionId: connection?.id.toString() || ''
+    }
+  ]);
+
+  // Cloud Router state management
+  const [showAddCloudRouterModal, setShowAddCloudRouterModal] = useState(false);
+  const [editingCloudRouter, setEditingCloudRouter] = useState<CloudRouter | undefined>();
+  const [deletingCloudRouter, setDeletingCloudRouter] = useState<CloudRouter | undefined>();
+  const [cloudRouters, setCloudRouters] = useState<CloudRouter[]>([
+    {
+      id: 'cr-1',
+      name: 'Primary Cloud Router',
+      description: 'Main cloud router for US-East region',
+      status: 'active',
+      location: 'US-East',
+      links: [
+        {
+          id: 'link-1',
+          name: 'Production VLAN',
+          vlanId: 100,
+          status: 'active',
+          ipSubnet: '10.1.0.0/24',
+          bandwidth: '5 Gbps',
+          description: 'Production traffic',
+          cloudRouterIds: ['cr-1'],
+          createdAt: '2024-01-10T00:00:00Z'
+        },
+        {
+          id: 'link-2',
+          name: 'Development VLAN',
+          vlanId: 200,
+          status: 'active',
+          ipSubnet: '10.2.0.0/24',
+          bandwidth: '2 Gbps',
+          description: 'Development environment',
+          cloudRouterIds: ['cr-1'],
+          createdAt: '2024-01-15T00:00:00Z'
+        }
+      ],
+      policies: {
+        routingPolicy: 'default',
+        securityPolicy: 'standard',
+        qosPolicy: 'standard'
+      },
+      connectionId: connection?.id.toString() || '',
+      createdAt: '2024-01-10T00:00:00Z',
+      updatedAt: '2024-03-15T00:00:00Z'
+    },
+    {
+      id: 'cr-2',
+      name: 'Secondary Cloud Router',
+      description: 'Backup router for redundancy',
+      status: 'active',
+      location: 'US-West',
+      links: [
+        {
+          id: 'link-3',
+          name: 'Backup VLAN',
+          vlanId: 300,
+          status: 'active',
+          ipSubnet: '10.3.0.0/24',
+          bandwidth: '3 Gbps',
+          description: 'Backup link',
+          cloudRouterIds: ['cr-2'],
+          createdAt: '2024-02-01T00:00:00Z'
+        },
+        {
+          id: 'link-4',
+          name: 'Management VLAN',
+          vlanId: 400,
+          status: 'active',
+          ipSubnet: '10.4.0.0/24',
+          bandwidth: '1 Gbps',
+          description: 'Management traffic',
+          cloudRouterIds: ['cr-2'],
+          createdAt: '2024-02-05T00:00:00Z'
+        }
+      ],
+      policies: {
+        routingPolicy: 'default',
+        securityPolicy: 'standard',
+        qosPolicy: 'standard'
+      },
+      connectionId: connection?.id.toString() || '',
+      createdAt: '2024-02-01T00:00:00Z',
+      updatedAt: '2024-03-10T00:00:00Z'
+    }
+  ]);
+
+  // Get all links from cloud routers
+  const getAllLinks = (): Link[] => {
+    return cloudRouters.flatMap((router) => router.links || []);
+  };
 
   const {
     isEditing: isEditingName,
@@ -65,7 +220,7 @@ export function ConnectionDetails() {
   const handleToggleStatus = () => {
     const newStatus = connection.status === 'Active' ? 'Inactive' : 'Active';
     updateConnection(connection.id, { status: newStatus });
-    
+
     window.addToast({
       type: 'success',
       title: 'Status Updated',
@@ -77,7 +232,7 @@ export function ConnectionDetails() {
   const handleDelete = () => {
     removeConnection(connection.id);
     navigate('/manage');
-    
+
     window.addToast({
       type: 'success',
       title: 'Connection Deleted',
@@ -86,19 +241,146 @@ export function ConnectionDetails() {
     });
   };
 
+  // Cloud Router handlers
+  const handleAddCloudRouter = () => {
+    setEditingCloudRouter(undefined);
+    setShowAddCloudRouterModal(true);
+  };
+
+  const handleEditCloudRouter = (cloudRouter: CloudRouter) => {
+    setEditingCloudRouter(cloudRouter);
+    setShowAddCloudRouterModal(true);
+  };
+
+  const handleDeleteCloudRouter = (cloudRouter: CloudRouter) => {
+    setDeletingCloudRouter(cloudRouter);
+  };
+
+  const handleSaveCloudRouter = (cloudRouter: CloudRouter) => {
+    if (editingCloudRouter) {
+      setCloudRouters(cloudRouters.map((cr) => (cr.id === cloudRouter.id ? cloudRouter : cr)));
+      window.addToast({
+        type: 'success',
+        title: 'Cloud Router Updated',
+        message: `${cloudRouter.name} has been updated successfully.`,
+        duration: 3000
+      });
+    } else {
+      setCloudRouters([...cloudRouters, cloudRouter]);
+      window.addToast({
+        type: 'success',
+        title: 'Cloud Router Created',
+        message: `${cloudRouter.name} has been created successfully.`,
+        duration: 3000
+      });
+    }
+    setShowAddCloudRouterModal(false);
+    setEditingCloudRouter(undefined);
+  };
+
+  const handleConfirmDeleteCloudRouter = () => {
+    if (deletingCloudRouter) {
+      setCloudRouters(cloudRouters.filter((cr) => cr.id !== deletingCloudRouter.id));
+      window.addToast({
+        type: 'success',
+        title: 'Cloud Router Deleted',
+        message: `${deletingCloudRouter.name} has been deleted successfully.`,
+        duration: 3000
+      });
+      setDeletingCloudRouter(undefined);
+    }
+  };
+
+  // VNF handlers
+  const handleAddVNF = () => {
+    setEditingVNF(undefined);
+    setShowAddVNFModal(true);
+  };
+
+  const handleEditVNF = (vnf: VNF) => {
+    setEditingVNF(vnf);
+    setShowAddVNFModal(true);
+  };
+
+  const handleDeleteVNF = (vnf: VNF) => {
+    setDeletingVNF(vnf);
+  };
+
+  const handleSaveVNF = (vnfData: VNF) => {
+    if (editingVNF) {
+      setVnfs(vnfs.map((v) => (v.id === vnfData.id ? vnfData : v)));
+      window.addToast({
+        type: 'success',
+        title: 'VNF Updated',
+        message: `${vnfData.name} has been updated successfully.`,
+        duration: 3000
+      });
+    } else {
+      setVnfs([...vnfs, vnfData]);
+      window.addToast({
+        type: 'success',
+        title: 'VNF Created',
+        message: `${vnfData.name} has been created successfully.`,
+        duration: 3000
+      });
+    }
+    setShowAddVNFModal(false);
+    setEditingVNF(undefined);
+  };
+
+  const handleConfirmDeleteVNF = () => {
+    if (deletingVNF) {
+      setVnfs(vnfs.filter((v) => v.id !== deletingVNF.id));
+      window.addToast({
+        type: 'success',
+        title: 'VNF Deleted',
+        message: `${deletingVNF.name} has been deleted successfully.`,
+        duration: 3000
+      });
+      setDeletingVNF(undefined);
+    }
+  };
+
   const renderContent = () => {
-    // These numbers match the sample data in NetworkTab
-    const cloudRoutersCount = 2;
-    const linksCount = 4;
-    const vnfsCount = 2;
+    const cloudRoutersCount = cloudRouters.length;
+    const linksCount = getAllLinks().length;
+    const vnfsCount = vnfs.length;
 
     switch (activeTab) {
       case 'overview':
         return <ConnectionOverview connection={connection} cloudRoutersCount={cloudRoutersCount} linksCount={linksCount} vnfsCount={vnfsCount} />;
-      case 'network':
-        return <NetworkTab connection={connection} isEditing={isEditing} />;
-      case 'routing':
-        return <RoutingTab />;
+      case 'cloudrouters':
+        return (
+          <NetworkTab
+            connection={connection}
+            cloudRouters={cloudRouters}
+            vnfs={vnfs}
+            onAddCloudRouter={handleAddCloudRouter}
+            onEditCloudRouter={handleEditCloudRouter}
+            onDeleteCloudRouter={handleDeleteCloudRouter}
+            isEditing={isEditing}
+          />
+        );
+      case 'links':
+        return (
+          <LinksTab
+            connection={connection}
+            cloudRouters={cloudRouters}
+            allLinks={getAllLinks()}
+            isEditing={isEditing}
+          />
+        );
+      case 'vnfs':
+        return (
+          <VNFTab
+            connection={connection}
+            vnfs={vnfs}
+            cloudRouters={cloudRouters}
+            onAdd={handleAddVNF}
+            onEdit={handleEditVNF}
+            onDelete={handleDeleteVNF}
+          />
+        );
       case 'access':
         return <AccessConfiguration />;
       case 'versions':
@@ -111,13 +393,6 @@ export function ConnectionDetails() {
         return <APIConfiguration />;
       case 'apps':
         return <AppsConfiguration />;
-      case 'security':
-      case 'test':
-        return (
-          <div className="p-6 text-center text-gray-500">
-            This feature is currently unavailable
-          </div>
-        );
       default:
         return <ConnectionOverview connection={connection} cloudRoutersCount={cloudRoutersCount} linksCount={linksCount} vnfsCount={vnfsCount} />;
     }
@@ -317,6 +592,45 @@ export function ConnectionDetails() {
         icon={<Trash2 className="w-6 h-6 text-red-600" />}
         confirmText="Delete"
         confirmVariant="danger"
+      />
+
+      {/* Cloud Router Modals */}
+      <CloudRouterModal
+        isOpen={showAddCloudRouterModal}
+        onClose={() => {
+          setShowAddCloudRouterModal(false);
+          setEditingCloudRouter(undefined);
+        }}
+        onSave={handleSaveCloudRouter}
+        cloudRouter={editingCloudRouter}
+        connectionId={connection.id.toString()}
+      />
+
+      <DeleteCloudRouterModal
+        isOpen={!!deletingCloudRouter}
+        onClose={() => setDeletingCloudRouter(undefined)}
+        onConfirm={handleConfirmDeleteCloudRouter}
+        cloudRouterName={deletingCloudRouter?.name || ''}
+      />
+
+      {/* VNF Modals */}
+      <VNFModal
+        isOpen={showAddVNFModal}
+        onClose={() => {
+          setShowAddVNFModal(false);
+          setEditingVNF(undefined);
+        }}
+        onSave={handleSaveVNF}
+        vnf={editingVNF}
+        connectionId={connection.id.toString()}
+        links={getAllLinks()}
+      />
+
+      <DeleteVNFModal
+        isOpen={!!deletingVNF}
+        onClose={() => setDeletingVNF(undefined)}
+        onConfirm={handleConfirmDeleteVNF}
+        vnfName={deletingVNF?.name || ''}
       />
     </div>
   );

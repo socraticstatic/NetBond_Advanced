@@ -1,19 +1,19 @@
 import { ReactNode } from 'react';
 import {
-  Activity, Shield, History, Terminal, Settings,
-  Network, Router, Layers, Users, DollarSign, Code
+  Activity, Shield, History, Terminal,
+  Network, GitBranch, Layers, Users, DollarSign, Code
 } from 'lucide-react';
 
 export type ConnectionTabType =
   | 'overview'
-  | 'network'
-  | 'security'
+  | 'cloudrouters'
+  | 'links'
+  | 'vnfs'
   | 'apps'
   | 'access'
   | 'versions'
   | 'billing'
   | 'logs'
-  | 'test'
   | 'api';
 
 interface Tab {
@@ -30,15 +30,15 @@ interface ConnectionTabsProps {
 
 const TABS: Tab[] = [
   { id: 'overview', label: 'Overview', icon: <Activity className="h-5 w-5 mr-2" /> },
-  { id: 'network', label: 'Details', icon: <Network className="h-5 w-5 mr-2" /> },
+  { id: 'cloudrouters', label: 'Cloud Routers', icon: <GitBranch className="h-5 w-5 mr-2" /> },
+  { id: 'links', label: 'Links', icon: <Network className="h-5 w-5 mr-2" /> },
+  { id: 'vnfs', label: 'VNF Functions', icon: <Shield className="h-5 w-5 mr-2" /> },
   { id: 'apps', label: 'Apps', icon: <Layers className="h-5 w-5 mr-2" /> },
-  { id: 'security', label: 'Security', icon: <Shield className="h-5 w-5 mr-2" />, disabled: true },
   { id: 'api', label: 'API', icon: <Code className="h-5 w-5 mr-2" /> },
   { id: 'access', label: 'Access', icon: <Users className="h-5 w-5 mr-2" /> },
   { id: 'billing', label: 'Billing', icon: <DollarSign className="h-5 w-5 mr-2" /> },
   { id: 'versions', label: 'Versions', icon: <History className="h-5 w-5 mr-2" /> },
-  { id: 'logs', label: 'Logs', icon: <Terminal className="h-5 w-5 mr-2" /> },
-  { id: 'test', label: 'Test', icon: <Settings className="h-5 w-5 mr-2" />, disabled: true }
+  { id: 'logs', label: 'Logs', icon: <Terminal className="h-5 w-5 mr-2" /> }
 ];
 
 export function ConnectionTabs({ activeTab, onTabChange }: ConnectionTabsProps) {
