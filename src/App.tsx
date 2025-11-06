@@ -17,6 +17,8 @@ import { AsyncBoundary } from './components/common/AsyncBoundary';
 import { ProductTour } from './components/tour/ProductTour';
 import { useTour } from './hooks/useTour';
 import { mainAppTour } from './data/tourSteps';
+import { MobileManagePage } from './components/MobileManagePage';
+import { useIsMobile } from './hooks/useMobileDetection';
 
 // Optimized lazy loading with better error handling
 const LazyConnectionWizard = lazy(() =>
@@ -202,37 +204,46 @@ function App() {
                 } />
                 
                 <Route path="/manage" element={
-                  <SubNav
-                    title="Network Connections"
-                    description="Manage your network connections across clouds and data centers"
-                    action={{ label: "Create Connection", to: "/create" }}
-                  >
-                    <div className="mb-8">
-                      <ConnectionTabs
-                        activeTab={activeTab}
-                        onTabChange={(tab) => setActiveTab(tab as typeof activeTab)}
-                        connectionCount={safeConnections.length}
-                        groupCount={safeGroups.length}
-                      />
-                    </div>
-                    {activeTab === 'connections' ? (
-                      <ConnectionGrid connections={safeConnections} />
-                    ) : activeTab === 'groups' ? (
-                      <GroupGrid groups={safeGroups} />
-                    ) : activeTab === 'control-center' ? (
-                      <AsyncBoundary fallback={<LoadingFallback />}>
-                        <Suspense fallback={<LoadingFallback />}>
-                          <LazyControlCenterManager connections={safeConnections} />
-                        </Suspense>
-                      </AsyncBoundary>
-                    ) : (
-                      <AsyncBoundary fallback={<LoadingFallback />}>
-                        <Suspense fallback={<LoadingFallback />}>
-                          <LazyMarketplace onSelectItem={() => {}} />
-                        </Suspense>
-                      </AsyncBoundary>
-                    )}
-                  </SubNav>
+                  isMobile ? (
+                    <MobileManagePage
+                      connections={safeConnections}
+                      groups={safeGroups}
+                      activeTab={activeTab}
+                      onTabChange={(tab) => setActiveTab(tab as typeof activeTab)}
+                    />
+                  ) : (
+                    <SubNav
+                      title="Network Connections"
+                      description="Manage your network connections across clouds and data centers"
+                      action={{ label: "Create Connection", to: "/create" }}
+                    >
+                      <div className="mb-8">
+                        <ConnectionTabs
+                          activeTab={activeTab}
+                          onTabChange={(tab) => setActiveTab(tab as typeof activeTab)}
+                          connectionCount={safeConnections.length}
+                          groupCount={safeGroups.length}
+                        />
+                      </div>
+                      {activeTab === 'connections' ? (
+                        <ConnectionGrid connections={safeConnections} />
+                      ) : activeTab === 'groups' ? (
+                        <GroupGrid groups={safeGroups} />
+                      ) : activeTab === 'control-center' ? (
+                        <AsyncBoundary fallback={<LoadingFallback />}>
+                          <Suspense fallback={<LoadingFallback />}>
+                            <LazyControlCenterManager connections={safeConnections} />
+                          </Suspense>
+                        </AsyncBoundary>
+                      ) : (
+                        <AsyncBoundary fallback={<LoadingFallback />}>
+                          <Suspense fallback={<LoadingFallback />}>
+                            <LazyMarketplace onSelectItem={() => {}} />
+                          </Suspense>
+                        </AsyncBoundary>
+                      )}
+                    </SubNav>
+                  )
                 } />
 
                 <Route path="/monitor" element={
