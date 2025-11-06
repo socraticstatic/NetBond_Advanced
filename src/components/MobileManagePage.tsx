@@ -29,7 +29,7 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
 
   const tabs = [
     { id: 'connections' as const, label: 'Connections', icon: Network, count: stats.connections },
-    { id: 'groups' as const, label: 'Groups', icon: Users, count: stats.groups },
+    { id: 'groups' as const, label: 'Pools', icon: Users, count: stats.groups },
     { id: 'control-center' as const, label: 'Control', icon: Grid, count: 0 },
     { id: 'marketplace' as const, label: 'Market', icon: ShoppingBag, count: 0 },
   ];
@@ -97,7 +97,7 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
                     Network Management
                   </h1>
                   <p className="text-sm text-gray-500">
-                    {activeTab === 'connections' ? 'Your connections at a glance' : 'Manage your groups'}
+                    {activeTab === 'connections' ? 'Your connections at a glance' : 'Manage your pools'}
                   </p>
                 </div>
                 <div className="flex items-center space-x-2">

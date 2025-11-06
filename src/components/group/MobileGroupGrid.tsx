@@ -55,15 +55,15 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
               <ArrowLeft className="h-5 w-5" />
             </button>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Groups</h1>
-              <p className="text-sm text-gray-500">{filteredGroups.length} groups</p>
+              <h1 className="text-xl font-bold text-gray-900">Pools</h1>
+              <p className="text-sm text-gray-500">{filteredGroups.length} pools</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
-              aria-label="Filter groups"
+              aria-label="Filter pools"
             >
               <Filter className="h-5 w-5" />
             </button>
@@ -71,13 +71,13 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
               onClick={() => {
                 window.addToast({
                   type: 'info',
-                  title: 'Create Group',
-                  message: 'Group creation is available on desktop',
+                  title: 'Create Pool',
+                  message: 'Pool creation is available on desktop',
                   duration: 3000
                 });
               }}
               className="p-2 text-white bg-brand-blue hover:bg-brand-darkBlue rounded-full"
-              aria-label="Create group"
+              aria-label="Create pool"
             >
               <Plus className="h-5 w-5" />
             </button>
@@ -90,7 +90,7 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search groups..."
+              placeholder="Search pools..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-transparent"
@@ -180,16 +180,16 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
         </div>
       </div>
 
-      {/* Group List */}
+      {/* Pool List */}
       <div className="flex-1 p-4 space-y-3 pb-20">
         {filteredGroups.length === 0 ? (
           <div className="text-center py-12">
             <Users className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-            <h3 className="text-lg font-medium text-gray-900 mb-1">No groups found</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-1">No pools found</h3>
             <p className="text-gray-500 text-sm">
               {searchTerm || statusFilter !== 'all'
                 ? 'Try adjusting your filters'
-                : 'Create your first group to get started'}
+                : 'Create your first pool to get started'}
             </p>
           </div>
         ) : (

@@ -19,6 +19,8 @@ import { useTour } from './hooks/useTour';
 import { mainAppTour } from './data/tourSteps';
 import { MobileManagePage } from './components/MobileManagePage';
 import { useIsMobile } from './hooks/useMobileDetection';
+import { MobileConfigureHub } from './components/configure/MobileConfigureHub';
+import { MobileDesktopOnly } from './components/common/MobileDesktopOnly';
 
 // Optimized lazy loading with better error handling
 const LazyConnectionWizard = lazy(() =>
@@ -163,36 +165,47 @@ function App() {
             <main id="main-content" tabIndex={-1} className="min-h-screen">
               <Routes>
                 <Route path="/create" element={
-                  <AsyncBoundary fallback={<LoadingFallback />}>
-                    <SubNav
-                      title="Create Connection"
-                      description="Set up a new network connection"
-                    >
-                      <Suspense fallback={<LoadingFallback />}>
-                        <LazyConnectionWizard
-                          onComplete={(config) => {
-                            try {
-                              const connectionName = typeof config === 'object' && config !== null
-                                ? (config as any).name || 'New Connection'
-                                : 'New Connection';
+                  isMobile ? (
+                    <MobileDesktopOnly
+                      feature="Create Connection"
+                      description="Creating connections requires multiple complex configuration steps that work best on a desktop or laptop screen."
+                      alternativeAction={{
+                        label: "View Connections",
+                        path: "/manage"
+                      }}
+                    />
+                  ) : (
+                    <AsyncBoundary fallback={<LoadingFallback />}>
+                      <SubNav
+                        title="Create Connection"
+                        description="Set up a new network connection"
+                      >
+                        <Suspense fallback={<LoadingFallback />}>
+                          <LazyConnectionWizard
+                            onComplete={(config) => {
+                              try {
+                                const connectionName = typeof config === 'object' && config !== null
+                                  ? (config as any).name || 'New Connection'
+                                  : 'New Connection';
 
-                              window.addToast?.({
-                                type: 'success',
-                                title: 'Connection Created',
-                                message: `Connection "${connectionName}" created successfully`,
-                                duration: 3000
-                              });
-                              navigate('/manage');
-                            } catch (error) {
-                              console.error('Error handling connection completion:', error);
-                              navigate('/manage');
-                            }
-                          }}
-                          onCancel={() => navigate('/manage')}
-                        />
-                      </Suspense>
-                    </SubNav>
-                  </AsyncBoundary>
+                                window.addToast?.({
+                                  type: 'success',
+                                  title: 'Connection Created',
+                                  message: `Connection "${connectionName}" created successfully`,
+                                  duration: 3000
+                                });
+                                navigate('/manage');
+                              } catch (error) {
+                                console.error('Error handling connection completion:', error);
+                                navigate('/manage');
+                              }
+                            }}
+                            onCancel={() => navigate('/manage')}
+                          />
+                        </Suspense>
+                      </SubNav>
+                    </AsyncBoundary>
+                  )
                 } />
 
                 <Route path="/api-toolbox" element={
@@ -266,16 +279,20 @@ function App() {
                 } />
 
                 <Route path="/configure/*" element={
-                  <AsyncBoundary fallback={<LoadingFallback />}>
-                    <SubNav
-                      title="System Configuration"
-                      description="Configure system settings and preferences"
-                    >
-                      <Suspense fallback={<LoadingFallback />}>
-                        <LazyConfigureHub defaultTab="connections" />
-                      </Suspense>
-                    </SubNav>
-                  </AsyncBoundary>
+                  isMobile ? (
+                    <MobileConfigureHub />
+                  ) : (
+                    <AsyncBoundary fallback={<LoadingFallback />}>
+                      <SubNav
+                        title="System Configuration"
+                        description="Configure system settings and preferences"
+                      >
+                        <Suspense fallback={<LoadingFallback />}>
+                          <LazyConfigureHub defaultTab="connections" />
+                        </Suspense>
+                      </SubNav>
+                    </AsyncBoundary>
+                  )
                 } />
 
                 <Route path="/profile" element={
