@@ -26,7 +26,7 @@ export function Skeleton({
 
   return (
     <div
-      className={`bg-gray-200 ${animate ? 'animate-pulse' : ''} ${roundedMap[rounded]} ${className}`}
+      className={`bg-fw-neutral ${animate ? 'animate-pulse' : ''} ${roundedMap[rounded]} ${className}`}
       style={{
         width: width !== undefined ? (typeof width === 'number' ? `${width}px` : width) : '100%',
         height: height !== undefined ? (typeof height === 'number' ? `${height}px` : height) : '1rem'
