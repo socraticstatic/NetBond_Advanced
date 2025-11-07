@@ -13,27 +13,52 @@ export default {
           // Base Colors
           'att-blue': 'rgb(0 159 219)', // Primary brand
           'functional-blue': 'rgb(0 116 179)', // Interactive elements
-          'cobalt-700': 'rgb(0 56 143)', // Strong CTAs
-          'cobalt-600': 'rgb(0 87 184)', // Hover states
-          'cobalt-100': 'rgb(230 240 250)', // Very light blue for ghost buttons
-          'white': 'rgb(255 255 255)',
-          'black': 'rgb(0 0 0)',
+
+          // AT&T Blue variants
+          blue: {
+            DEFAULT: 'rgb(0 159 219)',
+            '000': 'rgb(0 171 235)', // Lighter
+            '100': 'rgb(102 200 240)', // Even lighter
+            '200': 'rgb(153 218 245)', // Very light
+            light: 'rgb(230 246 253)', // Background tint
+            functional: 'rgb(0 116 179)',
+          },
+
+          // Cobalt variants
+          cobalt: {
+            '100': 'rgb(230 240 250)', // Very light
+            '400': 'rgb(51 116 204)',
+            '600': 'rgb(0 87 184)', // Hover states
+            '700': 'rgb(0 56 143)', // Primary CTAs
+            '800': 'rgb(0 35 90)', // Dark mode
+          },
 
           // Flywheel Gray Scale
-          'gray-100': 'rgb(248 250 251)', // Lightest backgrounds
-          'gray-200': 'rgb(243 244 246)', // Subtle backgrounds
-          'gray-300': 'rgb(220 223 227)', // Borders, dividers
-          'gray-400': 'rgb(189 194 199)', // Disabled states
-          'gray-500': 'rgb(135 140 148)', // Muted elements
-          'gray-600': 'rgb(104 110 116)', // Secondary text
-          'gray-700': 'rgb(69 75 82)', // Body text
-          'gray-800': 'rgb(29 35 41)', // Dark text
-          'gray-900': 'rgb(19 23 27)', // Headings
+          gray: {
+            '100': 'rgb(248 250 251)', // Lightest backgrounds
+            '200': 'rgb(243 244 246)', // Subtle backgrounds
+            '300': 'rgb(220 223 227)', // Borders, dividers
+            '400': 'rgb(189 194 199)', // Disabled states
+            '500': 'rgb(135 140 148)', // Muted elements
+            '600': 'rgb(104 110 116)', // Secondary text
+            '700': 'rgb(69 75 82)', // Body text
+            '800': 'rgb(29 35 41)', // Dark text
+            '900': 'rgb(19 23 27)', // Headings
+          },
 
           // Semantic Colors
-          'green-600': 'rgb(45 126 36)', // Success
-          'orange-600': 'rgb(234 113 47)', // Warning
-          'red-600': 'rgb(199 0 50)', // Error
+          green: {
+            '400': 'rgb(74 175 66)',
+            '600': 'rgb(45 126 36)', // Success
+          },
+          orange: {
+            '400': 'rgb(255 143 77)',
+            '600': 'rgb(234 113 47)', // Warning
+          },
+          red: {
+            '400': 'rgb(255 92 115)',
+            '600': 'rgb(199 0 50)', // Error
+          },
         },
         // Legacy colors for gradual migration
         gray: {

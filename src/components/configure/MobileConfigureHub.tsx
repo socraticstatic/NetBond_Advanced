@@ -11,7 +11,7 @@ const configSections = [
     title: 'User Management',
     description: 'Manage users, roles, and permissions',
     icon: Users,
-    gradient: 'from-blue-500 to-cyan-500',
+    gradient: 'from-fw-blue-functional to-fw-blue-000',
     path: '/configure/users'
   },
   {
@@ -19,7 +19,7 @@ const configSections = [
     title: 'Billing & Usage',
     description: 'View billing, invoices, and usage metrics',
     icon: DollarSign,
-    gradient: 'from-green-500 to-emerald-500',
+    gradient: 'from-complementary-green to-fw-green-400',
     path: '/configure/billing'
   },
   {
@@ -27,7 +27,7 @@ const configSections = [
     title: 'Reporting',
     description: 'Configure reports and schedules',
     icon: FileText,
-    gradient: 'from-purple-500 to-pink-500',
+    gradient: 'from-fw-cobalt-600 to-fw-blue-100',
     path: '/configure/reporting'
   },
   {
@@ -35,7 +35,7 @@ const configSections = [
     title: 'Policies',
     description: 'Network policies and configurations',
     icon: Shield,
-    gradient: 'from-orange-500 to-red-500',
+    gradient: 'from-complementary-orange to-fw-orange-600',
     path: '/configure/policies'
   },
   {
@@ -43,7 +43,7 @@ const configSections = [
     title: 'Partners',
     description: 'Manage partner integrations',
     icon: Globe,
-    gradient: 'from-indigo-500 to-blue-500',
+    gradient: 'from-fw-cobalt-700 to-fw-blue-functional',
     path: '/configure/partners'
   },
   {
@@ -51,7 +51,7 @@ const configSections = [
     title: 'System Settings',
     description: 'General system configuration',
     icon: Settings,
-    gradient: 'from-gray-600 to-gray-800',
+    gradient: 'from-fw-gray-700 to-fw-gray-900',
     path: '/configure/system'
   },
 ];
@@ -60,24 +60,24 @@ export function MobileConfigureHub() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-fw-wash to-fw-base">
       {/* Elegant Header */}
-      <div className="bg-white shadow-sm sticky top-0 z-10">
+      <div className="bg-fw-base shadow-sm sticky top-0 z-10">
         <div className="px-4 pt-6 pb-4">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center flex-1">
               <button
                 onClick={() => navigate(-1)}
-                className="mr-3 p-2 -ml-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
+                className="mr-3 p-2 -ml-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-wash transition-colors"
                 aria-label="Go back"
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                <h1 className="text-2xl font-bold text-fw-heading mb-1">
                   Configure
                 </h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-fw-bodyLight">
                   System settings & preferences
                 </p>
               </div>
@@ -85,15 +85,15 @@ export function MobileConfigureHub() {
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => navigate('/notifications')}
-                className="relative p-3 text-gray-600 hover:text-gray-900 rounded-full hover:bg-gray-100 transition-colors"
+                className="relative p-3 text-fw-bodyLight hover:text-fw-heading rounded-full hover:bg-fw-wash transition-colors"
                 aria-label="Notifications"
               >
                 <Bell className="h-5 w-5" />
-                <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full"></span>
+                <span className="absolute top-2 right-2 h-2 w-2 bg-fw-error rounded-full"></span>
               </button>
               <button
                 onClick={() => navigate('/profile')}
-                className="p-3 text-gray-600 hover:text-gray-900 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-3 text-fw-bodyLight hover:text-fw-heading rounded-full hover:bg-fw-wash transition-colors"
                 aria-label="Profile"
               >
                 <UserIcon className="h-5 w-5" />
@@ -119,7 +119,7 @@ export function MobileConfigureHub() {
                 duration: 3000
               });
             }}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden active:scale-[0.98] transition-all"
+            className="bg-fw-base rounded-2xl border border-fw-secondary shadow-sm overflow-hidden active:scale-[0.98] transition-all"
           >
             <div className="p-4">
               <div className="flex items-center">
@@ -130,16 +130,16 @@ export function MobileConfigureHub() {
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-base font-bold text-gray-900 mb-0.5">
+                  <h3 className="text-base font-bold text-fw-heading mb-0.5">
                     {section.title}
                   </h3>
-                  <p className="text-sm text-gray-500 truncate">
+                  <p className="text-sm text-fw-bodyLight truncate">
                     {section.description}
                   </p>
                 </div>
 
                 {/* Chevron */}
-                <ChevronRight className="h-5 w-5 text-gray-300 flex-shrink-0 ml-2" />
+                <ChevronRight className="h-5 w-5 text-fw-border-secondary flex-shrink-0 ml-2" />
               </div>
             </div>
           </motion.div>
@@ -152,17 +152,17 @@ export function MobileConfigureHub() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-4 border border-blue-100"
+          className="bg-gradient-to-br from-fw-blue-light to-fw-cobalt-100 rounded-2xl p-4 border border-fw-border-secondary"
         >
           <div className="flex items-start">
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-              <Settings className="h-5 w-5 text-blue-600" />
+            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-fw-cobalt-100 flex items-center justify-center mr-3">
+              <Settings className="h-5 w-5 text-fw-cobalt-600" />
             </div>
             <div className="flex-1">
-              <h4 className="text-sm font-semibold text-gray-900 mb-1">
+              <h4 className="text-sm font-semibold text-fw-heading mb-1">
                 Desktop Experience
               </h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
+              <p className="text-xs text-fw-body leading-relaxed">
                 Configuration settings are optimized for desktop screens where you can view detailed settings, manage complex configurations, and access advanced features.
               </p>
             </div>
