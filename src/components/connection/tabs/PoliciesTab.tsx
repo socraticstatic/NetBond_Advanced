@@ -12,6 +12,7 @@ import { CloudRouter } from '../../../types/cloudrouter';
 import { VNF } from '../../../types/vnf';
 import { Link } from '../../../types';
 import { Modal } from '../../common/Modal';
+import { SideDrawer } from '../../common/SideDrawer';
 import { FormField } from '../../form/FormField';
 
 interface PoliciesTabProps {
@@ -24,6 +25,20 @@ interface PoliciesTabProps {
 export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: PoliciesTabProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedAppliesTo, setSelectedAppliesTo] = useState<PolicyAppliesTo>('all');
+  const [selectedTargetIds, setSelectedTargetIds] = useState<string[]>([]);
+  const [selectedAction, setSelectedAction] = useState<PolicyAction>('allow');
+
+  // Policy configuration options from Configure > Policies
+  const [policyDirection, setPolicyDirection] = useState<'onPremiseToPartner' | 'partnerToOnPremise' | 'both'>('both');
+  const [specificOptions, setSpecificOptions] = useState({
+    matchingRoutes: false,
+    blockDefaultRoutes: false,
+    communityValueFilter: false,
+    prependASN: false,
+    cvTagging: false,
+    advertiseStatic: false
+  });
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingPolicy, setEditingPolicy] = useState<RoutingPolicy | undefined>();
   const [expandedPolicy, setExpandedPolicy] = useState<string | null>(null);
@@ -499,79 +514,20 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
         )}
       </div>
 
-      {/* Add/Edit Policy Modal */}
-      <Modal
+      {/* Add/Edit Policy Drawer */}
+      <SideDrawer
         isOpen={showAddModal}
         onClose={() => {
           setShowAddModal(false);
           setEditingPolicy(undefined);
+          setSelectedAppliesTo('all');
+          setSelectedTargetIds([]);
+          setSelectedAction('allow');
         }}
-        title={editingPolicy ? 'Edit Policy' : 'Add Routing Policy'}
-        size="lg"
-      >
-        <div className="space-y-4">
-          <p className="text-sm text-fw-bodyLight">
-            Create routing policies to control traffic flow across your network infrastructure.
-          </p>
-
-          <FormField label="Policy Name" required>
-            <input
-              type="text"
-              className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-              placeholder="e.g., Production Traffic Priority"
-            />
-          </FormField>
-
-          <FormField label="Description">
-            <textarea
-              className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-              rows={2}
-              placeholder="Describe what this policy does..."
-            />
-          </FormField>
-
-          <div className="grid grid-cols-2 gap-4">
-            <FormField label="Action" required helpText="Inherited from Configure > Policies">
-              <select className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active">
-                <option value="allow">Allow</option>
-                <option value="deny">Deny</option>
-                <option value="manipulate">Manipulate</option>
-                <option value="advertise">Advertise</option>
-              </select>
-            </FormField>
-
-            <FormField label="Protocol" required>
-              <select className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active">
-                <option value="any">Any</option>
-                <option value="tcp">TCP</option>
-                <option value="udp">UDP</option>
-                <option value="icmp">ICMP</option>
-                <option value="bgp">BGP</option>
-                <option value="ospf">OSPF</option>
-              </select>
-            </FormField>
-          </div>
-
-          <FormField label="Priority" required helpText="Higher numbers = higher priority">
-            <input
-              type="number"
-              className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-              placeholder="100"
-              min="1"
-              max="1000"
-            />
-          </FormField>
-
-          <FormField label="Apply To" required>
-            <select className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active">
-              <option value="all">All Resources</option>
-              <option value="links">Specific Links</option>
-              <option value="cloudrouters">Specific Cloud Routers</option>
-              <option value="vnfs">Specific VNFs</option>
-            </select>
-          </FormField>
-
-          <div className="pt-4 border-t border-fw-secondary flex justify-end space-x-3">
+        title={editingPolicy ? 'Edit Routing Policy' : 'Add Routing Policy'}
+        size="xl"
+        footer={
+          <div className="flex justify-end space-x-3">
             <Button
               variant="outline"
               onClick={() => {
@@ -585,8 +541,387 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               {editingPolicy ? 'Update Policy' : 'Create Policy'}
             </Button>
           </div>
+        }
+      >
+        <div className="space-y-6">
+          <p className="text-sm text-fw-bodyLight">
+            Create routing policies to control traffic flow across your network infrastructure.
+            Configure actions and conditions based on your network requirements.
+          </p>
+
+          {/* Basic Information */}
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold text-fw-heading border-b border-fw-secondary pb-2">
+              Basic Information
+            </h3>
+
+            <FormField label="Policy Name" required>
+              <input
+                type="text"
+                className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                placeholder="e.g., Production Traffic Priority"
+              />
+            </FormField>
+
+            <FormField label="Description">
+              <textarea
+                className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                rows={3}
+                placeholder="Describe what this policy does and when it should be applied..."
+              />
+            </FormField>
+
+            <FormField label="Priority" required helpText="Higher numbers = higher priority (1-1000)">
+              <input
+                type="number"
+                className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                placeholder="100"
+                min="1"
+                max="1000"
+                defaultValue={100}
+              />
+            </FormField>
+          </div>
+
+          {/* Action Configuration */}
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold text-fw-heading border-b border-fw-secondary pb-2">
+              Action Configuration
+            </h3>
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField label="Action" required helpText="Inherited from Configure > Policies">
+                <select
+                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                  value={selectedAction}
+                  onChange={(e) => setSelectedAction(e.target.value as PolicyAction)}
+                >
+                  <option value="allow">Allow</option>
+                  <option value="deny">Deny</option>
+                  <option value="manipulate">Manipulate</option>
+                  <option value="advertise">Advertise</option>
+                </select>
+              </FormField>
+
+              <FormField label="Protocol" required>
+                <select className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active">
+                  <option value="any">Any</option>
+                  <option value="tcp">TCP</option>
+                  <option value="udp">UDP</option>
+                  <option value="icmp">ICMP</option>
+                  <option value="bgp">BGP</option>
+                  <option value="ospf">OSPF</option>
+                </select>
+              </FormField>
+            </div>
+
+            {/* Direction Selection */}
+            <FormField label="Traffic Direction" required>
+              <div className="space-y-2">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="direction"
+                    value="onPremiseToPartner"
+                    checked={policyDirection === 'onPremiseToPartner'}
+                    onChange={(e) => setPolicyDirection(e.target.value as typeof policyDirection)}
+                    className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary"
+                  />
+                  <span className="ml-2 text-sm text-fw-body">On Premise → Partner</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="direction"
+                    value="partnerToOnPremise"
+                    checked={policyDirection === 'partnerToOnPremise'}
+                    onChange={(e) => setPolicyDirection(e.target.value as typeof policyDirection)}
+                    className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary"
+                  />
+                  <span className="ml-2 text-sm text-fw-body">Partner → On Premise</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="direction"
+                    value="both"
+                    checked={policyDirection === 'both'}
+                    onChange={(e) => setPolicyDirection(e.target.value as typeof policyDirection)}
+                    className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary"
+                  />
+                  <span className="ml-2 text-sm text-fw-body">Both Directions</span>
+                </label>
+              </div>
+            </FormField>
+
+            {/* Action-Specific Options */}
+            <div className="bg-fw-wash p-4 rounded-lg">
+              <h4 className="text-sm font-medium text-fw-body mb-3">
+                {selectedAction === 'allow' ? 'Allow Options' :
+                 selectedAction === 'deny' ? 'Deny Options' :
+                 selectedAction === 'manipulate' ? 'Manipulation Options' :
+                 'Advertisement Options'}
+              </h4>
+              <div className="space-y-2">
+                {selectedAction === 'allow' && (
+                  <>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={specificOptions.matchingRoutes}
+                        onChange={(e) => setSpecificOptions({...specificOptions, matchingRoutes: e.target.checked})}
+                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      />
+                      <span className="ml-2 text-sm text-fw-body">Matching Routes</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={specificOptions.communityValueFilter}
+                        onChange={(e) => setSpecificOptions({...specificOptions, communityValueFilter: e.target.checked})}
+                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      />
+                      <span className="ml-2 text-sm text-fw-body">Community Value Filter</span>
+                    </label>
+                  </>
+                )}
+                {selectedAction === 'deny' && (
+                  <>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={specificOptions.matchingRoutes}
+                        onChange={(e) => setSpecificOptions({...specificOptions, matchingRoutes: e.target.checked})}
+                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      />
+                      <span className="ml-2 text-sm text-fw-body">Matching Routes</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={specificOptions.blockDefaultRoutes}
+                        onChange={(e) => setSpecificOptions({...specificOptions, blockDefaultRoutes: e.target.checked})}
+                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      />
+                      <span className="ml-2 text-sm text-fw-body">Block Default Routes</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={specificOptions.communityValueFilter}
+                        onChange={(e) => setSpecificOptions({...specificOptions, communityValueFilter: e.target.checked})}
+                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      />
+                      <span className="ml-2 text-sm text-fw-body">Community Value Filter</span>
+                    </label>
+                  </>
+                )}
+                {selectedAction === 'manipulate' && (
+                  <>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={specificOptions.prependASN}
+                        onChange={(e) => setSpecificOptions({...specificOptions, prependASN: e.target.checked})}
+                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      />
+                      <span className="ml-2 text-sm text-fw-body">Prepend Advertisements with Extra BGP ASNs</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={specificOptions.cvTagging}
+                        onChange={(e) => setSpecificOptions({...specificOptions, cvTagging: e.target.checked})}
+                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      />
+                      <span className="ml-2 text-sm text-fw-body">Selective CV Tagging to Routes/Prefixes</span>
+                    </label>
+                  </>
+                )}
+                {selectedAction === 'advertise' && (
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={specificOptions.advertiseStatic}
+                      onChange={(e) => setSpecificOptions({...specificOptions, advertiseStatic: e.target.checked})}
+                      className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                    />
+                    <span className="ml-2 text-sm text-fw-body">Advertise Static Routes</span>
+                  </label>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Target Selection */}
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold text-fw-heading border-b border-fw-secondary pb-2">
+              Apply To Resources
+            </h3>
+
+            <FormField label="Target Resources" required>
+              <select
+                className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                value={selectedAppliesTo}
+                onChange={(e) => {
+                  setSelectedAppliesTo(e.target.value as PolicyAppliesTo);
+                  setSelectedTargetIds([]);
+                }}
+              >
+                <option value="all">All Resources</option>
+                <option value="links">Specific Links</option>
+                <option value="cloudrouters">Specific Cloud Routers</option>
+                <option value="vnfs">Specific VNFs</option>
+              </select>
+            </FormField>
+
+            {/* Show resource selection when not "all" */}
+            {selectedAppliesTo === 'links' && allLinks.length > 0 && (
+              <div className="bg-fw-wash p-4 rounded-lg">
+                <h4 className="text-sm font-medium text-fw-body mb-3">Select Links</h4>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {allLinks.map((link) => (
+                    <label key={link.id} className="flex items-center p-2 hover:bg-fw-base rounded transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={selectedTargetIds.includes(link.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedTargetIds([...selectedTargetIds, link.id]);
+                          } else {
+                            setSelectedTargetIds(selectedTargetIds.filter(id => id !== link.id));
+                          }
+                        }}
+                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      />
+                      <div className="ml-3 flex-1">
+                        <div className="text-sm font-medium text-fw-body">{link.name}</div>
+                        <div className="text-xs text-fw-bodyLight">
+                          VLAN {link.vlanId} • {link.status === 'active' ? 'Active' : 'Inactive'}
+                          {link.ipSubnet && ` • ${link.ipSubnet}`}
+                        </div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+                <div className="mt-2 text-xs text-fw-bodyLight">
+                  {selectedTargetIds.length} of {allLinks.length} links selected
+                </div>
+              </div>
+            )}
+
+            {selectedAppliesTo === 'cloudrouters' && cloudRouters.length > 0 && (
+              <div className="bg-fw-wash p-4 rounded-lg">
+                <h4 className="text-sm font-medium text-fw-body mb-3">Select Cloud Routers</h4>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {cloudRouters.map((cr) => (
+                    <label key={cr.id} className="flex items-center p-2 hover:bg-fw-base rounded transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={selectedTargetIds.includes(cr.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedTargetIds([...selectedTargetIds, cr.id]);
+                          } else {
+                            setSelectedTargetIds(selectedTargetIds.filter(id => id !== cr.id));
+                          }
+                        }}
+                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      />
+                      <div className="ml-3 flex-1">
+                        <div className="text-sm font-medium text-fw-body">{cr.name}</div>
+                        <div className="text-xs text-fw-bodyLight">
+                          {cr.provider} • BGP ASN: {cr.bgpAsn}
+                        </div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+                <div className="mt-2 text-xs text-fw-bodyLight">
+                  {selectedTargetIds.length} of {cloudRouters.length} cloud routers selected
+                </div>
+              </div>
+            )}
+
+            {selectedAppliesTo === 'vnfs' && vnfs.length > 0 && (
+              <div className="bg-fw-wash p-4 rounded-lg">
+                <h4 className="text-sm font-medium text-fw-body mb-3">Select VNFs</h4>
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {vnfs.map((vnf) => (
+                    <label key={vnf.id} className="flex items-center p-2 hover:bg-fw-base rounded transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={selectedTargetIds.includes(vnf.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedTargetIds([...selectedTargetIds, vnf.id]);
+                          } else {
+                            setSelectedTargetIds(selectedTargetIds.filter(id => id !== vnf.id));
+                          }
+                        }}
+                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      />
+                      <div className="ml-3 flex-1">
+                        <div className="text-sm font-medium text-fw-body">{vnf.name}</div>
+                        <div className="text-xs text-fw-bodyLight">
+                          {vnf.type} • {vnf.provider}
+                        </div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+                <div className="mt-2 text-xs text-fw-bodyLight">
+                  {selectedTargetIds.length} of {vnfs.length} VNFs selected
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Conditions Section */}
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold text-fw-heading border-b border-fw-secondary pb-2">
+              Policy Conditions
+            </h3>
+            <p className="text-sm text-fw-bodyLight">
+              Define conditions that must be met for this policy to apply. Leave empty to match all traffic.
+            </p>
+
+            <div className="space-y-3">
+              <FormField label="Source Prefix">
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                  placeholder="e.g., 10.0.0.0/8"
+                />
+              </FormField>
+
+              <FormField label="Destination Prefix">
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                  placeholder="e.g., 192.168.0.0/16"
+                />
+              </FormField>
+
+              <FormField label="BGP Community">
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                  placeholder="e.g., 65000:100"
+                />
+              </FormField>
+
+              <FormField label="AS Path (Regex)">
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                  placeholder="e.g., ^65001"
+                />
+              </FormField>
+            </div>
+          </div>
         </div>
-      </Modal>
+      </SideDrawer>
     </div>
   );
 }
