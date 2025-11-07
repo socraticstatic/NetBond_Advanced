@@ -56,11 +56,22 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange }: Bandw
     setIsEditing(false);
   };
 
-  if (!isEditing) {
-    return (
-      <div className="bg-white rounded-lg border border-fw-secondary overflow-hidden">
+  return (
+    <AnimatePresence mode="wait">
+      {!isEditing ? (
+        <motion.div
+          key="collapsed"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.2 }}
+          className="bg-white rounded-lg border border-fw-secondary overflow-hidden"
+        >
         <div className="flex items-center justify-between p-6">
-          <div className="flex-1">
+          <motion.div
+            className="flex-1"
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.2 }}
+          >
             <div className="flex items-baseline space-x-3 mb-1">
               <span className="text-4xl font-bold text-fw-heading tracking-tight">
                 {currentOption?.label}
@@ -73,26 +84,28 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange }: Bandw
               </span>
             </div>
             <p className="text-sm text-fw-bodyLight">Current bandwidth allocation</p>
-          </div>
+          </motion.div>
 
-          <button
+          <motion.button
             onClick={() => setIsEditing(true)}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             className="ml-6 px-6 py-3 bg-fw-base border-2 border-fw-secondary text-fw-body hover:border-fw-active hover:bg-fw-wash rounded-lg transition-all font-medium text-sm flex items-center space-x-2 group"
           >
             <span>Change</span>
             <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-          </button>
+          </motion.button>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-lg border border-fw-secondary overflow-hidden"
-    >
+      </motion.div>
+      ) : (
+        <motion.div
+          key="expanded"
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+          className="bg-white rounded-lg border border-fw-secondary overflow-hidden"
+        >
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-fw-secondary bg-fw-wash">
         <div>
@@ -252,5 +265,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange }: Bandw
         </button>
       </div>
     </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
