@@ -30,7 +30,7 @@ export function ConnectionCardStatus({
   showEffects
 }: ConnectionCardStatusProps) {
   return (
-    <div className="p-4 border-t border-gray-100">
+    <div className="p-4 border-t border-fw-secondary">
       <div className="flex items-center justify-between mt-4">
         <motion.button
           onClick={(e) => {
@@ -41,11 +41,11 @@ export function ConnectionCardStatus({
           className={`
             inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
             transition-all duration-200 border
-            ${isPending 
-              ? 'bg-brand-lightBlue text-brand-blue border-brand-blue/20 cursor-wait' 
+            ${isPending
+              ? 'bg-fw-blue-light text-fw-link border-fw-active/20 cursor-wait'
               : status === 'Active'
-                ? 'bg-white text-complementary-green border-complementary-green/20 hover:bg-complementary-green/10'
-                : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                ? 'bg-fw-base text-fw-success border-fw-success/20 hover:bg-green-50'
+                : 'bg-fw-base text-fw-body border-fw-secondary hover:bg-fw-wash'
             }
           `}
           // Add animation for the pending state

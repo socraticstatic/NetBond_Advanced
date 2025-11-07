@@ -28,28 +28,28 @@ export function GlossaryPage() {
   const selectedTermData = selectedTerm ? getTermById(selectedTerm) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-fw-wash via-fw-blue-light to-fw-wash">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-3 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl shadow-lg">
+            <div className="p-3 bg-gradient-to-br from-fw-cobalt-700 to-fw-blue-700 rounded-xl shadow-lg">
               <BookOpen className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Network Glossary</h1>
-              <p className="text-gray-600 mt-1">Understanding key networking concepts and terminology</p>
+              <h1 className="text-3xl font-bold text-fw-heading">Network Glossary</h1>
+              <p className="text-fw-body mt-1">Understanding key networking concepts and terminology</p>
             </div>
           </div>
 
           <div className="flex gap-3 mt-6">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-fw-bodyLight" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search terms, definitions, and examples..."
-                className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full pl-12 pr-4 py-3 bg-fw-base border border-fw-secondary rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-transparent text-sm"
               />
             </div>
             <Button
@@ -64,7 +64,7 @@ export function GlossaryPage() {
         </div>
 
         {showDiagram && (
-          <div className="mb-8 bg-white rounded-xl border-2 border-gray-200 shadow-lg p-6">
+          <div className="mb-8 bg-fw-base rounded-xl border-2 border-fw-secondary shadow-lg p-6">
             <ConceptHierarchyDiagram />
           </div>
         )}
@@ -78,19 +78,19 @@ export function GlossaryPage() {
             onClick={() => setSelectedCategory(null)}
             className={`p-4 rounded-xl border-2 transition-all duration-200 ${
               selectedCategory === null
-                ? 'border-blue-600 bg-blue-50 shadow-md'
-                : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm'
+                ? 'border-fw-active bg-fw-blue-light shadow-md'
+                : 'border-fw-secondary bg-fw-base hover:border-fw-bodyLight hover:shadow-sm'
             }`}
           >
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${selectedCategory === null ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                <BookOpen className={`h-5 w-5 ${selectedCategory === null ? 'text-blue-600' : 'text-gray-600'}`} />
+              <div className={`p-2 rounded-lg ${selectedCategory === null ? 'bg-fw-blue-100' : 'bg-fw-neutral'}`}>
+                <BookOpen className={`h-5 w-5 ${selectedCategory === null ? 'text-fw-link' : 'text-fw-body'}`} />
               </div>
               <div className="text-left">
-                <div className={`font-semibold text-sm ${selectedCategory === null ? 'text-blue-900' : 'text-gray-900'}`}>
+                <div className={`font-semibold text-sm ${selectedCategory === null ? 'text-fw-heading' : 'text-fw-heading'}`}>
                   All Terms
                 </div>
-                <div className="text-xs text-gray-600">
+                <div className="text-xs text-fw-body">
                   {glossaryTerms.length} terms
                 </div>
               </div>
