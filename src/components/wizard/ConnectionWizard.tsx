@@ -11,6 +11,7 @@ import { ReviewConfiguration } from './screens/ReviewConfiguration';
 import { ModeSelection } from './modes';
 import { useStore } from '../../store/useStore';
 import { Button } from '../common/Button';
+import { Toggle } from '../common/Toggle';
 import { NetworkAI } from './NetworkAI';
 import { Connection, NetworkNode, NetworkEdge } from '../../types';
 import { AsyncBoundary } from '../common/AsyncBoundary';
@@ -486,24 +487,11 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   <div className="h-4 w-4 bg-[#003184] rounded-full">
                   </div>
                 </div>
-                <label className="flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={showAI}
-                    onChange={(e) => setShowAI(e.target.checked)}
-                    className="sr-only"
-                  />
-                  <div className={`relative inline-block w-10 h-5 transition-colors duration-200 ease-in-out rounded-full ${
-                    showAI ? 'bg-[#003184]' : 'bg-gray-200'
-                  }`}>
-                    <div className={`absolute inset-y-0 left-0 w-5 h-5 transition duration-200 ease-in-out transform bg-white rounded-full ${
-                      showAI ? 'translate-x-5' : 'translate-x-0'
-                    } shadow-md`}></div>
-                  </div>
-                  <span className="ml-2 text-sm font-medium text-gray-700">
-                    AI Assistant
-                  </span>
-                </label>
+                <Toggle
+                  checked={showAI}
+                  onChange={setShowAI}
+                  label="AI Assistant"
+                />
               </div>
             </div>
 
