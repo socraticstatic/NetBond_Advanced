@@ -62,14 +62,14 @@ export function SideDrawer({ isOpen, onClose, title, children, size = 'lg', foot
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className={`fixed top-0 right-0 h-full bg-white shadow-2xl z-50 flex flex-col ${sizeClasses[size]} w-full`}
+            className={`fixed top-0 right-0 h-full bg-fw-base shadow-2xl z-50 flex flex-col ${sizeClasses[size]} w-full`}
           >
             {/* Header */}
-            <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-white sticky top-0 z-10">
-              <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+            <div className="px-6 py-4 border-b border-fw-secondary flex items-center justify-between bg-fw-base sticky top-0 z-10">
+              <h2 className="text-xl font-semibold text-fw-heading">{title}</h2>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-500 transition-colors p-2 rounded-lg hover:bg-gray-100"
+                className="text-fw-bodyLight hover:text-fw-body transition-colors p-2 rounded-lg hover:bg-fw-wash"
                 aria-label="Close drawer"
               >
                 <X className="h-6 w-6" />
@@ -83,7 +83,7 @@ export function SideDrawer({ isOpen, onClose, title, children, size = 'lg', foot
 
             {/* Footer */}
             {footer && (
-              <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 sticky bottom-0">
+              <div className="px-6 py-4 border-t border-fw-secondary bg-fw-wash sticky bottom-0">
                 {footer}
               </div>
             )}

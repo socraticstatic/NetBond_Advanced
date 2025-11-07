@@ -27,21 +27,21 @@ export function SearchBar({ onSearch }: SearchBarProps) {
             <input
               type="text"
               placeholder="Search connections, settings, documentation..."
-              className="w-full pl-11 pr-10 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg 
-                focus:outline-none focus:ring-2 focus:ring-[#009fdb] focus:border-transparent
-                placeholder:text-gray-400"
+              className="w-full pl-11 pr-10 py-2.5 text-sm bg-fw-wash border border-fw-secondary rounded-lg
+                focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-transparent
+                placeholder:text-fw-bodyLight"
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               onBlur={() => !searchQuery && setShowSearch(false)}
               autoFocus
             />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-fw-bodyLight" />
             {searchQuery && (
               <button
                 onClick={clearSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-gray-200 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-fw-neutral transition-colors"
               >
-                <X className="h-4 w-4 text-gray-500" />
+                <X className="h-4 w-4 text-fw-bodyLight" />
               </button>
             )}
           </div>
@@ -49,7 +49,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
       ) : (
         <button
           onClick={() => setShowSearch(true)}
-          className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+          className="p-2 text-fw-bodyLight hover:text-fw-body hover:bg-fw-wash rounded-lg transition-colors duration-200"
         >
           <Search className="h-5 w-5" />
         </button>

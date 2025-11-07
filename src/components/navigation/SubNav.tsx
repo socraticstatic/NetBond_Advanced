@@ -27,15 +27,15 @@ export function SubNav({ title, description, action, children }: SubNavProps) {
   };
 
   return (
-    <div className="bg-white border-b border-gray-200">
+    <div className="bg-fw-base border-b border-fw-secondary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+              <h1 className="text-2xl font-bold text-fw-heading">{title}</h1>
               {description && (
-                <p className="mt-1 text-sm text-gray-500">{description}</p>
+                <p className="mt-1 text-sm text-fw-bodyLight">{description}</p>
               )}
             </div>
             {action && (
