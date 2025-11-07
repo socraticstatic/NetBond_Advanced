@@ -62,16 +62,16 @@ export function ConnectionCardMetrics({
   };
 
   const getUtilizationColor = () => {
-    if (bandwidthUtil > 90) return 'text-red-600';
-    if (bandwidthUtil > 80) return 'text-amber-600';
-    if (bandwidthUtil > 60) return 'text-blue-600';
-    return 'text-green-600';
+    if (bandwidthUtil > 90) return 'text-fw-error';
+    if (bandwidthUtil > 80) return 'text-fw-warn';
+    if (bandwidthUtil > 60) return 'text-fw-link';
+    return 'text-fw-success';
   };
 
   const getUtilizationBgColor = () => {
     if (bandwidthUtil > 90) return 'bg-red-50';
-    if (bandwidthUtil > 80) return 'bg-amber-50';
-    if (bandwidthUtil > 60) return 'bg-blue-50';
+    if (bandwidthUtil > 80) return 'bg-orange-50';
+    if (bandwidthUtil > 60) return 'bg-fw-blue-light';
     return 'bg-green-50';
   };
 
@@ -90,22 +90,22 @@ export function ConnectionCardMetrics({
       {/* Top Row: Network Resources & Geographic Scope */}
       <div className="grid grid-cols-2 gap-3">
         {/* Network Resources */}
-        <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
-          <Router className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+        <div className="flex items-start space-x-3 p-3 bg-fw-blue-light rounded-lg border border-fw-blue-100">
+          <Router className="h-4 w-4 text-fw-link mt-0.5 flex-shrink-0" />
           <div className="min-w-0 flex-1">
-            <span className="text-xs font-medium text-blue-900 block mb-0.5">Network Resources</span>
-            <p className="text-sm font-semibold text-blue-700 truncate" title={networkSummary}>
+            <span className="text-xs font-medium text-fw-heading block mb-0.5">Network Resources</span>
+            <p className="text-sm font-semibold text-fw-link truncate" title={networkSummary}>
               {networkSummary}
             </p>
           </div>
         </div>
 
         {/* Geographic Scope */}
-        <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-          <Globe className="h-4 w-4 text-gray-600 mt-0.5 flex-shrink-0" />
+        <div className="flex items-start space-x-3 p-3 bg-fw-wash rounded-lg border border-fw-secondary">
+          <Globe className="h-4 w-4 text-fw-body mt-0.5 flex-shrink-0" />
           <div className="min-w-0 flex-1">
-            <span className="text-xs font-medium text-gray-700 block mb-0.5">Geographic Scope</span>
-            <p className="text-sm font-semibold text-gray-900 truncate" title={geographicTooltip}>
+            <span className="text-xs font-medium text-fw-body block mb-0.5">Geographic Scope</span>
+            <p className="text-sm font-semibold text-fw-heading truncate" title={geographicTooltip}>
               {geographicSummary}
             </p>
           </div>
@@ -119,13 +119,13 @@ export function ConnectionCardMetrics({
           <div className="flex items-center space-x-2">
             <DollarSign className={`h-4 w-4 ${billingInfo.textColor} flex-shrink-0`} />
             <span className={`text-xs font-medium ${
-              billingInfo.bgColor === 'bg-green-50' ? 'text-green-900' :
-              billingInfo.bgColor === 'bg-brand-lightBlue' ? 'text-blue-900' :
-              'text-gray-900'
+              billingInfo.bgColor === 'bg-green-50' ? 'text-fw-success' :
+              billingInfo.bgColor === 'bg-brand-lightBlue' ? 'text-fw-heading' :
+              'text-fw-heading'
             }`}>Monthly Cost</span>
           </div>
           <div className="flex items-center space-x-2">
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-fw-heading">
               {billingInfo.cost ? formatCurrency(billingInfo.cost) : '-'}
             </p>
             <span className={`text-xs font-medium ${billingInfo.textColor}`}>

@@ -29,7 +29,7 @@ export function ConnectionConfiguration({
 }: ConnectionConfigurationProps) {
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-gray-900 text-center mb-8">Configure Your Connection</h3>
+      <h3 className="text-xl font-semibold text-fw-heading text-center mb-8">Configure Your Connection</h3>
       
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Configuration Options */}
@@ -37,7 +37,7 @@ export function ConnectionConfiguration({
           <div className="grid grid-cols-2 gap-6">
             {/* Region Selection */}
             <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-3">Select Region</h4>
+              <h4 className="text-sm font-medium text-fw-body mb-3">Select Region</h4>
               <div className="grid grid-cols-2 gap-3">
                 {['US East', 'US West', 'EU West', 'Asia Pacific'].map((location) => (
                   <button
@@ -47,13 +47,13 @@ export function ConnectionConfiguration({
                       flex flex-col items-center justify-center h-24 p-3 border-2 rounded-xl 
                       transition-all duration-200 wizard-card
                       ${selectedLocation === location
-                        ? 'border-blue-500 bg-blue-50 shadow-lg transform scale-[1.02]'
-                        : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50/50'
+                        ? 'border-fw-active bg-fw-blue-light shadow-lg transform scale-[1.02]'
+                        : 'border-fw-secondary hover:border-fw-bodyLight hover:bg-fw-blue-light/50'
                       }
                     `}
                   >
-                    <Globe className={`h-5 w-5 mb-2 ${selectedLocation === location ? 'text-blue-500' : 'text-gray-400'}`} />
-                    <span className={`text-sm font-medium text-center ${selectedLocation === location ? 'text-blue-700' : 'text-gray-700'}`}>
+                    <Globe className={`h-5 w-5 mb-2 ${selectedLocation === location ? 'text-fw-link' : 'text-fw-bodyLight'}`} />
+                    <span className={`text-sm font-medium text-center ${selectedLocation === location ? 'text-fw-heading' : 'text-fw-body'}`}>
                       {location}
                     </span>
                   </button>
@@ -63,7 +63,7 @@ export function ConnectionConfiguration({
 
             {/* Bandwidth Selection */}
             <div>
-              <h4 className="text-sm font-medium text-gray-700 mb-3">Select Bandwidth</h4>
+              <h4 className="text-sm font-medium text-fw-body mb-3">Select Bandwidth</h4>
               <div className="grid grid-cols-2 gap-3">
                 {['100 Mbps', '500 Mbps', '1 Gbps', '10 Gbps'].map((bandwidth) => (
                   <button
@@ -73,13 +73,13 @@ export function ConnectionConfiguration({
                       flex flex-col items-center justify-center h-24 p-3 border-2 rounded-xl
                       transition-all duration-200 wizard-card
                       ${selectedBandwidth === bandwidth
-                        ? 'border-blue-500 bg-blue-50 shadow-lg transform scale-[1.02]'
-                        : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50/50'
+                        ? 'border-fw-active bg-fw-blue-light shadow-lg transform scale-[1.02]'
+                        : 'border-fw-secondary hover:border-fw-bodyLight hover:bg-fw-blue-light/50'
                       }
                     `}
                   >
-                    <ArrowUpDown className={`h-5 w-5 mb-2 ${selectedBandwidth === bandwidth ? 'text-blue-500' : 'text-gray-400'}`} />
-                    <div className={`text-sm font-medium ${selectedBandwidth === bandwidth ? 'text-blue-700' : 'text-gray-700'}`}>
+                    <ArrowUpDown className={`h-5 w-5 mb-2 ${selectedBandwidth === bandwidth ? 'text-fw-link' : 'text-fw-bodyLight'}`} />
+                    <div className={`text-sm font-medium ${selectedBandwidth === bandwidth ? 'text-fw-heading' : 'text-fw-body'}`}>
                       {bandwidth}
                     </div>
                   </button>

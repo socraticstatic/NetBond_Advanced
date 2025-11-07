@@ -110,11 +110,11 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
 
   const getBillingInfo = () => {
     const planLabels = {
-      'trial': { label: '22 days left', color: 'green', bgColor: 'bg-green-50', textColor: 'text-green-700' },
-      'pay-as-you-go': { label: 'Pay as you go', color: 'blue', bgColor: 'bg-brand-lightBlue', textColor: 'text-brand-blue' },
-      '12-months': { label: '12 Months', color: 'blue', bgColor: 'bg-brand-lightBlue', textColor: 'text-brand-blue' },
-      '24-months': { label: '24 Months', color: 'blue', bgColor: 'bg-brand-lightBlue', textColor: 'text-brand-blue' },
-      '36-months': { label: '36 Months', color: 'purple', bgColor: 'bg-purple-50', textColor: 'text-purple-700' }
+      'trial': { label: '22 days left', color: 'green', bgColor: 'bg-green-50', textColor: 'text-fw-success' },
+      'pay-as-you-go': { label: 'Pay as you go', color: 'blue', bgColor: 'bg-brand-lightBlue', textColor: 'text-fw-link' },
+      '12-months': { label: '12 Months', color: 'blue', bgColor: 'bg-brand-lightBlue', textColor: 'text-fw-link' },
+      '24-months': { label: '24 Months', color: 'blue', bgColor: 'bg-brand-lightBlue', textColor: 'text-fw-link' },
+      '36-months': { label: '36 Months', color: 'purple', bgColor: 'bg-purple-50', textColor: 'text-fw-link' }
     };
 
     const planId = connection.billing?.planId || 'pay-as-you-go';
@@ -137,11 +137,11 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
       case 'AWS':
       case 'Azure':
       case 'Google':
-        return <Cloud className="h-5 w-5 text-brand-blue" />;
+        return <Cloud className="h-5 w-5 text-fw-link" />;
       default:
-        return connection.type === 'GCP Connection for AT&T' ? 
-          <Globe className="h-5 w-5 text-brand-blue" /> : 
-          <Cloud className="h-5 w-5 text-brand-blue" />;
+        return connection.type === 'GCP Connection for AT&T' ?
+          <Globe className="h-5 w-5 text-fw-link" /> :
+          <Cloud className="h-5 w-5 text-fw-link" />;
     }
   };
 
