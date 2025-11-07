@@ -39,10 +39,10 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
     {
       id: 'policy-1',
       name: 'Production Traffic Priority',
-      description: 'Prioritize production traffic over all links',
+      description: 'Allow production traffic over all links',
       enabled: true,
       priority: 100,
-      action: 'permit',
+      action: 'allow',
       protocol: 'any',
       conditions: [
         { id: 'cond-1', type: 'prefix', operator: 'matches', value: '10.0.0.0/8' },
@@ -74,19 +74,37 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
     },
     {
       id: 'policy-3',
-      name: 'BGP Route Preference',
-      description: 'Prefer routes learned from primary cloud router',
-      enabled: false,
-      priority: 50,
-      action: 'permit',
+      name: 'BGP AS Path Prepending',
+      description: 'Manipulate route advertisements by prepending AS path',
+      enabled: true,
+      priority: 75,
+      action: 'manipulate',
       protocol: 'bgp',
       conditions: [
-        { id: 'cond-5', type: 'as-path', operator: 'contains', value: '65001' }
+        { id: 'cond-5', type: 'as-path', operator: 'contains', value: '65001' },
+        { id: 'cond-6', type: 'prefix', operator: 'matches', value: '172.16.0.0/12' }
       ],
       appliesTo: 'cloudrouters',
       targetIds: ['cr-1'],
       createdAt: '2024-01-20T13:30:00Z',
       updatedAt: '2024-03-05T16:00:00Z',
+      createdBy: 'network@att.com'
+    },
+    {
+      id: 'policy-4',
+      name: 'Advertise Static Routes',
+      description: 'Advertise static routes to BGP neighbors',
+      enabled: false,
+      priority: 50,
+      action: 'advertise',
+      protocol: 'bgp',
+      conditions: [
+        { id: 'cond-7', type: 'prefix', operator: 'matches', value: '192.168.0.0/16' }
+      ],
+      appliesTo: 'vnfs',
+      targetIds: ['vnf-1', 'vnf-2'],
+      createdAt: '2024-02-10T11:00:00Z',
+      updatedAt: '2024-03-01T09:20:00Z',
       createdBy: 'network@att.com'
     }
   ]);
@@ -251,7 +269,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               <div>
                 <h4 className="text-sm font-medium text-fw-body mb-2">Action</h4>
                 <div className="space-y-2">
-                  {['permit', 'deny'].map((action) => (
+                  {['allow', 'deny', 'manipulate', 'advertise'].map((action) => (
                     <label key={action} className="flex items-center">
                       <input
                         type="checkbox"
@@ -357,11 +375,18 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
 
                       {/* Action Badge */}
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                        policy.action === 'permit'
+                        policy.action === 'allow'
                           ? 'bg-[var(--status-active-bg)] text-[var(--status-active-text)]'
-                          : 'bg-[var(--status-error-bg)] text-[var(--status-error-text)]'
+                          : policy.action === 'deny'
+                          ? 'bg-[var(--status-error-bg)] text-[var(--status-error-text)]'
+                          : policy.action === 'manipulate'
+                          ? 'bg-[var(--status-warning-bg)] text-[var(--status-warning-text)]'
+                          : 'bg-fw-accent text-fw-link'
                       }`}>
-                        {policy.action === 'permit' ? <Check className="h-3 w-3 mr-1" /> : <AlertTriangle className="h-3 w-3 mr-1" />}
+                        {policy.action === 'allow' ? <Check className="h-3 w-3 mr-1" /> :
+                         policy.action === 'deny' ? <AlertTriangle className="h-3 w-3 mr-1" /> :
+                         policy.action === 'manipulate' ? <Edit2 className="h-3 w-3 mr-1" /> :
+                         <Play className="h-3 w-3 mr-1" />}
                         {policy.action.toUpperCase()}
                       </span>
 
@@ -506,10 +531,12 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
           </FormField>
 
           <div className="grid grid-cols-2 gap-4">
-            <FormField label="Action" required>
+            <FormField label="Action" required helpText="Inherited from Configure > Policies">
               <select className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active">
-                <option value="permit">Permit</option>
+                <option value="allow">Allow</option>
                 <option value="deny">Deny</option>
+                <option value="manipulate">Manipulate</option>
+                <option value="advertise">Advertise</option>
               </select>
             </FormField>
 

@@ -1,6 +1,6 @@
 export type PolicyAppliesTo = 'all' | 'links' | 'cloudrouters' | 'vnfs';
 
-export type PolicyAction = 'permit' | 'deny';
+export type PolicyAction = 'allow' | 'deny' | 'manipulate' | 'advertise';
 
 export type PolicyProtocol = 'any' | 'tcp' | 'udp' | 'icmp' | 'bgp' | 'ospf';
 
