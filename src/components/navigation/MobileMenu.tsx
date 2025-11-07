@@ -260,7 +260,7 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
                 Sign Out
               </button>
               <div className="mt-4 text-center text-xs text-gray-500">
-                <p>AT&T NetBond® Advanced • v2.0.1</p>
+                <p className="font-semibold">AT&T NetBond® Advanced • v2.0.1</p>
                 <p className="mt-1">© 2025 AT&T Intellectual Property. All rights reserved.</p>
               </div>
             </div>
