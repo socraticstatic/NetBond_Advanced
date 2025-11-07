@@ -228,7 +228,6 @@ function App() {
                     <SubNav
                       title="Network Connections"
                       description="Manage your network connections across clouds and data centers"
-                      action={{ label: "Create Connection", to: "/create" }}
                     >
                       <div className="mb-8">
                         <ConnectionTabs
