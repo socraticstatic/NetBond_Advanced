@@ -35,9 +35,19 @@
 
   /* AT&T Flywheel Design System - Semantic Colors */
   --color-success: rgb(45 126 36); /* Green 600 */
+  --color-success-light: rgb(74 175 66); /* Green 400 */
   --color-warning: rgb(234 113 47); /* Orange 600 */
+  --color-warning-light: rgb(255 143 77); /* Orange 400 */
   --color-error: rgb(199 0 50); /* Red 600 */
+  --color-error-light: rgb(255 92 115); /* Red 400 */
   --color-info: rgb(0 116 179); /* Functional Blue */
+
+  /* AT&T Flywheel - Additional Color Variants */
+  --color-att-blue-000: rgb(0 171 235); /* Lighter AT&T Blue */
+  --color-att-blue-100: rgb(102 200 240); /* Even lighter */
+  --color-att-blue-200: rgb(153 218 245); /* Very light */
+  --color-cobalt-400: rgb(51 116 204);
+  --color-cobalt-800: rgb(0 35 90);
 
   /* Complementary Colors */
   --color-complementary-green: rgb(45 126 36);
@@ -164,6 +174,74 @@
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-linear: linear;
+}
+
+/* AT&T Flywheel Design System - Semantic Tokens (Light Mode) */
+:root {
+  /* Text Colors */
+  --fw-text-heading: var(--color-gray-900);
+  --fw-text-body: var(--color-gray-700);
+  --fw-text-bodyLight: var(--color-gray-600);
+  --fw-text-link: var(--color-functional-blue);
+  --fw-text-linkHover: var(--color-cobalt-600);
+  --fw-text-linkPrimary: white;
+  --fw-text-disabled: var(--color-gray-500);
+  --fw-text-error: var(--color-error);
+  --fw-text-success: var(--color-success);
+  --fw-text-warning: var(--color-warning);
+  --fw-text-info: var(--color-functional-blue);
+
+  /* Background Colors */
+  --fw-bg-base: rgb(255 255 255);
+  --fw-bg-wash: var(--color-gray-100);
+  --fw-bg-neutral: var(--color-gray-200);
+  --fw-bg-accent: var(--color-att-blue-000);
+  --fw-bg-primary: var(--color-cobalt-700);
+  --fw-bg-ctaPrimary: var(--color-cobalt-700);
+  --fw-bg-ctaPrimaryHover: var(--color-cobalt-600);
+  --fw-bg-disabled: var(--color-gray-300);
+
+  /* Border Colors */
+  --fw-border-primary: var(--color-gray-600);
+  --fw-border-secondary: var(--color-gray-300);
+  --fw-border-active: var(--color-functional-blue);
+  --fw-border-focus: var(--color-gray-800);
+  --fw-border-error: var(--color-error);
+}
+
+/* AT&T Flywheel Design System - Dark Mode Semantic Tokens */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Text Colors - Dark Mode */
+    --fw-text-heading: rgb(255 255 255);
+    --fw-text-body: rgb(255 255 255);
+    --fw-text-bodyLight: var(--color-gray-400);
+    --fw-text-link: var(--color-att-blue-000);
+    --fw-text-linkHover: var(--color-att-blue-100);
+    --fw-text-linkPrimary: rgb(255 255 255);
+    --fw-text-disabled: var(--color-gray-500);
+    --fw-text-error: var(--color-error-light);
+    --fw-text-success: var(--color-success-light);
+    --fw-text-warning: var(--color-warning-light);
+    --fw-text-info: var(--color-att-blue);
+
+    /* Background Colors - Dark Mode */
+    --fw-bg-base: rgb(0 0 0);
+    --fw-bg-wash: var(--color-gray-900);
+    --fw-bg-neutral: var(--color-gray-800);
+    --fw-bg-accent: var(--color-cobalt-800);
+    --fw-bg-primary: var(--color-att-blue-100);
+    --fw-bg-ctaPrimary: var(--color-att-blue-000);
+    --fw-bg-ctaPrimaryHover: var(--color-att-blue-100);
+    --fw-bg-disabled: var(--color-gray-300);
+
+    /* Border Colors - Dark Mode */
+    --fw-border-primary: var(--color-gray-400);
+    --fw-border-secondary: var(--color-gray-700);
+    --fw-border-active: var(--color-att-blue-000);
+    --fw-border-focus: var(--color-gray-200);
+    --fw-border-error: var(--color-error-light);
+  }
 }
 
 /* Component-specific tokens */
