@@ -5,6 +5,7 @@ import {
   ChevronDown, ChevronUp
 } from 'lucide-react';
 import { Button } from '../../common/Button';
+import { Toggle } from '../../common/Toggle';
 import { RoutingPolicy, PolicyAppliesTo, PolicyAction, PolicyProtocol } from '../../../types/routingPolicy';
 import { Connection } from '../../../types';
 import { CloudRouter } from '../../../types/cloudrouter';
@@ -338,19 +339,11 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               <div className="p-4 flex items-center justify-between">
                 <div className="flex items-center space-x-4 flex-1">
                   {/* Status Indicator */}
-                  <button
-                    onClick={() => handleTogglePolicy(policy.id)}
-                    className={`flex-shrink-0 relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      policy.enabled ? 'bg-fw-success' : 'bg-fw-disabled'
-                    }`}
-                    title={policy.enabled ? 'Enabled' : 'Disabled'}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        policy.enabled ? 'translate-x-6' : 'translate-x-1'
-                      }`}
-                    />
-                  </button>
+                  <Toggle
+                    checked={policy.enabled}
+                    onChange={() => handleTogglePolicy(policy.id)}
+                    size="md"
+                  />
 
                   {/* Priority Badge */}
                   <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-fw-accent">
