@@ -138,7 +138,7 @@ function EnhancedTableComponent<T>({
         <div className="flex justify-end mb-3">
           <button
             onClick={handleExport}
-            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-md hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
           >
             <Download className="h-4 w-4 mr-2" />
             Export CSV
@@ -146,15 +146,15 @@ function EnhancedTableComponent<T>({
         </div>
       )}
       <div className="w-full overflow-visible">
-        <table className="w-full divide-y divide-gray-200">
-          <thead className={`bg-gray-50 ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
+        <table className="w-full divide-y divide-fw-secondary">
+          <thead className={`bg-fw-wash ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.id}
                   scope="col"
-                  className={`px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                    column.sortable ? 'cursor-pointer select-none hover:bg-gray-100' : ''
+                  className={`px-3 py-2 text-left text-xs font-medium text-fw-bodyLight uppercase tracking-wider ${
+                    column.sortable ? 'cursor-pointer select-none hover:bg-fw-neutral' : ''
                   }`}
                   onClick={() => handleSort(column)}
                   style={column.width ? { width: column.width } : undefined}
@@ -186,12 +186,12 @@ function EnhancedTableComponent<T>({
               )}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-fw-base divide-y divide-fw-secondary">
             {paginatedData.length === 0 ? (
               <tr>
                 <td
                   colSpan={columns.length + (rowActions ? 1 : 0)}
-                  className="px-3 py-8 text-center text-gray-500"
+                  className="px-3 py-8 text-center text-fw-bodyLight"
                 >
                   {emptyMessage}
                 </td>
@@ -200,7 +200,7 @@ function EnhancedTableComponent<T>({
               paginatedData.map((item) => (
                 <tr
                   key={keyExtractor(item)}
-                  className={`hover:bg-gray-50 ${onRowClick ? 'cursor-pointer' : ''}`}
+                  className={`hover:bg-fw-wash ${onRowClick ? 'cursor-pointer' : ''}`}
                   onClick={() => onRowClick?.(item)}
                 >
                   {columns.map((column) => (
@@ -223,9 +223,9 @@ function EnhancedTableComponent<T>({
       </div>
 
       {showPagination && totalPages > 1 && (
-        <div className="px-6 py-4 border-t border-gray-200 bg-white">
+        <div className="px-6 py-4 border-t border-fw-secondary bg-fw-base">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-700">
+            <div className="text-sm text-fw-body">
               Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
               <span className="font-medium">{Math.min(endIndex, sortedData.length)}</span> of{' '}
               <span className="font-medium">{sortedData.length}</span> results
@@ -234,7 +234,7 @@ function EnhancedTableComponent<T>({
               <button
                 onClick={() => goToPage(1)}
                 disabled={currentPage === 1}
-                className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 rounded-md hover:bg-fw-wash disabled:opacity-50 disabled:cursor-not-allowed"
                 title="First page"
               >
                 <ChevronsLeft className="h-4 w-4" />
@@ -242,7 +242,7 @@ function EnhancedTableComponent<T>({
               <button
                 onClick={() => goToPage(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 rounded-md hover:bg-fw-wash disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Previous page"
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -256,14 +256,14 @@ function EnhancedTableComponent<T>({
                       onClick={() => goToPage(page)}
                       className={`px-3 py-1 rounded-md text-sm ${
                         currentPage === page
-                          ? 'bg-brand-blue text-white'
-                          : 'hover:bg-gray-100 text-gray-700'
+                          ? 'bg-fw-ctaPrimary text-fw-linkPrimary'
+                          : 'hover:bg-fw-wash text-fw-body'
                       }`}
                     >
                       {page}
                     </button>
                   ) : (
-                    <span key={index} className="px-2 text-gray-400">
+                    <span key={index} className="px-2 text-fw-bodyLight">
                       {page}
                     </span>
                   )
@@ -273,7 +273,7 @@ function EnhancedTableComponent<T>({
               <button
                 onClick={() => goToPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 rounded-md hover:bg-fw-wash disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Next page"
               >
                 <ChevronRight className="h-4 w-4" />
@@ -281,7 +281,7 @@ function EnhancedTableComponent<T>({
               <button
                 onClick={() => goToPage(totalPages)}
                 disabled={currentPage === totalPages}
-                className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 rounded-md hover:bg-fw-wash disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Last page"
               >
                 <ChevronsRight className="h-4 w-4" />

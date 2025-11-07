@@ -24,18 +24,18 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
       <div className="flex items-center justify-center min-h-screen px-4 py-8">
         {/* Background overlay */}
         <div
-          className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+          className="fixed inset-0 transition-opacity bg-black bg-opacity-50"
           onClick={onClose}
         />
 
         {/* Modal panel */}
-        <div className={`relative w-full max-h-[calc(100vh-4rem)] flex flex-col px-4 pt-5 pb-4 text-left transition-all transform bg-white rounded-lg shadow-xl sm:p-6 ${sizeClasses[size]}`}>
+        <div className={`relative w-full max-h-[calc(100vh-4rem)] flex flex-col px-4 pt-5 pb-4 text-left transition-all transform bg-fw-base rounded-lg shadow-xl sm:p-6 ${sizeClasses[size]}`}>
           {/* Close button */}
           <div className="absolute top-0 right-0 pt-4 pr-4 z-10">
             <Button
               onClick={onClose}
               variant="outline"
-              className="!p-1 border-0 text-gray-400 hover:text-gray-500"
+              className="!p-1 border-0 text-fw-bodyLight hover:text-fw-body"
             >
               <X className="w-6 h-6" />
             </Button>
@@ -44,7 +44,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
           {/* Title */}
           {title && (
             <div className="mb-4 flex-shrink-0">
-              <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+              <h3 className="text-lg font-medium text-fw-heading">{title}</h3>
             </div>
           )}
 

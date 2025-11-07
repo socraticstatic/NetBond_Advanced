@@ -10,7 +10,7 @@ interface TabGroupProps {
 
 export function TabGroup({ tabs, activeTab, onChange, className = '' }: TabGroupProps) {
   return (
-    <div className={`border-b border-gray-200 ${className}`}>
+    <div className={`border-b border-fw-secondary ${className}`}>
       <nav className="-mb-px flex space-x-8" aria-label="Tabs">
         {tabs.map((tab) => (
           <button
@@ -21,10 +21,10 @@ export function TabGroup({ tabs, activeTab, onChange, className = '' }: TabGroup
               flex items-center whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm no-rounded
               transition-colors duration-200
               ${tab.disabled
-                ? 'border-transparent text-gray-300 cursor-not-allowed'
+                ? 'border-transparent text-fw-disabled cursor-not-allowed'
                 : activeTab === tab.id
-                  ? 'border-brand-blue text-brand-blue'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-fw-active text-fw-link'
+                  : 'border-transparent text-fw-bodyLight hover:text-fw-body hover:border-fw-secondary'
               }
             `}
           >
@@ -32,7 +32,7 @@ export function TabGroup({ tabs, activeTab, onChange, className = '' }: TabGroup
             <span>{tab.label}</span>
             {tab.count !== undefined && (
               <span className={`ml-2 rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                activeTab === tab.id ? 'bg-brand-lightBlue text-brand-blue' : 'bg-gray-100 text-gray-900'
+                activeTab === tab.id ? 'bg-fw-blue-light text-fw-link' : 'bg-fw-wash text-fw-heading'
               }`}>
                 {tab.count}
               </span>

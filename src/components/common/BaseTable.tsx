@@ -43,14 +43,14 @@ export function BaseTable<T>({
       {/* Table Header */}
       {title && (
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+          <h3 className="text-lg font-medium text-fw-heading">{title}</h3>
         </div>
       )}
 
       {/* Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <div className="min-w-full divide-y divide-gray-200">
-        <div className="bg-gray-50">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
+        <div className="min-w-full divide-y divide-fw-secondary">
+        <div className="bg-fw-wash">
           <div className="min-w-full table">
             <div className="table-header-group">
               <div className="table-row">
@@ -58,7 +58,7 @@ export function BaseTable<T>({
                   <div
                     key={column.id}
                     scope="col"
-                    className="table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
+                    className="table-cell px-6 py-3 text-left text-xs font-medium text-fw-bodyLight uppercase tracking-wider whitespace-nowrap"
                     style={column.width ? { width: column.width } : undefined}
                     role="columnheader"
                     aria-sort={
@@ -76,18 +76,18 @@ export function BaseTable<T>({
                       >
                         <span>{column.label}</span>
                         <span className="flex flex-col">
-                          <ChevronUp 
+                          <ChevronUp
                             className={`h-3 w-3 ${
-                              column.sortKey === sortField && sortDirection === 'asc' 
-                                ? 'text-gray-700' 
-                                : 'text-gray-400 group-hover:text-gray-500'
+                              column.sortKey === sortField && sortDirection === 'asc'
+                                ? 'text-fw-body'
+                                : 'text-fw-bodyLight group-hover:text-fw-body'
                             }`} 
                           />
-                          <ChevronDown 
+                          <ChevronDown
                             className={`h-3 w-3 -mt-1 ${
-                              column.sortKey === sortField && sortDirection === 'desc' 
-                                ? 'text-gray-700' 
-                                : 'text-gray-400 group-hover:text-gray-500'
+                              column.sortKey === sortField && sortDirection === 'desc'
+                                ? 'text-fw-body'
+                                : 'text-fw-bodyLight group-hover:text-fw-body'
                             }`} 
                           />
                         </span>
@@ -104,12 +104,12 @@ export function BaseTable<T>({
                 )}
               </div>
             </div>
-            <div className="table-row-group bg-white divide-y divide-gray-200">
+            <div className="table-row-group bg-fw-base divide-y divide-fw-secondary">
               {data.length === 0 ? (
                 <div className="table-row">
                   <div 
                     colSpan={columns.length + (actions ? 1 : 0)}
-                    className="table-cell px-6 py-4 text-center text-sm text-gray-500"
+                    className="table-cell px-6 py-4 text-center text-sm text-fw-bodyLight"
                   >
                     {emptyState || 'No data available'}
                   </div>
@@ -122,7 +122,7 @@ export function BaseTable<T>({
                     className={`
                       table-row transition-colors duration-150
                       ${onRowClick ? 'cursor-pointer' : ''}
-                      ${rowClassName?.(item) || 'hover:bg-gray-50'}
+                      ${rowClassName?.(item) || 'hover:bg-fw-wash'}
                     `}
                     role="row"
                     aria-rowindex={rowIndex + 1}

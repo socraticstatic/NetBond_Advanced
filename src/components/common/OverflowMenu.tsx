@@ -90,7 +90,7 @@ export function OverflowMenu({
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className={`p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors ${className}`}
+        className={`p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-wash transition-colors ${className}`}
       >
         <MoreVertical className="h-5 w-5" />
       </button>
@@ -107,7 +107,7 @@ export function OverflowMenu({
           />
           <div
             ref={menuRef}
-            className="fixed w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+            className="fixed w-48 rounded-md shadow-lg bg-fw-base ring-1 ring-black ring-opacity-5"
             style={{
               top: menuPosition.top,
               left: menuPosition.left,
@@ -125,8 +125,8 @@ export function OverflowMenu({
                   className={`
                     flex items-center w-full px-4 py-2 text-sm
                     ${item.variant === 'danger'
-                      ? 'text-red-600 hover:bg-red-50'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? 'text-fw-error hover:bg-red-50'
+                      : 'text-fw-body hover:bg-fw-wash'
                     }
                   `}
                 >
