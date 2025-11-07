@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Router, Link2, Box } from 'lucide-react';
 import { Connection } from '../../../types';
 import { ConnectionVisualization } from '../ConnectionVisualization';
 import { IPEInfoTooltip } from '../../common/IPEInfoTooltip';
+import { BandwidthAdjuster } from '../BandwidthAdjuster';
 
 interface ConnectionOverviewProps {
   connection: Connection;
@@ -11,8 +13,22 @@ interface ConnectionOverviewProps {
 }
 
 export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCount = 0, vnfsCount = 0 }: ConnectionOverviewProps) {
+  const [currentBandwidth, setCurrentBandwidth] = useState(connection.bandwidth);
+
+  const handleBandwidthChange = (newBandwidth: string) => {
+    setCurrentBandwidth(newBandwidth);
+    // In a real app, this would update the store and trigger an API call
+  };
   return (
     <div className="space-y-6">
+      {/* Quick Bandwidth Adjuster */}
+      <BandwidthAdjuster
+        currentBandwidth={currentBandwidth}
+        onBandwidthChange={handleBandwidthChange}
+        connectionId={connection.id}
+        connectionName={connection.name}
+      />
+
       {/* Network Architecture Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg border border-blue-200 p-6">
@@ -92,7 +108,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
             
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
               <span className="text-sm text-gray-700">Bandwidth</span>
-              <span className="text-sm font-medium text-gray-900">{connection.bandwidth}</span>
+              <span className="text-sm font-medium text-gray-900">{currentBandwidth}</span>
             </div>
             
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
