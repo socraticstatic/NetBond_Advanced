@@ -29,7 +29,7 @@ export function ConfirmDialog({
     <Modal isOpen={isOpen} onClose={onClose} size="sm">
       <div className="sm:flex sm:items-start">
         {icon && (
-          <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-red-50 rounded-full sm:mx-0 sm:h-10 sm:w-10">
+          <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-[var(--status-error-bg)] rounded-full sm:mx-0 sm:h-10 sm:w-10">
             {icon}
           </div>
         )}
