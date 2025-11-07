@@ -3,7 +3,7 @@
 /* ATT Aleck Sans - Regular */
 @font-face {
   font-family: 'ATT Aleck Sans';
-  src: url('/src/assets/fonts/ATTAleckSans_Regular.woff2') format('woff2');
+  src: url('/fonts/ATTAleckSans_Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -12,7 +12,7 @@
 /* ATT Aleck Sans - Light */
 @font-face {
   font-family: 'ATT Aleck Sans';
-  src: url('/src/assets/fonts/ATTAleckSans_Light.woff2') format('woff2');
+  src: url('/fonts/ATTAleckSans_Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -21,7 +21,7 @@
 /* ATT Aleck Sans - Medium */
 @font-face {
   font-family: 'ATT Aleck Sans';
-  src: url('/src/assets/fonts/ATTAleckSans_Medium.woff2') format('woff2');
+  src: url('/fonts/ATTAleckSans_Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -30,7 +30,7 @@
 /* ATT Aleck Sans - Bold */
 @font-face {
   font-family: 'ATT Aleck Sans';
-  src: url('/src/assets/fonts/ATTAleckSans_Bold.woff2') format('woff2');
+  src: url('/fonts/ATTAleckSans_Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -39,7 +39,7 @@
 /* ATT Aleck Sans - Black */
 @font-face {
   font-family: 'ATT Aleck Sans';
-  src: url('/src/assets/fonts/ATTAleckSans_Black.woff2') format('woff2');
+  src: url('/fonts/ATTAleckSans_Black.woff2') format('woff2');
   font-weight: 900;
   font-style: normal;
   font-display: swap;

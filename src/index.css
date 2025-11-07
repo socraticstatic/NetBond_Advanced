@@ -1,3 +1,5 @@
+@import './styles/fonts.css';
+@import './styles/tokens.css';
 @import './styles/buttons.css';
 
 @tailwind base;
@@ -6,7 +8,8 @@
 
 @layer base {
   body {
-    @apply text-gray-900;
+    @apply text-gray-900 font-sans;
+    font-family: var(--font-family-base);
   }
 
   p, h1, h2, h3, h4, h5, h6 {
