@@ -165,7 +165,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
             >
               <div className="flex items-center">
                 <span className="text-xl font-bold text-fw-heading">AT&T</span>
-                <span className="ml-3 text-xl font-semibold text-fw-link">NetBond® Advanced</span>
+                <span className="ml-3 text-xl font-bold text-fw-link">NetBond® Advanced</span>
               </div>
             </div>
 
