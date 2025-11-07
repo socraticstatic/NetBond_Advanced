@@ -98,9 +98,9 @@ export function UserProfile() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="bg-white rounded-lg shadow">
+      <div className="bg-fw-base rounded-lg shadow">
         {/* Profile Header */}
-        <div className="px-6 py-8 border-b border-gray-200">
+        <div className="px-6 py-8 border-b border-fw-secondary">
           <div className="flex items-start">
             <div className="relative">
               <div className="h-24 w-24 rounded-full overflow-hidden bg-gray-200">
@@ -120,8 +120,8 @@ export function UserProfile() {
             <div className="ml-6 flex-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">{formData.name}</h1>
-                  <p className="text-sm text-gray-500">{formData.role} at {formData.company}</p>
+                  <h1 className="text-2xl font-bold text-fw-heading">{formData.name}</h1>
+                  <p className="text-sm text-fw-bodyLight">{formData.role} at {formData.company}</p>
                 </div>
                 <Button
                   variant="primary"
@@ -133,19 +133,19 @@ export function UserProfile() {
                 </Button>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-4">
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm text-fw-bodyLight">
                   <Mail className="h-4 w-4 text-gray-400 mr-2" />
                   <span>{formData.email}</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm text-fw-bodyLight">
                   <Phone className="h-4 w-4 text-gray-400 mr-2" />
                   <span>{formData.phone}</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm text-fw-bodyLight">
                   <Building className="h-4 w-4 text-gray-400 mr-2" />
                   <span>{formData.department}</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm text-fw-bodyLight">
                   <Shield className="h-4 w-4 text-gray-400 mr-2" />
                   <span>{securitySettings.twoFactorEnabled ? 'Two-factor enabled' : 'Two-factor disabled'}</span>
                 </div>
@@ -156,10 +156,10 @@ export function UserProfile() {
 
         {/* Personal Information */}
         <div className="px-6 py-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-6">Personal Information</h2>
+          <h2 className="text-lg font-medium text-fw-heading mb-6">Personal Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="name" className="block text-sm font-medium text-fw-body mb-1">
                 Full Name
               </label>
               <input
@@ -173,7 +173,7 @@ export function UserProfile() {
               />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-fw-body mb-1">
                 Email Address
               </label>
               <input
@@ -187,7 +187,7 @@ export function UserProfile() {
               />
             </div>
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="phone" className="block text-sm font-medium text-fw-body mb-1">
                 Phone Number
               </label>
               <input
@@ -201,7 +201,7 @@ export function UserProfile() {
               />
             </div>
             <div>
-              <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="department" className="block text-sm font-medium text-fw-body mb-1">
                 Department
               </label>
               <input
@@ -218,9 +218,9 @@ export function UserProfile() {
         </div>
 
         {/* User Preferences - New Section */}
-        <div className="px-6 py-6 border-t border-gray-200">
+        <div className="px-6 py-6 border-t border-fw-secondary">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-medium text-gray-900">User Preferences</h2>
+            <h2 className="text-lg font-medium text-fw-heading">User Preferences</h2>
             <Button
               variant="outline"
               size="sm"
@@ -240,7 +240,7 @@ export function UserProfile() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Landing Page Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-fw-body mb-3">
                 Default Landing Page
               </label>
               <div className="space-y-2">
@@ -251,7 +251,7 @@ export function UserProfile() {
                       relative flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all
                       ${preferences.landingPage === option.value 
                         ? 'border-brand-blue bg-brand-lightBlue' 
-                        : 'border-gray-200 hover:border-brand-blue/30 hover:bg-brand-lightBlue/20'
+                        : 'border-fw-secondary hover:border-brand-blue/30 hover:bg-brand-lightBlue/20'
                       }
                     `}
                     onClick={() => handlePreferenceChange('landingPage', option.value)}
@@ -265,11 +265,11 @@ export function UserProfile() {
                     <div className="ml-3 flex-1">
                       <p className={`
                         text-sm font-medium 
-                        ${preferences.landingPage === option.value ? 'text-brand-blue' : 'text-gray-900'}
+                        ${preferences.landingPage === option.value ? 'text-brand-blue' : 'text-fw-heading'}
                       `}>
                         {option.label}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-fw-bodyLight mt-1">
                         Set as default page on login
                       </p>
                     </div>
@@ -286,7 +286,7 @@ export function UserProfile() {
             {/* Other Preferences */}
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-fw-body mb-1">
                   Theme
                 </label>
                 <div className="mt-1 flex items-center space-x-4">
@@ -297,7 +297,7 @@ export function UserProfile() {
                       onChange={() => handlePreferenceChange('theme', 'light')}
                       className="h-4 w-4 text-brand-blue border-gray-300 focus:ring-brand-blue"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Light</span>
+                    <span className="ml-2 text-sm text-fw-body">Light</span>
                   </label>
                   <label className="flex items-center">
                     <input
@@ -306,7 +306,7 @@ export function UserProfile() {
                       onChange={() => handlePreferenceChange('theme', 'dark')}
                       className="h-4 w-4 text-brand-blue border-gray-300 focus:ring-brand-blue"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Dark</span>
+                    <span className="ml-2 text-sm text-fw-body">Dark</span>
                   </label>
                   <label className="flex items-center">
                     <input
@@ -315,13 +315,13 @@ export function UserProfile() {
                       onChange={() => handlePreferenceChange('theme', 'system')}
                       className="h-4 w-4 text-brand-blue border-gray-300 focus:ring-brand-blue"
                     />
-                    <span className="ml-2 text-sm text-gray-700">System</span>
+                    <span className="ml-2 text-sm text-fw-body">System</span>
                   </label>
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-fw-body mb-1">
                   Language
                 </label>
                 <select
@@ -337,7 +337,7 @@ export function UserProfile() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-fw-body mb-1">
                   Data Refresh Rate
                 </label>
                 <select
@@ -349,7 +349,7 @@ export function UserProfile() {
                     <option key={option.value} value={option.value}>{option.label}</option>
                   ))}
                 </select>
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-fw-bodyLight">
                   How often monitoring data should be refreshed automatically
                 </p>
               </div>
@@ -358,9 +358,9 @@ export function UserProfile() {
         </div>
 
         {/* Security Settings */}
-        <div className="px-6 py-6 border-t border-gray-200">
+        <div className="px-6 py-6 border-t border-fw-secondary">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-medium text-gray-900">Security Settings</h2>
+            <h2 className="text-lg font-medium text-fw-heading">Security Settings</h2>
             <Button
               variant="outline"
               size="sm"
@@ -379,8 +379,8 @@ export function UserProfile() {
           <div className="space-y-4">
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <div>
-                <h3 className="text-sm font-medium text-gray-900">Two-factor Authentication</h3>
-                <p className="text-xs text-gray-500">Add an extra layer of security to your account</p>
+                <h3 className="text-sm font-medium text-fw-heading">Two-factor Authentication</h3>
+                <p className="text-xs text-fw-bodyLight">Add an extra layer of security to your account</p>
               </div>
               <div className="flex items-center">
                 {securitySettings.twoFactorEnabled ? (
@@ -407,8 +407,8 @@ export function UserProfile() {
 
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <div>
-                <h3 className="text-sm font-medium text-gray-900">Password</h3>
-                <p className="text-xs text-gray-500">
+                <h3 className="text-sm font-medium text-fw-heading">Password</h3>
+                <p className="text-xs text-fw-bodyLight">
                   Last changed {new Date(securitySettings.passwordLastChanged).toLocaleDateString()}
                 </p>
               </div>
@@ -430,8 +430,8 @@ export function UserProfile() {
 
             <div className="flex items-center justify-between py-2 border-b border-gray-100">
               <div>
-                <h3 className="text-sm font-medium text-gray-900">Session Timeout</h3>
-                <p className="text-xs text-gray-500">
+                <h3 className="text-sm font-medium text-fw-heading">Session Timeout</h3>
+                <p className="text-xs text-fw-bodyLight">
                   Your session will timeout after {securitySettings.sessionTimeout} minutes of inactivity
                 </p>
               </div>
@@ -468,11 +468,11 @@ export function UserProfile() {
         </div>
 
         {/* Business Center Integration */}
-        <div className="px-6 py-6 border-t border-gray-200">
+        <div className="px-6 py-6 border-t border-fw-secondary">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg font-medium text-gray-900">Business Center Integration</h2>
-              <p className="text-sm text-gray-500 mt-1">Connect to AT&T Business Center for unified account management</p>
+              <h2 className="text-lg font-medium text-fw-heading">Business Center Integration</h2>
+              <p className="text-sm text-fw-bodyLight mt-1">Connect to AT&T Business Center for unified account management</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -497,7 +497,7 @@ export function UserProfile() {
                   });
                 }}
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-fw-base after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
             </label>
           </div>
 
@@ -510,7 +510,7 @@ export function UserProfile() {
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h3 className="text-sm font-medium text-gray-900">Connection Status</h3>
+                      <h3 className="text-sm font-medium text-fw-heading">Connection Status</h3>
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                         businessCenterIntegration.syncStatus === 'Connected'
                           ? 'bg-green-100 text-green-800'
@@ -523,7 +523,7 @@ export function UserProfile() {
                         {businessCenterIntegration.syncStatus}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-fw-bodyLight mt-1">
                       {businessCenterIntegration.lastSync
                         ? `Last synced: ${new Date(businessCenterIntegration.lastSync).toLocaleString()}`
                         : 'Not yet synced'
@@ -560,7 +560,7 @@ export function UserProfile() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-brand-blue/20">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-fw-body mb-1">
                     Business Center Username
                   </label>
                   <input
@@ -573,12 +573,12 @@ export function UserProfile() {
                     className="rounded-full w-full border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue text-sm"
                     placeholder="Enter Business Center username"
                   />
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-fw-bodyLight">
                     Your AT&T Business Center account username
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-fw-body mb-1">
                     Password
                   </label>
                   <div className="flex space-x-2">
@@ -586,7 +586,7 @@ export function UserProfile() {
                       type="password"
                       value="••••••••"
                       disabled
-                      className="rounded-full w-full border-gray-300 shadow-sm bg-gray-50 text-sm"
+                      className="rounded-full w-full border-gray-300 shadow-sm bg-fw-wash text-sm"
                     />
                     <Button
                       variant="outline"
@@ -603,14 +603,14 @@ export function UserProfile() {
                       Update
                     </Button>
                   </div>
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-fw-bodyLight">
                     Securely stored and encrypted
                   </p>
                 </div>
               </div>
 
               <div className="pt-4 border-t border-brand-blue/20">
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Synchronized Data</h4>
+                <h4 className="text-sm font-medium text-fw-heading mb-2">Synchronized Data</h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   <div className="flex items-center text-xs text-gray-600">
                     <CheckCircle className="h-3.5 w-3.5 text-green-600 mr-1.5" />
@@ -634,7 +634,7 @@ export function UserProfile() {
           )}
 
           {!businessCenterIntegration.enabled && (
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <div className="bg-fw-wash p-4 rounded-lg border border-fw-secondary">
               <p className="text-sm text-gray-600">
                 Enable Business Center integration to access unified account management, billing data synchronization, and streamlined support workflows.
               </p>
@@ -643,9 +643,9 @@ export function UserProfile() {
         </div>
 
         {/* Notification Preferences */}
-        <div className="px-6 py-6 border-t border-gray-200">
+        <div className="px-6 py-6 border-t border-fw-secondary">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-medium text-gray-900">Notification Preferences</h2>
+            <h2 className="text-lg font-medium text-fw-heading">Notification Preferences</h2>
             <Button
               variant="outline"
               size="sm"
@@ -656,10 +656,10 @@ export function UserProfile() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex items-center justify-between p-4 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between p-4 rounded-lg border border-fw-secondary">
               <div>
-                <h3 className="text-sm font-medium text-gray-900">Email Notifications</h3>
-                <p className="text-xs text-gray-500">Get updates via email</p>
+                <h3 className="text-sm font-medium text-fw-heading">Email Notifications</h3>
+                <p className="text-xs text-fw-bodyLight">Get updates via email</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input 
@@ -677,14 +677,14 @@ export function UserProfile() {
                   }}
                   disabled={!isEditing}
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-fw-base after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
               </label>
             </div>
             
-            <div className="flex items-center justify-between p-4 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between p-4 rounded-lg border border-fw-secondary">
               <div>
-                <h3 className="text-sm font-medium text-gray-900">SMS Notifications</h3>
-                <p className="text-xs text-gray-500">Get updates via text message</p>
+                <h3 className="text-sm font-medium text-fw-heading">SMS Notifications</h3>
+                <p className="text-xs text-fw-bodyLight">Get updates via text message</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input 
@@ -702,14 +702,14 @@ export function UserProfile() {
                   }}
                   disabled={!isEditing}
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-fw-base after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
               </label>
             </div>
             
-            <div className="flex items-center justify-between p-4 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between p-4 rounded-lg border border-fw-secondary">
               <div>
-                <h3 className="text-sm font-medium text-gray-900">App Notifications</h3>
-                <p className="text-xs text-gray-500">Get in-app notifications</p>
+                <h3 className="text-sm font-medium text-fw-heading">App Notifications</h3>
+                <p className="text-xs text-fw-bodyLight">Get in-app notifications</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input 
@@ -727,14 +727,14 @@ export function UserProfile() {
                   }}
                   disabled={!isEditing}
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-fw-base after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
               </label>
             </div>
           </div>
         </div>
 
         {/* Footer Actions */}
-        <div className="px-6 py-4 bg-gray-50 flex items-center justify-end space-x-4 border-t border-gray-200">
+        <div className="px-6 py-4 bg-fw-wash flex items-center justify-end space-x-4 border-t border-fw-secondary">
           {isEditing && (
             <Button
               variant="outline"

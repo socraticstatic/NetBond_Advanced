@@ -518,19 +518,19 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
   const getIcon = (iconType: string) => {
     switch (iconType) {
       case 'internet':
-        return <Globe className="h-6 w-6 text-blue-600" />;
+        return <Globe className="h-6 w-6 text-fw-link" />;
       case 'cloud':
-        return <Cloud className="h-6 w-6 text-blue-600" />;
+        return <Cloud className="h-6 w-6 text-fw-link" />;
       case 'network':
-        return <Network className="h-6 w-6 text-blue-600" />;
+        return <Network className="h-6 w-6 text-fw-link" />;
       case 'shield':
-        return <Shield className="h-6 w-6 text-blue-600" />;
+        return <Shield className="h-6 w-6 text-fw-link" />;
       case 'code':
-        return <Code className="h-6 w-6 text-blue-600" />;
+        return <Code className="h-6 w-6 text-fw-link" />;
       case 'activity':
-        return <Activity className="h-6 w-6 text-blue-600" />;
+        return <Activity className="h-6 w-6 text-fw-link" />;
       default:
-        return <Database className="h-6 w-6 text-blue-600" />;
+        return <Database className="h-6 w-6 text-fw-link" />;
     }
   };
 
@@ -584,21 +584,21 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
       {/* Sidebar - Always visible */}
       <div className="w-72 shrink-0 space-y-6 animate-in fade-in slide-in-from-left duration-500">
         {/* Main Tabs */}
-        <div className="bg-white rounded-lg p-4 border border-gray-200">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Browse</h3>
+        <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
+          <h3 className="text-sm font-semibold text-fw-heading mb-3">Browse</h3>
           <div className="space-y-2">
             <button
               onClick={() => setActiveTab('all')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
                 activeTab === 'all'
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                  ? 'bg-fw-ctaPrimary text-fw-linkPrimary shadow-sm'
+                  : 'bg-fw-base text-fw-body hover:bg-fw-wash border border-fw-secondary'
               }`}
             >
               <Network className="h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium text-sm">Browse Products</div>
-                <div className={`text-xs ${activeTab === 'all' ? 'text-blue-100' : 'text-gray-500'}`}>
+                <div className={`text-xs ${activeTab === 'all' ? 'text-white/90' : 'text-fw-bodyLight'}`}>
                   Network services & add-ons
                 </div>
               </div>
@@ -607,14 +607,14 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               onClick={() => setActiveTab('solutions')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
                 activeTab === 'solutions'
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                  ? 'bg-fw-ctaPrimary text-fw-linkPrimary shadow-sm'
+                  : 'bg-fw-base text-fw-body hover:bg-fw-wash border border-fw-secondary'
               }`}
             >
               <Sparkles className="h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium text-sm">Browse Solutions</div>
-                <div className={`text-xs ${activeTab === 'solutions' ? 'text-blue-100' : 'text-gray-500'}`}>
+                <div className={`text-xs ${activeTab === 'solutions' ? 'text-white/90' : 'text-fw-bodyLight'}`}>
                   App-specific configurations
                 </div>
               </div>
@@ -677,7 +677,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
           selectedCategories={[]}
           onCategoryToggle={() => {}}
           title="Browse by Category"
-          className="bg-white rounded-lg p-4 border border-gray-200"
+          className="bg-fw-base rounded-lg p-4 border border-fw-secondary"
         />
       </div>
 
@@ -710,14 +710,14 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
         </div>
 
         {/* Sub-category Tabs */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-2">
+        <div className="bg-fw-base rounded-xl shadow-sm border border-fw-secondary p-2">
           <div className="flex space-x-2">
             <button
               onClick={() => setActiveTab('all')}
               className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'all'
                   ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
               }`}
             >
               All Services
@@ -727,7 +727,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'connections'
                   ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
               }`}
             >
               <div className="flex items-center justify-center">
@@ -740,7 +740,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'addons'
                   ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
               }`}
             >
               <div className="flex items-center justify-center">
@@ -753,7 +753,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'vnf'
                   ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
               }`}
             >
               <div className="flex items-center justify-center">
@@ -766,7 +766,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'api'
                   ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
               }`}
             >
               <div className="flex items-center justify-center">
@@ -779,7 +779,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 activeTab === 'managed'
                   ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
               }`}
             >
               <div className="flex items-center justify-center">
@@ -791,23 +791,23 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+        <div className="bg-fw-base p-5 rounded-xl shadow-sm border border-fw-secondary">
           <div className="flex items-center justify-between gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
               <input
                 type="text"
                 placeholder="Search marketplace..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="w-full pl-10 pr-4 py-2.5 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active transition-all"
               />
             </div>
             <div className="flex items-center space-x-4">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="border border-fw-secondary rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-fw-active focus:border-fw-active"
               >
                 <option value="popular">Most Popular</option>
                 <option value="rating">Highest Rated</option>
@@ -829,7 +829,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
           {getFilteredItems().map((item, index) => (
             <div
               key={item.id}
-              className="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-2xl hover:border-[#003184] hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-visible"
+              className="group bg-fw-base rounded-xl border border-fw-secondary shadow-sm hover:shadow-2xl hover:border-[#003184] hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-visible"
             >
               {/* Recommendation badge on the first item */}
               {index === 0 && (
@@ -877,9 +877,9 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                     )}
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#003184] transition-colors">{item.name}</h3>
+                <h3 className="text-lg font-bold text-fw-heading mb-1 group-hover:text-[#003184] transition-colors">{item.name}</h3>
                 <p className="text-xs text-gray-500 mb-2 font-medium">{item.provider}</p>
-                <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
+                <p className="text-sm text-fw-body leading-relaxed">{item.description}</p>
                 <div className="flex items-center mt-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
@@ -927,15 +927,15 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                   <div className="grid grid-cols-3 gap-2">
                     <div className="text-center">
                       <div className="text-xs text-gray-500">Uptime</div>
-                      <div className="text-sm font-medium text-gray-900">{item.sla.uptime}</div>
+                      <div className="text-sm font-medium text-fw-heading">{item.sla.uptime}</div>
                     </div>
                     <div className="text-center">
                       <div className="text-xs text-gray-500">Latency</div>
-                      <div className="text-sm font-medium text-gray-900">{item.sla.latency}</div>
+                      <div className="text-sm font-medium text-fw-heading">{item.sla.latency}</div>
                     </div>
                     <div className="text-center">
                       <div className="text-xs text-gray-500">Support</div>
-                      <div className="text-sm font-medium text-gray-900">{item.sla.support}</div>
+                      <div className="text-sm font-medium text-fw-heading">{item.sla.support}</div>
                     </div>
                   </div>
                 </div>
@@ -945,7 +945,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-left">
                     <div className="text-xs text-gray-500 font-medium">Starting at</div>
-                    <div className="text-2xl font-bold text-gray-900">
+                    <div className="text-2xl font-bold text-fw-heading">
                       ${item.basePrice}
                       <span className="text-sm font-normal text-gray-500">/mo</span>
                     </div>
