@@ -959,7 +959,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                 </div>
                 <button
                   onClick={() => handleSelectItem(item)}
-                  className="w-full inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-semibold transition-all duration-200 text-sm bg-gradient-to-r from-[#003184] to-[#0047BB] text-white hover:from-[#002255] hover:to-[#003184] hover:shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#003184] focus:ring-offset-2 active:scale-95 group/btn"
+                  className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold transition-all duration-200 text-sm bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--button-primary-focus-ring)] focus:ring-offset-2 rounded-lg shadow-sm hover:shadow-md active:shadow-sm group/btn"
                 >
                   <span>{item.addon || item.vnf || item.api ? 'Add to Connection' : 'Select Plan'}</span>
                   <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
