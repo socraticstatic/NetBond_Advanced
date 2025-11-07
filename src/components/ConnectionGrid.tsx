@@ -81,7 +81,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
 
   return (
     <div className="space-y-6 min-h-[calc(100vh-16rem)] pb-12">
-      <div className="bg-white rounded-lg border border-gray-200">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary">
         <div className="p-4 flex items-center space-x-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -90,16 +90,16 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+              className="w-full pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             />
           </div>
-          <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
+          <div className="flex items-center bg-fw-base rounded-lg border border-fw-secondary p-1">
             <button
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-full transition-colors ${
-                viewMode === 'grid' 
-                  ? 'text-brand-blue bg-brand-lightBlue' 
-                  : 'text-gray-400 hover:text-gray-500'
+                viewMode === 'grid'
+                  ? 'text-fw-link bg-fw-accent'
+                  : 'text-fw-disabled hover:text-fw-bodyLight'
               }`}
               title="Grid View"
             >
@@ -108,9 +108,9 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
             <button
               onClick={() => setViewMode('list')}
               className={`p-2 rounded-full transition-colors ${
-                viewMode === 'list' 
-                  ? 'text-brand-blue bg-brand-lightBlue' 
-                  : 'text-gray-400 hover:text-gray-500'
+                viewMode === 'list'
+                  ? 'text-fw-link bg-fw-accent'
+                  : 'text-fw-disabled hover:text-fw-bodyLight'
               }`}
               title="List View"
             >
@@ -119,9 +119,9 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
             <button
               onClick={() => setViewMode('topology')}
               className={`p-2 rounded-full transition-colors ${
-                viewMode === 'topology' 
-                  ? 'text-brand-blue bg-brand-lightBlue' 
-                  : 'text-gray-400 hover:text-gray-500'
+                viewMode === 'topology'
+                  ? 'text-fw-link bg-fw-accent'
+                  : 'text-fw-disabled hover:text-fw-bodyLight'
               }`}
               title="Topology View"
             >
@@ -184,13 +184,13 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20">
             {/* Overlay */}
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setShowFilters(false)}></div>
+            <div className="fixed inset-0 bg-[rgb(0_0_0_/_75%)] transition-opacity" onClick={() => setShowFilters(false)}></div>
 
             {/* Modal */}
-            <div className="relative bg-white rounded-lg max-w-3xl w-full mx-auto shadow-xl z-10 p-6">
+            <div className="relative bg-fw-base rounded-lg max-w-3xl w-full mx-auto shadow-xl z-10 p-6">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-medium text-gray-900">Filter Connections</h2>
-                <button onClick={() => setShowFilters(false)} className="text-gray-400 hover:text-gray-500">
+                <h2 className="text-lg font-medium text-fw-heading">Filter Connections</h2>
+                <button onClick={() => setShowFilters(false)} className="text-fw-disabled hover:text-fw-bodyLight">
                   <span className="sr-only">Close</span>
                   <X className="h-6 w-6" />
                 </button>
@@ -198,7 +198,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-2">Status</h3>
+                  <h3 className="text-sm font-medium text-fw-heading mb-2">Status</h3>
                   <div className="space-y-2">
                     {['Active', 'Inactive'].map((status) => (
                       <label key={status} className="flex items-center">
@@ -212,16 +212,16 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                               setFilters({...filters, status: filters.status.filter(t => t !== status)});
                             }
                           }}
-                          className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                          className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-gray-700">{status}</span>
+                        <span className="ml-2 text-sm text-fw-body">{status}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-2">Connection Type</h3>
+                  <h3 className="text-sm font-medium text-fw-heading mb-2">Connection Type</h3>
                   <div className="space-y-2 max-h-40 overflow-y-auto">
                     {Array.from(new Set(connections.map(c => c.type))).map((type) => (
                       <label key={type} className="flex items-center">
@@ -235,16 +235,16 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                               setFilters({...filters, type: filters.type.filter(t => t !== type)});
                             }
                           }}
-                          className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                          className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-gray-700">{type}</span>
+                        <span className="ml-2 text-sm text-fw-body">{type}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-2">Location</h3>
+                  <h3 className="text-sm font-medium text-fw-heading mb-2">Location</h3>
                   <div className="space-y-2">
                     {Array.from(new Set(connections.map(c => c.location))).map((location) => (
                       <label key={location} className="flex items-center">
@@ -258,16 +258,16 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                               setFilters({...filters, location: filters.location.filter(l => l !== location)});
                             }
                           }}
-                          className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                          className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-gray-700">{location}</span>
+                        <span className="ml-2 text-sm text-fw-body">{location}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-2 flex items-center">
+                  <h3 className="text-sm font-medium text-fw-heading mb-2 flex items-center">
                     <GroupIcon className="h-4 w-4 mr-1.5" />
                     Groups
                   </h3>
@@ -284,9 +284,9 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                               setFilters({...filters, groups: filters.groups.filter(g => g !== group.id)});
                             }
                           }}
-                          className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                          className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-gray-700">{group.name}</span>
+                        <span className="ml-2 text-sm text-fw-body">{group.name}</span>
                       </label>
                     ))}
                   </div>
@@ -333,7 +333,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
               return (
                 <span
                   key={`${category}-${value}`}
-                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-brand-lightBlue text-brand-blue"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-fw-accent text-fw-link"
                 >
                   {category === 'groups' ? (
                     <>
@@ -348,7 +348,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                       ...prev,
                       [category]: prev[category as keyof typeof prev].filter(v => v !== value)
                     }))}
-                    className="ml-2 hover:text-brand-darkBlue"
+                    className="ml-2 hover:text-fw-linkHover"
                   >
                     ×
                   </button>
@@ -357,11 +357,11 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
             })
           )}
           {searchQuery && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-fw-wash text-fw-body">
               "{searchQuery}"
               <button
                 onClick={() => setSearchQuery('')}
-                className="ml-2 hover:text-gray-900"
+                className="ml-2 hover:text-fw-heading"
               >
                 ×
               </button>
@@ -372,17 +372,17 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
               setFilters({ status: [], type: [], location: [], groups: [] });
               setSearchQuery('');
             }}
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className="text-sm text-fw-disabled hover:text-fw-body"
           >
             Clear all
           </button>
         </div>
       )}
 
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
         {filteredConnections.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">No connections match your search criteria</p>
+            <p className="text-fw-disabled">No connections match your search criteria</p>
           </div>
         ) : viewMode === 'list' ? (
           <div className="overflow-x-auto">

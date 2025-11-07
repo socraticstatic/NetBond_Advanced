@@ -48,7 +48,7 @@ export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardPro
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center space-x-3 flex-1 min-w-0">
             <div className="p-2 bg-fw-wash rounded-lg">
-              <svg className="h-5 w-5 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5 text-fw-link" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </div>
@@ -62,7 +62,7 @@ export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardPro
               e.stopPropagation();
               setIsExpanded(true);
             }}
-            className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-1.5 text-fw-disabled hover:text-fw-body hover:bg-fw-wash rounded-full transition-colors"
             aria-label="Expand"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
