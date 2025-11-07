@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import {
   Activity, Shield, History, Terminal,
-  Network, GitBranch, Layers, Users, DollarSign, Code
+  Network, GitBranch, Layers, Users, DollarSign, Code, FileText
 } from 'lucide-react';
 
 export type ConnectionTabType =
@@ -9,6 +9,7 @@ export type ConnectionTabType =
   | 'cloudrouters'
   | 'links'
   | 'vnfs'
+  | 'policies'
   | 'apps'
   | 'access'
   | 'versions'
@@ -32,7 +33,8 @@ const TABS: Tab[] = [
   { id: 'overview', label: 'Overview', icon: <Activity className="h-5 w-5 mr-2" /> },
   { id: 'cloudrouters', label: 'Cloud Routers', icon: <GitBranch className="h-5 w-5 mr-2" /> },
   { id: 'links', label: 'Links', icon: <Network className="h-5 w-5 mr-2" /> },
-  { id: 'vnfs', label: 'VNF Functions', icon: <Shield className="h-5 w-5 mr-2" /> },
+  { id: 'vnfs', label: 'VNFs', icon: <Shield className="h-5 w-5 mr-2" /> },
+  { id: 'policies', label: 'Policies', icon: <FileText className="h-5 w-5 mr-2" /> },
   { id: 'apps', label: 'Apps', icon: <Layers className="h-5 w-5 mr-2" /> },
   { id: 'api', label: 'API', icon: <Code className="h-5 w-5 mr-2" /> },
   { id: 'access', label: 'Access', icon: <Users className="h-5 w-5 mr-2" /> },
@@ -43,7 +45,7 @@ const TABS: Tab[] = [
 
 export function ConnectionTabs({ activeTab, onTabChange }: ConnectionTabsProps) {
   return (
-    <div className="border-b border-gray-200">
+    <div className="border-b border-fw-secondary">
       <nav className="-mb-px flex items-center space-x-4 overflow-x-auto">
         {TABS.map((tab) => (
           <button
@@ -52,11 +54,11 @@ export function ConnectionTabs({ activeTab, onTabChange }: ConnectionTabsProps) 
             disabled={tab.disabled}
             className={`
               flex items-center whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm no-rounded
-              ${tab.disabled 
-                ? 'border-transparent text-gray-300 cursor-not-allowed'
+              ${tab.disabled
+                ? 'border-transparent text-fw-disabled cursor-not-allowed'
                 : activeTab === tab.id
-                  ? 'border-brand-blue text-brand-blue'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'border-fw-active text-fw-link'
+                  : 'border-transparent text-fw-bodyLight hover:text-fw-body'
               }
             `}
           >

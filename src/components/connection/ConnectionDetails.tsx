@@ -13,6 +13,7 @@ import { ConnectionLogs } from '../configure/connections/ConnectionLogs';
 import { NetworkTab } from './tabs/NetworkTab';
 import { LinksTab } from './tabs/LinksTab';
 import { VNFTab } from './tabs/VNFTab';
+import { PoliciesTab } from './tabs/PoliciesTab';
 import { APIConfiguration } from './tabs/APIConfiguration';
 import { AppsConfiguration } from './tabs/AppsConfiguration';
 import { IconButton } from '../common/IconButton';
@@ -387,6 +388,15 @@ export function ConnectionDetails() {
             onAdd={handleAddVNF}
             onEdit={handleEditVNF}
             onDelete={handleDeleteVNF}
+          />
+        );
+      case 'policies':
+        return (
+          <PoliciesTab
+            connection={connection}
+            cloudRouters={cloudRouters}
+            vnfs={vnfs}
+            allLinks={getAllLinks()}
           />
         );
       case 'access':
