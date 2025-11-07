@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['ATTAleckSans', 'Inter var', 'system-ui', 'sans-serif'],
+        sans: ['ATT Aleck Sans', 'Inter var', 'system-ui', 'sans-serif'],
       },
       colors: {
         // AT&T Flywheel Design System - Light Mode Colors
