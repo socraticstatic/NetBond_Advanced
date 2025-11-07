@@ -20,11 +20,11 @@ export function IconButton({
   disabled = false
 }: IconButtonProps) {
   const variantClasses = {
-    primary: 'bg-brand-blue text-white hover:bg-brand-darkBlue',
-    secondary: 'bg-white text-gray-600 hover:bg-gray-50',
-    success: 'bg-complementary-green/10 text-complementary-green hover:bg-complementary-green/20',
-    danger: 'bg-red-100 text-red-600 hover:bg-red-200',
-    ghost: 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+    primary: 'bg-fw-ctaPrimary text-fw-linkPrimary hover:bg-fw-ctaPrimaryHover',
+    secondary: 'bg-fw-base text-fw-body hover:bg-fw-wash border border-fw-secondary',
+    success: 'bg-green-50 text-fw-success hover:bg-green-100',
+    danger: 'bg-red-50 text-fw-error hover:bg-red-100',
+    ghost: 'text-fw-bodyLight hover:text-fw-body hover:bg-fw-wash'
   };
 
   const sizeClasses = {

@@ -14,10 +14,10 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
   };
 
   const statusStyles = {
-    active: 'bg-green-100 text-green-800 border-green-200',
-    inactive: 'bg-gray-100 text-gray-800 border-gray-200',
-    suspended: 'bg-red-100 text-red-800 border-red-200',
-    pending: 'bg-amber-100 text-amber-800 border-amber-200'
+    active: 'bg-green-50 text-fw-success border-fw-success',
+    inactive: 'bg-fw-wash text-fw-body border-fw-secondary',
+    suspended: 'bg-red-50 text-fw-error border-fw-error',
+    pending: 'bg-orange-50 text-fw-warn border-fw-warn'
   };
 
   const statusLabels = {
@@ -33,10 +33,10 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
   return (
     <span className={`inline-flex items-center ${sizeClasses[size]} rounded-full font-medium border ${style} ${className}`}>
       <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-        normalizedStatus === 'active' ? 'bg-green-500' :
-        normalizedStatus === 'inactive' ? 'bg-gray-500' :
-        normalizedStatus === 'suspended' ? 'bg-red-500' :
-        'bg-amber-500'
+        normalizedStatus === 'active' ? 'bg-fw-green-600' :
+        normalizedStatus === 'inactive' ? 'bg-fw-gray-500' :
+        normalizedStatus === 'suspended' ? 'bg-fw-red-600' :
+        'bg-fw-orange-600'
       }`} />
       {label}
     </span>

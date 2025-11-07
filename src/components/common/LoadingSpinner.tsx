@@ -20,8 +20,8 @@ export function LoadingSpinner({
   };
   
   const colorMap = {
-    brand: 'text-brand-blue',
-    gray: 'text-gray-400',
+    brand: 'text-fw-link',
+    gray: 'text-fw-bodyLight',
     white: 'text-white'
   };
 
