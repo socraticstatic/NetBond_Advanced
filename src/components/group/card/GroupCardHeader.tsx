@@ -13,7 +13,7 @@ export function GroupCardHeader({ group, children }: GroupCardHeaderProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="p-2 bg-fw-wash rounded-lg">
-            <Layers className="h-5 w-5 text-brand-blue" />
+            <Layers className="h-5 w-5 text-fw-link" />
           </div>
           <div>
             <h3 className="text-sm font-medium text-fw-heading">

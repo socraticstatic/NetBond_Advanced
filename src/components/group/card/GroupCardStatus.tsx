@@ -20,32 +20,32 @@ export function GroupCardStatus({ group }: GroupCardStatusProps) {
   };
 
   const getHealthStatus = () => {
-    if (group.status !== 'active') return { label: 'Inactive', color: 'bg-gray-100 text-gray-600' };
+    if (group.status !== 'active') return { label: 'Inactive', color: 'bg-fw-wash text-fw-body' };
 
     const score = getPerformanceScore();
     if (score > 95) {
-      return { label: 'Optimal', color: 'bg-complementary-green/10 text-complementary-green' };
+      return { label: 'Optimal', color: 'bg-green-50 text-fw-success' };
     } else if (score > 90) {
-      return { label: 'Good', color: 'bg-brand-lightBlue text-brand-blue' };
+      return { label: 'Good', color: 'bg-fw-blue-light text-fw-link' };
     } else if (score > 80) {
-      return { label: 'Warning', color: 'bg-amber-50 text-amber-700' };
+      return { label: 'Warning', color: 'bg-orange-50 text-fw-warn' };
     } else {
-      return { label: 'Critical', color: 'bg-red-50 text-red-700' };
+      return { label: 'Critical', color: 'bg-red-50 text-fw-error' };
     }
   };
 
   const healthStatus = getHealthStatus();
 
   return (
-    <div className="p-4 border-t border-gray-100">
+    <div className="p-4 border-t border-fw-secondary">
       <div className="flex items-center justify-between mt-4">
         <button
           className={`
             inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
             transition-all duration-200 border
             ${group.status === 'active'
-              ? 'bg-white text-complementary-green border-complementary-green/20'
-              : 'bg-white text-gray-700 border-gray-200'
+              ? 'bg-fw-base text-fw-success border-fw-success/20'
+              : 'bg-fw-base text-fw-body border-fw-secondary'
             }
           `}
         >
