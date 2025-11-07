@@ -17,8 +17,8 @@ export function NotificationsPage() {
       title: 'System Notifications',
       icon: Settings,
       description: 'Updates about system maintenance and changes',
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'text-fw-link',
+      bgColor: 'bg-fw-blue-light',
       settings: [
         { key: 'maintenance', label: 'Scheduled Maintenance' },
         { key: 'updates', label: 'System Updates' },
@@ -30,8 +30,8 @@ export function NotificationsPage() {
       title: 'Activity Notifications',
       icon: Activity,
       description: 'Updates about your network activity',
-      color: 'text-complementary-green',
-      bgColor: 'bg-complementary-green/10',
+      color: 'text-fw-success',
+      bgColor: 'bg-green-50',
       settings: [
         { key: 'statusChanges', label: 'Connection Status Changes' },
         { key: 'bandwidthAlerts', label: 'Bandwidth Utilization Alerts' },
@@ -44,7 +44,7 @@ export function NotificationsPage() {
       title: 'Security Notifications',
       icon: Shield,
       description: 'Important security-related updates',
-      color: 'text-red-600',
+      color: 'text-fw-error',
       bgColor: 'bg-red-50',
       settings: [
         { key: 'securityAlerts', label: 'Security Alerts & Warnings' },
@@ -58,8 +58,8 @@ export function NotificationsPage() {
       title: 'Billing Notifications',
       icon: DollarSign,
       description: 'Updates about billing and payments',
-      color: 'text-complementary-amber',
-      bgColor: 'bg-complementary-amber/10',
+      color: 'text-fw-warn',
+      bgColor: 'bg-orange-50',
       settings: [
         { key: 'invoices', label: 'Invoice Notifications' },
         { key: 'paymentFailures', label: 'Payment Failures' },
@@ -72,7 +72,7 @@ export function NotificationsPage() {
       title: 'System Alerts',
       icon: AlertTriangle,
       description: 'Critical system alerts and warnings',
-      color: 'text-orange-600',
+      color: 'text-fw-warn',
       bgColor: 'bg-orange-50',
       settings: [
         { key: 'criticalOnly', label: 'Critical Alerts Only' },
