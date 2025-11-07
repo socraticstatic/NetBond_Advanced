@@ -31,7 +31,7 @@ export function ConnectionCardMetrics({
   const getNetworkSummary = () => {
     const parts = [];
     if (cloudRouterCount > 0) {
-      parts.push(`${cloudRouterCount} Router${cloudRouterCount !== 1 ? 's' : ''}`);
+      parts.push(`${cloudRouterCount} Cloud Router${cloudRouterCount !== 1 ? 's' : ''}`);
     }
     if (linkCount > 0) {
       parts.push(`${linkCount} Link${linkCount !== 1 ? 's' : ''}`);
