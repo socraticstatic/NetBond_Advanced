@@ -23,6 +23,7 @@ export interface ColumnVisibilitySlice {
  */
 const DEFAULT_COLUMNS: ColumnConfig = {
   connections: ['name', 'status', 'bandwidth', 'location', 'provider', 'performance'],
+  'connections-list': ['name', 'groups', 'type', 'status', 'bandwidth', 'location', 'provider'],
   groups: ['name', 'connections', 'bandwidth', 'status', 'created'],
   users: ['name', 'email', 'role', 'status', 'lastLogin'],
   vnf: ['name', 'type', 'status', 'connection', 'actions'],
