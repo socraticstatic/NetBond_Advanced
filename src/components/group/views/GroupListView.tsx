@@ -218,6 +218,8 @@ export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps
         }))}
         data={sortedGroups}
         keyField="id"
+        tableId="groups-list"
+        showColumnManager={true}
         sortField={sortField as string}
         sortDirection={sortDirection}
         onSort={(field) => handleSort(field as keyof Group)}

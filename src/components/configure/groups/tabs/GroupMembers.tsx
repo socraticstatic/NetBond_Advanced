@@ -220,6 +220,8 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
           columns={columns}
           data={filteredUsers}
           keyField="id"
+          tableId="group-members"
+          showColumnManager={true}
           actions={(user) => (
             <OverflowMenu
               items={[

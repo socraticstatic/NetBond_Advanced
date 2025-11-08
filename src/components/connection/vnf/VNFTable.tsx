@@ -138,6 +138,8 @@ export function VNFTable({
       showPagination={vnfs.length > 50}
       stickyHeader={true}
       showExport={false}
+      tableId="vnf"
+      showColumnManager={true}
       rowActions={(vnf) => (
         <OverflowMenu
           items={[

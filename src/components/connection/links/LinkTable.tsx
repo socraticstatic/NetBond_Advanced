@@ -93,6 +93,8 @@ export function LinkTable({
       showPagination={links.length > 100}
       stickyHeader={true}
       showExport={false}
+      tableId="links"
+      showColumnManager={true}
       rowActions={(link) => (
         <OverflowMenu
           items={[
