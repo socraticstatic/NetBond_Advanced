@@ -1,5 +1,6 @@
 import { StateCreator } from 'zustand';
 import { safeGetItem, safeSetItem } from '../../utils/localStorageUtils';
+import { getSyncManager } from '../../utils/windowSync';
 
 /**
  * Column configuration per table
@@ -142,6 +143,14 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
 
       // Save to localStorage (debounced)
       saveColumnConfig(tableId, columns);
+
+      // Broadcast change to other windows
+      try {
+        const syncManager = getSyncManager();
+        syncManager.broadcast('COLUMN_CHANGE', { columns }, tableId);
+      } catch (error) {
+        console.error('[ColumnVisibility] Failed to broadcast column change:', error);
+      }
 
       console.log(`[ColumnVisibility] Updated ${tableId}: ${columns.length} visible columns`);
     },
