@@ -3,6 +3,21 @@ import { Settings, GripVertical, X, ChevronRight, ChevronDown } from 'lucide-rea
 import type { ColumnConfig } from '../../types/connection';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
 
+/**
+ * @deprecated This component is deprecated and should not be used in new code.
+ * Please use ColumnVisibilityPopover with useColumnVisibility hook instead.
+ *
+ * Example:
+ * ```tsx
+ * import { ColumnVisibilityPopover } from '../common/ColumnVisibilityPopover';
+ * import { useColumnVisibility } from '../../hooks/useColumnVisibility';
+ *
+ * const { visibleColumns, isVisible } = useColumnVisibility(TABLE_ID);
+ * ```
+ *
+ * This component will be removed in a future version.
+ */
+
 interface ColumnSelectorProps {
   columns: ColumnConfig[];
   onChange: (columns: ColumnConfig[]) => void;

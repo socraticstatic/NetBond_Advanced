@@ -1,16 +1,24 @@
-import { useState } from 'react';
-import { ChevronDown, ChevronUp, Activity, Network, Users, Settings, CreditCard, MoreVertical, X, SlidersHorizontal } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { ChevronDown, ChevronUp, Activity, Network, Users, Settings as SettingsIcon, CreditCard, MoreVertical, X } from 'lucide-react';
 import { Group } from '../../../types/group';
 import { BaseTable } from '../../common/BaseTable';
 import { OverflowMenu } from '../../common/OverflowMenu';
+import { ColumnVisibilityPopover, ColumnDefinition } from '../../common/ColumnVisibilityPopover';
+import { useColumnVisibility } from '../../../hooks/useColumnVisibility';
 
-interface ColumnConfig {
-  id: string;
-  label: string;
-  visible: boolean;
-  sortable?: boolean;
-  width?: string;
-}
+const TABLE_ID = 'groups-list';
+
+const ALL_COLUMNS: ColumnDefinition[] = [
+  { id: 'name', label: 'Name' },
+  { id: 'type', label: 'Type' },
+  { id: 'connections', label: 'Connections' },
+  { id: 'members', label: 'Members' },
+  { id: 'status', label: 'Status' },
+  { id: 'billing', label: 'Monthly Cost' },
+  { id: 'performance', label: 'Performance' }
+];
+
+const SORTABLE_COLUMNS = ['name', 'type', 'connections', 'members', 'status', 'billing'];
 
 interface GroupListViewProps {
   groups: Group[];
@@ -19,19 +27,11 @@ interface GroupListViewProps {
 }
 
 export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps) {
-  const [columns, setColumns] = useState<ColumnConfig[]>([
-    { id: 'name', label: 'Name', visible: true, sortable: true, width: '30%' },
-    { id: 'type', label: 'Type', visible: true, sortable: true, width: '15%' },
-    { id: 'connections', label: 'Connections', visible: true, sortable: true, width: '15%' },
-    { id: 'members', label: 'Members', visible: true, sortable: true, width: '15%' },
-    { id: 'status', label: 'Status', visible: true, sortable: true, width: '15%' },
-    { id: 'billing', label: 'Monthly Cost', visible: false, sortable: true, width: '15%' },
-    { id: 'performance', label: 'Performance', visible: false, sortable: false, width: '15%' }
-  ]);
-  
+  const { visibleColumns, isVisible } = useColumnVisibility(TABLE_ID);
   const [sortField, setSortField] = useState<keyof Group>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [showColumnSelector, setShowColumnSelector] = useState(false);
+  const [showColumnPopover, setShowColumnPopover] = useState(false);
+  const columnButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleSort = (field: keyof Group) => {
     if (sortField === field) {
@@ -94,14 +94,8 @@ export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps
     }
   };
 
-  const handleColumnToggle = (columnId: string) => {
-    setColumns(columns.map(col => 
-      col.id === columnId ? { ...col, visible: !col.visible } : col
-    ));
-  };
-
-  // Only show visible columns
-  const visibleColumns = columns.filter(col => col.visible);
+  // Filter columns based on visibility
+  const displayColumns = ALL_COLUMNS.filter(col => isVisible(col.id));
 
   const renderColumnContent = (group: Group, columnId: string) => {
     switch (columnId) {
@@ -163,57 +157,34 @@ export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps
 
   return (
     <div className="relative">
-      {/* Column Selector */}
+      {/* Column Visibility Button */}
       <div className="absolute top-0 right-0 z-10 mb-2">
         <button
-          onClick={() => setShowColumnSelector(!showColumnSelector)}
+          ref={columnButtonRef}
+          onClick={() => setShowColumnPopover(true)}
           className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
-          title="Customize Columns"
-          aria-label="Customize table columns"
+          title="Manage Columns"
+          aria-label="Manage table columns"
         >
-          <SlidersHorizontal className="h-5 w-5" />
+          <SettingsIcon className="h-5 w-5" />
+          <span className="sr-only">{visibleColumns.length}/{ALL_COLUMNS.length} visible</span>
         </button>
-
-        {showColumnSelector && (
-          <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20">
-            <div className="p-4 border-b border-gray-100 bg-gray-50">
-              <h3 className="text-sm font-semibold text-gray-900">Customize Columns</h3>
-            </div>
-
-            <div className="p-3">
-              <div className="space-y-2">
-                {columns.map((column) => (
-                  <div
-                    key={column.id}
-                    className="flex items-center justify-between p-2 hover:bg-gray-50 rounded"
-                  >
-                    <label className="flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={column.visible}
-                        onChange={() => handleColumnToggle(column.id)}
-                        className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">{column.label}</span>
-                    </label>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 text-xs text-gray-500">
-                Toggle visibility using checkboxes.
-              </div>
-            </div>
-          </div>
+        {showColumnPopover && (
+          <ColumnVisibilityPopover
+            tableId={TABLE_ID}
+            allColumns={ALL_COLUMNS}
+            onClose={() => setShowColumnPopover(false)}
+            anchorEl={columnButtonRef.current}
+          />
         )}
       </div>
 
       {/* Table */}
       <BaseTable
-        columns={visibleColumns.map(col => ({
+        columns={displayColumns.map(col => ({
           id: col.id,
           label: col.label,
-          sortable: !!col.sortable,
-          width: col.width,
+          sortable: SORTABLE_COLUMNS.includes(col.id),
           render: (group: Group) => renderColumnContent(group, col.id)
         }))}
         data={sortedGroups}
