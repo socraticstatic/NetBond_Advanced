@@ -107,25 +107,10 @@
   100% { transform: translateY(100%); opacity: 0; }
 }
 
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .matrix-character {
   animation: matrix-rain 2s linear infinite;
   color: #00ff00;
   opacity: 0;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.2s ease-out forwards;
 }
 
 /* Critical button styles */

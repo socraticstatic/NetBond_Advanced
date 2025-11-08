@@ -101,9 +101,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                   ? 'text-fw-link bg-fw-accent'
                   : 'text-fw-disabled hover:text-fw-bodyLight'
               }`}
-              title="Grid View (Press 1)"
-              data-view="grid"
-              aria-label="Switch to grid view"
+              title="Grid View"
             >
               <LayoutGrid className="h-5 w-5" />
             </button>
@@ -114,9 +112,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                   ? 'text-fw-link bg-fw-accent'
                   : 'text-fw-disabled hover:text-fw-bodyLight'
               }`}
-              title="List View (Press 2)"
-              data-view="list"
-              aria-label="Switch to list view"
+              title="List View"
             >
               <List className="h-5 w-5" />
             </button>
@@ -127,9 +123,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                   ? 'text-fw-link bg-fw-accent'
                   : 'text-fw-disabled hover:text-fw-bodyLight'
               }`}
-              title="Topology View (Press 3)"
-              data-view="topology"
-              aria-label="Switch to topology view"
+              title="Topology View"
             >
               <Network className="h-5 w-5" />
             </button>
