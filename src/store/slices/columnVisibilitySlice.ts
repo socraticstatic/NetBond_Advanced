@@ -1,6 +1,5 @@
 import { StateCreator } from 'zustand';
 import { safeGetItem, safeSetItem } from '../../utils/localStorageUtils';
-import { getSyncManager } from '../../utils/windowSync';
 
 /**
  * Column configuration per table
@@ -50,20 +49,11 @@ function loadColumnConfig(tableId: string): string[] | null {
 }
 
 /**
- * Save column config to localStorage with debouncing
+ * Save column config to localStorage immediately
  */
-const saveTimeouts: Record<string, NodeJS.Timeout> = {};
-
 function saveColumnConfig(tableId: string, columns: string[]): void {
-  // Debounce saves
-  if (saveTimeouts[tableId]) {
-    clearTimeout(saveTimeouts[tableId]);
-  }
-
-  saveTimeouts[tableId] = setTimeout(() => {
-    safeSetItem(`${STORAGE_KEY_PREFIX}${tableId}`, columns);
-    delete saveTimeouts[tableId];
-  }, 100);
+  // Save immediately so storage events fire right away for cross-window sync
+  safeSetItem(`${STORAGE_KEY_PREFIX}${tableId}`, columns);
 }
 
 /**
@@ -77,6 +67,32 @@ function getDefaultColumns(tableId: string): string[] {
  * Create column visibility slice
  */
 export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = (set, get) => {
+  // Listen for storage changes from other windows
+  if (typeof window !== 'undefined') {
+    window.addEventListener('storage', (event) => {
+      if (event.key && event.key.startsWith(STORAGE_KEY_PREFIX)) {
+        const tableId = event.key.substring(STORAGE_KEY_PREFIX.length);
+
+        if (event.newValue) {
+          try {
+            const columns = JSON.parse(event.newValue);
+            console.log(`[ColumnVisibility] Storage event detected for ${tableId}:`, columns);
+
+            // Update the store with new column config
+            set((state) => ({
+              columnConfig: {
+                ...state.columnConfig,
+                [tableId]: columns
+              }
+            }));
+          } catch (error) {
+            console.error('[ColumnVisibility] Failed to parse storage event:', error);
+          }
+        }
+      }
+    });
+  }
+
   return {
     columnConfig: {},
 
@@ -141,16 +157,8 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
         }
       }));
 
-      // Save to localStorage (debounced)
+      // Save to localStorage (will trigger storage event in other windows)
       saveColumnConfig(tableId, columns);
-
-      // Broadcast change to other windows
-      try {
-        const syncManager = getSyncManager();
-        syncManager.broadcast('COLUMN_CHANGE', { columns }, tableId);
-      } catch (error) {
-        console.error('[ColumnVisibility] Failed to broadcast column change:', error);
-      }
 
       console.log(`[ColumnVisibility] Updated ${tableId}: ${columns.length} visible columns`);
     },
