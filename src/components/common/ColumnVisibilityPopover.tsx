@@ -76,17 +76,30 @@ function ColumnVisibilityPopoverComponent({
     if (anchorEl && popoverRef.current) {
       const anchorRect = anchorEl.getBoundingClientRect();
       const popoverRect = popoverRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
 
       let top = anchorRect.bottom + 8;
       let left = anchorRect.right - popoverRect.width;
 
-      // Adjust if off-screen
+      // Adjust horizontal position if off-screen
       if (left < 8) {
         left = 8;
       }
+      if (left + popoverRect.width > viewportWidth - 8) {
+        left = viewportWidth - popoverRect.width - 8;
+      }
 
-      if (top + popoverRect.height > window.innerHeight - 8) {
-        top = anchorRect.top - popoverRect.height - 8;
+      // Adjust vertical position if off-screen
+      if (top + popoverRect.height > viewportHeight - 8) {
+        // Try positioning above the anchor
+        const topAbove = anchorRect.top - popoverRect.height - 8;
+        if (topAbove >= 8) {
+          top = topAbove;
+        } else {
+          // If it doesn't fit above either, position it at the top of viewport
+          top = 8;
+        }
       }
 
       setPosition({ top, left });
