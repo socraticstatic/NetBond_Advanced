@@ -115,6 +115,46 @@ export function VNFTable({
       csvRender: (vnf) => getTypeName(vnf.type)
     },
     {
+      id: 'vendor',
+      label: 'Vendor',
+      sortable: true,
+      sortKey: 'vendor',
+      render: (vnf) => (
+        <span className="text-sm text-gray-900">{vnf.vendor || 'N/A'}</span>
+      ),
+      csvRender: (vnf) => vnf.vendor || 'N/A'
+    },
+    {
+      id: 'model',
+      label: 'Model',
+      sortable: true,
+      sortKey: 'model',
+      render: (vnf) => (
+        <span className="text-sm text-gray-700">{vnf.model || 'N/A'}</span>
+      ),
+      csvRender: (vnf) => vnf.model || 'N/A'
+    },
+    {
+      id: 'version',
+      label: 'Version',
+      sortable: true,
+      sortKey: 'version',
+      render: (vnf) => (
+        <span className="text-sm text-gray-700">{vnf.version || 'N/A'}</span>
+      ),
+      csvRender: (vnf) => vnf.version || 'N/A'
+    },
+    {
+      id: 'throughput',
+      label: 'Throughput',
+      sortable: true,
+      sortKey: 'throughput',
+      render: (vnf) => (
+        <span className="text-sm text-gray-700">{vnf.throughput || 'N/A'}</span>
+      ),
+      csvRender: (vnf) => vnf.throughput || 'N/A'
+    },
+    {
       id: 'status',
       label: 'Status',
       sortable: true,
@@ -125,6 +165,15 @@ export function VNFTable({
         </span>
       ),
       csvRender: (vnf) => vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)
+    },
+    {
+      id: 'cloudRouter',
+      label: 'Cloud Router',
+      sortable: false,
+      render: (vnf) => (
+        <span className="text-sm text-gray-700">{getCloudRouterName(vnf.cloudRouterId)}</span>
+      ),
+      csvRender: (vnf) => getCloudRouterName(vnf.cloudRouterId)
     }
   ];
 
@@ -137,9 +186,10 @@ export function VNFTable({
       pageSize={50}
       showPagination={vnfs.length > 50}
       stickyHeader={true}
-      showExport={false}
+      showExport={true}
       tableId="vnf"
       showColumnManager={true}
+      showFilter={true}
       rowActions={(vnf) => (
         <OverflowMenu
           items={[
