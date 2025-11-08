@@ -29,6 +29,7 @@ import { CloudRouterModal } from './cloudrouter/CloudRouterModal';
 import { DeleteCloudRouterModal } from './cloudrouter/DeleteCloudRouterModal';
 import { MobileConnectionDetails } from './MobileConnectionDetails';
 import { useIsMobile } from '../../hooks/useMobileDetection';
+import { useVNFSync } from '../../hooks/useVNFSync';
 
 export function ConnectionDetails() {
   const { id } = useParams();
@@ -186,6 +187,15 @@ export function ConnectionDetails() {
   const getAllLinks = (): Link[] => {
     return cloudRouters.flatMap((router) => router.links || []);
   };
+
+  // Set up cross-window VNF synchronization
+  useVNFSync({
+    vnfs,
+    cloudRouters,
+    connectionId: connection?.id.toString() || '',
+    onVNFsUpdate: setVnfs,
+    onCloudRoutersUpdate: setCloudRouters
+  });
 
   const {
     isEditing: isEditingName,

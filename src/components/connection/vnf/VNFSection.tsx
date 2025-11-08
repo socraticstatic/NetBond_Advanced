@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Plus, Shield } from 'lucide-react';
+import { Plus, Shield, ExternalLink } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { VNF, VNFType } from '../../../types/vnf';
 import { VNFTable } from './VNFTable';
 import { CloudRouter } from '../../../types/cloudrouter';
+import { useStore } from '../../../store/useStore';
 
 interface VNFSectionProps {
   vnfs: VNF[];
@@ -19,10 +20,13 @@ export function VNFSection({
   cloudRouters,
   onAdd,
   onEdit,
-  onDelete
+  onDelete,
+  connectionId
 }: VNFSectionProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [vnfTypeFilter, setVnfTypeFilter] = useState<VNFType | 'all'>('all');
+  const openWindow = useStore(state => state.openWindow);
+  const isWindowOpen = useStore(state => state.isWindowOpen);
 
   // Filter VNFs
   const filteredVNFs = vnfs.filter(vnf => {
@@ -51,6 +55,16 @@ export function VNFSection({
 
   const activeVNFs = vnfs.filter(v => v.status === 'active').length;
 
+  const handleDetach = () => {
+    const tableId = `vnf-${connectionId}`;
+    openWindow(tableId, {
+      position: { x: 100, y: 100 },
+      size: { width: 1200, height: 800 }
+    });
+  };
+
+  const isDetached = isWindowOpen(`vnf-${connectionId}`);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -61,14 +75,25 @@ export function VNFSection({
             Manage network function instances and their configurations
           </p>
         </div>
-        <Button
-          variant="primary"
-          size="sm"
-          icon={<Plus className="h-4 w-4" />}
-          onClick={onAdd}
-        >
-          Add Network Function
-        </Button>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            icon={<ExternalLink className="h-4 w-4" />}
+            onClick={handleDetach}
+            disabled={isDetached}
+          >
+            {isDetached ? 'Table Detached' : 'Detach Table'}
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            icon={<Plus className="h-4 w-4" />}
+            onClick={onAdd}
+          >
+            Add Network Function
+          </Button>
+        </div>
       </div>
 
       {/* Summary Stats */}
