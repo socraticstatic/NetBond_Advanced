@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Download } from 'lucide-react';
 import { VNFTable } from './VNFTable';
-import { VNF } from '../../../types/vnf';
+import { VNF, VNFType } from '../../../types/vnf';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { VNFModal } from '../modals/VNFModal';
 import { DeleteVNFModal } from '../modals/DeleteVNFModal';
-import { downloadCSV } from '../../../utils/downloadCSV';
 
 interface DetachedVNFTableProps {
   connectionId?: string;
@@ -253,6 +251,7 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
   const [deletingVNF, setDeletingVNF] = useState<VNF | undefined>();
   const [showAddVNFModal, setShowAddVNFModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [vnfTypeFilter, setVnfTypeFilter] = useState<VNFType | 'all'>('all');
 
   // Listen for data updates from parent window via BroadcastChannel
   useEffect(() => {
@@ -349,32 +348,45 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
     return cloudRouters.flatMap((router) => router.links || []);
   };
 
-  // Filter VNFs by search query
+  // Filter VNFs by search query and type
   const filteredVnfs = vnfs.filter(vnf => {
-    if (!searchQuery) return true;
+    const matchesType = vnfTypeFilter === 'all' || vnf.type === vnfTypeFilter;
+
+    if (!searchQuery) return matchesType;
+
     const searchLower = searchQuery.toLowerCase();
-    return (
+    const matchesSearch = (
       vnf.name.toLowerCase().includes(searchLower) ||
       vnf.vendor?.toLowerCase().includes(searchLower) ||
-      vnf.type.toLowerCase().includes(searchLower) ||
-      vnf.description?.toLowerCase().includes(searchLower)
+      vnf.type.toLowerCase().includes(searchLower)
     );
+
+    return matchesType && matchesSearch;
   });
 
   const handleExportCSV = () => {
-    const csvData = filteredVnfs.map(vnf => ({
-      Name: vnf.name,
-      Type: vnf.type,
-      Vendor: vnf.vendor || '',
-      Model: vnf.model || '',
-      Version: vnf.version || '',
-      Status: vnf.status,
-      Throughput: vnf.throughput || '',
-      'Cloud Router': cloudRouters.find(cr => cr.id === vnf.cloudRouterId)?.name || 'None',
-      Description: vnf.description || ''
-    }));
-
-    downloadCSV(csvData, 'vnf-export.csv');
+    const getTypeName = (type: VNFType) => {
+      switch(type) {
+        case 'firewall': return 'Firewall';
+        case 'sdwan': return 'SD-WAN';
+        case 'router': return 'Router';
+        case 'vnat': return 'NAT';
+        case 'custom': return 'Custom';
+        default: return type.toUpperCase();
+      }
+    };
+    const headers = ['Name', 'Type', 'Status'].join(',');
+    const rows = filteredVnfs.map(vnf =>
+      `"${vnf.name}","${getTypeName(vnf.type)}","${vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)}"`
+    );
+    const csv = [headers, ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'network-functions.csv';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -385,10 +397,10 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
           <div className="relative flex-1 max-w-md">
             <input
               type="text"
-              placeholder="Search VNFs by name, vendor, type, or description..."
+              placeholder="Search VNFs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm w-full"
             />
             <svg
               className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4"
@@ -403,30 +415,27 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                title="Clear search"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            )}
           </div>
-          <div className="flex items-center gap-2">
-            <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              Filters
-            </button>
+          <div className="flex items-center gap-3">
+            <select
+              value={vnfTypeFilter}
+              onChange={(e) => setVnfTypeFilter(e.target.value as VNFType | 'all')}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <option value="all">All Types</option>
+              <option value="firewall">Firewall</option>
+              <option value="sdwan">SD-WAN</option>
+              <option value="router">Router</option>
+              <option value="vnat">NAT</option>
+              <option value="custom">Custom</option>
+            </select>
             <button
               onClick={handleExportCSV}
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              <Download className="h-4 w-4 mr-2" />
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
               Export
             </button>
           </div>
