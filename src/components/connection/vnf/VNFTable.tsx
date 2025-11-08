@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Router as RouterIcon, Network, Settings, Shield, Globe, Edit2, Trash2, Eye } from 'lucide-react';
+import { Router as RouterIcon, Network, Settings, Shield, Globe, CreditCard as Edit2, Trash2, Eye } from 'lucide-react';
 import { VNF } from '../../../types/vnf';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { CloudRouter } from '../../../types/cloudrouter';
