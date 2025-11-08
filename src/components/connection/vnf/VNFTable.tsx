@@ -186,7 +186,7 @@ export function VNFTable({
       pageSize={50}
       showPagination={vnfs.length > 50}
       stickyHeader={true}
-      showExport={true}
+      showExport={false}
       tableId="vnf"
       showColumnManager={true}
       showFilter={true}
