@@ -25,6 +25,7 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
       version: '10.2.3',
       status: 'active',
       throughput: '5 Gbps',
+      cloudRouterId: 'cr-1',
       licenseExpiry: '2025-06-30T00:00:00Z',
       configuration: {
         interfaces: [
@@ -49,6 +50,7 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
       version: '21.1.2',
       status: 'active',
       throughput: '2 Gbps',
+      cloudRouterId: 'cr-1',
       configuration: {
         interfaces: [
           { id: 'if-1', name: 'WAN1', type: 'wan', ipAddress: '203.0.113.20', subnetMask: '255.255.255.0', status: 'up' },
@@ -61,6 +63,151 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
       createdAt: '2024-01-15T14:30:00Z',
       updatedAt: '2024-02-20T10:15:00Z',
       description: 'SD-WAN for branch office connectivity',
+      connectionId: connectionId || ''
+    },
+    {
+      id: 'vnf-3',
+      name: 'Data Center Router',
+      type: 'router',
+      vendor: 'Cisco',
+      model: 'CSR 1000V',
+      version: '17.3.1',
+      status: 'active',
+      throughput: '10 Gbps',
+      cloudRouterId: 'cr-2',
+      configuration: {
+        interfaces: [
+          { id: 'if-1', name: 'GigE0/0', type: 'wan', ipAddress: '203.0.113.30', subnetMask: '255.255.255.0', status: 'up' },
+          { id: 'if-2', name: 'GigE0/1', type: 'lan', ipAddress: '10.10.0.1', subnetMask: '255.255.255.0', status: 'up' }
+        ],
+        routingProtocols: ['BGP', 'OSPF', 'EIGRP'],
+        highAvailability: true,
+        managementIP: '192.168.1.30'
+      },
+      createdAt: '2024-01-20T08:00:00Z',
+      updatedAt: '2024-03-10T11:20:00Z',
+      description: 'Core routing for data center connectivity',
+      connectionId: connectionId || ''
+    },
+    {
+      id: 'vnf-4',
+      name: 'DMZ Firewall',
+      type: 'firewall',
+      vendor: 'Fortinet',
+      model: 'FortiGate-VM',
+      version: '7.2.1',
+      status: 'active',
+      throughput: '3 Gbps',
+      cloudRouterId: 'cr-1',
+      licenseExpiry: '2025-12-31T00:00:00Z',
+      configuration: {
+        interfaces: [
+          { id: 'if-1', name: 'port1', type: 'wan', ipAddress: '203.0.113.40', subnetMask: '255.255.255.0', status: 'up' },
+          { id: 'if-2', name: 'port2', type: 'dmz', ipAddress: '172.16.0.1', subnetMask: '255.255.255.0', status: 'up' }
+        ],
+        routingProtocols: ['Static'],
+        highAvailability: true,
+        managementIP: '192.168.1.40'
+      },
+      createdAt: '2024-02-01T10:30:00Z',
+      updatedAt: '2024-03-12T14:45:00Z',
+      description: 'DMZ protection and segmentation',
+      connectionId: connectionId || ''
+    },
+    {
+      id: 'vnf-5',
+      name: 'Regional SD-WAN Hub',
+      type: 'sdwan',
+      vendor: 'VMware',
+      model: 'SD-WAN Edge',
+      version: '4.5.0',
+      status: 'provisioning',
+      throughput: '5 Gbps',
+      cloudRouterId: 'cr-2',
+      configuration: {
+        interfaces: [
+          { id: 'if-1', name: 'ge1', type: 'wan', ipAddress: '203.0.113.50', subnetMask: '255.255.255.0', status: 'up' },
+          { id: 'if-2', name: 'ge2', type: 'wan', ipAddress: '198.51.100.50', subnetMask: '255.255.255.0', status: 'up' }
+        ],
+        routingProtocols: ['BGP'],
+        highAvailability: true,
+        managementIP: '192.168.1.50'
+      },
+      createdAt: '2024-03-01T09:00:00Z',
+      updatedAt: '2024-03-15T16:30:00Z',
+      description: 'Regional hub for SD-WAN orchestration',
+      connectionId: connectionId || ''
+    },
+    {
+      id: 'vnf-6',
+      name: 'Cloud NAT Gateway',
+      type: 'vnat',
+      vendor: 'Generic',
+      model: 'Virtual NAT',
+      version: '2.1.0',
+      status: 'active',
+      throughput: '1 Gbps',
+      cloudRouterId: 'cr-1',
+      configuration: {
+        interfaces: [
+          { id: 'if-1', name: 'eth0', type: 'wan', ipAddress: '203.0.113.60', subnetMask: '255.255.255.0', status: 'up' },
+          { id: 'if-2', name: 'eth1', type: 'lan', ipAddress: '10.20.0.1', subnetMask: '255.255.255.0', status: 'up' }
+        ],
+        routingProtocols: ['Static'],
+        highAvailability: false,
+        managementIP: '192.168.1.60'
+      },
+      createdAt: '2024-02-15T13:00:00Z',
+      updatedAt: '2024-03-08T10:00:00Z',
+      description: 'NAT gateway for cloud services',
+      connectionId: connectionId || ''
+    },
+    {
+      id: 'vnf-7',
+      name: 'Backup Router',
+      type: 'router',
+      vendor: 'Juniper',
+      model: 'vSRX',
+      version: '20.4R2',
+      status: 'inactive',
+      throughput: '5 Gbps',
+      configuration: {
+        interfaces: [
+          { id: 'if-1', name: 'ge-0/0/0', type: 'wan', ipAddress: '203.0.113.70', subnetMask: '255.255.255.0', status: 'down' },
+          { id: 'if-2', name: 'ge-0/0/1', type: 'lan', ipAddress: '10.30.0.1', subnetMask: '255.255.255.0', status: 'down' }
+        ],
+        routingProtocols: ['BGP', 'OSPF'],
+        highAvailability: false,
+        managementIP: '192.168.1.70'
+      },
+      createdAt: '2024-01-25T11:00:00Z',
+      updatedAt: '2024-02-28T15:00:00Z',
+      description: 'Standby router for failover scenarios',
+      connectionId: connectionId || ''
+    },
+    {
+      id: 'vnf-8',
+      name: 'Web Application Firewall',
+      type: 'firewall',
+      vendor: 'F5 Networks',
+      model: 'BIG-IP Virtual',
+      version: '16.1.2',
+      status: 'active',
+      throughput: '4 Gbps',
+      cloudRouterId: 'cr-2',
+      licenseExpiry: '2025-09-30T00:00:00Z',
+      configuration: {
+        interfaces: [
+          { id: 'if-1', name: '1.1', type: 'wan', ipAddress: '203.0.113.80', subnetMask: '255.255.255.0', status: 'up' },
+          { id: 'if-2', name: '1.2', type: 'lan', ipAddress: '10.40.0.1', subnetMask: '255.255.255.0', status: 'up' }
+        ],
+        routingProtocols: ['Static'],
+        highAvailability: true,
+        managementIP: '192.168.1.80'
+      },
+      createdAt: '2024-02-10T14:30:00Z',
+      updatedAt: '2024-03-14T12:15:00Z',
+      description: 'Application-layer security and load balancing',
       connectionId: connectionId || ''
     }
   ]);
@@ -81,6 +228,22 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
       connectionId: connectionId || '',
       createdAt: '2024-01-10T00:00:00Z',
       updatedAt: '2024-03-15T00:00:00Z'
+    },
+    {
+      id: 'cr-2',
+      name: 'Secondary Cloud Router',
+      description: 'Backup router for redundancy',
+      status: 'active',
+      location: 'US-West',
+      links: [],
+      policies: {
+        routingPolicy: 'default',
+        securityPolicy: 'standard',
+        qosPolicy: 'standard'
+      },
+      connectionId: connectionId || '',
+      createdAt: '2024-01-15T00:00:00Z',
+      updatedAt: '2024-03-12T00:00:00Z'
     }
   ]);
 
