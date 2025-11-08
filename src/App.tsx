@@ -21,6 +21,7 @@ import { MobileManagePage } from './components/MobileManagePage';
 import { useIsMobile } from './hooks/useMobileDetection';
 import { MobileConfigureHub } from './components/configure/MobileConfigureHub';
 import { MobileDesktopOnly } from './components/common/MobileDesktopOnly';
+import { GlobalKeyboardShortcuts } from './components/common/GlobalKeyboardShortcuts';
 
 // Optimized lazy loading with better error handling
 const LazyConnectionWizard = lazy(() =>
@@ -162,6 +163,7 @@ function App() {
         <ErrorBoundary onReset={() => window.location.reload()}>
           <DashboardLayout>
             <ToastContainer />
+            <GlobalKeyboardShortcuts />
             <main id="main-content" tabIndex={-1} className="min-h-screen">
               <Routes>
                 <Route path="/create" element={
