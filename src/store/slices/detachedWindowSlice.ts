@@ -168,8 +168,9 @@ export const createDetachedWindowSlice: StateCreator<DetachedWindowSlice> = (set
         'status=yes'
       ].join(',');
 
-      // Open new window
-      const windowUrl = `/detached/${tableId}/${id}`;
+      // Open new window - parse tableId to get type and connectionId
+      const [tableType, connectionId] = tableId.split('-');
+      const windowUrl = `/detached/${tableType}/${connectionId}/${id}`;
 
       try {
         const windowRef = window.open(windowUrl, `detached-${id}`, features);

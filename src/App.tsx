@@ -103,9 +103,15 @@ const LazyControlCenterManager = lazy(() =>
   }))
 );
 
-const LazyMarketplace = lazy(() => 
-  import('./components/Marketplace').then(module => ({ 
-    default: module.Marketplace 
+const LazyMarketplace = lazy(() =>
+  import('./components/Marketplace').then(module => ({
+    default: module.Marketplace
+  }))
+);
+
+const LazyDetachedVNFTable = lazy(() =>
+  import('./components/connection/vnf/DetachedVNFTable').then(module => ({
+    default: module.DetachedVNFTable
   }))
 );
 
@@ -357,7 +363,13 @@ function App() {
                     <LazyGroupDetailsPage />
                   </Suspense>
                 } />
-                
+
+                <Route path="/detached/vnf/:connectionId/:windowId" element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <LazyDetachedVNFTable />
+                  </Suspense>
+                } />
+
                 <Route path="/" element={<Navigate to="/manage" />} />
                 
                 <Route path="*" element={
