@@ -14,6 +14,7 @@ import { createAPIToolboxSlice, APIToolboxSlice } from './slices/apiToolboxSlice
 import { createNotificationSlice, NotificationSlice } from './slices/notificationSlice';
 import { createFontSizeSlice, FontSizeSlice } from './slices/fontSizeSlice';
 import { createColumnVisibilitySlice, ColumnVisibilitySlice } from './slices/columnVisibilitySlice';
+import { createDetachedWindowSlice, DetachedWindowSlice } from './slices/detachedWindowSlice';
 import { sampleConnections, sampleUsers, sampleGroups } from '../data/sampleData';
 import { safeJsonParse } from '../utils/errorHandling';
 
@@ -57,7 +58,8 @@ interface Store extends
   APIToolboxSlice,
   NotificationSlice,
   FontSizeSlice,
-  ColumnVisibilitySlice {}
+  ColumnVisibilitySlice,
+  DetachedWindowSlice {}
 
 // Create store with persisted or sample data
 export const useStore = create<Store>((set, get) => {
@@ -89,6 +91,7 @@ export const useStore = create<Store>((set, get) => {
     ...createNotificationSlice(set),
     ...createFontSizeSlice(set, get),
     ...createColumnVisibilitySlice(set, get),
+    ...createDetachedWindowSlice(set, get),
     ...initialState,
 
     // Add a reset function to clear everything (useful for development/testing)

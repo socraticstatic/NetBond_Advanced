@@ -1,5 +1,7 @@
-import { ReactNode } from 'react';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ReactNode, useState, useRef, useMemo } from 'react';
+import { ChevronUp, ChevronDown, Settings } from 'lucide-react';
+import { ColumnVisibilityPopover, ColumnDefinition } from './ColumnVisibilityPopover';
+import { useColumnVisibility } from '../../hooks/useColumnVisibility';
 
 interface Column<T> {
   id: string;
@@ -23,9 +25,11 @@ interface BaseTableProps<T> {
   actions?: (item: T) => ReactNode;
   emptyState?: ReactNode;
   title?: string;
+  tableId?: string;
+  showColumnManager?: boolean;
 }
 
-export function BaseTable<T>({ 
+export function BaseTable<T>({
   columns,
   data,
   keyField,
@@ -36,14 +40,51 @@ export function BaseTable<T>({
   rowClassName,
   actions,
   emptyState,
-  title
+  title,
+  tableId,
+  showColumnManager = true
 }: BaseTableProps<T>) {
+  const [showColumnPopover, setShowColumnPopover] = useState(false);
+  const columnButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Column visibility
+  const { visibleColumns, isVisible } = useColumnVisibility(tableId || 'default');
+
+  // Filter columns based on visibility
+  const filteredColumns = useMemo(() => {
+    if (!tableId || visibleColumns.length === 0) {
+      return columns;
+    }
+    return columns.filter(col => isVisible(col.id));
+  }, [columns, tableId, visibleColumns, isVisible]);
+
+  // Convert columns to column definitions for the popover
+  const columnDefinitions: ColumnDefinition[] = useMemo(() => {
+    return columns.map(col => ({
+      id: col.id,
+      label: col.label
+    }));
+  }, [columns]);
   return (
     <>
       {/* Table Header */}
-      {title && (
+      {(title || (showColumnManager && tableId)) && (
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium text-fw-heading">{title}</h3>
+          {title && <h3 className="text-lg font-medium text-fw-heading">{title}</h3>}
+          {showColumnManager && tableId && (
+            <button
+              ref={columnButtonRef}
+              onClick={() => setShowColumnPopover(!showColumnPopover)}
+              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-md hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
+              title="Manage columns"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Columns
+              <span className="ml-2 px-2 py-0.5 text-xs bg-brand-lightBlue text-brand-blue rounded-full">
+                {filteredColumns.length}/{columns.length}
+              </span>
+            </button>
+          )}
         </div>
       )}
 
@@ -54,7 +95,7 @@ export function BaseTable<T>({
           <div className="min-w-full table">
             <div className="table-header-group">
               <div className="table-row">
-                {columns.map((column) => (
+                {filteredColumns.map((column) => (
                   <div
                     key={column.id}
                     scope="col"
@@ -107,8 +148,8 @@ export function BaseTable<T>({
             <div className="table-row-group bg-fw-base divide-y divide-fw-secondary">
               {data.length === 0 ? (
                 <div className="table-row">
-                  <div 
-                    colSpan={columns.length + (actions ? 1 : 0)}
+                  <div
+                    colSpan={filteredColumns.length + (actions ? 1 : 0)}
                     className="table-cell px-6 py-4 text-center text-sm text-fw-bodyLight"
                   >
                     {emptyState || 'No data available'}
@@ -127,7 +168,7 @@ export function BaseTable<T>({
                     role="row"
                     aria-rowindex={rowIndex + 1}
                   >
-                    {columns.map((column) => (
+                    {filteredColumns.map((column) => (
                       <div 
                         key={column.id} 
                         className="table-cell px-6 py-4 whitespace-nowrap"
@@ -153,6 +194,16 @@ export function BaseTable<T>({
         </div>
         </div>
       </div>
+
+      {/* Column Visibility Popover */}
+      {showColumnPopover && tableId && (
+        <ColumnVisibilityPopover
+          tableId={tableId}
+          allColumns={columnDefinitions}
+          onClose={() => setShowColumnPopover(false)}
+          anchorEl={columnButtonRef.current}
+        />
+      )}
     </>
   );
 }

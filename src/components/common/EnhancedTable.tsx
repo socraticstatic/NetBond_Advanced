@@ -1,6 +1,8 @@
-import { useState, useMemo, memo, ReactNode } from 'react';
-import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download } from 'lucide-react';
+import { useState, useMemo, memo, ReactNode, useRef } from 'react';
+import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download, Settings } from 'lucide-react';
 import { downloadCSV } from '../../utils/downloadCSV';
+import { ColumnVisibilityPopover, ColumnDefinition } from './ColumnVisibilityPopover';
+import { useColumnVisibility } from '../../hooks/useColumnVisibility';
 
 export interface TableColumn<T> {
   id: string;
@@ -24,6 +26,8 @@ interface EnhancedTableProps<T> {
   rowActions?: (item: T) => ReactNode;
   exportFilename?: string;
   showExport?: boolean;
+  tableId?: string;
+  showColumnManager?: boolean;
 }
 
 function EnhancedTableComponent<T>({
@@ -38,10 +42,33 @@ function EnhancedTableComponent<T>({
   rowActions,
   exportFilename = 'export.csv',
   showExport = true,
+  tableId,
+  showColumnManager = true,
 }: EnhancedTableProps<T>) {
   const [sortField, setSortField] = useState<keyof T | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
+  const [showColumnPopover, setShowColumnPopover] = useState(false);
+  const columnButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Column visibility
+  const { visibleColumns, isVisible } = useColumnVisibility(tableId || 'default');
+
+  // Filter columns based on visibility (only if tableId is provided)
+  const filteredColumns = useMemo(() => {
+    if (!tableId || visibleColumns.length === 0) {
+      return columns;
+    }
+    return columns.filter(col => isVisible(col.id));
+  }, [columns, tableId, visibleColumns, isVisible]);
+
+  // Convert columns to column definitions for the popover
+  const columnDefinitions: ColumnDefinition[] = useMemo(() => {
+    return columns.map(col => ({
+      id: col.id,
+      label: col.label
+    }));
+  }, [columns]);
 
   const handleSort = (column: TableColumn<T>) => {
     if (!column.sortable || !column.sortKey) return;
@@ -88,9 +115,11 @@ function EnhancedTableComponent<T>({
   };
 
   const handleExport = () => {
-    const headers = columns.map(col => col.label).join(',');
+    // Export only visible columns
+    const columnsToExport = tableId ? filteredColumns : columns;
+    const headers = columnsToExport.map(col => col.label).join(',');
     const rows = sortedData.map(item => {
-      return columns.map(col => {
+      return columnsToExport.map(col => {
         if (col.csvRender) {
           return `"${col.csvRender(item).replace(/"/g, '""')}"`;
         }
@@ -134,22 +163,38 @@ function EnhancedTableComponent<T>({
 
   return (
     <div className="flex flex-col">
-      {showExport && data.length > 0 && (
-        <div className="flex justify-end mb-3">
-          <button
-            onClick={handleExport}
-            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-md hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            Export CSV
-          </button>
+      {(showExport || (showColumnManager && tableId)) && data.length > 0 && (
+        <div className="flex justify-end items-center gap-2 mb-3">
+          {showColumnManager && tableId && (
+            <button
+              ref={columnButtonRef}
+              onClick={() => setShowColumnPopover(!showColumnPopover)}
+              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-md hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
+              title="Manage columns"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Columns
+              <span className="ml-2 px-2 py-0.5 text-xs bg-brand-lightBlue text-brand-blue rounded-full">
+                {filteredColumns.length}/{columns.length}
+              </span>
+            </button>
+          )}
+          {showExport && (
+            <button
+              onClick={handleExport}
+              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-md hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export CSV
+            </button>
+          )}
         </div>
       )}
       <div className="w-full overflow-visible">
         <table className="w-full divide-y divide-fw-secondary">
           <thead className={`bg-fw-wash ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
             <tr>
-              {columns.map((column) => (
+              {filteredColumns.map((column) => (
                 <th
                   key={column.id}
                   scope="col"
@@ -190,7 +235,7 @@ function EnhancedTableComponent<T>({
             {paginatedData.length === 0 ? (
               <tr>
                 <td
-                  colSpan={columns.length + (rowActions ? 1 : 0)}
+                  colSpan={filteredColumns.length + (rowActions ? 1 : 0)}
                   className="px-3 py-8 text-center text-fw-bodyLight"
                 >
                   {emptyMessage}
@@ -203,7 +248,7 @@ function EnhancedTableComponent<T>({
                   className={`hover:bg-fw-wash ${onRowClick ? 'cursor-pointer' : ''}`}
                   onClick={() => onRowClick?.(item)}
                 >
-                  {columns.map((column) => (
+                  {filteredColumns.map((column) => (
                     <td key={column.id} className="px-3 py-2 truncate">
                       {column.render(item)}
                     </td>
@@ -289,6 +334,16 @@ function EnhancedTableComponent<T>({
             </div>
           </div>
         </div>
+      )}
+
+      {/* Column Visibility Popover */}
+      {showColumnPopover && tableId && (
+        <ColumnVisibilityPopover
+          tableId={tableId}
+          allColumns={columnDefinitions}
+          onClose={() => setShowColumnPopover(false)}
+          anchorEl={columnButtonRef.current}
+        />
       )}
     </div>
   );
