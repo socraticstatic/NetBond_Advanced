@@ -1,8 +1,9 @@
-import { useState, useMemo, memo, ReactNode, useRef } from 'react';
+import { useState, useMemo, memo, ReactNode, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download, Settings } from 'lucide-react';
 import { downloadCSV } from '../../utils/downloadCSV';
 import { ColumnVisibilityPopover, ColumnDefinition } from './ColumnVisibilityPopover';
 import { useColumnVisibility } from '../../hooks/useColumnVisibility';
+import { getSyncManager } from '../../utils/windowSync';
 
 export interface TableColumn<T> {
   id: string;
@@ -49,10 +50,31 @@ function EnhancedTableComponent<T>({
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
   const [showColumnPopover, setShowColumnPopover] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0);
   const columnButtonRef = useRef<HTMLButtonElement>(null);
 
   // Column visibility
   const { visibleColumns, isVisible } = useColumnVisibility(tableId || 'default');
+
+  // Listen for column visibility changes from other windows
+  useEffect(() => {
+    if (!tableId) return;
+
+    const syncManager = getSyncManager();
+
+    const unsubscribe = syncManager.subscribe('COLUMN_CHANGE', (message) => {
+      // Only respond to messages for this table
+      if (message.tableId === tableId) {
+        console.log(`[EnhancedTable] Received column change for ${tableId}`);
+        // Force re-render to pick up new column visibility
+        setForceUpdate(prev => prev + 1);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [tableId]);
 
   // Filter columns based on visibility (only if tableId is provided)
   const filteredColumns = useMemo(() => {
@@ -60,7 +82,7 @@ function EnhancedTableComponent<T>({
       return columns;
     }
     return columns.filter(col => isVisible(col.id));
-  }, [columns, tableId, visibleColumns, isVisible]);
+  }, [columns, tableId, visibleColumns, isVisible, forceUpdate]);
 
   // Convert columns to column definitions for the popover
   const columnDefinitions: ColumnDefinition[] = useMemo(() => {
