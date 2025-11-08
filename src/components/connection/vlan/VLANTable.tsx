@@ -120,7 +120,7 @@ export function VLANTable({
       pageSize={50}
       showPagination={filteredVLANs.length > 50}
       stickyHeader={false}
-      showExport={true}
+      showExport={false}
       exportFilename="vlans-export.csv"
       tableId="vlans"
       showColumnManager={true}
