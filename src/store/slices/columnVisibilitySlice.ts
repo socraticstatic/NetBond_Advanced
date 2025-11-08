@@ -69,28 +69,42 @@ function getDefaultColumns(tableId: string): string[] {
 export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = (set, get) => {
   // Listen for storage changes from other windows
   if (typeof window !== 'undefined') {
-    window.addEventListener('storage', (event) => {
+    const handleStorageChange = (event: StorageEvent) => {
+      console.log('[ColumnVisibility] Storage event received:', {
+        key: event.key,
+        newValue: event.newValue,
+        oldValue: event.oldValue,
+        url: event.url
+      });
+
       if (event.key && event.key.startsWith(STORAGE_KEY_PREFIX)) {
         const tableId = event.key.substring(STORAGE_KEY_PREFIX.length);
 
         if (event.newValue) {
           try {
             const columns = JSON.parse(event.newValue);
-            console.log(`[ColumnVisibility] Storage event detected for ${tableId}:`, columns);
+            console.log(`[ColumnVisibility] Updating columnConfig for ${tableId}:`, columns);
 
             // Update the store with new column config
-            set((state) => ({
-              columnConfig: {
-                ...state.columnConfig,
-                [tableId]: columns
-              }
-            }));
+            set((state) => {
+              const newState = {
+                columnConfig: {
+                  ...state.columnConfig,
+                  [tableId]: columns
+                }
+              };
+              console.log('[ColumnVisibility] New state:', newState);
+              return newState;
+            });
           } catch (error) {
             console.error('[ColumnVisibility] Failed to parse storage event:', error);
           }
         }
       }
-    });
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    console.log('[ColumnVisibility] Storage event listener registered');
   }
 
   return {
