@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, Suspense, lazy, memo } from 'react';
 import { DashboardLayout } from './components/common/layouts';
 import { SubNav } from './components/navigation/SubNav';
@@ -124,12 +124,16 @@ const LoadingFallback = memo(() => (
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   const connections = useStore(state => state.connections);
   const groups = useStore(state => state.groups);
   const [activeTab, setActiveTab] = useState<'connections' | 'marketplace' | 'groups' | 'control-center'>('connections');
   const [isInitializing, setIsInitializing] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const tour = useTour('main-app');
+
+  // Check if current route is a detached window
+  const isDetachedWindow = location.pathname.startsWith('/detached/');
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -397,20 +401,24 @@ function App() {
           </Routes>
         </ErrorBoundary>
         
-        <MobileMenu
-          isOpen={false}
-          onClose={() => {}}
-          userInfo={userInfo}
-          notifications={3}
-        />
-        <SmartAssistant />
-        <ProductTour
-          steps={mainAppTour}
-          isOpen={tour.isOpen}
-          onClose={tour.closeTour}
-          onComplete={tour.completeTour}
-          storageKey="tour-main-app-completed"
-        />
+        {!isDetachedWindow && (
+          <>
+            <MobileMenu
+              isOpen={false}
+              onClose={() => {}}
+              userInfo={userInfo}
+              notifications={3}
+            />
+            <SmartAssistant />
+            <ProductTour
+              steps={mainAppTour}
+              isOpen={tour.isOpen}
+              onClose={tour.closeTour}
+              onComplete={tour.completeTour}
+              storageKey="tour-main-app-completed"
+            />
+          </>
+        )}
       </ThemeProvider>
     </NavigationStateProvider>
   );

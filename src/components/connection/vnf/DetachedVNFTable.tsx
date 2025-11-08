@@ -14,8 +14,76 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
   const { windowId, connectionId: routeConnectionId } = useParams<{ windowId: string; connectionId: string }>();
   const connectionId = initialConnectionId || routeConnectionId;
 
-  const [vnfs, setVnfs] = useState<VNF[]>([]);
-  const [cloudRouters, setCloudRouters] = useState<CloudRouter[]>([]);
+  // Initialize with mock data for immediate display
+  const [vnfs, setVnfs] = useState<VNF[]>([
+    {
+      id: 'vnf-1',
+      name: 'Edge Firewall',
+      type: 'firewall',
+      vendor: 'Palo Alto Networks',
+      model: 'VM-Series',
+      version: '10.2.3',
+      status: 'active',
+      throughput: '5 Gbps',
+      licenseExpiry: '2025-06-30T00:00:00Z',
+      configuration: {
+        interfaces: [
+          { id: 'if-1', name: 'WAN1', type: 'wan', ipAddress: '203.0.113.10', subnetMask: '255.255.255.0', status: 'up' },
+          { id: 'if-2', name: 'LAN1', type: 'lan', ipAddress: '10.0.0.1', subnetMask: '255.255.255.0', status: 'up' }
+        ],
+        routingProtocols: ['BGP', 'OSPF'],
+        highAvailability: true,
+        managementIP: '192.168.1.10'
+      },
+      createdAt: '2024-01-10T12:00:00Z',
+      updatedAt: '2024-03-15T09:30:00Z',
+      description: 'Primary edge firewall for cloud connectivity',
+      connectionId: connectionId || ''
+    },
+    {
+      id: 'vnf-2',
+      name: 'Branch SD-WAN',
+      type: 'sdwan',
+      vendor: 'Versa Networks',
+      model: 'FlexVNF',
+      version: '21.1.2',
+      status: 'active',
+      throughput: '2 Gbps',
+      configuration: {
+        interfaces: [
+          { id: 'if-1', name: 'WAN1', type: 'wan', ipAddress: '203.0.113.20', subnetMask: '255.255.255.0', status: 'up' },
+          { id: 'if-2', name: 'WAN2', type: 'wan', ipAddress: '198.51.100.20', subnetMask: '255.255.255.0', status: 'up' }
+        ],
+        routingProtocols: ['BGP'],
+        highAvailability: false,
+        managementIP: '192.168.1.20'
+      },
+      createdAt: '2024-01-15T14:30:00Z',
+      updatedAt: '2024-02-20T10:15:00Z',
+      description: 'SD-WAN for branch office connectivity',
+      connectionId: connectionId || ''
+    }
+  ]);
+
+  const [cloudRouters, setCloudRouters] = useState<CloudRouter[]>([
+    {
+      id: 'cr-1',
+      name: 'Primary Cloud Router',
+      description: 'Main cloud router for US-East region',
+      status: 'active',
+      location: 'US-East',
+      links: [],
+      policies: {
+        routingPolicy: 'default',
+        securityPolicy: 'standard',
+        qosPolicy: 'standard'
+      },
+      connectionId: connectionId || '',
+      createdAt: '2024-01-10T00:00:00Z',
+      updatedAt: '2024-03-15T00:00:00Z'
+    }
+  ]);
+
   const [editingVNF, setEditingVNF] = useState<VNF | undefined>();
   const [deletingVNF, setDeletingVNF] = useState<VNF | undefined>();
   const [showAddVNFModal, setShowAddVNFModal] = useState(false);
