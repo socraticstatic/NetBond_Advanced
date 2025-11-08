@@ -68,23 +68,9 @@ export function BaseTable<T>({
   return (
     <>
       {/* Table Header */}
-      {(title || (showColumnManager && tableId)) && (
+      {title && (
         <div className="flex justify-between items-center mb-4">
-          {title && <h3 className="text-lg font-medium text-fw-heading">{title}</h3>}
-          {showColumnManager && tableId && (
-            <button
-              ref={columnButtonRef}
-              onClick={() => setShowColumnPopover(!showColumnPopover)}
-              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-md hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
-              title="Manage columns"
-            >
-              <Settings className="h-4 w-4 mr-2" />
-              Columns
-              <span className="ml-2 px-2 py-0.5 text-xs bg-brand-lightBlue text-brand-blue rounded-full">
-                {filteredColumns.length}/{columns.length}
-              </span>
-            </button>
-          )}
+          <h3 className="text-lg font-medium text-fw-heading">{title}</h3>
         </div>
       )}
 
@@ -122,14 +108,14 @@ export function BaseTable<T>({
                               column.sortKey === sortField && sortDirection === 'asc'
                                 ? 'text-fw-body'
                                 : 'text-fw-bodyLight group-hover:text-fw-body'
-                            }`} 
+                            }`}
                           />
                           <ChevronDown
                             className={`h-3 w-3 -mt-1 ${
                               column.sortKey === sortField && sortDirection === 'desc'
                                 ? 'text-fw-body'
                                 : 'text-fw-bodyLight group-hover:text-fw-body'
-                            }`} 
+                            }`}
                           />
                         </span>
                       </button>
@@ -138,11 +124,24 @@ export function BaseTable<T>({
                     )}
                   </div>
                 ))}
-                {actions && (
-                  <div scope="col" className="table-cell relative px-6 py-3 w-px">
-                    <span className="sr-only">Actions</span>
-                  </div>
-                )}
+                <div scope="col" className="table-cell relative px-6 py-3 w-16">
+                  {showColumnManager && tableId ? (
+                    <div className="flex justify-end">
+                      <button
+                        ref={columnButtonRef}
+                        onClick={() => setShowColumnPopover(!showColumnPopover)}
+                        className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+                        title="Manage Columns"
+                        aria-label="Manage table columns"
+                      >
+                        <Settings className="h-5 w-5" />
+                        <span className="sr-only">{filteredColumns.length}/{columns.length} visible</span>
+                      </button>
+                    </div>
+                  ) : (
+                    actions && <span className="sr-only">Actions</span>
+                  )}
+                </div>
               </div>
             </div>
             <div className="table-row-group bg-fw-base divide-y divide-fw-secondary">
