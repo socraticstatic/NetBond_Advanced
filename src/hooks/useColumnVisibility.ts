@@ -5,6 +5,9 @@ import { useStore } from '../store/useStore';
  * Hook for managing column visibility for a specific table
  */
 export function useColumnVisibility(tableId: string) {
+  // Subscribe to the columnConfig state directly so we react to changes
+  const columnConfig = useStore((state) => state.columnConfig);
+
   const {
     getVisibleColumns,
     setVisibleColumns,
@@ -15,10 +18,10 @@ export function useColumnVisibility(tableId: string) {
     isColumnVisible
   } = useStore();
 
-  // Get visible columns for this table
+  // Get visible columns for this table - recalculate when columnConfig changes
   const visibleColumns = useMemo(
     () => getVisibleColumns(tableId),
-    [getVisibleColumns, tableId]
+    [getVisibleColumns, tableId, columnConfig]
   );
 
   // Toggle a column
@@ -55,7 +58,7 @@ export function useColumnVisibility(tableId: string) {
     (columnId: string) => {
       return isColumnVisible(tableId, columnId);
     },
-    [isColumnVisible, tableId]
+    [isColumnVisible, tableId, columnConfig]
   );
 
   // Set visible columns directly
