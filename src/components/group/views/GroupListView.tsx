@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react';
-import { ChevronDown, ChevronUp, Activity, Network, Users, Settings as SettingsIcon, CreditCard, MoreVertical, X } from 'lucide-react';
+import { useState } from 'react';
+import { Activity, Network, Users, Settings, CreditCard, X } from 'lucide-react';
 import { Group } from '../../../types/group';
 import { BaseTable } from '../../common/BaseTable';
 import { OverflowMenu } from '../../common/OverflowMenu';
-import { ColumnVisibilityPopover, ColumnDefinition } from '../../common/ColumnVisibilityPopover';
+import { ColumnDefinition } from '../../common/ColumnVisibilityPopover';
 import { useColumnVisibility } from '../../../hooks/useColumnVisibility';
 
 const TABLE_ID = 'groups-list';
@@ -27,11 +27,9 @@ interface GroupListViewProps {
 }
 
 export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps) {
-  const { visibleColumns, isVisible } = useColumnVisibility(TABLE_ID);
+  const { isVisible } = useColumnVisibility(TABLE_ID);
   const [sortField, setSortField] = useState<keyof Group>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [showColumnPopover, setShowColumnPopover] = useState(false);
-  const columnButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleSort = (field: keyof Group) => {
     if (sortField === field) {
@@ -157,28 +155,6 @@ export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps
 
   return (
     <div className="relative">
-      {/* Column Visibility Button */}
-      <div className="absolute top-0 right-0 z-10 mb-2">
-        <button
-          ref={columnButtonRef}
-          onClick={() => setShowColumnPopover(true)}
-          className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
-          title="Manage Columns"
-          aria-label="Manage table columns"
-        >
-          <SettingsIcon className="h-5 w-5" />
-          <span className="sr-only">{visibleColumns.length}/{ALL_COLUMNS.length} visible</span>
-        </button>
-        {showColumnPopover && (
-          <ColumnVisibilityPopover
-            tableId={TABLE_ID}
-            allColumns={ALL_COLUMNS}
-            onClose={() => setShowColumnPopover(false)}
-            anchorEl={columnButtonRef.current}
-          />
-        )}
-      </div>
-
       {/* Table */}
       <BaseTable
         columns={displayColumns.map(col => ({

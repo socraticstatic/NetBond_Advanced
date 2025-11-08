@@ -163,22 +163,8 @@ function EnhancedTableComponent<T>({
 
   return (
     <div className="flex flex-col">
-      {(showExport || (showColumnManager && tableId)) && data.length > 0 && (
+      {showExport && data.length > 0 && (
         <div className="flex justify-end items-center gap-2 mb-3">
-          {showColumnManager && tableId && (
-            <button
-              ref={columnButtonRef}
-              onClick={() => setShowColumnPopover(!showColumnPopover)}
-              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-md hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
-              title="Manage columns"
-            >
-              <Settings className="h-4 w-4 mr-2" />
-              Columns
-              <span className="ml-2 px-2 py-0.5 text-xs bg-brand-lightBlue text-brand-blue rounded-full">
-                {filteredColumns.length}/{columns.length}
-              </span>
-            </button>
-          )}
           {showExport && (
             <button
               onClick={handleExport}
@@ -224,11 +210,24 @@ function EnhancedTableComponent<T>({
                   </div>
                 </th>
               ))}
-              {rowActions && (
-                <th scope="col" className="relative px-6 py-3 w-20">
-                  <span className="sr-only">Actions</span>
-                </th>
-              )}
+              <th scope="col" className="relative px-6 py-3 w-16">
+                {showColumnManager && tableId ? (
+                  <div className="flex justify-end">
+                    <button
+                      ref={columnButtonRef}
+                      onClick={() => setShowColumnPopover(!showColumnPopover)}
+                      className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+                      title="Manage Columns"
+                      aria-label="Manage table columns"
+                    >
+                      <Settings className="h-5 w-5" />
+                      <span className="sr-only">{filteredColumns.length}/{columns.length} visible</span>
+                    </button>
+                  </div>
+                ) : (
+                  rowActions && <span className="sr-only">Actions</span>
+                )}
+              </th>
             </tr>
           </thead>
           <tbody className="bg-fw-base divide-y divide-fw-secondary">
