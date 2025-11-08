@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe, Link2 } from 'lucide-react';
+import { User, Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe, Link2, Type } from 'lucide-react';
 import { Button } from '../common/Button';
+import { useStore } from '../../store/useStore';
+import { FONT_SIZES } from '../../store/slices/fontSizeSlice';
 
 export function UserProfile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80');
+
+  // Font size from store
+  const { fontSize, setFontSize } = useStore();
 
   const [formData, setFormData] = useState({
     name: 'Emilio Estevez',
@@ -351,6 +356,126 @@ export function UserProfile() {
                 </select>
                 <p className="mt-1 text-xs text-fw-bodyLight">
                   How often monitoring data should be refreshed automatically
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Font Size Settings */}
+        <div className="px-6 py-6 border-t border-fw-secondary">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-lg font-medium text-fw-heading">Font Size</h2>
+              <p className="text-sm text-fw-bodyLight mt-1">Adjust text size for better readability</p>
+            </div>
+            <div className="flex items-center space-x-2 text-sm text-fw-bodyLight">
+              <Type className="h-4 w-4" />
+              <span>Currently: {fontSize}%</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Small */}
+            <div
+              onClick={() => setFontSize(FONT_SIZES.SMALL)}
+              className={`
+                relative flex flex-col items-center p-6 rounded-lg border-2 cursor-pointer transition-all
+                ${fontSize === FONT_SIZES.SMALL
+                  ? 'border-brand-blue bg-brand-lightBlue shadow-md'
+                  : 'border-fw-secondary hover:border-brand-blue/30 hover:bg-brand-lightBlue/20'
+                }
+              `}
+            >
+              <Type className={`h-6 w-6 mb-3 ${fontSize === FONT_SIZES.SMALL ? 'text-brand-blue' : 'text-gray-400'}`} />
+              <p className={`text-sm font-medium ${fontSize === FONT_SIZES.SMALL ? 'text-brand-blue' : 'text-fw-heading'}`}>
+                Small
+              </p>
+              <p className="text-xs text-fw-bodyLight mt-1">87.5% (14px)</p>
+              {fontSize === FONT_SIZES.SMALL && (
+                <div className="absolute top-3 right-3">
+                  <CheckCircle className="h-5 w-5 text-brand-blue" />
+                </div>
+              )}
+            </div>
+
+            {/* Normal */}
+            <div
+              onClick={() => setFontSize(FONT_SIZES.NORMAL)}
+              className={`
+                relative flex flex-col items-center p-6 rounded-lg border-2 cursor-pointer transition-all
+                ${fontSize === FONT_SIZES.NORMAL
+                  ? 'border-brand-blue bg-brand-lightBlue shadow-md'
+                  : 'border-fw-secondary hover:border-brand-blue/30 hover:bg-brand-lightBlue/20'
+                }
+              `}
+            >
+              <Type className={`h-7 w-7 mb-3 ${fontSize === FONT_SIZES.NORMAL ? 'text-brand-blue' : 'text-gray-400'}`} />
+              <p className={`text-sm font-medium ${fontSize === FONT_SIZES.NORMAL ? 'text-brand-blue' : 'text-fw-heading'}`}>
+                Normal
+              </p>
+              <p className="text-xs text-fw-bodyLight mt-1">100% (16px)</p>
+              {fontSize === FONT_SIZES.NORMAL && (
+                <div className="absolute top-3 right-3">
+                  <CheckCircle className="h-5 w-5 text-brand-blue" />
+                </div>
+              )}
+            </div>
+
+            {/* Large */}
+            <div
+              onClick={() => setFontSize(FONT_SIZES.LARGE)}
+              className={`
+                relative flex flex-col items-center p-6 rounded-lg border-2 cursor-pointer transition-all
+                ${fontSize === FONT_SIZES.LARGE
+                  ? 'border-brand-blue bg-brand-lightBlue shadow-md'
+                  : 'border-fw-secondary hover:border-brand-blue/30 hover:bg-brand-lightBlue/20'
+                }
+              `}
+            >
+              <Type className={`h-8 w-8 mb-3 ${fontSize === FONT_SIZES.LARGE ? 'text-brand-blue' : 'text-gray-400'}`} />
+              <p className={`text-sm font-medium ${fontSize === FONT_SIZES.LARGE ? 'text-brand-blue' : 'text-fw-heading'}`}>
+                Large
+              </p>
+              <p className="text-xs text-fw-bodyLight mt-1">112.5% (18px)</p>
+              {fontSize === FONT_SIZES.LARGE && (
+                <div className="absolute top-3 right-3">
+                  <CheckCircle className="h-5 w-5 text-brand-blue" />
+                </div>
+              )}
+            </div>
+
+            {/* Extra Large */}
+            <div
+              onClick={() => setFontSize(FONT_SIZES.EXTRA_LARGE)}
+              className={`
+                relative flex flex-col items-center p-6 rounded-lg border-2 cursor-pointer transition-all
+                ${fontSize === FONT_SIZES.EXTRA_LARGE
+                  ? 'border-brand-blue bg-brand-lightBlue shadow-md'
+                  : 'border-fw-secondary hover:border-brand-blue/30 hover:bg-brand-lightBlue/20'
+                }
+              `}
+            >
+              <Type className={`h-9 w-9 mb-3 ${fontSize === FONT_SIZES.EXTRA_LARGE ? 'text-brand-blue' : 'text-gray-400'}`} />
+              <p className={`text-sm font-medium ${fontSize === FONT_SIZES.EXTRA_LARGE ? 'text-brand-blue' : 'text-fw-heading'}`}>
+                Extra Large
+              </p>
+              <p className="text-xs text-fw-bodyLight mt-1">125% (20px)</p>
+              {fontSize === FONT_SIZES.EXTRA_LARGE && (
+                <div className="absolute top-3 right-3">
+                  <CheckCircle className="h-5 w-5 text-brand-blue" />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-4 p-4 bg-brand-lightBlue/30 rounded-lg border border-brand-blue/20">
+            <div className="flex items-start space-x-3">
+              <Type className="h-5 w-5 text-brand-blue mt-0.5" />
+              <div>
+                <p className="text-sm text-fw-heading font-medium">Accessibility Feature</p>
+                <p className="text-xs text-fw-bodyLight mt-1">
+                  Font size preference is saved and will apply across all pages. Changes sync automatically across all open tabs.
                 </p>
               </div>
             </div>
