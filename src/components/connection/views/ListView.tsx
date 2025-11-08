@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronUp, Activity, Network, Globe, Group as GroupIcon } from 'lucide-react';
-import type { Connection, ColumnConfig } from '../../../types';
+import { ChevronDown, ChevronUp, Activity, Network, Globe, Group as GroupIcon, Settings } from 'lucide-react';
+import type { Connection } from '../../../types';
 import type { Group } from '../../../types/group';
 import { ConnectionOverflowMenu } from '../ConnectionOverflowMenu';
-import { ColumnSelector } from '../ColumnSelector';
+import { ColumnVisibilityPopover, ColumnDefinition } from '../../common/ColumnVisibilityPopover';
+import { useColumnVisibility } from '../../../hooks/useColumnVisibility';
 import { useStore } from '../../../store/useStore';
 import { getGroupsForConnection } from '../../../utils/groups';
 
@@ -13,24 +14,29 @@ interface ListViewProps {
   groups: Group[];
 }
 
-const DEFAULT_COLUMNS: ColumnConfig[] = [
-  { id: 'name', label: 'Name', visible: true, sortable: true, width: '20%' },
-  { id: 'groups', label: 'Groups', visible: true, sortable: false, width: '15%' },
-  { id: 'type', label: 'Type', visible: true, sortable: true, width: '15%' },
-  { id: 'status', label: 'Status', visible: true, sortable: true, width: '10%' },
-  { id: 'performance', label: 'Performance', visible: false, width: '15%' }, // Default to hidden
-  { id: 'bandwidth', label: 'Bandwidth', visible: true, sortable: true, width: '10%' },
-  { id: 'location', label: 'Location', visible: true, sortable: true, width: '10%' },
-  { id: 'provider', label: 'Provider', visible: true, sortable: true, width: '10%' } // New column
+const TABLE_ID = 'connections-list';
+
+const ALL_COLUMNS: ColumnDefinition[] = [
+  { id: 'name', label: 'Name' },
+  { id: 'groups', label: 'Groups' },
+  { id: 'type', label: 'Type' },
+  { id: 'status', label: 'Status' },
+  { id: 'performance', label: 'Performance' },
+  { id: 'bandwidth', label: 'Bandwidth' },
+  { id: 'location', label: 'Location' },
+  { id: 'provider', label: 'Provider' }
 ];
+
+const SORTABLE_COLUMNS = ['name', 'type', 'status', 'bandwidth', 'location', 'provider'];
 
 export function ListView({ connections, groups }: ListViewProps) {
   const navigate = useNavigate();
-  const [columns, setColumns] = useState<ColumnConfig[]>(DEFAULT_COLUMNS);
+  const { visibleColumns, isVisible } = useColumnVisibility(TABLE_ID);
   const [sortField, setSortField] = useState<keyof Connection>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [activeOverflowMenu, setActiveOverflowMenu] = useState<string | null>(null);
-  const [columnSelectorOpen, setColumnSelectorOpen] = useState(false);
+  const [showColumnPopover, setShowColumnPopover] = useState(false);
+  const columnButtonRef = useRef<HTMLButtonElement>(null);
   const removeConnection = useStore(state => state.removeConnection);
 
   const handleSort = (field: keyof Connection) => {
@@ -60,36 +66,38 @@ export function ListView({ connections, groups }: ListViewProps) {
     return aValue < bValue ? -1 * modifier : aValue > bValue ? 1 * modifier : 0;
   });
 
-  const renderColumnHeader = (column: ColumnConfig) => {
-    if (!column.sortable) {
-      return <span>{column.label}</span>;
+  const renderColumnHeader = (columnId: string, columnLabel: string) => {
+    const isSortable = SORTABLE_COLUMNS.includes(columnId);
+
+    if (!isSortable) {
+      return <span>{columnLabel}</span>;
     }
 
-    const isSorted = sortField === column.id;
-    const buttonId = `sort-${column.id}`;
+    const isSorted = sortField === columnId;
+    const buttonId = `sort-${columnId}`;
 
     return (
       <button
         id={buttonId}
-        onClick={() => handleSort(column.id as keyof Connection)}
+        onClick={() => handleSort(columnId as keyof Connection)}
         className="group inline-flex items-center space-x-1 text-left"
         aria-sort={isSorted ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'}
       >
-        <span>{column.label}</span>
+        <span>{columnLabel}</span>
         <span className="flex flex-col">
-          <ChevronUp 
+          <ChevronUp
             className={`h-3 w-3 ${
-              isSorted && sortDirection === 'asc' 
-                ? 'text-gray-700' 
+              isSorted && sortDirection === 'asc'
+                ? 'text-gray-700'
                 : 'text-gray-400 group-hover:text-gray-500'
-            }`} 
+            }`}
           />
-          <ChevronDown 
+          <ChevronDown
             className={`h-3 w-3 -mt-1 ${
-              isSorted && sortDirection === 'desc' 
-                ? 'text-gray-700' 
+              isSorted && sortDirection === 'desc'
+                ? 'text-gray-700'
                 : 'text-gray-400 group-hover:text-gray-500'
-            }`} 
+            }`}
           />
         </span>
       </button>
@@ -172,8 +180,8 @@ export function ListView({ connections, groups }: ListViewProps) {
     }
   };
 
-  // Get visible columns
-  const visibleColumns = columns.filter(col => col.visible);
+  // Filter columns based on visibility
+  const displayColumns = ALL_COLUMNS.filter(col => isVisible(col.id));
 
   return (
     <div className="overflow-hidden">
@@ -184,29 +192,41 @@ export function ListView({ connections, groups }: ListViewProps) {
         </caption>
         <thead className="bg-gray-50">
           <tr>
-            {visibleColumns.map((column) => (
+            {displayColumns.map((column) => (
               <th
                 key={column.id}
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap overflow-hidden text-ellipsis"
-                style={{ width: column.width }}
                 role="columnheader"
                 aria-sort={sortField === column.id ? sortDirection : 'none'}
               >
-                {renderColumnHeader(column)}
+                {renderColumnHeader(column.id, column.label)}
               </th>
             ))}
-            <th 
-              scope="col" 
+            <th
+              scope="col"
               className="relative px-6 py-3 w-16"
               role="columnheader"
             >
               <div className="flex justify-end">
-                <ColumnSelector 
-                  columns={columns} 
-                  onChange={setColumns}
-                  onOpenChange={setColumnSelectorOpen}
-                />
+                <button
+                  ref={columnButtonRef}
+                  onClick={() => setShowColumnPopover(true)}
+                  className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+                  title="Manage Columns"
+                  aria-label="Manage table columns"
+                >
+                  <Settings className="h-5 w-5" />
+                  <span className="sr-only">{visibleColumns.length}/{ALL_COLUMNS.length} visible</span>
+                </button>
+                {showColumnPopover && (
+                  <ColumnVisibilityPopover
+                    tableId={TABLE_ID}
+                    allColumns={ALL_COLUMNS}
+                    onClose={() => setShowColumnPopover(false)}
+                    anchorEl={columnButtonRef.current}
+                  />
+                )}
               </div>
               <span className="sr-only">Actions</span>
             </th>
@@ -215,8 +235,8 @@ export function ListView({ connections, groups }: ListViewProps) {
         <tbody className="bg-white divide-y divide-gray-200">
           {sortedConnections.length === 0 ? (
             <tr>
-              <td 
-                colSpan={visibleColumns.length + 1}
+              <td
+                colSpan={displayColumns.length + 1}
                 className="px-6 py-4 text-center text-sm text-gray-500"
               >
                 No connections found
@@ -231,11 +251,10 @@ export function ListView({ connections, groups }: ListViewProps) {
                 role="row"
                 aria-rowindex={rowIndex + 1}
               >
-                {visibleColumns.map((column) => (
-                  <td 
-                    key={column.id} 
+                {displayColumns.map((column) => (
+                  <td
+                    key={column.id}
                     className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis"
-                    style={{ width: column.width }}
                     role="gridcell"
                   >
                     {renderColumnContent(connection, column.id)}
@@ -254,7 +273,7 @@ export function ListView({ connections, groups }: ListViewProps) {
                       onDelete={() => handleDelete(connection.id.toString())}
                       isActive={activeOverflowMenu === connection.id.toString()}
                       onOpenChange={(isOpen) => {
-                        if (!columnSelectorOpen) {
+                        if (!showColumnPopover) {
                           setActiveOverflowMenu(isOpen ? connection.id.toString() : null);
                         }
                       }}
