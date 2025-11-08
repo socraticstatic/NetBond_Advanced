@@ -171,7 +171,7 @@ function EnhancedTableComponent<T>({
               className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-md hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
             >
               <Download className="h-4 w-4 mr-2" />
-              Export
+              Export CSV
             </button>
           )}
         </div>
