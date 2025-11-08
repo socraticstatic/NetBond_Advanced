@@ -167,11 +167,21 @@ function App() {
     <NavigationStateProvider>
       <ThemeProvider>
         <ErrorBoundary onReset={() => window.location.reload()}>
-          <DashboardLayout>
-            <ToastContainer />
-            <GlobalKeyboardShortcuts />
-            <main id="main-content" tabIndex={-1} className="min-h-screen">
-              <Routes>
+          <ToastContainer />
+          <GlobalKeyboardShortcuts />
+          <Routes>
+            {/* Detached windows - no layout wrapper */}
+            <Route path="/detached/vnf/:connectionId/:windowId" element={
+              <Suspense fallback={<LoadingFallback />}>
+                <LazyDetachedVNFTable />
+              </Suspense>
+            } />
+
+            {/* Main app routes - with layout wrapper */}
+            <Route path="*" element={
+              <DashboardLayout>
+                <main id="main-content" tabIndex={-1} className="min-h-screen">
+                  <Routes>
                 <Route path="/create" element={
                   isMobile ? (
                     <MobileDesktopOnly
@@ -364,12 +374,6 @@ function App() {
                   </Suspense>
                 } />
 
-                <Route path="/detached/vnf/:connectionId/:windowId" element={
-                  <Suspense fallback={<LoadingFallback />}>
-                    <LazyDetachedVNFTable />
-                  </Suspense>
-                } />
-
                 <Route path="/" element={<Navigate to="/manage" />} />
                 
                 <Route path="*" element={
@@ -386,9 +390,11 @@ function App() {
                     </div>
                   </div>
                 } />
-              </Routes>
-            </main>
-          </DashboardLayout>
+                  </Routes>
+                </main>
+              </DashboardLayout>
+            } />
+          </Routes>
         </ErrorBoundary>
         
         <MobileMenu

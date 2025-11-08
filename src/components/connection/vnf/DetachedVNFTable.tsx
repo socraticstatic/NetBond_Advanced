@@ -129,7 +129,7 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
   });
 
   return (
-    <div className="w-full h-screen flex flex-col bg-white overflow-hidden">
+    <div className="fixed inset-0 w-full h-full flex flex-col bg-white overflow-hidden m-0 p-0">
       {/* Search Bar - Fixed at top */}
       <div className="flex-shrink-0 px-6 py-4 border-b border-gray-200">
         <div className="relative">
