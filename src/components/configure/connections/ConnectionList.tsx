@@ -247,6 +247,8 @@ export function ConnectionList({
           columns={columns}
           data={filteredConnections}
           keyField="id"
+          tableId="configure-connections"
+          showColumnManager={true}
           onRowClick={(connection) => onSelect(connection.id.toString(), connection.name)}
           rowClassName={(connection) =>
             selectedConnection === connection.id.toString()

@@ -231,6 +231,8 @@ export function PartnersConfiguration() {
           columns={columns}
           data={partners}
           keyField="id"
+          tableId="partners"
+          showColumnManager={true}
           actions={(partner) => (
             <OverflowMenu
               items={[

@@ -195,6 +195,8 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
             ]}
             data={filteredConnections}
             keyField="id"
+            tableId="group-connections"
+            showColumnManager={true}
             onRowClick={(item) => window.location.href = `/connections/${item.id}`}
             actions={(item) => (
               <Button

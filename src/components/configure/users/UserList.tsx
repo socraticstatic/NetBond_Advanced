@@ -143,6 +143,8 @@ export function UserList({ searchQuery }: UserListProps) {
         columns={columns}
         data={filteredUsers}
         keyField="id"
+        tableId="users"
+        showColumnManager={true}
         actions={(user) => (
           <OverflowMenu
             items={[
