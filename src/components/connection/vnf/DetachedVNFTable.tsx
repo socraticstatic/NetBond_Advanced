@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Download } from 'lucide-react';
 import { VNFTable } from './VNFTable';
 import { VNF } from '../../../types/vnf';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { VNFModal } from '../modals/VNFModal';
 import { DeleteVNFModal } from '../modals/DeleteVNFModal';
+import { downloadCSV } from '../../../utils/downloadCSV';
 
 interface DetachedVNFTableProps {
   connectionId?: string;
@@ -359,42 +361,75 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
     );
   });
 
+  const handleExportCSV = () => {
+    const csvData = filteredVnfs.map(vnf => ({
+      Name: vnf.name,
+      Type: vnf.type,
+      Vendor: vnf.vendor || '',
+      Model: vnf.model || '',
+      Version: vnf.version || '',
+      Status: vnf.status,
+      Throughput: vnf.throughput || '',
+      'Cloud Router': cloudRouters.find(cr => cr.id === vnf.cloudRouterId)?.name || 'None',
+      Description: vnf.description || ''
+    }));
+
+    downloadCSV(csvData, 'vnf-export.csv');
+  };
+
   return (
     <div className="fixed inset-0 w-full h-full flex flex-col bg-white overflow-hidden m-0 p-0">
-      {/* Search Bar - Fixed at top */}
+      {/* Search Bar and Actions - Fixed at top */}
       <div className="flex-shrink-0 px-6 py-4 border-b border-gray-200">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search VNFs by name, vendor, type, or description..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-          <svg
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        <div className="flex items-center justify-between gap-4">
+          <div className="relative flex-1 max-w-md">
+            <input
+              type="text"
+              placeholder="Search VNFs by name, vendor, type, or description..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
-          </svg>
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              title="Clear search"
+            <svg
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                title="Clear search"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
+              Filters
             </button>
-          )}
+            <button
+              onClick={handleExportCSV}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export CSV
+            </button>
+          </div>
         </div>
       </div>
 
