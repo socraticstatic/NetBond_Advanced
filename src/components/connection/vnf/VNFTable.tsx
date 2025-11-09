@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Router as RouterIcon, Network, Settings, Shield, Globe, CreditCard as Edit2, Trash2, Eye } from 'lucide-react';
+import { Router as RouterIcon, Network, Settings, Shield, Globe, CreditCard as Edit2, Trash2, Eye, ExternalLink } from 'lucide-react';
 import { VNF } from '../../../types/vnf';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { CloudRouter } from '../../../types/cloudrouter';
@@ -10,13 +10,19 @@ interface VNFTableProps {
   cloudRouters: CloudRouter[];
   onEdit: (vnf: VNF) => void;
   onDelete: (vnf: VNF) => void;
+  connectionId?: string;
+  onDetach?: () => void;
+  isDetached?: boolean;
 }
 
 export function VNFTable({
   vnfs,
   cloudRouters,
   onEdit,
-  onDelete
+  onDelete,
+  connectionId,
+  onDetach,
+  isDetached = false
 }: VNFTableProps) {
   const [activeOverflow, setActiveOverflow] = useState<string | null>(null);
 
@@ -190,6 +196,19 @@ export function VNFTable({
       tableId="vnf"
       showColumnManager={true}
       showFilter={true}
+      headerActions={
+        onDetach && (
+          <button
+            onClick={onDetach}
+            disabled={isDetached}
+            className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title={isDetached ? 'Table Detached' : 'Detach Table'}
+            aria-label={isDetached ? 'Table Detached' : 'Detach Table'}
+          >
+            <ExternalLink className="h-5 w-5" />
+          </button>
+        )
+      }
       rowActions={(vnf) => (
         <OverflowMenu
           items={[

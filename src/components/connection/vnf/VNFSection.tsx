@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Shield, ExternalLink } from 'lucide-react';
+import { Plus, Shield } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { VNF, VNFType } from '../../../types/vnf';
 import { VNFTable } from './VNFTable';
@@ -76,15 +76,6 @@ export function VNFSection({
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            icon={<ExternalLink className="h-4 w-4" />}
-            onClick={handleDetach}
-            disabled={isDetached}
-          >
-            {isDetached ? 'Table Detached' : 'Detach Table'}
-          </Button>
           <Button
             variant="primary"
             size="sm"
@@ -237,6 +228,9 @@ export function VNFSection({
             cloudRouters={cloudRouters}
             onEdit={onEdit}
             onDelete={onDelete}
+            connectionId={connectionId}
+            onDetach={handleDetach}
+            isDetached={isDetached}
           />
         )}
       </div>
