@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import './styles/fonts.css';
@@ -17,22 +17,11 @@ if (!rootElement) {
   try {
     const root = createRoot(rootElement);
 
-    // Use basename for GitHub Pages deployment
-    const basename = import.meta.env.PROD ? '/att-netbond-sdci' : '';
-
-    // Handle GitHub Pages SPA redirect
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirect = urlParams.get('redirect');
-    if (redirect) {
-      // Remove the redirect parameter and navigate to the actual path
-      const newUrl = window.location.pathname + redirect;
-      window.history.replaceState(null, '', newUrl);
-    }
-
+    // Use HashRouter for file:// protocol compatibility (flash drive usage)
     root.render(
-      <BrowserRouter basename={basename}>
+      <HashRouter>
         <App />
-      </BrowserRouter>
+      </HashRouter>
     );
     
     // Initialize intelligent preloading after initial render
