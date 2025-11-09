@@ -173,7 +173,10 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
             <div className="hidden lg:ml-8 lg:flex lg:space-x-8 lg:items-center lg:h-full">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = location.pathname.startsWith(item.href);
+                // Special handling: /groups routes should be considered part of /manage
+                const isActive = item.href === '/manage'
+                  ? (location.pathname.startsWith('/manage') || location.pathname.startsWith('/groups'))
+                  : location.pathname.startsWith(item.href);
 
                 return (
                   <Link
