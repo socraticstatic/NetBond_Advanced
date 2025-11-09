@@ -195,7 +195,7 @@ function EnhancedTableComponent<T>({
                 <th
                   key={column.id}
                   scope="col"
-                  className={`px-3 py-2 text-left text-xs font-medium text-fw-bodyLight uppercase tracking-wider ${
+                  className={`px-3 py-2 text-left text-xs font-medium text-fw-bodyLight tracking-wider ${
                     column.sortable ? 'cursor-pointer select-none hover:bg-fw-neutral' : ''
                   }`}
                   onClick={() => handleSort(column)}

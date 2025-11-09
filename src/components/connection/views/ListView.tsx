@@ -18,7 +18,7 @@ const TABLE_ID = 'connections-list';
 
 const ALL_COLUMNS: ColumnDefinition[] = [
   { id: 'name', label: 'Name' },
-  { id: 'groups', label: 'Groups' },
+  { id: 'groups', label: 'Pools' },
   { id: 'type', label: 'Type' },
   { id: 'status', label: 'Status' },
   { id: 'performance', label: 'Performance' },
@@ -196,7 +196,7 @@ export function ListView({ connections, groups }: ListViewProps) {
               <th
                 key={column.id}
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap overflow-hidden text-ellipsis"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider whitespace-nowrap overflow-hidden text-ellipsis"
                 role="columnheader"
                 aria-sort={sortField === column.id ? sortDirection : 'none'}
               >
