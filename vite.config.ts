@@ -5,7 +5,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
   ],
-  base: mode === 'production' ? '/att-netbond-sdci/' : '/',
+  base: './',
   build: {
     target: 'esnext',
     minify: 'esbuild',
