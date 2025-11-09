@@ -28,6 +28,7 @@ interface EnhancedTableProps<T> {
   showExport?: boolean;
   tableId?: string;
   showColumnManager?: boolean;
+  headerActions?: ReactNode;
 }
 
 function EnhancedTableComponent<T>({
@@ -44,6 +45,7 @@ function EnhancedTableComponent<T>({
   showExport = true,
   tableId,
   showColumnManager = true,
+  headerActions,
 }: EnhancedTableProps<T>) {
   const [sortField, setSortField] = useState<keyof T | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -220,18 +222,21 @@ function EnhancedTableComponent<T>({
                 </th>
               ))}
               <th scope="col" className="relative px-6 py-3 w-16">
-                {showColumnManager && tableId ? (
-                  <div className="flex justify-end">
-                    <button
-                      ref={columnButtonRef}
-                      onClick={() => setShowColumnPopover(!showColumnPopover)}
-                      className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
-                      title="Manage Columns"
-                      aria-label="Manage table columns"
-                    >
-                      <Settings className="h-5 w-5" />
-                      <span className="sr-only">{filteredColumns.length}/{columns.length} visible</span>
-                    </button>
+                {(showColumnManager && tableId) || headerActions ? (
+                  <div className="flex items-center justify-end gap-1">
+                    {headerActions}
+                    {showColumnManager && tableId && (
+                      <button
+                        ref={columnButtonRef}
+                        onClick={() => setShowColumnPopover(!showColumnPopover)}
+                        className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+                        title="Manage Columns"
+                        aria-label="Manage table columns"
+                      >
+                        <Settings className="h-5 w-5" />
+                        <span className="sr-only">{filteredColumns.length}/{columns.length} visible</span>
+                      </button>
+                    )}
                   </div>
                 ) : (
                   rowActions && <span className="sr-only">Actions</span>
