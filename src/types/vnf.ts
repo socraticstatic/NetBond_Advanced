@@ -1,6 +1,14 @@
 import { DivideIcon as LucideIcon } from 'lucide-react';
 
-export type VNFType = 'firewall' | 'sdwan' | 'router' | 'vnat' | 'custom';
+export type VNFType =
+  | 'firewall'
+  | 'sdwan'
+  | 'router'
+  | 'vnat'
+  | 'load_balancer'
+  | 'ids_ips'
+  | 'wan_optimizer'
+  | 'custom';
 
 export interface VNF {
   id: string;
@@ -29,6 +37,7 @@ export interface VNF {
   icon?: typeof LucideIcon;
   description?: string;
   connectionId: string;
+  cloudRouterId?: string;
   linkIds: string[];
   performance?: {
     throughput: string;
@@ -41,6 +50,16 @@ export interface VNF {
     licenseUtilization: number;
     serviceSpecificMetrics: Record<string, number>;
   };
+}
+
+export interface VNFTypeInfo {
+  type: VNFType;
+  label: string;
+  description: string;
+  icon: string;
+  color: string;
+  defaultVendors: string[];
+  commonFeatures: string[];
 }
 
 export interface VNFInterface {
