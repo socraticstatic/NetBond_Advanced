@@ -28,9 +28,6 @@ export function EnhancedMetricsTab() {
 
   // Initialize and simulate real-time data
   useEffect(() => {
-    if (resourceType && resourceType !== 'all' && resourceType !== 'connection') {
-      return;
-    }
     const initialData = generateHourlyData().map(d => ({
       timestamp: new Date(d.timestamp),
       latency: d.latency,
