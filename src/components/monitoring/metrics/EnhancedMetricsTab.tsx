@@ -28,7 +28,7 @@ export function EnhancedMetricsTab() {
 
   if (resourceType === 'router') {
     return (
-      <Suspense fallback={<LoadingSpinner size="lg" text="Loading router metrics..." />}>
+      <Suspense fallback={<LoadingSpinner size="lg" text="Loading cloud router metrics..." />}>
         <RouterMetricsView />
       </Suspense>
     );

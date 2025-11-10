@@ -35,7 +35,7 @@ export function DashboardFilters({
   const resourceTypeConfig: Record<ResourceType, { icon: typeof Network; label: string; description: string }> = {
     connection: { icon: Network, label: 'Connections', description: 'View connection-level metrics' },
     pool: { icon: Box, label: 'Pools', description: 'View pool-aggregated metrics' },
-    router: { icon: Radio, label: 'Routers', description: 'View cloud router performance' },
+    router: { icon: Radio, label: 'Cloud Routers', description: 'View cloud router performance' },
     link: { icon: LinkIcon, label: 'Links', description: 'View link utilization and traffic' },
     vnf: { icon: Box, label: 'VNFs', description: 'View VNF throughput and sessions' }
   };
