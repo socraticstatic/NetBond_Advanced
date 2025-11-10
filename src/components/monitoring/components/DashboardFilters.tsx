@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { Button } from '../../common/Button';
 import { Group } from '../../../types';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Network, Radio, Link as LinkIcon, Box } from 'lucide-react';
 import { useMonitoring } from '../context/MonitoringContext';
+import { ResourceType } from '../../../types/metric';
 
 interface DashboardFiltersProps {
   connections: Array<{ id: string; name: string }>;
@@ -20,14 +21,24 @@ export function DashboardFilters({
   const {
     selectedConnection,
     selectedGroup,
+    resourceType,
     timeRange,
     isRefreshing,
     lastRefreshed,
     setSelectedConnection,
     setSelectedGroup,
+    setResourceType,
     setTimeRange,
     handleRefresh
   } = useMonitoring();
+
+  const resourceTypeConfig: Record<ResourceType, { icon: typeof Network; label: string; description: string }> = {
+    connection: { icon: Network, label: 'Connections', description: 'View connection-level metrics' },
+    pool: { icon: Box, label: 'Pools', description: 'View pool-aggregated metrics' },
+    router: { icon: Radio, label: 'Routers', description: 'View cloud router performance' },
+    link: { icon: LinkIcon, label: 'Links', description: 'View link utilization and traffic' },
+    vnf: { icon: Box, label: 'VNFs', description: 'View VNF throughput and sessions' }
+  };
 
   const formattedLastRefreshed = lastRefreshed 
     ? lastRefreshed.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) 
@@ -105,7 +116,43 @@ export function DashboardFilters({
 
   // Desktop version
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
+    <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
+      {/* Resource Type Selector */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          Resource Type
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {(Object.keys(resourceTypeConfig) as ResourceType[]).map((type) => {
+            const config = resourceTypeConfig[type];
+            const Icon = config.icon;
+            const isActive = resourceType === type;
+
+            return (
+              <button
+                key={type}
+                onClick={() => setResourceType(type)}
+                className={`
+                  flex items-center space-x-2 px-4 py-2.5 rounded-lg border-2 transition-all duration-200
+                  ${
+                    isActive
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'
+                  }
+                `}
+                title={config.description}
+              >
+                <Icon className="h-4 w-4" />
+                <span className="text-sm font-medium">{config.label}</span>
+              </button>
+            );
+          })}
+        </div>
+        <p className="mt-2 text-xs text-gray-500">
+          {resourceTypeConfig[resourceType].description}
+        </p>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
           <label htmlFor="connection-select" className="block text-sm font-medium text-gray-700 mb-2">

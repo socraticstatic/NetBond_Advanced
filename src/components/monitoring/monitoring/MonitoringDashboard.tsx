@@ -8,6 +8,7 @@ import { useStore } from '../../../store/useStore';
 import { MonitoringProvider } from '../context/MonitoringContext';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
 import { AsyncBoundary } from '../../common/AsyncBoundary';
+import { sampleRouters, sampleLinks, sampleVNFs } from '../../../data/sampleInfrastructure';
 
 // Lazy load tabs for better performance
 const OverviewTab = lazy(() => import('../tabs/OverviewTab').then(module => ({ default: module.OverviewTab })));
@@ -34,7 +35,12 @@ export function MonitoringDashboard({ connections }: MonitoringDashboardProps) {
   });
 
   return (
-    <MonitoringProvider allConnections={connections}>
+    <MonitoringProvider
+      allConnections={connections}
+      allRouters={sampleRouters}
+      allLinks={sampleLinks}
+      allVNFs={sampleVNFs}
+    >
       <div className="space-y-6">
         <DashboardTabs
           activeTab={activeTab}

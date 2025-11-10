@@ -29,6 +29,20 @@ export interface CloudRouter {
     routeFilters?: string[];
     [key: string]: any;
   };
+  performance?: {
+    latency: string;
+    throughput: string;
+    cpuUsage: number;
+    memoryUsage: number;
+    bgpSessions: {
+      total: number;
+      active: number;
+      idle: number;
+    };
+    routingTableSize: number;
+    packetForwardingRate: number;
+    controlPlaneLoad: number;
+  };
 }
 
 interface CloudRouterPolicy {
