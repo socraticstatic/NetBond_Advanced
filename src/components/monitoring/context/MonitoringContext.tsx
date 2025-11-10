@@ -11,6 +11,7 @@ interface MonitoringContextType {
   // Filter state
   selectedConnection: string;
   selectedGroup: string;
+  selectedVNF: string;
   resourceType: ResourceType;
   timeRange: string;
   lastRefreshed: Date | null;
@@ -25,6 +26,7 @@ interface MonitoringContextType {
   links: Link[];
   filteredLinks: Link[];
   vnfs: VNF[];
+  allVNFs: VNF[];
   filteredVNFs: VNF[];
   summary: {
     latency: string;
@@ -37,6 +39,7 @@ interface MonitoringContextType {
   // Actions
   setSelectedConnection: (id: string) => void;
   setSelectedGroup: (id: string) => void;
+  setSelectedVNF: (id: string) => void;
   setResourceType: (type: ResourceType) => void;
   setTimeRange: (range: string) => void;
   setRefreshInterval: (interval: number) => void;
@@ -72,6 +75,7 @@ export function MonitoringProvider({
   // Connection filtering
   const [selectedConnection, setSelectedConnection] = useState<string>('all');
   const [selectedGroup, setSelectedGroup] = useState<string>('all');
+  const [selectedVNF, setSelectedVNF] = useState<string>('all');
   const [resourceType, setResourceType] = useState<ResourceType>('connection');
 
   // Time range handling
@@ -111,13 +115,18 @@ export function MonitoringProvider({
     );
   }, [selectedConnection, filteredRouters, allLinks]);
 
-  // Filter VNFs based on selected connection
-  const filteredVNFs = useMemo(() =>
-    selectedConnection === 'all'
+  // Filter VNFs based on selected connection and specific VNF selection
+  const filteredVNFs = useMemo(() => {
+    let vnfs = selectedConnection === 'all'
       ? allVNFs
-      : allVNFs.filter(vnf => vnf.connectionId === selectedConnection),
-    [selectedConnection, allVNFs]
-  );
+      : allVNFs.filter(vnf => vnf.connectionId === selectedConnection);
+
+    if (selectedVNF && selectedVNF !== 'all') {
+      vnfs = vnfs.filter(vnf => vnf.id === selectedVNF);
+    }
+
+    return vnfs;
+  }, [selectedConnection, selectedVNF, allVNFs]);
 
   // Calculate summary metrics
   const summary = calculateConnectionSummary(filteredConnections);
@@ -148,6 +157,7 @@ export function MonitoringProvider({
   const value = {
     selectedConnection,
     selectedGroup,
+    selectedVNF,
     resourceType,
     timeRange,
     lastRefreshed,
@@ -160,10 +170,12 @@ export function MonitoringProvider({
     links: allLinks,
     filteredLinks,
     vnfs: allVNFs,
+    allVNFs,
     filteredVNFs,
     summary,
     setSelectedConnection,
     setSelectedGroup,
+    setSelectedVNF,
     setResourceType,
     setTimeRange,
     setRefreshInterval,
