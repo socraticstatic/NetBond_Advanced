@@ -26,32 +26,11 @@ export function EnhancedMetricsTab() {
   const [metricsData, setMetricsData] = useState<MetricData[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<'latency' | 'throughput' | 'packetLoss' | 'all'>('all');
 
-  if (resourceType === 'router') {
-    return (
-      <Suspense fallback={<LoadingSpinner size="lg" text="Loading cloud router metrics..." />}>
-        <RouterMetricsView />
-      </Suspense>
-    );
-  }
-
-  if (resourceType === 'link') {
-    return (
-      <Suspense fallback={<LoadingSpinner size="lg" text="Loading link metrics..." />}>
-        <LinkMetricsView />
-      </Suspense>
-    );
-  }
-
-  if (resourceType === 'vnf') {
-    return (
-      <Suspense fallback={<LoadingSpinner size="lg" text="Loading VNF metrics..." />}>
-        <VNFMetricsView />
-      </Suspense>
-    );
-  }
-
   // Initialize and simulate real-time data
   useEffect(() => {
+    if (resourceType && resourceType !== 'all' && resourceType !== 'connection') {
+      return;
+    }
     const initialData = generateHourlyData().map(d => ({
       timestamp: new Date(d.timestamp),
       latency: d.latency,
@@ -161,6 +140,31 @@ export function EnhancedMetricsTab() {
       }
     };
   }, [metricsData]);
+
+  // Handle resource-specific views AFTER all hooks have been called
+  if (resourceType === 'router') {
+    return (
+      <Suspense fallback={<LoadingSpinner size="lg" text="Loading cloud router metrics..." />}>
+        <RouterMetricsView />
+      </Suspense>
+    );
+  }
+
+  if (resourceType === 'link') {
+    return (
+      <Suspense fallback={<LoadingSpinner size="lg" text="Loading link metrics..." />}>
+        <LinkMetricsView />
+      </Suspense>
+    );
+  }
+
+  if (resourceType === 'vnf') {
+    return (
+      <Suspense fallback={<LoadingSpinner size="lg" text="Loading VNF metrics..." />}>
+        <VNFMetricsView />
+      </Suspense>
+    );
+  }
 
   if (!currentMetrics) {
     return (
