@@ -26,7 +26,7 @@ export function ConnectionTabs({ activeTab, onTabChange, connectionCount, groupC
             className={`
               flex items-center whitespace-nowrap pt-1 pb-2 px-1 border-b-2 font-medium text-sm no-rounded
               ${activeTab === tab.id
-                ? 'border-brand-blue text-brand-blue'
+                ? 'border-fw-active text-fw-link'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }
             `}
@@ -35,7 +35,7 @@ export function ConnectionTabs({ activeTab, onTabChange, connectionCount, groupC
             <span>{tab.label}</span>
             {tab.count !== undefined && (
               <span className={`ml-2 rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                activeTab === tab.id ? 'bg-brand-lightBlue text-brand-blue' : 'bg-gray-100 text-gray-900'
+                activeTab === tab.id ? 'bg-fw-accent text-fw-link' : 'bg-gray-100 text-gray-900'
               }`}>
                 {tab.count}
               </span>
