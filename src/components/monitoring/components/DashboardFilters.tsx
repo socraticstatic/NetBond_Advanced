@@ -22,14 +22,20 @@ export function DashboardFilters({
     selectedConnection,
     selectedGroup,
     selectedVNF,
+    selectedLink,
+    selectedRouter,
     resourceType,
     timeRange,
     isRefreshing,
     lastRefreshed,
     allVNFs,
+    allLinks,
+    allRouters,
     setSelectedConnection,
     setSelectedGroup,
     setSelectedVNF,
+    setSelectedLink,
+    setSelectedRouter,
     setResourceType,
     setTimeRange,
     handleRefresh
@@ -266,6 +272,56 @@ export function DashboardFilters({
           </select>
           <p className="mt-1 text-xs text-gray-500">
             Select a specific VNF to view its individual performance metrics and type-specific data
+          </p>
+        </div>
+      )}
+
+      {/* Link Selector - shown only when Link resource type is selected */}
+      {resourceType === 'link' && allLinks && allLinks.length > 0 && (
+        <div className="pt-4 border-t border-gray-200">
+          <label htmlFor="link-select" className="block text-sm font-medium text-gray-700 mb-2">
+            Select Specific Link
+          </label>
+          <select
+            id="link-select"
+            value={selectedLink || 'all'}
+            onChange={(e) => setSelectedLink?.(e.target.value)}
+            className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="all">All Links (Aggregated)</option>
+            {allLinks.map((link) => (
+              <option key={link.id} value={link.id}>
+                {link.name} (VLAN {link.vlanId})
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-gray-500">
+            Select a specific link to view its individual bandwidth utilization and traffic patterns
+          </p>
+        </div>
+      )}
+
+      {/* Cloud Router Selector - shown only when Router resource type is selected */}
+      {resourceType === 'router' && allRouters && allRouters.length > 0 && (
+        <div className="pt-4 border-t border-gray-200">
+          <label htmlFor="router-select" className="block text-sm font-medium text-gray-700 mb-2">
+            Select Specific Cloud Router
+          </label>
+          <select
+            id="router-select"
+            value={selectedRouter || 'all'}
+            onChange={(e) => setSelectedRouter?.(e.target.value)}
+            className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="all">All Cloud Routers (Aggregated)</option>
+            {allRouters.map((router) => (
+              <option key={router.id} value={router.id}>
+                {router.name} ({router.vendor})
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-gray-500">
+            Select a specific cloud router to view its individual routing performance and BGP sessions
           </p>
         </div>
       )}

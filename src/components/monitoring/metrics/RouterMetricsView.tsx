@@ -122,14 +122,29 @@ export function RouterMetricsView() {
     );
   }
 
+  const selectedRouter = filteredRouters.length === 1 ? filteredRouters[0] : null;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Cloud Router Performance</h2>
-          <p className="text-sm text-gray-600 mt-1">
-            Monitoring {filteredRouters.length} cloud router{filteredRouters.length !== 1 ? 's' : ''}
-          </p>
+          <div className="flex items-center gap-3 mb-2">
+            <Radio className="h-8 w-8 text-blue-600" />
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {selectedRouter ? `${selectedRouter.name} Performance` : 'Cloud Router Performance'}
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                {selectedRouter ? (
+                  <>
+                    {selectedRouter.vendor} • {selectedRouter.location} • ASN {selectedRouter.configuration?.asn || 'N/A'}
+                  </>
+                ) : (
+                  `Monitoring ${filteredRouters.length} cloud router${filteredRouters.length !== 1 ? 's' : ''}`
+                )}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
