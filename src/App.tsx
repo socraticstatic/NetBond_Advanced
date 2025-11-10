@@ -90,16 +90,34 @@ const LazyManageGroupsPage = lazy(() =>
   }))
 );
 
-const LazyGroupDetailsPage = lazy(() => 
-  import('./components/GroupDetailsPage').then(module => ({ 
-    default: module.GroupDetailsPage 
+const LazyGroupDetailsPage = lazy(() =>
+  import('./components/GroupDetailsPage').then(module => ({
+    default: module.GroupDetailsPage
+  }))
+);
+
+const LazyPoolDetailPage = lazy(() =>
+  import('./components/pages/PoolDetailPage').then(module => ({
+    default: module.PoolDetailPage
+  }))
+);
+
+const LazyCloudRouterDetailPage = lazy(() =>
+  import('./components/pages/CloudRouterDetailPage').then(module => ({
+    default: module.CloudRouterDetailPage
+  }))
+);
+
+const LazyVNFDetailPage = lazy(() =>
+  import('./components/pages/VNFDetailPage').then(module => ({
+    default: module.VNFDetailPage
   }))
 );
 
 // Only load these when actually needed
-const LazyControlCenterManager = lazy(() => 
-  import('./components/control-center/ControlCenterManager').then(module => ({ 
-    default: module.ControlCenterManager 
+const LazyControlCenterManager = lazy(() =>
+  import('./components/control-center/ControlCenterManager').then(module => ({
+    default: module.ControlCenterManager
   }))
 );
 
@@ -375,6 +393,24 @@ function App() {
                 <Route path="/groups/:id/*" element={
                   <Suspense fallback={<LoadingFallback />}>
                     <LazyGroupDetailsPage />
+                  </Suspense>
+                } />
+
+                <Route path="/pools/:id" element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <LazyPoolDetailPage />
+                  </Suspense>
+                } />
+
+                <Route path="/cloud-routers/:id" element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <LazyCloudRouterDetailPage />
+                  </Suspense>
+                } />
+
+                <Route path="/vnfs/:id" element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <LazyVNFDetailPage />
                   </Suspense>
                 } />
 

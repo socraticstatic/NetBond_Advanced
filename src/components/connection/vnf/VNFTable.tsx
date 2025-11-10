@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Router as RouterIcon, Network, Settings, Shield, Globe, CreditCard as Edit2, Trash2, Eye, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Router as RouterIcon, Network, Settings, Shield, Globe, CreditCard as Edit2, Trash2, Eye, ExternalLink, Scale, AlertTriangle, Zap } from 'lucide-react';
 import { VNF } from '../../../types/vnf';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { EnhancedTable, TableColumn } from '../../common/EnhancedTable';
+import { getVNFTypeIcon, getVNFTypeInfo } from '../../../utils/vnfTypes';
 
 interface VNFTableProps {
   vnfs: VNF[];
@@ -24,41 +26,28 @@ export function VNFTable({
   onDetach,
   isDetached = false
 }: VNFTableProps) {
+  const navigate = useNavigate();
   const [activeOverflow, setActiveOverflow] = useState<string | null>(null);
 
-  // Get icon based on VNF type
   const getTypeIcon = (type: VNF['type']) => {
-    switch(type) {
-      case 'firewall':
-        return <Shield className="h-5 w-5 text-red-500" />;
-      case 'sdwan':
-        return <Globe className="h-5 w-5 text-purple-500" />;
-      case 'router':
-        return <RouterIcon className="h-5 w-5 text-blue-500" />;
-      case 'vnat':
-        return <Network className="h-5 w-5 text-green-500" />;
-      case 'custom':
-      default:
-        return <Settings className="h-5 w-5 text-gray-500" />;
-    }
+    const Icon = getVNFTypeIcon(type);
+    const info = getVNFTypeInfo(type);
+    const colorMap: Record<string, string> = {
+      red: 'text-red-500',
+      purple: 'text-purple-500',
+      blue: 'text-blue-500',
+      green: 'text-green-500',
+      indigo: 'text-indigo-500',
+      orange: 'text-orange-500',
+      yellow: 'text-yellow-600',
+      gray: 'text-gray-500'
+    };
+    const colorClass = colorMap[info.color] || 'text-gray-500';
+    return <Icon className={`h-5 w-5 ${colorClass}`} />;
   };
 
-  // Get formatted type name
   const getTypeName = (type: VNF['type']) => {
-    switch(type) {
-      case 'firewall':
-        return 'Firewall';
-      case 'sdwan':
-        return 'SD-WAN';
-      case 'router':
-        return 'Router';
-      case 'vnat':
-        return 'NAT';
-      case 'custom':
-        return 'Custom';
-      default:
-        return type.toUpperCase();
-    }
+    return getVNFTypeInfo(type).label;
   };
 
   // Get status color
@@ -103,7 +92,12 @@ export function VNFTable({
             </div>
           </div>
           <div className="ml-3">
-            <div className="text-sm font-medium text-gray-900">{vnf.name}</div>
+            <button
+              onClick={() => navigate(`/vnfs/${vnf.id}`)}
+              className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline text-left"
+            >
+              {vnf.name}
+            </button>
             <div className="text-xs text-gray-500">{vnf.description}</div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GitBranch, Network, Shield, Edit2, Trash2, Eye, MapPin } from 'lucide-react';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { OverflowMenu } from '../../common/OverflowMenu';
@@ -22,6 +23,7 @@ export function CloudRouterTable({
   connectionBandwidth = '10 Gbps',
   usedBandwidth = 0
 }: CloudRouterTableProps) {
+  const navigate = useNavigate();
   const [activeOverflow, setActiveOverflow] = useState<string | null>(null);
 
   // Count VNFs by cloud router
@@ -58,7 +60,12 @@ export function CloudRouterTable({
       sortKey: 'name',
       render: (router) => (
         <div>
-          <div className="text-sm font-medium text-gray-900">{router.name}</div>
+          <button
+            onClick={() => navigate(`/cloud-routers/${router.id}`)}
+            className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline text-left"
+          >
+            {router.name}
+          </button>
           {router.description && (
             <div className="text-xs text-gray-500 truncate mt-0.5">{router.description}</div>
           )}
