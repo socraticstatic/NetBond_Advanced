@@ -156,7 +156,7 @@ export function DashboardFilters({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div>
           <label htmlFor="connection-select" className="block text-sm font-medium text-gray-700 mb-2">
             View Statistics For
@@ -200,30 +200,6 @@ export function DashboardFilters({
             Select a pool to view statistics for connections in that pool
           </p>
         </div>
-
-        {resourceType === 'vnf' && (
-          <div>
-            <label htmlFor="vnf-select" className="block text-sm font-medium text-gray-700 mb-2">
-              Select VNF
-            </label>
-            <select
-              id="vnf-select"
-              value={selectedVNF || 'all'}
-              onChange={(e) => setSelectedVNF?.(e.target.value)}
-              className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            >
-              <option value="all">All VNFs</option>
-              {allVNFs.map((vnf) => (
-                <option key={vnf.id} value={vnf.id}>
-                  {vnf.name} ({vnf.type})
-                </option>
-              ))}
-            </select>
-            <p className="mt-1 text-xs text-gray-500">
-              Select a specific VNF to view detailed performance metrics
-            </p>
-          </div>
-        )}
         
         <div>
           <label htmlFor="time-range" className="block text-sm font-medium text-gray-700 mb-2">
@@ -268,6 +244,31 @@ export function DashboardFilters({
           )}
         </div>
       </div>
+
+      {/* VNF Selector - shown only when VNF resource type is selected */}
+      {resourceType === 'vnf' && allVNFs && allVNFs.length > 0 && (
+        <div className="pt-4 border-t border-gray-200">
+          <label htmlFor="vnf-select" className="block text-sm font-medium text-gray-700 mb-2">
+            Select Specific VNF
+          </label>
+          <select
+            id="vnf-select"
+            value={selectedVNF || 'all'}
+            onChange={(e) => setSelectedVNF?.(e.target.value)}
+            className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="all">All VNFs (Aggregated)</option>
+            {allVNFs.map((vnf) => (
+              <option key={vnf.id} value={vnf.id}>
+                {vnf.name} ({vnf.type})
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-gray-500">
+            Select a specific VNF to view its individual performance metrics and type-specific data
+          </p>
+        </div>
+      )}
     </div>
   );
 }
