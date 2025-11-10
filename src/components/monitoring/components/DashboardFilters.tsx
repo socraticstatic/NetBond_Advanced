@@ -1,7 +1,7 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useRef, useEffect } from 'react';
 import { Button } from '../../common/Button';
 import { Group } from '../../../types';
-import { RefreshCw, Network, Radio, Link as LinkIcon, Box, ChevronDown, ChevronUp, Save, Bookmark } from 'lucide-react';
+import { RefreshCw, Network, Radio, Link as LinkIcon, Box, ChevronDown, ChevronUp, Save, Bookmark, X } from 'lucide-react';
 import { useMonitoring } from '../context/MonitoringContext';
 import { ResourceType } from '../../../types/metric';
 
@@ -44,6 +44,7 @@ export function DashboardFilters({
   const [isExpanded, setIsExpanded] = useState(false);
   const [showSavePreset, setShowSavePreset] = useState(false);
   const [presetName, setPresetName] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const resourceTypeConfig: Record<ResourceType, { icon: typeof Network; label: string; description: string }> = {
     connection: { icon: Network, label: 'Connections', description: 'View connection-level metrics' },
@@ -56,6 +57,19 @@ export function DashboardFilters({
   const formattedLastRefreshed = lastRefreshed
     ? lastRefreshed.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
     : '';
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsExpanded(false);
+      }
+    }
+
+    if (isExpanded) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isExpanded]);
 
   const getResourceList = () => {
     switch (resourceType) {
@@ -272,98 +286,97 @@ export function DashboardFilters({
   const selectedResource = getSelectedResource();
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-      {/* Compact View */}
-      <div className="p-4">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 flex-wrap flex-1 min-w-0">
-            {getActiveFiltersDescription()}
-          </div>
+    <div className="bg-white rounded-lg border border-gray-200 shadow-sm relative" ref={dropdownRef}>
+      {/* Fixed Height Filter Bar */}
+      <div className="h-16 p-4 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2 flex-wrap flex-1 min-w-0">
+          {getActiveFiltersDescription()}
+        </div>
 
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <select
-              value={timeRange}
-              onChange={(e) => setTimeRange?.(e.target.value)}
-              className="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm pr-8"
-            >
-              <option value="5m">5m</option>
-              <option value="15m">15m</option>
-              <option value="1h">1h</option>
-              <option value="6h">6h</option>
-              <option value="24h">24h</option>
-              <option value="7d">7d</option>
-              <option value="30d">30d</option>
-            </select>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <select
+            value={timeRange}
+            onChange={(e) => setTimeRange?.(e.target.value)}
+            className="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm pr-8"
+          >
+            <option value="5m">5m</option>
+            <option value="15m">15m</option>
+            <option value="1h">1h</option>
+            <option value="6h">6h</option>
+            <option value="24h">24h</option>
+            <option value="7d">7d</option>
+            <option value="30d">30d</option>
+          </select>
 
+          <Button
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            variant="outline"
+            size="sm"
+            title={`Last refreshed: ${formattedLastRefreshed || 'Never'}`}
+          >
+            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+          </Button>
+
+          <Button
+            onClick={() => setShowSavePreset(!showSavePreset)}
+            variant="outline"
+            size="sm"
+            title="Save current filter settings"
+          >
+            <Bookmark className="h-4 w-4" />
+          </Button>
+
+          <Button
+            onClick={() => setIsExpanded(!isExpanded)}
+            variant="outline"
+            size="sm"
+          >
+            {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            <span className="ml-1.5 text-sm">{isExpanded ? 'Less' : 'More'}</span>
+          </Button>
+        </div>
+      </div>
+
+      {/* Save Preset Dropdown */}
+      {showSavePreset && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50">
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={presetName}
+              onChange={(e) => setPresetName(e.target.value)}
+              placeholder="Enter preset name..."
+              className="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+              onKeyPress={(e) => e.key === 'Enter' && handleSavePreset()}
+              autoFocus
+            />
             <Button
-              onClick={handleRefresh}
-              disabled={isRefreshing}
-              variant="outline"
+              onClick={handleSavePreset}
+              disabled={!presetName.trim()}
               size="sm"
-              title={`Last refreshed: ${formattedLastRefreshed || 'Never'}`}
+              variant="primary"
             >
-              <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              <Save className="h-4 w-4 mr-1.5" />
+              Save
             </Button>
-
             <Button
-              onClick={() => setShowSavePreset(!showSavePreset)}
-              variant="outline"
+              onClick={() => {
+                setShowSavePreset(false);
+                setPresetName('');
+              }}
               size="sm"
-              title="Save current filter settings"
-            >
-              <Bookmark className="h-4 w-4" />
-            </Button>
-
-            <Button
-              onClick={() => setIsExpanded(!isExpanded)}
               variant="outline"
-              size="sm"
             >
-              {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-              <span className="ml-1.5 text-sm">{isExpanded ? 'Less' : 'More'}</span>
+              <X className="h-4 w-4" />
             </Button>
           </div>
         </div>
+      )}
 
-        {/* Save Preset Form */}
-        {showSavePreset && (
-          <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                value={presetName}
-                onChange={(e) => setPresetName(e.target.value)}
-                placeholder="Enter preset name..."
-                className="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-                onKeyPress={(e) => e.key === 'Enter' && handleSavePreset()}
-              />
-              <Button
-                onClick={handleSavePreset}
-                disabled={!presetName.trim()}
-                size="sm"
-                variant="primary"
-              >
-                <Save className="h-4 w-4 mr-1.5" />
-                Save
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowSavePreset(false);
-                  setPresetName('');
-                }}
-                size="sm"
-                variant="outline"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Expanded View */}
+      {/* Expanded Filters Dropdown */}
       {isExpanded && (
-        <div className="px-6 pb-6 pt-2 border-t border-gray-200">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-6 z-50 max-h-96 overflow-y-auto">
           <div className="space-y-4">
             {/* Resource Type Selection */}
             <div>
@@ -459,13 +472,13 @@ export function DashboardFilters({
                 </select>
               </div>
             )}
-          </div>
 
-          {children && (
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              {children}
-            </div>
-          )}
+            {children && (
+              <div className="pt-4 border-t border-gray-200">
+                {children}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
