@@ -116,7 +116,7 @@ export function RouterMetricsView() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Radio className="h-12 w-12 text-gray-400 mx-auto mb-4 animate-pulse" />
-          <p className="text-gray-600">Loading router metrics...</p>
+          <p className="text-gray-600">Loading cloud router metrics...</p>
         </div>
       </div>
     );
@@ -128,7 +128,7 @@ export function RouterMetricsView() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Cloud Router Performance</h2>
           <p className="text-sm text-gray-600 mt-1">
-            Monitoring {filteredRouters.length} router{filteredRouters.length !== 1 ? 's' : ''}
+            Monitoring {filteredRouters.length} cloud router{filteredRouters.length !== 1 ? 's' : ''}
           </p>
         </div>
       </div>
