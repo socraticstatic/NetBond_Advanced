@@ -1,20 +1,31 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, ReactNode, useMemo } from 'react';
 import { Connection } from '../../../types';
+import { CloudRouter } from '../../../types/cloudrouter';
+import { VNF } from '../../../types/vnf';
+import { Link } from '../../../types/connection';
 import { useTimeRange } from '../../../hooks/useTimeRange';
 import { calculateConnectionSummary } from '../../../utils/connections';
+import { ResourceType } from '../../../types/metric';
 
 interface MonitoringContextType {
   // Filter state
   selectedConnection: string;
   selectedGroup: string;
+  resourceType: ResourceType;
   timeRange: string;
   lastRefreshed: Date | null;
   isRefreshing: boolean;
   refreshInterval: number;
-  
+
   // Data
   connections: Connection[];
   filteredConnections: Connection[];
+  routers: CloudRouter[];
+  filteredRouters: CloudRouter[];
+  links: Link[];
+  filteredLinks: Link[];
+  vnfs: VNF[];
+  filteredVNFs: VNF[];
   summary: {
     latency: string;
     packetLoss: string;
@@ -22,10 +33,11 @@ interface MonitoringContextType {
     bandwidth: string;
     tunnelStatus: string;
   };
-  
+
   // Actions
   setSelectedConnection: (id: string) => void;
   setSelectedGroup: (id: string) => void;
+  setResourceType: (type: ResourceType) => void;
   setTimeRange: (range: string) => void;
   setRefreshInterval: (interval: number) => void;
   handleRefresh: () => void;
@@ -45,13 +57,23 @@ export function useMonitoring() {
 interface MonitoringProviderProps {
   children: ReactNode;
   allConnections: Connection[];
+  allRouters?: CloudRouter[];
+  allLinks?: Link[];
+  allVNFs?: VNF[];
 }
 
-export function MonitoringProvider({ children, allConnections }: MonitoringProviderProps) {
+export function MonitoringProvider({
+  children,
+  allConnections,
+  allRouters = [],
+  allLinks = [],
+  allVNFs = []
+}: MonitoringProviderProps) {
   // Connection filtering
   const [selectedConnection, setSelectedConnection] = useState<string>('all');
   const [selectedGroup, setSelectedGroup] = useState<string>('all');
-  
+  const [resourceType, setResourceType] = useState<ResourceType>('connection');
+
   // Time range handling
   const {
     timeRange,
@@ -62,11 +84,40 @@ export function MonitoringProvider({ children, allConnections }: MonitoringProvi
     handleRefresh,
     lastRefreshed
   } = useTimeRange('1h');
-  
+
   // Filter connections based on current selection
-  const filteredConnections = selectedConnection === 'all' 
-    ? allConnections
-    : allConnections.filter(conn => conn.id === selectedConnection);
+  const filteredConnections = useMemo(() =>
+    selectedConnection === 'all'
+      ? allConnections
+      : allConnections.filter(conn => conn.id === selectedConnection),
+    [selectedConnection, allConnections]
+  );
+
+  // Filter routers based on selected connection
+  const filteredRouters = useMemo(() =>
+    selectedConnection === 'all'
+      ? allRouters
+      : allRouters.filter(router => router.connectionId === selectedConnection),
+    [selectedConnection, allRouters]
+  );
+
+  // Filter links based on selected connection or router
+  const filteredLinks = useMemo(() => {
+    if (selectedConnection === 'all') return allLinks;
+
+    const connectionRouterIds = filteredRouters.map(r => r.id);
+    return allLinks.filter(link =>
+      link.cloudRouterIds.some(rid => connectionRouterIds.includes(rid))
+    );
+  }, [selectedConnection, filteredRouters, allLinks]);
+
+  // Filter VNFs based on selected connection
+  const filteredVNFs = useMemo(() =>
+    selectedConnection === 'all'
+      ? allVNFs
+      : allVNFs.filter(vnf => vnf.connectionId === selectedConnection),
+    [selectedConnection, allVNFs]
+  );
 
   // Calculate summary metrics
   const summary = calculateConnectionSummary(filteredConnections);
@@ -97,15 +148,23 @@ export function MonitoringProvider({ children, allConnections }: MonitoringProvi
   const value = {
     selectedConnection,
     selectedGroup,
+    resourceType,
     timeRange,
     lastRefreshed,
     isRefreshing,
     refreshInterval,
     connections: allConnections,
     filteredConnections,
+    routers: allRouters,
+    filteredRouters,
+    links: allLinks,
+    filteredLinks,
+    vnfs: allVNFs,
+    filteredVNFs,
     summary,
     setSelectedConnection,
     setSelectedGroup,
+    setResourceType,
     setTimeRange,
     setRefreshInterval,
     handleRefresh,

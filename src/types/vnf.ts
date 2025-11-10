@@ -30,6 +30,17 @@ export interface VNF {
   description?: string;
   connectionId: string;
   linkIds: string[];
+  performance?: {
+    throughput: string;
+    latency: string;
+    cpuUsage: number;
+    memoryUsage: number;
+    activeSessions: number;
+    maxSessions: number;
+    policyHitRate: number;
+    licenseUtilization: number;
+    serviceSpecificMetrics: Record<string, number>;
+  };
 }
 
 export interface VNFInterface {

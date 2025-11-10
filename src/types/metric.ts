@@ -23,3 +23,49 @@ export interface ThresholdRule {
   severity: 'info' | 'warning' | 'critical';
   action?: 'notify' | 'alert' | 'escalate';
 }
+
+export type ResourceType = 'connection' | 'pool' | 'router' | 'link' | 'vnf';
+
+export interface PerformanceMetrics {
+  timestamp: string;
+  latency?: number;
+  throughput?: number;
+  packetLoss?: number;
+  jitter?: number;
+  errorRate?: number;
+  cpuUsage?: number;
+  memoryUsage?: number;
+  bandwidth?: number;
+  utilization?: number;
+}
+
+export interface RouterPerformanceMetrics extends PerformanceMetrics {
+  bgpSessions: {
+    total: number;
+    active: number;
+    idle: number;
+  };
+  routingTableSize: number;
+  packetForwardingRate: number;
+  controlPlaneLoad: number;
+}
+
+export interface LinkPerformanceMetrics extends PerformanceMetrics {
+  bandwidthCapacity: number;
+  currentUsage: number;
+  utilizationPercentage: number;
+  inboundRate: number;
+  outboundRate: number;
+  qosMetrics: {
+    delayVariation: number;
+    priorityQueueDepth: number;
+  };
+}
+
+export interface VNFPerformanceMetrics extends PerformanceMetrics {
+  activeSessions: number;
+  maxSessions: number;
+  policyHitRate: number;
+  serviceSpecificMetrics: Record<string, number>;
+  licenseUtilization: number;
+}

@@ -130,6 +130,20 @@ export interface Link {
   createdAt: string;
   updatedAt?: string;
   linkBandwidth?: string;
+  performance?: {
+    bandwidthCapacity: string;
+    currentUsage: string;
+    utilizationPercentage: number;
+    inboundRate: string;
+    outboundRate: string;
+    latency: string;
+    packetLoss: string;
+    errorRate: number;
+    qosMetrics: {
+      delayVariation: number;
+      priorityQueueDepth: number;
+    };
+  };
 }
 
 export type ViewMode = 'grid' | 'list' | 'topology';

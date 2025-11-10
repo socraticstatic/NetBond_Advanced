@@ -1,8 +1,13 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { Activity, Zap, Network, TrendingUp, AlertTriangle, Clock, Database, Cpu } from 'lucide-react';
 import { RealTimeMetricCard } from './RealTimeMetricCard';
 import { RealTimeChart } from './RealTimeChart';
 import { useMonitoring } from '../context/MonitoringContext';
+import { LoadingSpinner } from '../../common/LoadingSpinner';
+
+const RouterMetricsView = lazy(() => import('./RouterMetricsView').then(m => ({ default: m.RouterMetricsView })));
+const LinkMetricsView = lazy(() => import('./LinkMetricsView').then(m => ({ default: m.LinkMetricsView })));
+const VNFMetricsView = lazy(() => import('./VNFMetricsView').then(m => ({ default: m.VNFMetricsView })));
 
 interface MetricData {
   timestamp: Date;
@@ -17,9 +22,33 @@ interface MetricData {
 }
 
 export function EnhancedMetricsTab() {
-  const { summary, generateHourlyData } = useMonitoring();
+  const { summary, generateHourlyData, resourceType } = useMonitoring();
   const [metricsData, setMetricsData] = useState<MetricData[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<'latency' | 'throughput' | 'packetLoss' | 'all'>('all');
+
+  if (resourceType === 'router') {
+    return (
+      <Suspense fallback={<LoadingSpinner size="lg" text="Loading router metrics..." />}>
+        <RouterMetricsView />
+      </Suspense>
+    );
+  }
+
+  if (resourceType === 'link') {
+    return (
+      <Suspense fallback={<LoadingSpinner size="lg" text="Loading link metrics..." />}>
+        <LinkMetricsView />
+      </Suspense>
+    );
+  }
+
+  if (resourceType === 'vnf') {
+    return (
+      <Suspense fallback={<LoadingSpinner size="lg" text="Loading VNF metrics..." />}>
+        <VNFMetricsView />
+      </Suspense>
+    );
+  }
 
   // Initialize and simulate real-time data
   useEffect(() => {
