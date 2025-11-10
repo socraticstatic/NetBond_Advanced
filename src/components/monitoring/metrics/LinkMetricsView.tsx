@@ -122,14 +122,29 @@ export function LinkMetricsView() {
     );
   }
 
+  const selectedLink = filteredLinks.length === 1 ? filteredLinks[0] : null;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Link Performance & Utilization</h2>
-          <p className="text-sm text-gray-600 mt-1">
-            Monitoring {filteredLinks.length} link{filteredLinks.length !== 1 ? 's' : ''}
-          </p>
+          <div className="flex items-center gap-3 mb-2">
+            <LinkIcon className="h-8 w-8 text-blue-600" />
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {selectedLink ? `${selectedLink.name} Performance` : 'Link Performance & Utilization'}
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                {selectedLink ? (
+                  <>
+                    VLAN {selectedLink.vlanId} • {selectedLink.ipSubnet} • MTU {selectedLink.mtu}
+                  </>
+                ) : (
+                  `Monitoring ${filteredLinks.length} link${filteredLinks.length !== 1 ? 's' : ''}`
+                )}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 

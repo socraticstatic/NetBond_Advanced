@@ -12,6 +12,8 @@ interface MonitoringContextType {
   selectedConnection: string;
   selectedGroup: string;
   selectedVNF: string;
+  selectedLink: string;
+  selectedRouter: string;
   resourceType: ResourceType;
   timeRange: string;
   lastRefreshed: Date | null;
@@ -22,8 +24,10 @@ interface MonitoringContextType {
   connections: Connection[];
   filteredConnections: Connection[];
   routers: CloudRouter[];
+  allRouters: CloudRouter[];
   filteredRouters: CloudRouter[];
   links: Link[];
+  allLinks: Link[];
   filteredLinks: Link[];
   vnfs: VNF[];
   allVNFs: VNF[];
@@ -40,6 +44,8 @@ interface MonitoringContextType {
   setSelectedConnection: (id: string) => void;
   setSelectedGroup: (id: string) => void;
   setSelectedVNF: (id: string) => void;
+  setSelectedLink: (id: string) => void;
+  setSelectedRouter: (id: string) => void;
   setResourceType: (type: ResourceType) => void;
   setTimeRange: (range: string) => void;
   setRefreshInterval: (interval: number) => void;
@@ -76,6 +82,8 @@ export function MonitoringProvider({
   const [selectedConnection, setSelectedConnection] = useState<string>('all');
   const [selectedGroup, setSelectedGroup] = useState<string>('all');
   const [selectedVNF, setSelectedVNF] = useState<string>('all');
+  const [selectedLink, setSelectedLink] = useState<string>('all');
+  const [selectedRouter, setSelectedRouter] = useState<string>('all');
   const [resourceType, setResourceType] = useState<ResourceType>('connection');
 
   // Time range handling
@@ -97,23 +105,36 @@ export function MonitoringProvider({
     [selectedConnection, allConnections]
   );
 
-  // Filter routers based on selected connection
-  const filteredRouters = useMemo(() =>
-    selectedConnection === 'all'
+  // Filter routers based on selected connection and specific router selection
+  const filteredRouters = useMemo(() => {
+    let routers = selectedConnection === 'all'
       ? allRouters
-      : allRouters.filter(router => router.connectionId === selectedConnection),
-    [selectedConnection, allRouters]
-  );
+      : allRouters.filter(router => router.connectionId === selectedConnection);
 
-  // Filter links based on selected connection or router
+    if (selectedRouter && selectedRouter !== 'all') {
+      routers = routers.filter(router => router.id === selectedRouter);
+    }
+
+    return routers;
+  }, [selectedConnection, selectedRouter, allRouters]);
+
+  // Filter links based on selected connection and specific link selection
   const filteredLinks = useMemo(() => {
-    if (selectedConnection === 'all') return allLinks;
+    let links = selectedConnection === 'all'
+      ? allLinks
+      : (() => {
+          const connectionRouterIds = filteredRouters.map(r => r.id);
+          return allLinks.filter(link =>
+            link.cloudRouterIds.some(rid => connectionRouterIds.includes(rid))
+          );
+        })();
 
-    const connectionRouterIds = filteredRouters.map(r => r.id);
-    return allLinks.filter(link =>
-      link.cloudRouterIds.some(rid => connectionRouterIds.includes(rid))
-    );
-  }, [selectedConnection, filteredRouters, allLinks]);
+    if (selectedLink && selectedLink !== 'all') {
+      links = links.filter(link => link.id === selectedLink);
+    }
+
+    return links;
+  }, [selectedConnection, selectedLink, filteredRouters, allLinks]);
 
   // Filter VNFs based on selected connection and specific VNF selection
   const filteredVNFs = useMemo(() => {
@@ -158,6 +179,8 @@ export function MonitoringProvider({
     selectedConnection,
     selectedGroup,
     selectedVNF,
+    selectedLink,
+    selectedRouter,
     resourceType,
     timeRange,
     lastRefreshed,
@@ -166,8 +189,10 @@ export function MonitoringProvider({
     connections: allConnections,
     filteredConnections,
     routers: allRouters,
+    allRouters,
     filteredRouters,
     links: allLinks,
+    allLinks,
     filteredLinks,
     vnfs: allVNFs,
     allVNFs,
@@ -176,6 +201,8 @@ export function MonitoringProvider({
     setSelectedConnection,
     setSelectedGroup,
     setSelectedVNF,
+    setSelectedLink,
+    setSelectedRouter,
     setResourceType,
     setTimeRange,
     setRefreshInterval,
