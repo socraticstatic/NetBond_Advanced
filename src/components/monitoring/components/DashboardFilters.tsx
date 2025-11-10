@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Button } from '../../common/Button';
 import { Group } from '../../../types';
-import { RefreshCw, Network, Radio, Link as LinkIcon, Box } from 'lucide-react';
+import { RefreshCw, Network, Radio, Link as LinkIcon, Box, ChevronDown, ChevronUp, Save, Bookmark } from 'lucide-react';
 import { useMonitoring } from '../context/MonitoringContext';
 import { ResourceType } from '../../../types/metric';
 
@@ -40,6 +40,10 @@ export function DashboardFilters({
     setTimeRange,
     handleRefresh
   } = useMonitoring();
+
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showSavePreset, setShowSavePreset] = useState(false);
+  const [presetName, setPresetName] = useState('');
 
   const resourceTypeConfig: Record<ResourceType, { icon: typeof Network; label: string; description: string }> = {
     connection: { icon: Network, label: 'Connections', description: 'View connection-level metrics' },
@@ -104,6 +108,73 @@ export function DashboardFilters({
         setSelectedRouter?.(value);
         break;
     }
+  };
+
+  const getActiveFiltersDescription = () => {
+    const parts = [];
+
+    const Icon = resourceTypeConfig[resourceType].icon;
+    parts.push(
+      <span key="resource" className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-100 text-blue-800 rounded-md text-sm font-medium">
+        <Icon className="h-3.5 w-3.5" />
+        {resourceTypeConfig[resourceType].label}
+      </span>
+    );
+
+    if (selectedConnection !== 'all') {
+      const conn = connections.find(c => c.id === selectedConnection);
+      parts.push(
+        <span key="connection" className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md text-sm">
+          Connection: <span className="font-medium">{conn?.name}</span>
+        </span>
+      );
+    }
+
+    if (selectedGroup !== 'all') {
+      const group = groups.find(g => g.id === selectedGroup);
+      parts.push(
+        <span key="group" className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md text-sm">
+          Pool: <span className="font-medium">{group?.name}</span>
+        </span>
+      );
+    }
+
+    const selectedResource = getSelectedResource();
+    if (selectedResource && selectedResource !== 'all') {
+      const resources = getResourceList();
+      const resource = resources.find((r: any) => r.id === selectedResource);
+      if (resource) {
+        parts.push(
+          <span key="resource-specific" className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md text-sm">
+            {resourceTypeConfig[resourceType].label.slice(0, -1)}: <span className="font-medium">{getResourceName(resource)}</span>
+          </span>
+        );
+      }
+    }
+
+    return parts;
+  };
+
+  const handleSavePreset = () => {
+    if (!presetName.trim()) return;
+
+    const preset = {
+      name: presetName,
+      resourceType,
+      selectedConnection,
+      selectedGroup,
+      selectedVNF,
+      selectedLink,
+      selectedRouter,
+      timeRange
+    };
+
+    const savedPresets = JSON.parse(localStorage.getItem('monitoringPresets') || '[]');
+    savedPresets.push(preset);
+    localStorage.setItem('monitoringPresets', JSON.stringify(savedPresets));
+
+    setPresetName('');
+    setShowSavePreset(false);
   };
 
   if (isMobile) {
@@ -202,51 +273,131 @@ export function DashboardFilters({
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-      <div className="p-6">
-        <div className="space-y-6">
-          {/* LEVEL 1: Resource Type Selection */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              1. What would you like to monitor?
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {(Object.entries(resourceTypeConfig) as [ResourceType, typeof resourceTypeConfig[ResourceType]][]).map(([type, config]) => {
-                const Icon = config.icon;
-                return (
-                  <button
-                    key={type}
-                    onClick={() => setResourceType?.(type)}
-                    className={`
-                      flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all
-                      ${resourceType === type
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-300 hover:bg-blue-50'
-                      }
-                    `}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{config.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-            <p className="mt-2 text-xs text-gray-500">
-              {resourceTypeConfig[resourceType].description}
-            </p>
+      {/* Compact View */}
+      <div className="p-4">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 flex-wrap flex-1 min-w-0">
+            {getActiveFiltersDescription()}
           </div>
 
-          <div className="border-t border-gray-200"></div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <select
+              value={timeRange}
+              onChange={(e) => setTimeRange?.(e.target.value)}
+              className="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm pr-8"
+            >
+              <option value="5m">5m</option>
+              <option value="15m">15m</option>
+              <option value="1h">1h</option>
+              <option value="6h">6h</option>
+              <option value="24h">24h</option>
+              <option value="7d">7d</option>
+              <option value="30d">30d</option>
+            </select>
 
-          {/* LEVEL 2: Scope Selection */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              2. Select scope
-            </label>
+            <Button
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              variant="outline"
+              size="sm"
+              title={`Last refreshed: ${formattedLastRefreshed || 'Never'}`}
+            >
+              <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            </Button>
+
+            <Button
+              onClick={() => setShowSavePreset(!showSavePreset)}
+              variant="outline"
+              size="sm"
+              title="Save current filter settings"
+            >
+              <Bookmark className="h-4 w-4" />
+            </Button>
+
+            <Button
+              onClick={() => setIsExpanded(!isExpanded)}
+              variant="outline"
+              size="sm"
+            >
+              {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              <span className="ml-1.5 text-sm">{isExpanded ? 'Less' : 'More'}</span>
+            </Button>
+          </div>
+        </div>
+
+        {/* Save Preset Form */}
+        {showSavePreset && (
+          <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={presetName}
+                onChange={(e) => setPresetName(e.target.value)}
+                placeholder="Enter preset name..."
+                className="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                onKeyPress={(e) => e.key === 'Enter' && handleSavePreset()}
+              />
+              <Button
+                onClick={handleSavePreset}
+                disabled={!presetName.trim()}
+                size="sm"
+                variant="primary"
+              >
+                <Save className="h-4 w-4 mr-1.5" />
+                Save
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowSavePreset(false);
+                  setPresetName('');
+                }}
+                size="sm"
+                variant="outline"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Expanded View */}
+      {isExpanded && (
+        <div className="px-6 pb-6 pt-2 border-t border-gray-200">
+          <div className="space-y-4">
+            {/* Resource Type Selection */}
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
+                Resource Type
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {(Object.entries(resourceTypeConfig) as [ResourceType, typeof resourceTypeConfig[ResourceType]][]).map(([type, config]) => {
+                  const Icon = config.icon;
+                  return (
+                    <button
+                      key={type}
+                      onClick={() => setResourceType?.(type)}
+                      className={`
+                        flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all
+                        ${resourceType === type
+                          ? 'bg-blue-600 text-white shadow-md'
+                          : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-300 hover:bg-blue-50'
+                        }
+                      `}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span>{config.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Scope Selection */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Connection Filter - Always visible for context */}
               <div>
-                <label htmlFor="connection-select" className="block text-xs font-medium text-gray-600 mb-1.5">
-                  {resourceType === 'connection' ? 'View' : 'Within Connection'}
+                <label htmlFor="connection-select" className="block text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
+                  {resourceType === 'connection' ? 'View Connection' : 'Filter by Connection'}
                 </label>
                 <select
                   id="connection-select"
@@ -263,17 +414,11 @@ export function DashboardFilters({
                     </option>
                   ))}
                 </select>
-                <p className="mt-1 text-xs text-gray-500">
-                  {resourceType === 'connection'
-                    ? 'Select a specific connection or view all'
-                    : 'Filter resources by parent connection'}
-                </p>
               </div>
 
-              {/* Pool Filter - Show for all resource types */}
               <div>
-                <label htmlFor="group-select" className="block text-xs font-medium text-gray-600 mb-1.5">
-                  {resourceType === 'pool' ? 'View' : 'Within Pool'}
+                <label htmlFor="group-select" className="block text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
+                  {resourceType === 'pool' ? 'View Pool' : 'Filter by Pool'}
                 </label>
                 <select
                   id="group-select"
@@ -290,87 +435,39 @@ export function DashboardFilters({
                     </option>
                   ))}
                 </select>
-                <p className="mt-1 text-xs text-gray-500">
-                  {resourceType === 'pool'
-                    ? 'Select a specific pool or view all'
-                    : 'Filter resources by pool membership'}
-                </p>
               </div>
             </div>
-          </div>
 
-          <div className="border-t border-gray-200"></div>
-
-          {/* LEVEL 3: Specific Resource Selection (VNF/Link/Router only) */}
-          {['vnf', 'link', 'router'].includes(resourceType) && resources.length > 0 && (
-            <div>
-              <label htmlFor="resource-select" className="block text-sm font-medium text-gray-700 mb-3">
-                3. Select specific {resourceTypeConfig[resourceType].label.toLowerCase().slice(0, -1)} (optional)
-              </label>
-              <select
-                id="resource-select"
-                value={selectedResource || 'all'}
-                onChange={(e) => setSelectedResource(e.target.value)}
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              >
-                <option value="all">All {resourceTypeConfig[resourceType].label} (Aggregated)</option>
-                {resources.map((resource: any) => (
-                  <option key={resource.id} value={resource.id}>
-                    {getResourceName(resource)}
-                  </option>
-                ))}
-              </select>
-              <p className="mt-2 text-xs text-gray-500">
-                View aggregated metrics for all {resourceTypeConfig[resourceType].label.toLowerCase()}, or select one for detailed individual performance
-              </p>
-            </div>
-          )}
-
-          {/* Time Range and Refresh */}
-          <div className="pt-4 border-t border-gray-200">
-            <div className="flex items-end gap-4">
-              <div className="flex-1">
-                <label htmlFor="time-range" className="block text-sm font-medium text-gray-700 mb-2">
-                  Time Range
+            {/* Specific Resource Selection */}
+            {['vnf', 'link', 'router'].includes(resourceType) && resources.length > 0 && (
+              <div>
+                <label htmlFor="resource-select" className="block text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
+                  Select Specific {resourceTypeConfig[resourceType].label.slice(0, -1)}
                 </label>
                 <select
-                  id="time-range"
-                  value={timeRange}
-                  onChange={(e) => setTimeRange?.(e.target.value)}
+                  id="resource-select"
+                  value={selectedResource || 'all'}
+                  onChange={(e) => setSelectedResource(e.target.value)}
                   className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 >
-                  <option value="5m">Last 5 Minutes</option>
-                  <option value="15m">Last 15 Minutes</option>
-                  <option value="1h">Last Hour</option>
-                  <option value="6h">Last 6 Hours</option>
-                  <option value="24h">Last 24 Hours</option>
-                  <option value="7d">Last 7 Days</option>
-                  <option value="30d">Last 30 Days</option>
+                  <option value="all">All {resourceTypeConfig[resourceType].label} (Aggregated)</option>
+                  {resources.map((resource: any) => (
+                    <option key={resource.id} value={resource.id}>
+                      {getResourceName(resource)}
+                    </option>
+                  ))}
                 </select>
-                <p className="mt-1 text-xs text-gray-500">
-                  Last refreshed: {formattedLastRefreshed || 'Never'}
-                </p>
               </div>
-
-              <Button
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-                variant="primary"
-                className="flex-shrink-0"
-              >
-                <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-                Refresh Data
-              </Button>
-            </div>
+            )}
           </div>
 
           {children && (
-            <div className="mt-4">
+            <div className="mt-4 pt-4 border-t border-gray-200">
               {children}
             </div>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 }
