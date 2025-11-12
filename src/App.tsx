@@ -428,20 +428,7 @@ function App() {
                   </Suspense>
                 } />
 
-                <Route path="/platform-admin" element={
-                  <AsyncBoundary fallback={<LoadingFallback />}>
-                    <SubNav
-                      title="Platform Administration"
-                      description="Manage tenants, users, and platform-wide settings"
-                    >
-                      <Suspense fallback={<LoadingFallback />}>
-                        <LazyPlatformAdminPage />
-                      </Suspense>
-                    </SubNav>
-                  </AsyncBoundary>
-                } />
-
-                <Route path="/platform-admin/tenants/:id/*" element={
+                <Route path="/configure/platform/tenants/:id/*" element={
                   <AsyncBoundary fallback={<LoadingFallback />}>
                     <SubNav
                       title="Tenant Details"

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import {
   Settings, Users, CreditCard, FileText, Shield,
-  Server, Layers, Building, Clock, Database, Zap
+  Server, Layers, Building, Clock, Database, Zap, Building2
 } from 'lucide-react';
 import { SubNav } from '../navigation/SubNav';
 import { ConnectionManagement } from './ConnectionManagement';
@@ -15,6 +15,8 @@ import { PoliciesConfiguration } from './policies/PoliciesConfiguration';
 import { GroupManagement } from './groups/GroupManagement';
 import { AgenticAISettings } from './AgenticAISettings';
 import { TabGroup } from '../navigation/TabGroup';
+import { PlatformAdminPage } from '../platform-admin/PlatformAdminPage';
+import { useStore } from '../../store/useStore';
 
 interface ConfigureHubProps {
   defaultTab?: string;
@@ -23,8 +25,9 @@ interface ConfigureHubProps {
 export function ConfigureHub({ defaultTab = 'connections' }: ConfigureHubProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { currentRole } = useStore();
   const [activeTab, setActiveTab] = useState<string>(defaultTab);
-  
+
   // Set active tab based on URL path
   useEffect(() => {
     const path = location.pathname.split('/')[2]; // /configure/:tab
@@ -48,7 +51,10 @@ export function ConfigureHub({ defaultTab = 'connections' }: ConfigureHubProps) 
     { id: 'agentic', label: 'Agentic AI', icon: <Zap className="h-5 w-5 mr-2" /> },
     { id: 'system', label: 'System', icon: <Settings className="h-5 w-5 mr-2" /> },
     { id: 'partners', label: 'Partners', icon: <Building className="h-5 w-5 mr-2" /> },
-    { id: 'policies', label: 'Policies', icon: <Shield className="h-5 w-5 mr-2" /> }
+    { id: 'policies', label: 'Policies', icon: <Shield className="h-5 w-5 mr-2" /> },
+    ...(currentRole === 'super-admin' ? [
+      { id: 'platform', label: 'Platform Admin', icon: <Building2 className="h-5 w-5 mr-2" /> }
+    ] : [])
   ];
 
   return (
@@ -69,6 +75,9 @@ export function ConfigureHub({ defaultTab = 'connections' }: ConfigureHubProps) 
         <Route path="system/*" element={<SystemSettings />} />
         <Route path="partners" element={<PartnersConfiguration />} />
         <Route path="policies/*" element={<PoliciesConfiguration />} />
+        {currentRole === 'super-admin' && (
+          <Route path="platform" element={<PlatformAdminPage />} />
+        )}
         <Route path="/*" element={<Navigate to="/configure/connections" />} />
       </Routes>
     </div>
