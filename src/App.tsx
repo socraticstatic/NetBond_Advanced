@@ -22,6 +22,7 @@ import { useIsMobile } from './hooks/useMobileDetection';
 import { MobileConfigureHub } from './components/configure/MobileConfigureHub';
 import { MobileDesktopOnly } from './components/common/MobileDesktopOnly';
 import { GlobalKeyboardShortcuts } from './components/common/GlobalKeyboardShortcuts';
+import { ImpersonationBanner } from './components/common/ImpersonationBanner';
 
 // Optimized lazy loading with better error handling
 const LazyConnectionWizard = lazy(() =>
@@ -133,6 +134,18 @@ const LazyDetachedVNFTable = lazy(() =>
   }))
 );
 
+const LazyPlatformAdminPage = lazy(() =>
+  import('./components/platform-admin/PlatformAdminPage').then(module => ({
+    default: module.PlatformAdminPage
+  }))
+);
+
+const LazyTenantDetailPage = lazy(() =>
+  import('./components/platform-admin/TenantDetailPage').then(module => ({
+    default: module.TenantDetailPage
+  }))
+);
+
 // Optimized loading fallback
 const LoadingFallback = memo(() => (
   <div className="min-h-[400px] flex items-center justify-center">
@@ -189,6 +202,7 @@ function App() {
     <NavigationStateProvider>
       <ThemeProvider>
         <ErrorBoundary onReset={() => window.location.reload()}>
+          <ImpersonationBanner />
           <ToastContainer />
           <GlobalKeyboardShortcuts />
           <Routes>
@@ -412,6 +426,32 @@ function App() {
                   <Suspense fallback={<LoadingFallback />}>
                     <LazyVNFDetailPage />
                   </Suspense>
+                } />
+
+                <Route path="/platform-admin" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <SubNav
+                      title="Platform Administration"
+                      description="Manage tenants, users, and platform-wide settings"
+                    >
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyPlatformAdminPage />
+                      </Suspense>
+                    </SubNav>
+                  </AsyncBoundary>
+                } />
+
+                <Route path="/platform-admin/tenants/:id/*" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <SubNav
+                      title="Tenant Details"
+                      description="View and manage tenant configuration"
+                    >
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyTenantDetailPage />
+                      </Suspense>
+                    </SubNav>
+                  </AsyncBoundary>
                 } />
 
                 <Route path="/" element={<Navigate to="/manage" />} />
