@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { PlusCircle, SlidersHorizontal, Users } from 'lucide-react';
-import { 
+import { PlusCircle, SlidersHorizontal, Users, Building2 } from 'lucide-react';
+import {
   Settings, BarChart2, Menu, Bell, HelpCircle, Search
 } from '../../utils/iconImports';
 import { SearchBar } from './SearchBar';
@@ -12,6 +12,7 @@ import { MobileMenu } from './MobileMenu';
 import { AdaptiveNavigation } from './AdaptiveNavigation';
 import { TabItem } from '../../types/navigation';
 import { Button } from '../common/Button';
+import { useStore } from '../../store/useStore';
 
 interface NavItem {
   label: string;
@@ -29,6 +30,7 @@ interface MainNavProps {
 export function MainNav({ items = [], onSearch }: MainNavProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { currentRole } = useStore();
   const [notifications] = useState(3);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,30 +60,36 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
   });
 
   const defaultItems: NavItem[] = [
-    { 
-      label: 'Create', 
-      icon: PlusCircle, 
+    {
+      label: 'Create',
+      icon: PlusCircle,
       href: '/create',
       description: 'Create a New Connection Here'
     },
-    { 
-      label: 'Manage', 
-      icon: Settings, 
+    {
+      label: 'Manage',
+      icon: Settings,
       href: '/manage',
       description: 'Manage Your Individual Connections Here'
     },
-    { 
-      label: 'Monitor', 
-      icon: BarChart2, 
+    {
+      label: 'Monitor',
+      icon: BarChart2,
       href: '/monitor',
       description: 'Monitor and Report on Your Connections Here'
     },
-    { 
-      label: 'Configure', 
-      icon: SlidersHorizontal, 
+    {
+      label: 'Configure',
+      icon: SlidersHorizontal,
       href: '/configure',
       description: 'Configure your Global Settings Here'
-    }
+    },
+    ...(currentRole === 'super-admin' ? [{
+      label: 'Platform Admin',
+      icon: Building2,
+      href: '/platform-admin',
+      description: 'Manage Tenants and Platform Settings'
+    }] : [])
   ];
 
   const navItems = items.length ? items : defaultItems;

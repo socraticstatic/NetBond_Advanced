@@ -1,17 +1,29 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe, Link2, Type } from 'lucide-react';
+import { User, Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe, Link2, Type, Users, UserCheck } from 'lucide-react';
 import { Button } from '../common/Button';
 import { useStore } from '../../store/useStore';
 import { FONT_SIZES } from '../../store/slices/fontSizeSlice';
+import { UserRole } from '../../store/slices/roleSlice';
 
 export function UserProfile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80');
 
-  // Font size from store
-  const { fontSize, setFontSize } = useStore();
+  // Font size and role from store
+  const { fontSize, setFontSize, currentRole, setRole, startImpersonation, impersonation } = useStore();
+
+  // Mock users for impersonation
+  const mockUsers = [
+    { id: '1', name: 'John Smith', email: 'john.smith@att.com', role: 'user' as UserRole },
+    { id: '2', name: 'Sarah Johnson', email: 'sarah.johnson@att.com', role: 'admin' as UserRole },
+    { id: '3', name: 'Michael Chen', email: 'michael.chen@att.com', role: 'user' as UserRole },
+    { id: '4', name: 'Emily Rodriguez', email: 'emily.rodriguez@att.com', role: 'user' as UserRole },
+    { id: '5', name: 'David Kim', email: 'david.kim@att.com', role: 'admin' as UserRole },
+  ];
+
+  const [selectedImpersonationUser, setSelectedImpersonationUser] = useState<string>('');
 
   const [formData, setFormData] = useState({
     name: 'Emilio Estevez',
@@ -857,6 +869,178 @@ export function UserProfile() {
             </div>
           </div>
         </div>
+
+        {/* Role Simulator - Only for Demo/Testing */}
+        <div className="px-6 py-6 border-t border-fw-secondary bg-gradient-to-br from-fw-wash to-fw-base">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-lg font-medium text-fw-heading">Role Simulator</h2>
+              <p className="text-sm text-fw-bodyLight mt-1">Switch between roles to preview different user experiences</p>
+            </div>
+            <div className="flex items-center space-x-2 px-3 py-1 bg-fw-base rounded-full border border-fw-secondary">
+              <Users className="h-4 w-4 text-fw-bodyLight" />
+              <span className="text-xs font-medium text-fw-body">Demo Mode</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div
+              onClick={() => setRole('super-admin')}
+              className={`
+                relative flex flex-col items-start p-6 rounded-lg border-2 cursor-pointer transition-all
+                ${currentRole === 'super-admin'
+                  ? 'border-brand-blue bg-brand-lightBlue shadow-md'
+                  : 'border-fw-secondary hover:border-brand-blue/30 hover:bg-brand-lightBlue/20'
+                }
+              `}
+            >
+              <Shield className={`h-8 w-8 mb-3 ${currentRole === 'super-admin' ? 'text-brand-blue' : 'text-gray-400'}`} />
+              <p className={`text-base font-medium ${currentRole === 'super-admin' ? 'text-brand-blue' : 'text-fw-heading'}`}>
+                Super Admin
+              </p>
+              <p className="text-xs text-fw-bodyLight mt-1">Manage all tenants and platform</p>
+              {currentRole === 'super-admin' && (
+                <div className="absolute top-3 right-3">
+                  <CheckCircle className="h-5 w-5 text-brand-blue" />
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => setRole('admin')}
+              className={`
+                relative flex flex-col items-start p-6 rounded-lg border-2 cursor-pointer transition-all
+                ${currentRole === 'admin'
+                  ? 'border-brand-blue bg-brand-lightBlue shadow-md'
+                  : 'border-fw-secondary hover:border-brand-blue/30 hover:bg-brand-lightBlue/20'
+                }
+              `}
+            >
+              <Settings className={`h-8 w-8 mb-3 ${currentRole === 'admin' ? 'text-brand-blue' : 'text-gray-400'}`} />
+              <p className={`text-base font-medium ${currentRole === 'admin' ? 'text-brand-blue' : 'text-fw-heading'}`}>
+                Tenant Admin
+              </p>
+              <p className="text-xs text-fw-bodyLight mt-1">Manage tenant resources and users</p>
+              {currentRole === 'admin' && (
+                <div className="absolute top-3 right-3">
+                  <CheckCircle className="h-5 w-5 text-brand-blue" />
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => setRole('user')}
+              className={`
+                relative flex flex-col items-start p-6 rounded-lg border-2 cursor-pointer transition-all
+                ${currentRole === 'user'
+                  ? 'border-brand-blue bg-brand-lightBlue shadow-md'
+                  : 'border-fw-secondary hover:border-brand-blue/30 hover:bg-brand-lightBlue/20'
+                }
+              `}
+            >
+              <User className={`h-8 w-8 mb-3 ${currentRole === 'user' ? 'text-brand-blue' : 'text-gray-400'}`} />
+              <p className={`text-base font-medium ${currentRole === 'user' ? 'text-brand-blue' : 'text-fw-heading'}`}>
+                Standard User
+              </p>
+              <p className="text-xs text-fw-bodyLight mt-1">View and manage connections</p>
+              {currentRole === 'user' && (
+                <div className="absolute top-3 right-3">
+                  <CheckCircle className="h-5 w-5 text-brand-blue" />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* User Impersonation - Only visible to admins */}
+        {(currentRole === 'admin' || currentRole === 'super-admin') && (
+          <div className="px-6 py-6 border-t border-fw-secondary">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-lg font-medium text-fw-heading">User Impersonation</h2>
+                <p className="text-sm text-fw-bodyLight mt-1">View the system from another user's perspective for troubleshooting</p>
+              </div>
+              <UserCheck className="h-6 w-6 text-fw-link" />
+            </div>
+
+            {impersonation.isImpersonating ? (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <div className="flex items-start space-x-3">
+                  <UserCheck className="h-5 w-5 text-amber-600 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-amber-900">Currently Impersonating</p>
+                    <p className="text-sm text-amber-700 mt-1">
+                      {impersonation.targetUser?.name} ({impersonation.targetUser?.email})
+                    </p>
+                    <p className="text-xs text-amber-600 mt-2">
+                      Started: {impersonation.startTime ? new Date(impersonation.startTime).toLocaleString() : 'N/A'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="impersonate-user" className="block text-sm font-medium text-fw-body mb-2">
+                    Select User to Impersonate
+                  </label>
+                  <select
+                    id="impersonate-user"
+                    value={selectedImpersonationUser}
+                    onChange={(e) => setSelectedImpersonationUser(e.target.value)}
+                    className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                  >
+                    <option value="">Choose a user...</option>
+                    {mockUsers.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {user.name} ({user.email}) - {user.role}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-fw-bodyLight mt-2">
+                    All impersonation sessions are logged for security and compliance
+                  </p>
+                </div>
+
+                <Button
+                  variant="primary"
+                  icon={UserCheck}
+                  onClick={() => {
+                    const user = mockUsers.find(u => u.id === selectedImpersonationUser);
+                    if (user) {
+                      startImpersonation(user);
+                      setSelectedImpersonationUser('');
+                    } else {
+                      window.addToast({
+                        type: 'warning',
+                        title: 'No User Selected',
+                        message: 'Please select a user to impersonate',
+                        duration: 3000,
+                      });
+                    }
+                  }}
+                  disabled={!selectedImpersonationUser}
+                >
+                  Start Impersonation
+                </Button>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+                  <div className="flex items-start space-x-3">
+                    <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-blue-900">Security Notice</p>
+                      <ul className="text-xs text-blue-700 mt-2 space-y-1 list-disc list-inside">
+                        <li>All actions taken during impersonation are logged</li>
+                        <li>Sessions automatically expire after 30 minutes</li>
+                        <li>Use responsibly for support and troubleshooting only</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Footer Actions */}
         <div className="px-6 py-4 bg-fw-wash flex items-center justify-end space-x-4 border-t border-fw-secondary">
