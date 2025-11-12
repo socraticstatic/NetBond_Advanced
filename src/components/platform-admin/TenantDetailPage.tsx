@@ -19,7 +19,7 @@ export function TenantDetailPage() {
         <p className="text-fw-bodyLight">Tenant not found</p>
         <Button
           variant="outline"
-          onClick={() => navigate('/platform-admin')}
+          onClick={() => navigate('/configure/platform')}
           className="mt-4"
         >
           Back to Tenants
@@ -68,7 +68,7 @@ export function TenantDetailPage() {
             variant="outline"
             size="sm"
             icon={ArrowLeft}
-            onClick={() => navigate('/platform-admin')}
+            onClick={() => navigate('/configure/platform')}
           >
             Back
           </Button>

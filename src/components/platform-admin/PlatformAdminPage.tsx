@@ -134,11 +134,11 @@ export function PlatformAdminPage() {
   };
 
   const handleViewDetails = (tenant: Tenant) => {
-    navigate(`/platform-admin/tenants/${tenant.id}`);
+    navigate(`/configure/platform/tenants/${tenant.id}`);
   };
 
   const handleEditBranding = (tenant: Tenant) => {
-    navigate(`/platform-admin/tenants/${tenant.id}/branding`);
+    navigate(`/configure/platform/tenants/${tenant.id}/branding`);
   };
 
   const handleExport = () => {
