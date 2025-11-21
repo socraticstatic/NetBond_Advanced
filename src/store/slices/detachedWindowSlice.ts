@@ -170,7 +170,11 @@ export const createDetachedWindowSlice: StateCreator<DetachedWindowSlice> = (set
 
       // Open new window - parse tableId to get type and connectionId
       const [tableType, connectionId] = tableId.split('-');
-      const windowUrl = `/detached/${tableType}/${connectionId}/${id}`;
+
+      // Use BASE_URL from Vite to respect deployment path (e.g., GitHub Pages subdirectory)
+      const basePath = import.meta.env.BASE_URL || '/';
+      const cleanBase = basePath === '/' ? '' : basePath.replace(/\/$/, '');
+      const windowUrl = `${cleanBase}/detached/${tableType}/${connectionId}/${id}`;
 
       try {
         const windowRef = window.open(windowUrl, `detached-${id}`, features);
