@@ -23,6 +23,7 @@ import { MobileConfigureHub } from './components/configure/MobileConfigureHub';
 import { MobileDesktopOnly } from './components/common/MobileDesktopOnly';
 import { GlobalKeyboardShortcuts } from './components/common/GlobalKeyboardShortcuts';
 import { ImpersonationBanner } from './components/common/ImpersonationBanner';
+import { PWAUpdatePrompt, usePWAUpdate } from './components/common/PWAUpdatePrompt';
 
 // Optimized lazy loading with better error handling
 const LazyConnectionWizard = lazy(() =>
@@ -162,6 +163,7 @@ function App() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const tour = useTour('main-app');
+  const pwaUpdate = usePWAUpdate();
 
   // Check if current route is a detached window
   const isDetachedWindow = location.pathname.startsWith('/detached/');
@@ -205,6 +207,12 @@ function App() {
           <ImpersonationBanner />
           <ToastContainer />
           <GlobalKeyboardShortcuts />
+          {pwaUpdate.showPrompt && (
+            <PWAUpdatePrompt
+              onUpdate={pwaUpdate.handleUpdate}
+              onDismiss={pwaUpdate.handleDismiss}
+            />
+          )}
           <Routes>
             {/* Detached windows - no layout wrapper */}
             <Route path="/detached/vnf/:connectionId/:windowId" element={

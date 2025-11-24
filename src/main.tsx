@@ -5,9 +5,36 @@ import './index.css';
 import './styles/fonts.css';
 import { initializePerformanceOptimizations } from './utils/performanceOptimizations';
 import { initializePreloader } from './utils/preloadStrategies';
+import { registerSW } from 'virtual:pwa-register';
 
 // Initialize performance optimizations
 initializePerformanceOptimizations();
+
+// Register service worker for PWA
+if ('serviceWorker' in navigator) {
+  registerSW({
+    immediate: true,
+    onNeedRefresh() {
+      if (confirm('New version available! Reload to update?')) {
+        window.location.reload();
+      }
+    },
+    onOfflineReady() {
+      console.log('App is ready to work offline');
+    },
+    onRegistered(registration) {
+      console.log('Service Worker registered');
+
+      // Check for updates every hour
+      setInterval(() => {
+        registration?.update();
+      }, 60 * 60 * 1000);
+    },
+    onRegisterError(error) {
+      console.error('Service Worker registration failed:', error);
+    }
+  });
+}
 
 const rootElement = document.getElementById('root');
 
