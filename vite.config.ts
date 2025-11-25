@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon-*.png', 'robots.txt'],
+      includeAssets: ['icon-*.png', 'robots.txt', 'sitemap.xml', '_headers', '.htaccess', 'vercel.json'],
       manifest: false, // Use our custom manifest.json
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
