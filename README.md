@@ -8,6 +8,8 @@
 
 AT&T NetBond SDCI (Software-Defined Cloud Interconnect) is a comprehensive cloud connectivity management platform that enables enterprises to establish secure, high-performance connections between their networks and major cloud service providers. This application provides a unified interface for managing, monitoring, and configuring network connections across multiple cloud environments.
 
+**✨ Now available as a Progressive Web App (PWA)** - Install on any device and run independently like a native application. Works offline, auto-updates, and provides a seamless native-like experience.
+
 ## Key Features
 
 ### Connection Management
@@ -46,17 +48,34 @@ AT&T NetBond SDCI (Software-Defined Cloud Interconnect) is a comprehensive cloud
 - **Grid View**: Card-based visualization of connections
 - **List View**: Detailed tabular view with customizable columns
 - **Topology View**: Network diagram visualization of connections
+- **Detached Tables**: Open tables in separate windows for multi-monitor workflows
+
+### Progressive Web App (PWA)
+- **Installable**: Add to home screen on desktop and mobile devices
+- **Offline Capable**: Works without internet connection (cached content)
+- **Auto-Updates**: Automatically checks for new versions every hour
+- **Native Feel**: Runs in standalone window without browser UI
+- **Fast Loading**: Service worker caching for instant repeat loads
+- **App Shortcuts**: Quick access to Create, Monitor, and Manage pages
 
 ## Technical Architecture
 
 ### Frontend
 - **Framework**: React 18 with TypeScript
-- **Routing**: React Router v6
+- **Routing**: React Router v6 with HashRouter (file:// protocol support)
 - **State Management**: Zustand for global state
 - **UI Components**: Custom component library with Tailwind CSS
 - **Charts & Visualization**: Chart.js with React-ChartJS-2
 - **Icons**: Lucide React
 - **Drag & Drop**: DND Kit for drag-and-drop functionality
+- **PWA**: Vite PWA plugin with Workbox service worker
+
+### Backend & Data
+- **Database**: Supabase (PostgreSQL)
+- **Real-time**: Supabase Realtime subscriptions
+- **Authentication**: Supabase Auth (email/password)
+- **Storage**: Local browser storage + Supabase persistence
+- **API**: Supabase REST API + Edge Functions
 
 ### Accessibility
 - **WCAG 2.1 AA Compliance**: 98% conformance
@@ -68,8 +87,11 @@ AT&T NetBond SDCI (Software-Defined Cloud Interconnect) is a comprehensive cloud
 ### Performance Optimizations
 - **Code Splitting**: Lazy loading of components
 - **Bundle Optimization**: Manual chunk splitting for vendor libraries
+- **Service Worker**: Workbox caching strategies for instant repeat loads
+- **Precaching**: 59 static resources (2.2 MB) cached on install
 - **Responsive Design**: Optimized for all device sizes
 - **Reduced Motion**: Respects user preferences for reduced motion
+- **Tree Shaking**: Automatic removal of unused code
 
 ## Getting Started
 
@@ -95,9 +117,11 @@ npm run dev
 
 ### Available Scripts
 
-- `npm run dev` - Start the development server
-- `npm run build` - Build for production
+- `npm run dev` - Start the development server (with PWA enabled)
+- `npm run build` - Build for production (includes PWA)
+- `npm run build:pwa` - Explicit PWA production build
 - `npm run build:gh-pages` - Build for GitHub Pages deployment
+- `npm run preview` - Preview production build locally
 - `npm run test` - Run tests
 - `npm run test:coverage` - Run tests with coverage
 - `npm run test:a11y` - Run accessibility tests
@@ -119,6 +143,20 @@ To manually deploy to GitHub Pages:
 ```bash
 npm run deploy
 ```
+
+### PWA Installation
+Once deployed, users can install the app on their devices:
+
+- **Desktop (Chrome/Edge)**: Click install icon (⊕) in address bar
+- **iOS**: Safari → Share → "Add to Home Screen"
+- **Android**: Chrome → Menu → "Install app"
+
+See [PWA_INSTALLATION.md](./PWA_INSTALLATION.md) for detailed installation instructions.
+
+### Deployment Requirements
+- **HTTPS Required**: PWA features require HTTPS (GitHub Pages provides this automatically)
+- **Base Path**: Configure `base` in `vite.config.ts` for subdirectory deployments
+- **Icons**: Replace placeholder icons in `public/` with production assets before deploying
 
 ## CI/CD Pipeline
 
@@ -211,10 +249,29 @@ AT&T NetBond SDCI is designed with accessibility in mind, following WCAG 2.1 AA 
 
 ## Browser Support
 
-- Chrome (latest 2 versions)
-- Firefox (latest 2 versions)
-- Safari (latest 2 versions)
-- Edge (latest 2 versions)
+### Full Support (PWA + All Features)
+- Chrome 90+ (Desktop & Mobile)
+- Edge 90+ (Desktop & Mobile)
+- Samsung Internet 14+
+- Opera 76+
+
+### Partial PWA Support
+- Safari 15.4+ (iOS - Add to Home Screen only)
+- Firefox (Latest 2 versions - Offline caching, no install)
+
+### Minimum Requirements
+- Modern browser with ES2020+ support
+- JavaScript enabled
+- Cookies/LocalStorage enabled
+- 2.4 MB available storage for cached assets
+
+## Documentation
+
+- [PWA Installation Guide](./PWA_INSTALLATION.md) - User guide for installing the app
+- [PWA Technical Summary](./PWA_SUMMARY.md) - Implementation details and features
+- [Contributing Guide](./CONTRIBUTING.md) - How to contribute to the project
+- [Deployment Guide](./DEPLOYMENT.md) - Detailed deployment instructions
+- [Site Map](./SITE_MAP.md) - Complete application structure and routes
 
 ## License
 
