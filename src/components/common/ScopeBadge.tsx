@@ -47,11 +47,11 @@ export function ScopeBadge({ scope, label, showIcon = true, variant = 'default' 
   const Icon = config.icon;
 
   const colorClasses = {
-    blue: 'bg-blue-100 text-blue-800 border-blue-300',
-    green: 'bg-green-100 text-green-800 border-green-300',
-    purple: 'bg-purple-100 text-purple-800 border-purple-300',
-    orange: 'bg-orange-100 text-orange-800 border-orange-300',
-    red: 'bg-red-100 text-red-800 border-red-300',
+    blue: 'bg-fw-blue-light text-fw-link border-fw-active',
+    green: 'bg-green-50 text-fw-success border-fw-success',
+    purple: 'bg-fw-accent text-fw-cobalt-700 border-fw-active',
+    orange: 'bg-orange-50 text-fw-warn border-fw-warn',
+    red: 'bg-red-50 text-fw-error border-fw-error',
   }[config.color];
 
   return (
@@ -62,10 +62,10 @@ export function ScopeBadge({ scope, label, showIcon = true, variant = 'default' 
       </span>
 
       {variant === 'detailed' && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-fw-gray-900 text-fw-linkPrimary text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
           {config.description}
           <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
-            <div className="border-4 border-transparent border-t-gray-900"></div>
+            <div className="border-4 border-transparent border-t-fw-gray-900"></div>
           </div>
         </div>
       )}
@@ -81,16 +81,16 @@ interface TenantBadgeProps {
 
 export function TenantBadge({ tenantName, tenantId, isCrossTenant }: TenantBadgeProps) {
   return (
-    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white border-2 border-gray-300 rounded-lg shadow-sm">
-      <Building2 className="h-4 w-4 text-gray-600" />
+    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-fw-base border-2 border-fw-secondary rounded-lg shadow-sm">
+      <Building2 className="h-4 w-4 text-fw-body" />
       <div className="flex flex-col">
-        <span className="text-xs font-semibold text-gray-900">{tenantName}</span>
-        {tenantId && <span className="text-xs text-gray-500">{tenantId}</span>}
+        <span className="text-xs font-semibold text-fw-heading">{tenantName}</span>
+        {tenantId && <span className="text-xs text-fw-bodyLight">{tenantId}</span>}
       </div>
       {isCrossTenant && (
         <div className="relative group">
-          <Lock className="h-3.5 w-3.5 text-orange-500" />
-          <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
+          <Lock className="h-3.5 w-3.5 text-fw-warn" />
+          <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-fw-gray-900 text-fw-linkPrimary text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
             Cross-tenant access
           </div>
         </div>
@@ -109,11 +109,11 @@ export function AccessPath({ path, className = '' }: AccessPathProps) {
     <div className={`inline-flex items-center gap-2 ${className}`}>
       {path.map((item, index) => (
         <div key={index} className="inline-flex items-center gap-2">
-          <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded border border-gray-300">
+          <span className="px-2 py-1 bg-fw-wash text-fw-body text-xs font-medium rounded border border-fw-secondary">
             {item.name}
           </span>
           {index < path.length - 1 && (
-            <span className="text-gray-400">→</span>
+            <span className="text-fw-disabled">→</span>
           )}
         </div>
       ))}
@@ -129,7 +129,7 @@ interface ScopeFilterPillProps {
 
 export function ScopeFilterPills({ activeScope, availableScopes, onScopeChange }: ScopeFilterPillProps) {
   return (
-    <div className="inline-flex items-center gap-2 p-1 bg-gray-100 rounded-lg">
+    <div className="inline-flex items-center gap-2 p-1 bg-fw-wash rounded-lg">
       {availableScopes.map((scope) => {
         const isActive = scope === activeScope;
         return (
@@ -138,8 +138,8 @@ export function ScopeFilterPills({ activeScope, availableScopes, onScopeChange }
             onClick={() => onScopeChange(scope)}
             className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               isActive
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-fw-base text-fw-heading shadow-sm'
+                : 'text-fw-body hover:text-fw-heading'
             }`}
           >
             <ScopeBadge scope={scope} showIcon={false} variant="default" />

@@ -12,14 +12,14 @@ export function PermissionBadge({ requirement, variant = 'default', showTooltip 
   const color = permissionChecker.getPermissionColor(requirement.permission);
 
   const colorClasses = {
-    blue: 'bg-blue-100 text-blue-800 border-blue-300',
-    green: 'bg-green-100 text-green-800 border-green-300',
-    yellow: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    red: 'bg-red-100 text-red-800 border-red-300',
-    purple: 'bg-purple-100 text-purple-800 border-purple-300',
-    orange: 'bg-orange-100 text-orange-800 border-orange-300',
-    pink: 'bg-pink-100 text-pink-800 border-pink-300',
-    gray: 'bg-gray-100 text-gray-800 border-gray-300',
+    blue: 'bg-fw-blue-light text-fw-link border-fw-active',
+    green: 'bg-green-50 text-fw-success border-fw-success',
+    yellow: 'bg-orange-50 text-fw-warn border-fw-warn',
+    red: 'bg-red-50 text-fw-error border-fw-error',
+    purple: 'bg-fw-accent text-fw-cobalt-700 border-fw-active',
+    orange: 'bg-orange-50 text-fw-warn border-fw-warn',
+    pink: 'bg-red-50 text-fw-error border-fw-error',
+    gray: 'bg-fw-neutral text-fw-disabled border-fw-secondary',
   }[color];
 
   const getIcon = () => {
@@ -91,10 +91,10 @@ export function PermissionBadge({ requirement, variant = 'default', showTooltip 
       </span>
 
       {showTooltip && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-pre-line z-50 pointer-events-none min-w-max">
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-fw-gray-900 text-fw-linkPrimary text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-pre-line z-50 pointer-events-none min-w-max">
           {getTooltipContent()}
           <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
-            <div className="border-4 border-transparent border-t-gray-900"></div>
+            <div className="border-4 border-transparent border-t-fw-gray-900"></div>
           </div>
         </div>
       )}
