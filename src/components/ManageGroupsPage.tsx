@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Layers, Search, Filter, Download, Plus, LayoutGrid, List, Minimize2, Maximize2, X, Activity, ShoppingBag, Cpu, Shield
+  Layers, Search, Filter, Download, Plus, LayoutGrid, List, Minimize2, Maximize2, X, Activity, ShoppingBag, Cpu
 } from 'lucide-react';
 import { Group } from '../types/group';
 import { Button } from './common/Button';
@@ -12,9 +12,6 @@ import { GroupCardView, GroupListView } from './group/views';
 import { ConfirmDialog } from './common/ConfirmDialog';
 import { ConnectionTabs } from './connection/ConnectionTabs';
 import { ControlCenterManager } from './control-center/ControlCenterManager';
-import { PermissionBadge } from './common/PermissionBadge';
-import { ResourceFilterBadge } from './common/ResourceFilterBadge';
-import { permissionChecker } from '../utils/permissionChecker';
 
 export function ManageGroupsPage() {
   const navigate = useNavigate();
@@ -23,10 +20,6 @@ export function ManageGroupsPage() {
   const removeGroup = useStore(state => state.removeGroup);
   const users = useStore(state => state.users);
   const addGroup = useStore(state => state.addGroup);
-  const currentRole = useStore(state => state.currentRole);
-
-  // RBAC Showcase: Check permissions
-  const userScope = permissionChecker.getDefaultScope(currentRole);
   
   const [activeTab, setActiveTab] = useState<'groups' | 'marketplace' | 'control-center'>('groups');
   const [searchQuery, setSearchQuery] = useState('');
@@ -201,42 +194,6 @@ export function ManageGroupsPage() {
                 >
                   Export
                 </Button>
-              </div>
-
-              {/* RBAC Showcase Banner */}
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg px-4 py-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <Shield className="h-4 w-4 text-blue-600" />
-                      <span className="text-xs font-semibold text-blue-900">RBAC Scope:</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-blue-700">Role:</span>
-                        <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs font-medium rounded capitalize">
-                          {currentRole.replace('-', ' ')}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-blue-700">Filter:</span>
-                        <ResourceFilterBadge filter={userScope} showIcon={false} />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <PermissionBadge
-                      requirement={{ permission: 'create', resource: 'pool' }}
-                      variant="compact"
-                      showTooltip={false}
-                    />
-                    <PermissionBadge
-                      requirement={{ permission: 'edit', resource: 'pool' }}
-                      variant="compact"
-                      showTooltip={false}
-                    />
-                  </div>
-                </div>
               </div>
 
               {/* Expanded Filters */}
