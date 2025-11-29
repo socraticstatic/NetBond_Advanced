@@ -26,7 +26,7 @@ const DEFAULT_COLUMNS: ColumnConfig = {
   'connections-list': ['name', 'groups', 'type', 'status', 'bandwidth', 'location', 'provider'],
   groups: ['name', 'connections', 'bandwidth', 'status', 'created'],
   'groups-list': ['name', 'type', 'connections', 'members', 'status'],
-  users: ['name', 'email', 'role', 'status', 'lastLogin'],
+  users: ['user', 'role', 'permissions', 'department', 'status'],
   vnf: ['name', 'type', 'status', 'connection', 'actions'],
   cloudrouter: ['name', 'status', 'location', 'connections', 'actions'],
   links: ['name', 'status', 'bandwidth', 'latency', 'actions']
