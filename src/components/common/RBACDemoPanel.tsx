@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Shield, Eye, Users, Lock, FileText, Settings, DollarSign, X, ChevronRight, Info } from 'lucide-react';
+import { Shield, Eye, Users, Lock, FileText, Settings, DollarSign, X, ChevronRight, Info, Layers } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { Button } from './Button';
 import { RoleCapabilityMatrix } from './RoleCapabilityMatrix';
 import { AuditLogPanel } from './AuditLogPanel';
 import { PermissionBadge } from './PermissionBadge';
+import { ResourceFilterBadge } from './ResourceFilterBadge';
 import { Role } from '../../types/permissions';
+import { permissionChecker } from '../../utils/permissionChecker';
 
 interface RBACDemoPanelProps {
   isOpen: boolean;
@@ -167,7 +169,7 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
           <div className="flex-1 overflow-y-auto p-6">
             {/* Current Role Status */}
             <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
                     <Shield className="h-6 w-6 text-white" />
@@ -185,6 +187,34 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
                   <Eye className="h-4 w-4 mr-2" />
                   View My Permissions
                 </Button>
+              </div>
+
+              {/* Scope & Filter Information */}
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-blue-200">
+                <div>
+                  <p className="text-xs text-blue-700 font-medium mb-1">Default Resource Filter</p>
+                  <ResourceFilterBadge
+                    filter={permissionChecker.getDefaultScope(currentRole)}
+                    showIcon={true}
+                  />
+                </div>
+                <div>
+                  <p className="text-xs text-blue-700 font-medium mb-1">Maximum Filter Scope</p>
+                  <ResourceFilterBadge
+                    filter={permissionChecker.getMaxScope(currentRole)}
+                    showIcon={true}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-3 pt-3 border-t border-blue-200">
+                <div className="flex items-start gap-2">
+                  <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-blue-700">
+                    <span className="font-semibold">Resource Filters</span> control <em>which</em> resources you can access within your scope.
+                    <span className="font-semibold"> Scope paths</span> define <em>where</em> in the hierarchy your permissions apply.
+                  </p>
+                </div>
               </div>
             </div>
 
