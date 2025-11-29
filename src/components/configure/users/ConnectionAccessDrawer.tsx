@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { Network, Shield, Eye, Settings, Activity, AlertCircle } from 'lucide-react';
+import { Network, Shield, Eye, Settings, Activity, AlertCircle, Info } from 'lucide-react';
 import { UserType } from '../types';
 import { SideDrawer } from '../../common/SideDrawer';
 import { Button } from '../../common/Button';
+import { ScopeBadge } from '../../common/ScopeBadge';
+import { permissionChecker } from '../../../utils/permissionChecker';
+import { Role } from '../../../types/permissions';
 
 interface ConnectionAccessDrawerProps {
   isOpen: boolean;
@@ -111,12 +114,36 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
               <p className="text-xs text-fw-body mb-2">
                 Configure which connections {user.name} can access and what actions they can perform on each connection.
               </p>
-              <div className="flex items-center gap-2 text-xs">
-                <span className="text-fw-bodyLight">Role:</span>
-                <span className="px-2 py-0.5 bg-fw-accent text-fw-cobalt-700 rounded-md font-medium border border-fw-active">
-                  {user.role}
-                </span>
+              <div className="flex items-center gap-3 text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-fw-bodyLight">Role:</span>
+                  <span className="px-2 py-0.5 bg-fw-accent text-fw-cobalt-700 rounded-md font-medium border border-fw-active">
+                    {user.role}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-fw-bodyLight">Scope:</span>
+                  <ScopeBadge
+                    scope={permissionChecker.getDefaultScope(
+                      user.role.toLowerCase().includes('admin') ? 'admin' : 'user'
+                    )}
+                    showIcon={false}
+                  />
+                </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scope Information Banner */}
+        <div className="bg-fw-accent border border-fw-active rounded-lg p-3">
+          <div className="flex items-start gap-2">
+            <Info className="h-4 w-4 text-fw-link mt-0.5 flex-shrink-0" />
+            <div className="text-xs text-fw-body">
+              <span className="font-medium text-fw-heading">Scope Limitations:</span>
+              {' '}User's role limits access to connections within their {permissionChecker.getDefaultScope(
+                user.role.toLowerCase().includes('admin') ? 'admin' : 'user'
+              )} scope. Connections outside this scope will not be accessible.
             </div>
           </div>
         </div>
