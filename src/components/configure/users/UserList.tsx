@@ -157,10 +157,10 @@ export function UserList({ searchQuery }: UserListProps) {
         const scope = getScopeForUser(user);
         return (
           <div className="flex flex-col gap-1">
-            <ScopeBadge scope={scope} variant="compact" />
+            <ScopeBadge scope={scope} variant="detailed" showIcon={true} />
             <span className="text-xs text-gray-500">
               {scope === 'tenant' && 'All resources'}
-              {scope === 'department' && user.department || 'Department'}
+              {scope === 'department' && user.department}
               {scope === 'own' && 'Own only'}
             </span>
           </div>
