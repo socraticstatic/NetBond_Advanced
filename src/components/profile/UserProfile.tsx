@@ -8,6 +8,9 @@ import { FONT_SIZES } from '../../store/slices/fontSizeSlice';
 import { UserRole } from '../../store/slices/roleSlice';
 import { RoleCapabilityMatrix } from '../common/RoleCapabilityMatrix';
 import { AuditLogPanel } from '../common/AuditLogPanel';
+import { PermissionBadge } from '../common/PermissionBadge';
+import { ResourceFilterBadge } from '../common/ResourceFilterBadge';
+import { permissionChecker } from '../../utils/permissionChecker';
 
 export function UserProfile() {
   const navigate = useNavigate();
@@ -872,6 +875,104 @@ export function UserProfile() {
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-fw-base after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
               </label>
             </div>
+          </div>
+        </div>
+
+        {/* RBAC Information */}
+        <div className="px-6 py-6 border-t border-fw-secondary">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-blue-50 rounded-lg">
+                <Shield className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-lg font-medium text-fw-heading">Access Control (RBAC)</h2>
+                <p className="text-sm text-fw-bodyLight mt-0.5">Your current role and permissions</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-full border border-green-200">
+              <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-xs font-medium text-green-700">Active</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Current Role Card */}
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-4 border-2 border-blue-200">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xs font-semibold text-blue-900 uppercase tracking-wide">Current Role</h3>
+                <Shield className="h-4 w-4 text-blue-600" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="px-3 py-2 bg-white rounded-md border border-blue-200 flex-1">
+                  <span className="text-base font-bold text-blue-900 capitalize">
+                    {currentRole.replace('-', ' ')}
+                  </span>
+                </div>
+              </div>
+              <p className="text-xs text-blue-700 mt-2">
+                {currentRole === 'super-admin' && 'Full platform access'}
+                {currentRole === 'admin' && 'Tenant-level management'}
+                {currentRole === 'user' && 'Standard user access'}
+              </p>
+            </div>
+
+            {/* Resource Scope Card */}
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 border-2 border-purple-200">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xs font-semibold text-purple-900 uppercase tracking-wide">Resource Scope</h3>
+                <Building className="h-4 w-4 text-purple-600" />
+              </div>
+              <div className="flex items-center gap-2">
+                <ResourceFilterBadge filter={permissionChecker.getDefaultScope(currentRole)} showIcon={true} />
+              </div>
+              <p className="text-xs text-purple-700 mt-2">
+                Defines which resources you can access
+              </p>
+            </div>
+
+            {/* Quick Permissions Card */}
+            <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-lg p-4 border-2 border-green-200">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xs font-semibold text-green-900 uppercase tracking-wide">Key Permissions</h3>
+                <CheckCircle className="h-4 w-4 text-green-600" />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-green-800">Connections</span>
+                  <div className="flex gap-1">
+                    <PermissionBadge requirement={{ permission: 'view', resource: 'connection' }} variant="compact" showTooltip={false} />
+                    <PermissionBadge requirement={{ permission: 'edit', resource: 'connection' }} variant="compact" showTooltip={false} />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-green-800">Pools</span>
+                  <div className="flex gap-1">
+                    <PermissionBadge requirement={{ permission: 'view', resource: 'pool' }} variant="compact" showTooltip={false} />
+                    <PermissionBadge requirement={{ permission: 'create', resource: 'pool' }} variant="compact" showTooltip={false} />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-green-800">Billing</span>
+                  <div className="flex gap-1">
+                    <PermissionBadge requirement={{ permission: 'view', resource: 'billing' }} variant="compact" showTooltip={false} />
+                    <PermissionBadge requirement={{ permission: 'edit', resource: 'billing' }} variant="compact" showTooltip={false} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* View Full Matrix Button */}
+          <div className="mt-4 flex justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              icon={Eye}
+              onClick={() => setShowPermissionMatrix(true)}
+            >
+              View Full Permission Matrix
+            </Button>
           </div>
         </div>
 
