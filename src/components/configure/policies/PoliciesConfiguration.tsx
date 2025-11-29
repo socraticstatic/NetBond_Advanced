@@ -6,6 +6,7 @@ import { Layer3IPv4Policy } from './tabs/Layer3IPv4Policy';
 import { Layer3IPv6Policy } from './tabs/Layer3IPv6Policy';
 import { RestrictedIPv4Policy } from './tabs/RestrictedIPv4Policy';
 import { BandwidthScalingPolicy } from './tabs/BandwidthScalingPolicy';
+import { AccessControlPolicy } from './tabs/AccessControlPolicy';
 import { Button } from '../../common/Button';
 
 export function PoliciesConfiguration() {
@@ -17,7 +18,7 @@ export function PoliciesConfiguration() {
     { id: 'ipv6', label: 'Layer 3 IPV6', icon: <Layers className="h-5 w-5 mr-2" />, category: 'Routing' },
     { id: 'restricted', label: 'Restricted IPV4', icon: <Lock className="h-5 w-5 mr-2" />, category: 'Routing' },
     { id: 'bandwidth', label: 'Bandwidth', icon: <TrendingUp className="h-5 w-5 mr-2" />, category: 'Scaling' },
-    { id: 'security', label: 'Access Control', icon: <Shield className="h-5 w-5 mr-2" />, category: 'Security', disabled: true }
+    { id: 'security', label: 'Access Control', icon: <Shield className="h-5 w-5 mr-2" />, category: 'Security' }
   ];
 
   const renderContent = () => {
@@ -30,6 +31,8 @@ export function PoliciesConfiguration() {
         return <RestrictedIPv4Policy />;
       case 'bandwidth':
         return <BandwidthScalingPolicy />;
+      case 'security':
+        return <AccessControlPolicy />;
       default:
         return (
           <div className="p-6">
