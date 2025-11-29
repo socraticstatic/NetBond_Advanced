@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Check, X, Shield, User, Crown, ChevronDown, ChevronUp, Info, Layers, Eye, Building2 } from 'lucide-react';
+import { Check, X, Shield, Crown, ChevronDown, ChevronUp, Info, Layers, Eye, Building2 } from 'lucide-react';
+import { UserIcon } from './UserIcon';
 import { Role, ROLE_PERMISSIONS, PERMISSION_LABELS, ResourceType, RESOURCE_LABELS, ROLE_DEFAULT_FILTER, ROLE_MAX_FILTER } from '../../types/permissions';
 import { RESOURCE_FILTER_LABELS, RESOURCE_FILTER_DESCRIPTIONS } from '../../types/scope';
 import { Modal } from './Modal';
@@ -20,7 +21,7 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
   const getRoleIcon = (role: Role) => {
     switch (role) {
       case 'user':
-        return <User className="h-4 w-4" />;
+        return <UserIcon size="sm" />;
       case 'admin':
         return <Shield className="h-4 w-4" />;
       case 'super-admin':
@@ -177,7 +178,7 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
           <div className="flex items-center justify-center gap-4">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                <User className="h-8 w-8 text-blue-600" />
+                <UserIcon size="lg" variant="primary" />
               </div>
               <div className="text-xs font-medium text-gray-700">User</div>
               <div className="text-xs text-gray-500">1 permission</div>

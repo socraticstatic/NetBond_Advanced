@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { User, MoreVertical, UserPlus, Search, Filter, Download, Shield, Eye, Lock, Globe } from 'lucide-react';
+import { MoreVertical, UserPlus, Search, Filter, Download, Shield, Eye, Lock, Globe } from 'lucide-react';
+import { UserIcon } from '../../common/UserIcon';
 import { ConnectionAccessDrawer } from './ConnectionAccessDrawer';
 import { AddUserDrawer } from './AddUserDrawer';
 import { UserType } from '../types';
@@ -88,7 +89,7 @@ export function UserList({ searchQuery }: UserListProps) {
         <div className="flex items-center min-w-[200px]">
           <div className="flex-shrink-0 h-10 w-10">
             <div className="h-10 w-10 rounded-full bg-gradient-to-br from-fw-blue-000 to-fw-accent flex items-center justify-center border-2 border-fw-secondary">
-              <User className="h-5 w-5 text-fw-link" />
+              <UserIcon size="md" variant="primary" />
             </div>
           </div>
           <div className="ml-3 flex-1 min-w-0">
@@ -253,7 +254,7 @@ export function UserList({ searchQuery }: UserListProps) {
                 </span>
               </div>
               <div className="flex items-center gap-1">
-                <User className="h-3.5 w-3.5 text-fw-success" />
+                <UserIcon size="xs" variant="success" />
                 <span className="text-fw-heading font-medium">
                   {users.filter(u => u.status === 'active').length} Active
                 </span>
@@ -356,7 +357,7 @@ export function UserList({ searchQuery }: UserListProps) {
                 {
                   id: 'edit',
                   label: 'Edit User',
-                  icon: <User className="h-4 w-4" />,
+                  icon: <UserIcon size="sm" />,
                   onClick: () => {
                     window.addToast({
                       type: 'info',
@@ -387,7 +388,7 @@ export function UserList({ searchQuery }: UserListProps) {
           )}
           emptyState={
             <div className="text-center py-12">
-              <User className="h-12 w-12 text-fw-disabled mx-auto mb-3" />
+              <UserIcon size="xl" variant="muted" className="mx-auto mb-3" />
               <h3 className="text-sm font-medium text-fw-heading mb-1">No users found</h3>
               <p className="text-sm text-fw-bodyLight">
                 {localSearchQuery ? 'Try adjusting your search criteria' : 'Get started by adding your first user'}

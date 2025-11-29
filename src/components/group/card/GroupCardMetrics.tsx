@@ -1,4 +1,5 @@
-import { User, Network, DollarSign } from 'lucide-react';
+import { Network, DollarSign } from 'lucide-react';
+import { UserIcon } from '../../common/UserIcon';
 import { Group } from '../../../types/group';
 
 interface GroupCardMetricsProps {
@@ -12,7 +13,7 @@ export function GroupCardMetrics({ group }: GroupCardMetricsProps) {
       <div className="grid grid-cols-2 gap-3">
         {/* Members */}
         <div className="flex items-start space-x-3 p-3 bg-fw-blue-light rounded-lg border border-fw-blue-100">
-          <User className="h-4 w-4 text-fw-link mt-0.5 flex-shrink-0" />
+          <UserIcon size="sm" variant="primary" className="mt-0.5 flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <span className="text-xs font-medium text-fw-heading block mb-0.5">Members</span>
             <p className="text-sm font-semibold text-fw-link">

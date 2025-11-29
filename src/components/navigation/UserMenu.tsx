@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { User, Shield, ChevronDown } from 'lucide-react';
+import { Shield, ChevronDown } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { PermissionBadge } from '../common/PermissionBadge';
 import { ResourceFilterBadge } from '../common/ResourceFilterBadge';
 import { permissionChecker } from '../../utils/permissionChecker';
+import { UserIcon } from '../common/UserIcon';
 
 interface UserMenuProps {
   name: string;

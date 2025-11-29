@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { UserPlus, Trash2, ShieldCheck, Edit2, X, Search, Filter, Download } from 'lucide-react';
+import { UserIcon } from '../../../common/UserIcon';
 import { Group } from '../../../../types/group';
 import { User as UserType } from '../../../../types';
 import { BaseTable } from '../../../common/BaseTable';
@@ -79,7 +80,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
               />
             ) : (
               <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                <User className="h-5 w-5 text-gray-500" />
+                <UserIcon size="md" variant="muted" />
               </div>
             )}
           </div>
@@ -263,7 +264,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
           )}
           emptyState={
             <div className="text-center py-12">
-              <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <UserIcon size="xl" variant="muted" className="mx-auto mb-4" />
               <p className="text-gray-500">No members found in this group</p>
             </div>
           }
@@ -332,7 +333,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
                               />
                             ) : (
                               <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                <User className="h-5 w-5 text-gray-500" />
+                                <UserIcon size="md" variant="muted" />
                               </div>
                             )}
                           </div>
@@ -373,5 +374,3 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
   );
 }
 
-// Needed for rendering the user avatar placeholder
-import { User } from 'lucide-react';
