@@ -154,15 +154,25 @@ export function UserList({ searchQuery }: UserListProps) {
       id: 'scope',
       label: 'Access Scope',
       render: (user: UserType) => {
-        const scope = getScopeForUser(user);
+        const mappedRole = mapUserRole(user.role);
+        const defaultScope = permissionChecker.getDefaultScope(mappedRole);
+        const maxScope = permissionChecker.getMaxScope(mappedRole);
+
         return (
-          <div className="flex flex-col gap-1">
-            <ScopeBadge scope={scope} variant="detailed" showIcon={true} />
-            <span className="text-xs text-fw-bodyLight">
-              {scope === 'tenant' && 'All resources'}
-              {scope === 'department' && user.department}
-              {scope === 'own' && 'Own only'}
-            </span>
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-2">
+              <ScopeBadge scope={defaultScope} variant="detailed" showIcon={true} />
+            </div>
+            <div className="flex items-center gap-1 text-xs text-fw-bodyLight">
+              <span>Max:</span>
+              <span className="font-medium text-fw-body capitalize">{maxScope}</span>
+              {user.department && defaultScope === 'department' && (
+                <>
+                  <span className="mx-1">•</span>
+                  <span>{user.department}</span>
+                </>
+              )}
+            </div>
           </div>
         );
       }
@@ -225,11 +235,13 @@ export function UserList({ searchQuery }: UserListProps) {
         <div className="flex items-start gap-3">
           <Shield className="h-5 w-5 text-fw-link mt-0.5 flex-shrink-0" />
           <div className="flex-1">
-            <h3 className="text-sm font-semibold text-fw-heading mb-1">Role-Based Access Control</h3>
+            <h3 className="text-sm font-semibold text-fw-heading mb-1">Role-Based Access Control with Scope</h3>
             <p className="text-xs text-fw-body mb-3">
               Users are assigned roles that determine their permissions. Each role has a defined scope limiting what resources they can access.
             </p>
-            <div className="flex items-center gap-3 text-xs">
+
+            {/* Stats Row */}
+            <div className="flex items-center gap-3 text-xs mb-3">
               <div className="flex items-center gap-1">
                 <Globe className="h-3.5 w-3.5 text-fw-link" />
                 <span className="text-fw-heading font-medium">{users.length} Total Users</span>
@@ -244,6 +256,21 @@ export function UserList({ searchQuery }: UserListProps) {
                 <User className="h-3.5 w-3.5 text-fw-success" />
                 <span className="text-fw-heading font-medium">
                   {users.filter(u => u.status === 'active').length} Active
+                </span>
+              </div>
+            </div>
+
+            {/* Scope Information */}
+            <div className="bg-fw-accent border border-fw-active rounded-md p-2">
+              <div className="text-xs">
+                <span className="text-fw-bodyLight">Your Access Scope:</span>
+                <span className="ml-2 text-fw-heading font-semibold">
+                  {permissionChecker.getDefaultScope(currentRole).charAt(0).toUpperCase() + permissionChecker.getDefaultScope(currentRole).slice(1)}
+                </span>
+                <span className="mx-2 text-fw-bodyLight">•</span>
+                <span className="text-fw-bodyLight">Max Scope:</span>
+                <span className="ml-1 text-fw-heading font-semibold">
+                  {permissionChecker.getMaxScope(currentRole).charAt(0).toUpperCase() + permissionChecker.getMaxScope(currentRole).slice(1)}
                 </span>
               </div>
             </div>
