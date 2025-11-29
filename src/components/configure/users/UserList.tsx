@@ -87,13 +87,13 @@ export function UserList({ searchQuery }: UserListProps) {
       render: (user: UserType) => (
         <div className="flex items-center min-w-[200px]">
           <div className="flex-shrink-0 h-10 w-10">
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center border-2 border-blue-200">
-              <User className="h-5 w-5 text-blue-600" />
+            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-fw-blue-000 to-fw-accent flex items-center justify-center border-2 border-fw-secondary">
+              <User className="h-5 w-5 text-fw-link" />
             </div>
           </div>
           <div className="ml-3 flex-1 min-w-0">
-            <div className="text-sm font-semibold text-gray-900 truncate">{user.name}</div>
-            <div className="text-xs text-gray-600 truncate">{user.email}</div>
+            <div className="text-sm font-semibold text-fw-heading truncate">{user.name}</div>
+            <div className="text-xs text-fw-bodyLight truncate">{user.email}</div>
           </div>
         </div>
       )
@@ -108,13 +108,13 @@ export function UserList({ searchQuery }: UserListProps) {
         const roleColor = getRoleColor(user.role);
         const permissions = ROLE_PERMISSIONS[mappedRole];
         const colorClasses = {
-          purple: 'bg-purple-50 text-purple-700 border-purple-200',
-          blue: 'bg-blue-50 text-blue-700 border-blue-200'
+          purple: 'bg-fw-accent text-fw-cobalt-700 border-fw-active',
+          blue: 'bg-fw-blue-light text-fw-link border-fw-active'
         }[roleColor];
 
         return (
           <div className="flex items-center gap-2">
-            <Shield className={`h-4 w-4 ${roleColor === 'purple' ? 'text-purple-600' : 'text-blue-600'}`} />
+            <Shield className={`h-4 w-4 ${roleColor === 'purple' ? 'text-fw-cobalt-600' : 'text-fw-link'}`} />
             <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold border ${colorClasses}`}>
               {user.role}
             </span>
@@ -131,8 +131,8 @@ export function UserList({ searchQuery }: UserListProps) {
 
         return (
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-900">{permissions.length}</span>
-            <span className="text-xs text-gray-500">permission{permissions.length !== 1 ? 's' : ''}</span>
+            <span className="text-sm font-medium text-fw-heading">{permissions.length}</span>
+            <span className="text-xs text-fw-bodyLight">permission{permissions.length !== 1 ? 's' : ''}</span>
             <button
               onClick={() => {
                 window.addToast({
@@ -142,7 +142,7 @@ export function UserList({ searchQuery }: UserListProps) {
                   duration: 5000
                 });
               }}
-              className="text-xs text-blue-600 hover:text-blue-800 font-medium ml-1"
+              className="text-xs text-fw-link hover:text-fw-linkHover font-medium ml-1"
             >
               View
             </button>
@@ -158,7 +158,7 @@ export function UserList({ searchQuery }: UserListProps) {
         return (
           <div className="flex flex-col gap-1">
             <ScopeBadge scope={scope} variant="detailed" showIcon={true} />
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-fw-bodyLight">
               {scope === 'tenant' && 'All resources'}
               {scope === 'department' && user.department}
               {scope === 'own' && 'Own only'}
@@ -173,8 +173,8 @@ export function UserList({ searchQuery }: UserListProps) {
       sortable: true,
       sortKey: 'department' as keyof UserType,
       render: (user: UserType) => (
-        <div className="text-sm text-gray-900">
-          {user.department || <span className="text-gray-400 italic">Not assigned</span>}
+        <div className="text-sm text-fw-body">
+          {user.department || <span className="text-fw-disabled italic">Not assigned</span>}
         </div>
       )
     },
@@ -187,12 +187,12 @@ export function UserList({ searchQuery }: UserListProps) {
         <div className="flex flex-col gap-1">
           <span className={`px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full w-fit ${
             user.status === 'active'
-              ? 'bg-green-100 text-green-800'
-              : 'bg-gray-100 text-gray-800'
+              ? 'bg-green-50 text-fw-success'
+              : 'bg-fw-neutral text-fw-disabled'
           }`}>
             {user.status === 'active' ? 'Active' : 'Inactive'}
           </span>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-fw-bodyLight">
             {new Date(user.lastActive).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           </span>
         </div>
@@ -204,12 +204,12 @@ export function UserList({ searchQuery }: UserListProps) {
     <>
       {/* Permission Status Banner */}
       {!canManageUsers.allowed && (
-        <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-4 mb-6">
+        <div className="bg-orange-50 border-2 border-fw-warn rounded-lg p-4 mb-6">
           <div className="flex items-start gap-3">
-            <Lock className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+            <Lock className="h-5 w-5 text-fw-warn mt-0.5 flex-shrink-0" />
             <div className="flex-1">
-              <h3 className="text-sm font-semibold text-yellow-900 mb-1">Limited User Management Access</h3>
-              <p className="text-xs text-yellow-700 mb-2">
+              <h3 className="text-sm font-semibold text-fw-heading mb-1">Limited User Management Access</h3>
+              <p className="text-xs text-fw-body mb-2">
                 {canManageUsers.reason}. You can view users but cannot add, edit, or delete them.
               </p>
               <div className="flex items-center gap-2">
@@ -221,28 +221,28 @@ export function UserList({ searchQuery }: UserListProps) {
       )}
 
       {/* RBAC Info Banner */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+      <div className="bg-fw-blue-light border border-fw-active rounded-lg p-4 mb-6">
         <div className="flex items-start gap-3">
-          <Shield className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+          <Shield className="h-5 w-5 text-fw-link mt-0.5 flex-shrink-0" />
           <div className="flex-1">
-            <h3 className="text-sm font-semibold text-blue-900 mb-1">Role-Based Access Control</h3>
-            <p className="text-xs text-blue-700 mb-3">
+            <h3 className="text-sm font-semibold text-fw-heading mb-1">Role-Based Access Control</h3>
+            <p className="text-xs text-fw-body mb-3">
               Users are assigned roles that determine their permissions. Each role has a defined scope limiting what resources they can access.
             </p>
             <div className="flex items-center gap-3 text-xs">
               <div className="flex items-center gap-1">
-                <Globe className="h-3.5 w-3.5 text-blue-600" />
-                <span className="text-blue-900 font-medium">{users.length} Total Users</span>
+                <Globe className="h-3.5 w-3.5 text-fw-link" />
+                <span className="text-fw-heading font-medium">{users.length} Total Users</span>
               </div>
               <div className="flex items-center gap-1">
-                <Shield className="h-3.5 w-3.5 text-purple-600" />
-                <span className="text-blue-900 font-medium">
+                <Shield className="h-3.5 w-3.5 text-fw-cobalt-600" />
+                <span className="text-fw-heading font-medium">
                   {users.filter(u => u.role.toLowerCase().includes('admin')).length} Admins
                 </span>
               </div>
               <div className="flex items-center gap-1">
-                <User className="h-3.5 w-3.5 text-green-600" />
-                <span className="text-blue-900 font-medium">
+                <User className="h-3.5 w-3.5 text-fw-success" />
+                <span className="text-fw-heading font-medium">
                   {users.filter(u => u.status === 'active').length} Active
                 </span>
               </div>
@@ -252,16 +252,16 @@ export function UserList({ searchQuery }: UserListProps) {
       </div>
 
       {/* Search and Controls */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 mb-6 shadow-sm">
+      <div className="bg-fw-base p-4 rounded-lg border border-fw-secondary mb-6 shadow-sm">
         <div className="flex items-center justify-between gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-disabled h-5 w-5" />
             <input
               type="text"
               placeholder="Search by name, email, or role..."
               value={localSearchQuery}
               onChange={(e) => setLocalSearchQuery(e.target.value || '')}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="w-full pl-10 pr-4 py-2.5 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active text-sm text-fw-body bg-fw-base"
             />
           </div>
           <div className="flex items-center space-x-3">
@@ -306,7 +306,7 @@ export function UserList({ searchQuery }: UserListProps) {
       </div>
 
       {/* Users Table */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary shadow-sm">
         <BaseTable
           columns={columns}
           data={filteredUsers}
@@ -360,9 +360,9 @@ export function UserList({ searchQuery }: UserListProps) {
           )}
           emptyState={
             <div className="text-center py-12">
-              <User className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-              <h3 className="text-sm font-medium text-gray-900 mb-1">No users found</h3>
-              <p className="text-sm text-gray-500">
+              <User className="h-12 w-12 text-fw-disabled mx-auto mb-3" />
+              <h3 className="text-sm font-medium text-fw-heading mb-1">No users found</h3>
+              <p className="text-sm text-fw-bodyLight">
                 {localSearchQuery ? 'Try adjusting your search criteria' : 'Get started by adding your first user'}
               </p>
             </div>
