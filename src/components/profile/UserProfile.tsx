@@ -882,97 +882,88 @@ export function UserProfile() {
         <div className="px-6 py-6 border-t border-fw-secondary">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <Shield className="h-6 w-6 text-blue-600" />
-              </div>
+              <Shield className="h-5 w-5 text-fw-link" />
               <div>
-                <h2 className="text-lg font-medium text-fw-heading">Access Control (RBAC)</h2>
-                <p className="text-sm text-fw-bodyLight mt-0.5">Your current role and permissions</p>
+                <h2 className="text-lg font-medium text-fw-heading">Access Control</h2>
+                <p className="text-sm text-fw-bodyLight">Your current role and permissions</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-full border border-green-200">
-              <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-xs font-medium text-green-700">Active</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Current Role Card */}
-            <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-4 border-2 border-blue-200">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xs font-semibold text-blue-900 uppercase tracking-wide">Current Role</h3>
-                <Shield className="h-4 w-4 text-blue-600" />
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="px-3 py-2 bg-white rounded-md border border-blue-200 flex-1">
-                  <span className="text-base font-bold text-blue-900 capitalize">
-                    {currentRole.replace('-', ' ')}
-                  </span>
-                </div>
-              </div>
-              <p className="text-xs text-blue-700 mt-2">
-                {currentRole === 'super-admin' && 'Full platform access'}
-                {currentRole === 'admin' && 'Tenant-level management'}
-                {currentRole === 'user' && 'Standard user access'}
-              </p>
-            </div>
-
-            {/* Resource Scope Card */}
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 border-2 border-purple-200">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xs font-semibold text-purple-900 uppercase tracking-wide">Resource Scope</h3>
-                <Building className="h-4 w-4 text-purple-600" />
-              </div>
-              <div className="flex items-center gap-2">
-                <ResourceFilterBadge filter={permissionChecker.getDefaultScope(currentRole)} showIcon={true} />
-              </div>
-              <p className="text-xs text-purple-700 mt-2">
-                Defines which resources you can access
-              </p>
-            </div>
-
-            {/* Quick Permissions Card */}
-            <div className="bg-gradient-to-br from-green-50 to-teal-50 rounded-lg p-4 border-2 border-green-200">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xs font-semibold text-green-900 uppercase tracking-wide">Key Permissions</h3>
-                <CheckCircle className="h-4 w-4 text-green-600" />
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-green-800">Connections</span>
-                  <div className="flex gap-1">
-                    <PermissionBadge requirement={{ permission: 'view', resource: 'connection' }} variant="compact" showTooltip={false} />
-                    <PermissionBadge requirement={{ permission: 'edit', resource: 'connection' }} variant="compact" showTooltip={false} />
-                  </div>
-                </div>
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-green-800">Pools</span>
-                  <div className="flex gap-1">
-                    <PermissionBadge requirement={{ permission: 'view', resource: 'pool' }} variant="compact" showTooltip={false} />
-                    <PermissionBadge requirement={{ permission: 'create', resource: 'pool' }} variant="compact" showTooltip={false} />
-                  </div>
-                </div>
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-green-800">Billing</span>
-                  <div className="flex gap-1">
-                    <PermissionBadge requirement={{ permission: 'view', resource: 'billing' }} variant="compact" showTooltip={false} />
-                    <PermissionBadge requirement={{ permission: 'edit', resource: 'billing' }} variant="compact" showTooltip={false} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* View Full Matrix Button */}
-          <div className="mt-4 flex justify-end">
             <Button
               variant="outline"
               size="sm"
               icon={Eye}
               onClick={() => setShowPermissionMatrix(true)}
             >
-              View Full Permission Matrix
+              View Details
             </Button>
+          </div>
+
+          <div className="space-y-4">
+            {/* Current Role */}
+            <div className="flex items-center justify-between p-4 bg-fw-wash rounded-lg border border-fw-secondary">
+              <div className="flex items-center gap-3">
+                <Shield className="h-5 w-5 text-fw-link" />
+                <div>
+                  <p className="text-xs font-medium text-fw-bodyLight uppercase tracking-wide">Current Role</p>
+                  <p className="text-base font-semibold text-fw-heading capitalize mt-0.5">
+                    {currentRole.replace('-', ' ')}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-fw-bodyLight">
+                  {currentRole === 'super-admin' && 'Platform Administrator'}
+                  {currentRole === 'admin' && 'Tenant Administrator'}
+                  {currentRole === 'user' && 'Standard User'}
+                </p>
+              </div>
+            </div>
+
+            {/* Resource Scope */}
+            <div className="flex items-center justify-between p-4 bg-fw-wash rounded-lg border border-fw-secondary">
+              <div className="flex items-center gap-3">
+                <Building className="h-5 w-5 text-fw-link" />
+                <div>
+                  <p className="text-xs font-medium text-fw-bodyLight uppercase tracking-wide">Resource Scope</p>
+                  <div className="mt-1">
+                    <ResourceFilterBadge filter={permissionChecker.getDefaultScope(currentRole)} showIcon={false} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Key Permissions */}
+            <div className="p-4 bg-fw-wash rounded-lg border border-fw-secondary">
+              <div className="flex items-center gap-3 mb-4">
+                <CheckCircle className="h-5 w-5 text-fw-link" />
+                <p className="text-xs font-medium text-fw-bodyLight uppercase tracking-wide">Key Permissions</p>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-fw-body">Connections</span>
+                  <div className="flex gap-2">
+                    <PermissionBadge requirement={{ permission: 'view', resource: 'connection' }} variant="compact" showTooltip={false} />
+                    <PermissionBadge requirement={{ permission: 'edit', resource: 'connection' }} variant="compact" showTooltip={false} />
+                    <PermissionBadge requirement={{ permission: 'delete', resource: 'connection' }} variant="compact" showTooltip={false} />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-fw-body">Pools</span>
+                  <div className="flex gap-2">
+                    <PermissionBadge requirement={{ permission: 'view', resource: 'pool' }} variant="compact" showTooltip={false} />
+                    <PermissionBadge requirement={{ permission: 'create', resource: 'pool' }} variant="compact" showTooltip={false} />
+                    <PermissionBadge requirement={{ permission: 'edit', resource: 'pool' }} variant="compact" showTooltip={false} />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-fw-body">Billing</span>
+                  <div className="flex gap-2">
+                    <PermissionBadge requirement={{ permission: 'view', resource: 'billing' }} variant="compact" showTooltip={false} />
+                    <PermissionBadge requirement={{ permission: 'edit', resource: 'billing' }} variant="compact" showTooltip={false} />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
