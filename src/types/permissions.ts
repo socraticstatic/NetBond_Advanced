@@ -1,6 +1,6 @@
-export type Role = 'user' | 'admin' | 'super-admin';
+import { ScopePath, ResourceFilter } from './scope';
 
-export type Scope = 'own' | 'department' | 'pool' | 'tenant' | 'platform';
+export type Role = 'user' | 'admin' | 'super-admin';
 
 export type Permission =
   | 'view'
@@ -30,7 +30,10 @@ export interface PermissionRequirement {
   resource?: ResourceType;
   requiresMFA?: boolean;
   requiresApproval?: boolean;
-  scope?: Scope;
+  // Optional: require permission to be checked at a specific scope level
+  atScope?: ScopePath;
+  // Optional: apply additional resource filtering
+  resourceFilter?: ResourceFilter;
 }
 
 export interface PermissionCheck {
@@ -40,8 +43,11 @@ export interface PermissionCheck {
   needsMFA?: boolean;
   needsApproval?: boolean;
   canRequest?: boolean;
-  actualScope?: Scope;
-  limitedBy?: 'role' | 'scope' | 'department' | 'pool';
+  // The scope path where the permission was granted
+  grantedAtScope?: ScopePath;
+  // The resource filter applied
+  appliedFilter?: ResourceFilter;
+  limitedBy?: 'role' | 'scope' | 'filter' | 'membership';
 }
 
 export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
@@ -50,18 +56,18 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
   'super-admin': ['view', 'create', 'edit', 'delete', 'manage_users', 'manage_billing', 'manage_system', 'manage_tenants', 'impersonate', 'view_audit', 'manage_security']
 };
 
-// Default scope for each role
-export const ROLE_DEFAULT_SCOPE: Record<Role, Scope> = {
-  'user': 'own',
-  'admin': 'tenant',
-  'super-admin': 'platform'
+// Default resource filter for each role
+export const ROLE_DEFAULT_FILTER: Record<Role, ResourceFilter> = {
+  'user': 'owned-by-me',
+  'admin': 'my-tenant',
+  'super-admin': 'all-tenants'
 };
 
-// Maximum scope each role can access
-export const ROLE_MAX_SCOPE: Record<Role, Scope> = {
-  'user': 'department',
-  'admin': 'tenant',
-  'super-admin': 'platform'
+// Maximum resource filter each role can use
+export const ROLE_MAX_FILTER: Record<Role, ResourceFilter> = {
+  'user': 'my-department',
+  'admin': 'my-tenant',
+  'super-admin': 'all-tenants'
 };
 
 export const PERMISSION_LABELS: Record<Permission, string> = {
@@ -88,21 +94,11 @@ export const RESOURCE_LABELS: Record<ResourceType, string> = {
   'security': 'Security Settings'
 };
 
-export const SCOPE_LABELS: Record<Scope, string> = {
-  'own': 'Own Resources Only',
-  'department': 'Department Resources',
-  'pool': 'Pool Resources',
-  'tenant': 'All Tenant Resources',
-  'platform': 'All Platform Resources'
-};
-
-export const SCOPE_DESCRIPTIONS: Record<Scope, string> = {
-  'own': 'Can only access resources you own or created',
-  'department': 'Can access all resources within your department',
-  'pool': 'Can access all resources in assigned pools',
-  'tenant': 'Can access all resources across the entire tenant/organization',
-  'platform': 'Can access resources across all tenants (cross-tenant access)'
-};
-
-// Scope hierarchy (higher index = broader access)
-export const SCOPE_HIERARCHY: Scope[] = ['own', 'department', 'pool', 'tenant', 'platform'];
+// Resource filter hierarchy (higher index = broader access)
+export const RESOURCE_FILTER_HIERARCHY: ResourceFilter[] = [
+  'owned-by-me',
+  'my-department',
+  'my-pools',
+  'my-tenant',
+  'all-tenants'
+];
