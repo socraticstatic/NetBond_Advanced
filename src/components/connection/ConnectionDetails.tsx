@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Cog, Play, Pause, Trash2, Edit2, Activity, Network, Users, Globe, Cloud, Shield } from 'lucide-react';
+import { ArrowLeft, Cog, Play, Pause, Trash2, Edit2, Activity, Network, Users, Globe, Cloud } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { SubNav } from '../navigation/SubNav';
 import { ConnectionTabs, ConnectionTabType } from './tabs/ConnectionTabs';
@@ -20,9 +20,6 @@ import { IconButton } from '../common/IconButton';
 import { Button } from '../common/Button';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { useEditableField } from '../../hooks/useEditableField';
-import { PermissionBadge } from '../common/PermissionBadge';
-import { ResourceFilterBadge } from '../common/ResourceFilterBadge';
-import { permissionChecker } from '../../utils/permissionChecker';
 import { VNF } from '../../types/vnf';
 import { CloudRouter } from '../../types/cloudrouter';
 import { Link } from '../../types';
@@ -40,13 +37,7 @@ export function ConnectionDetails() {
   const connection = useStore(state => state.connections.find(c => c.id === id));
   const updateConnection = useStore(state => state.updateConnection);
   const removeConnection = useStore(state => state.removeConnection);
-  const currentRole = useStore(state => state.currentRole);
   const isMobile = useIsMobile();
-
-  // RBAC Showcase: Check permissions
-  const canEdit = permissionChecker.canEditResource(currentRole, 'connection');
-  const canDelete = permissionChecker.canDeleteResource(currentRole, 'connection');
-  const userScope = permissionChecker.getDefaultScope(currentRole);
   const [activeTab, setActiveTab] = useState<ConnectionTabType>('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -437,41 +428,6 @@ export function ConnectionDetails() {
 
   return (
     <div className="min-h-screen">
-      {/* RBAC Showcase Banner */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-b-2 border-blue-200 px-6 py-3">
-        <div className="flex items-center justify-between max-w-7xl mx-auto">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-blue-600" />
-              <span className="text-sm font-semibold text-blue-900">RBAC Active:</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-blue-700">Role:</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded border border-blue-300 capitalize">
-                  {currentRole.replace('-', ' ')}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-blue-700">Scope:</span>
-                <ResourceFilterBadge filter={userScope} showIcon={false} />
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <PermissionBadge
-              requirement={{ permission: 'edit', resource: 'connection' }}
-              variant="compact"
-              showTooltip={false}
-            />
-            <PermissionBadge
-              requirement={{ permission: 'delete', resource: 'connection' }}
-              variant="compact"
-              showTooltip={false}
-            />
-          </div>
-        </div>
-      </div>
       <SubNav
         title={
           isEditingName ? (
