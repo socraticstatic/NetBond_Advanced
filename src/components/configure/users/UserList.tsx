@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { User, MoreVertical, UserPlus, Search, Filter, Download, Shield, Eye, Lock, Globe } from 'lucide-react';
-import { ConnectionAccessModal } from './ConnectionAccessModal';
-import { AddUserModal } from './AddUserModal';
+import { ConnectionAccessDrawer } from './ConnectionAccessDrawer';
+import { AddUserDrawer } from './AddUserDrawer';
 import { UserType } from '../types';
 import { BaseTable } from '../../common/BaseTable';
 import { OverflowMenu } from '../../common/OverflowMenu';
@@ -370,9 +370,9 @@ export function UserList({ searchQuery }: UserListProps) {
         />
       </div>
 
-      {/* Modals */}
+      {/* Drawers */}
       {selectedUser && (
-        <ConnectionAccessModal
+        <ConnectionAccessDrawer
           isOpen={showAccessModal}
           onClose={() => setShowAccessModal(false)}
           user={selectedUser}
@@ -380,7 +380,7 @@ export function UserList({ searchQuery }: UserListProps) {
         />
       )}
 
-      <AddUserModal
+      <AddUserDrawer
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         onSave={handleAddUser}
