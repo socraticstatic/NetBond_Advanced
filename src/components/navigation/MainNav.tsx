@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { PlusCircle, SlidersHorizontal, Users, Shield } from 'lucide-react';
+import { PlusCircle, SlidersHorizontal, Users } from 'lucide-react';
 import {
   Settings, BarChart2, Menu, Bell, HelpCircle, Search
 } from '../../utils/iconImports';
@@ -12,7 +12,6 @@ import { MobileMenu } from './MobileMenu';
 import { AdaptiveNavigation } from './AdaptiveNavigation';
 import { TabItem } from '../../types/navigation';
 import { Button } from '../common/Button';
-import { RBACDemoPanel } from '../common/RBACDemoPanel';
 
 interface NavItem {
   label: string;
@@ -37,7 +36,6 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
   const [isVerticalNav, setIsVerticalNav] = useState(false);
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showRBACDemo, setShowRBACDemo] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -237,16 +235,6 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
               <>
                 <SearchBar onSearch={onSearch} />
                 <div className="h-6 w-px bg-fw-secondary" />
-                {/* RBAC Demo Button */}
-                <button
-                  onClick={() => setShowRBACDemo(true)}
-                  className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg transition-all shadow-md hover:shadow-lg"
-                  title="Open RBAC Demo Panel"
-                >
-                  <Shield className="h-4 w-4" />
-                  <span className="text-sm font-semibold">RBAC Demo</span>
-                </button>
-                <div className="h-6 w-px bg-fw-secondary" />
                 <HelpButton />
                 <div className="h-6 w-px bg-fw-secondary" />
                 <NotificationsButton count={notifications} />
@@ -262,12 +250,6 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
           </div>
         </div>
       </div>
-
-      {/* RBAC Demo Panel */}
-      <RBACDemoPanel
-        isOpen={showRBACDemo}
-        onClose={() => setShowRBACDemo(false)}
-      />
 
       {/* Adaptive Navigation - Only render when isVertical is true */}
       <AdaptiveNavigation
