@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe, Link2, Type, Users, UserCheck, Eye, FileText } from 'lucide-react';
+import { Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe, Link2, Type, Users, UserCheck, Eye, FileText } from 'lucide-react';
+import { UserIcon } from '../common/UserIcon';
 import { Button } from '../common/Button';
 import { useStore } from '../../store/useStore';
 import { FONT_SIZES } from '../../store/slices/fontSizeSlice';
@@ -960,7 +961,7 @@ export function UserProfile() {
                 }
               `}
             >
-              <User className={`h-8 w-8 mb-3 ${currentRole === 'user' ? 'text-brand-blue' : 'text-gray-400'}`} />
+              <UserIcon size="lg" variant={currentRole === 'user' ? 'primary' : 'muted'} className="mb-3" />
               <p className={`text-base font-medium ${currentRole === 'user' ? 'text-brand-blue' : 'text-fw-heading'}`}>
                 Standard User
               </p>

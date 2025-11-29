@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { FileText, User, Shield, DollarSign, Settings, Eye, Edit, Trash2, Plus, ChevronDown, ChevronUp, Filter, X } from 'lucide-react';
+import { FileText, Shield, DollarSign, Settings, Eye, Edit, Trash2, Plus, ChevronDown, ChevronUp, Filter, X } from 'lucide-react';
+import { UserIcon } from './UserIcon';
 import { Button } from './Button';
 
 interface AuditLogEntry {
@@ -94,7 +95,7 @@ export function AuditLogPanel({ isOpen, onClose, filterByResource, filterByUser 
       case 'connection':
         return <Shield className="h-4 w-4" />;
       case 'user':
-        return <User className="h-4 w-4" />;
+        return <UserIcon size="sm" />;
       case 'billing':
         return <DollarSign className="h-4 w-4" />;
       case 'system':
