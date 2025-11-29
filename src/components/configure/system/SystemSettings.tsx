@@ -1,11 +1,20 @@
 import { useState } from 'react';
-import { Settings, Shield, Database, Clock, FileText, GitBranch, HardDrive, Cloud } from 'lucide-react';
+import { Settings, Shield, Database, Clock, FileText, GitBranch, HardDrive, Cloud, Lock, Eye, AlertCircle } from 'lucide-react';
 import { VerticalTabGroup } from '../../navigation/VerticalTabGroup';
 import { TabItem } from '../../../types/navigation';
 import { Button } from '../../common/Button';
+import { PermissionBadge, PermissionLockOverlay } from '../../common/PermissionBadge';
+import { useStore } from '../../../store/useStore';
+import { permissionChecker } from '../../../utils/permissionChecker';
 
 export function SystemSettings() {
   const [activeView, setActiveView] = useState<'general' | 'security' | 'backup' | 'versioning' | 'data' | 'maintenance'>('general');
+  const { currentRole } = useStore();
+
+  // Permission checks for different system areas
+  const canViewSystem = permissionChecker.hasPermission(currentRole, { permission: 'view', resource: 'system' });
+  const canManageSystem = permissionChecker.hasPermission(currentRole, { permission: 'manage_system', resource: 'system' });
+  const canManageSecurity = permissionChecker.hasPermission(currentRole, { permission: 'manage_security', resource: 'security' });
 
   const [general, setGeneral] = useState({
     timezone: 'UTC',
@@ -96,8 +105,51 @@ export function SystemSettings() {
     { id: 'maintenance', label: 'Maintenance', icon: <Clock className="h-5 w-5 mr-2" /> }
   ];
 
+  const getTabPermissionBadge = (tab: string) => {
+    if (tab === 'security' && !canManageSecurity.allowed) {
+      return <Lock className="h-4 w-4 text-red-500 ml-2" />;
+    }
+    if (['backup', 'versioning', 'data', 'maintenance'].includes(tab) && !canManageSystem.allowed) {
+      return <Lock className="h-4 w-4 text-orange-500 ml-2" />;
+    }
+    return null;
+  };
+
   return (
     <div className="p-6">
+      {/* Permission Status Banner */}
+      {currentRole !== 'super-admin' && (
+        <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <Eye className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-blue-900 mb-1">System Settings Access</h3>
+              <div className="space-y-1 text-xs text-blue-700">
+                <div className="flex items-center gap-2">
+                  <span>General Settings:</span>
+                  {canManageSystem.allowed ? (
+                    <span className="text-green-700 font-medium">Full Access</span>
+                  ) : (
+                    <span className="text-orange-700 font-medium">View Only</span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>Security Settings:</span>
+                  {canManageSecurity.allowed ? (
+                    <span className="text-green-700 font-medium">Full Access</span>
+                  ) : (
+                    <div className="flex items-center gap-1">
+                      <Lock className="h-3 w-3 text-red-600" />
+                      <span className="text-red-700 font-medium">Restricted (Security Admin Required)</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Help Banner */}
       <div className="mb-6 bg-gradient-to-r from-fw-wash to-fw-base border border-fw-secondary rounded-lg p-4">
         <div className="flex items-start">
@@ -229,11 +281,42 @@ export function SystemSettings() {
           {/* Security Settings */}
           {activeView === 'security' && (
             <div className="space-y-6">
-              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
-                <h3 className="text-lg font-semibold text-fw-heading mb-4">Security Configuration</h3>
-                <p className="text-sm text-fw-bodyLight mb-6">
-                  Configure system-wide security policies and authentication requirements.
-                </p>
+              {!canManageSecurity.allowed ? (
+                <PermissionLockOverlay
+                  requirement={{ permission: 'manage_security', resource: 'security', role: 'super-admin' }}
+                  reason="Security settings require Security Admin or Super Admin role"
+                  onRequestAccess={() => {
+                    window.addToast({
+                      type: 'info',
+                      title: 'Access Request',
+                      message: 'Contact your Security Administrator to request access to security settings',
+                      duration: 5000
+                    });
+                  }}
+                >
+                  <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+                    <h3 className="text-lg font-semibold text-fw-heading mb-4">Security Configuration</h3>
+                    <p className="text-sm text-fw-bodyLight mb-6">
+                      Configure system-wide security policies and authentication requirements.
+                    </p>
+                    <div className="space-y-4">
+                      <div className="h-20 bg-gray-100 rounded animate-pulse"></div>
+                      <div className="h-20 bg-gray-100 rounded animate-pulse"></div>
+                      <div className="h-20 bg-gray-100 rounded animate-pulse"></div>
+                    </div>
+                  </div>
+                </PermissionLockOverlay>
+              ) : (
+                <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-fw-heading">Security Configuration</h3>
+                      <p className="text-sm text-fw-bodyLight mt-1">
+                        Configure system-wide security policies and authentication requirements.
+                      </p>
+                    </div>
+                    <PermissionBadge requirement={{ permission: 'manage_security', resource: 'security' }} />
+                  </div>
 
                 <div className="space-y-6">
                   <label className="flex items-start space-x-3">
@@ -369,12 +452,13 @@ export function SystemSettings() {
                   </div>
                 </div>
 
-                <div className="mt-6 flex justify-end">
-                  <Button variant="primary" onClick={handleSaveSettings}>
-                    Save Security Settings
-                  </Button>
+                  <div className="mt-6 flex justify-end">
+                    <Button variant="primary" onClick={handleSaveSettings}>
+                      Save Security Settings
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
 

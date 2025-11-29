@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe, Link2, Type, Users, UserCheck } from 'lucide-react';
+import { User, Mail, Phone, Building, Shield, Edit3, Camera, CheckCircle, Save, X, Home, Settings, BarChart2, Network, Cpu, Globe, Link2, Type, Users, UserCheck, Eye, FileText } from 'lucide-react';
 import { Button } from '../common/Button';
 import { useStore } from '../../store/useStore';
 import { FONT_SIZES } from '../../store/slices/fontSizeSlice';
 import { UserRole } from '../../store/slices/roleSlice';
+import { RoleCapabilityMatrix } from '../common/RoleCapabilityMatrix';
+import { AuditLogPanel } from '../common/AuditLogPanel';
 
 export function UserProfile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80');
+  const [showPermissionMatrix, setShowPermissionMatrix] = useState(false);
+  const [showAuditLog, setShowAuditLog] = useState(false);
 
   // Font size and role from store
   const { fontSize, setFontSize, currentRole, setRole, startImpersonation, impersonation } = useStore();
@@ -877,9 +881,27 @@ export function UserProfile() {
               <h2 className="text-lg font-medium text-fw-heading">Role Simulator</h2>
               <p className="text-sm text-fw-bodyLight mt-1">Switch between roles to preview different user experiences</p>
             </div>
-            <div className="flex items-center space-x-2 px-3 py-1 bg-fw-base rounded-full border border-fw-secondary">
-              <Users className="h-4 w-4 text-fw-bodyLight" />
-              <span className="text-xs font-medium text-fw-body">Demo Mode</span>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                icon={Eye}
+                onClick={() => setShowPermissionMatrix(true)}
+              >
+                View Permissions
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                icon={FileText}
+                onClick={() => setShowAuditLog(true)}
+              >
+                Audit Log
+              </Button>
+              <div className="flex items-center space-x-2 px-3 py-1 bg-fw-base rounded-full border border-fw-secondary">
+                <Users className="h-4 w-4 text-fw-bodyLight" />
+                <span className="text-xs font-medium text-fw-body">Demo Mode</span>
+              </div>
             </div>
           </div>
 
@@ -1062,6 +1084,19 @@ export function UserProfile() {
           </Button>
         </div>
       </div>
+
+      {/* Permission Matrix Modal */}
+      <RoleCapabilityMatrix
+        isOpen={showPermissionMatrix}
+        onClose={() => setShowPermissionMatrix(false)}
+        currentRole={currentRole}
+      />
+
+      {/* Audit Log Panel */}
+      <AuditLogPanel
+        isOpen={showAuditLog}
+        onClose={() => setShowAuditLog(false)}
+      />
     </div>
   );
 }

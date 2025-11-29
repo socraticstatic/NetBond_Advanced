@@ -1,8 +1,13 @@
 import { useState } from 'react';
-import { Building2, DollarSign, Users, Settings } from 'lucide-react';
+import { Building2, DollarSign, Users, Settings, Shield, Lock, Eye, FileText } from 'lucide-react';
 import { VerticalTabGroup } from '../navigation/VerticalTabGroup';
 import { TabItem } from '../../types/navigation';
 import { Button } from '../common/Button';
+import { PermissionBadge } from '../common/PermissionBadge';
+import { useStore } from '../../store/useStore';
+import { PermissionRequestModal } from '../common/PermissionRequestModal';
+import { AuditLogPanel } from '../common/AuditLogPanel';
+import { permissionChecker } from '../../utils/permissionChecker';
 
 interface BillingConfigurationProps {
   defaultTab?: 'hierarchy' | 'allocation' | 'integration' | 'policies';
@@ -10,6 +15,19 @@ interface BillingConfigurationProps {
 
 export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfigurationProps) {
   const [activeView, setActiveView] = useState<'hierarchy' | 'allocation' | 'integration' | 'policies'>(defaultTab);
+  const { currentRole } = useStore();
+  const [showPermissionRequest, setShowPermissionRequest] = useState(false);
+  const [showAuditLog, setShowAuditLog] = useState(false);
+  const [requestedFeature, setRequestedFeature] = useState('');
+
+  // Check permissions for billing operations
+  const canViewBilling = permissionChecker.hasPermission(currentRole, { permission: 'view', resource: 'billing' });
+  const canManageBilling = permissionChecker.hasPermission(currentRole, { permission: 'manage_billing', resource: 'billing' });
+  const canModifyPayment = permissionChecker.hasPermission(currentRole, {
+    permission: 'manage_billing',
+    resource: 'billing',
+    requiresMFA: true
+  });
 
   const [hierarchy, setHierarchy] = useState({
     enableTenantHierarchy: true,
@@ -59,8 +77,58 @@ export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfig
     { id: 'policies', label: 'Billing Policies', icon: <Settings className="h-5 w-5 mr-2" /> }
   ];
 
+  const handleRequestAccess = (feature: string) => {
+    setRequestedFeature(feature);
+    setShowPermissionRequest(true);
+  };
+
   return (
     <div className="p-6">
+      {/* Permission & Audit Controls */}
+      <div className="mb-4 flex justify-end gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          icon={Eye}
+          onClick={() => window.addToast({ type: 'info', title: 'Your Permissions', message: `Current Role: ${currentRole}\nBilling Access: ${canManageBilling.allowed ? 'Full' : 'View Only'}`, duration: 5000 })}
+        >
+          My Permissions
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          icon={FileText}
+          onClick={() => setShowAuditLog(true)}
+        >
+          View Audit Log
+        </Button>
+      </div>
+
+      {/* Permission Warning Banner */}
+      {!canManageBilling.allowed && (
+        <div className="mb-6 bg-yellow-50 border-2 border-yellow-300 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <Lock className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-yellow-900 mb-1">Limited Billing Access</h3>
+              <p className="text-xs text-yellow-700 mb-2">
+                You can view billing settings but cannot make changes. {canManageBilling.reason}
+              </p>
+              <div className="flex items-center gap-2">
+                <PermissionBadge requirement={{ permission: 'manage_billing', resource: 'billing' }} />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleRequestAccess('Billing Configuration')}
+                >
+                  Request Access
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Help Banner */}
       <div className="mb-6 bg-gradient-to-r from-fw-wash to-fw-base border border-fw-secondary rounded-lg p-4">
         <div className="flex items-start">
@@ -189,9 +257,19 @@ export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfig
                   </div>
                 </div>
 
-                <div className="mt-6 flex justify-end">
-                  <Button variant="primary" onClick={handleSaveSettings}>
-                    Save Hierarchy Settings
+                <div className="mt-6 flex justify-end gap-3">
+                  <div className="flex items-center gap-2">
+                    <PermissionBadge
+                      requirement={{ permission: 'manage_billing', resource: 'billing' }}
+                      variant="compact"
+                    />
+                  </div>
+                  <Button
+                    variant="primary"
+                    onClick={handleSaveSettings}
+                    disabled={!canManageBilling.allowed}
+                  >
+                    {canManageBilling.allowed ? 'Save Hierarchy Settings' : 'View Only Mode'}
                   </Button>
                 </div>
               </div>
@@ -614,6 +692,23 @@ export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfig
           )}
         </div>
       </div>
+
+      {/* Permission Request Modal */}
+      {showPermissionRequest && (
+        <PermissionRequestModal
+          isOpen={showPermissionRequest}
+          onClose={() => setShowPermissionRequest(false)}
+          requirement={{ permission: 'manage_billing', resource: 'billing' }}
+          resourceName={requestedFeature}
+        />
+      )}
+
+      {/* Audit Log Panel */}
+      <AuditLogPanel
+        isOpen={showAuditLog}
+        onClose={() => setShowAuditLog(false)}
+        filterByResource="Billing"
+      />
     </div>
   );
 }
