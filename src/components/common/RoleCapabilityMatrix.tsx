@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Check, X, Shield, User, Crown, ChevronDown, ChevronUp, Info } from 'lucide-react';
-import { Role, ROLE_PERMISSIONS, PERMISSION_LABELS, ResourceType, RESOURCE_LABELS } from '../../types/permissions';
+import { Check, X, Shield, User, Crown, ChevronDown, ChevronUp, Info, Layers, Eye, Building2 } from 'lucide-react';
+import { Role, ROLE_PERMISSIONS, PERMISSION_LABELS, ResourceType, RESOURCE_LABELS, ROLE_DEFAULT_FILTER, ROLE_MAX_FILTER } from '../../types/permissions';
+import { RESOURCE_FILTER_LABELS, RESOURCE_FILTER_DESCRIPTIONS } from '../../types/scope';
 import { Modal } from './Modal';
+import { ResourceFilterBadge } from './ResourceFilterBadge';
 
 interface RoleCapabilityMatrixProps {
   isOpen: boolean;
@@ -212,6 +214,106 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
           <p className="text-xs text-gray-600 text-center mt-4">
             Each role inherits all permissions from roles below it, plus additional capabilities
           </p>
+        </div>
+
+        {/* Resource Filter Scope by Role */}
+        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+          <div className="flex items-start gap-3 mb-4">
+            <Layers className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <h4 className="text-sm font-semibold text-purple-900 mb-1">Resource Filter Scope by Role</h4>
+              <p className="text-xs text-purple-700">
+                Resource filters control <em>which</em> resources you can access. Each role has default and maximum filter levels.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            {roles.map((role) => {
+              const defaultFilter = ROLE_DEFAULT_FILTER[role];
+              const maxFilter = ROLE_MAX_FILTER[role];
+              const isCurrentRole = role === currentRole;
+
+              return (
+                <div
+                  key={role}
+                  className={`bg-white border-2 rounded-lg p-3 ${
+                    isCurrentRole
+                      ? 'border-green-500 shadow-sm'
+                      : 'border-purple-200'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    {getRoleIcon(role)}
+                    <span className="text-sm font-semibold text-gray-900 capitalize">
+                      {role.replace('-', ' ')}
+                    </span>
+                    {isCurrentRole && (
+                      <span className="ml-auto text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded">You</span>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <div>
+                      <p className="text-xs text-gray-600 mb-1">Default Filter:</p>
+                      <ResourceFilterBadge filter={defaultFilter} showIcon={false} />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-600 mb-1">Max Filter:</p>
+                      <ResourceFilterBadge filter={maxFilter} showIcon={false} />
+                    </div>
+                  </div>
+
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    <p className="text-xs text-gray-600">
+                      {RESOURCE_FILTER_DESCRIPTIONS[defaultFilter]}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Scope Path Examples */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-start gap-3 mb-4">
+            <Building2 className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <h4 className="text-sm font-semibold text-blue-900 mb-1">Understanding Scope Paths</h4>
+              <p className="text-xs text-blue-700">
+                Scope paths define <em>where</em> in the resource hierarchy your permissions apply. Permissions inherit down the tree.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white border border-blue-200 rounded-lg p-3">
+            <p className="text-xs font-medium text-gray-900 mb-2">Hierarchical Scope Example:</p>
+            <div className="space-y-1 text-xs font-mono text-gray-700">
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400">├─</span>
+                <code className="bg-gray-100 px-2 py-0.5 rounded">/platform</code>
+                <span className="text-gray-500">(entire platform)</span>
+              </div>
+              <div className="flex items-center gap-2 ml-3">
+                <span className="text-gray-400">├─</span>
+                <code className="bg-gray-100 px-2 py-0.5 rounded">/tenants/acme-corp</code>
+                <span className="text-gray-500">(tenant scope)</span>
+              </div>
+              <div className="flex items-center gap-2 ml-6">
+                <span className="text-gray-400">├─</span>
+                <code className="bg-gray-100 px-2 py-0.5 rounded">/tenants/acme-corp/departments/engineering</code>
+              </div>
+              <div className="flex items-center gap-2 ml-9">
+                <span className="text-gray-400">└─</span>
+                <code className="bg-gray-100 px-2 py-0.5 rounded">/tenants/acme-corp/departments/engineering/pools/prod</code>
+              </div>
+            </div>
+            <div className="mt-3 pt-3 border-t border-gray-200 text-xs text-gray-600">
+              <Eye className="h-3.5 w-3.5 inline mr-1" />
+              <span className="font-medium">Example:</span> Admin role assigned at <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-800">/tenants/acme-corp/departments/engineering</code> can access all resources in engineering dept and child scopes (like prod pool).
+            </div>
+          </div>
         </div>
       </div>
     </Modal>
