@@ -265,14 +265,14 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
                 {users.slice(0, 5).map((user, idx) => (
                   <div
                     key={user.id}
-                    className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white flex items-center justify-center text-white font-medium text-sm"
+                    className="h-10 w-10 rounded-full bg-fw-link flex items-center justify-center border border-fw-secondary text-white font-medium text-sm"
                     title={user.name}
                   >
                     {user.name.split(' ').map(n => n[0]).join('')}
                   </div>
                 ))}
                 {users.length > 5 && (
-                  <div className="h-10 w-10 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-gray-600 font-medium text-sm">
+                  <div className="h-10 w-10 rounded-full bg-fw-wash flex items-center justify-center border border-fw-secondary text-fw-body font-medium text-sm">
                     +{users.length - 5}
                   </div>
                 )}

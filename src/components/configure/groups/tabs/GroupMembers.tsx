@@ -79,8 +79,8 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
                 alt={user.name}
               />
             ) : (
-              <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                <UserIcon size="md" variant="muted" />
+              <div className="h-10 w-10 rounded-full bg-fw-blue-light flex items-center justify-center border border-fw-secondary">
+                <UserIcon size="md" variant="primary" />
               </div>
             )}
           </div>
