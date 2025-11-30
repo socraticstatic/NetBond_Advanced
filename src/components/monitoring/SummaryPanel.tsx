@@ -24,7 +24,7 @@ export function SummaryPanel({ connections }: SummaryPanelProps) {
           <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">
-                <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-fw-blue-light flex items-center justify-center border border-fw-secondary">
                   <Users className="h-5 w-5 text-blue-600" />
                 </div>
               </div>

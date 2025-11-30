@@ -60,7 +60,7 @@ export function AccessConfiguration() {
           {accessRules.map((rule) => (
             <div key={rule.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center space-x-4">
-                <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-fw-blue-light flex items-center justify-center border border-fw-secondary">
                   <Users className="h-5 w-5 text-gray-500" />
                 </div>
                 <div>

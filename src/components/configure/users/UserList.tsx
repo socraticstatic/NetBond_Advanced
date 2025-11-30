@@ -88,7 +88,7 @@ export function UserList({ searchQuery }: UserListProps) {
       render: (user: UserType) => (
         <div className="flex items-center min-w-[200px]">
           <div className="flex-shrink-0 h-10 w-10">
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-fw-blue-000 to-fw-accent flex items-center justify-center border-2 border-fw-secondary">
+            <div className="h-10 w-10 rounded-full bg-fw-blue-light flex items-center justify-center border border-fw-secondary">
               <UserIcon size="md" variant="primary" />
             </div>
           </div>
