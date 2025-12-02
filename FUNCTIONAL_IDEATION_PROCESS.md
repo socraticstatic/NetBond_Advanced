@@ -95,11 +95,12 @@ This React prototype is a **functional ideation tool**, NOT production code.
 
 1. **"Prototype Fast, Validate Often, Build Once"**
 2. React = Ideation tool (NOT production)
-3. Figma = Design authority
-4. Angular = Production framework
-5. Mixpanel = Validation platform
-6. Multiple validation gates ensure quality
-7. Data-driven iteration
+3. React Sandbox = Stakeholder test-drive environment
+4. Figma = Design authority
+5. Angular = Production framework
+6. Mixpanel = Validation platform
+7. Multiple validation gates ensure quality
+8. Data-driven iteration
 
 ---
 
@@ -216,14 +217,14 @@ This React prototype is a **functional ideation tool**, NOT production code.
                                              ▼
                                     ┌─────────────────┐
                                     │ Working Prototype│
-                                    │ + GitHub Pages   │
-                                    │ + Demo Video     │
+                                    │ + React Sandbox  │
+                                    │ + Auth Access    │
                                     └────────┬────────┘
                                              │
                                              ▼
                             ┌────────────────────────────────┐
                             │        GATE 2: VALIDATE        │
-                            │      Functional Review         │
+                            │      Deploy to Sandbox         │
                             │   ⚠️  NOT PRODUCTION CODE ⚠️   │
                             └────────────────┬───────────────┘
                                              │
@@ -232,14 +233,15 @@ This React prototype is a **functional ideation tool**, NOT production code.
                                     │   STAGE 3:      │
                                     │   VALIDATION    │
                                     │   (1-2 weeks)   │
+                                    │ 🔐 REACT SANDBOX│
                                     └────────┬────────┘
                                              │
                     ┌────────────────────────┼────────────────────────┐
                     │                        │                        │
                     ▼                        ▼                        ▼
-            Stakeholder Demos         Usability Testing       Tech Feasibility
-            Executive Review           Internal Users          Angular Team Review
-            Business Alignment         UX Feedback            Architecture Review
+            Stakeholder Test-Drive    Usability Testing       Tech Feasibility
+            Hands-on Exploration       Live Feedback          Angular Team Review
+            Auth Sandbox Access        Real Usage Data        Architecture Review
                     │                        │                        │
                     └────────────────────────┼────────────────────────┘
                                              │
@@ -443,11 +445,11 @@ This React prototype is a **functional ideation tool**, NOT production code.
 
 IDEATION TRACK (Fast)
 ─────────────────────
-   React Prototype → Validate → Archive
-   3-5 days          1-2 weeks   Done
-        │                │
-        │                │
-        └────────────────┴─────► Handoff Documentation
+   React Prototype → React Sandbox → Validate → Archive
+   3-5 days          Auth Deploy     1-2 weeks   Done
+        │                │               │
+        │                │               │
+        └────────────────┴───────────────┴─────► Handoff Documentation
 
 
 DESIGN TRACK (Quality)
@@ -535,8 +537,15 @@ PRODUCTION TRACK (Enterprise)
                         │                           │
                         ▼                           │
                  ┌──────────────┐                   │
+                 │  React       │                   │
+                 │  Sandbox     │                   │
+                 │  (Auth)      │                   │
+                 └──────┬───────┘                   │
+                        │                           │
+                        ▼                           │
+                 ┌──────────────┐                   │
                  │  Stakeholder │                   │
-                 │  Validation  │                   │
+                 │  Test-Drive  │                   │
                  └──────┬───────┘                   │
                         │                           │
                         ▼                           │
@@ -733,7 +742,8 @@ Rapidly build working prototypes to visualize and validate concepts before inves
 - **UI Library**: Tailwind CSS + Custom Components
 - **State Management**: Zustand
 - **Database**: Supabase (prototype data)
-- **Deployment**: GitHub Pages (for stakeholder review)
+- **Authentication**: Supabase Auth (sandbox access control)
+- **Deployment**: Authenticated React Sandbox (for stakeholder test-driving)
 
 ### ⚡ **CRITICAL: This is NOT Production Code**
 
@@ -769,7 +779,8 @@ Rapidly build working prototypes to visualize and validate concepts before inves
 
 ### Outputs
 - Working React prototype
-- Demo environment (GitHub Pages)
+- Authenticated sandbox environment (React-based)
+- Stakeholder credentials for test-driving
 - Screen recordings/walkthroughs
 - Interaction documentation
 - UX findings and insights
@@ -786,7 +797,8 @@ Rapidly build working prototypes to visualize and validate concepts before inves
 - ✅ Demonstrates core functionality
 - ✅ Shows key user interactions
 - ✅ Follows basic Flywheel design patterns
-- ✅ Accessible for stakeholder review
+- ✅ Deployed to authenticated sandbox
+- ✅ Stakeholder credentials provisioned
 - ✅ Responsive on desktop and mobile
 
 ---
@@ -794,11 +806,36 @@ Rapidly build working prototypes to visualize and validate concepts before inves
 ## Stage 3: Sandbox Validation
 
 ### Purpose
-Internal validation of prototype with stakeholders before committing to design system refinement.
+Internal validation of prototype with stakeholders before committing to design system refinement. Stakeholders can "test-drive" the working React prototype in an authenticated sandbox environment.
+
+### The React Sandbox Environment
+
+**What It Is:**
+- Secure, authentication-based React environment
+- Same technology as the prototype (React + Supabase)
+- Stakeholders get individual login credentials
+- Full interactivity - stakeholders can click, navigate, and test workflows
+- Isolated from production systems
+
+**Why React-Based:**
+- Consistent experience with prototype development
+- Rapid updates and iteration during feedback phase
+- No need to rebuild in another technology for testing
+- Stakeholders see exactly what was prototyped
+- Easy to manage user access via Supabase Auth
+
+**Access Control:**
+- Supabase Authentication enforces access
+- Stakeholders receive temporary credentials
+- Different user roles can test different scenarios
+- Access can be revoked after validation phase
+- Audit trail of who tested what and when
 
 ### Activities
-- Stakeholder demo sessions
-- Feedback collection
+- Deploy prototype to authenticated React sandbox
+- Provision stakeholder credentials
+- Stakeholder "test-drive" sessions (hands-on exploration)
+- Live feedback collection during testing
 - Usability testing (internal)
 - Technical feasibility review
 - Business value assessment
@@ -818,9 +855,11 @@ Internal validation of prototype with stakeholders before committing to design s
 ### Outputs
 - Validated prototype
 - Stakeholder approval
+- Stakeholder test-drive feedback
+- Usage analytics from sandbox (who tested what)
 - Prioritized feedback list
 - Feature scope finalization
-- Handoff documentation
+- Handoff documentation with sandbox insights
 
 ### Team Involved
 - Product Management
@@ -1254,29 +1293,64 @@ Mixpanel Data → Prototype Update → Sandbox → Figma → Angular → Deploy 
 
 **Document Includes:**
 - Feature overview and objectives
-- Demo environment URL
+- React sandbox deployment URL
+- Stakeholder credentials (individual logins)
 - User flows demonstrated
+- Test scenarios for stakeholders
 - Known limitations
 - Areas needing feedback
 - Success criteria
+- How to access the authenticated sandbox
 
-**Format:** Markdown document + recorded demo
+**Format:** Markdown document + recorded demo + credential distribution
+
+**Sandbox Setup:**
+```markdown
+## Sandbox Access for [Feature Name]
+
+### Authentication
+- **Sandbox URL**: https://[your-sandbox].com
+- **Login Credentials**: [Distributed securely]
+- **Access Duration**: [Date range]
+
+### Test Scenarios
+1. **Scenario 1**: [What to test]
+   - Login as: [role]
+   - Navigate to: [location]
+   - Expected behavior: [description]
+
+2. **Scenario 2**: [What to test]
+   - Login as: [role]
+   - Navigate to: [location]
+   - Expected behavior: [description]
+
+### Feedback Collection
+- **Feedback Form**: [URL to feedback form]
+- **Slack Channel**: [For real-time questions]
+- **Due Date**: [When feedback is needed]
+
+### Known Limitations
+- [Limitation 1]
+- [Limitation 2]
+```
 
 ---
 
 ### Sandbox → Figma Handoff
 
 **Document Includes:**
-- Approved prototype reference
+- Approved prototype reference (from sandbox)
+- Sandbox testing insights and stakeholder feedback
+- Real usage data from sandbox analytics
 - Functional requirements
 - User flows and journeys
 - Component list and hierarchy
 - Interaction specifications
 - Responsive behavior requirements
 - Accessibility requirements
-- Edge cases to handle
+- Edge cases discovered during sandbox testing
 
-**Format:** Detailed specification document + prototype access
+**Format:** Detailed specification document + sandbox access + testing insights
 
 **Template:**
 ```markdown
@@ -1397,13 +1471,41 @@ Mixpanel Data → Prototype Update → Sandbox → Figma → Angular → Deploy 
 │  Supabase (Prototype Database)         │
 │  Lucide Icons                          │
 │  Chart.js Visualizations               │
-│  GitHub Pages Deployment               │
+│  Local Development Environment         │
 └─────────────────────────────────────────┘
 ```
 
-**Purpose**: Fast functional ideation and validation
-**Audience**: Internal stakeholders, product team
+**Purpose**: Fast functional ideation and prototyping
+**Audience**: AI Ideation Team
 **Lifespan**: Temporary (per feature)
+
+---
+
+### Sandbox Environment (Validation)
+```
+┌─────────────────────────────────────────┐
+│  React 18 + TypeScript + Vite          │
+│  Tailwind CSS + Custom Components      │
+│  Zustand State Management              │
+│  Supabase (Prototype Database)         │
+│  Supabase Auth (Access Control)        │
+│  Deployed React Application            │
+│  🔐 Authentication Required            │
+└─────────────────────────────────────────┘
+```
+
+**Purpose**: Stakeholder test-driving and validation
+**Audience**: Stakeholders, product team, executives
+**Access**: Authentication-controlled via Supabase Auth
+**Lifespan**: Temporary (validation phase only)
+
+**Key Features:**
+- Same React technology as prototype (no rebuild needed)
+- Individual stakeholder credentials
+- Full interactivity - click, test, explore
+- Usage tracking and analytics
+- Isolated from production
+- Easy access management
 
 ---
 
@@ -1606,12 +1708,32 @@ Mixpanel Data → Prototype Update → Sandbox → Figma → Angular → Deploy 
 - Prototype code is throwaway - don't need production-grade architecture
 - Faster iteration cycles = more ideas tested = better outcomes
 
+### Q: What is the React Sandbox and why is it important?
+
+**A**: Authenticated test-drive environment for stakeholders.
+- **Same technology as prototype** (React) - no rebuild needed
+- **Authentication-controlled** via Supabase Auth
+- Stakeholders get **hands-on experience** - not just demos
+- Collects **real usage data** and feedback before design investment
+- **Isolated** from production systems
+- Easy to update during validation phase
+
+### Q: Why not just show stakeholders the prototype on GitHub Pages?
+
+**A**: Authentication and controlled access.
+- **Security**: Stakeholders need credentials to access
+- **Analytics**: Track who tested what and when
+- **Role testing**: Different stakeholders can test different user roles
+- **Feedback quality**: Hands-on testing yields better insights than passive demos
+- **Production-like**: Feels closer to real application than local demos
+
 ### Q: How do we ensure Figma designs match the prototype?
 
-**A**: Clear handoff documentation.
+**A**: Clear handoff documentation plus sandbox insights.
 - Prototype demonstrates **behavior**, Figma defines **appearance**
-- Design team uses prototype as functional reference
-- Product team validates Figma matches intended UX
+- **Sandbox testing provides real usage data** and stakeholder feedback
+- Design team uses both prototype AND sandbox insights as reference
+- Product team validates Figma matches intended UX from sandbox testing
 
 ### Q: What if Mixpanel shows the feature failed?
 
