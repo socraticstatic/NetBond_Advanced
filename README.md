@@ -10,6 +10,20 @@ AT&T NetBond SDCI (Software-Defined Cloud Interconnect) is a comprehensive cloud
 
 **✨ Now available as a Progressive Web App (PWA)** - Install on any device and run independently like a native application. Works offline, auto-updates, and provides a seamless native-like experience.
 
+---
+
+## ⚡ Important: Functional Ideation Prototype
+
+**This repository contains a React/TypeScript prototype for functional ideation and UX validation. This is NOT production code.**
+
+- **Purpose**: Rapid prototyping and concept validation
+- **Production**: All production features are implemented in Angular
+- **Process**: See [FUNCTIONAL_IDEATION_PROCESS.md](./FUNCTIONAL_IDEATION_PROCESS.md) for complete workflow
+
+**Quick Reference**: [PROCESS_FLOW_QUICK_REFERENCE.md](./PROCESS_FLOW_QUICK_REFERENCE.md)
+
+---
+
 ## Key Features
 
 ### Connection Management
@@ -267,6 +281,11 @@ AT&T NetBond SDCI is designed with accessibility in mind, following WCAG 2.1 AA 
 
 ## Documentation
 
+### Process & Workflow
+- [Functional Ideation Process](./FUNCTIONAL_IDEATION_PROCESS.md) - Complete workflow from idea to production
+- [Process Flow Quick Reference](./PROCESS_FLOW_QUICK_REFERENCE.md) - Quick overview of the 8-stage process
+
+### Technical Documentation
 - [PWA Installation Guide](./PWA_INSTALLATION.md) - User guide for installing the app
 - [PWA Technical Summary](./PWA_SUMMARY.md) - Implementation details and features
 - [Contributing Guide](./CONTRIBUTING.md) - How to contribute to the project
