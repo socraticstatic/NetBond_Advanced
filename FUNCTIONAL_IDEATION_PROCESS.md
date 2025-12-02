@@ -1,5 +1,35 @@
 # Functional Ideation to Production Process Flow
 
+## Table of Contents
+
+1. [Executive Summary](#executive-summary)
+2. [Quick Reference](#quick-reference)
+3. [Complete Process Overview](#complete-process-overview)
+4. [Visual Flow Diagrams](#visual-flow-diagrams)
+   - [Complete Process Flow](#complete-process-flow-diagram)
+   - [Parallel Tracks](#parallel-tracks)
+   - [Technology Decision Flow](#technology-decision-flow)
+   - [Data Flow](#data-flow-diagram)
+   - [Team Collaboration](#team-collaboration-model)
+   - [Success Metrics Dashboard](#success-metrics-dashboard)
+5. [Stage 1: Discovery & Ideation Input](#stage-1-discovery--ideation-input)
+6. [Stage 2: AI-Assisted Functional Prototyping](#stage-2-ai-assisted-functional-prototyping)
+7. [Stage 3: Sandbox Validation](#stage-3-sandbox-validation)
+8. [Stage 4: Figma Flywheel 3 Refinement](#stage-4-figma-flywheel-3-refinement)
+9. [Stage 5: Angular Production Development](#stage-5-angular-production-development)
+10. [Stage 6: Staging & Production Deployment](#stage-6-staging--production-deployment)
+11. [Stage 7: UX Validation with Mixpanel](#stage-7-ux-validation-with-mixpanel)
+12. [Stage 8: Data-Driven Iteration](#stage-8-data-driven-iteration)
+13. [Team Roles & Responsibilities](#team-roles--responsibilities)
+14. [Handoff Documentation](#handoff-documentation)
+15. [Technology Stack Summary](#technology-stack-summary)
+16. [Process Metrics & KPIs](#process-metrics--kpis)
+17. [Best Practices](#best-practices)
+18. [Example: RBAC Feature Journey](#example-rbac-feature-journey)
+19. [Common Questions](#common-questions)
+
+---
+
 ## Executive Summary
 
 This document defines the complete process for taking ideas from initial concept through AI-assisted functional prototyping, design system validation, to production implementation in Angular. The React/TypeScript prototype in this repository serves as a **functional ideation tool** for rapid concept validation and is **never used in production**.
@@ -7,9 +37,73 @@ This document defines the complete process for taking ideas from initial concept
 ### Key Principle
 **"Prototype Fast, Validate Often, Build Once"**
 
+### The Big Picture
+
+This React prototype is a **functional ideation tool**, NOT production code.
+
+```
+💡 Idea → ⚡ React Prototype → ✅ Validate → 🎨 Figma → 🏗️ Angular → 🚀 Production → 📊 Measure
+```
+
 ---
 
-## Process Overview
+## Quick Reference
+
+### 8-Stage Process at a Glance
+
+| Stage | Duration | Purpose | Output |
+|-------|----------|---------|--------|
+| **1. DISCOVER** | 1-2 weeks | Gather requirements | Feature requirements |
+| **2. IDEATE** ⚡ THIS REPO | 3-5 days | AI-assisted React prototype | Working prototype |
+| **3. VALIDATE** | 1-2 weeks | Internal testing | Approved concept |
+| **4. REFINE** 📐 | 2-3 weeks | Figma Flywheel 3 designs | Production-ready designs |
+| **5. DEVELOP** 🏗️ | 3-6 weeks | Angular implementation | Angular production code |
+| **6. DEPLOY** | 4-7 days | Release to users | Live feature |
+| **7. MEASURE** 📊 | Ongoing | Mixpanel analytics | Analytics insights |
+| **8. ITERATE** | Variable | Continuous improvement | Optimized feature |
+
+### Technology Stack
+
+| Stage | Technology | Purpose |
+|-------|-----------|---------|
+| **Ideation** | React + TypeScript + Vite | Fast prototyping |
+| **Design** | Figma Flywheel 3 | Design system specs |
+| **Production** | Angular | Enterprise application |
+| **Analytics** | Mixpanel | UX validation |
+
+### Quick Facts
+
+- **Prototype Speed**: 3-5 days
+- **Total Cycle Time**: ~14 weeks (concept to production)
+- **Prototype Lifespan**: Temporary (archived after launch)
+- **Production Framework**: Angular only
+- **Design Authority**: Figma Flywheel 3
+- **Analytics Platform**: Mixpanel
+
+### Success Metrics Targets
+
+| Metric | Target |
+|--------|--------|
+| Prototype Approval | >80% |
+| Design System Compliance | 100% |
+| Code Coverage | >80% |
+| Feature Adoption | >60% |
+| Task Completion | >80% |
+| User Satisfaction | >4.0/5.0 |
+
+### Key Principles
+
+1. **"Prototype Fast, Validate Often, Build Once"**
+2. React = Ideation tool (NOT production)
+3. Figma = Design authority
+4. Angular = Production framework
+5. Mixpanel = Validation platform
+6. Multiple validation gates ensure quality
+7. Data-driven iteration
+
+---
+
+## Complete Process Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -56,6 +150,539 @@ This document defines the complete process for taking ideas from initial concept
     └──────────────┘
            │
            └────────► (Back to DISCOVER or REFINE)
+```
+
+---
+
+## Visual Flow Diagrams
+
+### Complete Process Flow Diagram
+
+```
+┌───────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                       │
+│                        FUNCTIONAL IDEATION TO PRODUCTION                              │
+│                                                                                       │
+│                          "Prototype Fast, Validate Often, Build Once"                │
+│                                                                                       │
+└───────────────────────────────────────────────────────────────────────────────────────┘
+
+
+                                    ┌─────────────────┐
+                                    │   STAGE 1:      │
+                                    │   DISCOVERY     │
+                                    │   (1-2 weeks)   │
+                                    └────────┬────────┘
+                                             │
+                    ┌────────────────────────┼────────────────────────┐
+                    │                        │                        │
+                    ▼                        ▼                        ▼
+            Customer Feedback         Market Research        Stakeholder Input
+            Support Tickets            Competitors           Sales, Support, Eng
+            Feature Requests           Industry Trends       Business Objectives
+                    │                        │                        │
+                    └────────────────────────┼────────────────────────┘
+                                             │
+                                             ▼
+                                    ┌─────────────────┐
+                                    │   Requirements  │
+                                    │   + User Stories│
+                                    └────────┬────────┘
+                                             │
+                                             ▼
+                            ┌────────────────────────────────┐
+                            │        GATE 1: APPROVE         │
+                            │   Product Management Review    │
+                            └────────────────┬───────────────┘
+                                             │
+                                             ▼
+                                    ┌─────────────────┐
+                                    │   STAGE 2:      │
+                                    │   IDEATION      │
+                                    │   (3-5 days)    │
+                                    │  ⚡ REACT ⚡    │
+                                    └────────┬────────┘
+                                             │
+                    ┌────────────────────────┼────────────────────────┐
+                    │                        │                        │
+                    ▼                        ▼                        ▼
+            AI-Assisted Prototyping    Interactive UX          Data Flows
+            React + TypeScript         Lucide Icons            Supabase
+            Vite + Tailwind           Chart.js                 Mock APIs
+            Zustand State              Framer Motion           Edge Cases
+                    │                        │                        │
+                    └────────────────────────┼────────────────────────┘
+                                             │
+                                             ▼
+                                    ┌─────────────────┐
+                                    │ Working Prototype│
+                                    │ + GitHub Pages   │
+                                    │ + Demo Video     │
+                                    └────────┬────────┘
+                                             │
+                                             ▼
+                            ┌────────────────────────────────┐
+                            │        GATE 2: VALIDATE        │
+                            │      Functional Review         │
+                            │   ⚠️  NOT PRODUCTION CODE ⚠️   │
+                            └────────────────┬───────────────┘
+                                             │
+                                             ▼
+                                    ┌─────────────────┐
+                                    │   STAGE 3:      │
+                                    │   VALIDATION    │
+                                    │   (1-2 weeks)   │
+                                    └────────┬────────┘
+                                             │
+                    ┌────────────────────────┼────────────────────────┐
+                    │                        │                        │
+                    ▼                        ▼                        ▼
+            Stakeholder Demos         Usability Testing       Tech Feasibility
+            Executive Review           Internal Users          Angular Team Review
+            Business Alignment         UX Feedback            Architecture Review
+                    │                        │                        │
+                    └────────────────────────┼────────────────────────┘
+                                             │
+                                             ▼
+                                    ┌─────────────────┐
+                                    │  Feedback Loop   │
+                                    │  Iterate? Yes/No │
+                                    └────────┬────────┘
+                                             │
+                            ┌────────────────┼────────────────┐
+                            │ No (Approved)  │                │ Yes (Changes)
+                            ▼                │                ▼
+                            │                │           Update Prototype
+                            │                │           (Back to Stage 2)
+                            │                │
+                            ▼                ▼
+                ┌────────────────────────────────┐
+                │        GATE 3: APPROVE         │
+                │   Stakeholder Sign-off         │
+                │   Ready for Design System      │
+                └────────────────┬───────────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │   STAGE 4:      │
+                        │   REFINEMENT    │
+                        │   (2-3 weeks)   │
+                        │  🎨 FIGMA 🎨   │
+                        └────────┬────────┘
+                                 │
+        ┌────────────────────────┼────────────────────────┐
+        │                        │                        │
+        ▼                        ▼                        ▼
+    Flywheel 3             Design Tokens           Component Library
+    Components             Colors, Spacing         Buttons, Cards, Forms
+    Design System          Typography              Tables, Modals
+    Authority              Breakpoints             Navigation, Icons
+        │                        │                        │
+        └────────────────────────┼────────────────────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │ Production-Ready │
+                        │ Figma Designs    │
+                        │ + Specifications │
+                        │ + Assets         │
+                        └────────┬────────┘
+                                 │
+                                 ▼
+                ┌────────────────────────────────┐
+                │        GATE 4: VALIDATE        │
+                │   Design System Compliance     │
+                │   Accessibility Audit (WCAG)   │
+                │   📐 FIGMA = SOURCE OF TRUTH   │
+                └────────────────┬───────────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │   STAGE 5:      │
+                        │  DEVELOPMENT    │
+                        │   (3-6 weeks)   │
+                        │  🏗️ ANGULAR 🏗️ │
+                        └────────┬────────┘
+                                 │
+        ┌────────────────────────┼────────────────────────┐
+        │                        │                        │
+        ▼                        ▼                        ▼
+    Angular Components     Unit Testing           API Integration
+    TypeScript             80%+ Coverage          Production APIs
+    RxJS State             Integration Tests      Security
+    Enterprise Code        E2E Tests              Performance
+        │                        │                        │
+        └────────────────────────┼────────────────────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │ Production Code  │
+                        │ + Tests          │
+                        │ + Documentation  │
+                        └────────┬────────┘
+                                 │
+                                 ▼
+                ┌────────────────────────────────┐
+                │        GATE 5: REVIEW          │
+                │   Code Review (2+ Approvals)   │
+                │   Security Audit Pass          │
+                │   Performance Benchmarks Met   │
+                │   QA Sign-off                  │
+                └────────────────┬───────────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │   STAGE 6:      │
+                        │   DEPLOYMENT    │
+                        │   (4-7 days)    │
+                        └────────┬────────┘
+                                 │
+        ┌────────────────────────┼────────────────────────┐
+        │                        │                        │
+        ▼                        ▼                        ▼
+    STAGING                  VALIDATION              PRODUCTION
+    3-5 days                 Smoke Tests             Phased Rollout
+    Smoke Testing            Regression Tests        Feature Flags
+    UAT Testing              Performance Tests       Monitoring
+    Bug Fixes                Security Scan           Rollback Ready
+        │                        │                        │
+        └────────────────────────┼────────────────────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │   Live Feature   │
+                        │   in Production  │
+                        └────────┬────────┘
+                                 │
+                                 ▼
+                ┌────────────────────────────────┐
+                │        GATE 6: MONITOR         │
+                │   Production Health Check      │
+                │   Error Rate < 2%              │
+                │   Performance Metrics OK       │
+                └────────────────┬───────────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │   STAGE 7:      │
+                        │  MEASUREMENT    │
+                        │   (Ongoing)     │
+                        │  📊 MIXPANEL 📊 │
+                        └────────┬────────┘
+                                 │
+        ┌────────────────────────┼────────────────────────┐
+        │                        │                        │
+        ▼                        ▼                        ▼
+    Event Tracking         User Behavior           Success Metrics
+    User Actions           Funnels                 Adoption Rate >60%
+    Feature Usage          Retention               Completion >80%
+    Error Events           Segmentation            Satisfaction >4.0
+        │                        │                        │
+        └────────────────────────┼────────────────────────┘
+                                 │
+                                 ▼
+                        ┌─────────────────┐
+                        │  Analytics Data  │
+                        │  + Dashboards    │
+                        │  + Insights      │
+                        └────────┬────────┘
+                                 │
+                                 ▼
+                ┌────────────────────────────────┐
+                │        GATE 7: EVALUATE        │
+                │   Meeting Success Criteria?    │
+                │   Data-Driven Decision Point   │
+                └────────────────┬───────────────┘
+                                 │
+                    ┌────────────┼────────────┐
+                    │            │            │
+                    ▼            ▼            ▼
+                SUCCESS      NEEDS FIX     MAJOR ISSUE
+                Celebrate    Minor Iter.   Re-prototype
+                    │            │            │
+                    │            ▼            │
+                    │      ┌─────────────┐   │
+                    │      │  STAGE 8:   │   │
+                    │      │  ITERATION  │   │
+                    │      │  (Variable) │   │
+                    │      └──────┬──────┘   │
+                    │             │          │
+                    │             ▼          │
+                    │     Quick Angular      │
+                    │     Updates (1-2 wks)  │
+                    │             │          │
+                    │             ▼          │
+                    │     Deploy to Prod     │
+                    │             │          │
+                    │             ▼          │
+                    │     Re-measure         │
+                    │             │          │
+                    └─────────────┼──────────┘
+                                  │
+                                  ▼
+                         ┌────────────────┐
+                         │ Continuous     │
+                         │ Improvement    │
+                         │ Cycle          │
+                         └────────────────┘
+                                  │
+                                  │ (Major Changes)
+                                  ▼
+                         Back to Stage 1 or 2
+```
+
+---
+
+### Parallel Tracks
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│                              PARALLEL WORKFLOWS                             │
+└────────────────────────────────────────────────────────────────────────────┘
+
+
+IDEATION TRACK (Fast)
+─────────────────────
+   React Prototype → Validate → Archive
+   3-5 days          1-2 weeks   Done
+        │                │
+        │                │
+        └────────────────┴─────► Handoff Documentation
+
+
+DESIGN TRACK (Quality)
+──────────────────────
+   Figma Design → Validate → Maintain
+   2-3 weeks      1 week      Ongoing
+        │              │
+        │              │
+        └──────────────┴─────► Developer Specs
+
+
+PRODUCTION TRACK (Enterprise)
+─────────────────────────────
+   Angular Code → Test → Deploy → Monitor
+   3-6 weeks      1 week  1 week  Ongoing
+        │            │       │        │
+        │            │       │        │
+        └────────────┴───────┴────────┴─────► Production Feature
+```
+
+---
+
+### Technology Decision Flow
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                         TECHNOLOGY SELECTION                              │
+└──────────────────────────────────────────────────────────────────────────┘
+
+
+                        Need to build something?
+                                 │
+                                 │
+                    ┌────────────┴────────────┐
+                    │                         │
+                    ▼                         ▼
+            For Ideation?               For Production?
+            Fast validation?            Customer-facing?
+                    │                         │
+                    │                         │
+                    ▼                         ▼
+          ┌──────────────────┐      ┌──────────────────┐
+          │  USE REACT       │      │  USE ANGULAR     │
+          │                  │      │                  │
+          │  • Rapid Proto   │      │  • Enterprise    │
+          │  • AI-Assisted   │      │  • Security      │
+          │  • Throwaway     │      │  • Performance   │
+          │  • 3-5 days      │      │  • Scalable      │
+          │  • Stakeholders  │      │  • Maintained    │
+          └──────────────────┘      └──────────────────┘
+                    │                         │
+                    │                         │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                        Both serve different
+                        purposes - NEVER convert
+```
+
+---
+
+### Data Flow Diagram
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                         DATA & INSIGHTS FLOW                              │
+└──────────────────────────────────────────────────────────────────────────┘
+
+
+    Customer Voice                Internal Insights             Market Data
+         │                              │                           │
+         └──────────────┬───────────────┴────────────┬──────────────┘
+                        │                            │
+                        ▼                            ▼
+                 ┌──────────────┐            ┌──────────────┐
+                 │  Product     │◄───────────│  Analytics   │
+                 │  Management  │            │  Team        │
+                 └──────┬───────┘            └──────▲───────┘
+                        │                           │
+                        ▼                           │
+                 ┌──────────────┐                   │
+                 │  React       │                   │
+                 │  Prototype   │                   │
+                 └──────┬───────┘                   │
+                        │                           │
+                        ▼                           │
+                 ┌──────────────┐                   │
+                 │  Stakeholder │                   │
+                 │  Validation  │                   │
+                 └──────┬───────┘                   │
+                        │                           │
+                        ▼                           │
+                 ┌──────────────┐                   │
+                 │  Figma       │                   │
+                 │  Designs     │                   │
+                 └──────┬───────┘                   │
+                        │                           │
+                        ▼                           │
+                 ┌──────────────┐                   │
+                 │  Angular     │                   │
+                 │  Production  │                   │
+                 └──────┬───────┘                   │
+                        │                           │
+                        ▼                           │
+                 ┌──────────────┐                   │
+                 │  Production  │                   │
+                 │  Deployment  │                   │
+                 └──────┬───────┘                   │
+                        │                           │
+                        ▼                           │
+                 ┌──────────────┐                   │
+                 │  Mixpanel    │───────────────────┘
+                 │  Tracking    │
+                 └──────────────┘
+                        │
+                        └──► Continuous Feedback Loop
+```
+
+---
+
+### Team Collaboration Model
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                        TEAM COLLABORATION                                 │
+└──────────────────────────────────────────────────────────────────────────┘
+
+
+Stage         Owner              Collaborators           Reviewers
+─────         ─────              ─────────────           ─────────
+
+Discovery     Product Mgmt       UX Research             Stakeholders
+              │                  Sales/Support           Executives
+              └─────────────────► Tech Leads             │
+                                                         │
+                                                         ▼
+                                                    Decision Gate
+
+
+Ideation      AI Team            Product Mgmt            Stakeholders
+              │                  UX Design               Product Mgmt
+              └─────────────────► Tech Advisors          │
+                                                         │
+                                                         ▼
+                                                    Validation Gate
+
+
+Validation    Product Mgmt       All Stakeholders        Executives
+              │                  UX Team                 Product Mgmt
+              └─────────────────► Tech Leads             │
+                                                         │
+                                                         ▼
+                                                    Approval Gate
+
+
+Refinement    UX Design          Design System Team      Product Mgmt
+              │                  Accessibility           Design Lead
+              └─────────────────► AI Team (reference)    │
+                                                         │
+                                                         ▼
+                                                    Design Gate
+
+
+Development   Angular Team       Backend Team            Tech Leads
+              │                  UX Design               Architecture
+              └─────────────────► QA Team                │
+                                                         │
+                                                         ▼
+                                                    Code Review Gate
+
+
+Deployment    DevOps             Angular Team            Tech Leads
+              │                  QA Team                 Product Mgmt
+              └─────────────────► SRE Team               │
+                                                         │
+                                                         ▼
+                                                    Release Gate
+
+
+Measurement   Analytics Team     Product Mgmt            Executives
+              │                  UX Research             Product Mgmt
+              └─────────────────► Engineering            │
+                                                         │
+                                                         ▼
+                                                    Success Gate
+
+
+Iteration     Product Mgmt       Analytics Team          Stakeholders
+              │                  Engineering             Executives
+              └─────────────────► UX Design              │
+                                                         │
+                                                         ▼
+                                                    Priority Gate
+```
+
+---
+
+### Success Metrics Dashboard
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                        SUCCESS METRICS TRACKING                           │
+└──────────────────────────────────────────────────────────────────────────┘
+
+
+SPEED METRICS
+═════════════
+Discovery to Prototype:        [████████░░] 8/10 days   (Target: <14 days)
+Prototype to Validated:        [██████████] 10/10 days  (Target: <14 days)
+Validated to Figma:            [████████░░] 16/20 days  (Target: <21 days)
+Figma to Angular:              [██████░░░░] 28/42 days  (Target: <42 days)
+Total Cycle Time:              [████████░░] 62/98 days  (Target: <98 days)
+
+
+QUALITY METRICS
+═══════════════
+Prototype Approval Rate:       [██████████] 85%   (Target: >80%)
+Design System Compliance:      [██████████] 100%  (Target: 100%)
+Code Coverage:                 [██████████] 87%   (Target: >80%)
+Accessibility Compliance:      [██████████] 100%  (Target: 100%)
+Production Bug Rate:           [██████████] 1.2%  (Target: <2%)
+
+
+IMPACT METRICS
+══════════════
+Feature Adoption:              [████████░░] 68%   (Target: >60%)
+Task Completion:               [██████████] 82%   (Target: >80%)
+User Satisfaction:             [██████████] 4.2/5 (Target: >4.0)
+Support Tickets:               [██████████] -15%  (Target: Reduction)
+Business Objectives:           [██████████] 100%  (Target: 100%)
+
+
+OVERALL HEALTH
+══════════════
+Process Health Score:          [██████████] 89/100 ⭐ EXCELLENT
 ```
 
 ---
@@ -1000,6 +1627,34 @@ Mixpanel Data → Prototype Update → Sandbox → Figma → Angular → Deploy 
 - Once in production, prototype can be archived
 - For major updates, create new prototype
 
+### Q: Can we use React code in production?
+
+**A**: No. Angular team builds from Figma specs.
+- React code is throwaway and not production-ready
+- Angular is the only production framework
+- Figma Flywheel 3 is the source of truth
+
+### Q: Why prototype if we redesign in Figma?
+
+**A**: Prototypes validate functionality before design investment.
+- Cheaper to iterate on working prototypes than finished designs
+- Prototypes reveal edge cases that static designs miss
+- Stakeholders can interact with working concepts
+
+### Q: Who approves moving to next stage?
+
+**A**: Product Management with stakeholder input.
+- Each gate has defined approval criteria
+- Multiple reviewers ensure quality
+- Clear documentation of decisions
+
+### Q: What if Mixpanel shows failure?
+
+**A**: Minor fixes in Angular, major changes re-prototype.
+- Fast loop for quick optimizations
+- Slow loop for fundamental changes
+- Data-driven decision making
+
 ---
 
 ## Conclusion
@@ -1023,6 +1678,7 @@ Features that are thoroughly validated before expensive development, properly de
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0 | 2025-12-02 | AI Ideation Team | Initial process documentation |
+| 1.1 | 2025-12-02 | AI Ideation Team | Consolidated into single comprehensive document |
 
 ---
 

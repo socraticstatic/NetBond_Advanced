@@ -282,8 +282,7 @@ AT&T NetBond SDCI is designed with accessibility in mind, following WCAG 2.1 AA 
 ## Documentation
 
 ### Process & Workflow
-- [Functional Ideation Process](./FUNCTIONAL_IDEATION_PROCESS.md) - Complete workflow from idea to production
-- [Process Flow Quick Reference](./PROCESS_FLOW_QUICK_REFERENCE.md) - Quick overview of the 8-stage process
+- [Functional Ideation Process](./FUNCTIONAL_IDEATION_PROCESS.md) - Complete workflow from idea to production (includes quick reference, visual diagrams, and detailed process documentation)
 
 ### Technical Documentation
 - [PWA Installation Guide](./PWA_INSTALLATION.md) - User guide for installing the app
