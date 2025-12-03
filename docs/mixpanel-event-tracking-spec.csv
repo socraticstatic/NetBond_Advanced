@@ -1,0 +1,106 @@
+Event Category,Event Name,Event Description,Trigger/When,User Properties,Event Properties,Funnel,Priority,Implementation Notes
+Navigation,Page View,User views a page,On page load,user_id|user_role|account_type,page_name|page_url|referrer|session_id,General Usage,High,Track all page navigation
+Navigation,Tab Changed,User switches tabs,On tab click,user_id|user_role,tab_from|tab_to|page_context|session_id,General Usage,Medium,Track tab navigation within pages
+Navigation,Menu Opened,User opens navigation menu,On menu click,user_id|user_role,menu_type|menu_location|session_id,General Usage,Low,Mobile and desktop menus
+Navigation,Search Performed,User performs search,On search submit,user_id|user_role,search_query|search_results_count|search_category|session_id,Search Funnel,High,Track all search interactions
+
+Connection Management,Connection Created,New connection initiated,On wizard completion,user_id|user_role|account_type,connection_type|bandwidth|provider_a|provider_b|connection_id|cost_estimate|wizard_completion_time,Connection Creation Funnel,Critical,Track complete connection creation flow
+Connection Management,Connection Wizard Started,User starts connection wizard,On wizard entry,user_id|user_role,wizard_entry_point|session_id,Connection Creation Funnel,Critical,First step in connection funnel
+Connection Management,Connection Wizard Step Completed,User completes a wizard step,On step completion,user_id|user_role,step_number|step_name|time_on_step|session_id,Connection Creation Funnel,Critical,Track each wizard step
+Connection Management,Connection Wizard Abandoned,User exits wizard without completing,On wizard exit without completion,user_id|user_role,last_step_completed|abandonment_reason|time_in_wizard|session_id,Connection Creation Funnel,High,Identify drop-off points
+Connection Management,Connection Details Viewed,User views connection details,On connection detail page load,user_id|user_role,connection_id|connection_type|connection_status|session_id,General Usage,High,Track interest in specific connections
+Connection Management,Connection Modified,User modifies connection settings,On settings save,user_id|user_role,connection_id|modification_type|old_value|new_value|session_id,Connection Management,High,Track configuration changes
+Connection Management,Connection Deleted,User deletes a connection,On delete confirmation,user_id|user_role,connection_id|connection_type|connection_age|deletion_reason|session_id,Connection Management,High,Track why connections are removed
+Connection Management,Bandwidth Adjusted,User changes bandwidth,On bandwidth change,user_id|user_role,connection_id|old_bandwidth|new_bandwidth|cost_impact|session_id,Connection Management,Medium,Track bandwidth modifications
+Connection Management,Connection Status Changed,Connection status updates,On status change,user_id|user_role,connection_id|old_status|new_status|change_reason|session_id,Connection Management,High,Track lifecycle changes
+Connection Management,Connection Filter Applied,User filters connection list,On filter change,user_id|user_role,filter_type|filter_value|results_count|session_id,General Usage,Medium,Track how users find connections
+Connection Management,Connection Sorted,User sorts connection list,On sort change,user_id|user_role,sort_by|sort_direction|session_id,General Usage,Low,Track sorting preferences
+
+Group Management,Group Created,New group created,On group creation,user_id|user_role|account_type,group_name|group_type|member_count|session_id,Group Management,High,Track group creation patterns
+Group Management,Group Viewed,User views group details,On group detail page load,user_id|user_role,group_id|group_type|member_count|session_id,General Usage,Medium,Track group engagement
+Group Management,Group Modified,User modifies group settings,On group update,user_id|user_role,group_id|modification_type|old_value|new_value|session_id,Group Management,Medium,Track group changes
+Group Management,Group Deleted,User deletes a group,On delete confirmation,user_id|user_role,group_id|group_age|member_count|deletion_reason|session_id,Group Management,Medium,Track group lifecycle
+Group Management,Member Added to Group,User adds member to group,On member add,user_id|user_role,group_id|member_id|member_role|session_id,Group Management,Medium,Track group growth
+Group Management,Member Removed from Group,User removes member from group,On member remove,user_id|user_role,group_id|member_id|removal_reason|session_id,Group Management,Medium,Track group changes
+
+RBAC & Permissions,Role Assigned,User role is assigned,On role assignment,admin_user_id|target_user_id,role_assigned|scope_type|scope_id|previous_role|session_id,RBAC Management,Critical,Track all role assignments
+RBAC & Permissions,Role Changed,User role is changed,On role change,admin_user_id|target_user_id,old_role|new_role|scope_type|scope_id|change_reason|session_id,RBAC Management,Critical,Track role modifications
+RBAC & Permissions,Permission Request,User requests permission,On permission request,user_id|user_role,permission_requested|resource_type|resource_id|request_reason|session_id,RBAC Management,High,Track permission escalation requests
+RBAC & Permissions,Permission Granted,Permission request approved,On approval,approver_user_id|requester_user_id,permission_granted|resource_type|resource_id|session_id,RBAC Management,High,Track approved requests
+RBAC & Permissions,Permission Denied,Permission request denied,On denial,approver_user_id|requester_user_id,permission_denied|resource_type|resource_id|denial_reason|session_id,RBAC Management,High,Track denied requests
+RBAC & Permissions,Access Denied,User attempts unauthorized action,On permission check failure,user_id|user_role,action_attempted|resource_type|resource_id|required_permission|session_id,Security Monitoring,Critical,Track unauthorized access attempts
+RBAC & Permissions,Scope Filter Applied,User filters by scope,On scope filter change,user_id|user_role|assigned_scopes,scope_type|scope_value|results_count|session_id,General Usage,Medium,Track scope-based filtering
+RBAC & Permissions,Impersonation Started,Admin impersonates user,On impersonation start,admin_user_id|target_user_id,impersonation_reason|session_id,Security Monitoring,Critical,Track impersonation for auditing
+RBAC & Permissions,Impersonation Ended,Admin stops impersonating,On impersonation end,admin_user_id|target_user_id,impersonation_duration|actions_performed|session_id,Security Monitoring,Critical,Track impersonation completion
+
+Monitoring & Analytics,Dashboard Viewed,User views monitoring dashboard,On dashboard load,user_id|user_role,dashboard_type|time_range|session_id,General Usage,High,Track monitoring engagement
+Monitoring & Analytics,Alert Created,User creates alert rule,On alert rule creation,user_id|user_role,alert_type|metric|threshold|notification_method|session_id,Alert Management,High,Track alert configuration
+Monitoring & Analytics,Alert Triggered,Alert condition met,On alert trigger,affected_users|user_role,alert_id|alert_type|metric_value|threshold|resource_id|session_id,Alert Management,Critical,Track all alerts
+Monitoring & Analytics,Alert Acknowledged,User acknowledges alert,On acknowledgment,user_id|user_role,alert_id|alert_type|acknowledgment_time|session_id,Alert Management,High,Track alert response
+Monitoring & Analytics,Alert Dismissed,User dismisses alert,On dismissal,user_id|user_role,alert_id|alert_type|dismissal_reason|session_id,Alert Management,Medium,Track alert handling
+Monitoring & Analytics,Metrics Exported,User exports metrics,On export action,user_id|user_role,export_format|date_range|metric_types|session_id,Data Export,Medium,Track data export usage
+Monitoring & Analytics,Chart Interaction,User interacts with chart,On chart click/hover,user_id|user_role,chart_type|interaction_type|data_point|session_id,General Usage,Low,Track data exploration
+Monitoring & Analytics,Time Range Changed,User changes time range,On time range selector change,user_id|user_role,old_range|new_range|context|session_id,General Usage,Medium,Track temporal analysis patterns
+
+Network Designer,Designer Opened,User opens network designer,On designer entry,user_id|user_role,entry_point|session_id,Network Design Funnel,High,Track designer usage
+Network Designer,Template Selected,User selects network template,On template selection,user_id|user_role,template_id|template_name|template_category|session_id,Network Design Funnel,High,Track template popularity
+Network Designer,Node Added,User adds node to canvas,On node add,user_id|user_role,node_type|node_position|session_id,Network Design,Medium,Track design patterns
+Network Designer,Connection Added,User connects nodes,On connection creation,user_id|user_role,source_node|target_node|connection_type|session_id,Network Design,Medium,Track topology patterns
+Network Designer,Design Saved,User saves network design,On save action,user_id|user_role,design_name|node_count|connection_count|template_used|session_id,Network Design Funnel,High,Track design completion
+Network Designer,Design Exported,User exports design,On export action,user_id|user_role,export_format|node_count|connection_count|session_id,Network Design,Medium,Track design sharing
+Network Designer,AI Recommendation Viewed,User views AI recommendation,On recommendation display,user_id|user_role,recommendation_type|recommendation_id|session_id,AI Features,High,Track AI engagement
+Network Designer,AI Recommendation Accepted,User accepts AI recommendation,On recommendation acceptance,user_id|user_role,recommendation_type|recommendation_id|session_id,AI Features,High,Track AI usefulness
+Network Designer,AI Recommendation Rejected,User rejects AI recommendation,On recommendation rejection,user_id|user_role,recommendation_type|recommendation_id|rejection_reason|session_id,AI Features,High,Track AI accuracy
+
+Control Center,Widget Added,User adds widget to dashboard,On widget add,user_id|user_role,widget_type|widget_position|session_id,Dashboard Customization,Medium,Track dashboard personalization
+Control Center,Widget Removed,User removes widget,On widget remove,user_id|user_role,widget_type|widget_position|time_on_dashboard|session_id,Dashboard Customization,Medium,Track widget usefulness
+Control Center,Widget Configured,User configures widget settings,On widget config save,user_id|user_role,widget_type|configuration_changed|session_id,Dashboard Customization,Low,Track customization patterns
+Control Center,Dashboard Layout Changed,User rearranges widgets,On layout save,user_id|user_role,widget_count|layout_change_type|session_id,Dashboard Customization,Low,Track layout preferences
+Control Center,Quick Action Used,User clicks quick action,On quick action click,user_id|user_role,action_type|action_target|session_id,General Usage,Medium,Track shortcut usage
+
+Configuration,Settings Changed,User modifies settings,On settings save,user_id|user_role,setting_category|setting_name|old_value|new_value|session_id,Configuration,Medium,Track configuration changes
+Configuration,User Created,New user added to system,On user creation,creator_user_id|creator_role,new_user_id|new_user_role|invitation_method|session_id,User Management,High,Track user provisioning
+Configuration,User Modified,User details updated,On user update,modifier_user_id|target_user_id,modification_type|old_value|new_value|session_id,User Management,Medium,Track user changes
+Configuration,User Deleted,User removed from system,On user deletion,deleter_user_id|target_user_id,deletion_reason|user_age|session_id,User Management,High,Track user lifecycle
+Configuration,Billing Plan Changed,User changes billing plan,On plan change,user_id|account_id,old_plan|new_plan|price_change|session_id,Billing,Critical,Track revenue changes
+Configuration,Payment Method Added,User adds payment method,On payment method save,user_id|account_id,payment_method_type|session_id,Billing,High,Track payment setup
+Configuration,Invoice Downloaded,User downloads invoice,On invoice download,user_id|account_id,invoice_id|invoice_date|invoice_amount|session_id,Billing,Medium,Track billing engagement
+
+Marketplace,Marketplace Viewed,User views marketplace,On marketplace load,user_id|user_role,category_filter|session_id,Marketplace Funnel,High,Track marketplace engagement
+Marketplace,Solution Viewed,User views solution details,On solution detail page,user_id|user_role,solution_id|solution_category|solution_name|session_id,Marketplace Funnel,High,Track solution interest
+Marketplace,Solution Deployed,User deploys marketplace solution,On deployment confirmation,user_id|user_role|account_type,solution_id|solution_category|solution_name|deployment_type|session_id,Marketplace Funnel,Critical,Track solution adoption
+Marketplace,Solution Removed,User removes deployed solution,On removal confirmation,user_id|user_role,solution_id|solution_name|time_deployed|removal_reason|session_id,Marketplace,High,Track solution lifecycle
+
+Authentication,Login Success,User successfully logs in,On successful login,user_id|user_role,login_method|device_type|browser|location|session_id,Authentication,Critical,Track authentication patterns
+Authentication,Login Failed,Login attempt fails,On failed login attempt,attempted_username,failure_reason|device_type|browser|location|session_id,Security Monitoring,Critical,Track security issues
+Authentication,Logout,User logs out,On logout action,user_id|session_duration,logout_method|session_id,Authentication,Medium,Track session patterns
+Authentication,Password Changed,User changes password,On password change,user_id,change_method|session_id,Security,High,Track security actions
+Authentication,Password Reset Requested,User requests password reset,On reset request,attempted_email,request_method|session_id,Authentication,High,Track password issues
+Authentication,MFA Enabled,User enables multi-factor auth,On MFA setup completion,user_id,mfa_method|session_id,Security,High,Track security adoption
+Authentication,MFA Disabled,User disables multi-factor auth,On MFA removal,user_id,mfa_method|disable_reason|session_id,Security,High,Track security changes
+Authentication,Session Timeout,User session expires,On timeout,user_id|session_duration,timeout_reason|last_activity|session_id,Authentication,Medium,Track session health
+
+Help & Support,Help Opened,User opens help panel,On help panel open,user_id|user_role,help_entry_point|page_context|session_id,Support,High,Track help usage
+Help & Support,Help Article Viewed,User views help article,On article view,user_id|user_role,article_id|article_title|article_category|session_id,Support,High,Track help content effectiveness
+Help & Support,Glossary Term Viewed,User views glossary definition,On term click,user_id|user_role,term|term_category|page_context|session_id,Support,Medium,Track terminology clarity
+Help & Support,Tour Started,User starts product tour,On tour start,user_id|user_role,tour_type|entry_point|session_id,Onboarding,High,Track onboarding engagement
+Help & Support,Tour Completed,User completes product tour,On tour completion,user_id|user_role,tour_type|completion_time|session_id,Onboarding,High,Track onboarding success
+Help & Support,Tour Skipped,User skips product tour,On tour skip,user_id|user_role,tour_type|step_at_skip|session_id,Onboarding,High,Track onboarding friction
+Help & Support,Feedback Submitted,User submits feedback,On feedback submit,user_id|user_role,feedback_type|rating|page_context|session_id,Feedback,High,Track user satisfaction
+Help & Support,Support Ticket Created,User creates support ticket,On ticket submission,user_id|user_role,ticket_category|priority|page_context|session_id,Support,Critical,Track support needs
+
+Errors & Performance,Error Occurred,Application error happens,On error catch,user_id|user_role,error_type|error_message|error_stack|page_context|session_id,Error Monitoring,Critical,Track all application errors
+Errors & Performance,API Error,API call fails,On API error response,user_id|user_role,api_endpoint|http_status|error_message|session_id,Error Monitoring,Critical,Track backend issues
+Errors & Performance,Performance Issue,Slow page load detected,On performance threshold exceeded,user_id|user_role,page_name|load_time|threshold|session_id,Performance Monitoring,High,Track performance problems
+Errors & Performance,Network Error,Network request fails,On network failure,user_id|user_role,request_type|error_type|session_id,Error Monitoring,High,Track connectivity issues
+
+PWA & Mobile,PWA Installed,User installs PWA,On install confirmation,user_id,device_type|browser|os|session_id,PWA Adoption,High,Track PWA installation
+PWA & Mobile,PWA Launched,User launches PWA,On PWA app start,user_id,device_type|launch_source|session_id,PWA Usage,Medium,Track PWA engagement
+PWA & Mobile,Offline Mode Activated,User goes offline,On offline detection,user_id,page_context|session_id,PWA Usage,Medium,Track offline capability usage
+PWA & Mobile,Offline Action Queued,User performs action offline,On offline action,user_id,action_type|session_id,PWA Usage,Medium,Track offline interactions
+PWA & Mobile,Mobile Menu Opened,User opens mobile menu,On mobile menu toggle,user_id|user_role,page_context|session_id,Mobile Usage,Low,Track mobile navigation patterns
+
+Sandbox Testing,Sandbox Access Granted,Stakeholder logs into sandbox,On sandbox authentication,stakeholder_id|stakeholder_role,sandbox_environment|feature_being_tested|session_id,Sandbox Testing,Critical,Track sandbox usage for prototypes
+Sandbox Testing,Sandbox Feature Tested,Stakeholder tests feature in sandbox,On feature interaction in sandbox,stakeholder_id|stakeholder_role,feature_name|interaction_type|test_scenario|session_id,Sandbox Testing,Critical,Track hands-on testing
+Sandbox Testing,Sandbox Feedback Submitted,Stakeholder submits sandbox feedback,On feedback form submission,stakeholder_id|stakeholder_role,feature_name|feedback_type|rating|comments|session_id,Sandbox Testing,Critical,Track stakeholder feedback quality
+Sandbox Testing,Sandbox Session Duration,Time spent in sandbox,On sandbox logout,stakeholder_id|stakeholder_role,session_duration|pages_visited|features_tested|session_id,Sandbox Testing,High,Track engagement depth
