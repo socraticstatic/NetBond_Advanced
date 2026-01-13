@@ -244,8 +244,8 @@ export function BaseAlertsView({
             />
           </div>
           
-          <div className="flex space-x-4">
-            <div className="space-x-2">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               {['critical', 'warning', 'info'].map((type) => (
                 <Button
                   key={type}
