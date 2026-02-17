@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "build:gh-pages": "vite build --base=/att-netbond-sdci/ --mode production",
+    "build:gh-pages": "vite build --base=/NetBond_Advanced/ --mode production",
     "build:skip-typecheck": "vite build",
     "build:analyze": "vite build && npx vite-bundle-analyzer dist/stats.html",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

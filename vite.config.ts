@@ -47,7 +47,7 @@ export default defineConfig(({ mode }) => ({
       }
     })
   ],
-  base: './',
+  base: '/NetBond_Advanced/',
   build: {
     target: 'esnext',
     minify: 'esbuild',
