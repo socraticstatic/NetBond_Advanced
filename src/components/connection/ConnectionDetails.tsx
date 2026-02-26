@@ -95,6 +95,54 @@ export function ConnectionDetails() {
       updatedAt: '2024-02-20T10:15:00Z',
       description: 'SD-WAN for branch office connectivity',
       connectionId: connection?.id.toString() || ''
+    },
+    {
+      id: 'vnf-3',
+      name: 'Enterprise LMCC',
+      type: 'lmcc',
+      vendor: 'AT&T NetBond',
+      model: 'Managed Cloud Connectivity',
+      version: '2.1.0',
+      status: 'active',
+      throughput: '5 Gbps',
+      linkIds: ['link-1', 'link-2'],
+      configuration: {
+        lmccConfiguration: {
+          vnfId: 'vnf-3',
+          selectedSites: ['site-sf', 'site-ny', 'site-chi', 'site-dal'],
+          bandwidthAllocations: [
+            { siteId: 'site-sf', bandwidth: 1000 },
+            { siteId: 'site-ny', bandwidth: 1000 },
+            { siteId: 'site-chi', bandwidth: 500 },
+            { siteId: 'site-dal', bandwidth: 500 }
+          ],
+          taoConfig: {
+            terminationType: 'bgp',
+            bgpConfig: {
+              localASN: 65000,
+              remoteASN: 65001,
+              authenticationKey: 'encrypted-key'
+            },
+            baseSubnet: '10.100.0.0/16',
+            startingVlanId: 100,
+            ipAllocations: [
+              { siteId: 'site-sf', subnet: '10.100.0.0/24', vlanId: 100, gateway: '10.100.0.1' },
+              { siteId: 'site-ny', subnet: '10.100.1.0/24', vlanId: 101, gateway: '10.100.1.1' },
+              { siteId: 'site-chi', subnet: '10.100.2.0/24', vlanId: 102, gateway: '10.100.2.1' },
+              { siteId: 'site-dal', subnet: '10.100.3.0/24', vlanId: 103, gateway: '10.100.3.1' }
+            ],
+            routingPolicy: 'dynamic',
+            enableDefaultRoute: true
+          },
+          status: 'active',
+          createdAt: '2024-02-01T10:00:00Z',
+          updatedAt: '2024-02-26T14:30:00Z'
+        }
+      },
+      createdAt: '2024-02-01T10:00:00Z',
+      updatedAt: '2024-02-26T14:30:00Z',
+      description: 'Layer 3 Managed Cloud Connectivity across 4 sites',
+      connectionId: connection?.id.toString() || ''
     }
   ]);
 

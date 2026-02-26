@@ -8,6 +8,7 @@ export type VNFType =
   | 'load_balancer'
   | 'ids_ips'
   | 'wan_optimizer'
+  | 'lmcc'
   | 'custom';
 
 export interface VNF {

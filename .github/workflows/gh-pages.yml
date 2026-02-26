@@ -36,7 +36,7 @@ jobs:
       - name: Build
         run: |
           echo "Running build with base path..."
-          npm run build:skip-typecheck
+          npm run build:gh-pages
         env:
           NODE_ENV: production
           CI: false

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { X, AlertTriangle, Plus, Info, Network, Shield, Settings, Globe, Router as RouterIcon, ServerCog } from 'lucide-react';
+import { X, AlertTriangle, Plus, Info, Network, Shield, Settings, Globe, Router as RouterIcon, ServerCog, Cloud } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { FormField } from '../../form/FormField';
 import { VNF, VNFType, VNFInterface, VNFTemplate } from '../../../types/vnf';
 import { Link } from '../../../types/connection';
 import { SideDrawer } from '../../common/SideDrawer';
+import { LMCCConfigDrawer } from '../lmcc/LMCCConfigDrawer';
+import { LMCCConfiguration } from '../../../types/lmcc';
 
 // Utility function to get user-friendly VNF type names
 const getTypeName = (type: VNFType): string => {
@@ -17,6 +19,8 @@ const getTypeName = (type: VNFType): string => {
       return 'Router';
     case 'vnat':
       return 'NAT';
+    case 'lmcc':
+      return 'LMCC';
     case 'custom':
       return 'Custom';
     default:
@@ -121,6 +125,23 @@ const VNF_TEMPLATES: VNFTemplate[] = [
     }
   },
   {
+    id: 'template-lmcc',
+    name: 'AT&T LMCC',
+    description: 'Layer 3 Managed Cloud Connectivity for multi-site deployments',
+    type: 'lmcc',
+    vendor: 'AT&T NetBond',
+    model: 'Managed Cloud Connectivity',
+    throughput: 'Variable',
+    defaultConfiguration: {},
+    icon: Cloud,
+    recommendedUseCase: 'Multi-site enterprise connectivity, managed cloud access',
+    licenseRequired: true,
+    pricing: {
+      monthly: 2000,
+      annually: 20000
+    }
+  },
+  {
     id: 'template-custom',
     name: 'Custom VNF',
     description: 'Configure your own custom network function',
@@ -183,6 +204,10 @@ export function VNFModal({
   // Validation state
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showAdvanced, setShowAdvanced] = useState(false);
+
+  // LMCC Configuration state
+  const [showLMCCConfig, setShowLMCCConfig] = useState(false);
+  const [lmccConfiguration, setLmccConfiguration] = useState<LMCCConfiguration | undefined>();
 
   // Populate form fields in edit mode
   useEffect(() => {
@@ -375,7 +400,8 @@ export function VNFModal({
         interfaces: interfaces.length > 0 ? interfaces : undefined,
         routingProtocols: routingProtocols.length > 0 ? routingProtocols : undefined,
         highAvailability: highAvailability || undefined,
-        managementIP: managementIP || undefined
+        managementIP: managementIP || undefined,
+        lmccConfiguration: type === 'lmcc' ? lmccConfiguration : undefined
       },
       createdAt: isEditMode && vnf ? vnf.createdAt : new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -719,6 +745,44 @@ export function VNFModal({
                   </div>
                 </div>
 
+                {/* LMCC Configuration Section */}
+                {type === 'lmcc' && (
+                  <div className="pt-6 border-t border-gray-200">
+                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-900 mb-1 flex items-center gap-2">
+                            <Settings className="h-4 w-4 text-blue-600" />
+                            LMCC Configuration
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Configure sites, bandwidth allocation, and TAO settings for this LMCC VNF
+                          </p>
+                          {lmccConfiguration && (
+                            <div className="mt-2 flex items-center gap-2">
+                              <span className="px-2 py-0.5 bg-green-100 text-green-800 rounded text-xs font-medium">
+                                {lmccConfiguration.selectedSites.length} sites configured
+                              </span>
+                              <span className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                                {lmccConfiguration.bandwidthAllocations.reduce((sum, a) => sum + a.bandwidth, 0)} Mbps total
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <Button
+                          type="button"
+                          variant="primary"
+                          size="sm"
+                          icon={Settings}
+                          onClick={() => setShowLMCCConfig(true)}
+                        >
+                          {lmccConfiguration ? 'Edit Configuration' : 'Configure LMCC'}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Advanced Configuration Toggle */}
                 <div className="pt-4 border-t border-gray-200">
                   <button
@@ -952,6 +1016,19 @@ export function VNFModal({
           )}
         </div>
 
+        {/* LMCC Configuration Drawer */}
+        {type === 'lmcc' && (
+          <LMCCConfigDrawer
+            isOpen={showLMCCConfig}
+            onClose={() => setShowLMCCConfig(false)}
+            onSave={(config) => {
+              setLmccConfiguration(config);
+              setShowLMCCConfig(false);
+            }}
+            vnfId={vnf?.id || `vnf-${Date.now()}`}
+            existingConfig={lmccConfiguration}
+          />
+        )}
     </SideDrawer>
   );
 }

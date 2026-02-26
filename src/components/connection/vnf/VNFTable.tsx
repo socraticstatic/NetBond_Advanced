@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Router as RouterIcon, Network, Settings, Shield, Globe, CreditCard as Edit2, Trash2, Eye, ExternalLink, Scale, AlertTriangle, Zap } from 'lucide-react';
+import { Router as RouterIcon, Network, Settings, Shield, Globe, CreditCard as Edit2, Trash2, Eye, ExternalLink, Scale, AlertTriangle, Zap, MapPin, Gauge } from 'lucide-react';
 import { VNF } from '../../../types/vnf';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { CloudRouter } from '../../../types/cloudrouter';
@@ -86,6 +86,7 @@ export function VNFTable({
               vnf.type === 'sdwan' ? 'bg-purple-100' :
               vnf.type === 'router' ? 'bg-blue-100' :
               vnf.type === 'vnat' ? 'bg-green-100' :
+              vnf.type === 'lmcc' ? 'bg-sky-100' :
               'bg-gray-100'
             }`}>
               {getTypeIcon(vnf.type)}
@@ -99,6 +100,18 @@ export function VNFTable({
               {vnf.name}
             </button>
             <div className="text-xs text-gray-500">{vnf.description}</div>
+            {vnf.type === 'lmcc' && vnf.configuration?.lmccConfiguration && (
+              <div className="flex items-center gap-2 mt-1">
+                <span className="inline-flex items-center px-1.5 py-0.5 bg-green-100 text-green-800 rounded text-xs font-medium">
+                  <MapPin className="h-3 w-3 mr-1" />
+                  {vnf.configuration.lmccConfiguration.selectedSites.length} sites
+                </span>
+                <span className="inline-flex items-center px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                  <Gauge className="h-3 w-3 mr-1" />
+                  {vnf.configuration.lmccConfiguration.bandwidthAllocations.reduce((sum, a) => sum + a.bandwidth, 0)} Mbps
+                </span>
+              </div>
+            )}
           </div>
         </div>
       ),
