@@ -193,7 +193,7 @@ export function VNFModal({
   const [managementIP, setManagementIP] = useState('');
   const [routingProtocols, setRoutingProtocols] = useState<string[]>([]);
   const [linkIds, setLinkIds] = useState<string[]>([]);
-  const [selectedConnectionForLinks, setSelectedConnectionForLinks] = useState<string>(connectionId);
+  const [selectedConnectionsForLinks, setSelectedConnectionsForLinks] = useState<string[]>([connectionId]);
 
   // New interface form
   const [newInterface, setNewInterface] = useState<Partial<VNFInterface>>({
@@ -214,26 +214,37 @@ export function VNFModal({
   const [showLMCCConfig, setShowLMCCConfig] = useState(false);
   const [lmccConfiguration, setLmccConfiguration] = useState<LMCCConfiguration | undefined>();
 
-  // Get available links from the selected connection
-  const getAvailableLinks = (): Link[] => {
-    // If selecting current connection, use the provided links
-    if (selectedConnectionForLinks === connectionId) {
-      return links;
-    }
+  // Get available links from the selected connections
+  const getAvailableLinks = (): Array<Link & { connectionName: string; connectionId: string }> => {
+    const allLinks: Array<Link & { connectionName: string; connectionId: string }> = [];
 
-    // For cross-connection, we need to get links from the selected connection
-    // In a real implementation, this would fetch from the connection's stored links
-    // For now, return empty array to indicate cross-connection links need to be loaded
-    const selectedConn = connections.find(c => c.id === selectedConnectionForLinks);
-    if (!selectedConn) return [];
+    selectedConnectionsForLinks.forEach(connId => {
+      // If selecting current connection, use the provided links
+      if (connId === connectionId) {
+        allLinks.push(...links.map(link => ({
+          ...link,
+          connectionName: connections.find(c => c.id === connId)?.name || 'Current Connection',
+          connectionId: connId
+        })));
+      } else {
+        // For cross-connection, we need to get links from the selected connection
+        // In a real implementation, this would fetch from the connection's stored links
+        // For now, we'll indicate these need to be loaded
+        const selectedConn = connections.find(c => c.id === connId);
+        if (selectedConn) {
+          // In production, you'd fetch/access the connection's links here
+          // This could be: selectedConn.links or an API call
+          // For demo purposes, return empty for cross-connection
+        }
+      }
+    });
 
-    // Return empty for now - in production, you'd fetch/access the connection's links here
-    // This could be: selectedConn.links or an API call
-    return [];
+    return allLinks;
   };
 
   const availableLinks = getAvailableLinks();
-  const isCrossConnection = selectedConnectionForLinks !== connectionId;
+  const hasMultipleConnections = selectedConnectionsForLinks.length > 1;
+  const hasCrossConnection = selectedConnectionsForLinks.some(id => id !== connectionId);
 
   // Populate form fields in edit mode
   useEffect(() => {
@@ -322,6 +333,10 @@ export function VNFModal({
   // Field validation
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
+
+    if (selectedConnectionsForLinks.length === 0) {
+      newErrors.connections = 'At least one connection must be selected';
+    }
 
     if (linkIds.length === 0) {
       newErrors.linkIds = 'At least one link must be selected';
@@ -725,28 +740,61 @@ export function VNFModal({
 
                   <div className="col-span-2">
                     <FormField
-                      label="Connection for Links"
-                      helpText="Select which connection's links/VLANs to associate with this VNF"
+                      label="Connections"
+                      error={errors.connections}
+                      required
+                      helpText="Select one or more connections whose links/VLANs can be associated with this VNF"
                     >
-                      <select
-                        value={selectedConnectionForLinks}
-                        onChange={(e) => {
-                          setSelectedConnectionForLinks(e.target.value);
-                          // Clear selected links when changing connection
-                          setLinkIds([]);
-                        }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      >
-                        {connections.map(conn => (
-                          <option key={conn.id} value={conn.id}>
-                            {conn.name} ({conn.type}) - {conn.status}
-                            {conn.id === connectionId ? ' (Current)' : ''}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3 bg-white">
+                        {connections.length === 0 ? (
+                          <div className="text-sm text-gray-500">
+                            <p>No connections available</p>
+                          </div>
+                        ) : (
+                          connections.map(conn => (
+                            <label key={conn.id} className="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                              <input
+                                type="checkbox"
+                                checked={selectedConnectionsForLinks.includes(conn.id)}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setSelectedConnectionsForLinks([...selectedConnectionsForLinks, conn.id]);
+                                  } else {
+                                    setSelectedConnectionsForLinks(selectedConnectionsForLinks.filter(id => id !== conn.id));
+                                    // Clear any selected links from this connection
+                                    setLinkIds(linkIds.filter(linkId => {
+                                      const link = availableLinks.find(l => l.id === linkId);
+                                      return link?.connectionId !== conn.id;
+                                    }));
+                                  }
+                                }}
+                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                              />
+                              <div className="flex-1 flex items-center justify-between">
+                                <div>
+                                  <span className="text-sm font-medium text-gray-900">{conn.name}</span>
+                                  <span className="text-xs text-gray-500 ml-2">({conn.type})</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className={`text-xs px-2 py-0.5 rounded-full ${
+                                    conn.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                                  }`}>
+                                    {conn.status}
+                                  </span>
+                                  {conn.id === connectionId && (
+                                    <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">
+                                      Current
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </label>
+                          ))
+                        )}
+                      </div>
                     </FormField>
 
-                    {isCrossConnection && (
+                    {hasCrossConnection && (
                       <div className="mt-2 bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start">
                         <ExternalLink className="h-4 w-4 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
                         <div>
@@ -754,7 +802,21 @@ export function VNFModal({
                             Cross-Connection Association
                           </p>
                           <p className="text-xs text-blue-700 mt-1">
-                            This VNF will be associated with links from a different connection. Ensure network policies allow cross-connection routing.
+                            This VNF will be associated with links from multiple connections. Ensure network policies allow cross-connection routing.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {hasMultipleConnections && (
+                      <div className="mt-2 bg-green-50 border border-green-200 rounded-lg p-3 flex items-start">
+                        <Network className="h-4 w-4 text-green-600 mt-0.5 mr-2 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm text-green-800 font-medium">
+                            Multi-Connection VNF
+                          </p>
+                          <p className="text-xs text-green-700 mt-1">
+                            This VNF can access links from {selectedConnectionsForLinks.length} connections for flexible network design.
                           </p>
                         </div>
                       </div>
@@ -768,11 +830,15 @@ export function VNFModal({
                       required
                       helpText="Select one or more links this VNF will be associated with"
                     >
-                      <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3">
-                        {availableLinks.length === 0 ? (
+                      <div className="space-y-2 max-h-64 overflow-y-auto border border-gray-300 rounded-md p-3 bg-white">
+                        {selectedConnectionsForLinks.length === 0 ? (
                           <div className="text-sm text-gray-500">
-                            <p>No links available for this connection</p>
-                            {isCrossConnection && (
+                            <p>Please select at least one connection first</p>
+                          </div>
+                        ) : availableLinks.length === 0 ? (
+                          <div className="text-sm text-gray-500">
+                            <p>No links available for the selected connection(s)</p>
+                            {hasCrossConnection && (
                               <p className="text-xs mt-1 text-gray-400">
                                 Cross-connection links need to be loaded separately. Navigate to the selected connection to view its links.
                               </p>
@@ -794,11 +860,14 @@ export function VNFModal({
                                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                               />
                               <div className="flex-1 flex items-center justify-between">
-                                <span className="text-sm text-gray-700">{link.name} (VLAN {link.vlanId})</span>
-                                {isCrossConnection && (
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-medium text-gray-900">{link.name}</span>
+                                  <span className="text-xs text-gray-500">VLAN {link.vlanId} • {link.connectionName}</span>
+                                </div>
+                                {link.connectionId !== connectionId && (
                                   <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full flex items-center gap-1">
                                     <ExternalLink className="h-3 w-3" />
-                                    External
+                                    Cross-Connection
                                   </span>
                                 )}
                               </div>
