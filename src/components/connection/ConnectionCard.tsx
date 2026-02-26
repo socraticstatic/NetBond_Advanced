@@ -227,7 +227,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   const billingInfo = getBillingInfo();
 
   return (
-    <motion.div 
+    <motion.div
       className={`
         relative
         bg-fw-base rounded-xl border border-fw-secondary
@@ -238,6 +238,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
         ${isMinimized ? 'h-[88px]' : ''}
         cursor-pointer
       `}
+      data-tour-target="connection-card"
       onClick={handleCardClick}
       // Add motion animation when pending
       animate={isPending ? {

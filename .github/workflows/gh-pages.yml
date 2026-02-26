@@ -3,6 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'LICENSE'
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -27,15 +31,24 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20.x'
           cache: 'npm'
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
       - name: Build
         run: |
-          echo "Running build with base path..."
+          echo "🚀 Building for GitHub Pages deployment..."
+          echo "Base path: /NetBond_Advanced/"
           npm run build:gh-pages
         env:
           NODE_ENV: production
@@ -45,6 +58,14 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
+
+      - name: Build summary
+        run: |
+          echo "### 🎉 Build Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Build completed at $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
 
   # Deployment job
   deploy:
@@ -57,3 +78,10 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Deployment summary
+        run: |
+          echo "### 🌐 Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Your site is now live at: ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "Deployed at: $(date)" >> $GITHUB_STEP_SUMMARY

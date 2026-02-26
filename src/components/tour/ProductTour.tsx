@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, ChevronLeft, ChevronRight, Check, Sparkles } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Check, Sparkles, MousePointer } from 'lucide-react';
 import { Button } from '../common/Button';
 
 export interface TourStep {
@@ -9,6 +9,7 @@ export interface TourStep {
   targetSelector?: string;
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'center';
   highlightPadding?: number;
+  scrollIntoView?: boolean;
   action?: {
     label: string;
     onClick: () => void;
@@ -42,54 +43,76 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
     const updatePosition = () => {
       const element = document.querySelector(step.targetSelector!);
       if (element) {
-        const rect = element.getBoundingClientRect();
-        setTargetRect(rect);
-
-        if (tooltipRef.current) {
-          const tooltipRect = tooltipRef.current.getBoundingClientRect();
-          const padding = step.highlightPadding || 8;
-
-          let top = 0;
-          let left = 0;
-
-          switch (step.placement || 'bottom') {
-            case 'top':
-              top = rect.top - tooltipRect.height - padding - 16;
-              left = rect.left + (rect.width - tooltipRect.width) / 2;
-              break;
-            case 'bottom':
-              top = rect.bottom + padding + 16;
-              left = rect.left + (rect.width - tooltipRect.width) / 2;
-              break;
-            case 'left':
-              top = rect.top + (rect.height - tooltipRect.height) / 2;
-              left = rect.left - tooltipRect.width - padding - 16;
-              break;
-            case 'right':
-              top = rect.top + (rect.height - tooltipRect.height) / 2;
-              left = rect.right + padding + 16;
-              break;
-            case 'center':
-              top = window.innerHeight / 2 - tooltipRect.height / 2;
-              left = window.innerWidth / 2 - tooltipRect.width / 2;
-              break;
-          }
-
-          left = Math.max(16, Math.min(left, window.innerWidth - tooltipRect.width - 16));
-          top = Math.max(16, Math.min(top, window.innerHeight - tooltipRect.height - 16));
-
-          setTooltipPosition({ top, left });
+        // Scroll element into view if needed
+        if (step.scrollIntoView !== false) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+
+        // Small delay to allow scrolling to complete
+        setTimeout(() => {
+          const rect = element.getBoundingClientRect();
+          setTargetRect(rect);
+
+          if (tooltipRef.current) {
+            const tooltipRect = tooltipRef.current.getBoundingClientRect();
+            const padding = step.highlightPadding || 8;
+
+            let top = 0;
+            let left = 0;
+
+            switch (step.placement || 'bottom') {
+              case 'top':
+                top = rect.top - tooltipRect.height - padding - 16;
+                left = rect.left + (rect.width - tooltipRect.width) / 2;
+                break;
+              case 'bottom':
+                top = rect.bottom + padding + 16;
+                left = rect.left + (rect.width - tooltipRect.width) / 2;
+                break;
+              case 'left':
+                top = rect.top + (rect.height - tooltipRect.height) / 2;
+                left = rect.left - tooltipRect.width - padding - 16;
+                break;
+              case 'right':
+                top = rect.top + (rect.height - tooltipRect.height) / 2;
+                left = rect.right + padding + 16;
+                break;
+              case 'center':
+                top = window.innerHeight / 2 - tooltipRect.height / 2;
+                left = window.innerWidth / 2 - tooltipRect.width / 2;
+                break;
+            }
+
+            // Ensure tooltip stays on screen
+            left = Math.max(16, Math.min(left, window.innerWidth - tooltipRect.width - 16));
+            top = Math.max(16, Math.min(top, window.innerHeight - tooltipRect.height - 16));
+
+            setTooltipPosition({ top, left });
+          }
+        }, step.scrollIntoView !== false ? 300 : 0);
       }
     };
 
     updatePosition();
+    const resizeObserver = new ResizeObserver(updatePosition);
+    const mutationObserver = new MutationObserver(updatePosition);
+
     window.addEventListener('resize', updatePosition);
-    window.addEventListener('scroll', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+
+    if (step.targetSelector) {
+      const element = document.querySelector(step.targetSelector);
+      if (element) {
+        resizeObserver.observe(element);
+        mutationObserver.observe(document.body, { childList: true, subtree: true });
+      }
+    }
 
     return () => {
       window.removeEventListener('resize', updatePosition);
-      window.removeEventListener('scroll', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
     };
   }, [isOpen, step, currentStep]);
 
@@ -128,6 +151,7 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
     <div className="fixed inset-0 z-[9999]">
       {targetRect && step.targetSelector ? (
         <>
+          {/* Dark overlay with cutout */}
           <div
             className="absolute rounded-lg animate-in fade-in zoom-in-95 duration-300"
             style={{
@@ -135,28 +159,80 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
               left: targetRect.left - (step.highlightPadding || 8),
               width: targetRect.width + (step.highlightPadding || 8) * 2,
               height: targetRect.height + (step.highlightPadding || 8) * 2,
-              boxShadow: '0 0 0 4px rgba(59, 130, 246, 0.6), 0 0 0 9999px rgba(0, 0, 0, 0.75)',
+              boxShadow: '0 0 0 4px rgba(59, 130, 246, 0.7), 0 0 0 9999px rgba(0, 0, 0, 0.8)',
               pointerEvents: 'none',
               zIndex: 10000
             }}
           />
 
+          {/* Pulsing border */}
           <div
             className="absolute animate-pulse"
             style={{
-              top: targetRect.top - (step.highlightPadding || 8) - 4,
-              left: targetRect.left - (step.highlightPadding || 8) - 4,
-              width: targetRect.width + (step.highlightPadding || 8) * 2 + 8,
-              height: targetRect.height + (step.highlightPadding || 8) * 2 + 8,
-              border: '3px solid rgba(59, 130, 246, 0.9)',
-              borderRadius: '0.75rem',
+              top: targetRect.top - (step.highlightPadding || 8) - 3,
+              left: targetRect.left - (step.highlightPadding || 8) - 3,
+              width: targetRect.width + (step.highlightPadding || 8) * 2 + 6,
+              height: targetRect.height + (step.highlightPadding || 8) * 2 + 6,
+              border: '3px solid rgba(59, 130, 246, 1)',
+              borderRadius: '0.875rem',
               pointerEvents: 'none',
               zIndex: 10001
             }}
           />
+
+          {/* Corner accents for better visual focus */}
+          <div
+            className="absolute"
+            style={{
+              top: targetRect.top - (step.highlightPadding || 8) - 8,
+              left: targetRect.left - (step.highlightPadding || 8) - 8,
+              width: targetRect.width + (step.highlightPadding || 8) * 2 + 16,
+              height: targetRect.height + (step.highlightPadding || 8) * 2 + 16,
+              pointerEvents: 'none',
+              zIndex: 10001
+            }}
+          >
+            {/* Top-left corner */}
+            <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-blue-400 rounded-tl-lg" />
+            {/* Top-right corner */}
+            <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-blue-400 rounded-tr-lg" />
+            {/* Bottom-left corner */}
+            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-blue-400 rounded-bl-lg" />
+            {/* Bottom-right corner */}
+            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-blue-400 rounded-br-lg" />
+          </div>
+
+          {/* Animated pointer based on tooltip placement */}
+          {step.placement && step.placement !== 'center' && (
+            <div
+              className="absolute animate-bounce"
+              style={{
+                ...(step.placement === 'top' && {
+                  top: targetRect.top - (step.highlightPadding || 8) - 40,
+                  left: targetRect.left + targetRect.width / 2 - 12,
+                }),
+                ...(step.placement === 'bottom' && {
+                  top: targetRect.bottom + (step.highlightPadding || 8) + 16,
+                  left: targetRect.left + targetRect.width / 2 - 12,
+                }),
+                ...(step.placement === 'left' && {
+                  top: targetRect.top + targetRect.height / 2 - 12,
+                  left: targetRect.left - (step.highlightPadding || 8) - 40,
+                }),
+                ...(step.placement === 'right' && {
+                  top: targetRect.top + targetRect.height / 2 - 12,
+                  left: targetRect.right + (step.highlightPadding || 8) + 16,
+                }),
+                pointerEvents: 'none',
+                zIndex: 10001
+              }}
+            >
+              <MousePointer className="w-6 h-6 text-blue-400 drop-shadow-lg" />
+            </div>
+          )}
         </>
       ) : (
-        <div className="absolute inset-0 bg-black bg-opacity-70 animate-in fade-in duration-300" />
+        <div className="absolute inset-0 bg-black bg-opacity-80 animate-in fade-in duration-300" />
       )}
 
       <div

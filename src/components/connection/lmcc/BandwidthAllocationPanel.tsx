@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Gauge, Zap } from 'lucide-react';
+import { Gauge, Zap, DollarSign, TrendingUp, Info } from 'lucide-react';
 import { LMCCSite, LMCCBandwidthAllocation } from '../../../types/lmcc';
 
 interface BandwidthAllocationPanelProps {
@@ -10,6 +10,14 @@ interface BandwidthAllocationPanelProps {
 }
 
 const BANDWIDTH_PRESETS = [100, 500, 1000, 10000]; // Mbps
+
+// Cost calculation (example rates)
+const calculateMonthlyCost = (bandwidth: number): number => {
+  // Tiered pricing model
+  if (bandwidth <= 100) return bandwidth * 10; // $10/Mbps
+  if (bandwidth <= 1000) return 1000 + (bandwidth - 100) * 8; // $8/Mbps for 101-1000
+  return 8200 + (bandwidth - 1000) * 6; // $6/Mbps for 1000+
+};
 
 export function BandwidthAllocationPanel({
   sites,
@@ -41,14 +49,34 @@ export function BandwidthAllocationPanel({
   };
 
   const totalBandwidth = bandwidthAllocations.reduce((sum, a) => sum + a.bandwidth, 0);
+  const totalMonthlyCost = bandwidthAllocations.reduce((sum, a) => sum + calculateMonthlyCost(a.bandwidth), 0);
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">Allocate Bandwidth</h3>
         <p className="text-sm text-gray-600">
-          Configure bandwidth allocation for each selected site. You can set individual values or apply a bandwidth tier to all sites at once.
+          Configure bandwidth allocation for each selected site. Pricing is tiered and scales with bandwidth. All costs are displayed transparently for AWS Console approval.
         </p>
+      </div>
+
+      {/* Billing Information Banner */}
+      <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-lg p-4">
+        <div className="flex items-start gap-3">
+          <div className="p-2 bg-amber-100 rounded-lg">
+            <DollarSign className="h-5 w-5 text-amber-700" />
+          </div>
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-1">Surprise-Free Billing</h4>
+            <p className="text-sm text-gray-700 mb-2">
+              All connection costs are calculated in real-time and will be passed back to AWS Console for your approval before provisioning.
+            </p>
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <Info className="h-3 w-3" />
+              <span>Pricing includes port fees, bandwidth allocation, and TAO configuration</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Bulk Bandwidth Allocation */}
@@ -89,28 +117,53 @@ export function BandwidthAllocationPanel({
         </div>
       </div>
 
-      {/* Total Bandwidth Summary */}
-      <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-4 border border-green-200">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-white rounded-lg">
-              <Zap className="h-6 w-6 text-green-600" />
+      {/* Total Bandwidth & Cost Summary */}
+      <div className="bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 rounded-xl p-5 border-2 border-green-200 shadow-lg">
+        <div className="grid grid-cols-2 gap-6">
+          {/* Bandwidth Summary */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <Zap className="h-5 w-5 text-green-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-600">Total Bandwidth</span>
             </div>
-            <div>
-              <p className="text-sm text-gray-600">Total Aggregate Bandwidth</p>
-              <p className="text-2xl font-bold text-gray-900">
-                {totalBandwidth >= 1000
-                  ? `${(totalBandwidth / 1000).toFixed(2)} Gbps`
-                  : `${totalBandwidth} Mbps`}
-              </p>
-            </div>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-600">Across {selectedSites.length} sites</p>
-            <p className="text-sm text-gray-500">
-              Avg: {selectedSites.length > 0 ? Math.round(totalBandwidth / selectedSites.length) : 0} Mbps/site
+            <p className="text-3xl font-bold text-gray-900 mb-1">
+              {totalBandwidth >= 1000
+                ? `${(totalBandwidth / 1000).toFixed(2)} Gbps`
+                : `${totalBandwidth} Mbps`}
             </p>
+            <div className="flex items-center gap-4 text-xs text-gray-600">
+              <span>{selectedSites.length} sites</span>
+              <span>•</span>
+              <span>Avg: {selectedSites.length > 0 ? Math.round(totalBandwidth / selectedSites.length) : 0} Mbps/site</span>
+            </div>
           </div>
+
+          {/* Cost Summary */}
+          <div className="border-l-2 border-green-300 pl-6">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm">
+                <DollarSign className="h-5 w-5 text-blue-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-600">Estimated Monthly Cost</span>
+            </div>
+            <p className="text-3xl font-bold text-gray-900 mb-1">
+              ${totalMonthlyCost.toLocaleString()}
+            </p>
+            <div className="flex items-center gap-2 text-xs">
+              <TrendingUp className="h-3 w-3 text-green-600" />
+              <span className="text-green-700 font-medium">Tiered pricing applied</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Cost Breakdown Link */}
+        <div className="mt-4 pt-4 border-t border-green-200">
+          <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+            <Info className="h-4 w-4" />
+            View detailed pricing breakdown
+          </button>
         </div>
       </div>
 
@@ -120,33 +173,53 @@ export function BandwidthAllocationPanel({
         <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
           {selectedSitesData.map(site => {
             const currentBandwidth = getBandwidthForSite(site.id);
+            const siteCost = calculateMonthlyCost(currentBandwidth);
             return (
               <div
                 key={site.id}
-                className="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-300 transition-colors"
+                className="bg-white rounded-xl p-4 border-2 border-gray-200 hover:border-blue-300 hover:shadow-md transition-all"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
-                    <div className="p-2 bg-blue-100 rounded-lg">
-                      <Gauge className="h-5 w-5 text-blue-600" />
+                    <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg">
+                      <Gauge className="h-5 w-5 text-blue-700" />
                     </div>
                   </div>
-                  <div className="flex-1">
-                    <h5 className="font-medium text-gray-900">{site.name}</h5>
-                    <p className="text-sm text-gray-500">
-                      {site.city}, {site.state}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number"
-                      value={currentBandwidth}
-                      onChange={(e) => handleBandwidthChange(site.id, parseInt(e.target.value) || 0)}
-                      min="1"
-                      max="100000"
-                      className="w-28 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right"
-                    />
-                    <span className="text-sm font-medium text-gray-700 w-12">Mbps</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <h5 className="font-semibold text-gray-900">{site.name}</h5>
+                        <p className="text-sm text-gray-500">
+                          {site.city}, {site.state}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm font-medium text-gray-600">Monthly Cost</div>
+                        <div className="text-lg font-bold text-green-600">${siteCost.toLocaleString()}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1">
+                        <label className="text-xs font-medium text-gray-600 block mb-1">Bandwidth Allocation</label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            value={currentBandwidth}
+                            onChange={(e) => handleBandwidthChange(site.id, parseInt(e.target.value) || 0)}
+                            min="1"
+                            max="100000"
+                            className="w-32 px-3 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right font-semibold"
+                          />
+                          <span className="text-sm font-medium text-gray-700">Mbps</span>
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <label className="text-xs font-medium text-gray-600 block mb-1">Cost per Mbps</label>
+                        <div className="text-sm font-semibold text-gray-700">
+                          ${(siteCost / currentBandwidth).toFixed(2)}/Mbps
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

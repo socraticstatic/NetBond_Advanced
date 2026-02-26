@@ -106,6 +106,109 @@ export function TAOConfigurationPanel({
         </p>
       </div>
 
+      {/* Connection Type Selection */}
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4">
+        <label className="block text-sm font-medium text-gray-900 mb-3">
+          Connection Type <span className="text-red-500">*</span>
+        </label>
+        <p className="text-sm text-gray-600 mb-4">
+          LMCC provides IP to Cloud connectivity (not Internet to Cloud). Choose your connection model:
+        </p>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white p-4 rounded-lg border-2 border-blue-500 relative">
+            <div className="absolute -top-2 -right-2">
+              <span className="px-2 py-0.5 bg-blue-600 text-white rounded-full text-xs font-bold">Recommended</span>
+            </div>
+            <div className="flex items-center gap-2 mb-2">
+              <NetworkIcon className="h-5 w-5 text-blue-600" />
+              <span className="font-semibold text-gray-900">IP to Cloud</span>
+            </div>
+            <p className="text-xs text-gray-600">
+              Direct IP connectivity from your private network to AWS. Provides secure, low-latency access without traversing the public internet.
+            </p>
+            <div className="mt-3 flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              <span className="text-xs text-green-700 font-medium">Selected for LMCC</span>
+            </div>
+          </div>
+          <div className="bg-gray-50 p-4 rounded-lg border-2 border-gray-200 opacity-60">
+            <div className="flex items-center gap-2 mb-2">
+              <Globe className="h-5 w-5 text-gray-500" />
+              <span className="font-semibold text-gray-700">Internet to Cloud</span>
+            </div>
+            <p className="text-xs text-gray-600">
+              Connection via public internet. Not available for LMCC connections - requires different connection type.
+            </p>
+            <div className="mt-3 flex items-center gap-2">
+              <AlertCircle className="h-4 w-4 text-gray-400" />
+              <span className="text-xs text-gray-500">Not available for LMCC</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Redundancy Configuration */}
+      <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
+        <label className="block text-sm font-medium text-gray-900 mb-3">
+          Redundancy Configuration
+        </label>
+        <p className="text-sm text-gray-600 mb-4">
+          Configure redundancy options for high availability. Metro redundancy provides failover within the same metropolitan area.
+        </p>
+        <div className="space-y-3">
+          <label className="flex items-start gap-3 p-3 border-2 border-gray-200 rounded-lg hover:border-blue-300 cursor-pointer transition-all">
+            <input
+              type="radio"
+              name="redundancy"
+              value="none"
+              defaultChecked
+              className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500"
+            />
+            <div className="flex-1">
+              <div className="font-medium text-gray-900">Single Connection</div>
+              <div className="text-sm text-gray-600">Standard connectivity without redundancy</div>
+            </div>
+          </label>
+          <label className="flex items-start gap-3 p-3 border-2 border-blue-200 bg-blue-50 rounded-lg hover:border-blue-400 cursor-pointer transition-all">
+            <input
+              type="radio"
+              name="redundancy"
+              value="metro"
+              className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500"
+            />
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <span className="font-medium text-gray-900">Metro Redundancy</span>
+                <span className="px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-medium">Recommended</span>
+              </div>
+              <div className="text-sm text-gray-600 mb-2">Dual connections within the same metro area for failover protection</div>
+              <div className="flex items-center gap-4 text-xs text-gray-500">
+                <span>99.99% availability</span>
+                <span>Automatic failover</span>
+                <span>Active/Active or Active/Standby</span>
+              </div>
+            </div>
+          </label>
+          <label className="flex items-start gap-3 p-3 border-2 border-gray-200 rounded-lg hover:border-blue-300 cursor-pointer transition-all">
+            <input
+              type="radio"
+              name="redundancy"
+              value="geographic"
+              className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500"
+            />
+            <div className="flex-1">
+              <div className="font-medium text-gray-900">Geographic Redundancy</div>
+              <div className="text-sm text-gray-600 mb-2">Connections across multiple geographic locations for maximum resilience</div>
+              <div className="flex items-center gap-4 text-xs text-gray-500">
+                <span>99.999% availability</span>
+                <span>Disaster recovery</span>
+                <span>Multi-region support</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+
       {/* Termination Type */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-3">

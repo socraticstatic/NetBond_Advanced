@@ -144,29 +144,14 @@ npm run dev
 
 ## Deployment
 
-### 🚀 Automatic Deployment (Recommended)
+### Automatic Deployment
+The application is automatically deployed to GitHub Pages when changes are pushed to the `main` branch. The deployment URL will be:
 
-**The application automatically deploys to GitHub Pages when you push to `main`.**
-
-**Quick Start:**
-1. Enable GitHub Pages: Settings → Pages → Source: "GitHub Actions"
-2. Push changes: `git push origin main`
-3. Wait 1-3 minutes
-4. Your site is live!
-
-**Your deployment URL:**
 ```
-https://your-username.github.io/NetBond_Advanced/
+https://your-username.github.io/att-netbond-sdci/
 ```
 
-**📖 Complete Guides:**
-- **Quick Start**: [DEPLOY_QUICK_START.md](./DEPLOY_QUICK_START.md) - Get started in 2 minutes
-- **Full Guide**: [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) - Complete documentation with troubleshooting
-
-**Monitor deployments:** Check the Actions tab in your repository to see build and deployment status.
-
-### Manual Deployment (Optional)
-
+### Manual Deployment
 To manually deploy to GitHub Pages:
 
 ```bash
@@ -174,7 +159,6 @@ npm run deploy
 ```
 
 ### PWA Installation
-
 Once deployed, users can install the app on their devices:
 
 - **Desktop (Chrome/Edge)**: Click install icon (⊕) in address bar
@@ -184,7 +168,6 @@ Once deployed, users can install the app on their devices:
 See [PWA_INSTALLATION.md](./PWA_INSTALLATION.md) for detailed installation instructions.
 
 ### Deployment Requirements
-
 - **HTTPS Required**: PWA features require HTTPS (GitHub Pages provides this automatically)
 - **Base Path**: Configure `base` in `vite.config.ts` for subdirectory deployments
 - **Icons**: Replace placeholder icons in `public/` with production assets before deploying
@@ -193,8 +176,7 @@ See [PWA_INSTALLATION.md](./PWA_INSTALLATION.md) for detailed installation instr
 
 ### Workflows
 - **CI Pipeline** (`.github/workflows/ci.yml`): Runs tests, linting, and builds
-- **GitHub Pages Deploy** (`.github/workflows/gh-pages.yml`): Automated deployment on push to main
-- **Bolt.new Sync** (`.github/workflows/sync.yml`): Syncs changes from Bolt.new environment
+- **Auto Deploy** (`.github/workflows/auto-deploy.yml`): Deploys to GitHub Pages
 - **Code Quality** (`.github/workflows/code-quality.yml`): Advanced quality checks
 - **Lighthouse Audit** (`.github/workflows/lighthouse.yml`): Performance monitoring
 - **Sync** (`.github/workflows/sync.yml`): Syncs changes from external environments
