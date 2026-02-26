@@ -748,35 +748,68 @@ export function VNFModal({
                 {/* LMCC Configuration Section */}
                 {type === 'lmcc' && (
                   <div className="pt-6 border-t border-gray-200">
-                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h4 className="text-sm font-medium text-gray-900 mb-1 flex items-center gap-2">
-                            <Settings className="h-4 w-4 text-blue-600" />
-                            LMCC Configuration
+                    <div className={`rounded-lg p-4 border ${
+                      lmccConfiguration
+                        ? 'bg-gradient-to-br from-green-50 to-blue-50 border-green-200'
+                        : 'bg-amber-50 border-amber-200'
+                    }`}>
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <h4 className="text-sm font-semibold text-gray-900 mb-1 flex items-center gap-2">
+                            <Settings className={`h-4 w-4 ${lmccConfiguration ? 'text-green-600' : 'text-amber-600'}`} />
+                            {lmccConfiguration ? 'LMCC Configuration' : 'LMCC Configuration Required'}
                           </h4>
-                          <p className="text-sm text-gray-600">
-                            Configure sites, bandwidth allocation, and TAO settings for this LMCC VNF
-                          </p>
-                          {lmccConfiguration && (
-                            <div className="mt-2 flex items-center gap-2">
-                              <span className="px-2 py-0.5 bg-green-100 text-green-800 rounded text-xs font-medium">
-                                {lmccConfiguration.selectedSites.length} sites configured
-                              </span>
-                              <span className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded text-xs font-medium">
-                                {lmccConfiguration.bandwidthAllocations.reduce((sum, a) => sum + a.bandwidth, 0)} Mbps total
-                              </span>
-                            </div>
+                          {lmccConfiguration ? (
+                            <>
+                              <p className="text-sm text-gray-700 mb-3">
+                                Multi-site connectivity configured and ready
+                              </p>
+                              <div className="grid grid-cols-2 gap-3">
+                                <div className="bg-white rounded-lg border border-gray-200 p-3">
+                                  <div className="text-xs font-medium text-gray-500 mb-1">Sites</div>
+                                  <div className="text-lg font-bold text-gray-900">
+                                    {lmccConfiguration.selectedSites.length}
+                                  </div>
+                                </div>
+                                <div className="bg-white rounded-lg border border-gray-200 p-3">
+                                  <div className="text-xs font-medium text-gray-500 mb-1">Total Bandwidth</div>
+                                  <div className="text-lg font-bold text-gray-900">
+                                    {lmccConfiguration.bandwidthAllocations.reduce((sum, a) => sum + a.bandwidth, 0)} Mbps
+                                  </div>
+                                </div>
+                                <div className="bg-white rounded-lg border border-gray-200 p-3">
+                                  <div className="text-xs font-medium text-gray-500 mb-1">TAO Type</div>
+                                  <div className="text-sm font-semibold text-gray-900 capitalize">
+                                    {lmccConfiguration.taoConfig.terminationType}
+                                  </div>
+                                </div>
+                                <div className="bg-white rounded-lg border border-gray-200 p-3">
+                                  <div className="text-xs font-medium text-gray-500 mb-1">Routing</div>
+                                  <div className="text-sm font-semibold text-gray-900 uppercase">
+                                    {lmccConfiguration.taoConfig.routingPolicy}
+                                  </div>
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <p className="text-sm text-amber-800 mb-2">
+                                Complete the LMCC configuration to activate this VNF
+                              </p>
+                              <p className="text-xs text-amber-700">
+                                You'll configure sites, bandwidth allocation, and TAO settings
+                              </p>
+                            </>
                           )}
                         </div>
                         <Button
                           type="button"
-                          variant="primary"
+                          variant={lmccConfiguration ? 'outline' : 'primary'}
                           size="sm"
                           icon={Settings}
                           onClick={() => setShowLMCCConfig(true)}
                         >
-                          {lmccConfiguration ? 'Edit Configuration' : 'Configure LMCC'}
+                          {lmccConfiguration ? 'Edit Configuration' : 'Configure Now'}
                         </Button>
                       </div>
                     </div>

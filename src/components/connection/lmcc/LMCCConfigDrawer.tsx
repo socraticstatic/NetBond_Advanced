@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronRight, Save, AlertCircle, GitBranch } from 'lucide-react';
+import { ChevronRight, Save, AlertCircle, GitBranch, HelpCircle, X, CheckCircle2 } from 'lucide-react';
 import { SideDrawer } from '../../common/SideDrawer';
 import { Button } from '../../common/Button';
 import { SiteSelectionPanel } from './SiteSelectionPanel';
@@ -18,7 +18,7 @@ interface LMCCConfigDrawerProps {
   existingConfig?: LMCCConfiguration;
 }
 
-type Step = 'workflow' | 1 | 2 | 3 | 'review';
+type Step = 1 | 2 | 3 | 'review';
 
 export function LMCCConfigDrawer({
   isOpen,
@@ -27,7 +27,8 @@ export function LMCCConfigDrawer({
   vnfId,
   existingConfig
 }: LMCCConfigDrawerProps) {
-  const [currentStep, setCurrentStep] = useState<Step>('workflow');
+  const [currentStep, setCurrentStep] = useState<Step>(1);
+  const [showWorkflowHelp, setShowWorkflowHelp] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   // Configuration state
@@ -70,9 +71,7 @@ export function LMCCConfigDrawer({
   const canProceedFromStep3 = taoConfig.terminationType && taoConfig.baseSubnet && taoConfig.startingVlanId;
 
   const handleNext = () => {
-    if (currentStep === 'workflow') {
-      setCurrentStep(1);
-    } else if (currentStep === 1 && canProceedFromStep1) {
+    if (currentStep === 1 && canProceedFromStep1) {
       setCurrentStep(2);
     } else if (currentStep === 2 && canProceedFromStep2) {
       setCurrentStep(3);
@@ -88,8 +87,6 @@ export function LMCCConfigDrawer({
       setCurrentStep(2);
     } else if (currentStep === 2) {
       setCurrentStep(1);
-    } else if (currentStep === 1) {
-      setCurrentStep('workflow');
     } else {
       onClose();
     }
@@ -138,19 +135,26 @@ export function LMCCConfigDrawer({
 
   const getStepTitle = () => {
     switch (currentStep) {
-      case 'workflow': return 'LMCC Integration Workflow';
-      case 1: return 'Step 1 of 3: Select Sites';
-      case 2: return 'Step 2 of 3: Allocate Bandwidth';
-      case 3: return 'Step 3 of 3: Configure TAO';
-      case 'review': return 'Review Configuration';
+      case 1: return existingConfig ? 'Edit LMCC Configuration' : 'Configure LMCC';
+      case 2: return existingConfig ? 'Edit LMCC Configuration' : 'Configure LMCC';
+      case 3: return existingConfig ? 'Edit LMCC Configuration' : 'Configure LMCC';
+      case 'review': return 'Review & Save Configuration';
       default: return 'LMCC Configuration';
+    }
+  };
+
+  const getStepDescription = () => {
+    switch (currentStep) {
+      case 1: return 'Select the NetBond sites where your LMCC connection will be established';
+      case 2: return 'Configure bandwidth allocation across your selected sites';
+      case 3: return 'Set up Termination, Access, and Orchestration (TAO) parameters';
+      case 'review': return 'Review your configuration before saving';
+      default: return '';
     }
   };
 
   const renderStepContent = () => {
     switch (currentStep) {
-      case 'workflow':
-        return <LMCCWorkflowVisualization />;
       case 1:
         return (
           <SiteSelectionPanel
@@ -195,13 +199,11 @@ export function LMCCConfigDrawer({
   };
 
   const getNextButtonText = () => {
-    if (currentStep === 'workflow') return 'Start Configuration';
     if (currentStep === 3) return 'Review Configuration';
-    return 'Next';
+    return 'Continue';
   };
 
   const canProceed = () => {
-    if (currentStep === 'workflow') return true;
     if (currentStep === 1) return canProceedFromStep1;
     if (currentStep === 2) return canProceedFromStep2;
     if (currentStep === 3) return canProceedFromStep3;
@@ -271,56 +273,92 @@ export function LMCCConfigDrawer({
       size="xl"
       footer={footer}
     >
-      {/* Step Indicator */}
-      {currentStep !== 'workflow' && currentStep !== 'review' && (
-        <div className="mb-6 flex items-center justify-center">
-          <div className="flex items-center gap-2">
-            {[1, 2, 3].map((step) => (
-              <div key={step} className="flex items-center">
-                <div
-                  className={`
-                    w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                    ${currentStep >= step
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-200 text-gray-600'
-                    }
-                  `}
-                >
-                  {step}
-                </div>
-                {step < 3 && (
-                  <div
-                    className={`
-                      w-12 h-0.5 mx-1
-                      ${currentStep > step ? 'bg-blue-600' : 'bg-gray-200'}
-                    `}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
+      {/* Step Description */}
+      {currentStep !== 'review' && (
+        <div className="mb-4">
+          <p className="text-sm text-gray-600">{getStepDescription()}</p>
         </div>
       )}
 
-      {/* Workflow Navigation */}
-      {currentStep === 'workflow' && (
-        <div className="mb-6 flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-center gap-3">
-            <GitBranch className="w-5 h-5 text-blue-600" />
-            <div>
-              <h3 className="font-semibold text-gray-900">Understanding LMCC Integration</h3>
-              <p className="text-sm text-gray-600">Review the complete workflow before configuring your connection</p>
+      {/* Configuration Header with Progress and Help */}
+      <div className="mb-6 space-y-4">
+        {/* Progress Indicator */}
+        {currentStep !== 'review' && (
+          <div className="bg-white border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-gray-900">Configuration Progress</h3>
+              <button
+                onClick={() => setShowWorkflowHelp(!showWorkflowHelp)}
+                className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-medium"
+              >
+                <HelpCircle className="w-4 h-4" />
+                {showWorkflowHelp ? 'Hide' : 'View'} Workflow Guide
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              {[
+                { num: 1, label: 'Sites', complete: selectedSites.length > 0 },
+                { num: 2, label: 'Bandwidth', complete: bandwidthAllocations.length > 0 && currentStep > 2 },
+                { num: 3, label: 'TAO', complete: canProceedFromStep3 && currentStep > 3 }
+              ].map((step, idx) => (
+                <div key={step.num} className="flex items-center flex-1">
+                  <div className="flex items-center gap-2 flex-1">
+                    <div
+                      className={`
+                        w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium shrink-0
+                        ${step.complete
+                          ? 'bg-green-600 text-white'
+                          : currentStep === step.num
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-200 text-gray-600'
+                        }
+                      `}
+                    >
+                      {step.complete ? <CheckCircle2 className="w-4 h-4" /> : step.num}
+                    </div>
+                    <div className="flex-1">
+                      <div className={`text-xs font-medium ${
+                        currentStep === step.num ? 'text-blue-700' : step.complete ? 'text-green-700' : 'text-gray-600'
+                      }`}>
+                        {step.label}
+                      </div>
+                      {currentStep === step.num && (
+                        <div className="w-full bg-gray-200 rounded-full h-1 mt-1">
+                          <div className="bg-blue-600 h-1 rounded-full transition-all" style={{ width: '60%' }}></div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  {idx < 2 && (
+                    <div className={`w-8 h-0.5 mx-1 ${step.complete ? 'bg-green-600' : 'bg-gray-200'}`} />
+                  )}
+                </div>
+              ))}
             </div>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentStep(1)}
-          >
-            Skip to Configuration
-          </Button>
-        </div>
-      )}
+        )}
+
+        {/* Workflow Help Panel */}
+        {showWorkflowHelp && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg overflow-hidden">
+            <div className="p-3 bg-blue-100 border-b border-blue-200 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <GitBranch className="w-4 h-4 text-blue-700" />
+                <h3 className="text-sm font-semibold text-blue-900">LMCC Integration Workflow</h3>
+              </div>
+              <button
+                onClick={() => setShowWorkflowHelp(false)}
+                className="text-blue-700 hover:text-blue-900"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-4 max-h-96 overflow-y-auto">
+              <LMCCWorkflowVisualization />
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Step Content */}
       <div>
