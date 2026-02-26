@@ -280,85 +280,98 @@ export function LMCCConfigDrawer({
         </div>
       )}
 
-      {/* Configuration Header with Progress and Help */}
-      <div className="mb-6 space-y-4">
-        {/* Progress Indicator */}
-        {currentStep !== 'review' && (
-          <div className="bg-white border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-gray-900">Configuration Progress</h3>
+      {/* Progress Indicator */}
+      {currentStep !== 'review' && (
+        <div className="mb-6">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-5">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Step {currentStep} of 3</span>
               <button
                 onClick={() => setShowWorkflowHelp(!showWorkflowHelp)}
-                className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-medium"
+                className="flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors"
               >
-                <HelpCircle className="w-4 h-4" />
-                {showWorkflowHelp ? 'Hide' : 'View'} Workflow Guide
+                <HelpCircle className="w-3.5 h-3.5" />
+                {showWorkflowHelp ? 'Hide' : 'View'} Workflow
               </button>
             </div>
-            <div className="flex items-center gap-2">
-              {[
-                { num: 1, label: 'Sites', complete: selectedSites.length > 0 },
-                { num: 2, label: 'Bandwidth', complete: bandwidthAllocations.length > 0 && currentStep > 2 },
-                { num: 3, label: 'TAO', complete: canProceedFromStep3 && currentStep > 3 }
-              ].map((step, idx) => (
-                <div key={step.num} className="flex items-center flex-1">
-                  <div className="flex items-center gap-2 flex-1">
+
+            {/* Step Progress Visualization */}
+            <div>
+              {/* Circles and Lines Row */}
+              <div className="flex items-center justify-between mb-3">
+                {[
+                  { num: 1, label: 'Sites', complete: selectedSites.length > 0 },
+                  { num: 2, label: 'Bandwidth', complete: bandwidthAllocations.length > 0 && currentStep > 2 },
+                  { num: 3, label: 'TAO', complete: canProceedFromStep3 && currentStep > 3 }
+                ].map((step, idx) => (
+                  <div key={step.num} className="flex items-center" style={{ flex: idx < 2 ? '1' : '0 0 auto' }}>
+                    {/* Step Circle */}
                     <div
                       className={`
-                        w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium shrink-0
+                        w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all
                         ${step.complete
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-green-600 text-white shadow-sm'
                           : currentStep === step.num
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-200 text-gray-600'
+                          ? 'bg-blue-600 text-white shadow-md ring-4 ring-blue-100'
+                          : 'bg-white border-2 border-gray-300 text-gray-400'
                         }
                       `}
                     >
-                      {step.complete ? <CheckCircle2 className="w-4 h-4" /> : step.num}
+                      {step.complete ? <CheckCircle2 className="w-5 h-5" /> : step.num}
                     </div>
-                    <div className="flex-1">
-                      <div className={`text-xs font-medium ${
-                        currentStep === step.num ? 'text-blue-700' : step.complete ? 'text-green-700' : 'text-gray-600'
-                      }`}>
-                        {step.label}
-                      </div>
-                      {currentStep === step.num && (
-                        <div className="w-full bg-gray-200 rounded-full h-1 mt-1">
-                          <div className="bg-blue-600 h-1 rounded-full transition-all" style={{ width: '60%' }}></div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {idx < 2 && (
-                    <div className={`w-8 h-0.5 mx-1 ${step.complete ? 'bg-green-600' : 'bg-gray-200'}`} />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
-        {/* Workflow Help Panel */}
-        {showWorkflowHelp && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg overflow-hidden">
-            <div className="p-3 bg-blue-100 border-b border-blue-200 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <GitBranch className="w-4 h-4 text-blue-700" />
-                <h3 className="text-sm font-semibold text-blue-900">LMCC Integration Workflow</h3>
+                    {/* Connector Line */}
+                    {idx < 2 && (
+                      <div className="flex-1 h-0.5 mx-3 transition-colors" style={{
+                        backgroundColor: step.complete ? '#16a34a' : '#e5e7eb'
+                      }} />
+                    )}
+                  </div>
+                ))}
               </div>
-              <button
-                onClick={() => setShowWorkflowHelp(false)}
-                className="text-blue-700 hover:text-blue-900"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="p-4 max-h-96 overflow-y-auto">
-              <LMCCWorkflowVisualization />
+
+              {/* Labels Row */}
+              <div className="flex items-center justify-between">
+                {[
+                  { num: 1, label: 'Sites', complete: selectedSites.length > 0 },
+                  { num: 2, label: 'Bandwidth', complete: bandwidthAllocations.length > 0 && currentStep > 2 },
+                  { num: 3, label: 'TAO', complete: canProceedFromStep3 && currentStep > 3 }
+                ].map((step) => (
+                  <div key={step.num} className="w-10 text-center">
+                    <span className={`text-xs font-medium ${
+                      currentStep === step.num ? 'text-blue-700' : step.complete ? 'text-green-700' : 'text-gray-500'
+                    }`}>
+                      {step.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Workflow Help Panel */}
+      {showWorkflowHelp && (
+        <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg overflow-hidden">
+          <div className="px-4 py-3 bg-blue-100 border-b border-blue-200 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <GitBranch className="w-4 h-4 text-blue-700" />
+              <h3 className="text-sm font-semibold text-blue-900">LMCC Integration Workflow</h3>
+            </div>
+            <button
+              onClick={() => setShowWorkflowHelp(false)}
+              className="text-blue-700 hover:text-blue-900 transition-colors"
+              aria-label="Close workflow guide"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="p-4">
+            <LMCCWorkflowVisualization />
+          </div>
+        </div>
+      )}
 
       {/* Step Content */}
       <div>

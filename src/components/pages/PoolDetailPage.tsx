@@ -336,7 +336,7 @@ export function PoolDetailPage() {
                 {poolUsers.map(user => (
                   <div key={user.id} className="flex items-center justify-between border-b border-gray-200 pb-4 last:border-0 last:pb-0">
                     <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-full bg-fw-link flex items-center justify-center border border-fw-secondary text-white font-medium">
+                      <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center border border-gray-300 text-gray-700 font-medium">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div>

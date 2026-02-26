@@ -27,6 +27,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
         onBandwidthChange={handleBandwidthChange}
         connectionId={connection.id}
         connectionName={connection.name}
+        connectionStatus={connection.status}
       />
 
       {/* Network Architecture Summary */}

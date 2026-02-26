@@ -7,6 +7,7 @@ interface BandwidthAdjusterProps {
   onBandwidthChange: (newBandwidth: string) => void;
   connectionId: string;
   connectionName: string;
+  connectionStatus: 'Active' | 'Inactive' | 'Pending';
 }
 
 const BANDWIDTH_OPTIONS = [
@@ -21,13 +22,14 @@ const BANDWIDTH_OPTIONS = [
   { value: '100 Gbps', label: '100', unit: 'Gbps', price: 49999, tier: 'enterprise' },
 ];
 
-export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange }: BandwidthAdjusterProps) {
+export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connectionStatus }: BandwidthAdjusterProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedBandwidth, setSelectedBandwidth] = useState(currentBandwidth);
   const [isConfirming, setIsConfirming] = useState(false);
 
   const currentOption = BANDWIDTH_OPTIONS.find(opt => opt.value === currentBandwidth);
   const selectedOption = BANDWIDTH_OPTIONS.find(opt => opt.value === selectedBandwidth);
+  const isConnectionActive = connectionStatus === 'Active';
 
   const handleSave = () => {
     if (selectedBandwidth === currentBandwidth) {
@@ -87,15 +89,29 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange }: Bandw
           </motion.div>
 
           <motion.button
-            onClick={() => setIsEditing(true)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="ml-6 px-6 py-3 bg-fw-base border-2 border-fw-secondary text-fw-body hover:border-fw-active hover:bg-fw-wash rounded-lg transition-all font-medium text-sm flex items-center space-x-2 group"
+            onClick={() => !isConnectionActive && setIsEditing(true)}
+            whileHover={!isConnectionActive ? { scale: 1.02 } : {}}
+            whileTap={!isConnectionActive ? { scale: 0.98 } : {}}
+            disabled={isConnectionActive}
+            title={isConnectionActive ? 'Connection must be deactivated before changing bandwidth' : undefined}
+            className={`ml-6 px-6 py-3 border-2 rounded-lg transition-all font-medium text-sm flex items-center space-x-2 group ${
+              isConnectionActive
+                ? 'bg-fw-disabled border-fw-secondary text-fw-bodyLight cursor-not-allowed'
+                : 'bg-fw-base border-fw-secondary text-fw-body hover:border-fw-active hover:bg-fw-wash'
+            }`}
           >
             <span>Change</span>
-            <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+            {!isConnectionActive && <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />}
           </motion.button>
         </div>
+        {isConnectionActive && (
+          <div className="px-6 pb-4 pt-0">
+            <div className="flex items-start space-x-2 text-xs text-fw-warn bg-orange-50 border border-orange-200 rounded p-2">
+              <AlertCircle className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
+              <span>Bandwidth cannot be changed while connection is active. Please deactivate the connection first.</span>
+            </div>
+          </div>
+        )}
       </motion.div>
       ) : (
         <motion.div

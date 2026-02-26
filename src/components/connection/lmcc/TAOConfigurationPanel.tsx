@@ -365,7 +365,7 @@ export function TAOConfigurationPanel({
               <h5 className="text-sm font-medium text-gray-900">Allocation Preview</h5>
               <CheckCircle className="h-4 w-4 text-green-600" />
             </div>
-            <div className="space-y-2 max-h-[200px] overflow-y-auto">
+            <div className="space-y-2">
               {taoConfig.ipAllocations.map((allocation, index) => {
                 const site = sites.find(s => s.id === allocation.siteId);
                 return (

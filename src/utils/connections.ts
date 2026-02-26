@@ -72,3 +72,14 @@ export function formatCurrency(amount: number, currency: string = 'USD'): string
     currency: currency
   }).format(amount);
 }
+
+export function isConnectionEditable(connection: Connection): boolean {
+  return connection.status !== 'Active';
+}
+
+export function getConnectionEditRestrictionReason(connection: Connection): string | null {
+  if (connection.status === 'Active') {
+    return 'Connection must be deactivated before making changes';
+  }
+  return null;
+}

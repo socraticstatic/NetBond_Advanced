@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Connection } from '../../types';
 import { OverflowMenu } from '../common/OverflowMenu';
 import { useStore } from '../../store/useStore';
+import { isConnectionEditable, getConnectionEditRestrictionReason } from '../../utils/connections';
 
 interface ConnectionOverflowMenuProps {
   connection: Connection;
@@ -74,6 +75,9 @@ export function ConnectionOverflowMenu({
     });
   };
 
+  const isEditable = isConnectionEditable(connection);
+  const editRestrictionReason = getConnectionEditRestrictionReason(connection);
+
   const menuItems = [
     {
       id: 'status',
@@ -91,7 +95,9 @@ export function ConnectionOverflowMenu({
       id: 'edit',
       label: 'Edit Connection',
       icon: <Edit2 className="h-4 w-4" />,
-      onClick: () => navigate(`/connections/${connection.id}/edit`)
+      onClick: () => navigate(`/connections/${connection.id}/edit`),
+      disabled: !isEditable,
+      tooltip: editRestrictionReason || undefined
     },
     {
       id: 'export',
@@ -104,7 +110,9 @@ export function ConnectionOverflowMenu({
       label: 'Delete Connection',
       icon: <Trash2 className="h-4 w-4" />,
       onClick: () => onDelete?.(),
-      variant: 'danger' as const
+      variant: 'danger' as const,
+      disabled: !isEditable,
+      tooltip: editRestrictionReason || undefined
     }
   ];
 

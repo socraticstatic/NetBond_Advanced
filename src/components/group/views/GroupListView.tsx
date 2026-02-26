@@ -67,15 +67,15 @@ export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps
   const getGroupTypeColor = (type: Group['type']) => {
     switch (type) {
       case 'business':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-slate-100 text-slate-700';
       case 'department':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-gray-100 text-gray-700';
       case 'project':
-        return 'bg-green-100 text-green-800';
+        return 'bg-emerald-50 text-emerald-700';
       case 'team':
-        return 'bg-amber-100 text-amber-800';
+        return 'bg-amber-50 text-amber-700';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 text-gray-700';
     }
   };
 

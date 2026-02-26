@@ -30,6 +30,7 @@ import { DeleteCloudRouterModal } from './cloudrouter/DeleteCloudRouterModal';
 import { MobileConnectionDetails } from './MobileConnectionDetails';
 import { useIsMobile } from '../../hooks/useMobileDetection';
 import { useVNFSync } from '../../hooks/useVNFSync';
+import { ConnectionEditWarning } from '../common/ConnectionEditWarning';
 
 export function ConnectionDetails() {
   const { id } = useParams();
@@ -613,6 +614,9 @@ export function ConnectionDetails() {
           </div>
         </div>
 
+        {/* Connection Edit Warning */}
+        <ConnectionEditWarning connection={connection} className="mb-6" />
+
         {/* Action Bar */}
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -680,6 +684,7 @@ export function ConnectionDetails() {
         onSave={handleSaveCloudRouter}
         cloudRouter={editingCloudRouter}
         connectionId={connection.id.toString()}
+        links={getAllLinks()}
       />
 
       <DeleteCloudRouterModal

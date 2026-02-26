@@ -133,9 +133,9 @@ export function GroupConnectionSummaryWidget({ group, connections }: GroupConnec
           <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
             <div>
               <div className="text-xs text-gray-500 mb-1">Avg Utilization</div>
-              <div className="text-xl font-semibold text-purple-600">{connectionStats.avgUtilization.toFixed(1)}%</div>
+              <div className="text-xl font-semibold text-gray-700">{connectionStats.avgUtilization.toFixed(1)}%</div>
             </div>
-            <Zap className="h-8 w-8 text-purple-500 bg-purple-50 p-1.5 rounded-full" />
+            <Zap className="h-8 w-8 text-gray-600 bg-gray-100 p-1.5 rounded-full" />
           </div>
         </div>
         

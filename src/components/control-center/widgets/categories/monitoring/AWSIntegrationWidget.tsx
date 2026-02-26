@@ -119,30 +119,28 @@ export default function AWSIntegrationWidget() {
               key={connection.id}
               className="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-sm transition-shadow"
             >
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-6 h-6 rounded bg-orange-50 border border-orange-200 flex items-center justify-center flex-shrink-0">
-                      <Cloud className="w-3 h-3 text-orange-600" />
-                    </div>
-                    <h4 className="text-xs font-semibold text-gray-900 truncate">
-                      {connection.connectionName}
-                    </h4>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <div className="w-8 h-8 rounded bg-orange-50 border border-orange-200 flex items-center justify-center flex-shrink-0">
+                    <Cloud className="w-4 h-4 text-orange-600" />
                   </div>
-                  <div className="text-xs text-gray-600 space-y-0.5">
-                    <div className="flex items-center gap-1">
-                      <span className="text-gray-500">Region:</span>
-                      <span className="font-mono">{connection.region}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-gray-500">Bandwidth:</span>
-                      <span className="font-medium">{connection.bandwidth}</span>
-                    </div>
-                  </div>
+                  <h4 className="text-sm font-semibold text-gray-900 truncate">
+                    {connection.connectionName}
+                  </h4>
                 </div>
-                <div className={`inline-flex items-center gap-1 px-2 py-1 border rounded-md text-xs font-semibold whitespace-nowrap ${getStatusColor(connection.status)}`}>
+                <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 border rounded-md text-xs font-semibold whitespace-nowrap flex-shrink-0 ${getStatusColor(connection.status)}`}>
                   {getStatusIcon(connection.status)}
-                  {getStatusLabel(connection.status)}
+                  <span>{getStatusLabel(connection.status)}</span>
+                </div>
+              </div>
+              <div className="text-xs text-gray-600 space-y-1 mb-2 pl-10">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gray-500 font-medium min-w-[70px]">Region:</span>
+                  <span className="font-mono text-gray-900">{connection.region}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gray-500 font-medium min-w-[70px]">Bandwidth:</span>
+                  <span className="font-semibold text-gray-900">{connection.bandwidth}</span>
                 </div>
               </div>
               {connection.status === 'pending-config' && (

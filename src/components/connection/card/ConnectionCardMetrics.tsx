@@ -90,7 +90,7 @@ export function ConnectionCardMetrics({
       {/* Top Row: Network Resources & Geographic Scope */}
       <div className="grid grid-cols-2 gap-3">
         {/* Network Resources */}
-        <div className="flex items-start space-x-3 p-3 bg-fw-blue-light rounded-lg border border-fw-blue-100">
+        <div className="flex items-start space-x-3 p-3 bg-white rounded-lg border border-fw-secondary">
           <Router className="h-4 w-4 text-fw-link mt-0.5 flex-shrink-0" />
           <div className="min-w-0 flex-1">
             <span className="text-xs font-medium text-fw-heading block mb-0.5">Network Resources</span>
@@ -115,14 +115,10 @@ export function ConnectionCardMetrics({
       {/* Bottom Row: Monthly Cost */}
       <div>
         {/* Monthly Cost */}
-        <div className={`flex items-center justify-between p-3 ${billingInfo.bgColor} rounded-lg border border-${billingInfo.color}-200`}>
+        <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-fw-secondary">
           <div className="flex items-center space-x-2">
-            <DollarSign className={`h-4 w-4 ${billingInfo.textColor} flex-shrink-0`} />
-            <span className={`text-xs font-medium ${
-              billingInfo.bgColor === 'bg-green-50' ? 'text-fw-success' :
-              billingInfo.bgColor === 'bg-brand-lightBlue' ? 'text-fw-heading' :
-              'text-fw-heading'
-            }`}>Monthly Cost</span>
+            <DollarSign className="h-4 w-4 text-fw-body flex-shrink-0" />
+            <span className="text-xs font-medium text-fw-heading">Monthly Cost</span>
           </div>
           <div className="flex items-center space-x-2">
             <p className="text-sm font-semibold text-fw-heading">

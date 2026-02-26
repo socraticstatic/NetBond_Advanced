@@ -146,7 +146,7 @@ export function SiteSelectionPanel({ sites, selectedSites, onSitesChange }: Site
       </div>
 
       {/* Sites Grid */}
-      <div className="grid grid-cols-1 gap-3 max-h-[500px] overflow-y-auto pr-2">
+      <div className="grid grid-cols-1 gap-3">
         {filteredSites.map(site => {
           const isSelected = selectedSites.includes(site.id);
           const isRecommended = recommendedSites.includes(site.id);

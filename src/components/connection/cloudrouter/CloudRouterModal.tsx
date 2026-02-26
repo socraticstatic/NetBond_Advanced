@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { X, GitBranch, Network, Settings, Info, Plus, AlertTriangle } from 'lucide-react';
+import { X, GitBranch, Network, Settings, Info, Plus, AlertTriangle, ExternalLink } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { FormField } from '../../form/FormField';
 import { Link } from '../../../types/connection';
 import { SideDrawer } from '../../common/SideDrawer';
+import { useStore } from '../../../store/useStore';
 
 interface CloudRouterModalProps {
   isOpen: boolean;
@@ -12,16 +13,21 @@ interface CloudRouterModalProps {
   onSave: (cloudRouter: CloudRouter) => void;
   cloudRouter?: CloudRouter;
   connectionId: string;
+  links: Link[];
 }
 
-export function CloudRouterModal({ 
-  isOpen, 
-  onClose, 
-  onSave, 
-  cloudRouter, 
-  connectionId 
+export function CloudRouterModal({
+  isOpen,
+  onClose,
+  onSave,
+  cloudRouter,
+  connectionId,
+  links: providedLinks
 }: CloudRouterModalProps) {
   const isEditMode = !!cloudRouter;
+
+  // Get all connections from store
+  const connections = useStore(state => state.connections);
 
   // Form state
   const [name, setName] = useState('');
@@ -32,14 +38,34 @@ export function CloudRouterModal({
   const [securityPolicy, setSecurityPolicy] = useState('standard');
   const [qosPolicy, setQosPolicy] = useState('standard');
   const [links, setLinks] = useState<Link[]>([]);
+  const [linkIds, setLinkIds] = useState<string[]>([]);
+  const [selectedConnectionForLinks, setSelectedConnectionForLinks] = useState<string>(connectionId);
   const [asn, setAsn] = useState<number | undefined>(undefined);
   const [bgpEnabled, setBgpEnabled] = useState(false);
   const [routeFilters, setRouteFilters] = useState<string[]>([]);
   const [routeFilterInput, setRouteFilterInput] = useState('');
-  
+
   // Validation state
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showAdvanced, setShowAdvanced] = useState(false);
+
+  // Get available links from the selected connection
+  const getAvailableLinks = (): Link[] => {
+    // If selecting current connection, use the provided links
+    if (selectedConnectionForLinks === connectionId) {
+      return providedLinks;
+    }
+
+    // For cross-connection, we need to get links from the selected connection
+    const selectedConn = connections.find(c => c.id === selectedConnectionForLinks);
+    if (!selectedConn) return [];
+
+    // Return empty for now - in production, you'd fetch/access the connection's links here
+    return [];
+  };
+
+  const availableLinks = getAvailableLinks();
+  const isCrossConnection = selectedConnectionForLinks !== connectionId;
 
   // Populate form fields in edit mode
   useEffect(() => {
@@ -49,14 +75,15 @@ export function CloudRouterModal({
       setStatus(cloudRouter.status);
       setLocation(cloudRouter.location);
       setLinks(cloudRouter.links || []);
-      
+      setLinkIds((cloudRouter.links || []).map(link => link.id));
+
       // Set policies if available
       if (cloudRouter.policies) {
         setRoutingPolicy(cloudRouter.policies.routingPolicy || 'default');
         setSecurityPolicy(cloudRouter.policies.securityPolicy || 'standard');
         setQosPolicy(cloudRouter.policies.qosPolicy || 'standard');
       }
-      
+
       // Set configuration if available
       if (cloudRouter.configuration) {
         setAsn(cloudRouter.configuration.asn);
@@ -70,15 +97,17 @@ export function CloudRouterModal({
       setStatus('inactive');
       setLocation('');
       setLinks([]);
+      setLinkIds([]);
       setRoutingPolicy('default');
       setSecurityPolicy('standard');
       setQosPolicy('standard');
       setAsn(undefined);
       setBgpEnabled(false);
       setRouteFilters([]);
+      setSelectedConnectionForLinks(connectionId);
     }
     setErrors({});
-  }, [cloudRouter, isOpen]);
+  }, [cloudRouter, isOpen, connectionId]);
 
   // Field validation
   const validateForm = (): boolean => {
@@ -110,10 +139,13 @@ export function CloudRouterModal({
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
+
+    // Convert linkIds back to Link objects
+    const selectedLinks = availableLinks.filter(link => linkIds.includes(link.id));
 
     // Prepare cloud router data
     const cloudRouterData: CloudRouter = {
@@ -125,7 +157,7 @@ export function CloudRouterModal({
       createdAt: cloudRouter?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       connectionId,
-      links: links,
+      links: selectedLinks,
       policies: {
         routingPolicy,
         securityPolicy,
@@ -248,7 +280,7 @@ export function CloudRouterModal({
                   </FormField>
                   
                   <div className="md:col-span-2">
-                    <FormField 
+                    <FormField
                       label="Description"
                     >
                       <textarea
@@ -262,7 +294,97 @@ export function CloudRouterModal({
                   </div>
                 </div>
               </div>
-              
+
+              {/* Link Association */}
+              <div className="md:col-span-2 pt-6 border-t border-gray-200">
+                <h4 className="text-base font-medium text-gray-900 mb-4 flex items-center">
+                  <Network className="h-4 w-4 text-gray-500 mr-2" />
+                  Link Association
+                </h4>
+
+                <div className="space-y-4">
+                  <FormField
+                    label="Connection for Links"
+                    helpText="Select which connection's links/VLANs to associate with this cloud router"
+                  >
+                    <select
+                      value={selectedConnectionForLinks}
+                      onChange={(e) => {
+                        setSelectedConnectionForLinks(e.target.value);
+                        // Clear selected links when changing connection
+                        setLinkIds([]);
+                      }}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      {connections.map(conn => (
+                        <option key={conn.id} value={conn.id}>
+                          {conn.name} ({conn.type}) - {conn.status}
+                          {conn.id === connectionId ? ' (Current)' : ''}
+                        </option>
+                      ))}
+                    </select>
+                  </FormField>
+
+                  {isCrossConnection && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start">
+                      <ExternalLink className="h-4 w-4 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm text-blue-800 font-medium">
+                          Cross-Connection Association
+                        </p>
+                        <p className="text-xs text-blue-700 mt-1">
+                          This cloud router will be associated with links from a different connection. Ensure network policies allow cross-connection routing.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  <FormField
+                    label="Links / VLANs"
+                    helpText="Select one or more links to associate with this cloud router"
+                  >
+                    <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3">
+                      {availableLinks.length === 0 ? (
+                        <div className="text-sm text-gray-500">
+                          <p>No links available for this connection</p>
+                          {isCrossConnection && (
+                            <p className="text-xs mt-1 text-gray-400">
+                              Cross-connection links need to be loaded separately. Navigate to the selected connection to view its links.
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        availableLinks.map(link => (
+                          <label key={link.id} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                            <input
+                              type="checkbox"
+                              checked={linkIds.includes(link.id)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setLinkIds([...linkIds, link.id]);
+                                } else {
+                                  setLinkIds(linkIds.filter(id => id !== link.id));
+                                }
+                              }}
+                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                            />
+                            <div className="flex-1 flex items-center justify-between">
+                              <span className="text-sm text-gray-700">{link.name} (VLAN {link.vlanId})</span>
+                              {isCrossConnection && (
+                                <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full flex items-center gap-1">
+                                  <ExternalLink className="h-3 w-3" />
+                                  External
+                                </span>
+                              )}
+                            </div>
+                          </label>
+                        ))
+                      )}
+                    </div>
+                  </FormField>
+                </div>
+              </div>
+
               {/* Policies */}
               <div className="md:col-span-2">
                 <h4 className="text-base font-medium text-gray-900 mb-4 flex items-center">

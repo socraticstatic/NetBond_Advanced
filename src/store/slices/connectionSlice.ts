@@ -92,6 +92,19 @@ export const createConnectionSlice: StateCreator<ConnectionSlice> = (set, get) =
 
   updateConnection: async (id, updates) => {
     try {
+      const connection = get().connections.find(conn => conn.id === id);
+
+      if (!connection) {
+        throw new Error('Connection not found');
+      }
+
+      // Check if trying to modify configuration while connection is active
+      // Allow status changes, but prevent other modifications when active
+      const isConfigChange = Object.keys(updates).some(key => key !== 'status');
+      if (connection.status === 'Active' && isConfigChange) {
+        throw new Error('Cannot modify an active connection. Please deactivate the connection first.');
+      }
+
       // If name is being updated, check for uniqueness
       if (updates.name) {
         const existingConnection = get().connections.find(
@@ -115,7 +128,7 @@ export const createConnectionSlice: StateCreator<ConnectionSlice> = (set, get) =
       window.addToast({
         type: 'success',
         title: 'Connection Updated',
-        message: updates.status !== undefined 
+        message: updates.status !== undefined
           ? `Connection is now ${updates.status}`
           : 'Connection has been updated successfully',
         duration: 3000
@@ -134,6 +147,16 @@ export const createConnectionSlice: StateCreator<ConnectionSlice> = (set, get) =
 
   removeConnection: async (id) => {
     try {
+      const connection = get().connections.find(conn => conn.id === id);
+
+      if (!connection) {
+        throw new Error('Connection not found');
+      }
+
+      if (connection.status === 'Active') {
+        throw new Error('Cannot delete an active connection. Please deactivate the connection first.');
+      }
+
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 300));
 

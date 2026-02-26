@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, AlertTriangle, Plus, Info, Network, Shield, Settings, Globe, Router as RouterIcon, ServerCog, Cloud } from 'lucide-react';
+import { X, AlertTriangle, Plus, Info, Network, Shield, Settings, Globe, Router as RouterIcon, ServerCog, Cloud, ExternalLink } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { FormField } from '../../form/FormField';
 import { VNF, VNFType, VNFInterface, VNFTemplate } from '../../../types/vnf';
@@ -7,6 +7,7 @@ import { Link } from '../../../types/connection';
 import { SideDrawer } from '../../common/SideDrawer';
 import { LMCCConfigDrawer } from '../lmcc/LMCCConfigDrawer';
 import { LMCCConfiguration } from '../../../types/lmcc';
+import { useStore } from '../../../store/useStore';
 
 // Utility function to get user-friendly VNF type names
 const getTypeName = (type: VNFType): string => {
@@ -174,6 +175,9 @@ export function VNFModal({
   const isEditMode = !!vnf;
   const [showVnfTooltip, setShowVnfTooltip] = useState(false);
 
+  // Get all connections from store
+  const connections = useStore(state => state.connections);
+
   // Form state
   const [name, setName] = useState('');
   const [type, setType] = useState<VNFType>('custom');
@@ -189,6 +193,7 @@ export function VNFModal({
   const [managementIP, setManagementIP] = useState('');
   const [routingProtocols, setRoutingProtocols] = useState<string[]>([]);
   const [linkIds, setLinkIds] = useState<string[]>([]);
+  const [selectedConnectionForLinks, setSelectedConnectionForLinks] = useState<string>(connectionId);
 
   // New interface form
   const [newInterface, setNewInterface] = useState<Partial<VNFInterface>>({
@@ -208,6 +213,27 @@ export function VNFModal({
   // LMCC Configuration state
   const [showLMCCConfig, setShowLMCCConfig] = useState(false);
   const [lmccConfiguration, setLmccConfiguration] = useState<LMCCConfiguration | undefined>();
+
+  // Get available links from the selected connection
+  const getAvailableLinks = (): Link[] => {
+    // If selecting current connection, use the provided links
+    if (selectedConnectionForLinks === connectionId) {
+      return links;
+    }
+
+    // For cross-connection, we need to get links from the selected connection
+    // In a real implementation, this would fetch from the connection's stored links
+    // For now, return empty array to indicate cross-connection links need to be loaded
+    const selectedConn = connections.find(c => c.id === selectedConnectionForLinks);
+    if (!selectedConn) return [];
+
+    // Return empty for now - in production, you'd fetch/access the connection's links here
+    // This could be: selectedConn.links or an API call
+    return [];
+  };
+
+  const availableLinks = getAvailableLinks();
+  const isCrossConnection = selectedConnectionForLinks !== connectionId;
 
   // Populate form fields in edit mode
   useEffect(() => {
@@ -699,16 +725,61 @@ export function VNFModal({
 
                   <div className="col-span-2">
                     <FormField
-                      label="Links"
+                      label="Connection for Links"
+                      helpText="Select which connection's links/VLANs to associate with this VNF"
+                    >
+                      <select
+                        value={selectedConnectionForLinks}
+                        onChange={(e) => {
+                          setSelectedConnectionForLinks(e.target.value);
+                          // Clear selected links when changing connection
+                          setLinkIds([]);
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        {connections.map(conn => (
+                          <option key={conn.id} value={conn.id}>
+                            {conn.name} ({conn.type}) - {conn.status}
+                            {conn.id === connectionId ? ' (Current)' : ''}
+                          </option>
+                        ))}
+                      </select>
+                    </FormField>
+
+                    {isCrossConnection && (
+                      <div className="mt-2 bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start">
+                        <ExternalLink className="h-4 w-4 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm text-blue-800 font-medium">
+                            Cross-Connection Association
+                          </p>
+                          <p className="text-xs text-blue-700 mt-1">
+                            This VNF will be associated with links from a different connection. Ensure network policies allow cross-connection routing.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="col-span-2">
+                    <FormField
+                      label="Links / VLANs"
                       error={errors.linkIds}
                       required
                       helpText="Select one or more links this VNF will be associated with"
                     >
                       <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3">
-                        {links.length === 0 ? (
-                          <p className="text-sm text-gray-500">No links available</p>
+                        {availableLinks.length === 0 ? (
+                          <div className="text-sm text-gray-500">
+                            <p>No links available for this connection</p>
+                            {isCrossConnection && (
+                              <p className="text-xs mt-1 text-gray-400">
+                                Cross-connection links need to be loaded separately. Navigate to the selected connection to view its links.
+                              </p>
+                            )}
+                          </div>
                         ) : (
-                          links.map(link => (
+                          availableLinks.map(link => (
                             <label key={link.id} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
                               <input
                                 type="checkbox"
@@ -722,7 +793,15 @@ export function VNFModal({
                                 }}
                                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                               />
-                              <span className="text-sm text-gray-700">{link.name} (VLAN {link.vlanId})</span>
+                              <div className="flex-1 flex items-center justify-between">
+                                <span className="text-sm text-gray-700">{link.name} (VLAN {link.vlanId})</span>
+                                {isCrossConnection && (
+                                  <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full flex items-center gap-1">
+                                    <ExternalLink className="h-3 w-3" />
+                                    External
+                                  </span>
+                                )}
+                              </div>
                             </label>
                           ))
                         )}

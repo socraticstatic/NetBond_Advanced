@@ -170,7 +170,7 @@ export function BandwidthAllocationPanel({
       {/* Individual Site Bandwidth */}
       <div className="space-y-3">
         <h4 className="text-sm font-medium text-gray-900">Per-Site Bandwidth Allocation</h4>
-        <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+        <div className="space-y-3">
           {selectedSitesData.map(site => {
             const currentBandwidth = getBandwidthForSite(site.id);
             const siteCost = calculateMonthlyCost(currentBandwidth);
