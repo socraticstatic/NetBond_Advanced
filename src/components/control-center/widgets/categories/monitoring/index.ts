@@ -1,7 +1,8 @@
-import { Activity, Network, BarChart2 } from 'lucide-react';
+import { Activity, Network, BarChart2, Cloud } from 'lucide-react';
 import { NetworkStatusWidget } from './NetworkStatusWidget';
 import { ConnectionsWidget } from './ConnectionsWidget';
 import { PerformanceWidget } from './PerformanceWidget';
+import AWSIntegrationWidget from './AWSIntegrationWidget';
 import { WidgetDefinition } from '../../../types';
 
 export const monitoringWidgets: WidgetDefinition[] = [
@@ -34,9 +35,20 @@ export const monitoringWidgets: WidgetDefinition[] = [
     defaultW: 2,
     defaultH: 1,
     component: PerformanceWidget
+  },
+  {
+    id: 'aws-integration',
+    title: 'AWS Partner Integration',
+    description: 'AWS Direct Connect status and pending connections',
+    icon: Cloud,
+    color: 'orange',
+    defaultW: 1,
+    defaultH: 1,
+    component: AWSIntegrationWidget
   }
 ];
 
 export * from './NetworkStatusWidget';
 export * from './ConnectionsWidget';
 export * from './PerformanceWidget';
+export { default as AWSIntegrationWidget } from './AWSIntegrationWidget';

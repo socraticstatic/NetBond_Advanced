@@ -9,6 +9,7 @@ import { Button } from './common/Button';
 import { CategoryGrid } from './marketplace/CategoryGrid';
 import { CollectionGrid } from './marketplace/CollectionGrid';
 import { ApplicationSolutionZone } from './marketplace/ApplicationSolutionZone';
+import { AWSPartnerZone } from './marketplace/AWSPartnerZone';
 
 interface MarketplaceProps {
   onSelectItem: (item: MarketplaceItem) => void;
@@ -513,7 +514,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
   });
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<'popular' | 'rating' | 'price'>('popular');
-  const [activeTab, setActiveTab] = useState<'solutions' | 'all' | 'connections' | 'addons' | 'vnf' | 'api' | 'managed'>('all');
+  const [activeTab, setActiveTab] = useState<'solutions' | 'all' | 'connections' | 'addons' | 'vnf' | 'api' | 'managed' | 'aws'>('all');
 
   const getIcon = (iconType: string) => {
     switch (iconType) {
@@ -587,6 +588,22 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
         <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
           <h3 className="text-sm font-semibold text-fw-heading mb-3">Browse</h3>
           <div className="space-y-2">
+            <button
+              onClick={() => setActiveTab('aws')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
+                activeTab === 'aws'
+                  ? 'bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg'
+                  : 'bg-gradient-to-r from-orange-50 to-blue-50 text-gray-900 hover:from-orange-100 hover:to-blue-100 border border-orange-200'
+              }`}
+            >
+              <Cloud className="h-5 w-5" />
+              <div className="text-left">
+                <div className="font-medium text-sm">AWS Partner</div>
+                <div className={`text-xs ${activeTab === 'aws' ? 'text-white/90' : 'text-gray-600'}`}>
+                  Direct Connect integration
+                </div>
+              </div>
+            </button>
             <button
               onClick={() => setActiveTab('all')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
@@ -682,13 +699,18 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
       </div>
 
       <div className="flex-1 space-y-6">
+        {/* AWS Partner Zone */}
+        {activeTab === 'aws' && (
+          <AWSPartnerZone />
+        )}
+
         {/* Application Solution Zone */}
         {activeTab === 'solutions' && (
           <ApplicationSolutionZone />
         )}
 
       {/* Traditional Marketplace */}
-      {activeTab !== 'solutions' && (
+      {activeTab !== 'solutions' && activeTab !== 'aws' && (
         <>
           {/* Hero Section */}
             <div className="bg-gradient-to-br from-[#003184] via-[#0047BB] to-[#005CDB] rounded-2xl p-8 shadow-xl text-white mb-6">

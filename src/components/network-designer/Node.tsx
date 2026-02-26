@@ -155,22 +155,22 @@ export function Node({
     }
   };
 
-  // Get node background color based on type
+  // Get node background color based on type with gradient
   const getBackgroundColor = () => {
-    if (isSelected) return 'bg-brand-lightBlue';
-    if (isDragging) return 'bg-gray-50';
+    if (isSelected) return 'bg-gradient-to-br from-brand-lightBlue to-blue-50';
+    if (isDragging) return 'bg-gradient-to-br from-gray-50 to-white';
 
     switch (node.type) {
       case 'source':
-        return 'bg-green-50';
+        return 'bg-gradient-to-br from-green-50 to-emerald-50';
       case 'destination':
-        return 'bg-brand-lightBlue';
+        return 'bg-gradient-to-br from-blue-50 to-cyan-50';
       case 'router':
-        return 'bg-purple-50';
+        return 'bg-gradient-to-br from-purple-50 to-indigo-50';
       case 'network':
-        return 'bg-indigo-50';
+        return 'bg-gradient-to-br from-indigo-50 to-blue-50';
       default:
-        return 'bg-white';
+        return 'bg-gradient-to-br from-white to-gray-50';
     }
   };
 
@@ -215,12 +215,12 @@ export function Node({
         ref={nodeRef}
         className={`
           absolute w-16 h-16 flex items-center justify-center
-          rounded-lg transition-all duration-200
+          rounded-2xl transition-all duration-200
           ${getBackgroundColor()}
           ${isCreatingEdge ? 'cursor-pointer' : 'cursor-move'}
-          ${isDragging ? 'cursor-grabbing shadow-lg scale-105' : 'cursor-grab shadow-sm hover:shadow-md'}
-          border-2 ${isSelected ? 'border-brand-blue' : 'border-gray-200'}
-          transform-gpu
+          ${isDragging ? 'cursor-grabbing shadow-2xl scale-110 ring-2 ring-brand-blue ring-opacity-30' : 'cursor-grab shadow-md hover:shadow-xl hover:scale-105'}
+          border ${isSelected ? 'border-brand-blue border-2 ring-2 ring-brand-blue ring-opacity-20' : 'border-gray-200 border-opacity-50'}
+          transform-gpu backdrop-blur-sm
         `}
         style={{
           left: `${position.x}px`,
@@ -309,25 +309,26 @@ export function Node({
         )}
       </div>
 
-      {/* Tooltip */}
+      {/* Tooltip - Elegant White Style */}
       {showTooltip && !isDragging && (
         <div
           className="fixed z-50 transform -translate-x-1/2 -translate-y-full pointer-events-none"
           style={{ left: tooltipPosition.x, top: tooltipPosition.y }}
         >
-          <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-lg text-sm">
-            <div className="font-medium">{node.name}</div>
-            <div className="text-xs text-gray-300 mt-1">
+          <div className="bg-white text-gray-800 px-4 py-3 rounded-xl shadow-2xl border border-gray-200 text-sm">
+            <div className="font-semibold text-gray-900">{node.name}</div>
+            <div className="text-xs text-gray-500 mt-1 flex items-center gap-1.5">
+              <span className="inline-block w-2 h-2 rounded-full bg-brand-blue"></span>
               {node.type.charAt(0).toUpperCase() + node.type.slice(1)}
               {node.config?.location && ` • ${node.config.location}`}
               {node.config?.provider && ` • ${node.config.provider}`}
             </div>
-            {node.config && (
-              <div className="mt-2 pt-2 border-t border-gray-700 grid grid-cols-2 gap-2 text-xs">
+            {node.config && Object.keys(node.config).length > 0 && (
+              <div className="mt-2.5 pt-2.5 border-t border-gray-100 grid grid-cols-2 gap-2 text-xs">
                 {Object.entries(node.config).map(([key, value]) => (
                   <div key={key}>
-                    <span className="text-gray-400">{key}: </span>
-                    <span className="text-gray-200">{value}</span>
+                    <span className="text-gray-400 text-[10px] uppercase tracking-wide">{key}: </span>
+                    <span className="text-gray-700 font-medium">{value}</span>
                   </div>
                 ))}
               </div>

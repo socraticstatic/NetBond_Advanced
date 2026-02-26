@@ -66,6 +66,13 @@ export interface Connection {
   links?: string[];
   totalDowntime?: number;
   configuration?: Record<string, any>;
+  origin?: {
+    source: 'manual' | 'aws-marketplace' | 'azure-marketplace' | 'gcp-marketplace';
+    requestId?: string;
+    externalAccountId?: string;
+    initiatedAt?: string;
+    metadata?: Record<string, any>;
+  };
 }
 
 export interface ColumnConfig {

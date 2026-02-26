@@ -190,43 +190,71 @@ export function Edge({ edge, nodes, isSelected, onClick, showEffects = false }: 
         `}
       />
 
-      {/* Hover Tooltip */}
-      <g 
-        className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-        transform={`translate(${midX},${midY - 40})`}
-      >
+      {/* Elegant Inline Label - Always Visible */}
+      <g transform={`translate(${midX},${midY - 25})`}>
+        {/* Background with subtle shadow */}
+        <defs>
+          <filter id={`shadow-${edge.id}`} x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="1" stdDeviation="2" floodOpacity="0.1"/>
+          </filter>
+        </defs>
         <rect
-          x="-70"
-          y="-30"
-          width="140"
-          height="60"
-          rx="6"
-          className="fill-gray-800"
+          x="-80"
+          y="-18"
+          width="160"
+          height="36"
+          rx="18"
+          className="fill-white stroke-gray-200"
+          strokeWidth="1"
+          filter={`url(#shadow-${edge.id})`}
         />
+        {/* Connection type and bandwidth */}
         <text
           x="0"
-          y="-12"
-          className="text-xs fill-white text-center"
+          y="-4"
+          className="text-[10px] fill-gray-600 font-medium"
           textAnchor="middle"
         >
           {edge.type}
         </text>
         <text
-          x="0"
-          y="5"
-          className="text-xs fill-white text-center"
+          x="-35"
+          y="10"
+          className="text-[9px] fill-brand-blue font-semibold"
           textAnchor="middle"
         >
           {edge.bandwidth}
         </text>
+        {/* Separator */}
+        <line
+          x1="-15"
+          y1="6"
+          x2="-15"
+          y2="14"
+          className="stroke-gray-200"
+          strokeWidth="1"
+        />
+        {/* Latency */}
         <text
-          x="0"
-          y="22"
-          className="text-xs fill-gray-300 text-center"
+          x="15"
+          y="10"
+          className="text-[9px] fill-green-600 font-semibold"
           textAnchor="middle"
         >
           {edge.metrics?.latency || '<10ms'}
         </text>
+        {/* Status indicator dot */}
+        <circle
+          cx="60"
+          cy="7"
+          r="3"
+          className={`
+            ${edge.status === 'active'
+              ? 'fill-green-500'
+              : 'fill-gray-400'
+            }
+          `}
+        />
       </g>
     </g>
   );

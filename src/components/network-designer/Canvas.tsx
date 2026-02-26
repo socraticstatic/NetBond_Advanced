@@ -153,7 +153,7 @@ export function Canvas({
   return (
     <div
       ref={canvasRef}
-      className="relative w-full h-full overflow-hidden bg-gray-50"
+      className="relative w-full h-full overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50"
       onClick={(e) => {
         if (e.target === canvasRef.current && !isDragging) {
           onNodeClick(null as any);
@@ -161,12 +161,21 @@ export function Canvas({
         }
       }}
     >
-      {/* Grid Background */}
-      <div 
-        className="absolute inset-0" 
+      {/* Subtle Grid Pattern */}
+      <div
+        className="absolute inset-0 opacity-30"
         style={{
-          backgroundImage: 'radial-gradient(circle, #e5e7eb 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, #cbd5e1 0.5px, transparent 0.5px)',
           backgroundSize: `${gridSize}px ${gridSize}px`,
+          zIndex: 0
+        }}
+      />
+      {/* Subtle Accent Lines */}
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: 'linear-gradient(to right, #0ea5e9 1px, transparent 1px), linear-gradient(to bottom, #0ea5e9 1px, transparent 1px)',
+          backgroundSize: `${gridSize * 5}px ${gridSize * 5}px`,
           zIndex: 0
         }}
       />

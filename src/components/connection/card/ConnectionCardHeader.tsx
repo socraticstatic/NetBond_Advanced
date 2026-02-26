@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Edit2, Minimize2 } from 'lucide-react';
+import { Edit2, Minimize2, Cloud } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { IconButton } from '../../common/IconButton';
 import { ConnectionOverflowMenu } from '../ConnectionOverflowMenu';
@@ -65,12 +65,22 @@ export function ConnectionCardHeader({
                 )}
               </div>
             ) : (
-              <h3
-                className="text-sm font-medium text-fw-heading cursor-text"
-                onClick={onEditNameClick}
-              >
-                {name}
-              </h3>
+              <div>
+                <h3
+                  className="text-sm font-medium text-fw-heading cursor-text"
+                  onClick={onEditNameClick}
+                >
+                  {name}
+                </h3>
+                {connection?.origin?.source === 'aws-marketplace' && (
+                  <div className="flex items-center gap-1 mt-1">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-orange-100 to-blue-100 border border-orange-300 rounded text-xs font-semibold text-orange-800">
+                      <Cloud className="w-3 h-3" />
+                      AWS Partner
+                    </span>
+                  </div>
+                )}
+              </div>
             )}
             <p className="text-xs text-fw-bodyLight">{type}</p>
           </div>

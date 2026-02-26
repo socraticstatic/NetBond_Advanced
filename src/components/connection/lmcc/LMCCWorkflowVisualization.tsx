@@ -508,24 +508,6 @@ export default function LMCCWorkflowVisualization() {
         </ul>
       </div>
 
-      {/* Architecture Notes */}
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-        <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-          <AlertCircle className="w-5 h-5 text-gray-600" />
-          Design & Architecture Considerations
-        </h3>
-        <p className="text-sm text-gray-700 mb-3">
-          This workflow represents high-level flows only. Design and architecture are purview of Network labs/Solution Arch/Design and development teams.
-        </p>
-        <ul className="space-y-1.5 text-xs text-gray-600 list-disc ml-4">
-          <li>Portal page must be tested and tag link connections validated</li>
-          <li>Support workflow needs definition - chatbot integration for customer assistance</li>
-          <li>Billing flow: 2 BIN w PRD vs contracting - revenue routing to NetBond Advanced</li>
-          <li>One-page display in AWS console for streamlined approval</li>
-          <li>BC-3Wreqs white-label multi-tenant setup required</li>
-        </ul>
-      </div>
-
       {/* AWS Console Mockup Modal */}
       {showAWSConsole && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowAWSConsole(false)}>

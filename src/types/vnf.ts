@@ -51,6 +51,13 @@ export interface VNF {
     licenseUtilization: number;
     serviceSpecificMetrics: Record<string, number>;
   };
+  origin?: {
+    source: 'manual' | 'aws-marketplace' | 'azure-marketplace' | 'gcp-marketplace';
+    requestId?: string;
+    externalAccountId?: string;
+    initiatedAt?: string;
+    metadata?: Record<string, any>;
+  };
 }
 
 export interface VNFTypeInfo {

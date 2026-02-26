@@ -141,6 +141,12 @@ const LazyPlatformAdminPage = lazy(() =>
   }))
 );
 
+const LazyAWSWorkflowPage = lazy(() =>
+  import('./components/pages/AWSWorkflowPage').then(module => ({
+    default: module.default
+  }))
+);
+
 const LazyTenantDetailPage = lazy(() =>
   import('./components/platform-admin/TenantDetailPage').then(module => ({
     default: module.TenantDetailPage
@@ -387,6 +393,14 @@ function App() {
                         <LazyHelpResourcesPage />
                       </Suspense>
                     </SubNav>
+                  </AsyncBoundary>
+                } />
+
+                <Route path="/aws-workflow" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyAWSWorkflowPage />
+                    </Suspense>
                   </AsyncBoundary>
                 } />
 

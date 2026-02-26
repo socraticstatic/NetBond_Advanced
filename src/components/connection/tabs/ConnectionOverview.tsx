@@ -72,12 +72,12 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
       </div>
 
       {/* Network Visualization */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-visible">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h3 className="text-lg font-medium text-gray-900">Network Topology</h3>
-          <p className="text-sm text-gray-500">Visual representation of your network connection</p>
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+        <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-white border-b border-gray-100">
+          <h3 className="text-lg font-semibold text-gray-900">Network Topology</h3>
+          <p className="text-sm text-gray-500">Interactive visualization of your network connection</p>
         </div>
-        <div className="h-[400px] p-6 relative">
+        <div className="h-[400px] relative">
           <ConnectionVisualization connection={connection} />
         </div>
       </div>

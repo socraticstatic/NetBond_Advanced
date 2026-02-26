@@ -105,7 +105,7 @@ export function TopologyView({ connections, groups }: TopologyViewProps) {
               </div>
 
               {/* Topology Visualization */}
-              <div className="h-[400px] bg-gray-50 rounded-lg overflow-visible mb-6">
+              <div className="h-[400px] rounded-xl overflow-hidden mb-6 border border-gray-200 shadow-sm">
                 <ConnectionVisualization connection={connection} standalone />
               </div>
 

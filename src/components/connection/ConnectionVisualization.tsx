@@ -263,15 +263,10 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
       </div>
 
       {/* Canvas container with centering */}
-      <div 
-        className="flex-1 flex items-center justify-center"
+      <div
+        className="flex-1 flex items-center justify-center relative"
         onClick={handleCanvasClick}
       >
-        {/* Add a small description above the visualization */}
-        <div className="absolute top-0 left-0 right-0 text-center pt-2">
-          <p className="text-xs text-gray-500">Visualization of your network connection topology</p>
-        </div>
-        
         <Canvas
           nodes={nodes}
           edges={edges}
@@ -288,26 +283,23 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
         />
       </div>
 
-      {/* Connection details overlay at the bottom */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 backdrop-blur-sm border-t border-gray-200 p-2 text-xs">
-        <div className="flex justify-between">
-          <div className="flex items-center">
-            <Activity className="h-3 w-3 mr-1 text-gray-600" />
-            <span className="text-gray-700">Status: </span>
-            <span className={`ml-1 font-medium ${connection.status === 'Active' ? 'text-green-600' : 'text-gray-600'}`}>
-              {connection.status}
-            </span>
+      {/* Connection details overlay at the bottom - Elegant version */}
+      <div className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-3">
+        <div className="flex items-center justify-between gap-6">
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${connection.status === 'Active' ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+            <span className="text-xs font-semibold text-gray-900">{connection.status}</span>
           </div>
-          <div className="flex items-center">
-            <Network className="h-3 w-3 mr-1 text-gray-600" />
-            <span className="text-gray-700">Bandwidth: </span>
-            <span className="ml-1 font-medium text-gray-900">{connection.bandwidth}</span>
+
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-blue/10 rounded-full">
+            <Network className="h-3.5 w-3.5 text-brand-blue" />
+            <span className="text-xs font-semibold text-brand-blue">{connection.bandwidth}</span>
           </div>
+
           {connection.performance?.latency && (
-            <div className="flex items-center">
-              <Clock className="h-3 w-3 mr-1 text-gray-600" />
-              <span className="text-gray-700">Latency: </span>
-              <span className="ml-1 font-medium text-gray-900">{connection.performance.latency}</span>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 rounded-full">
+              <Clock className="h-3.5 w-3.5 text-green-600" />
+              <span className="text-xs font-semibold text-green-600">{connection.performance.latency}</span>
             </div>
           )}
         </div>
