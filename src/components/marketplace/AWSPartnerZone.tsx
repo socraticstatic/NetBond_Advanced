@@ -21,7 +21,7 @@ export function AWSPartnerZone() {
     {
       id: 'aws-001',
       requestId: 'AWS-REQ-789012',
-      connectionName: 'att-lmcc-prod-001',
+      connectionName: 'att-netbond-prod-001',
       region: 'us-east-1',
       bandwidth: '10 Gbps',
       status: 'pending-config',
@@ -34,13 +34,18 @@ export function AWSPartnerZone() {
     window.addToast?.({
       type: 'info',
       title: 'AWS Connection Configuration',
-      message: `Opening LMCC configuration wizard for ${connection.connectionName}`,
+      message: `Opening configuration wizard for ${connection.connectionName}`,
       duration: 3000
     });
   };
 
   const handleViewWorkflow = () => {
-    navigate('/aws-workflow');
+    window.addToast?.({
+      type: 'info',
+      title: 'AWS Workflow',
+      message: 'AWS workflow documentation coming soon',
+      duration: 3000
+    });
   };
 
   return (
@@ -49,7 +54,7 @@ export function AWSPartnerZone() {
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center">
               <Cloud className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -69,19 +74,19 @@ export function AWSPartnerZone() {
       </div>
 
       {/* Hero Banner */}
-      <div className="bg-gradient-to-br from-orange-50 to-blue-50 border border-orange-200 rounded-xl p-6">
+      <div className="bg-gradient-to-br from-gray-50 to-slate-50 border border-gray-200 rounded-xl p-6">
         <div className="grid md:grid-cols-2 gap-6 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-full border border-orange-300 mb-3">
-              <Sparkles className="w-4 h-4 text-orange-600" />
-              <span className="text-xs font-semibold text-orange-900">AWS Direct Connect Partner</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-full border border-gray-300 mb-3">
+              <Sparkles className="w-4 h-4 text-gray-700" />
+              <span className="text-xs font-semibold text-gray-800">AWS Direct Connect Partner</span>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">
               Seamless Connection from AWS Console
             </h3>
             <p className="text-sm text-gray-700 mb-4">
               Initiate your AT&T NetBond connection directly from the AWS Direct Connect console.
-              We'll guide you through LMCC site selection, bandwidth allocation, and TAO configuration.
+              We'll guide you through site selection, bandwidth allocation, and network configuration.
             </p>
             <div className="flex flex-wrap gap-3">
               <a
@@ -108,7 +113,7 @@ export function AWSPartnerZone() {
               {[
                 { icon: Cloud, label: 'AWS Console', desc: 'Select AT&T as partner' },
                 { icon: ArrowRight, label: 'API Handoff', desc: 'AWS sends details to AT&T' },
-                { icon: Network, label: 'NetBond Config', desc: 'Configure LMCC sites & TAO' },
+                { icon: Network, label: 'NetBond Config', desc: 'Configure sites & routing' },
                 { icon: Building2, label: 'Business Center', desc: 'Billing & provisioning' },
                 { icon: CheckCircle2, label: 'Complete', desc: 'Connection activated' }
               ].map((step, idx) => {
@@ -200,7 +205,7 @@ export function AWSPartnerZone() {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Why Connect via AWS?</h3>
         <div className="grid md:grid-cols-3 gap-4">
           <div className="bg-white border border-gray-200 rounded-lg p-4">
-            <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center mb-3">
+            <div className="w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center mb-3">
               <Sparkles className="w-5 h-5 text-blue-600" />
             </div>
             <h4 className="font-semibold text-gray-900 mb-2">Streamlined Onboarding</h4>
@@ -218,10 +223,10 @@ export function AWSPartnerZone() {
             </p>
           </div>
           <div className="bg-white border border-gray-200 rounded-lg p-4">
-            <div className="w-10 h-10 rounded-lg bg-purple-50 border border-purple-200 flex items-center justify-center mb-3">
+            <div className="w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center mb-3">
               <Network className="w-5 h-5 text-purple-600" />
             </div>
-            <h4 className="font-semibold text-gray-900 mb-2">Multi-Site LMCC</h4>
+            <h4 className="font-semibold text-gray-900 mb-2">Multi-Site Connectivity</h4>
             <p className="text-sm text-gray-600">
               Configure connections across multiple AT&T NetBond locations with flexible bandwidth allocation.
             </p>
@@ -262,7 +267,7 @@ export function AWSPartnerZone() {
             <div>
               <div className="font-medium text-gray-900">Configure in NetBond Portal</div>
               <div className="text-sm text-gray-600">
-                You'll receive an email to complete LMCC configuration. Your connection will appear above.
+                You'll receive an email to complete network configuration. Your connection will appear above.
               </div>
             </div>
           </li>

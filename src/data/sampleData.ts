@@ -53,6 +53,52 @@ const createBillingData = (
 // Sample connections with optimized structure
 export const sampleConnections: Connection[] = [
   {
+    id: 'conn-aws-pending-1',
+    name: 'AWS Interconnect - Last Mile',
+    type: 'Internet to Cloud',
+    status: 'Pending',
+    bandwidth: '1 Gbps',
+    location: 'US East',
+    provider: 'AWS',
+    locations: ['AWS - US East'],
+    cloudRouterCount: 0,
+    linkCount: 0,
+    primaryIPE: 'Not configured',
+    ipeRedundancy: false,
+    createdAt: new Date().toISOString(),
+    origin: {
+      source: 'aws-marketplace',
+      requestId: 'AWS-REQ-789012',
+      externalAccountId: '123456789012',
+      initiatedAt: new Date().toISOString(),
+      metadata: {
+        region: 'us-east-1',
+        awsConnectionId: 'dxcon-fgh5678',
+        vlan: 1234
+      }
+    },
+    performance: {
+      latency: 'N/A',
+      packetLoss: 'N/A',
+      uptime: 'N/A',
+      throughput: 'N/A',
+      tunnels: 'Not configured',
+      bandwidthUtilization: 0,
+      currentUsage: '0 Gbps',
+      utilizationTrend: [0, 0, 0, 0, 0, 0, 0]
+    },
+    features: defaultFeatures,
+    security: defaultSecurity,
+    billing: {
+      baseFee: 1000,
+      usage: 0,
+      total: 1000,
+      currency: 'USD',
+      lastBill: undefined,
+      nextBill: undefined
+    },
+  },
+  {
     id: 'conn-1',
     name: 'Corporate Cloud Gateway',
     type: 'Internet to Cloud',

@@ -197,3 +197,29 @@
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Custom Scrollbar */
+.styled-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gray-400) var(--color-gray-100);
+}
+
+.styled-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-gray-100);
+  border-radius: 4px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-gray-400);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-500);
+}

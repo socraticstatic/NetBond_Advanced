@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Globe, Cloud } from 'lucide-react';
+import { Globe, Cloud, ChevronRight } from 'lucide-react';
 import { Connection } from '../../types';
 import { Group } from '../../types/group';
 import { useStore } from '../../store/useStore';
@@ -13,6 +13,7 @@ import { ConnectionCardMetrics } from './card/ConnectionCardMetrics';
 import { ConnectionCardProgress } from './card/ConnectionCardProgress';
 import { ConnectionCardAction } from './card/ConnectionCardAction';
 import { ConnectionCardMinimized } from './card/ConnectionCardMinimized';
+import { AWSPendingConfigModal } from './modals/AWSPendingConfigModal';
 
 interface ConnectionCardProps {
   connection: Connection;
@@ -36,6 +37,9 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   const [nodeName, setNodeName] = useState(connection.name);
   const [nameError, setNameError] = useState<string | null>(null);
   const [showEffects] = useState(true);
+  const [showAWSConfigModal, setShowAWSConfigModal] = useState(false);
+
+  const isPendingAWS = connection.status === 'Pending' && connection.origin?.source === 'aws-marketplace';
 
   // Update local minimized state when prop changes
   useEffect(() => {
@@ -153,31 +157,18 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
     const isActivating = newStatus === 'Active';
 
     if (isActivating) {
-      // Activating: Show timer countdown (7 seconds emulating 7 minutes)
-      setIsPending(true);
+      // Activating: Instant activation
+      updateConnection(connection.id, { status: newStatus });
+      setIsPending(false);
+      setProgress(0);
+      setRemainingTime(420);
 
-      // Show initial toast
       window.addToast({
-        type: 'info',
-        title: 'Activation Initiated',
-        message: `Connection activation typically takes 7 minutes to complete. A notification will appear when finished.`,
-        duration: 6000
+        type: 'success',
+        title: 'Connection Activated',
+        message: `Connection is now Active`,
+        duration: 3000
       });
-
-      // Simulate activation after 7 seconds (emulating 7 minutes)
-      setTimeout(() => {
-        updateConnection(connection.id, { status: newStatus });
-        setIsPending(false);
-        setProgress(0);
-        setRemainingTime(420);
-
-        window.addToast({
-          type: 'success',
-          title: 'Connection Activated',
-          message: `Connection is now Active`,
-          duration: 3000
-        });
-      }, 7000);
     } else {
       // Deactivating: Instant change, no timer
       updateConnection(connection.id, { status: newStatus });
@@ -216,11 +207,46 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   };
 
   const handleCardClick = () => {
+    if (isPendingAWS) {
+      setShowAWSConfigModal(true);
+      return;
+    }
+
     if (onClick) {
       onClick();
     } else {
       navigate(`/connections/${connection.id}`);
     }
+  };
+
+  const handleAWSActivation = (config: any) => {
+    updateConnection(connection.id, {
+      status: 'Active',
+      configuration: config,
+      primaryIPE: 'Ashburn-1',
+      ipeRedundancy: true,
+      performance: {
+        latency: '4.5ms',
+        packetLoss: '0.02%',
+        uptime: '99.9%',
+        throughput: '1 Gbps',
+        tunnels: 'Active',
+        bandwidthUtilization: 15,
+        currentUsage: '150 Mbps',
+        utilizationTrend: [10, 12, 15, 14, 16, 15, 15]
+      }
+    });
+
+    setIsPending(false);
+    setProgress(0);
+    setRemainingTime(420);
+
+    window.addToast({
+      type: 'success',
+      title: 'Connection Activated',
+      message: 'AWS connection is now active and ready to use.',
+      duration: 3000
+    });
   };
 
   const healthStatus = getHealthStatus();
@@ -235,17 +261,19 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
         hover:shadow-md
         transition-all duration-300 ease-in-out
         transform hover:translate-y-[-2px]
-        ${isMinimized ? 'h-[88px]' : ''}
+        ${isMinimized ? 'h-[88px]' : 'h-[480px]'}
+        ${isPendingAWS ? 'opacity-75' : ''}
         cursor-pointer
+        flex flex-col
       `}
       data-tour-target="connection-card"
       onClick={handleCardClick}
-      // Add motion animation when pending
-      animate={isPending ? {
+      // Add motion animation when pending (but not for AWS pending)
+      animate={isPending && !isPendingAWS ? {
         boxShadow: ['0 2px 4px rgba(0,0,0,0.05)', '0 0 8px rgba(0,159,219,0.5)', '0 2px 4px rgba(0,0,0,0.05)'],
         scale: [1, 1.02, 1],
-        transition: { 
-          repeat: Infinity, 
+        transition: {
+          repeat: Infinity,
           duration: 2.5,
           ease: "easeInOut"
         }
@@ -288,7 +316,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
       ) : (
         // Expanded View
         <>
-          <ConnectionCardHeader 
+          <ConnectionCardHeader
             name={connection.name}
             type={connection.type}
             icon={getCardIcon()}
@@ -303,7 +331,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
             connection={connection}
           />
 
-          <div className="p-4 space-y-4">
+          <div className="p-4 space-y-4 flex-grow">
             {/* Bandwidth Utilization Bar */}
             <ConnectionCardProgress
               performance={connection.performance}
@@ -331,8 +359,35 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
           />
 
           {/* Action */}
-          <ConnectionCardAction connectionId={connection.id} />
+          {isPendingAWS ? (
+            <div className="p-4 border-t border-gray-100 mt-auto">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowAWSConfigModal(true);
+                }}
+                className="w-full flex items-center justify-center px-4 py-2 bg-white border-2 border-amber-500 rounded-lg text-sm font-medium text-amber-700 hover:bg-amber-50 transition-all shadow-sm hover:shadow-md"
+              >
+                Pending Activation
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            <div className="mt-auto">
+              <ConnectionCardAction connectionId={connection.id} />
+            </div>
+          )}
         </>
+      )}
+
+      {/* AWS Configuration Modal */}
+      {isPendingAWS && (
+        <AWSPendingConfigModal
+          connection={connection}
+          isOpen={showAWSConfigModal}
+          onClose={() => setShowAWSConfigModal(false)}
+          onActivate={handleAWSActivation}
+        />
       )}
     </motion.div>
   );

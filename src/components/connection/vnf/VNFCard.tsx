@@ -21,11 +21,11 @@ export function VNFCard({ vnf, cloudRouter, onEdit, onDelete }: VNFCardProps) {
       case 'firewall':
         return <Shield className="h-8 w-8 text-red-500" />;
       case 'sdwan':
-        return <Globe className="h-8 w-8 text-purple-500" />;
+        return <Globe className="h-8 w-8 text-gray-600" />;
       case 'router':
-        return <RouterIcon className="h-8 w-8 text-blue-500" />;
+        return <RouterIcon className="h-8 w-8 text-gray-600" />;
       case 'vnat':
-        return <Network className="h-8 w-8 text-green-500" />;
+        return <Network className="h-8 w-8 text-emerald-600" />;
       case 'custom':
       default:
         return <ServerCog className="h-8 w-8 text-gray-700" />;
@@ -127,7 +127,7 @@ export function VNFCard({ vnf, cloudRouter, onEdit, onDelete }: VNFCardProps) {
         <div className="flex items-center space-x-3">
           <div className={`p-2 rounded-lg ${
             vnf.type === 'firewall' ? 'bg-red-100' : 
-            vnf.type === 'sdwan' ? 'bg-purple-100' : 
+            vnf.type === 'sdwan' ? 'bg-gray-100' : 
             vnf.type === 'router' ? 'bg-blue-100' : 
             vnf.type === 'vnat' ? 'bg-green-100' : 
             'bg-gray-100'

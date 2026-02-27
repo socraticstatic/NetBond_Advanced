@@ -32,46 +32,46 @@ export function ApplicationSolutionZone() {
 
   const colorClasses: Record<string, { bg: string; text: string; border: string; gradient: string }> = {
     blue: {
-      bg: 'bg-blue-50',
-      text: 'text-blue-700',
-      border: 'border-blue-200',
-      gradient: 'from-blue-500 to-blue-600'
+      bg: 'bg-slate-50',
+      text: 'text-slate-700',
+      border: 'border-slate-200',
+      gradient: 'from-slate-500 to-slate-600'
     },
     indigo: {
-      bg: 'bg-indigo-50',
-      text: 'text-indigo-700',
-      border: 'border-indigo-200',
-      gradient: 'from-indigo-500 to-indigo-600'
+      bg: 'bg-gray-50',
+      text: 'text-gray-700',
+      border: 'border-gray-200',
+      gradient: 'from-gray-500 to-gray-600'
     },
     green: {
-      bg: 'bg-green-50',
-      text: 'text-green-700',
-      border: 'border-green-200',
-      gradient: 'from-green-500 to-green-600'
+      bg: 'bg-emerald-50',
+      text: 'text-emerald-700',
+      border: 'border-emerald-200',
+      gradient: 'from-emerald-500 to-emerald-600'
     },
     cyan: {
-      bg: 'bg-cyan-50',
-      text: 'text-cyan-700',
-      border: 'border-cyan-200',
-      gradient: 'from-cyan-500 to-cyan-600'
+      bg: 'bg-slate-50',
+      text: 'text-slate-700',
+      border: 'border-slate-200',
+      gradient: 'from-slate-500 to-slate-600'
     },
     purple: {
-      bg: 'bg-purple-50',
-      text: 'text-purple-700',
-      border: 'border-purple-200',
-      gradient: 'from-purple-500 to-purple-600'
+      bg: 'bg-gray-50',
+      text: 'text-gray-700',
+      border: 'border-gray-200',
+      gradient: 'from-gray-500 to-gray-600'
     },
     orange: {
-      bg: 'bg-orange-50',
-      text: 'text-orange-700',
-      border: 'border-orange-200',
-      gradient: 'from-orange-500 to-orange-600'
+      bg: 'bg-amber-50',
+      text: 'text-amber-700',
+      border: 'border-amber-200',
+      gradient: 'from-amber-500 to-amber-600'
     },
     pink: {
-      bg: 'bg-pink-50',
-      text: 'text-pink-700',
-      border: 'border-pink-200',
-      gradient: 'from-pink-500 to-pink-600'
+      bg: 'bg-gray-50',
+      text: 'text-gray-700',
+      border: 'border-gray-200',
+      gradient: 'from-gray-500 to-gray-600'
     },
     red: {
       bg: 'bg-red-50',
@@ -83,14 +83,14 @@ export function ApplicationSolutionZone() {
 
   return (
     <div className="space-y-8" style={{ isolation: 'auto' }}>
-      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl">
+      <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-2xl p-8 text-white shadow-xl">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
             <Sparkles className="h-8 w-8" />
           </div>
           <div className="flex-1">
             <h2 className="text-3xl font-bold mb-2">Solution Builder</h2>
-            <p className="text-blue-100 text-lg mb-4">
+            <p className="text-gray-200 text-lg mb-4">
               Build optimized network connections for your business applications
             </p>
             <p className="text-white text-opacity-90 leading-relaxed">
@@ -252,7 +252,7 @@ export function ApplicationSolutionZone() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+              <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl p-6 border border-gray-200">
                 <h4 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">Setup Summary</h4>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>

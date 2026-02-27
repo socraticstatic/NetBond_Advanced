@@ -473,20 +473,19 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       default:
         return (
           <>
-            <div className="flex items-center justify-center space-x-4 mb-8">
+            <div className="flex items-center justify-between mb-8">
               <button
                 onClick={() => setMode(null)}
                 className="text-brand-blue hover:text-brand-darkBlue flex items-center"
               >
                 Change Creation Mode
               </button>
-              
+
+              <div className="text-sm font-medium text-gray-500">
+                Step {step + 1} of {STEPS.length}
+              </div>
+
               <div className="flex items-center">
-                {/* Removed the pulsing dot span, keeping only the static indicator */}
-                <div className="relative mr-2">
-                  <div className="h-4 w-4 bg-[#003184] rounded-full">
-                  </div>
-                </div>
                 <Toggle
                   checked={showAI}
                   onChange={setShowAI}

@@ -121,23 +121,6 @@ export const VNF_TYPE_INFO: Record<VNFType, VNFTypeInfo> = {
       'Application acceleration'
     ]
   },
-  lmcc: {
-    type: 'lmcc',
-    label: 'LMCC',
-    description: 'Layer 3 Managed Cloud Connectivity for multi-site enterprise deployments',
-    icon: 'Cloud',
-    color: 'blue',
-    defaultVendors: ['AT&T NetBond'],
-    commonFeatures: [
-      'Multi-site connectivity',
-      'BGP routing',
-      'Dynamic bandwidth allocation',
-      'Managed service',
-      'Enterprise-grade SLA',
-      'Site-to-site VPN',
-      'Cloud provider integration'
-    ]
-  },
   custom: {
     type: 'custom',
     label: 'Custom VNF',
@@ -167,7 +150,6 @@ export function getVNFTypeIcon(type: VNFType) {
     load_balancer: Scale,
     ids_ips: AlertTriangle,
     wan_optimizer: Zap,
-    lmcc: Cloud,
     custom: Network
   };
   return iconMap[type] || Network;

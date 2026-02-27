@@ -34,12 +34,12 @@ export function VNFTable({
     const info = getVNFTypeInfo(type);
     const colorMap: Record<string, string> = {
       red: 'text-red-500',
-      purple: 'text-purple-500',
-      blue: 'text-blue-500',
-      green: 'text-green-500',
-      indigo: 'text-indigo-500',
-      orange: 'text-orange-500',
-      yellow: 'text-yellow-600',
+      purple: 'text-gray-600',
+      blue: 'text-gray-600',
+      green: 'text-emerald-600',
+      indigo: 'text-gray-600',
+      orange: 'text-amber-600',
+      yellow: 'text-amber-600',
       gray: 'text-gray-500'
     };
     const colorClass = colorMap[info.color] || 'text-gray-500';
@@ -83,10 +83,9 @@ export function VNFTable({
           <div className="flex-shrink-0">
             <div className={`p-2 rounded-lg ${
               vnf.type === 'firewall' ? 'bg-red-100' :
-              vnf.type === 'sdwan' ? 'bg-purple-100' :
+              vnf.type === 'sdwan' ? 'bg-gray-100' :
               vnf.type === 'router' ? 'bg-blue-100' :
               vnf.type === 'vnat' ? 'bg-green-100' :
-              vnf.type === 'lmcc' ? 'bg-sky-100' :
               'bg-gray-100'
             }`}>
               {getTypeIcon(vnf.type)}
@@ -100,18 +99,6 @@ export function VNFTable({
               {vnf.name}
             </button>
             <div className="text-xs text-gray-500">{vnf.description}</div>
-            {vnf.type === 'lmcc' && vnf.configuration?.lmccConfiguration && (
-              <div className="flex items-center gap-2 mt-1">
-                <span className="inline-flex items-center px-1.5 py-0.5 bg-green-100 text-green-800 rounded text-xs font-medium">
-                  <MapPin className="h-3 w-3 mr-1" />
-                  {vnf.configuration.lmccConfiguration.selectedSites.length} sites
-                </span>
-                <span className="inline-flex items-center px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded text-xs font-medium">
-                  <Gauge className="h-3 w-3 mr-1" />
-                  {vnf.configuration.lmccConfiguration.bandwidthAllocations.reduce((sum, a) => sum + a.bandwidth, 0)} Mbps
-                </span>
-              </div>
-            )}
           </div>
         </div>
       ),

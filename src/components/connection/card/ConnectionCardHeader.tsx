@@ -73,11 +73,20 @@ export function ConnectionCardHeader({
                   {name}
                 </h3>
                 {connection?.origin?.source === 'aws-marketplace' && (
-                  <div className="flex items-center gap-1 mt-1">
+                  <div className="flex items-center gap-2 mt-1">
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-orange-100 to-blue-100 border border-orange-300 rounded text-xs font-semibold text-orange-800">
-                      <Cloud className="w-3 h-3" />
-                      AWS Partner
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg"
+                        alt="AWS"
+                        className="w-6 h-3 object-contain"
+                      />
+                      Direct Connect
                     </span>
+                    {connection?.status === 'Pending' && (
+                      <span className="inline-flex items-center px-2 py-0.5 bg-amber-50 border border-amber-300 rounded text-xs font-semibold text-amber-800">
+                        Needs Configuration
+                      </span>
+                    )}
                   </div>
                 )}
               </div>

@@ -19,7 +19,7 @@ export default function AWSIntegrationWidget() {
     {
       id: 'aws-001',
       requestId: 'AWS-REQ-789012',
-      connectionName: 'att-lmcc-prod-001',
+      connectionName: 'att-netbond-prod-001',
       region: 'us-east-1',
       bandwidth: '10 Gbps',
       status: 'pending-config',
@@ -35,16 +35,11 @@ export default function AWSIntegrationWidget() {
   };
 
   const handleViewAll = () => {
-    navigate('/marketplace', { state: { activeTab: 'aws' } });
+    navigate('/connections');
   };
 
   const handleConfigure = (connection: AWSConnection) => {
-    window.addToast?.({
-      type: 'info',
-      title: 'AWS Connection',
-      message: `Opening configuration for ${connection.connectionName}`,
-      duration: 3000
-    });
+    navigate('/connections');
   };
 
   const getStatusIcon = (status: AWSConnection['status']) => {

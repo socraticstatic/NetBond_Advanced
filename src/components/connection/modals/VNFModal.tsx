@@ -5,8 +5,6 @@ import { FormField } from '../../form/FormField';
 import { VNF, VNFType, VNFInterface, VNFTemplate } from '../../../types/vnf';
 import { Link } from '../../../types/connection';
 import { SideDrawer } from '../../common/SideDrawer';
-import { LMCCConfigDrawer } from '../lmcc/LMCCConfigDrawer';
-import { LMCCConfiguration } from '../../../types/lmcc';
 import { useStore } from '../../../store/useStore';
 
 // Utility function to get user-friendly VNF type names
@@ -20,8 +18,6 @@ const getTypeName = (type: VNFType): string => {
       return 'Router';
     case 'vnat':
       return 'NAT';
-    case 'lmcc':
-      return 'LMCC';
     case 'custom':
       return 'Custom';
     default:
@@ -126,23 +122,6 @@ const VNF_TEMPLATES: VNFTemplate[] = [
     }
   },
   {
-    id: 'template-lmcc',
-    name: 'AT&T LMCC',
-    description: 'Layer 3 Managed Cloud Connectivity for multi-site deployments',
-    type: 'lmcc',
-    vendor: 'AT&T NetBond',
-    model: 'Managed Cloud Connectivity',
-    throughput: 'Variable',
-    defaultConfiguration: {},
-    icon: Cloud,
-    recommendedUseCase: 'Multi-site enterprise connectivity, managed cloud access',
-    licenseRequired: true,
-    pricing: {
-      monthly: 2000,
-      annually: 20000
-    }
-  },
-  {
     id: 'template-custom',
     name: 'Custom VNF',
     description: 'Configure your own custom network function',
@@ -209,10 +188,6 @@ export function VNFModal({
   // Validation state
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showAdvanced, setShowAdvanced] = useState(false);
-
-  // LMCC Configuration state
-  const [showLMCCConfig, setShowLMCCConfig] = useState(false);
-  const [lmccConfiguration, setLmccConfiguration] = useState<LMCCConfiguration | undefined>();
 
   // Get available links from the selected connections
   const getAvailableLinks = (): Array<Link & { connectionName: string; connectionId: string }> => {
@@ -441,8 +416,7 @@ export function VNFModal({
         interfaces: interfaces.length > 0 ? interfaces : undefined,
         routingProtocols: routingProtocols.length > 0 ? routingProtocols : undefined,
         highAvailability: highAvailability || undefined,
-        managementIP: managementIP || undefined,
-        lmccConfiguration: type === 'lmcc' ? lmccConfiguration : undefined
+        managementIP: managementIP || undefined
       },
       createdAt: isEditMode && vnf ? vnf.createdAt : new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -893,77 +867,6 @@ export function VNFModal({
                   </div>
                 </div>
 
-                {/* LMCC Configuration Section */}
-                {type === 'lmcc' && (
-                  <div className="pt-6 border-t border-gray-200">
-                    <div className={`rounded-lg p-4 border ${
-                      lmccConfiguration
-                        ? 'bg-gradient-to-br from-green-50 to-blue-50 border-green-200'
-                        : 'bg-amber-50 border-amber-200'
-                    }`}>
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <h4 className="text-sm font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                            <Settings className={`h-4 w-4 ${lmccConfiguration ? 'text-green-600' : 'text-amber-600'}`} />
-                            {lmccConfiguration ? 'LMCC Configuration' : 'LMCC Configuration Required'}
-                          </h4>
-                          {lmccConfiguration ? (
-                            <>
-                              <p className="text-sm text-gray-700 mb-3">
-                                Multi-site connectivity configured and ready
-                              </p>
-                              <div className="grid grid-cols-2 gap-3">
-                                <div className="bg-white rounded-lg border border-gray-200 p-3">
-                                  <div className="text-xs font-medium text-gray-500 mb-1">Sites</div>
-                                  <div className="text-lg font-bold text-gray-900">
-                                    {lmccConfiguration.selectedSites.length}
-                                  </div>
-                                </div>
-                                <div className="bg-white rounded-lg border border-gray-200 p-3">
-                                  <div className="text-xs font-medium text-gray-500 mb-1">Total Bandwidth</div>
-                                  <div className="text-lg font-bold text-gray-900">
-                                    {lmccConfiguration.bandwidthAllocations.reduce((sum, a) => sum + a.bandwidth, 0)} Mbps
-                                  </div>
-                                </div>
-                                <div className="bg-white rounded-lg border border-gray-200 p-3">
-                                  <div className="text-xs font-medium text-gray-500 mb-1">TAO Type</div>
-                                  <div className="text-sm font-semibold text-gray-900 capitalize">
-                                    {lmccConfiguration.taoConfig.terminationType}
-                                  </div>
-                                </div>
-                                <div className="bg-white rounded-lg border border-gray-200 p-3">
-                                  <div className="text-xs font-medium text-gray-500 mb-1">Routing</div>
-                                  <div className="text-sm font-semibold text-gray-900 uppercase">
-                                    {lmccConfiguration.taoConfig.routingPolicy}
-                                  </div>
-                                </div>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <p className="text-sm text-amber-800 mb-2">
-                                Complete the LMCC configuration to activate this VNF
-                              </p>
-                              <p className="text-xs text-amber-700">
-                                You'll configure sites, bandwidth allocation, and TAO settings
-                              </p>
-                            </>
-                          )}
-                        </div>
-                        <Button
-                          type="button"
-                          variant={lmccConfiguration ? 'outline' : 'primary'}
-                          size="sm"
-                          icon={Settings}
-                          onClick={() => setShowLMCCConfig(true)}
-                        >
-                          {lmccConfiguration ? 'Edit Configuration' : 'Configure Now'}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
                 {/* Advanced Configuration Toggle */}
                 <div className="pt-4 border-t border-gray-200">
                   <button
@@ -1197,19 +1100,6 @@ export function VNFModal({
           )}
         </div>
 
-        {/* LMCC Configuration Drawer */}
-        {type === 'lmcc' && (
-          <LMCCConfigDrawer
-            isOpen={showLMCCConfig}
-            onClose={() => setShowLMCCConfig(false)}
-            onSave={(config) => {
-              setLmccConfiguration(config);
-              setShowLMCCConfig(false);
-            }}
-            vnfId={vnf?.id || `vnf-${Date.now()}`}
-            existingConfig={lmccConfiguration}
-          />
-        )}
     </SideDrawer>
   );
 }

@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { Button } from './Button';
 
@@ -7,29 +8,37 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: ReactNode;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'fullscreen';
 }
 
 export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
   if (!isOpen) return null;
 
+  const isFullscreen = size === 'fullscreen';
+
   const sizeClasses = {
     sm: 'sm:max-w-md',
     md: 'sm:max-w-lg',
-    lg: 'sm:max-w-xl'
+    lg: 'sm:max-w-xl',
+    xl: 'sm:max-w-4xl',
+    fullscreen: 'max-w-none'
   };
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 py-8">
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] overflow-y-auto">
+      <div className={`flex items-center justify-center ${isFullscreen ? 'min-h-screen' : 'min-h-screen px-4 py-8'}`}>
         {/* Background overlay */}
         <div
-          className="fixed inset-0 transition-opacity bg-black bg-opacity-50"
+          className="fixed inset-0 bg-black bg-opacity-50"
           onClick={onClose}
         />
 
         {/* Modal panel */}
-        <div className={`relative w-full max-h-[calc(100vh-4rem)] flex flex-col px-4 pt-5 pb-4 text-left transition-all transform bg-fw-base rounded-lg shadow-xl sm:p-6 ${sizeClasses[size]}`}>
+        <div className={`relative z-10 w-full flex flex-col text-left transform bg-fw-base shadow-xl ${
+          isFullscreen
+            ? 'h-screen max-h-screen p-8'
+            : 'max-h-[calc(100vh-4rem)] px-4 pt-5 pb-4 rounded-lg sm:p-6'
+        } ${sizeClasses[size]}`}>
           {/* Close button */}
           <div className="absolute top-0 right-0 pt-4 pr-4 z-10">
             <Button
@@ -56,4 +65,6 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

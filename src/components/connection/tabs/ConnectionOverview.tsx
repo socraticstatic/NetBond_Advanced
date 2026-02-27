@@ -32,11 +32,11 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
 
       {/* Network Architecture Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-white rounded-lg border border-blue-200 p-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center mb-2">
-                <Router className="h-5 w-5 text-blue-600 mr-2" />
+                <Router className="h-5 w-5 text-gray-600 mr-2" />
                 <p className="text-sm font-medium text-gray-600">Cloud Routers</p>
               </div>
               <p className="text-3xl font-bold text-gray-900">{connection.cloudRouterCount || cloudRoutersCount}</p>
@@ -45,11 +45,11 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-white rounded-lg border border-green-200 p-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center mb-2">
-                <Link2 className="h-5 w-5 text-green-600 mr-2" />
+                <Link2 className="h-5 w-5 text-gray-600 mr-2" />
                 <p className="text-sm font-medium text-gray-600">Links (VLANs)</p>
               </div>
               <p className="text-3xl font-bold text-gray-900">{connection.linkCount || linksCount}</p>
@@ -58,11 +58,11 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50 to-white rounded-lg border border-purple-200 p-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center mb-2">
-                <Box className="h-5 w-5 text-purple-600 mr-2" />
+                <Box className="h-5 w-5 text-gray-600 mr-2" />
                 <p className="text-sm font-medium text-gray-600">VNFs</p>
               </div>
               <p className="text-3xl font-bold text-gray-900">{vnfsCount}</p>
@@ -74,7 +74,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
 
       {/* Network Visualization */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-        <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-white border-b border-gray-100">
+        <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">Network Topology</h3>
           <p className="text-sm text-gray-500">Interactive visualization of your network connection</p>
         </div>
@@ -88,7 +88,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
         {/* Connection Information */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center mb-4">
-            <Network className="h-5 w-5 text-blue-500 mr-2" />
+            <Network className="h-5 w-5 text-gray-600 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">Connection Information</h3>
           </div>
           
@@ -124,7 +124,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
 
             {connection.primaryIPE && (
               <>
-                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
                   <div className="flex items-center">
                     <Server className="h-4 w-4 text-blue-600 mr-2" />
                     <span className="text-sm text-gray-700">Primary IPE</span>
@@ -157,7 +157,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
         {/* Network Architecture Explanation */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center mb-4">
-            <Network className="h-5 w-5 text-blue-500 mr-2" />
+            <Network className="h-5 w-5 text-gray-600 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">Network Architecture</h3>
           </div>
 
@@ -165,7 +165,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
                     <Router className="h-4 w-4 text-white" />
                   </div>
                 </div>
@@ -202,10 +202,10 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
               <div className="text-gray-400">↓</div>
             </div>
 
-            <div className="p-4 bg-purple-50 rounded-lg border border-purple-100">
+            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
                     <Box className="h-4 w-4 text-white" />
                   </div>
                 </div>
@@ -229,7 +229,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
         {/* Security Overview */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center mb-4">
-            <Shield className="h-5 w-5 text-blue-500 mr-2" />
+            <Shield className="h-5 w-5 text-gray-600 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">Security Overview</h3>
           </div>
           
@@ -258,7 +258,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
         {/* Performance Metrics */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center mb-4">
-            <Activity className="h-5 w-5 text-blue-500 mr-2" />
+            <Activity className="h-5 w-5 text-gray-600 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">Performance Metrics</h3>
           </div>
           
@@ -302,7 +302,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
         {/* Connection Features */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center mb-4">
-            <Server className="h-5 w-5 text-blue-500 mr-2" />
+            <Server className="h-5 w-5 text-gray-600 mr-2" />
             <h3 className="text-lg font-medium text-gray-900">Connection Features</h3>
           </div>
           
