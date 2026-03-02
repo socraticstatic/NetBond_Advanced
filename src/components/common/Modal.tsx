@@ -40,11 +40,12 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
             : 'max-h-[calc(100vh-4rem)] px-4 pt-5 pb-4 rounded-lg sm:p-6'
         } ${sizeClasses[size]}`}>
           {/* Close button */}
-          <div className="absolute top-0 right-0 pt-4 pr-4 z-10">
+          <div className="absolute top-0 right-0 pt-4 pr-4 z-20">
             <Button
               onClick={onClose}
               variant="outline"
               className="!p-1 border-0 text-fw-bodyLight hover:text-fw-body"
+              type="button"
             >
               <X className="w-6 h-6" />
             </Button>
