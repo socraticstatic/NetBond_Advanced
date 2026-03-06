@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Percent, RefreshCw, Calendar, DollarSign, X, Check, AlertCircle, Edit2, Trash2 } from 'lucide-react';
+import { Plus, Percent, RefreshCw, Calendar, DollarSign, X, Check, AlertCircle, CreditCard as Edit2, Trash2 } from 'lucide-react';
 import { useStore } from '../../../store/useStore';
 import { Button } from '../../common/Button';
 import { Modal } from '../../common/Modal';
