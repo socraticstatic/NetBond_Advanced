@@ -65,31 +65,12 @@ export function ConnectionCardHeader({
                 )}
               </div>
             ) : (
-              <div>
-                <h3
-                  className="text-sm font-medium text-fw-heading cursor-text"
-                  onClick={onEditNameClick}
-                >
-                  {name}
-                </h3>
-                {connection?.origin?.source === 'aws-marketplace' && (
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-orange-100 to-blue-100 border border-orange-300 rounded text-xs font-semibold text-orange-800">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg"
-                        alt="AWS"
-                        className="w-6 h-3 object-contain"
-                      />
-                      Direct Connect
-                    </span>
-                    {connection?.status === 'Pending' && (
-                      <span className="inline-flex items-center px-2 py-0.5 bg-amber-50 border border-amber-300 rounded text-xs font-semibold text-amber-800">
-                        Needs Configuration
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
+              <h3
+                className="text-sm font-medium text-fw-heading cursor-text"
+                onClick={onEditNameClick}
+              >
+                {name}
+              </h3>
             )}
             <p className="text-xs text-fw-bodyLight">{type}</p>
           </div>
