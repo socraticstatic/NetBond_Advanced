@@ -75,12 +75,12 @@ export function PoolDetailPage() {
   const activeConnections = poolConnections.filter(c => c.status === 'Active').length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-fw-wash">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <button
             onClick={() => navigate('/groups')}
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center text-sm text-fw-bodyLight hover:text-fw-heading mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Pools
@@ -88,17 +88,17 @@ export function PoolDetailPage() {
 
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{pool.name}</h1>
+              <h1 className="text-3xl font-bold text-fw-heading">{pool.name}</h1>
               {pool.description && (
-                <p className="mt-2 text-gray-600">{pool.description}</p>
+                <p className="mt-2 text-fw-body">{pool.description}</p>
               )}
               <div className="mt-3 flex items-center gap-3">
                 <StatusBadge
                   status={pool.status}
                   label={pool.status.charAt(0).toUpperCase() + pool.status.slice(1)}
                 />
-                <span className="text-sm text-gray-500">Type: {pool.type}</span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-fw-bodyLight">Type: {pool.type}</span>
+                <span className="text-sm text-fw-bodyLight">
                   Created {new Date(pool.createdAt).toLocaleDateString()}
                 </span>
               </div>
@@ -152,7 +152,7 @@ export function PoolDetailPage() {
         </div>
 
         <div className="mb-6">
-          <div className="border-b border-gray-200">
+          <div className="border-b border-fw-secondary">
             <nav className="-mb-px flex space-x-8">
               {[
                 { id: 'overview', label: 'Overview', icon: Settings },
@@ -167,8 +167,8 @@ export function PoolDetailPage() {
                   className={`
                     flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm
                     ${activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-fw-active text-fw-heading'
+                      : 'border-transparent text-fw-bodyLight hover:text-fw-body hover:border-fw-secondary'
                     }
                   `}
                 >
@@ -184,18 +184,18 @@ export function PoolDetailPage() {
           <div className="space-y-6">
             <Card>
               <div className="p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Pool Information</h3>
+                <h3 className="text-lg font-medium text-fw-heading mb-4">Pool Information</h3>
                 <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Pool ID</dt>
-                    <dd className="mt-1 text-sm text-gray-900 font-mono">{pool.id}</dd>
+                    <dt className="text-sm font-medium text-fw-bodyLight">Pool ID</dt>
+                    <dd className="mt-1 text-sm text-fw-heading font-mono">{pool.id}</dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Type</dt>
-                    <dd className="mt-1 text-sm text-gray-900 capitalize">{pool.type}</dd>
+                    <dt className="text-sm font-medium text-fw-bodyLight">Type</dt>
+                    <dd className="mt-1 text-sm text-fw-heading capitalize">{pool.type}</dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Status</dt>
+                    <dt className="text-sm font-medium text-fw-bodyLight">Status</dt>
                     <dd className="mt-1">
                       <StatusBadge
                         status={pool.status}
@@ -204,15 +204,15 @@ export function PoolDetailPage() {
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Created</dt>
-                    <dd className="mt-1 text-sm text-gray-900">
+                    <dt className="text-sm font-medium text-fw-bodyLight">Created</dt>
+                    <dd className="mt-1 text-sm text-fw-heading">
                       {new Date(pool.createdAt).toLocaleString()}
                     </dd>
                   </div>
                   {pool.updatedAt && (
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">Last Updated</dt>
-                      <dd className="mt-1 text-sm text-gray-900">
+                      <dt className="text-sm font-medium text-fw-bodyLight">Last Updated</dt>
+                      <dd className="mt-1 text-sm text-fw-heading">
                         {new Date(pool.updatedAt).toLocaleString()}
                       </dd>
                     </div>
@@ -224,20 +224,20 @@ export function PoolDetailPage() {
             {pool.contacts && pool.contacts.length > 0 && (
               <Card>
                 <div className="p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Contacts</h3>
+                  <h3 className="text-lg font-medium text-fw-heading mb-4">Contacts</h3>
                   <div className="space-y-4">
                     {pool.contacts.map((contact, index) => (
-                      <div key={index} className="flex items-start justify-between border-b border-gray-200 pb-4 last:border-0 last:pb-0">
+                      <div key={index} className="flex items-start justify-between border-b border-fw-secondary pb-4 last:border-0 last:pb-0">
                         <div>
-                          <p className="font-medium text-gray-900">{contact.name}</p>
-                          <p className="text-sm text-gray-500">{contact.role}</p>
+                          <p className="font-medium text-fw-heading">{contact.name}</p>
+                          <p className="text-sm text-fw-bodyLight">{contact.role}</p>
                           <div className="mt-1 space-y-1">
-                            <p className="text-sm text-gray-600">{contact.email}</p>
-                            <p className="text-sm text-gray-600">{contact.phone}</p>
+                            <p className="text-sm text-fw-body">{contact.email}</p>
+                            <p className="text-sm text-fw-body">{contact.phone}</p>
                           </div>
                         </div>
                         {contact.isPrimary && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-fw-wash text-fw-body border border-fw-secondary">
                             Primary
                           </span>
                         )}
@@ -254,7 +254,7 @@ export function PoolDetailPage() {
           <Card>
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-gray-900">Connections</h3>
+                <h3 className="text-lg font-medium text-fw-heading">Connections</h3>
                 <Button
                   variant="primary"
                   size="sm"
@@ -267,9 +267,9 @@ export function PoolDetailPage() {
 
               {poolConnections.length === 0 ? (
                 <div className="text-center py-12">
-                  <Network className="mx-auto h-12 w-12 text-gray-400" />
-                  <h3 className="mt-2 text-sm font-medium text-gray-900">No connections</h3>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <Network className="mx-auto h-12 w-12 text-fw-disabled" />
+                  <h3 className="mt-2 text-sm font-medium text-fw-heading">No connections</h3>
+                  <p className="mt-1 text-sm text-fw-bodyLight">
                     Get started by adding a connection to this pool.
                   </p>
                   <div className="mt-6">
@@ -288,25 +288,25 @@ export function PoolDetailPage() {
                     <Link
                       key={connection.id}
                       to={`/connections/${connection.id}`}
-                      className="block border border-gray-200 rounded-lg p-4 hover:border-blue-500 hover:shadow-md transition-all"
+                      className="block border border-fw-secondary rounded-lg p-4 hover:border-fw-active hover:shadow-md transition-all"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-3">
-                            <h4 className="font-medium text-gray-900">{connection.name}</h4>
+                            <h4 className="font-medium text-fw-heading">{connection.name}</h4>
                             <StatusBadge
                               status={connection.status.toLowerCase() as 'active' | 'inactive'}
                               label={connection.status}
                             />
                           </div>
-                          <div className="mt-2 flex items-center gap-6 text-sm text-gray-500">
+                          <div className="mt-2 flex items-center gap-6 text-sm text-fw-bodyLight">
                             <span>{connection.type}</span>
                             <span>{connection.bandwidth}</span>
                             <span>{connection.location}</span>
                             {connection.provider && <span>{connection.provider}</span>}
                           </div>
                         </div>
-                        <ExternalLink className="h-5 w-5 text-gray-400" />
+                        <ExternalLink className="h-5 w-5 text-fw-disabled" />
                       </div>
                     </Link>
                   ))}
@@ -320,7 +320,7 @@ export function PoolDetailPage() {
           <Card>
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-gray-900">Members</h3>
+                <h3 className="text-lg font-medium text-fw-heading">Members</h3>
                 <Button
                   variant="primary"
                   size="sm"
@@ -333,17 +333,17 @@ export function PoolDetailPage() {
 
               <div className="space-y-4">
                 {poolUsers.map(user => (
-                  <div key={user.id} className="flex items-center justify-between border-b border-gray-200 pb-4 last:border-0 last:pb-0">
+                  <div key={user.id} className="flex items-center justify-between border-b border-fw-secondary pb-4 last:border-0 last:pb-0">
                     <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center border border-gray-300 text-gray-700 font-medium">
+                      <div className="h-10 w-10 rounded-full bg-fw-wash flex items-center justify-center border border-fw-secondary text-fw-heading font-medium">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{user.name}</p>
-                        <p className="text-sm text-gray-500">{user.email}</p>
+                        <p className="font-medium text-fw-heading">{user.name}</p>
+                        <p className="text-sm text-fw-bodyLight">{user.email}</p>
                       </div>
                     </div>
-                    <span className="text-sm text-gray-500 capitalize">{user.role}</span>
+                    <span className="text-sm text-fw-bodyLight capitalize">{user.role}</span>
                   </div>
                 ))}
               </div>
@@ -358,8 +358,8 @@ export function PoolDetailPage() {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <Award className="h-5 w-5 text-blue-600" />
-                    <h3 className="text-lg font-medium text-gray-900">Pool Term Discount</h3>
+                    <Award className="h-5 w-5 text-fw-body" />
+                    <h3 className="text-lg font-medium text-fw-heading">Pool Term Discount</h3>
                   </div>
                   {!activeAgreement && termDiscounts.length > 0 && (
                     <Button
@@ -373,51 +373,51 @@ export function PoolDetailPage() {
                 </div>
 
                 {activeAgreement ? (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="bg-fw-wash border border-fw-secondary rounded-lg p-4">
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <CheckCircle className="h-5 w-5 text-blue-600" />
-                          <h4 className="font-semibold text-blue-900">{activeAgreement.termDiscountName}</h4>
+                          <CheckCircle className="h-5 w-5 text-fw-success" />
+                          <h4 className="font-semibold text-fw-heading">{activeAgreement.termDiscountName}</h4>
                         </div>
-                        <p className="text-sm text-blue-700">
+                        <p className="text-sm text-fw-body">
                           Active term commitment with {activeAgreement.discountPercentage}% discount applied to all pool connections
                         </p>
                       </div>
-                      <span className="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-full">
+                      <span className="px-3 py-1 bg-fw-heading text-fw-base text-sm font-medium rounded-full">
                         {activeAgreement.discountPercentage}% OFF
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
                       <div>
-                        <span className="text-sm text-blue-700">Monthly Savings</span>
-                        <p className="text-lg font-bold text-blue-900">
+                        <span className="text-sm text-fw-bodyLight">Monthly Savings</span>
+                        <p className="text-lg font-bold text-fw-heading">
                           ${activeAgreement.estimatedMonthlySavings.toLocaleString()}
                         </p>
                       </div>
                       <div>
-                        <span className="text-sm text-blue-700">Connections</span>
-                        <p className="text-lg font-bold text-blue-900">
+                        <span className="text-sm text-fw-bodyLight">Connections</span>
+                        <p className="text-lg font-bold text-fw-heading">
                           {poolConnections.length}
                         </p>
                       </div>
                       <div>
-                        <span className="text-sm text-blue-700">Agreement Period</span>
-                        <p className="text-sm font-medium text-blue-900">
+                        <span className="text-sm text-fw-bodyLight">Agreement Period</span>
+                        <p className="text-sm font-medium text-fw-heading">
                           {new Date(activeAgreement.startDate).toLocaleDateString()} - {new Date(activeAgreement.endDate).toLocaleDateString()}
                         </p>
                       </div>
                       <div>
-                        <span className="text-sm text-blue-700">Auto-Renew</span>
-                        <p className="text-sm font-medium text-blue-900">
+                        <span className="text-sm text-fw-bodyLight">Auto-Renew</span>
+                        <p className="text-sm font-medium text-fw-heading">
                           {activeAgreement.autoRenew ? 'Enabled' : 'Disabled'}
                         </p>
                       </div>
                     </div>
 
                     {activeAgreement.status === 'expiring_soon' && (
-                      <div className="mt-3 flex items-center gap-2 text-sm text-yellow-700 bg-yellow-50 px-3 py-2 rounded border border-yellow-200">
+                      <div className="mt-3 flex items-center gap-2 text-sm text-fw-warn bg-fw-wash px-3 py-2 rounded border border-fw-warn/20">
                         <AlertTriangle className="h-4 w-4" />
                         Your term agreement is expiring soon. Contact support to renew.
                       </div>
@@ -425,23 +425,23 @@ export function PoolDetailPage() {
                   </div>
                 ) : termDiscounts.length > 0 ? (
                   <div className="text-center py-8">
-                    <Percent className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                    <p className="text-gray-600 mb-2">No term discount applied to this pool</p>
-                    <p className="text-sm text-gray-500 mb-4">
+                    <Percent className="h-12 w-12 text-fw-disabled mx-auto mb-3" />
+                    <p className="text-fw-body mb-2">No term discount applied to this pool</p>
+                    <p className="text-sm text-fw-bodyLight mb-4">
                       Save up to {Math.max(...termDiscounts.map(d => d.discountPercentage))}% on all pool connections with a term commitment
                     </p>
                     <button
                       onClick={() => setShowDiscountModal(true)}
-                      className="text-blue-600 hover:text-blue-700 font-medium"
+                      className="text-fw-link hover:text-fw-active font-medium"
                     >
                       View Available Discounts
                     </button>
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <Percent className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                    <p className="text-gray-600 mb-2">No term discounts configured</p>
-                    <p className="text-sm text-gray-500">
+                    <Percent className="h-12 w-12 text-fw-disabled mx-auto mb-3" />
+                    <p className="text-fw-body mb-2">No term discounts configured</p>
+                    <p className="text-sm text-fw-bodyLight">
                       Contact your account manager to set up term discounts
                     </p>
                   </div>
@@ -452,25 +452,25 @@ export function PoolDetailPage() {
             {/* Pool Billing Summary */}
             <Card>
               <div className="p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-6">Pool Billing Summary</h3>
+                <h3 className="text-lg font-medium text-fw-heading mb-6">Pool Billing Summary</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Total Connections</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-sm font-medium text-fw-bodyLight">Total Connections</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       {poolConnections.length}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Estimated Monthly Cost</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-sm font-medium text-fw-bodyLight">Estimated Monthly Cost</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       ${(poolConnections.length * 999.99).toLocaleString()}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">
+                    <dt className="text-sm font-medium text-fw-bodyLight">
                       {activeAgreement ? 'With Discount' : 'Potential Savings'}
                     </dt>
-                    <dd className="mt-2 text-3xl font-semibold text-green-600">
+                    <dd className="mt-2 text-3xl font-semibold text-fw-success">
                       {activeAgreement
                         ? `-$${activeAgreement.estimatedMonthlySavings.toLocaleString()}`
                         : termDiscounts.length > 0
@@ -489,23 +489,23 @@ export function PoolDetailPage() {
           <div className="space-y-6">
             <Card>
               <div className="p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Performance Metrics</h3>
+                <h3 className="text-lg font-medium text-fw-heading mb-4">Performance Metrics</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Avg Latency</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-sm font-medium text-fw-bodyLight">Avg Latency</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       {pool.performance?.aggregatedMetrics.averageLatency || 'N/A'}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Avg Packet Loss</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-sm font-medium text-fw-bodyLight">Avg Packet Loss</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       {pool.performance?.aggregatedMetrics.averagePacketLoss || 'N/A'}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Avg Uptime</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-sm font-medium text-fw-bodyLight">Avg Uptime</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       {pool.performance?.aggregatedMetrics.averageUptime || 'N/A'}
                     </dd>
                   </div>
@@ -519,20 +519,20 @@ export function PoolDetailPage() {
       {/* Apply Term Discount Modal */}
       {showDiscountModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
+          <div className="bg-fw-base rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-fw-secondary">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Available Term Discounts for Pool</h3>
+                <h3 className="text-lg font-semibold text-fw-heading">Available Term Discounts for Pool</h3>
                 <button
                   onClick={() => setShowDiscountModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-fw-disabled hover:text-fw-body"
                 >
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-fw-bodyLight mt-1">
                 Choose a term commitment to receive a discount on all connections in this pool
               </p>
             </div>
@@ -545,7 +545,7 @@ export function PoolDetailPage() {
                   return (
                     <div
                       key={discount.id}
-                      className="border border-gray-200 rounded-lg p-4 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer"
+                      className="border border-fw-secondary rounded-lg p-4 hover:border-fw-active hover:shadow-md transition-all cursor-pointer"
                       onClick={() => {
                         if (id) {
                           addConnectionTermAgreement({
@@ -574,30 +574,30 @@ export function PoolDetailPage() {
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <h4 className="font-semibold text-gray-900">{discount.name}</h4>
-                          <p className="text-sm text-gray-500 mt-1">{discount.description}</p>
+                          <h4 className="font-semibold text-fw-heading">{discount.name}</h4>
+                          <p className="text-sm text-fw-bodyLight mt-1">{discount.description}</p>
                         </div>
-                        <span className="px-3 py-1 bg-blue-600 text-white text-sm font-bold rounded-full">
+                        <span className="px-3 py-1 bg-fw-heading text-fw-base text-sm font-bold rounded-full">
                           {discount.discountPercentage}% OFF
                         </span>
                       </div>
 
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
-                          <span className="text-gray-500">Term Length</span>
-                          <p className="font-medium text-gray-900">
+                          <span className="text-fw-bodyLight">Term Length</span>
+                          <p className="font-medium text-fw-heading">
                             {discount.termLength} {discount.termUnit}
                           </p>
                         </div>
                         <div>
-                          <span className="text-gray-500">Est. Monthly Savings</span>
-                          <p className="font-medium text-gray-900">
+                          <span className="text-fw-bodyLight">Est. Monthly Savings</span>
+                          <p className="font-medium text-fw-heading">
                             ${estimatedMonthlySavings.toLocaleString()}
                           </p>
                         </div>
                         <div>
-                          <span className="text-gray-500">Total Savings</span>
-                          <p className="font-medium text-gray-900">
+                          <span className="text-fw-bodyLight">Total Savings</span>
+                          <p className="font-medium text-fw-heading">
                             ${Math.round(
                               estimatedMonthlySavings *
                               discount.termLength *
@@ -608,12 +608,12 @@ export function PoolDetailPage() {
                       </div>
 
                       {discount.minimumSpend > 0 && (
-                        <div className="mt-3 text-xs text-gray-500">
+                        <div className="mt-3 text-xs text-fw-bodyLight">
                           Minimum spend: ${discount.minimumSpend.toLocaleString()}/month per connection
                         </div>
                       )}
 
-                      <div className="mt-3 flex items-center gap-2 text-xs text-blue-600 bg-blue-50 px-3 py-2 rounded">
+                      <div className="mt-3 flex items-center gap-2 text-xs text-fw-body bg-fw-wash px-3 py-2 rounded">
                         <Network className="h-3 w-3" />
                         Applies to all {poolConnections.length} connection{poolConnections.length !== 1 ? 's' : ''} in this pool
                       </div>
@@ -623,19 +623,19 @@ export function PoolDetailPage() {
 
               {termDiscounts.filter(d => d.isActive).length === 0 && (
                 <div className="text-center py-8">
-                  <Percent className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-600">No active term discounts available</p>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <Percent className="h-12 w-12 text-fw-disabled mx-auto mb-3" />
+                  <p className="text-fw-body">No active term discounts available</p>
+                  <p className="text-sm text-fw-bodyLight mt-1">
                     Contact your account manager to configure term discounts
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="p-6 border-t border-gray-200 bg-gray-50">
+            <div className="p-6 border-t border-fw-secondary bg-fw-wash">
               <button
                 onClick={() => setShowDiscountModal(false)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 font-medium text-gray-700"
+                className="w-full px-4 py-2 border border-fw-secondary rounded-lg hover:bg-fw-wash font-medium text-fw-body"
               >
                 Cancel
               </button>

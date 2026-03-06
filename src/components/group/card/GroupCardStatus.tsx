@@ -24,13 +24,13 @@ export function GroupCardStatus({ group }: GroupCardStatusProps) {
 
     const score = getPerformanceScore();
     if (score > 95) {
-      return { label: 'Optimal', color: 'bg-green-50 text-fw-success' };
+      return { label: 'Optimal', color: 'bg-fw-wash text-fw-success border border-fw-success/20' };
     } else if (score > 90) {
-      return { label: 'Good', color: 'bg-fw-blue-light text-fw-link' };
+      return { label: 'Good', color: 'bg-fw-wash text-fw-body border border-fw-secondary' };
     } else if (score > 80) {
-      return { label: 'Warning', color: 'bg-orange-50 text-fw-warn' };
+      return { label: 'Warning', color: 'bg-fw-wash text-fw-warn border border-fw-warn/20' };
     } else {
-      return { label: 'Critical', color: 'bg-red-50 text-fw-error' };
+      return { label: 'Critical', color: 'bg-fw-wash text-fw-error border border-fw-error/20' };
     }
   };
 
