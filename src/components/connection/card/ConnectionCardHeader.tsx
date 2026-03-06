@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Edit2, Minimize2, Cloud } from 'lucide-react';
+import { CreditCard as Edit2, Minimize2, Cloud } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { IconButton } from '../../common/IconButton';
 import { ConnectionOverflowMenu } from '../ConnectionOverflowMenu';
