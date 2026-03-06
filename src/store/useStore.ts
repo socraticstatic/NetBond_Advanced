@@ -17,6 +17,7 @@ import { createColumnVisibilitySlice, ColumnVisibilitySlice } from './slices/col
 import { createDetachedWindowSlice, DetachedWindowSlice } from './slices/detachedWindowSlice';
 import { createKeyboardShortcutsSlice, KeyboardShortcutsSlice } from './slices/keyboardShortcutsSlice';
 import { createRoleSlice, RoleSlice } from './slices/roleSlice';
+import { createBillingSlice, BillingSlice } from './slices/billingSlice';
 import { sampleConnections, sampleUsers, sampleGroups } from '../data/sampleData';
 import { safeJsonParse } from '../utils/errorHandling';
 
@@ -63,7 +64,8 @@ interface Store extends
   ColumnVisibilitySlice,
   DetachedWindowSlice,
   KeyboardShortcutsSlice,
-  RoleSlice {}
+  RoleSlice,
+  BillingSlice {}
 
 // Create store with persisted or sample data
 export const useStore = create<Store>((set, get) => {
@@ -132,6 +134,7 @@ export const useStore = create<Store>((set, get) => {
     ...createDetachedWindowSlice(set, get),
     ...createKeyboardShortcutsSlice(set, get),
     ...createRoleSlice(set, get),
+    ...createBillingSlice(set),
     ...initialState,
 
     // Add a reset function to clear everything (useful for development/testing)
