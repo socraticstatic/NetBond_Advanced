@@ -415,7 +415,7 @@ export function ConnectionDetails() {
       case 'versions':
         return <VersioningConfiguration connectionId={connection.id.toString()} currentVersion="1.0.0" />;
       case 'billing':
-        return <BillingConfiguration isEditing={isEditing} />;
+        return <BillingConfiguration isEditing={isEditing} connectionId={connection.id.toString()} />;
       case 'logs':
         return <ConnectionLogs connectionId={connection.id.toString()} />;
       case 'api':
