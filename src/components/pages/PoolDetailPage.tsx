@@ -1,22 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import {
-  ArrowLeft,
-  Edit2,
-  Trash2,
-  Users,
-  Network,
-  Activity,
-  CreditCard,
-  Settings,
-  Plus,
-  ExternalLink,
-  DollarSign,
-  Award,
-  CheckCircle,
-  Percent,
-  AlertTriangle
-} from 'lucide-react';
+import { ArrowLeft, CreditCard as Edit2, Trash2, Users, Network, Activity, CreditCard, Settings, Plus, ExternalLink, DollarSign, Award, CheckCircle, Percent, AlertTriangle } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { Button } from '../common/Button';
 import { IconButton } from '../common/IconButton';
