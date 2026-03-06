@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Cog, Play, Pause, Trash2, Edit2, Activity, Network, Users, Globe, Cloud } from 'lucide-react';
+import { ArrowLeft, Cog, Play, Pause, Trash2, CreditCard as Edit2, Activity, Network, Users, Globe, Cloud } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { SubNav } from '../navigation/SubNav';
 import { ConnectionTabs, ConnectionTabType } from './tabs/ConnectionTabs';
