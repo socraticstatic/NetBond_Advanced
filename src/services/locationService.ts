@@ -1,10 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 export interface DatacenterLocation {
   id: string;
   provider: string;
@@ -38,6 +31,21 @@ export interface LocationCoordinates {
   country: string;
 }
 
+const mockDatacenters: DatacenterLocation[] = [
+  { id: '1', provider: 'Equinix', facility_code: 'NY5', city: 'New York', state: 'NY', country: 'USA', latitude: 40.7128, longitude: -74.0060, metro_area: 'New York' },
+  { id: '2', provider: 'Equinix', facility_code: 'SV1', city: 'San Jose', state: 'CA', country: 'USA', latitude: 37.3382, longitude: -121.8863, metro_area: 'Silicon Valley' },
+  { id: '3', provider: 'Digital Realty', facility_code: 'CHI1', city: 'Chicago', state: 'IL', country: 'USA', latitude: 41.8781, longitude: -87.6298, metro_area: 'Chicago' },
+  { id: '4', provider: 'Coresite', facility_code: 'LA1', city: 'Los Angeles', state: 'CA', country: 'USA', latitude: 34.0522, longitude: -118.2437, metro_area: 'Los Angeles' },
+];
+
+const mockCloudRegions: CloudRegionLocation[] = [
+  { id: '1', provider: 'AWS', region_code: 'us-east-1', region_name: 'US East (N. Virginia)', city: 'Ashburn', state: 'VA', country: 'USA', latitude: 39.0438, longitude: -77.4874, availability_zones: 6 },
+  { id: '2', provider: 'AWS', region_code: 'us-west-2', region_name: 'US West (Oregon)', city: 'Portland', state: 'OR', country: 'USA', latitude: 45.5152, longitude: -122.6784, availability_zones: 4 },
+  { id: '3', provider: 'Azure', region_code: 'eastus', region_name: 'East US', city: 'Virginia', state: 'VA', country: 'USA', latitude: 37.3719, longitude: -79.4581, availability_zones: 3 },
+  { id: '4', provider: 'GCP', region_code: 'us-central1', region_name: 'Iowa', city: 'Council Bluffs', state: 'IA', country: 'USA', latitude: 41.2619, longitude: -95.8608, availability_zones: 4 },
+  { id: '5', provider: 'Oracle', region_code: 'us-ashburn-1', region_name: 'US East (Ashburn)', city: 'Ashburn', state: 'VA', country: 'USA', latitude: 39.0438, longitude: -77.4874, availability_zones: 3 },
+];
+
 let datacenterCache: DatacenterLocation[] | null = null;
 let cloudRegionCache: Map<string, CloudRegionLocation[]> | null = null;
 
@@ -46,18 +54,8 @@ export async function getDatacenterLocations(): Promise<DatacenterLocation[]> {
     return datacenterCache;
   }
 
-  const { data, error } = await supabase
-    .from('datacenter_locations')
-    .select('*')
-    .order('provider', { ascending: true })
-    .order('city', { ascending: true });
-
-  if (error) {
-    console.error('Error fetching datacenter locations:', error);
-    return [];
-  }
-
-  datacenterCache = data || [];
+  await new Promise(resolve => setTimeout(resolve, 100));
+  datacenterCache = mockDatacenters;
   return datacenterCache;
 }
 
@@ -71,58 +69,34 @@ export async function getCloudRegionLocations(provider?: string): Promise<CloudR
     return cloudRegionCache.get(cacheKey)!;
   }
 
-  let query = supabase
-    .from('cloud_region_locations')
-    .select('*')
-    .order('provider', { ascending: true })
-    .order('region_code', { ascending: true });
+  await new Promise(resolve => setTimeout(resolve, 100));
 
-  if (provider) {
-    query = query.eq('provider', provider);
-  }
+  const regions = provider
+    ? mockCloudRegions.filter(r => r.provider === provider)
+    : mockCloudRegions;
 
-  const { data, error } = await query;
-
-  if (error) {
-    console.error('Error fetching cloud region locations:', error);
-    return [];
-  }
-
-  const regions = data || [];
   cloudRegionCache.set(cacheKey, regions);
   return regions;
 }
 
 export async function getCloudRegionByCode(provider: string, regionCode: string): Promise<CloudRegionLocation | null> {
-  const { data, error } = await supabase
-    .from('cloud_region_locations')
-    .select('*')
-    .eq('provider', provider)
-    .eq('region_code', regionCode)
-    .maybeSingle();
+  await new Promise(resolve => setTimeout(resolve, 50));
 
-  if (error) {
-    console.error('Error fetching cloud region:', error);
-    return null;
-  }
+  const region = mockCloudRegions.find(
+    r => r.provider === provider && r.region_code === regionCode
+  );
 
-  return data;
+  return region || null;
 }
 
 export async function getDatacenterByFacility(provider: string, facilityCode: string): Promise<DatacenterLocation | null> {
-  const { data, error } = await supabase
-    .from('datacenter_locations')
-    .select('*')
-    .eq('provider', provider)
-    .eq('facility_code', facilityCode)
-    .maybeSingle();
+  await new Promise(resolve => setTimeout(resolve, 50));
 
-  if (error) {
-    console.error('Error fetching datacenter:', error);
-    return null;
-  }
+  const datacenter = mockDatacenters.find(
+    d => d.provider === provider && d.facility_code === facilityCode
+  );
 
-  return data;
+  return datacenter || null;
 }
 
 export function getCloudProviders(): string[] {
