@@ -149,7 +149,13 @@ export const Node = memo(function Node({
       }
 
       // Reset hasDragged after a short delay
-      setTimeout(() => setHasDragged(false), 100);
+      setTimeout(() => {
+        setHasDragged(false);
+        debugLog('=== MOUSEUP COMPLETE ===', {
+          finalPosition: position,
+          finalNodePosition: { x: node.x, y: node.y }
+        });
+      }, 100);
 
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
@@ -284,6 +290,13 @@ export const Node = memo(function Node({
             e.stopPropagation();
             setShowTooltip(false);
 
+            debugLog('=== MOUSEDOWN START ===');
+            debugLog('Position vs Node:', {
+              positionState: position,
+              nodeFromStore: { x: node.x, y: node.y },
+              inSync: position.x === node.x && position.y === node.y
+            });
+
             // Store initial mouse position for drag detection
             dragStartPos.current = { x: e.clientX, y: e.clientY };
 
@@ -309,11 +322,13 @@ export const Node = memo(function Node({
 
               debugLog('Mouse down - initializing drag', {
                 mouseClient: { x: e.clientX, y: e.clientY },
-                nodePosition: { x: node.x, y: node.y },
-                parentRect: { left: parentRect.left, top: parentRect.top },
+                rectLeft: parentRect.left,
+                rectTop: parentRect.top,
                 panOffset,
                 zoomLevel,
-                mouseInCanvas: { x: mouseXInCanvas, y: mouseYInCanvas },
+                mouseXInCanvas,
+                mouseYInCanvas,
+                nodePosition: { x: node.x, y: node.y },
                 calculatedOffset
               });
 
