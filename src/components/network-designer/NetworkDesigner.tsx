@@ -10,6 +10,7 @@ import { GlobalView } from './global-view/GlobalView';
 import { CircuitView } from './circuit-view/CircuitView';
 import { TemplatesManager } from './panels/TemplatesManager';
 import { SaveTemplateModal } from './SaveTemplateModal';
+import { HistoryDrawer } from './HistoryDrawer';
 import { NetworkSimulation } from './simulation/NetworkSimulation';
 import {
   useNetworkHistory,
@@ -56,6 +57,9 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
   // Custom templates state
   const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>([]);
   const [showSaveTemplateModal, setShowSaveTemplateModal] = useState(false);
+
+  // History drawer state
+  const [showHistoryDrawer, setShowHistoryDrawer] = useState(false);
   
   // Network history management
   const { saveToHistory, undo, canUndo } = useNetworkHistory();
@@ -498,16 +502,17 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
     <div className="flex flex-col bg-gray-50 rounded-xl border-2 border-gray-200 relative overflow-hidden">
       {/* Main Content Area */}
       <div className="relative h-[600px] md:h-[700px] lg:h-[800px]">
-        {/* Abstraction Level Selector - Highest z-index */}
-        <div className="absolute top-0 left-0 right-0" style={{ zIndex: Z_INDEX.UI_CONTROLS }}>
+        {/* Abstraction Level Selector - Positioned on left side, vertically centered */}
+        <div style={{ zIndex: Z_INDEX.UI_CONTROLS }}>
           <AbstractionLevelSelector
             currentLevel={abstractionLevel}
             onLevelChange={setAbstractionLevel}
+            onHistoryClick={() => setShowHistoryDrawer(true)}
           />
         </div>
 
-        {/* Status Bar - High z-index */}
-        <div className="absolute bottom-0 left-0 right-0" style={{ zIndex: Z_INDEX.UI_CONTROLS }}>
+        {/* Status Bar - Positioned at top center with high z-index */}
+        <div style={{ zIndex: Z_INDEX.UI_CONTROLS }}>
           <StatusBar
             nodes={nodes}
             edges={edges}
@@ -600,7 +605,7 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
         />
       </div>
 
-      
+
       {/* Templates Manager */}
       <TemplatesManager
         isOpen={showTemplatesDrawer}
@@ -608,6 +613,24 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
         onApplyTemplate={applyTemplate}
         customTemplates={customTemplates}
         onDeleteCustomTemplate={handleDeleteCustomTemplate}
+      />
+
+      {/* History Drawer */}
+      <HistoryDrawer
+        isOpen={showHistoryDrawer}
+        onClose={() => setShowHistoryDrawer(false)}
+        history={[]}
+        onRestoreTopology={(nodes, edges) => {
+          setNodes(nodes);
+          setEdges(edges);
+          saveToHistory(nodes, edges);
+          window.addToast({
+            type: 'success',
+            title: 'Topology Restored',
+            message: 'Previous topology has been restored',
+            duration: 3000
+          });
+        }}
       />
     </div>
   );

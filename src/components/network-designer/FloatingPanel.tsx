@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
+import { Z_INDEX } from '../../utils/designer-constants';
 
 interface FloatingPanelProps {
   title: string;
@@ -166,11 +167,11 @@ export function FloatingPanel({
           ? 'opacity-100 transform-gpu translate-y-0' 
           : 'opacity-0 transform-gpu translate-y-4'
       }`}
-      style={{ 
-        left: `${position.x}px`, 
+      style={{
+        left: `${position.x}px`,
         top: `${position.y}px`,
         width: '380px',
-        zIndex: 1000 // Significantly higher z-index to ensure it's above everything else
+        zIndex: Z_INDEX.OVERLAY
       }}
     >
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 rounded-t-lg sticky top-0 z-10">

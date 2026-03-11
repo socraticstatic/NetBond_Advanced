@@ -2,6 +2,7 @@ import { Activity, Shield, RefreshCw, Network } from 'lucide-react';
 import { NetworkNode, NetworkEdge } from '../types';
 import { ExportButton } from './components/ExportButton';
 import { calculateTotalBandwidth } from '../../utils/calculations';
+import { Z_INDEX } from '../../utils/designer-constants';
 
 interface StatusBarProps {
   nodes: NetworkNode[];
@@ -14,14 +15,14 @@ export function StatusBar({ nodes, edges, onRefresh, canvasRef }: StatusBarProps
   // Calculate active elements
   const activeNodes = nodes.filter(node => node.status === 'active').length;
   const activeEdges = edges.filter(edge => edge.status === 'active').length;
-  
+
   // Calculate bandwidth total
   const bandwidthTotal = calculateTotalBandwidth(edges);
-  
+
   return (
-    <div 
+    <div
       className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-sm border border-gray-200 py-2 px-3 flex items-center space-x-6 whitespace-nowrap"
-      style={{ zIndex: 20, minWidth: '700px' }}
+      style={{ zIndex: Z_INDEX.UI_CONTROLS, minWidth: '700px' }}
     >
       {/* Total Bandwidth */}
       <div className="flex items-center">
