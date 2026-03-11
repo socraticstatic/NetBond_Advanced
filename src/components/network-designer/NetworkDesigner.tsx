@@ -145,15 +145,42 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
       }
       return;
     }
-    
+
     // If we're creating an edge, handle edge creation
     if (isCreatingEdge) {
       const handled = handleNodeClickForEdge(node.id, node.id);
       if (handled) return;
     }
-    
+
     // Otherwise, handle node selection
     handleNodeSelection(node);
+  };
+
+  // Handle node selection without opening config (for single-click)
+  const handleNodeSelect = (node: NetworkNode | null) => {
+    if (!node) {
+      clearSelection();
+      return;
+    }
+
+    // If we're creating an edge, handle edge creation
+    if (isCreatingEdge) {
+      const handled = handleNodeClickForEdge(node.id, node.id);
+      return;
+    }
+
+    // Select the node visually but don't open config
+    handleNodeSelection(node);
+    setShowNodeConfig(false);
+  };
+
+  // Handle node double-click to open config
+  const handleNodeDoubleClick = (node: NetworkNode | null) => {
+    if (!node || isCreatingEdge) return;
+
+    // Select and open config panel
+    handleNodeSelection(node);
+    setShowNodeConfig(true);
   };
   
   // Handle node drag
@@ -474,6 +501,8 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
             isCreatingEdge={isCreatingEdge}
             edgeStart={edgeStart}
             onNodeClick={handleNodeClick}
+            onNodeSelect={handleNodeSelect}
+            onNodeDoubleClick={handleNodeDoubleClick}
             onNodeDrag={handleNodeDrag}
             onNodeDragEnd={handleNodeDragEnd}
             onEdgeClick={handleEdgeSelection}

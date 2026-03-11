@@ -9,6 +9,8 @@ interface NodeProps {
   isCreatingEdge: boolean;
   isReadOnly?: boolean;
   onClick: () => void;
+  onSelect?: () => void;
+  onDoubleClick?: () => void;
   onDragStart: () => void;
   onDragEnd: () => void;
   onDrag: (x: number, y: number) => void;
@@ -23,6 +25,8 @@ export const Node = memo(function Node({
   isCreatingEdge,
   isReadOnly = false,
   onClick,
+  onSelect,
+  onDoubleClick: onDoubleClickProp,
   onDragStart,
   onDragEnd,
   onDrag,
@@ -38,6 +42,8 @@ export const Node = memo(function Node({
   const [hasDragged, setHasDragged] = useState(false);
   const dragStartPos = useRef({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
+  const clickTimeoutRef = useRef<number | null>(null);
+  const lastClickTime = useRef<number>(0);
 
   // Track node position
   const [position, setPosition] = useState({ x: node.x, y: node.y });
@@ -55,28 +61,34 @@ export const Node = memo(function Node({
       if (nodeRef.current) {
         const rect = nodeRef.current.parentElement?.getBoundingClientRect();
         if (rect) {
-          // Calculate position accounting for zoom level
-          const x = (e.clientX - rect.left) / zoomLevel - dragOffset.x;
-          const y = (e.clientY - rect.top) / zoomLevel - dragOffset.y;
-
           // Check if we've moved more than 5 pixels (threshold to detect drag)
           const deltaX = Math.abs(e.clientX - dragStartPos.current.x);
           const deltaY = Math.abs(e.clientY - dragStartPos.current.y);
+
+          // Only start actual dragging if moved beyond threshold
           if (deltaX > 5 || deltaY > 5) {
             setHasDragged(true);
-          }
 
-          onDrag(x, y);
+            // Calculate position accounting for zoom level and drag offset
+            const x = (e.clientX - rect.left) / zoomLevel - dragOffset.x;
+            const y = (e.clientY - rect.top) / zoomLevel - dragOffset.y;
+
+            onDrag(x, y);
+          }
         }
       }
     };
 
     const handleMouseUp = () => {
       setIsDragging(false);
-      onDragEnd();
 
-      // Reset hasDragged after a short delay to allow click handler to check it
-      setTimeout(() => setHasDragged(false), 50);
+      // Only call onDragEnd if we actually dragged
+      if (hasDragged) {
+        onDragEnd();
+      }
+
+      // Reset hasDragged after a short delay
+      setTimeout(() => setHasDragged(false), 100);
 
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
@@ -89,7 +101,7 @@ export const Node = memo(function Node({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, dragOffset, onDrag, onDragEnd, zoomLevel]);
+  }, [isDragging, dragOffset, onDrag, onDragEnd, zoomLevel, hasDragged]);
 
   // Focus input when editing starts
   useEffect(() => {
@@ -98,6 +110,15 @@ export const Node = memo(function Node({
       nameInputRef.current.select();
     }
   }, [isEditingName]);
+
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const Icon = node.icon;
 
@@ -141,32 +162,76 @@ export const Node = memo(function Node({
         onMouseEnter={() => !isReadOnly && !isDragging && setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
         onClick={(e) => {
-          if (isCreatingEdge && !isReadOnly) {
-            e.stopPropagation();
-            onClick();
-          }
-        }}
-        onDoubleClick={(e) => {
           e.stopPropagation();
-          if (!isReadOnly && !isCreatingEdge) {
+
+          // Handle edge creation mode
+          if (isCreatingEdge && !isReadOnly) {
             onClick();
-            setShowTooltip(false);
+            return;
+          }
+
+          // Handle normal click - only if we didn't drag
+          if (!isReadOnly && !hasDragged) {
+            const now = Date.now();
+            const timeSinceLastClick = now - lastClickTime.current;
+
+            // Check if this is a double-click (within 300ms)
+            if (timeSinceLastClick < 300) {
+              // This is a double-click - open config panel
+              if (clickTimeoutRef.current) {
+                clearTimeout(clickTimeoutRef.current);
+                clickTimeoutRef.current = null;
+              }
+              if (onDoubleClickProp) {
+                onDoubleClickProp();
+              } else {
+                onClick();
+              }
+              setShowTooltip(false);
+              lastClickTime.current = 0; // Reset to prevent triple-click issues
+            } else {
+              // This might be a single click - wait to see if double-click follows
+              lastClickTime.current = now;
+
+              // Set a timeout to handle single-click selection
+              if (clickTimeoutRef.current) {
+                clearTimeout(clickTimeoutRef.current);
+              }
+              clickTimeoutRef.current = window.setTimeout(() => {
+                // Single click - just select (visual feedback)
+                if (onSelect) {
+                  onSelect();
+                } else {
+                  onClick();
+                }
+                clickTimeoutRef.current = null;
+              }, 300);
+            }
           }
         }}
         onMouseDown={(e) => {
           if (!isCreatingEdge && nodeRef.current && !isReadOnly) {
             e.stopPropagation();
             setShowTooltip(false);
-            const rect = nodeRef.current.getBoundingClientRect();
 
             // Store initial mouse position for drag detection
             dragStartPos.current = { x: e.clientX, y: e.clientY };
             setHasDragged(false);
 
-            setDragOffset({
-              x: (e.clientX - rect.left) / zoomLevel,
-              y: (e.clientY - rect.top) / zoomLevel
-            });
+            // Get the parent canvas element to calculate proper offset
+            const parentRect = nodeRef.current.parentElement?.getBoundingClientRect();
+            if (parentRect) {
+              // Calculate offset relative to the node's current position
+              // This prevents the node from jumping when drag starts
+              const mouseXInCanvas = (e.clientX - parentRect.left) / zoomLevel;
+              const mouseYInCanvas = (e.clientY - parentRect.top) / zoomLevel;
+
+              setDragOffset({
+                x: mouseXInCanvas - node.x,
+                y: mouseYInCanvas - node.y
+              });
+            }
+
             setIsDragging(true);
             onDragStart();
           }
@@ -244,10 +309,13 @@ export const Node = memo(function Node({
         {/* Tooltip */}
         {showTooltip && !isEditingName && !isCreatingEdge && node.name !== 'AT&T Core' && (
           <div
-            className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap pointer-events-none z-50 shadow-lg"
+            className="absolute -top-14 left-1/2 transform -translate-x-1/2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap pointer-events-none z-50 shadow-lg"
             style={{ fontSize: `${Math.max(11, 11 / zoomLevel)}px` }}
           >
-            Double-click to configure
+            <div className="text-center">
+              <div>Click to select</div>
+              <div className="opacity-75">Double-click to configure</div>
+            </div>
             <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-px">
               <div className="border-4 border-transparent border-t-gray-900"></div>
             </div>

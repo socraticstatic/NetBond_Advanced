@@ -14,6 +14,8 @@ interface CanvasProps {
   edgeStart: string | null;
   isReadOnly?: boolean;
   onNodeClick: (node: NetworkNode | null) => void;
+  onNodeSelect?: (node: NetworkNode | null) => void;
+  onNodeDoubleClick?: (node: NetworkNode | null) => void;
   onNodeDrag: (nodeId: string, x: number, y: number) => void;
   onNodeDragEnd: () => void;
   onEdgeClick: (edge: NetworkEdge | null) => void;
@@ -36,6 +38,8 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
   edgeStart,
   isReadOnly = false,
   onNodeClick,
+  onNodeSelect,
+  onNodeDoubleClick,
   onNodeDrag,
   onNodeDragEnd,
   onEdgeClick,
@@ -347,6 +351,8 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
               isCreatingEdge={isCreatingEdge}
               isReadOnly={isReadOnly}
               onClick={() => onNodeClick(node)}
+              onSelect={onNodeSelect ? () => onNodeSelect(node) : undefined}
+              onDoubleClick={onNodeDoubleClick ? () => onNodeDoubleClick(node) : undefined}
               onDragStart={() => setIsDragging(true)}
               onDragEnd={() => {
                 setIsDragging(false);
@@ -356,19 +362,19 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
                 // Ensure we have valid numbers
                 const validX = typeof x === 'number' ? x : 0;
                 const validY = typeof y === 'number' ? y : 0;
-                
+
                 // Apply bounds to keep nodes within the canvas
                 const boundedX = Math.max(0, Math.min(validX, (canvasRef.current?.clientWidth || 0) / zoomLevel - 64));
                 const boundedY = Math.max(0, Math.min(validY, maxY - 64));
-                
+
                 // Snap to grid if enabled
                 const snappedX = snapToGrid ? Math.round(boundedX / gridSize) * gridSize : boundedX;
                 const snappedY = snapToGrid ? Math.round(boundedY / gridSize) * gridSize : boundedY;
-                
+
                 // Ensure we're always passing valid numbers
                 onNodeDrag(
-                  node.id, 
-                  isNaN(snappedX) ? 0 : snappedX, 
+                  node.id,
+                  isNaN(snappedX) ? 0 : snappedX,
                   isNaN(snappedY) ? 0 : snappedY
                 );
               }}
