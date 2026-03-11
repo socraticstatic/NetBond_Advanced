@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { ZoomIn, ZoomOut, Rotate3D as RotateLeft, Maximize2 } from 'lucide-react';
+import { ZoomIn, ZoomOut, Rotate3d as RotateLeft, Maximize2 } from 'lucide-react';
 
 interface ZoomControlsProps {
   onZoomIn: () => void;

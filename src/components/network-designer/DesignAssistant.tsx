@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sparkles, Target, Shield, Zap, ArrowRight, CheckCircle, Clock, Building2, Globe2, Network } from 'lucide-react';
+import { Sparkles, Target, Shield, Zap, ArrowRight, CheckCircle, Clock, Building2, Globe as Globe2, Network } from 'lucide-react';
 import { NetworkNode, NetworkEdge } from '../types';
 import { OutcomeSelector } from './OutcomeSelector';
 
