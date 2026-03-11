@@ -381,21 +381,21 @@ export function NetworkDesigner({
   }, []);
 
   return (
-    <div className="flex flex-col h-[1000px] bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden network-designer-container">
+    <div className="flex flex-col h-[1000px] bg-fw-wash rounded-lg border-2 border-fw-secondary overflow-hidden network-designer-container">
       {/* Header with special effects toggle */}
-      <div className="bg-white border-b border-gray-200 p-4 flex justify-between items-center">
+      <div className="bg-white border-b border-fw-secondary p-4 flex justify-between items-center">
         <div className="flex items-center">
-          <Sparkles className="h-5 w-5 text-brand-blue mr-2" />
-          <h2 className="text-lg font-medium text-gray-900">
+          <Sparkles className="h-5 w-5 text-fw-link mr-2" />
+          <h2 className="text-lg font-medium text-fw-heading">
             {editMode ? 'Edit Network Topology' : 'Network Designer'}
           </h2>
         </div>
-        <button 
+        <button
           onClick={handleToggleEffects}
-          className={`flex items-center px-3 py-1.5 rounded-full text-sm ${
-            showEffects 
-              ? 'bg-brand-blue text-white' 
-              : 'bg-gray-100 text-gray-700'
+          className={`flex items-center px-3 py-1.5 rounded-full text-sm transition-colors ${
+            showEffects
+              ? 'bg-fw-ctaPrimary text-white hover:bg-fw-ctaPrimaryHover'
+              : 'bg-fw-neutral text-fw-body hover:bg-fw-wash'
           }`}
         >
           <Zap className="h-4 w-4 mr-1.5" />
@@ -448,50 +448,50 @@ export function NetworkDesigner({
       </div>
 
       {/* Bottom Panel */}
-      <div className="h-[400px] bg-white border-t border-gray-200">
-        <div className="flex border-b border-gray-200">
+      <div className="h-[400px] bg-white border-t border-fw-secondary">
+        <div className="flex border-b border-fw-secondary">
           <button
             onClick={() => setActiveTab('config')}
             className={`
-              flex items-center px-6 py-3 text-sm font-medium
+              flex items-center px-6 py-3 text-sm font-medium transition-colors
               ${activeTab === 'config'
-                ? 'text-brand-blue border-b-2 border-brand-blue'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'text-fw-link border-b-2 border-fw-link'
+                : 'text-fw-bodyLight hover:text-fw-body'
               }
             `}
           >
             <Settings className={`h-4 w-4 mr-2 ${
-              activeTab === 'config' ? 'text-brand-blue' : 'text-gray-400'
+              activeTab === 'config' ? 'text-fw-link' : 'text-fw-disabled'
             }`} />
             Configuration
           </button>
           <button
             onClick={() => setActiveTab('templates')}
             className={`
-              flex items-center px-6 py-3 text-sm font-medium
+              flex items-center px-6 py-3 text-sm font-medium transition-colors
               ${activeTab === 'templates'
-                ? 'text-brand-blue border-b-2 border-brand-blue'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'text-fw-link border-b-2 border-fw-link'
+                : 'text-fw-bodyLight hover:text-fw-body'
               }
             `}
           >
             <Cloud className={`h-4 w-4 mr-2 ${
-              activeTab === 'templates' ? 'text-brand-blue' : 'text-gray-400'
+              activeTab === 'templates' ? 'text-fw-link' : 'text-fw-disabled'
             }`} />
             Templates
           </button>
           <button
             onClick={() => setActiveTab('ai')}
             className={`
-              flex items-center px-6 py-3 text-sm font-medium
+              flex items-center px-6 py-3 text-sm font-medium transition-colors
               ${activeTab === 'ai'
-                ? 'text-brand-blue border-b-2 border-brand-blue'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'text-fw-link border-b-2 border-fw-link'
+                : 'text-fw-bodyLight hover:text-fw-body'
               }
             `}
           >
             <MessageSquareIcon className={`h-4 w-4 mr-2 ${
-              activeTab === 'ai' ? 'text-brand-blue' : 'text-gray-400'
+              activeTab === 'ai' ? 'text-fw-link' : 'text-fw-disabled'
             }`} />
             A.I. Recommendation Engine
           </button>

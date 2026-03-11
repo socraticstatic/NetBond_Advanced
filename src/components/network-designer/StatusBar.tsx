@@ -32,31 +32,31 @@ export function StatusBar({ nodes, edges, onRefresh }: StatusBarProps) {
     : `${totalBandwidth.toFixed(2)} Gbps`;
 
   return (
-    <div 
-      className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-sm border border-gray-200 p-2 flex items-center space-x-6 whitespace-nowrap"
+    <div
+      className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-sm border border-fw-secondary p-2 flex items-center space-x-6 whitespace-nowrap"
       style={{ zIndex: 100, minWidth: '600px' }}
     >
       <div className="flex items-center">
-        <Activity className="h-4 w-4 text-brand-blue mr-1" />
-        <span className="text-sm text-gray-600">
+        <Activity className="h-4 w-4 text-fw-link mr-1" />
+        <span className="text-sm text-fw-body">
           {nodes.length} Nodes, {edges.length} Connections
         </span>
       </div>
       <div className="flex items-center">
         <Shield className="h-4 w-4 text-green-500 mr-1" />
-        <span className="text-sm text-gray-600">
+        <span className="text-sm text-fw-body">
           {activeNodes} Active Nodes, {activeEdges} Active Connections
         </span>
       </div>
       <div className="flex items-center">
         <Zap className="h-4 w-4 text-amber-500 mr-1" />
-        <span className="text-sm text-gray-600">
+        <span className="text-sm text-fw-body">
           Total Bandwidth: {formattedBandwidth}
         </span>
       </div>
       <button
         onClick={onRefresh}
-        className="p-1 text-gray-400 hover:text-brand-blue rounded-full hover:bg-brand-lightBlue"
+        className="p-1 text-fw-disabled hover:text-fw-link rounded-full hover:bg-fw-accent transition-colors"
       >
         <RefreshCw className="h-4 w-4" />
       </button>

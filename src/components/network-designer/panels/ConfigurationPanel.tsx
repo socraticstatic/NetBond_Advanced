@@ -36,11 +36,11 @@ export function ConfigurationPanel({
 
   if (!selectedNode && !selectedEdge) {
     return (
-      <div className="h-full flex items-center justify-center text-gray-500">
+      <div className="h-full flex items-center justify-center text-fw-bodyLight">
         <div className="text-center max-w-md">
-          <Cpu className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-700 mb-2">Network Designer</h3>
-          <p className="text-sm text-gray-500">
+          <Cpu className="h-12 w-12 text-fw-disabled mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-fw-body mb-2">Network Designer</h3>
+          <p className="text-sm text-fw-bodyLight">
             Select a node or connection to configure it, or use the toolbar to add new elements to your network design.
           </p>
         </div>
@@ -78,16 +78,16 @@ export function ConfigurationPanel({
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+      <div className="px-4 py-3 border-b border-fw-secondary flex items-center justify-between">
         <div className="flex items-center">
-          <Settings className="h-5 w-5 text-brand-blue mr-2" />
-          <h3 className="text-lg font-medium text-gray-900">
+          <Settings className="h-5 w-5 text-fw-link mr-2" />
+          <h3 className="text-lg font-medium text-fw-heading">
             {selectedNode ? 'Node Configuration' : 'Connection Configuration'}
           </h3>
         </div>
         <button
           onClick={() => selectedNode ? onDeleteNode(selectedNode.id) : selectedEdge && onDeleteEdge(selectedEdge.id)}
-          className="text-sm text-red-600 hover:text-red-700 rounded-full"
+          className="text-sm text-red-600 hover:text-red-700 rounded-full transition-colors"
         >
           Delete {selectedNode ? 'Node' : 'Connection'}
         </button>
@@ -96,7 +96,7 @@ export function ConfigurationPanel({
       {/* Content Area with Vertical Tabs */}
       <div className="flex-1 flex">
         {/* Vertical Tab Bar */}
-        <div className="w-48 border-r border-gray-200 bg-gray-50">
+        <div className="w-48 border-r border-fw-secondary bg-fw-wash">
           {tabs.map(tab => (
             <button
               key={tab.id}
@@ -105,13 +105,13 @@ export function ConfigurationPanel({
                 w-full flex items-center px-4 py-3 text-sm font-medium network-config-tab
                 transition-colors duration-200
                 ${activeTab === tab.id
-                  ? 'bg-white border-l-2 border-brand-blue text-brand-blue'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-white border-l-2 border-fw-link text-fw-link'
+                  : 'text-fw-body hover:bg-fw-neutral hover:text-fw-heading'
                 }
               `}
             >
               <tab.icon className={`h-5 w-5 mr-3 ${
-                activeTab === tab.id ? 'text-brand-blue' : 'text-gray-400'
+                activeTab === tab.id ? 'text-fw-link' : 'text-fw-disabled'
               }`} />
               {tab.label}
             </button>
@@ -124,7 +124,7 @@ export function ConfigurationPanel({
             <>
               {/* Add Node Name field */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-fw-body mb-1">
                   Node Name
                 </label>
                 <input
@@ -135,13 +135,13 @@ export function ConfigurationPanel({
                   placeholder="Enter node name"
                 />
               </div>
-              
+
               {/* Node Type Display */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-fw-body mb-1">
                   Type
                 </label>
-                <div className="text-sm py-2 px-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="text-sm py-2 px-3 bg-fw-wash rounded-lg border border-fw-secondary">
                   {selectedNode.type.charAt(0).toUpperCase() + selectedNode.type.slice(1)}
                 </div>
               </div>
@@ -177,13 +177,13 @@ export function ConfigurationPanel({
           {selectedEdge && (
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-fw-body mb-1">
                   Connection Type
                 </label>
                 <select
                   value={selectedEdge.type}
                   onChange={(e) => handleEdgeUpdate({ type: e.target.value as any })}
-                  className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                  className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-fw-link focus:ring-fw-link"
                 >
                   <option value="Internet to Cloud">Internet to Cloud</option>
                   <option value="Cloud to Cloud">Cloud to Cloud</option>
@@ -197,13 +197,13 @@ export function ConfigurationPanel({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-fw-body mb-1">
                   Bandwidth
                 </label>
                 <select
                   value={selectedEdge.bandwidth}
                   onChange={(e) => handleEdgeUpdate({ bandwidth: e.target.value })}
-                  className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                  className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-fw-link focus:ring-fw-link"
                 >
                   <option value="1 Gbps">1 Gbps</option>
                   <option value="10 Gbps">10 Gbps</option>
@@ -214,7 +214,7 @@ export function ConfigurationPanel({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-fw-body mb-1">
                   Status
                 </label>
                 <div className="flex items-center space-x-4">
@@ -223,24 +223,24 @@ export function ConfigurationPanel({
                       type="radio"
                       checked={selectedEdge.status === 'inactive'}
                       onChange={() => handleEdgeUpdate({ status: 'inactive' })}
-                      className="text-brand-blue focus:ring-brand-blue h-4 w-4"
+                      className="text-fw-link focus:ring-fw-link h-4 w-4"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Inactive</span>
+                    <span className="ml-2 text-sm text-fw-body">Inactive</span>
                   </label>
                   <label className="inline-flex items-center">
                     <input
                       type="radio"
                       checked={selectedEdge.status === 'active'}
                       onChange={() => handleEdgeUpdate({ status: 'active' })}
-                      className="text-brand-blue focus:ring-brand-blue h-4 w-4"
+                      className="text-fw-link focus:ring-fw-link h-4 w-4"
                     />
-                    <span className="ml-2 text-sm text-gray-700">Active</span>
+                    <span className="ml-2 text-sm text-fw-body">Active</span>
                   </label>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-fw-body mb-1">
                   VLAN ID
                 </label>
                 <input
@@ -250,25 +250,25 @@ export function ConfigurationPanel({
                   placeholder="1-4094"
                   min="1"
                   max="4094"
-                  className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                  className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-fw-link focus:ring-fw-link"
                 />
               </div>
 
               {activeTab === 'performance' && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">Performance Settings</h4>
-                  <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+                  <h4 className="text-sm font-medium text-fw-body mb-2">Performance Settings</h4>
+                  <div className="space-y-4 bg-fw-wash p-4 rounded-lg">
                     <div>
-                      <label className="block text-sm text-gray-600 mb-1">Target Latency</label>
+                      <label className="block text-sm text-fw-body mb-1">Target Latency</label>
                       <select
                         value={selectedEdge.metrics?.latency || '<10ms'}
-                        onChange={(e) => handleEdgeUpdate({ 
-                          metrics: { 
+                        onChange={(e) => handleEdgeUpdate({
+                          metrics: {
                             ...selectedEdge.metrics,
-                            latency: e.target.value 
-                          } 
+                            latency: e.target.value
+                          }
                         })}
-                        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-fw-link focus:ring-fw-link"
                       >
                         <option value="<1ms">&lt;1ms (Ultra Low Latency)</option>
                         <option value="<5ms">&lt;5ms (Very Low Latency)</option>
@@ -277,18 +277,18 @@ export function ConfigurationPanel({
                         <option value="<50ms">&lt;50ms (Economy)</option>
                       </select>
                     </div>
-                    
+
                     <div>
-                      <label className="block text-sm text-gray-600 mb-1">Packet Loss Target</label>
+                      <label className="block text-sm text-fw-body mb-1">Packet Loss Target</label>
                       <select
                         value={selectedEdge.metrics?.packetLoss || '<0.01%'}
-                        onChange={(e) => handleEdgeUpdate({ 
-                          metrics: { 
+                        onChange={(e) => handleEdgeUpdate({
+                          metrics: {
                             ...selectedEdge.metrics,
-                            packetLoss: e.target.value 
-                          } 
+                            packetLoss: e.target.value
+                          }
                         })}
-                        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-fw-link focus:ring-fw-link"
                       >
                         <option value="<0.001%">&lt;0.001% (Mission Critical)</option>
                         <option value="<0.01%">&lt;0.01% (Premium)</option>
@@ -296,11 +296,11 @@ export function ConfigurationPanel({
                         <option value="<0.5%">&lt;0.5% (Basic)</option>
                       </select>
                     </div>
-                    
+
                     <div>
-                      <label className="block text-sm text-gray-600 mb-1">Quality of Service</label>
+                      <label className="block text-sm text-fw-body mb-1">Quality of Service</label>
                       <select
-                        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-fw-link focus:ring-fw-link"
                       >
                         <option value="premium">Premium (Guaranteed)</option>
                         <option value="business">Business (Priority)</option>
@@ -313,42 +313,42 @@ export function ConfigurationPanel({
 
               {activeTab === 'security' && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">Security Settings</h4>
-                  <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+                  <h4 className="text-sm font-medium text-fw-body mb-2">Security Settings</h4>
+                  <div className="space-y-4 bg-fw-wash p-4 rounded-lg">
                     <div>
                       <label className="flex items-center">
                         <input
                           type="checkbox"
-                          className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                          className="rounded border-gray-300 text-fw-link focus:ring-fw-link h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-gray-700">End-to-End Encryption</span>
+                        <span className="ml-2 text-sm text-fw-body">End-to-End Encryption</span>
                       </label>
                     </div>
-                    
+
                     <div>
                       <label className="flex items-center">
                         <input
                           type="checkbox"
-                          className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                          className="rounded border-gray-300 text-fw-link focus:ring-fw-link h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-gray-700">DDoS Protection</span>
+                        <span className="ml-2 text-sm text-fw-body">DDoS Protection</span>
                       </label>
                     </div>
-                    
+
                     <div>
                       <label className="flex items-center">
                         <input
                           type="checkbox"
-                          className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                          className="rounded border-gray-300 text-fw-link focus:ring-fw-link h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-gray-700">Traffic Inspection</span>
+                        <span className="ml-2 text-sm text-fw-body">Traffic Inspection</span>
                       </label>
                     </div>
-                    
+
                     <div>
-                      <label className="block text-sm text-gray-600 mb-1">Encryption Level</label>
+                      <label className="block text-sm text-fw-body mb-1">Encryption Level</label>
                       <select
-                        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                        className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-fw-link focus:ring-fw-link"
                       >
                         <option value="aes256">AES-256 (Standard)</option>
                         <option value="quantum">Quantum-Resistant</option>
