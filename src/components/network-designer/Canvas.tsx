@@ -1,7 +1,9 @@
-import { useRef, useEffect, useState } from 'react';
-import { NetworkNode, NetworkEdge } from '../../types';
+import { useRef, useEffect, useState, forwardRef, memo, RefObject } from 'react';
+import { NetworkNode, NetworkEdge } from '../types';
 import { Node } from './Node';
 import { Edge } from './Edge';
+import { EdgeControls } from './EdgeControls';
+import { CANVAS_BOUNDS, Z_INDEX } from '../../utils/designer-constants';
 
 interface CanvasProps {
   nodes: NetworkNode[];
@@ -10,66 +12,62 @@ interface CanvasProps {
   selectedEdge: string | null;
   isCreatingEdge: boolean;
   edgeStart: string | null;
-  onNodeClick: (node: NetworkNode) => void;
+  isReadOnly?: boolean;
+  onNodeClick: (node: NetworkNode | null) => void;
   onNodeDrag: (nodeId: string, x: number, y: number) => void;
   onNodeDragEnd: () => void;
-  onEdgeClick: (edge: NetworkEdge) => void;
+  onEdgeClick: (edge: NetworkEdge | null) => void;
   maxY: number;
-  showEffects?: boolean;
+  onUpdateNode?: (nodeId: string, updates: Partial<NetworkNode>) => void;
+  onUpdateEdge?: (edgeId: string, updates: Partial<NetworkEdge>) => void;
+  onDeleteNode?: (nodeId: string) => void;
+  onDeleteEdge?: (edgeId: string) => void;
 }
 
-export function Canvas({
+// Memoized Edge renderer for better performance
+const MemoizedEdge = memo(Edge);
+
+export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
   nodes,
   edges,
   selectedNode,
   selectedEdge,
   isCreatingEdge,
   edgeStart,
+  isReadOnly = false,
   onNodeClick,
   onNodeDrag,
   onNodeDragEnd,
   onEdgeClick,
   maxY,
-  showEffects = false
-}: CanvasProps) {
-  const canvasRef = useRef<HTMLDivElement>(null);
+  onUpdateNode,
+  onUpdateEdge,
+  onDeleteNode,
+  onDeleteEdge
+}, ref) => {
+  const internalCanvasRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
+  const [isPanning, setIsPanning] = useState(false);
+  const [startPanPosition, setStartPanPosition] = useState({ x: 0, y: 0 });
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [snapToGrid] = useState(true);
-  const gridSize = 20;
-  const [canvasDimensions, setCanvasDimensions] = useState({ width: 0, height: 0, centerX: 0, centerY: 0 });
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [contentBounds, setContentBounds] = useState({ minX: 0, minY: 0, maxX: 0, maxY: 0 });
+  const gridSize = CANVAS_BOUNDS.GRID_SIZE;
 
-  // Define toolbar heights - these should match the actual UI toolbar heights
-  const topToolbarHeight = 0; // Removed the top toolbar offset to allow dragging in the top area
-  const bottomToolbarHeight = 80;
-
-  // Track canvas dimensions
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (canvasRef.current) {
-        const rect = canvasRef.current.getBoundingClientRect();
-        setCanvasDimensions({
-          width: rect.width,
-          height: rect.height, // Use full height without restrictions
-          centerX: rect.width / 2,
-          centerY: rect.height / 2
-        });
-      }
-    };
-
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, [maxY]);
-
+  // Use provided ref or internal ref
+  const canvasRef = ref as RefObject<HTMLDivElement> || internalCanvasRef;
+  
   // Track mouse position for edge creation preview
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (canvasRef.current) {
+    function handleMouseMove(event: MouseEvent) {
+      if (canvasRef && 'current' in canvasRef && canvasRef.current) {
         const rect = canvasRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        // Allow mouse to go all the way to the top of the canvas
-        const y = Math.min(e.clientY - rect.top, maxY - bottomToolbarHeight);
+        
+        // Calculate position accounting for pan offset and zoom
+        const x = (event.clientX - rect.left - panOffset.x) / zoomLevel;
+        const y = Math.min((event.clientY - rect.top - panOffset.y) / zoomLevel, maxY - 32);
         
         // Snap to grid if enabled
         setMousePosition({
@@ -77,219 +75,317 @@ export function Canvas({
           y: snapToGrid ? Math.round(y / gridSize) * gridSize : y
         });
       }
-    };
+    }
 
     if (isCreatingEdge && edgeStart) {
       document.addEventListener('mousemove', handleMouseMove);
       return () => document.removeEventListener('mousemove', handleMouseMove);
     }
-  }, [isCreatingEdge, edgeStart, maxY, snapToGrid, gridSize, bottomToolbarHeight]);
+  }, [isCreatingEdge, edgeStart, maxY, snapToGrid, gridSize, canvasRef, panOffset, zoomLevel]);
 
-  // Calculate edge path with proper curvature
-  const getEdgePath = (startX: number, startY: number, endX: number, endY: number) => {
-    const dx = endX - startX;
-    const dy = endY - startY;
-    const midX = startX + dx * 0.5;
-    const midY = startY + dy * 0.5;
-    return `M ${startX} ${startY} Q ${midX} ${startY} ${midX} ${midY} T ${endX} ${endY}`;
-  };
+  // Track content boundaries
+  useEffect(() => {
+    if (nodes.length === 0) {
+      setContentBounds({ minX: 0, minY: 0, maxX: 0, maxY: 0 });
+      return;
+    }
 
-  // Helper function to get a position in the lower part of the canvas
-  const getLowerCanvasPosition = (index: number, total: number, nodeWidth: number = 64) => {
-    if (!canvasRef.current) return { x: 0, y: 0 };
+    const nodeXs = nodes.map(n => n.x);
+    const nodeYs = nodes.map(n => n.y);
     
-    const canvasWidth = canvasDimensions.width;
-    const canvasHeight = canvasDimensions.height;
+    setContentBounds({
+      minX: Math.min(...nodeXs) - 100,
+      minY: Math.min(...nodeYs) - 100,
+      maxX: Math.max(...nodeXs) + 100,
+      maxY: Math.max(...nodeYs) + 100
+    });
+  }, [nodes]);
+  
+  // Handle middle-mouse/spacebar panning
+  useEffect(() => {
+    if (!canvasRef || !('current' in canvasRef) || !canvasRef.current) return;
     
-    // Calculate position as a percentage of available space
-    let yPosition = canvasHeight * 0.3 + Math.random() * (canvasHeight * 0.4);
+    const element = canvasRef.current;
     
-    // Distribute nodes horizontally
-    let xPosition;
-    if (total <= 1) {
-      xPosition = canvasWidth / 2 - nodeWidth / 2;
-    } else {
-      const spacing = canvasWidth / (total + 1);
-      xPosition = spacing * (index + 1) - nodeWidth / 2;
-    }
-    
-    // Snap to grid if enabled
-    if (snapToGrid) {
-      xPosition = Math.round(xPosition / gridSize) * gridSize;
-      yPosition = Math.round(yPosition / gridSize) * gridSize;
-    }
-    
-    return { 
-      x: Math.max(0, Math.min(xPosition, canvasWidth - nodeWidth)),
-      y: Math.max(0, Math.min(yPosition, canvasHeight - nodeWidth - bottomToolbarHeight))
+    // Middle mouse button panning
+    const handleMouseDown = (e: MouseEvent) => {
+      if (e.button === 1 || (e.button === 0 && e.altKey)) { // Middle mouse button or Alt+Left click
+        e.preventDefault();
+        setIsPanning(true);
+        setStartPanPosition({ x: e.clientX - panOffset.x, y: e.clientY - panOffset.y });
+      }
     };
+    
+    const handleMouseUp = (e: MouseEvent) => {
+      if (e.button === 1 || (e.button === 0 && e.altKey)) { // Middle mouse button or Alt+Left click
+        setIsPanning(false);
+      }
+    };
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isPanning) {
+        const newPanX = e.clientX - startPanPosition.x;
+        const newPanY = e.clientY - startPanPosition.y;
+        setPanOffset({ x: newPanX, y: newPanY });
+        
+        // Change cursor during panning
+        document.body.style.cursor = 'grabbing';
+      }
+    };
+    
+    // Spacebar panning
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space' && !isPanning) {
+        e.preventDefault();
+        setIsPanning(true);
+        const mouseEvent = new MouseEvent('mousemove');
+        setStartPanPosition({ 
+          x: mouseEvent.clientX - panOffset.x, 
+          y: mouseEvent.clientY - panOffset.y 
+        });
+        document.body.style.cursor = 'grab';
+      }
+    };
+    
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        setIsPanning(false);
+        document.body.style.cursor = 'auto';
+      }
+    };
+    
+    // Wheel zoom
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const delta = -Math.sign(e.deltaY) * 0.1;
+        
+        // Calculate mouse position relative to the canvas
+        const rect = element.getBoundingClientRect();
+        const mouseX = (e.clientX - rect.left - panOffset.x) / zoomLevel;
+        const mouseY = (e.clientY - rect.top - panOffset.y) / zoomLevel;
+        
+        // Calculate new zoom level
+        const newZoomLevel = Math.max(0.5, Math.min(zoomLevel + delta, 2));
+        
+        // Calculate new pan offset to zoom towards/away from mouse position
+        if (newZoomLevel !== zoomLevel) {
+          const newPanX = e.clientX - mouseX * newZoomLevel;
+          const newPanY = e.clientY - mouseY * newZoomLevel;
+          setPanOffset({ x: newPanX, y: newPanY });
+          setZoomLevel(newZoomLevel);
+        }
+      }
+    };
+    
+    // Add event listeners
+    element.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+    element.addEventListener('wheel', handleWheel, { passive: false });
+    
+    // Clean up
+    return () => {
+      element.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
+      element.removeEventListener('wheel', handleWheel);
+      document.body.style.cursor = 'auto';
+    };
+  }, [canvasRef, isPanning, startPanPosition, panOffset, zoomLevel]);
+  
+  // Handle canvas click - clear selections if clicking on empty space
+  const handleCanvasClick = (e: React.MouseEvent) => {
+    // Only handle clicks directly on the canvas background
+    if (e.target === e.currentTarget && !isDragging && !isReadOnly) {
+      onNodeClick(null);
+      onEdgeClick(null);
+    }
   };
 
-  // Ensure nodes are within the visible canvas area
-  const getSafePosition = (node: NetworkNode) => {
-    if (!canvasRef.current) return node;
+  // Handle fit to screen function
+  const handleFitToScreen = () => {
+    if (nodes.length === 0) {
+      setZoomLevel(1);
+      setPanOffset({ x: 0, y: 0 });
+      return;
+    }
+
+    // Calculate bounding box of all nodes
+    const padding = 50;
+    const canvasWidth = canvasRef.current?.clientWidth || 800;
+    const canvasHeight = canvasRef.current?.clientHeight || 600;
     
-    // Use the node's current position or a default
-    const x = typeof node.x === 'number' ? node.x : 0;
-    const y = typeof node.y === 'number' ? node.y : 0;
+    const contentWidth = contentBounds.maxX - contentBounds.minX + padding * 2;
+    const contentHeight = contentBounds.maxY - contentBounds.minY + padding * 2;
     
-    // Get canvas dimensions
-    const canvasWidth = canvasDimensions.width || 800;
-    const canvasHeight = canvasDimensions.height || 600;
+    // Calculate zoom level to fit content
+    const widthRatio = canvasWidth / contentWidth;
+    const heightRatio = canvasHeight / contentHeight;
+    const newZoom = Math.min(widthRatio, heightRatio, 1.5);
     
-    // Calculate bounds (accounting for node size and toolbars)
-    const minX = 0;
-    const maxX = Math.max(0, canvasWidth - 64); // 64px is node width
-    const minY = 0; // Allow nodes to be placed at the top of the canvas
-    const maxY = Math.max(minY, canvasHeight - bottomToolbarHeight - 64); // 64px is node height
+    // Calculate pan to center content
+    const centerX = (contentBounds.minX + contentBounds.maxX) / 2;
+    const centerY = (contentBounds.minY + contentBounds.maxY) / 2;
     
-    // Ensure node is within bounds
-    const safeX = Math.max(minX, Math.min(maxX, x));
-    const safeY = Math.max(minY, Math.min(maxY, y));
+    const panX = (canvasWidth / 2) - (centerX * newZoom);
+    const panY = (canvasHeight / 2) - (centerY * newZoom);
     
-    return { ...node, x: safeX, y: safeY };
+    setZoomLevel(newZoom);
+    setPanOffset({ x: panX, y: panY });
   };
 
   return (
     <div
-      ref={canvasRef}
-      className="relative w-full h-full overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50"
-      onClick={(e) => {
-        if (e.target === canvasRef.current && !isDragging) {
-          onNodeClick(null as any);
-          onEdgeClick(null as any);
-        }
+      ref={canvasRef as React.RefObject<HTMLDivElement>}
+      className="relative overflow-hidden bg-gray-50"
+      style={{ 
+        width: '100%',
+        height: `${maxY}px`,
+        zIndex: 5,
+        cursor: isPanning ? 'grabbing' : 'default'
       }}
+      onClick={handleCanvasClick}
     >
-      {/* Subtle Grid Pattern */}
-      <div
-        className="absolute inset-0 opacity-30"
+      {/* Light Blue Background */}
+      <div className="absolute inset-0 bg-blue-50" style={{ zIndex: 1 }}></div>
+
+      {/* Grid Background */}
+      <div 
+        className="absolute inset-0" 
         style={{
-          backgroundImage: 'radial-gradient(circle, #cbd5e1 0.5px, transparent 0.5px)',
-          backgroundSize: `${gridSize}px ${gridSize}px`,
-          zIndex: 0
-        }}
-      />
-      {/* Subtle Accent Lines */}
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: 'linear-gradient(to right, #0ea5e9 1px, transparent 1px), linear-gradient(to bottom, #0ea5e9 1px, transparent 1px)',
-          backgroundSize: `${gridSize * 5}px ${gridSize * 5}px`,
-          zIndex: 0
+          backgroundImage: 'radial-gradient(circle, #e5e7eb 1px, transparent 1px)',
+          backgroundSize: `${gridSize * zoomLevel}px ${gridSize * zoomLevel}px`,
+          backgroundPosition: `${panOffset.x % (gridSize * zoomLevel)}px ${panOffset.y % (gridSize * zoomLevel)}px`,
+          zIndex: 2,
+          opacity: 0.6
         }}
       />
 
-      {/* SVG Layer for Edges */}
-      <svg 
-        className="absolute inset-0" 
-        style={{ zIndex: 1 }}
-        width="100%"
-        height="100%"
+      {/* Zoomable and Pannable Content Container */}
+      <div
+        className="absolute"
+        style={{
+          transform: `translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoomLevel})`,
+          transformOrigin: '0 0',
+          width: '100%',
+          height: '100%',
+          zIndex: 10
+        }}
       >
-        {/* Existing Edges */}
-        {edges.map(edge => {
-          // Get source and target nodes for this edge
-          const sourceNode = nodes.find(n => n.id === edge.source);
-          const targetNode = nodes.find(n => n.id === edge.target);
-          
-          // Only render edge if both nodes exist
-          if (!sourceNode || !targetNode) {
-            return null;
-          }
-          
-          // Make safe versions of nodes that are within bounds
-          const safeSourceNode = getSafePosition(sourceNode);
-          const safeTargetNode = getSafePosition(targetNode);
-          
-          return (
-            <Edge
+        {/* SVG Layer for Edges - Only visual representation */}
+        <svg 
+          className="absolute inset-0" 
+          style={{ zIndex: 10, pointerEvents: 'none' }}
+          width="100%"
+          height="100%"
+        >
+          {/* Existing Edges */}
+          {edges.map(edge => (
+            <MemoizedEdge
               key={edge.id}
               edge={edge}
-              nodes={[safeSourceNode, safeTargetNode, ...nodes.filter(n => 
-                n.id !== sourceNode.id && n.id !== targetNode.id
-              )]}
+              nodes={nodes}
               isSelected={selectedEdge === edge.id}
               onClick={() => onEdgeClick(edge)}
-              showEffects={showEffects}
             />
-          );
-        })}
+          ))}
 
-        {/* Edge Creation Preview */}
-        {isCreatingEdge && edgeStart && (
-          <g>
-            <path
-              d={getEdgePath(
-                nodes.find(n => n.id === edgeStart)?.x + 32 || 0,
-                nodes.find(n => n.id === edgeStart)?.y + 32 || 0,
-                mousePosition.x,
-                mousePosition.y
-              )}
-              className="stroke-brand-blue stroke-2 stroke-dashed fill-none"
-              style={{ pointerEvents: 'none' }}
-            />
-            {nodes.map(node => {
-              if (node.id !== edgeStart) {
-                const distance = Math.hypot(
-                  (node.x + 32) - mousePosition.x,
-                  (node.y + 32) - mousePosition.y
-                );
-                const isValidTarget = distance < 50;
-                return isValidTarget ? (
-                  <circle
-                    key={`highlight-${node.id}`}
-                    cx={node.x + 32}
-                    cy={node.y + 32}
-                    r="24"
-                    className="fill-brand-lightBlue stroke-brand-blue stroke-2"
-                    style={{ opacity: 0.5 }}
-                  />
-                ) : null;
-              }
-              return null;
-            })}
-          </g>
-        )}
-      </svg>
+          {/* Edge Creation Preview */}
+          {isCreatingEdge && edgeStart && (
+            <g>
+              <path
+                d={`
+                  M ${nodes.find(n => n.id === edgeStart)?.x + 32 || 0} ${nodes.find(n => n.id === edgeStart)?.y + 32 || 0}
+                  L ${mousePosition.x} ${mousePosition.y}
+                `}
+                className="stroke-blue-500 stroke-2 fill-none"
+                style={{ strokeDasharray: '5,5' }}
+              />
+              {nodes.map(node => {
+                if (node.id !== edgeStart) {
+                  const distance = Math.hypot(
+                    (node.x + 32) - mousePosition.x,
+                    (node.y + 32) - mousePosition.y
+                  );
+                  const isValidTarget = distance < 50;
+                  return isValidTarget ? (
+                    <circle
+                      key={`highlight-${node.id}`}
+                      cx={node.x + 32}
+                      cy={node.y + 32}
+                      r="24"
+                      className="fill-blue-100 stroke-blue-500 stroke-2"
+                      style={{ opacity: 0.5 }}
+                    />
+                  ) : null;
+                }
+                return null;
+              })}
+            </g>
+          )}
+        </svg>
 
-      {/* Nodes Layer */}
-      <div className="absolute inset-0" style={{ zIndex: 2 }}>
-        {nodes.map(node => {
-          // Ensure node is properly positioned within the visible area
-          const safeNode = getSafePosition(node);
-          
-          return (
+        {/* Separate layer for HTML-based edge controls */}
+        <EdgeControls 
+          edges={edges} 
+          nodes={nodes} 
+          selectedEdge={selectedEdge} 
+          isReadOnly={isReadOnly}
+          onEdgeClick={(edge) => onEdgeClick(edge)} 
+        />
+
+        {/* Nodes Layer */}
+        <div className="absolute inset-0" style={{ zIndex: 20 }}>
+          {nodes.map((node) => (
             <Node
-              key={safeNode.id}
-              node={safeNode}
-              isSelected={selectedNode === safeNode.id}
+              key={node.id}
+              node={node}
+              isSelected={selectedNode === node.id}
               isCreatingEdge={isCreatingEdge}
-              onClick={() => onNodeClick(safeNode)}
+              isReadOnly={isReadOnly}
+              onClick={() => onNodeClick(node)}
               onDragStart={() => setIsDragging(true)}
               onDragEnd={() => {
                 setIsDragging(false);
                 onNodeDragEnd();
               }}
               onDrag={(x, y) => {
-                // Ensure the node stays within canvas boundaries with the expanded draggable area
-                const boundedX = Math.max(0, Math.min(x, canvasRef.current?.clientWidth - 64 || x));
-                const boundedY = Math.max(
-                  0, // Allow nodes to be placed at the top
-                  Math.min(y, maxY - bottomToolbarHeight - 64)
-                );
+                // Ensure we have valid numbers
+                const validX = typeof x === 'number' ? x : 0;
+                const validY = typeof y === 'number' ? y : 0;
+                
+                // Apply bounds to keep nodes within the canvas
+                const boundedX = Math.max(0, Math.min(validX, (canvasRef.current?.clientWidth || 0) / zoomLevel - 64));
+                const boundedY = Math.max(0, Math.min(validY, maxY - 64));
                 
                 // Snap to grid if enabled
                 const snappedX = snapToGrid ? Math.round(boundedX / gridSize) * gridSize : boundedX;
                 const snappedY = snapToGrid ? Math.round(boundedY / gridSize) * gridSize : boundedY;
                 
-                onNodeDrag(safeNode.id, snappedX, snappedY);
+                // Ensure we're always passing valid numbers
+                onNodeDrag(
+                  node.id, 
+                  isNaN(snappedX) ? 0 : snappedX, 
+                  isNaN(snappedY) ? 0 : snappedY
+                );
               }}
-              showEffects={showEffects}
+              onNameChange={
+                onUpdateNode
+                  ? (newName) => onUpdateNode(node.id, { name: newName })
+                  : undefined
+              }
+              zoomLevel={zoomLevel}
             />
-          );
-        })}
+          ))}
+        </div>
       </div>
     </div>
   );
-}
+});
+
+Canvas.displayName = 'Canvas';
