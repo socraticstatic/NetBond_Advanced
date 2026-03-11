@@ -18,6 +18,15 @@ interface NodeProps {
   zoomLevel?: number;
 }
 
+// Debug flag - set to true to enable detailed drag logging
+const DEBUG_DRAG = false;
+
+const debugLog = (...args: any[]) => {
+  if (DEBUG_DRAG) {
+    console.log('[Node Debug]', ...args);
+  }
+};
+
 // Memoize the Node component for better performance
 export const Node = memo(function Node({
   node,
@@ -41,6 +50,7 @@ export const Node = memo(function Node({
   const [nodeName, setNodeName] = useState(node.name);
   const [hasDragged, setHasDragged] = useState(false);
   const dragStartPos = useRef({ x: 0, y: 0 });
+  const initialNodePos = useRef({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
   const clickTimeoutRef = useRef<number | null>(null);
   const lastClickTime = useRef<number>(0);
@@ -48,10 +58,12 @@ export const Node = memo(function Node({
   // Track node position
   const [position, setPosition] = useState({ x: node.x, y: node.y });
 
-  // Update position when node coordinates change
+  // Update position when node coordinates change (but NOT during dragging)
   useEffect(() => {
-    setPosition({ x: node.x, y: node.y });
-  }, [node.x, node.y]);
+    if (!isDragging) {
+      setPosition({ x: node.x, y: node.y });
+    }
+  }, [node.x, node.y, isDragging]);
 
   // Handle drag events
   useEffect(() => {
@@ -61,18 +73,41 @@ export const Node = memo(function Node({
       if (nodeRef.current) {
         const rect = nodeRef.current.parentElement?.getBoundingClientRect();
         if (rect) {
-          // Check if we've moved more than 5 pixels (threshold to detect drag)
+          // Check if we've moved more than 10 pixels (threshold to detect drag)
           const deltaX = Math.abs(e.clientX - dragStartPos.current.x);
           const deltaY = Math.abs(e.clientY - dragStartPos.current.y);
 
+          debugLog('Mouse move', {
+            deltaX,
+            deltaY,
+            threshold: 10,
+            hasDragged
+          });
+
           // Only start actual dragging if moved beyond threshold
-          if (deltaX > 5 || deltaY > 5) {
-            setHasDragged(true);
+          if (deltaX > 10 || deltaY > 10) {
+            if (!hasDragged) {
+              setHasDragged(true);
+              debugLog('Drag started - threshold exceeded');
+            }
 
             // Calculate position accounting for zoom level and drag offset
+            // Use the stored drag offset from mouse down, not recalculate
             const x = (e.clientX - rect.left) / zoomLevel - dragOffset.x;
             const y = (e.clientY - rect.top) / zoomLevel - dragOffset.y;
 
+            debugLog('Drag position calculated', {
+              mouseX: e.clientX,
+              mouseY: e.clientY,
+              rectLeft: rect.left,
+              rectTop: rect.top,
+              zoomLevel,
+              dragOffset,
+              calculatedX: x,
+              calculatedY: y
+            });
+
+            // Send raw coordinates to parent - let Canvas handle snapping
             onDrag(x, y);
           }
         }
@@ -216,20 +251,36 @@ export const Node = memo(function Node({
 
             // Store initial mouse position for drag detection
             dragStartPos.current = { x: e.clientX, y: e.clientY };
+
+            // Store the initial node position - THIS IS KEY to prevent jumping
+            initialNodePos.current = { x: node.x, y: node.y };
             setHasDragged(false);
 
             // Get the parent canvas element to calculate proper offset
             const parentRect = nodeRef.current.parentElement?.getBoundingClientRect();
             if (parentRect) {
-              // Calculate offset relative to the node's current position
-              // This prevents the node from jumping when drag starts
+              // Calculate offset relative to the node's CURRENT position
+              // Use the actual current position, not a recalculated one
               const mouseXInCanvas = (e.clientX - parentRect.left) / zoomLevel;
               const mouseYInCanvas = (e.clientY - parentRect.top) / zoomLevel;
 
-              setDragOffset({
+              // Store how far the mouse is from the node's top-left corner
+              // This offset stays constant throughout the drag
+              const calculatedOffset = {
                 x: mouseXInCanvas - node.x,
                 y: mouseYInCanvas - node.y
+              };
+
+              debugLog('Mouse down - initializing drag', {
+                mouseClient: { x: e.clientX, y: e.clientY },
+                nodePosition: { x: node.x, y: node.y },
+                parentRect: { left: parentRect.left, top: parentRect.top },
+                zoomLevel,
+                mouseInCanvas: { x: mouseXInCanvas, y: mouseYInCanvas },
+                calculatedOffset
               });
+
+              setDragOffset(calculatedOffset);
             }
 
             setIsDragging(true);

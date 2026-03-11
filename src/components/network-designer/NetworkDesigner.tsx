@@ -196,7 +196,17 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
   
   // Handle node drag end
   const handleNodeDragEnd = () => {
-    saveToHistory(nodes, edges);
+    // Apply snap-to-grid at the END of dragging, not during
+    // This prevents the jumping issue while still maintaining grid alignment
+    const gridSize = 20;
+    const snappedNodes = nodes.map(node => ({
+      ...node,
+      x: Math.round(node.x / gridSize) * gridSize,
+      y: Math.round(node.y / gridSize) * gridSize
+    }));
+
+    setNodes(snappedNodes);
+    saveToHistory(snappedNodes, edges);
   };
   
   // Handle running simulation

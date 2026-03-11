@@ -367,15 +367,13 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
                 const boundedX = Math.max(0, Math.min(validX, (canvasRef.current?.clientWidth || 0) / zoomLevel - 64));
                 const boundedY = Math.max(0, Math.min(validY, maxY - 64));
 
-                // Snap to grid if enabled
-                const snappedX = snapToGrid ? Math.round(boundedX / gridSize) * gridSize : boundedX;
-                const snappedY = snapToGrid ? Math.round(boundedY / gridSize) * gridSize : boundedY;
-
-                // Ensure we're always passing valid numbers
+                // IMPORTANT: DO NOT snap to grid during dragging
+                // This prevents the jumping issue - we'll snap on drag end instead
+                // Just pass the smooth coordinates directly
                 onNodeDrag(
                   node.id,
-                  isNaN(snappedX) ? 0 : snappedX,
-                  isNaN(snappedY) ? 0 : snappedY
+                  isNaN(boundedX) ? 0 : boundedX,
+                  isNaN(boundedY) ? 0 : boundedY
                 );
               }}
               onNameChange={
