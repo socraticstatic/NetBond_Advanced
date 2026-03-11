@@ -5,13 +5,9 @@ import { Toolbar } from './Toolbar';
 import { StatusBar } from './StatusBar';
 import { NodeConfigPanel } from './NodeConfigPanel';
 import { EdgeConfigPanel } from './EdgeConfigPanel';
-import { AIRecommendationEngine } from './AIRecommendationEngine';
-import { OutcomeSelector } from './OutcomeSelector';
-import { NetworkParameters } from './NetworkParameters';
 import { AbstractionLevelSelector } from './AbstractionLevelSelector';
 import { GlobalView } from './global-view/GlobalView';
 import { CircuitView } from './circuit-view/CircuitView';
-import { BottomPanel } from './panels/BottomPanel';
 import { TemplatesManager } from './panels/TemplatesManager';
 import { SaveTemplateModal } from './SaveTemplateModal';
 import { NetworkSimulation } from './simulation/NetworkSimulation';
@@ -33,7 +29,6 @@ import {
 import { getNodeIcon } from '../../utils/nodeUtils';
 import { Z_INDEX, DEFAULT_NETWORK_CONFIG } from '../../utils/designer-constants';
 import { NetworkNode, NetworkEdge } from './types';
-import { DesignAssistant } from './DesignAssistant';
 
 interface NetworkDesignerProps {
   onComplete: (config: ConnectionConfig) => void;
@@ -115,7 +110,6 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
   });
   
   // UI state
-  const [viewMode, setViewMode] = useState<'assistant' | 'optimize' | 'advanced'>('assistant');
   const [isRunningScenario, setIsRunningScenario] = useState(false);
   
   // Simulation data
@@ -240,18 +234,97 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
       });
       return;
     }
-    
-    // Prepare configuration to return to parent
-    const config: ConnectionConfig = {
-      provider: 'Custom',
-      type: 'Network Designer',
-      bandwidth: 'Custom',
-      location: 'Custom',
-      nodes,
-      edges,
-    };
-    
-    onComplete(config);
+
+    // Convert edges to Connection objects
+    const connections = edges.map((edge, index) => {
+      const sourceNode = nodes.find(n => n.id === edge.source);
+      const targetNode = nodes.find(n => n.id === edge.target);
+
+      if (!sourceNode || !targetNode) {
+        return null;
+      }
+
+      const connectionName = `${sourceNode.label} to ${targetNode.label}`;
+      const connectionType = determineConnectionType(sourceNode, targetNode);
+
+      return {
+        id: edge.id,
+        name: connectionName,
+        type: connectionType,
+        status: 'Inactive' as const,
+        bandwidth: edge.bandwidth || '1 Gbps',
+        location: targetNode.location || 'Custom',
+        provider: targetNode.provider as any,
+        features: {
+          dedicatedConnection: true,
+          redundantPath: false,
+          autoScaling: false,
+          loadBalancing: false
+        },
+        security: {
+          encryption: 'AES-256',
+          firewall: true,
+          ddosProtection: true,
+          ipSecEnabled: true
+        },
+        performance: {
+          latency: edge.latency || '<10ms',
+          packetLoss: '<0.1%',
+          uptime: '99.9%',
+          throughput: '0%',
+          tunnels: 'Inactive',
+          bandwidthUtilization: 0,
+          currentUsage: '0 Gbps',
+          utilizationTrend: [0, 0, 0, 0, 0, 0, 0]
+        },
+        billing: {
+          baseFee: 999.99,
+          usage: 0,
+          total: 999.99,
+          currency: 'USD'
+        },
+        createdAt: new Date().toISOString(),
+        configuration: {
+          sourceNode: sourceNode.id,
+          targetNode: targetNode.id,
+          visualDesign: { nodes, edges }
+        }
+      };
+    }).filter(Boolean);
+
+    if (connections.length === 0) {
+      window.addToast({
+        type: 'error',
+        title: 'Invalid Network',
+        message: 'Could not create connections from the network design',
+        duration: 3000
+      });
+      return;
+    }
+
+    // Return connections array to wizard
+    onComplete(connections as any);
+  };
+
+  // Helper to determine connection type based on node types
+  const determineConnectionType = (sourceNode: NetworkNode, targetNode: NetworkNode): string => {
+    const sourceType = sourceNode.type.toLowerCase();
+    const targetType = targetNode.type.toLowerCase();
+
+    if (sourceType.includes('internet') && targetType.includes('cloud')) {
+      return 'Internet to Cloud';
+    }
+    if (sourceType.includes('cloud') && targetType.includes('cloud')) {
+      return 'Cloud to Cloud';
+    }
+    if (sourceType.includes('datacenter') && targetType.includes('cloud')) {
+      return 'DataCenter/CoLocation to Cloud';
+    }
+    if (sourceType.includes('site') && targetType.includes('cloud')) {
+      return 'Site to Cloud';
+    }
+
+    return 'Internet to Cloud';
   };
   
   // Handle saving the current network as a template
@@ -422,11 +495,11 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
   };
 
   return (
-    <div className="flex flex-col bg-gray-50 rounded-xl border-2 border-gray-200 relative">
+    <div className="flex flex-col bg-gray-50 rounded-xl border-2 border-gray-200 relative overflow-hidden">
       {/* Main Content Area */}
-      <div className="relative h-[800px]" style={{ zIndex: 1 }}>
+      <div className="relative h-[600px] md:h-[700px] lg:h-[800px]">
         {/* Abstraction Level Selector - Highest z-index */}
-        <div style={{ zIndex: 100 }}>
+        <div className="absolute top-0 left-0 right-0" style={{ zIndex: Z_INDEX.UI_CONTROLS }}>
           <AbstractionLevelSelector
             currentLevel={abstractionLevel}
             onLevelChange={setAbstractionLevel}
@@ -434,7 +507,7 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
         </div>
 
         {/* Status Bar - High z-index */}
-        <div style={{ zIndex: 90 }}>
+        <div className="absolute bottom-0 left-0 right-0" style={{ zIndex: Z_INDEX.UI_CONTROLS }}>
           <StatusBar
             nodes={nodes}
             edges={edges}
@@ -451,63 +524,73 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
         </div>
 
         {/* Render the current abstraction level view */}
-        {renderAbstractionLevelView()}
-        
+        <div className="absolute inset-0" style={{ zIndex: Z_INDEX.CANVAS }}>
+          {renderAbstractionLevelView()}
+        </div>
+
         {/* Toolbar - Only show in network view with highest z-index */}
         {abstractionLevel === 'network' && (
-          <div style={{ zIndex: 100, pointerEvents: 'auto' }}>
-            <Toolbar
-              onAddNode={addNode}
-              onToggleEdgeCreation={toggleEdgeCreation}
-              isCreatingEdge={isCreatingEdge}
-              onCancel={undo}
-              hasConnections={edges.length > 0}
-              canUndo={canUndo}
-              onRunScenario={handleRunSimulation}
-              isRunningScenario={isRunningScenario}
-              onCreateConnections={handleCreateConnections}
-              onSaveTemplate={handleSaveTemplate}
-              onClearCanvas={clearNetwork}
-              onOpenTemplates={openTemplatesDrawer}
-            />
+          <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ zIndex: Z_INDEX.TOOLBAR }}>
+            <div className="pointer-events-auto">
+              <Toolbar
+                onAddNode={addNode}
+                onToggleEdgeCreation={toggleEdgeCreation}
+                isCreatingEdge={isCreatingEdge}
+                onCancel={undo}
+                hasConnections={edges.length > 0}
+                canUndo={canUndo}
+                onRunScenario={handleRunSimulation}
+                isRunningScenario={isRunningScenario}
+                onCreateConnections={handleCreateConnections}
+                onSaveTemplate={handleSaveTemplate}
+                onClearCanvas={clearNetwork}
+                onOpenTemplates={openTemplatesDrawer}
+              />
+            </div>
           </div>
         )}
         
         {/* Node Configuration Panel - Only in network view */}
         {abstractionLevel === 'network' && selectedNodeObject && showNodeConfig && (
-          <NodeConfigPanel
-            node={selectedNodeObject}
-            isVisible={showNodeConfig}
-            onClose={() => setShowNodeConfig(false)}
-            onUpdate={(updates) => updateNode(selectedNodeObject.id, updates)}
-            onDelete={deleteNode}
-            containerRef={canvasRef}
-          />
+          <div style={{ zIndex: Z_INDEX.MODAL }}>
+            <NodeConfigPanel
+              node={selectedNodeObject}
+              isVisible={showNodeConfig}
+              onClose={() => setShowNodeConfig(false)}
+              onUpdate={(updates) => updateNode(selectedNodeObject.id, updates)}
+              onDelete={deleteNode}
+              containerRef={canvasRef}
+            />
+          </div>
         )}
-        
+
         {/* Edge Configuration Panel - Only in network view */}
         {abstractionLevel === 'network' && selectedEdgeObject && showEdgeConfig && (
-          <EdgeConfigPanel
-            edge={selectedEdgeObject}
-            nodes={nodes}
-            isVisible={showEdgeConfig}
-            onClose={() => setShowEdgeConfig(false)}
-            onUpdate={(updates) => updateEdge(selectedEdgeObject.id, updates)}
-            onDelete={() => deleteEdge(selectedEdgeObject.id)}
-            containerRef={canvasRef}
-          />
+          <div style={{ zIndex: Z_INDEX.MODAL }}>
+            <EdgeConfigPanel
+              edge={selectedEdgeObject}
+              nodes={nodes}
+              isVisible={showEdgeConfig}
+              onClose={() => setShowEdgeConfig(false)}
+              onUpdate={(updates) => updateEdge(selectedEdgeObject.id, updates)}
+              onDelete={() => deleteEdge(selectedEdgeObject.id)}
+              containerRef={canvasRef}
+            />
+          </div>
         )}
-        
+
         {/* Simulation Overlay */}
-        <NetworkSimulation 
-          isRunning={isRunningScenario}
-          simulationData={simulationData as any}
-          onPause={handlePauseSimulation}
-          onResume={handleResumeSimulation}
-          onInjectLatency={handleInjectLatency}
-          onInjectPacketLoss={handleInjectPacketLoss}
-          onInjectBandwidthLimit={handleInjectBandwidthLimit}
-        />
+        <div style={{ zIndex: Z_INDEX.OVERLAY }}>
+          <NetworkSimulation
+            isRunning={isRunningScenario}
+            simulationData={simulationData as any}
+            onPause={handlePauseSimulation}
+            onResume={handleResumeSimulation}
+            onInjectLatency={handleInjectLatency}
+            onInjectPacketLoss={handleInjectPacketLoss}
+            onInjectBandwidthLimit={handleInjectBandwidthLimit}
+          />
+        </div>
         
         {/* Save Template Modal */}
         <SaveTemplateModal
@@ -517,39 +600,6 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
         />
       </div>
 
-      {/* Bottom Panel - Only in network view */}
-      {abstractionLevel === 'network' && (
-        <BottomPanel
-          viewMode={viewMode}
-          setViewMode={setViewMode}
-        >
-          {viewMode === 'assistant' && (
-            <DesignAssistant 
-              nodes={nodes}
-              edges={edges}
-              onApply={handleApplyOutcomePattern}
-            />
-          )}
-          
-          {viewMode === 'optimize' && (
-            <AIRecommendationEngine 
-              nodes={nodes}
-              edges={edges}
-              onApplyRecommendation={(newNodes, newEdges) => {
-                setNodes(newNodes);
-                setEdges(newEdges);
-                saveToHistory(newNodes, newEdges);
-              }}
-            />
-          )}
-          
-          {viewMode === 'advanced' && (
-            <NetworkParameters
-              onParameterChange={handleParameterChange}
-            />
-          )}
-        </BottomPanel>
-      )}
       
       {/* Templates Manager */}
       <TemplatesManager

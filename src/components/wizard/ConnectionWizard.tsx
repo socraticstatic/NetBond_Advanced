@@ -292,7 +292,14 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
         for (const connection of config) {
           await addConnection(connection);
         }
-        
+
+        window.addToast?.({
+          type: 'success',
+          title: 'Connections Created',
+          message: `Successfully created ${config.length} connection${config.length > 1 ? 's' : ''} from your network design`,
+          duration: 3000
+        });
+
         navigate('/manage');
         return;
       }

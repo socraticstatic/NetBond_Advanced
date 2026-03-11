@@ -242,26 +242,24 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
   return (
     <div
       ref={canvasRef as React.RefObject<HTMLDivElement>}
-      className="relative overflow-hidden bg-gray-50"
-      style={{ 
-        width: '100%',
-        height: `${maxY}px`,
-        zIndex: 5,
+      className="relative overflow-hidden bg-gray-50 w-full h-full"
+      style={{
+        zIndex: Z_INDEX.CANVAS,
         cursor: isPanning ? 'grabbing' : 'default'
       }}
       onClick={handleCanvasClick}
     >
       {/* Light Blue Background */}
-      <div className="absolute inset-0 bg-blue-50" style={{ zIndex: 1 }}></div>
+      <div className="absolute inset-0 bg-blue-50" style={{ zIndex: Z_INDEX.BACKGROUND }}></div>
 
       {/* Grid Background */}
-      <div 
-        className="absolute inset-0" 
+      <div
+        className="absolute inset-0"
         style={{
           backgroundImage: 'radial-gradient(circle, #e5e7eb 1px, transparent 1px)',
           backgroundSize: `${gridSize * zoomLevel}px ${gridSize * zoomLevel}px`,
           backgroundPosition: `${panOffset.x % (gridSize * zoomLevel)}px ${panOffset.y % (gridSize * zoomLevel)}px`,
-          zIndex: 2,
+          zIndex: Z_INDEX.GRID,
           opacity: 0.6
         }}
       />

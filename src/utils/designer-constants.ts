@@ -22,11 +22,16 @@ export const ANIMATION_DURATIONS = {
 export const Z_INDEX = {
   BACKGROUND: 1,
   GRID: 2,
+  CANVAS: 5,
   EDGES: 10,
   EDGE_CONTROLS: 15,
   NODES: 20,
   UI_PANELS: 50,
+  MODAL: 100,
   MODALS: 100,
+  UI_CONTROLS: 150,
+  TOOLBAR: 160,
+  OVERLAY: 170,
   NOTIFICATIONS: 200
 } as const;
 

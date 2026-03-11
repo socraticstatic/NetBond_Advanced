@@ -5,7 +5,8 @@ import {
   CLOUD_PROVIDERS,
   DATACENTER_PROVIDERS,
   FUNCTION_TYPES,
-  NETWORK_TYPES
+  NETWORK_TYPES,
+  Z_INDEX
 } from '../../utils/designer-constants';
 
 interface ToolbarProps {
@@ -94,10 +95,10 @@ export function Toolbar({
   };
   
   return (
-    <div 
-      ref={toolbarRef} 
-      className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-sm border border-gray-200 p-2 flex items-center space-x-1 min-w-max" 
-      style={{ zIndex: 100 }}
+    <div
+      ref={toolbarRef}
+      className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-sm border border-gray-200 p-2 flex items-center space-x-1 min-w-max"
+      style={{ zIndex: Z_INDEX.TOOLBAR }}
     >
       {/* Choose Button - Added before Function */}
       <button
@@ -145,7 +146,7 @@ export function Toolbar({
           </button>
           
           {openDropdown === 'function' && (
-            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200" style={{ zIndex: Z_INDEX.OVERLAY }}>
               {functionTypesWithIcons.map(type => (
                 <button
                   key={type.id}
@@ -177,7 +178,7 @@ export function Toolbar({
           </button>
           
           {openDropdown === 'cloud' && (
-            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200" style={{ zIndex: Z_INDEX.OVERLAY }}>
               {CLOUD_PROVIDERS.map(provider => (
                 <button
                   key={provider.id}
@@ -209,7 +210,7 @@ export function Toolbar({
           </button>
           
           {openDropdown === 'datacenter' && (
-            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200" style={{ zIndex: Z_INDEX.OVERLAY }}>
               {DATACENTER_PROVIDERS.map(provider => (
                 <button
                   key={provider.id}
@@ -241,7 +242,7 @@ export function Toolbar({
           </button>
           
           {openDropdown === 'network' && (
-            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200" style={{ zIndex: Z_INDEX.OVERLAY }}>
               {networkTypesWithIcons.map(type => (
                 <button
                   key={type.id}
