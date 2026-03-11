@@ -382,6 +382,7 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
                   : undefined
               }
               zoomLevel={zoomLevel}
+              panOffset={panOffset}
             />
           ))}
         </div>

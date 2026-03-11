@@ -16,6 +16,7 @@ interface NodeProps {
   onDrag: (x: number, y: number) => void;
   onNameChange?: (newName: string) => void;
   zoomLevel?: number;
+  panOffset?: { x: number; y: number };
 }
 
 // Debug flag - set to true to enable detailed drag logging
@@ -40,7 +41,8 @@ export const Node = memo(function Node({
   onDragEnd,
   onDrag,
   onNameChange,
-  zoomLevel = 1
+  zoomLevel = 1,
+  panOffset = { x: 0, y: 0 }
 }: NodeProps) {
   const nodeRef = useRef<HTMLDivElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -91,16 +93,18 @@ export const Node = memo(function Node({
               debugLog('Drag started - threshold exceeded');
             }
 
-            // Calculate position accounting for zoom level and drag offset
-            // Use the stored drag offset from mouse down, not recalculate
-            const x = (e.clientX - rect.left) / zoomLevel - dragOffset.x;
-            const y = (e.clientY - rect.top) / zoomLevel - dragOffset.y;
+            // Calculate position accounting for pan offset, zoom level, and drag offset
+            // CRITICAL: Subtract panOffset BEFORE dividing by zoomLevel
+            // This accounts for the canvas transform: translate(panOffset) scale(zoomLevel)
+            const x = ((e.clientX - rect.left - panOffset.x) / zoomLevel) - dragOffset.x;
+            const y = ((e.clientY - rect.top - panOffset.y) / zoomLevel) - dragOffset.y;
 
             debugLog('Drag position calculated', {
               mouseX: e.clientX,
               mouseY: e.clientY,
               rectLeft: rect.left,
               rectTop: rect.top,
+              panOffset,
               zoomLevel,
               dragOffset,
               calculatedX: x,
@@ -136,7 +140,7 @@ export const Node = memo(function Node({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, dragOffset, onDrag, onDragEnd, zoomLevel, hasDragged]);
+  }, [isDragging, dragOffset, onDrag, onDragEnd, zoomLevel, hasDragged, panOffset]);
 
   // Focus input when editing starts
   useEffect(() => {
@@ -260,9 +264,10 @@ export const Node = memo(function Node({
             const parentRect = nodeRef.current.parentElement?.getBoundingClientRect();
             if (parentRect) {
               // Calculate offset relative to the node's CURRENT position
-              // Use the actual current position, not a recalculated one
-              const mouseXInCanvas = (e.clientX - parentRect.left) / zoomLevel;
-              const mouseYInCanvas = (e.clientY - parentRect.top) / zoomLevel;
+              // CRITICAL: Subtract panOffset BEFORE dividing by zoomLevel
+              // This accounts for the canvas transform: translate(panOffset) scale(zoomLevel)
+              const mouseXInCanvas = (e.clientX - parentRect.left - panOffset.x) / zoomLevel;
+              const mouseYInCanvas = (e.clientY - parentRect.top - panOffset.y) / zoomLevel;
 
               // Store how far the mouse is from the node's top-left corner
               // This offset stays constant throughout the drag
@@ -275,6 +280,7 @@ export const Node = memo(function Node({
                 mouseClient: { x: e.clientX, y: e.clientY },
                 nodePosition: { x: node.x, y: node.y },
                 parentRect: { left: parentRect.left, top: parentRect.top },
+                panOffset,
                 zoomLevel,
                 mouseInCanvas: { x: mouseXInCanvas, y: mouseYInCanvas },
                 calculatedOffset
