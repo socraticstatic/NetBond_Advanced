@@ -20,7 +20,7 @@ interface NodeProps {
 }
 
 // Debug flag - set to true to enable detailed drag logging
-const DEBUG_DRAG = false;
+const DEBUG_DRAG = true;
 
 const debugLog = (...args: any[]) => {
   if (DEBUG_DRAG) {
@@ -63,7 +63,18 @@ export const Node = memo(function Node({
   // Update position when node coordinates change (but NOT during dragging)
   useEffect(() => {
     if (!isDragging) {
+      debugLog('Position update (not dragging)', {
+        oldPosition: position,
+        newNodePosition: { x: node.x, y: node.y },
+        isDragging
+      });
       setPosition({ x: node.x, y: node.y });
+    } else {
+      debugLog('Position update skipped (dragging)', {
+        currentPosition: position,
+        nodePosition: { x: node.x, y: node.y },
+        isDragging
+      });
     }
   }, [node.x, node.y, isDragging]);
 
@@ -112,6 +123,7 @@ export const Node = memo(function Node({
             });
 
             // Send raw coordinates to parent - let Canvas handle snapping
+            debugLog('Calling onDrag with:', { x, y });
             onDrag(x, y);
           }
         }
@@ -119,11 +131,21 @@ export const Node = memo(function Node({
     };
 
     const handleMouseUp = () => {
+      debugLog('Mouse up', {
+        hasDragged,
+        isDragging,
+        currentPosition: position,
+        nodePosition: { x: node.x, y: node.y }
+      });
+
       setIsDragging(false);
 
       // Only call onDragEnd if we actually dragged
       if (hasDragged) {
+        debugLog('Calling onDragEnd (drag completed)');
         onDragEnd();
+      } else {
+        debugLog('Skipping onDragEnd (no drag occurred)');
       }
 
       // Reset hasDragged after a short delay
@@ -203,8 +225,17 @@ export const Node = memo(function Node({
         onClick={(e) => {
           e.stopPropagation();
 
+          debugLog('onClick handler', {
+            isCreatingEdge,
+            isReadOnly,
+            hasDragged,
+            position,
+            nodePosition: { x: node.x, y: node.y }
+          });
+
           // Handle edge creation mode
           if (isCreatingEdge && !isReadOnly) {
+            debugLog('Edge creation mode - calling onClick');
             onClick();
             return;
           }
