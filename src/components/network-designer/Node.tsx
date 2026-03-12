@@ -104,22 +104,23 @@ export const Node = memo(function Node({
               debugLog('Drag started - threshold exceeded');
             }
 
-            // Calculate position accounting for pan offset, zoom level, and drag offset
-            // CRITICAL: Subtract panOffset BEFORE dividing by zoomLevel
-            // This accounts for the canvas transform: translate(panOffset) scale(zoomLevel)
-            const x = ((e.clientX - rect.left - panOffset.x) / zoomLevel) - dragOffset.x;
-            const y = ((e.clientY - rect.top - panOffset.y) / zoomLevel) - dragOffset.y;
+            // Calculate position accounting for zoom level and drag offset
+            // CRITICAL FIX: rect.left and rect.top ALREADY include panOffset (parent transform)
+            // We only need to account for zoomLevel and dragOffset
+            const x = ((e.clientX - rect.left) / zoomLevel) - dragOffset.x;
+            const y = ((e.clientY - rect.top) / zoomLevel) - dragOffset.y;
 
-            debugLog('Drag position calculated', {
+            debugLog('Drag position calculated (FIXED)', {
               mouseX: e.clientX,
               mouseY: e.clientY,
               rectLeft: rect.left,
               rectTop: rect.top,
-              panOffset,
+              panOffsetIgnored: panOffset,
               zoomLevel,
               dragOffset,
               calculatedX: x,
-              calculatedY: y
+              calculatedY: y,
+              fix: 'Not subtracting panOffset - already in rect'
             });
 
             // Send raw coordinates to parent - let Canvas handle snapping
@@ -307,11 +308,16 @@ export const Node = memo(function Node({
             // Get the parent canvas element to calculate proper offset
             const parentRect = nodeRef.current.parentElement?.getBoundingClientRect();
             if (parentRect) {
-              // Calculate offset relative to the node's CURRENT position
-              // CRITICAL: Subtract panOffset BEFORE dividing by zoomLevel
-              // This accounts for the canvas transform: translate(panOffset) scale(zoomLevel)
-              const mouseXInCanvas = (e.clientX - parentRect.left - panOffset.x) / zoomLevel;
-              const mouseYInCanvas = (e.clientY - parentRect.top - panOffset.y) / zoomLevel;
+              // CRITICAL FIX: getBoundingClientRect() returns coordinates AFTER parent transforms are applied
+              // The parent has: transform: translate(panOffset.x, panOffset.y) scale(zoomLevel)
+              // So rect.left and rect.top ALREADY include the panOffset translation
+              // We should NOT subtract panOffset again - that causes double-accounting!
+              //
+              // The correct calculation is:
+              // 1. Get mouse position relative to the transformed parent
+              // 2. Only divide by zoomLevel to account for scale
+              const mouseXInCanvas = (e.clientX - parentRect.left) / zoomLevel;
+              const mouseYInCanvas = (e.clientY - parentRect.top) / zoomLevel;
 
               // Store how far the mouse is from the node's top-left corner
               // This offset stays constant throughout the drag
@@ -320,16 +326,17 @@ export const Node = memo(function Node({
                 y: mouseYInCanvas - node.y
               };
 
-              debugLog('Mouse down - initializing drag', {
+              debugLog('Mouse down - initializing drag (FIXED)', {
                 mouseClient: { x: e.clientX, y: e.clientY },
                 rectLeft: parentRect.left,
                 rectTop: parentRect.top,
-                panOffset,
+                panOffsetIgnored: panOffset,
                 zoomLevel,
                 mouseXInCanvas,
                 mouseYInCanvas,
                 nodePosition: { x: node.x, y: node.y },
-                calculatedOffset
+                calculatedOffset,
+                fix: 'getBoundingClientRect includes parent transform'
               });
 
               setDragOffset(calculatedOffset);
