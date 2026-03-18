@@ -16,6 +16,7 @@ import { VNFTab } from './tabs/VNFTab';
 import { PoliciesTab } from './tabs/PoliciesTab';
 import { APIConfiguration } from './tabs/APIConfiguration';
 import { AppsConfiguration } from './tabs/AppsConfiguration';
+import { AlertsTab } from './tabs/AlertsTab';
 import { IconButton } from '../common/IconButton';
 import { Button } from '../common/Button';
 import { ConfirmDialog } from '../common/ConfirmDialog';
@@ -362,6 +363,39 @@ export function ConnectionDetails() {
     }
   };
 
+  // Alert handlers
+  const handleAcknowledgeAlert = (alertId: string) => {
+    if (!connection.alerts) return;
+
+    const updatedAlerts = connection.alerts.map(alert =>
+      alert.id === alertId ? { ...alert, acknowledged: true } : alert
+    );
+
+    updateConnection(connection.id, { alerts: updatedAlerts });
+
+    window.addToast({
+      type: 'success',
+      title: 'Alert Acknowledged',
+      message: 'The alert has been acknowledged.',
+      duration: 3000
+    });
+  };
+
+  const handleDismissAlert = (alertId: string) => {
+    if (!connection.alerts) return;
+
+    const updatedAlerts = connection.alerts.filter(alert => alert.id !== alertId);
+
+    updateConnection(connection.id, { alerts: updatedAlerts });
+
+    window.addToast({
+      type: 'success',
+      title: 'Alert Dismissed',
+      message: 'The alert has been dismissed.',
+      duration: 3000
+    });
+  };
+
   const renderContent = () => {
     const cloudRoutersCount = cloudRouters.length;
     const linksCount = getAllLinks().length;
@@ -370,6 +404,14 @@ export function ConnectionDetails() {
     switch (activeTab) {
       case 'overview':
         return <ConnectionOverview connection={connection} cloudRoutersCount={cloudRoutersCount} linksCount={linksCount} vnfsCount={vnfsCount} />;
+      case 'alerts':
+        return (
+          <AlertsTab
+            connection={connection}
+            onAcknowledge={handleAcknowledgeAlert}
+            onDismiss={handleDismissAlert}
+          />
+        );
       case 'cloudrouters':
         return (
           <NetworkTab

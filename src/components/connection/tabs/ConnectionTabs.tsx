@@ -1,11 +1,12 @@
 import { ReactNode } from 'react';
 import {
   Activity, Shield, History, Terminal,
-  Network, GitBranch, Layers, Users, DollarSign, Code, FileText
+  Network, GitBranch, Layers, Users, DollarSign, Code, FileText, AlertTriangle
 } from 'lucide-react';
 
 export type ConnectionTabType =
   | 'overview'
+  | 'alerts'
   | 'cloudrouters'
   | 'links'
   | 'vnfs'
@@ -31,6 +32,7 @@ interface ConnectionTabsProps {
 
 const TABS: Tab[] = [
   { id: 'overview', label: 'Overview', icon: <Activity className="h-5 w-5 mr-2" /> },
+  { id: 'alerts', label: 'Alerts', icon: <AlertTriangle className="h-5 w-5 mr-2" /> },
   { id: 'cloudrouters', label: 'Cloud Routers', icon: <GitBranch className="h-5 w-5 mr-2" /> },
   { id: 'links', label: 'Links', icon: <Network className="h-5 w-5 mr-2" /> },
   { id: 'vnfs', label: 'VNFs', icon: <Shield className="h-5 w-5 mr-2" /> },

@@ -113,6 +113,46 @@ export const sampleConnections: Connection[] = [
     secondaryIPE: 'Atlanta-1',
     ipeRedundancy: true,
     createdAt: '2024-01-15T00:00:00Z',
+    alerts: [
+      {
+        id: 'alert-1',
+        severity: 'critical',
+        category: 'throughput',
+        title: 'Bandwidth Utilization Critical',
+        message: 'Connection bandwidth utilization has exceeded 90%. Current usage: 85%. Consider upgrading bandwidth or implementing traffic shaping policies.',
+        timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(), // 15 minutes ago
+        acknowledged: false,
+        affectedComponents: ['cr-1', 'link-1'],
+        recommendedAction: 'Upgrade to 20 Gbps bandwidth or enable QoS policies to prioritize critical traffic.',
+      },
+      {
+        id: 'alert-2',
+        severity: 'warning',
+        category: 'configuration',
+        title: 'BGP Session Flapping',
+        message: 'BGP session on Primary Cloud Router has experienced 3 flaps in the last hour. This may indicate network instability.',
+        timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(), // 45 minutes ago
+        acknowledged: false,
+        affectedComponents: ['cr-1'],
+        recommendedAction: 'Review BGP configuration and check for network path issues. Consider increasing BGP timers.',
+      },
+      {
+        id: 'alert-3',
+        severity: 'info',
+        category: 'maintenance',
+        title: 'Scheduled Maintenance Window',
+        message: 'A maintenance window is scheduled for March 25, 2024 from 2:00 AM to 4:00 AM EST. Services may experience brief interruptions.',
+        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
+        acknowledged: false,
+        recommendedAction: 'Plan accordingly and notify affected teams of the maintenance window.',
+      }
+    ],
+    health: {
+      overall: 'degraded',
+      throughputStatus: 'critical',
+      configurationStatus: 'warning',
+      lastChecked: new Date().toISOString(),
+    },
     performance: createPerformanceData('4.2ms', '0.01%', '99.99%', 85),
     features: { ...defaultFeatures, redundantPath: true, loadBalancing: true },
     security: defaultSecurity,
@@ -137,6 +177,35 @@ export const sampleConnections: Connection[] = [
     secondaryIPE: 'SFO-1',
     ipeRedundancy: true,
     createdAt: '2024-02-01T00:00:00Z',
+    alerts: [
+      {
+        id: 'alert-4',
+        severity: 'warning',
+        category: 'performance',
+        title: 'Increased Latency Detected',
+        message: 'Average latency has increased from 4.2ms to 5.8ms over the past 4 hours. This may impact real-time applications.',
+        timestamp: new Date(Date.now() - 1000 * 60 * 20).toISOString(), // 20 minutes ago
+        acknowledged: false,
+        affectedComponents: ['link-3', 'link-4'],
+        recommendedAction: 'Check for network congestion and consider rerouting traffic through alternate paths.',
+      },
+      {
+        id: 'alert-5',
+        severity: 'info',
+        category: 'security',
+        title: 'SSL Certificate Renewal Required',
+        message: 'SSL certificate for the management interface expires in 30 days. Please renew to maintain secure access.',
+        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(), // 6 hours ago
+        acknowledged: true,
+        recommendedAction: 'Initiate certificate renewal process through the Certificate Manager.',
+      }
+    ],
+    health: {
+      overall: 'healthy',
+      throughputStatus: 'optimal',
+      configurationStatus: 'valid',
+      lastChecked: new Date().toISOString(),
+    },
     performance: createPerformanceData('4.8ms', '0.02%', '99.95%', 75),
     features: { ...defaultFeatures, autoScaling: true, loadBalancing: true },
     security: defaultSecurity,
