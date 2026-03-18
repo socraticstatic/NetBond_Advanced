@@ -35,13 +35,26 @@ import { ConnectionEditWarning } from '../common/ConnectionEditWarning';
 export function ConnectionDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const connection = useStore(state => state.connections.find(c => c.id === id));
+  const connections = useStore(state => state.connections);
+  const connection = connections.find(c => c.id === id);
   const updateConnection = useStore(state => state.updateConnection);
   const removeConnection = useStore(state => state.removeConnection);
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<ConnectionTabType>('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // Debug logging to diagnose connection lookup issue
+  useEffect(() => {
+    console.log('[ConnectionDetails] Debug Info:', {
+      urlId: id,
+      urlIdType: typeof id,
+      connectionsCount: connections.length,
+      connectionIds: connections.map(c => ({ id: c.id, type: typeof c.id })),
+      foundConnection: !!connection,
+      connectionName: connection?.name
+    });
+  }, [id, connections, connection]);
 
   // VNF state management
   const [showAddVNFModal, setShowAddVNFModal] = useState(false);
