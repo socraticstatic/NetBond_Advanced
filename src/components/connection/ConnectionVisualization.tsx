@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Cloud, Server, Network, Activity, Shield, Globe, Clock, Router, Edit2 } from 'lucide-react';
+import { Cloud, Server, Network, Activity, Shield, Globe, Clock, Router, CreditCard as Edit2 } from 'lucide-react';
 import { Connection, NetworkNode, NetworkEdge } from '../../types';
 import { Canvas } from '../network-designer/Canvas';
 import { Button } from '../common/Button';
@@ -36,6 +36,7 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
       x: width * 0.15,
       y: height * 0.5 - 32,
       name: 'Your Network',
+      icon: Network,
       status: connection.status === 'Active' ? 'active' : 'inactive',
       config: {
         location: connection.location,
@@ -54,6 +55,7 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
         x: width * 0.5,
         y: height * 0.5 - 32,
         name: connection.primaryIPE,
+        icon: Router,
         status: connection.status === 'Active' ? 'active' : 'inactive',
         config: {
           label: 'Physical IPE',
@@ -81,6 +83,7 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
       x: width * 0.85,
       y: height * 0.5 - 32,
       name: connection.provider || 'Cloud Provider',
+      icon: Cloud,
       status: connection.status === 'Active' ? 'active' : 'inactive',
       config: {
         provider: connection.provider,
@@ -182,6 +185,7 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
         x: 100,
         y: 200,
         name: 'Your Network',
+        icon: Network,
         status: connection.status === 'Active' ? 'active' : 'inactive',
         config: {
           location: connection.location,
@@ -194,6 +198,7 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
         x: 500,
         y: 200,
         name: connection.provider || 'Cloud Provider',
+        icon: Cloud,
         status: connection.status === 'Active' ? 'active' : 'inactive',
         config: {
           provider: connection.provider,

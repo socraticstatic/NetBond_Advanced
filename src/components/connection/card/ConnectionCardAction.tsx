@@ -16,11 +16,6 @@ export function ConnectionCardAction({
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('[ConnectionCardAction] Navigating to connection:', {
-      connectionId,
-      connectionIdType: typeof connectionId,
-      targetUrl: `/connections/${connectionId}`
-    });
     navigate(`/connections/${connectionId}`);
   };
 

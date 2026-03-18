@@ -44,18 +44,6 @@ export function ConnectionDetails() {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  // Debug logging to diagnose connection lookup issue
-  useEffect(() => {
-    console.log('[ConnectionDetails] Debug Info:', {
-      urlId: id,
-      urlIdType: typeof id,
-      connectionsCount: connections.length,
-      connectionIds: connections.map(c => ({ id: c.id, type: typeof c.id })),
-      foundConnection: !!connection,
-      connectionName: connection?.name
-    });
-  }, [id, connections, connection]);
-
   // VNF state management
   const [showAddVNFModal, setShowAddVNFModal] = useState(false);
   const [editingVNF, setEditingVNF] = useState<VNF | undefined>();
