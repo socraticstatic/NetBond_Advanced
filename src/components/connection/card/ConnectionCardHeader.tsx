@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import { CreditCard as Edit2, Minimize2, Cloud } from 'lucide-react';
+import { CreditCard as Edit2, Minimize2, Cloud, AlertTriangle } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { IconButton } from '../../common/IconButton';
 import { ConnectionOverflowMenu } from '../ConnectionOverflowMenu';
+import { Connection, AlertSeverity } from '../../../types/connection';
 
 interface ConnectionCardHeaderProps {
   name: string;
@@ -16,7 +17,8 @@ interface ConnectionCardHeaderProps {
   onNameKeyDown: (e: React.KeyboardEvent) => void;
   onEditNameClick: () => void;
   onMinimize: () => void;
-  connection: any;
+  connection: Connection;
+  onAlertClick?: (e: React.MouseEvent) => void;
 }
 
 /**
@@ -35,9 +37,21 @@ export function ConnectionCardHeader({
   onNameKeyDown,
   onEditNameClick,
   onMinimize,
-  connection
+  connection,
+  onAlertClick
 }: ConnectionCardHeaderProps) {
   const nameInputRef = useRef<HTMLInputElement>(null);
+
+  const alerts = connection.alerts || [];
+  const activeAlerts = alerts.filter(a => !a.acknowledged);
+  const criticalAlerts = activeAlerts.filter(a => a.severity === 'critical');
+  const warningAlerts = activeAlerts.filter(a => a.severity === 'warning');
+
+  const getSeverityColor = (): string => {
+    if (criticalAlerts.length > 0) return 'bg-red-500';
+    if (warningAlerts.length > 0) return 'bg-amber-500';
+    return 'bg-blue-500';
+  };
 
   return (
     <div className="p-4 border-b border-fw-secondary">
@@ -75,8 +89,22 @@ export function ConnectionCardHeader({
             <p className="text-xs text-fw-bodyLight">{type}</p>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
+          {/* Alert Indicator */}
+          {activeAlerts.length > 0 && (
+            <button
+              onClick={onAlertClick}
+              className="relative flex items-center justify-center h-8 w-8 rounded-lg hover:bg-fw-wash transition-colors"
+              title={`${activeAlerts.length} active alert${activeAlerts.length > 1 ? 's' : ''}`}
+            >
+              <AlertTriangle className="h-4 w-4 text-fw-bodyLight" />
+              <span className={`absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full ${getSeverityColor()} text-white text-[10px] font-semibold shadow-sm`}>
+                {activeAlerts.length}
+              </span>
+            </button>
+          )}
+
           <IconButton
             icon={<Minimize2 className="h-4 w-4" />}
             onClick={onMinimize}

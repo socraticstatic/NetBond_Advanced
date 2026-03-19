@@ -13,7 +13,6 @@ import { ConnectionCardMetrics } from './card/ConnectionCardMetrics';
 import { ConnectionCardProgress } from './card/ConnectionCardProgress';
 import { ConnectionCardAction } from './card/ConnectionCardAction';
 import { ConnectionCardMinimized } from './card/ConnectionCardMinimized';
-import { ConnectionAlertBadge } from './card/ConnectionAlertBadge';
 import { AWSPendingConfigModal } from './modals/AWSPendingConfigModal';
 
 interface ConnectionCardProps {
@@ -330,21 +329,13 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
             onEditNameClick={() => setIsEditingName(true)}
             onMinimize={() => setIsMinimized(true)}
             connection={connection}
+            onAlertClick={(e) => {
+              e.stopPropagation();
+              navigate(`/connections/${connection.id}`, { state: { activeTab: 'alerts' } });
+            }}
           />
 
           <div className="p-4 space-y-4 flex-grow">
-            {/* Alerts Badge */}
-            {connection.alerts && connection.alerts.length > 0 && (
-              <ConnectionAlertBadge
-                alerts={connection.alerts}
-                compact={true}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/connections/${connection.id}`, { state: { activeTab: 'alerts' } });
-                }}
-              />
-            )}
-
             {/* Bandwidth Utilization Bar */}
             <ConnectionCardProgress
               performance={connection.performance}
