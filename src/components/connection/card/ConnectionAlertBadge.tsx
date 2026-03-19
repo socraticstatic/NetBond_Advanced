@@ -1,4 +1,4 @@
-import { AlertTriangle, AlertCircle, Info, Zap, Settings, ShieldAlert } from 'lucide-react';
+import { AlertTriangle, AlertCircle, AlertOctagon, Info, Zap, Settings, ShieldAlert } from 'lucide-react';
 import { ConnectionAlert, AlertSeverity, AlertCategory } from '../../../types/connection';
 
 interface ConnectionAlertBadgeProps {
@@ -21,6 +21,17 @@ export function ConnectionAlertBadge({ alerts, compact = false, onClick }: Conne
   const highestSeverity: AlertSeverity = criticalAlerts.length > 0 ? 'critical'
     : warningAlerts.length > 0 ? 'warning'
     : 'info';
+
+  const getSeverityIcon = (severity: AlertSeverity) => {
+    switch (severity) {
+      case 'critical':
+        return AlertOctagon; // Stop sign shape for critical
+      case 'warning':
+        return AlertTriangle; // Triangle for warnings
+      case 'info':
+        return Info; // Circle with i for info
+    }
+  };
 
   const getSeverityColor = (severity: AlertSeverity) => {
     switch (severity) {
@@ -67,6 +78,7 @@ export function ConnectionAlertBadge({ alerts, compact = false, onClick }: Conne
   };
 
   const colors = getSeverityColor(highestSeverity);
+  const SeverityIcon = getSeverityIcon(highestSeverity);
 
   if (compact) {
     return (
@@ -75,7 +87,7 @@ export function ConnectionAlertBadge({ alerts, compact = false, onClick }: Conne
         onClick={onClick}
         title={`${alerts.length} alert${alerts.length > 1 ? 's' : ''}`}
       >
-        <AlertTriangle className={`h-3.5 w-3.5 ${colors.icon}`} />
+        <SeverityIcon className={`h-3.5 w-3.5 ${colors.icon}`} />
         <span className={`text-xs font-semibold ${colors.text}`}>{alerts.length}</span>
       </div>
     );
@@ -88,7 +100,7 @@ export function ConnectionAlertBadge({ alerts, compact = false, onClick }: Conne
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <AlertTriangle className={`h-4 w-4 ${colors.icon}`} />
+          <SeverityIcon className={`h-4 w-4 ${colors.icon}`} />
           <span className={`text-sm font-semibold ${colors.text}`}>
             {alerts.length} Active Alert{alerts.length > 1 ? 's' : ''}
           </span>
@@ -159,6 +171,17 @@ export function AlertList({ alerts, onAcknowledge, onDismiss }: AlertListProps) 
     );
   }
 
+  const getSeverityIcon = (severity: AlertSeverity) => {
+    switch (severity) {
+      case 'critical':
+        return AlertOctagon; // Stop sign shape for critical
+      case 'warning':
+        return AlertTriangle; // Triangle for warnings
+      case 'info':
+        return Info; // Circle with i for info
+    }
+  };
+
   const getSeverityColor = (severity: AlertSeverity) => {
     switch (severity) {
       case 'critical':
@@ -208,6 +231,7 @@ export function AlertList({ alerts, onAcknowledge, onDismiss }: AlertListProps) 
     <div className="space-y-3">
       {alerts.map((alert) => {
         const colors = getSeverityColor(alert.severity);
+        const SeverityIcon = getSeverityIcon(alert.severity);
 
         return (
           <div
@@ -216,21 +240,24 @@ export function AlertList({ alerts, onAcknowledge, onDismiss }: AlertListProps) 
           >
             <div className="flex items-start gap-3">
               <div className={colors.icon}>
-                {getCategoryIcon(alert.category)}
+                <SeverityIcon className="h-5 w-5" />
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2 mb-1">
-                  <div>
+                  <div className="flex items-center gap-2">
                     <h4 className={`font-semibold ${colors.text}`}>{alert.title}</h4>
-                    <p className={`text-xs ${colors.text} opacity-75 mt-0.5`}>
-                      {getCategoryLabel(alert.category)} • {new Date(alert.timestamp).toLocaleString()}
-                    </p>
+                    <div className={`${colors.icon} flex-shrink-0`}>
+                      {getCategoryIcon(alert.category)}
+                    </div>
                   </div>
                   <span className={`text-xs px-2 py-0.5 rounded ${colors.bg} border ${colors.border} font-medium ${colors.text} whitespace-nowrap`}>
                     {alert.severity.toUpperCase()}
                   </span>
                 </div>
+                <p className={`text-xs ${colors.text} opacity-75 mt-0.5`}>
+                  {getCategoryLabel(alert.category)} • {new Date(alert.timestamp).toLocaleString()}
+                </p>
 
                 <p className={`text-sm ${colors.text} mt-2`}>
                   {alert.message}
