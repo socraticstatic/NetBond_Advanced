@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { CreditCard as Edit2, Minimize2, Cloud, AlertTriangle } from 'lucide-react';
+import { CreditCard as Edit2, Minimize2, Cloud, AlertTriangle, Octagon, Info } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { IconButton } from '../../common/IconButton';
 import { ConnectionOverflowMenu } from '../ConnectionOverflowMenu';
@@ -53,6 +53,12 @@ export function ConnectionCardHeader({
     return 'bg-blue-500';
   };
 
+  const getSeverityIcon = () => {
+    if (criticalAlerts.length > 0) return <Octagon className="h-4 w-4 text-fw-bodyLight" />;
+    if (warningAlerts.length > 0) return <AlertTriangle className="h-4 w-4 text-fw-bodyLight" />;
+    return <Info className="h-4 w-4 text-fw-bodyLight" />;
+  };
+
   return (
     <div className="p-4 border-b border-fw-secondary">
       <div className="flex items-center justify-between">
@@ -98,7 +104,7 @@ export function ConnectionCardHeader({
               className="relative flex items-center justify-center h-8 w-8 rounded-lg hover:bg-fw-wash transition-colors"
               title={`${activeAlerts.length} active alert${activeAlerts.length > 1 ? 's' : ''}`}
             >
-              <AlertTriangle className="h-4 w-4 text-fw-bodyLight" />
+              {getSeverityIcon()}
               <span className={`absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full ${getSeverityColor()} text-white text-[10px] font-semibold shadow-sm`}>
                 {activeAlerts.length}
               </span>
