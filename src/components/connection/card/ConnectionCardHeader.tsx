@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { CreditCard as Edit2, Minimize2, Cloud, AlertTriangle, Octagon } from 'lucide-react';
+import { CreditCard as Edit2, Minimize2, Cloud, AlertTriangle, XOctagon } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { IconButton } from '../../common/IconButton';
 import { ConnectionOverflowMenu } from '../ConnectionOverflowMenu';
@@ -53,7 +53,7 @@ export function ConnectionCardHeader({
   };
 
   const getSeverityIcon = () => {
-    if (criticalAlerts.length > 0) return <Octagon className="h-4 w-4 text-fw-bodyLight" />;
+    if (criticalAlerts.length > 0) return <XOctagon className="h-4 w-4 text-fw-bodyLight" />;
     return <AlertTriangle className="h-4 w-4 text-fw-bodyLight" />;
   };
 
