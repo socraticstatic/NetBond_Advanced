@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AlertTriangle, AlertCircle, Clock, Activity, Network, X } from 'lucide-react';
+import { AlertTriangle, AlertOctagon, AlertCircle, Clock, Info, X } from 'lucide-react';
 import { Alert } from '../../../types';
 import { motion } from 'framer-motion';
 
@@ -15,11 +15,11 @@ export function AlertCard({ alert, onDismiss, isMobile = false }: AlertCardProps
   const getIcon = () => {
     switch (alert.type) {
       case 'critical':
-        return Activity;
+        return AlertOctagon; // Stop sign shape for critical
       case 'warning':
-        return AlertTriangle;
+        return AlertTriangle; // Triangle for warnings
       case 'info':
-        return Clock;
+        return Info; // Circle with i for info
       default:
         return AlertCircle;
     }

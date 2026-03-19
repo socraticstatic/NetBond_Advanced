@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Connection, AlertSeverity, AlertCategory } from '../../../types/connection';
 import { AlertList } from '../card/ConnectionAlertBadge';
-import { Filter, CheckCircle, AlertTriangle, Info } from 'lucide-react';
+import { Filter, CheckCircle, AlertTriangle, AlertOctagon, Info } from 'lucide-react';
 
 interface AlertsTabProps {
   connection: Connection;
@@ -52,7 +52,7 @@ export function AlertsTab({ connection, onAcknowledge, onDismiss }: AlertsTabPro
               <p className="text-xs text-red-600 font-medium mb-1">Critical</p>
               <p className="text-2xl font-bold text-red-700">{criticalCount}</p>
             </div>
-            <AlertTriangle className="h-8 w-8 text-red-500" />
+            <AlertOctagon className="h-8 w-8 text-red-500" />
           </div>
         </div>
 
