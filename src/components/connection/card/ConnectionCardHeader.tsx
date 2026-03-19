@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { CreditCard as Edit2, Minimize2, Cloud, AlertTriangle, Octagon, Info } from 'lucide-react';
+import { CreditCard as Edit2, Minimize2, Cloud, AlertTriangle, Octagon } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { IconButton } from '../../common/IconButton';
 import { ConnectionOverflowMenu } from '../ConnectionOverflowMenu';
@@ -43,20 +43,18 @@ export function ConnectionCardHeader({
   const nameInputRef = useRef<HTMLInputElement>(null);
 
   const alerts = connection.alerts || [];
-  const activeAlerts = alerts.filter(a => !a.acknowledged);
+  const activeAlerts = alerts.filter(a => !a.acknowledged && (a.severity === 'critical' || a.severity === 'warning'));
   const criticalAlerts = activeAlerts.filter(a => a.severity === 'critical');
   const warningAlerts = activeAlerts.filter(a => a.severity === 'warning');
 
   const getSeverityColor = (): string => {
     if (criticalAlerts.length > 0) return 'bg-red-500';
-    if (warningAlerts.length > 0) return 'bg-amber-500';
-    return 'bg-blue-500';
+    return 'bg-amber-500';
   };
 
   const getSeverityIcon = () => {
     if (criticalAlerts.length > 0) return <Octagon className="h-4 w-4 text-fw-bodyLight" />;
-    if (warningAlerts.length > 0) return <AlertTriangle className="h-4 w-4 text-fw-bodyLight" />;
-    return <Info className="h-4 w-4 text-fw-bodyLight" />;
+    return <AlertTriangle className="h-4 w-4 text-fw-bodyLight" />;
   };
 
   return (
