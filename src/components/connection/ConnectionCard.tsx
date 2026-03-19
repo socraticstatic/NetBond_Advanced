@@ -252,11 +252,57 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   const healthStatus = getHealthStatus();
   const billingInfo = getBillingInfo();
 
+  // Determine alert border animation
+  const alerts = connection.alerts || [];
+  const activeAlerts = alerts.filter(a => !a.acknowledged);
+  const hasCriticalAlerts = activeAlerts.some(a => a.severity === 'critical');
+  const hasWarningAlerts = activeAlerts.some(a => a.severity === 'warning');
+
+  const getAlertBorderAnimation = () => {
+    if (hasCriticalAlerts) {
+      return {
+        borderColor: ['rgba(239, 68, 68, 0.3)', 'rgba(239, 68, 68, 0.8)', 'rgba(239, 68, 68, 0.3)'],
+        boxShadow: [
+          '0 2px 4px rgba(0,0,0,0.05)',
+          '0 0 12px rgba(239, 68, 68, 0.4)',
+          '0 2px 4px rgba(0,0,0,0.05)'
+        ],
+        transition: {
+          repeat: Infinity,
+          duration: 2,
+          ease: "easeInOut"
+        }
+      };
+    } else if (hasWarningAlerts) {
+      return {
+        borderColor: ['rgba(245, 158, 11, 0.3)', 'rgba(245, 158, 11, 0.7)', 'rgba(245, 158, 11, 0.3)'],
+        boxShadow: [
+          '0 2px 4px rgba(0,0,0,0.05)',
+          '0 0 10px rgba(245, 158, 11, 0.3)',
+          '0 2px 4px rgba(0,0,0,0.05)'
+        ],
+        transition: {
+          repeat: Infinity,
+          duration: 3.5,
+          ease: "easeInOut"
+        }
+      };
+    }
+    return {};
+  };
+
+  const getBorderClass = () => {
+    if (hasCriticalAlerts) return 'border-red-500/30';
+    if (hasWarningAlerts) return 'border-amber-500/30';
+    return 'border-fw-secondary';
+  };
+
   return (
     <motion.div
       className={`
         relative
-        bg-fw-base rounded-xl border border-fw-secondary
+        bg-fw-base rounded-xl border-2
+        ${getBorderClass()}
         shadow-sm
         hover:shadow-md
         transition-all duration-300 ease-in-out
@@ -268,16 +314,22 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
       `}
       data-tour-target="connection-card"
       onClick={handleCardClick}
-      // Add motion animation when pending (but not for AWS pending)
-      animate={isPending && !isPendingAWS ? {
-        boxShadow: ['0 2px 4px rgba(0,0,0,0.05)', '0 0 8px rgba(0,159,219,0.5)', '0 2px 4px rgba(0,0,0,0.05)'],
-        scale: [1, 1.02, 1],
-        transition: {
-          repeat: Infinity,
-          duration: 2.5,
-          ease: "easeInOut"
-        }
-      } : {}}
+      // Add motion animation for alerts or pending status
+      animate={
+        (hasCriticalAlerts || hasWarningAlerts)
+          ? getAlertBorderAnimation()
+          : isPending && !isPendingAWS
+            ? {
+                boxShadow: ['0 2px 4px rgba(0,0,0,0.05)', '0 0 8px rgba(0,159,219,0.5)', '0 2px 4px rgba(0,0,0,0.05)'],
+                scale: [1, 1.02, 1],
+                transition: {
+                  repeat: Infinity,
+                  duration: 2.5,
+                  ease: "easeInOut"
+                }
+              }
+            : {}
+      }
     >
       {/* Progress Bar */}
       {isPending && (
