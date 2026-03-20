@@ -59,7 +59,17 @@ export function useNetworkManager(
     const updatedNode = {
       ...node,
       ...updates,
-      config: updates.config ? { ...node.config, ...updates.config } : node.config
+      config: updates.config
+        ? Object.entries(updates.config).reduce(
+            (merged, [key, value]) => ({
+              ...merged,
+              [key]: value && typeof value === 'object' && !Array.isArray(value) && merged[key] && typeof merged[key] === 'object'
+                ? { ...merged[key], ...value }
+                : value
+            }),
+            { ...node.config }
+          )
+        : node.config
     };
 
     if (typeof updatedNode.y === 'number') {
