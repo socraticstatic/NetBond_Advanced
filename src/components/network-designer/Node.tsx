@@ -169,7 +169,7 @@ export const Node = memo(function Node({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, dragOffset, onDrag, onDragEnd, zoomLevel, hasDragged, panOffset]);
+  }, [isDragging, dragOffset, onDrag, onDragEnd, zoomLevel, hasDragged]);
 
   // Focus input when editing starts
   useEffect(() => {
