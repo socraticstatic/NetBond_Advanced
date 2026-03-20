@@ -7,7 +7,7 @@ import { ToastContainer } from './components/common/ToastContainer';
 import { ConnectionTabs } from './components/connection/ConnectionTabs';
 import { useStore } from './store/useStore';
 import { ThemeProvider } from './components/ThemeProvider';
-import { MobileMenu } from './components/navigation/MobileMenu';
+
 import { SmartAssistant } from './components/SmartAssistant';
 import { NavigationStateProvider } from './components/common/layouts/NavigationStateProvider';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
@@ -474,12 +474,6 @@ function App() {
         
         {!isDetachedWindow && (
           <>
-            <MobileMenu
-              isOpen={false}
-              onClose={() => {}}
-              userInfo={userInfo}
-              notifications={3}
-            />
             <SmartAssistant />
             <ProductTour
               steps={mainAppTour}
