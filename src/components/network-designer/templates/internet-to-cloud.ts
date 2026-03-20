@@ -1,4 +1,4 @@
-import { Network, Router, Cloud, Globe } from 'lucide-react';
+import { Router, Cloud, Globe } from 'lucide-react';
 import { Template } from './types';
 
 export const internetToCloudTemplate: Template = {
@@ -24,7 +24,7 @@ export const internetToCloudTemplate: Template = {
       x: 100,
       y: 200,
       name: 'AT&T Core',
-      icon: Globe,
+      icon: 'Globe',
       status: 'inactive',
       config: {
         networkType: 'at&t core',
@@ -38,7 +38,7 @@ export const internetToCloudTemplate: Template = {
       x: 300,
       y: 200,
       name: 'Cloud Router',
-      icon: Router,
+      icon: 'Router',
       status: 'inactive',
       config: {
         routerType: 'cloud',
@@ -52,7 +52,7 @@ export const internetToCloudTemplate: Template = {
       x: 500,
       y: 200,
       name: 'AWS Cloud',
-      icon: Cloud,
+      icon: 'Cloud',
       status: 'inactive',
       config: {
         provider: 'AWS',

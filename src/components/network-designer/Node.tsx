@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, memo } from 'react';
 import { NetworkNode } from '../types';
 import { getNodeColors } from '../../utils/nodeUtils';
+import { resolveIcon } from '../../utils/iconRegistry';
 import { CANVAS_BOUNDS, Z_INDEX } from '../../utils/designer-constants';
 
 interface NodeProps {
@@ -188,7 +189,7 @@ export const Node = memo(function Node({
     };
   }, []);
 
-  const Icon = node.icon;
+  const Icon = typeof node.icon === 'string' ? resolveIcon(node.icon) : node.icon;
 
   // Get node colors
   const colors = getNodeColors(node);

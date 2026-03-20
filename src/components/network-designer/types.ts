@@ -5,7 +5,7 @@ export interface NetworkNode {
   x: number;
   y: number;
   name: string;
-  icon: any;
+  icon: string;
   status: 'active' | 'inactive';
   config?: {
     provider?: string;

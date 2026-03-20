@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NetworkNode, NetworkEdge } from '../types';
-import { Server, Router, Cloud, Globe, Network, Save, Trash2 } from 'lucide-react';
+import { Router, Cloud, Globe, Save, Trash2 } from 'lucide-react';
 
 interface TemplatesDrawerProps {
   onApplyTemplate: (nodes: NetworkNode[], edges: NetworkEdge[]) => void;
@@ -47,7 +47,7 @@ export function TemplatesDrawer({
           x: 200,
           y: 200,
           name: 'AT&T Core',
-          icon: Globe,
+          icon: 'Globe',
           status: 'inactive',
           config: {
             networkType: 'at&t core',
@@ -61,7 +61,7 @@ export function TemplatesDrawer({
           x: 400,
           y: 200,
           name: 'Cloud Router',
-          icon: Router,
+          icon: 'Router',
           status: 'inactive',
           config: {
             routerType: 'cloud',
@@ -74,7 +74,7 @@ export function TemplatesDrawer({
           x: 600,
           y: 200,
           name: 'AWS Cloud',
-          icon: Cloud,
+          icon: 'Cloud',
           status: 'inactive',
           config: {
             provider: 'AWS',
@@ -112,7 +112,7 @@ export function TemplatesDrawer({
           x: 200,
           y: 200,
           name: 'AT&T Core',
-          icon: Globe,
+          icon: 'Globe',
           status: 'inactive',
           config: {
             networkType: 'at&t core',
@@ -126,7 +126,7 @@ export function TemplatesDrawer({
           x: 300,
           y: 200,
           name: 'Cloud Router',
-          icon: Router,
+          icon: 'Router',
           status: 'inactive',
           config: {
             routerType: 'cloud',
@@ -139,7 +139,7 @@ export function TemplatesDrawer({
           x: 500,
           y: 100,
           name: 'AWS Cloud',
-          icon: Cloud,
+          icon: 'Cloud',
           status: 'inactive',
           config: {
             provider: 'AWS',
@@ -152,7 +152,7 @@ export function TemplatesDrawer({
           x: 500,
           y: 300,
           name: 'Azure Cloud',
-          icon: Cloud,
+          icon: 'Cloud',
           status: 'inactive',
           config: {
             provider: 'Azure',
@@ -198,7 +198,7 @@ export function TemplatesDrawer({
           x: 200,
           y: 200,
           name: 'AT&T Core',
-          icon: Globe,
+          icon: 'Globe',
           status: 'inactive',
           config: {
             networkType: 'at&t core',
@@ -212,7 +212,7 @@ export function TemplatesDrawer({
           x: 400,
           y: 100,
           name: 'Primary Cloud Router',
-          icon: Router,
+          icon: 'Router',
           status: 'inactive',
           config: {
             routerType: 'cloud',
@@ -228,7 +228,7 @@ export function TemplatesDrawer({
           x: 400,
           y: 300,
           name: 'Secondary Cloud Router',
-          icon: Router,
+          icon: 'Router',
           status: 'inactive',
           config: {
             routerType: 'cloud',
@@ -243,7 +243,7 @@ export function TemplatesDrawer({
           x: 600,
           y: 200,
           name: 'AWS Cloud',
-          icon: Cloud,
+          icon: 'Cloud',
           status: 'inactive',
           config: {
             provider: 'AWS',

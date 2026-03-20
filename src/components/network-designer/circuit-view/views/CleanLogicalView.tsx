@@ -3,6 +3,7 @@ import { Network, ArrowRight } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { Circuit, Port } from '../CircuitTypes';
 import { getNodeIcon } from '../../../../utils/nodeUtils';
+import { resolveIcon } from '../../../../utils/iconRegistry';
 
 interface CleanLogicalViewProps {
   nodes: NetworkNode[];
@@ -57,7 +58,7 @@ export function CleanLogicalView({
   };
 
   const renderDeviceCard = (node: NetworkNode) => {
-    const IconComponent = getNodeIcon(node.type, node.functionType, node.config?.networkType, node.config);
+    const IconComponent = resolveIcon(getNodeIcon(node.type, node.functionType, node.config?.networkType, node.config));
     const stats = getDeviceStats(node.id);
     const isSelected = selectedDevice === node.id;
     const isHovered = hoveredDevice === node.id;

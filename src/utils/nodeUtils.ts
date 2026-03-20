@@ -1,41 +1,40 @@
-import { Server, Cloud, Router, Network, Shield, Activity, PanelRight, Menu, Database, Globe, Lock, Feather as Ethernet, Wifi, Share2 } from 'lucide-react';
 import { NetworkNode } from '../types';
 
-export const getFunctionIcon = (functionType: string, config?: any) => {
+export const getFunctionIconName = (functionType: string, config?: any): string => {
   switch (functionType) {
-    case 'Cloud Router': return Share2;
-    case 'Router': return config?.routerType === 'cloud' ? Share2 : Router;
-    case 'SDWAN': return PanelRight;
-    case 'Firewall': return Shield;
-    case 'VNF': return Activity;
-    case 'VNAT': return Menu;
-    default: return Server;
+    case 'Cloud Router': return 'Share2';
+    case 'Router': return config?.routerType === 'cloud' ? 'Share2' : 'Router';
+    case 'SDWAN': return 'PanelRight';
+    case 'Firewall': return 'Shield';
+    case 'VNF': return 'Activity';
+    case 'VNAT': return 'Menu';
+    default: return 'Server';
   }
 };
 
-export const getNetworkTypeIcon = (networkType: string) => {
+export const getNetworkTypeIconName = (networkType: string): string => {
   switch (networkType?.toLowerCase()) {
-    case 'internet': return Network;
-    case 'vpn': return Lock;
-    case 'ethernet': return Ethernet;
-    case 'iot': return Wifi;
-    case 'at&t core': return Globe;
-    default: return Network;
+    case 'internet': return 'Network';
+    case 'vpn': return 'Lock';
+    case 'ethernet': return 'Cable';
+    case 'iot': return 'Wifi';
+    case 'at&t core': return 'Globe';
+    default: return 'Network';
   }
 };
 
-export const getNodeIcon = (type: NetworkNode['type'], functionType?: string, networkType?: string, config?: any) => {
+export const getNodeIcon = (type: NetworkNode['type'], functionType?: string, networkType?: string, config?: any): string => {
   switch (type) {
     case 'function':
-      return functionType ? getFunctionIcon(functionType, config) : Server;
+      return functionType ? getFunctionIconName(functionType, config) : 'Server';
     case 'destination':
-      return Cloud;
+      return 'Cloud';
     case 'datacenter':
-      return Database;
+      return 'Database';
     case 'network':
-      return networkType ? getNetworkTypeIcon(networkType) : Network;
+      return networkType ? getNetworkTypeIconName(networkType) : 'Network';
     default:
-      return Server;
+      return 'Server';
   }
 };
 

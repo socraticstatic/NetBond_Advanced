@@ -1,4 +1,4 @@
-import { Server, Router, Cloud, Network, Globe } from 'lucide-react';
+import { Router, Cloud, Globe } from 'lucide-react';
 import { Template } from './types';
 
 export const highAvailabilityTemplate: Template = {
@@ -25,7 +25,7 @@ export const highAvailabilityTemplate: Template = {
       x: 100,
       y: 225,
       name: 'AT&T Core',
-      icon: Globe,
+      icon: 'Globe',
       status: 'inactive',
       config: {
         networkType: 'at&t core',
@@ -39,7 +39,7 @@ export const highAvailabilityTemplate: Template = {
       x: 250,
       y: 150,
       name: 'Primary Cloud Router',
-      icon: Router,
+      icon: 'Router',
       status: 'inactive',
       config: {
         routerType: 'cloud',
@@ -55,7 +55,7 @@ export const highAvailabilityTemplate: Template = {
       x: 250,
       y: 300,
       name: 'Secondary Cloud Router',
-      icon: Router,
+      icon: 'Router',
       status: 'inactive',
       config: {
         routerType: 'cloud',
@@ -70,7 +70,7 @@ export const highAvailabilityTemplate: Template = {
       x: 400,
       y: 225,
       name: 'AWS Cloud',
-      icon: Cloud,
+      icon: 'Cloud',
       status: 'inactive',
       config: {
         provider: 'AWS',

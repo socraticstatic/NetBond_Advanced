@@ -2,6 +2,7 @@ import { X, Server, Cable, Activity, Zap } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { Port, Circuit } from '../CircuitTypes';
 import { getNodeIcon } from '../../../../utils/nodeUtils';
+import { resolveIcon } from '../../../../utils/iconRegistry';
 
 interface RightDetailPanelProps {
   selectedDevice: NetworkNode | null;
@@ -53,7 +54,7 @@ export function RightDetailPanel({
 }
 
 function renderDeviceDetails(device: NetworkNode, devicePorts: Record<string, Port[]>, onSelectPort: (portId: string) => void) {
-  const IconComponent = getNodeIcon(device.type, device.functionType, device.config?.networkType, device.config);
+  const IconComponent = resolveIcon(getNodeIcon(device.type, device.functionType, device.config?.networkType, device.config));
   const ports = devicePorts[device.id] || [];
   const activePorts = ports.filter(p => p.status === 'active');
 

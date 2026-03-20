@@ -169,11 +169,11 @@ export function AIRecommendationEngine({
             x: cloudNode.x - 150,
             y: cloudNode.y + 100,
             name: 'Backup Router',
-            icon: Router,
+            icon: 'Router',
             status: 'inactive',
             config: { routerType: 'virtual' }
           };
-          
+
           // Add a new source connection
           const newSource: NetworkNode = {
             id: `node-${Date.now()}-source`,
@@ -182,7 +182,7 @@ export function AIRecommendationEngine({
             x: newRouter.x - 150,
             y: newRouter.y,
             name: 'Backup Connection',
-            icon: Server,
+            icon: 'Server',
             status: 'inactive',
             config: {}
           };
@@ -266,14 +266,14 @@ export function AIRecommendationEngine({
             x: primaryCloud.x + 150,
             y: primaryCloud.y + 100,
             name: 'DR Region',
-            icon: Cloud,
+            icon: 'Cloud',
             status: 'inactive',
             config: {
               provider: primaryCloud.config.provider,
               region: drRegion
             }
           };
-          
+
           // Create router for DR region
           const drRouter: NetworkNode = {
             id: `node-${Date.now()}-drrouter`,
@@ -282,7 +282,7 @@ export function AIRecommendationEngine({
             x: drCloud.x - 100,
             y: drCloud.y,
             name: 'DR Router',
-            icon: Router,
+            icon: 'Router',
             status: 'inactive',
             config: {
               routerType: 'virtual'
@@ -351,7 +351,7 @@ export function AIRecommendationEngine({
               x: midX,
               y: midY,
               name: 'Security Firewall',
-              icon: Shield,
+              icon: 'Shield',
               status: 'inactive',
               config: { firewallType: 'ngfw' }
             };
@@ -393,7 +393,7 @@ export function AIRecommendationEngine({
           x: 250,
           y: 150,
           name: 'SD-WAN Controller',
-          icon: PanelRight,
+          icon: 'PanelRight',
           status: 'inactive',
           config: { sdwanType: 'controller' }
         };
@@ -440,7 +440,7 @@ export function AIRecommendationEngine({
           x: 300,
           y: 300,
           name: 'Virtual Network Functions',
-          icon: BarChart2,
+          icon: 'BarChart2',
           status: 'inactive',
           config: { 
             vnfType: 'multifunction',
