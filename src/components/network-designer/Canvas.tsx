@@ -51,6 +51,8 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
 }, ref) => {
   const internalCanvasRef = useRef<HTMLDivElement>(null);
   const lastMousePosition = useRef({ x: 0, y: 0 });
+  const isPanningRef = useRef(false);
+  const startPanPositionRef = useRef({ x: 0, y: 0 });
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [isPanning, setIsPanning] = useState(false);
@@ -125,23 +127,26 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
     const handleMouseDown = (e: MouseEvent) => {
       if (e.button === 1 || (e.button === 0 && e.altKey)) { // Middle mouse button or Alt+Left click
         e.preventDefault();
+        isPanningRef.current = true;
         setIsPanning(true);
-        setStartPanPosition({ x: e.clientX - panOffset.x, y: e.clientY - panOffset.y });
+        startPanPositionRef.current = { x: e.clientX - panOffset.x, y: e.clientY - panOffset.y };
+        setStartPanPosition(startPanPositionRef.current);
       }
     };
     
     const handleMouseUp = (e: MouseEvent) => {
       if (e.button === 1 || (e.button === 0 && e.altKey)) { // Middle mouse button or Alt+Left click
+        isPanningRef.current = false;
         setIsPanning(false);
       }
     };
     
     const handleMouseMove = (e: MouseEvent) => {
-      if (isPanning) {
-        const newPanX = e.clientX - startPanPosition.x;
-        const newPanY = e.clientY - startPanPosition.y;
+      if (isPanningRef.current) {
+        const newPanX = e.clientX - startPanPositionRef.current.x;
+        const newPanY = e.clientY - startPanPositionRef.current.y;
         setPanOffset({ x: newPanX, y: newPanY });
-        
+
         // Change cursor during panning
         document.body.style.cursor = 'grabbing';
       }
@@ -149,19 +154,22 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
     
     // Spacebar panning
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space' && !isPanning) {
+      if (e.code === 'Space' && !isPanningRef.current) {
         e.preventDefault();
+        isPanningRef.current = true;
         setIsPanning(true);
-        setStartPanPosition({
+        startPanPositionRef.current = {
           x: lastMousePosition.current.x - panOffset.x,
           y: lastMousePosition.current.y - panOffset.y
-        });
+        };
+        setStartPanPosition(startPanPositionRef.current);
         document.body.style.cursor = 'grab';
       }
     };
     
     const handleKeyUp = (e: KeyboardEvent) => {
       if (e.code === 'Space') {
+        isPanningRef.current = false;
         setIsPanning(false);
         document.body.style.cursor = 'auto';
       }
@@ -209,7 +217,7 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
       element.removeEventListener('wheel', handleWheel);
       document.body.style.cursor = 'auto';
     };
-  }, [canvasRef, isPanning, startPanPosition, panOffset, zoomLevel]);
+  }, [canvasRef, panOffset, zoomLevel]);
   
   // Handle canvas click - clear selections if clicking on empty space
   const handleCanvasClick = (e: React.MouseEvent) => {
