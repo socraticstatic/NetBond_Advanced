@@ -678,7 +678,13 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
       <HistoryDrawer
         isOpen={showHistoryDrawer}
         onClose={() => setShowHistoryDrawer(false)}
-        history={[]}
+        history={networkHistory.nodes.map((nodeSet, index) => ({
+          id: `history-${index}`,
+          timestamp: Date.now() - (networkHistory.nodes.length - 1 - index) * 1000,
+          nodes: nodeSet,
+          edges: networkHistory.edges[index] || [],
+          preview: `${nodeSet.length} node${nodeSet.length !== 1 ? 's' : ''}, ${(networkHistory.edges[index] || []).length} edge${(networkHistory.edges[index] || []).length !== 1 ? 's' : ''}`
+        })).reverse()}
         onRestoreTopology={(nodes, edges) => {
           setNodes(nodes);
           setEdges(edges);
