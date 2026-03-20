@@ -195,7 +195,7 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
         ) : (
           filteredGroups.map((group) => {
             const connectionCount = group.connectionIds?.length || 0;
-            const memberCount = group.members?.length || 0;
+            const memberCount = group.userIds?.length || 0;
 
             return (
               <motion.div
