@@ -222,13 +222,6 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
       }
     ];
     
-    // Log what we're sending to the router
-    console.log("Navigating to visual editor with:", {
-      initialNodes,
-      initialEdges,
-      connection
-    });
-    
     // Navigate to the wizard with the initial state (only serializable data)
     navigate('/create', { 
       state: { 

@@ -249,7 +249,6 @@ export function ReactiveAIPanel({ nodes, edges, onApplyRecommendation }: Reactiv
 
             <button
               onClick={() => {
-                console.log('Apply recommendation:', rec.id);
               }}
               className="mt-3 w-full px-3 py-1.5 bg-white border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex items-center justify-center text-sm font-medium text-gray-700 hover:text-blue-700"
             >

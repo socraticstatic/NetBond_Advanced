@@ -57,7 +57,6 @@ export function useVNFSync({
 
         case 'DETACHED_CLOSED':
           // Detached window closed, no action needed
-          console.log('[VNFSync] Detached window closed:', windowId);
           break;
       }
     };

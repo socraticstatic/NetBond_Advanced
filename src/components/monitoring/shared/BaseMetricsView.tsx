@@ -39,7 +39,6 @@ export function BaseMetricsView({ connections, children, isMobile = false }: Bas
     // Cleanup timer on unmount
     return () => {
       if (timerRef.current) {
-        console.log('BaseMetricsView: Cleaning up timer on unmount');
         clearTimeout(timerRef.current);
         timerRef.current = null;
       }

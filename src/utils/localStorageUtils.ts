@@ -173,7 +173,7 @@ export function pruneOldEntries(): void {
     keysToRemove.forEach(key => localStorage.removeItem(key));
 
     if (keysToRemove.length > 0) {
-      console.log(`[localStorage] Pruned ${keysToRemove.length} old entries`);
+
     }
   } catch (error) {
     console.error('[localStorage] Error pruning old entries:', error);
@@ -217,7 +217,7 @@ export function clearAllNetbondData(): void {
 
     keys.forEach(key => localStorage.removeItem(key));
 
-    console.log(`[localStorage] Cleared ${keys.length} netbond entries`);
+
   } catch (error) {
     console.error('[localStorage] Error clearing netbond data:', error);
   }
