@@ -28,7 +28,7 @@ import {
   injectBandwidthLimit
 } from './simulation/runSimulation';
 import { getNodeIcon } from '../../utils/nodeUtils';
-import { Z_INDEX, DEFAULT_NETWORK_CONFIG } from '../../utils/designer-constants';
+import { Z_INDEX, DEFAULT_NETWORK_CONFIG, CANVAS_BOUNDS } from '../../utils/designer-constants';
 import { NetworkNode, NetworkEdge } from './types';
 
 interface NetworkDesignerProps {
@@ -190,7 +190,7 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
     
     // Update node position
     setNodes(prev => 
-      prev.map(n => n.id === nodeId ? { ...n, x, y: Math.min(y, 800 - 64) } : n)
+      prev.map(n => n.id === nodeId ? { ...n, x, y: Math.min(y, CANVAS_BOUNDS.MAX_Y - CANVAS_BOUNDS.NODE_SIZE) } : n)
     );
   };
   
@@ -198,7 +198,7 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
   const handleNodeDragEnd = () => {
     // Apply snap-to-grid at the END of dragging, not during
     // This prevents the jumping issue while still maintaining grid alignment
-    const gridSize = 20;
+    const gridSize = CANVAS_BOUNDS.GRID_SIZE;
     const snappedNodes = nodes.map(node => ({
       ...node,
       x: Math.round(node.x / gridSize) * gridSize,

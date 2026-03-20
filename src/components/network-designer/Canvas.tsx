@@ -3,7 +3,7 @@ import { NetworkNode, NetworkEdge } from '../types';
 import { Node } from './Node';
 import { Edge } from './Edge';
 import { EdgeControls } from './EdgeControls';
-import { CANVAS_BOUNDS, Z_INDEX } from '../../utils/designer-constants';
+import { CANVAS_BOUNDS, ZOOM_LIMITS, Z_INDEX } from '../../utils/designer-constants';
 
 interface CanvasProps {
   nodes: NetworkNode[];
@@ -179,7 +179,7 @@ export const Canvas = forwardRef<HTMLDivElement, CanvasProps>(({
         const mouseY = (e.clientY - rect.top - panOffset.y) / zoomLevel;
         
         // Calculate new zoom level
-        const newZoomLevel = Math.max(0.5, Math.min(zoomLevel + delta, 2));
+        const newZoomLevel = Math.max(ZOOM_LIMITS.MIN, Math.min(zoomLevel + delta, ZOOM_LIMITS.MAX));
         
         // Calculate new pan offset to zoom towards/away from mouse position
         if (newZoomLevel !== zoomLevel) {
