@@ -68,7 +68,7 @@ export function GlobalKeyboardShortcuts() {
       {
         key: 'c',
         description: 'Go to connections',
-        handler: () => navigate('/connections')
+        handler: () => navigate('/manage')
       },
       {
         key: 'g',
@@ -78,7 +78,7 @@ export function GlobalKeyboardShortcuts() {
       {
         key: 'm',
         description: 'Go to monitoring',
-        handler: () => navigate('/monitoring')
+        handler: () => navigate('/monitor')
       },
       {
         key: 'e',
