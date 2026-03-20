@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { NetworkNode, NetworkEdge } from '../types';
 
 interface HistoryState {
@@ -14,34 +14,46 @@ export function useNetworkHistory() {
     currentIndex: 0
   });
 
+  const undoRedoResult = useRef<{ nodes: NetworkNode[]; edges: NetworkEdge[] } | null>(null);
+
   const saveToHistory = (newNodes: NetworkNode[], newEdges: NetworkEdge[]) => {
-    setHistory({
-      nodes: [...history.nodes.slice(0, history.currentIndex + 1), newNodes],
-      edges: [...history.edges.slice(0, history.currentIndex + 1), newEdges],
-      currentIndex: history.currentIndex + 1
-    });
+    setHistory(prev => ({
+      nodes: [...prev.nodes.slice(0, prev.currentIndex + 1), [...newNodes]],
+      edges: [...prev.edges.slice(0, prev.currentIndex + 1), [...newEdges]],
+      currentIndex: prev.currentIndex + 1
+    }));
   };
 
   const undo = () => {
-    if (history.currentIndex > 0) {
-      const newIndex = history.currentIndex - 1;
-      const nodes = history.nodes[newIndex];
-      const edges = history.edges[newIndex];
-      setHistory({ ...history, currentIndex: newIndex });
-      return { nodes, edges };
-    }
-    return null;
+    undoRedoResult.current = null;
+    setHistory(prev => {
+      if (prev.currentIndex > 0) {
+        const newIndex = prev.currentIndex - 1;
+        undoRedoResult.current = {
+          nodes: [...prev.nodes[newIndex]],
+          edges: [...prev.edges[newIndex]]
+        };
+        return { ...prev, currentIndex: newIndex };
+      }
+      return prev;
+    });
+    return undoRedoResult.current;
   };
 
   const redo = () => {
-    if (history.currentIndex < history.nodes.length - 1) {
-      const newIndex = history.currentIndex + 1;
-      const nodes = history.nodes[newIndex];
-      const edges = history.edges[newIndex];
-      setHistory({ ...history, currentIndex: newIndex });
-      return { nodes, edges };
-    }
-    return null;
+    undoRedoResult.current = null;
+    setHistory(prev => {
+      if (prev.currentIndex < prev.nodes.length - 1) {
+        const newIndex = prev.currentIndex + 1;
+        undoRedoResult.current = {
+          nodes: [...prev.nodes[newIndex]],
+          edges: [...prev.edges[newIndex]]
+        };
+        return { ...prev, currentIndex: newIndex };
+      }
+      return prev;
+    });
+    return undoRedoResult.current;
   };
 
   const canUndo = history.currentIndex > 0;
@@ -53,6 +65,7 @@ export function useNetworkHistory() {
     redo,
     canUndo,
     canRedo,
+    history,
     currentNodes: history.nodes[history.currentIndex],
     currentEdges: history.edges[history.currentIndex]
   };
