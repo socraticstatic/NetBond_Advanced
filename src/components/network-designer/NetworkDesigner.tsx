@@ -62,7 +62,7 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
   const [showHistoryDrawer, setShowHistoryDrawer] = useState(false);
   
   // Network history management
-  const { saveToHistory, undo, canUndo } = useNetworkHistory();
+  const { saveToHistory, undo, redo, canUndo, canRedo, history: networkHistory } = useNetworkHistory();
   
   // Network state management
   const {
@@ -209,6 +209,26 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
     saveToHistory(snappedNodes, edges);
   };
   
+  // Handle undo
+  const handleUndo = () => {
+    const restored = undo();
+    if (restored) {
+      setNodes(restored.nodes);
+      setEdges(restored.edges);
+      clearSelection();
+    }
+  };
+
+  // Handle redo
+  const handleRedo = () => {
+    const restored = redo();
+    if (restored) {
+      setNodes(restored.nodes);
+      setEdges(restored.edges);
+      clearSelection();
+    }
+  };
+
   // Handle running simulation
   const handleRunSimulation = async () => {
     await runSimulation(
@@ -580,7 +600,7 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
                 onAddNode={addNode}
                 onToggleEdgeCreation={toggleEdgeCreation}
                 isCreatingEdge={isCreatingEdge}
-                onCancel={undo}
+                onCancel={handleUndo}
                 hasConnections={edges.length > 0}
                 canUndo={canUndo}
                 onRunScenario={handleRunSimulation}
