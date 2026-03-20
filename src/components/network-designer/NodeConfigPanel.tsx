@@ -475,7 +475,7 @@ export function NodeConfigPanel({
       case 'routing':
         return (
           <div className="form-section">
-            {node.type === 'router' && (
+            {(node.type === 'function' && node.functionType === 'Router') && (
               <>
                 <div className="form-group">
                   <label htmlFor="asn">ASN</label>
@@ -540,20 +540,17 @@ export function NodeConfigPanel({
                     <option value="rip">RIP</option>
                   </select>
                 </div>
+                <div className="form-group">
+                  <label htmlFor="routeAdvertisement">Route Advertisement</label>
+                  <input
+                    type="text"
+                    value={node.config?.routeAdvertisement || ''}
+                    onChange={(e) => handleConfigChange('routeAdvertisement', e.target.value)}
+                    placeholder="e.g., 10.0.0.0/8"
+                    className="form-input"
+                  />
+                </div>
               </>
-            )}
-            
-            {node.type === 'source' && (
-              <div className="form-group">
-                <label htmlFor="routeAdvertisement">Route Advertisement</label>
-                <input
-                  type="text"
-                  value={node.config?.routeAdvertisement || ''}
-                  onChange={(e) => handleConfigChange('routeAdvertisement', e.target.value)}
-                  placeholder="e.g., 10.0.0.0/8"
-                  className="form-input"
-                />
-              </div>
             )}
           </div>
         );
@@ -561,33 +558,6 @@ export function NodeConfigPanel({
       case 'security':
         return (
           <div className="form-section">
-            {node.type === 'source' && (
-              <>
-                <div className="form-group">
-                  <label htmlFor="accessControl">Access Control</label>
-                  <select
-                    value={node.config?.accessControl || 'private'}
-                    onChange={(e) => handleConfigChange('accessControl', e.target.value)}
-                    className="form-select"
-                  >
-                    <option value="private">Private Access</option>
-                    <option value="public">Public Access</option>
-                    <option value="restricted">Restricted Access</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="securityGroups">Security Groups</label>
-                  <input
-                    type="text"
-                    value={node.config?.securityGroups || ''}
-                    onChange={(e) => handleConfigChange('securityGroups', e.target.value)}
-                    placeholder="e.g., sg-123456"
-                    className="form-input"
-                  />
-                </div>
-              </>
-            )}
-            
             {node.type === 'destination' && (
               <>
                 <div className="form-group">
@@ -629,7 +599,7 @@ export function NodeConfigPanel({
               </>
             )}
             
-            {node.type === 'router' && (
+            {(node.type === 'function' && node.functionType === 'Router') && (
               <>
                 <div className="form-group">
                   <label htmlFor="accessLists">Access Lists</label>
@@ -658,6 +628,28 @@ export function NodeConfigPanel({
             
             {node.type === 'network' && (
               <>
+                <div className="form-group">
+                  <label htmlFor="accessControl">Access Control</label>
+                  <select
+                    value={node.config?.accessControl || 'private'}
+                    onChange={(e) => handleConfigChange('accessControl', e.target.value)}
+                    className="form-select"
+                  >
+                    <option value="private">Private Access</option>
+                    <option value="public">Public Access</option>
+                    <option value="restricted">Restricted Access</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="securityGroups">Security Groups</label>
+                  <input
+                    type="text"
+                    value={node.config?.securityGroups || ''}
+                    onChange={(e) => handleConfigChange('securityGroups', e.target.value)}
+                    placeholder="e.g., sg-123456"
+                    className="form-input"
+                  />
+                </div>
                 <div className="form-group">
                   <label htmlFor="networkSecurity">Network Security</label>
                   <select
