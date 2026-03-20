@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '../../store/useStore';
 import {
   Code, Database, Zap, ArrowRight, ArrowLeft, Check, Upload, Download,
   PlayCircle, AlertCircle, CheckCircle, XCircle, Copy, RefreshCw,
@@ -65,6 +66,7 @@ export interface DataMapping {
 
 export function APIToolbox() {
   const navigate = useNavigate();
+  const addConnection = useStore(state => state.addConnection);
   const [currentStep, setCurrentStep] = useState(1);
   const [apiConfig, setApiConfig] = useState<Partial<APIConfig>>({
     authType: 'none',
@@ -104,14 +106,38 @@ export function APIToolbox() {
     }
   };
 
-  const handleComplete = () => {
-    window.addToast?.({
-      type: 'success',
-      title: 'API Integration Created',
-      message: `API "${apiConfig.name}" has been successfully configured`,
-      duration: 3000
-    });
-    navigate('/manage');
+  const handleComplete = async () => {
+    try {
+      await addConnection({
+        id: `api-${Date.now()}`,
+        name: apiConfig.name || 'Unnamed API Integration',
+        type: 'Internet to Cloud',
+        status: 'Pending',
+        bandwidth: '100 Mbps',
+        location: 'US East',
+        configuration: {
+          baseUrl: apiConfig.baseUrl,
+          authType: apiConfig.authType,
+          endpointCount: apiConfig.endpoints?.length ?? 0,
+          description: apiConfig.description,
+        },
+        createdAt: new Date().toISOString(),
+      });
+      window.addToast?.({
+        type: 'success',
+        title: 'API Integration Created',
+        message: `API "${apiConfig.name}" has been successfully configured`,
+        duration: 3000
+      });
+      navigate('/manage');
+    } catch (error) {
+      window.addToast?.({
+        type: 'error',
+        title: 'Failed to Create Integration',
+        message: error instanceof Error ? error.message : 'An unexpected error occurred',
+        duration: 5000
+      });
+    }
   };
 
   const handleCancel = () => {
