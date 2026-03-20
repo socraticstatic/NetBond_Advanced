@@ -135,7 +135,12 @@ export function EdgeConfigPanel({
             id="vlanId"
             type="number"
             value={edge.vlan || ''}
-            onChange={(e) => onUpdate({ vlan: parseInt(e.target.value) })}
+            onChange={(e) => {
+              const val = parseInt(e.target.value);
+              if (!isNaN(val) && val >= 1 && val <= 4094) {
+                onUpdate({ vlan: val });
+              }
+            }}
             placeholder="1-4094"
             min="1"
             max="4094"
