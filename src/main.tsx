@@ -20,10 +20,9 @@ if ('serviceWorker' in navigator) {
       }
     },
     onOfflineReady() {
-      console.log('App is ready to work offline');
+
     },
     onRegistered(registration) {
-      console.log('Service Worker registered');
 
       // Check for updates every hour
       setInterval(() => {

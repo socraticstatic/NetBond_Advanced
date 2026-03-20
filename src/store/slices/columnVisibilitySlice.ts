@@ -70,12 +70,6 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
   // Listen for storage changes from other windows
   if (typeof window !== 'undefined') {
     const handleStorageChange = (event: StorageEvent) => {
-      console.log('[ColumnVisibility] Storage event received:', {
-        key: event.key,
-        newValue: event.newValue,
-        oldValue: event.oldValue,
-        url: event.url
-      });
 
       if (event.key && event.key.startsWith(STORAGE_KEY_PREFIX)) {
         const tableId = event.key.substring(STORAGE_KEY_PREFIX.length);

@@ -80,31 +80,12 @@ export const useStore = create<Store>((set, get) => {
     const existingIds = new Set(connections.map(c => c.id));
     const newConnections = sampleConnections.filter(sc => !existingIds.has(sc.id));
     connections = [...newConnections, ...connections];
-    console.log('[Store Init] Merged connections:', {
-      existingCount: persistedState.connections.length,
-      newCount: newConnections.length,
-      totalCount: connections.length,
-      newConnectionIds: newConnections.map(c => c.id)
-    });
+
   } else {
     // No persisted state, use all sample connections
     connections = [...sampleConnections];
-    console.log('[Store Init] Using all sample connections:', connections.length);
-  }
 
-  // Reset AWS pending demo connection to "Pending" status on every reload
-  // This allows users to repeatedly test the pending-to-active UI flow
-  const awsDemoConnectionId = 'conn-aws-pending-1';
-  connections = connections.map(conn => {
-    if (conn.id === awsDemoConnectionId) {
-      console.log('[Store Init] Resetting AWS demo connection to Pending state');
-      return {
-        ...conn,
-        status: 'Pending' as const
-      };
-    }
-    return conn;
-  });
+  }
 
   // Merge with defaults
   const initialState = {
