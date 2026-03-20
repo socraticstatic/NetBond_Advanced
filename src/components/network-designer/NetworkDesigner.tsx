@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { safeGetItem, safeSetItem } from '../../utils/localStorageUtils';
 import { ConnectionConfig } from './types';
 import { Canvas } from './Canvas';
 import { Toolbar } from './Toolbar';
@@ -55,9 +56,24 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
   // Abstraction level state
   const [abstractionLevel, setAbstractionLevel] = useState<AbstractionLevel>('network');
   
-  // Custom templates state
-  const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>([]);
+  // Custom templates state - persisted to localStorage
+  const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>(() => {
+    const saved = safeGetItem<string>('custom_templates');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
   const [showSaveTemplateModal, setShowSaveTemplateModal] = useState(false);
+
+  // Persist custom templates to localStorage
+  useEffect(() => {
+    safeSetItem('custom_templates', JSON.stringify(customTemplates));
+  }, [customTemplates]);
 
   // History drawer state
   const [showHistoryDrawer, setShowHistoryDrawer] = useState(false);
