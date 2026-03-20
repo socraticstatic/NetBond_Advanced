@@ -30,7 +30,10 @@ export function ManageGroupsPage() {
   const [showConfirmDelete, setShowConfirmDelete] = useState<string | null>(null);
   const [filters, setFilters] = useState({
     type: [] as Array<Group['type']>,
-    status: [] as Array<Group['status']>
+    status: [] as Array<Group['status']>,
+    hasConnections: false,
+    hasMembers: false,
+    hasAddresses: false,
   });
 
   // Filter groups based on search and filters
@@ -44,10 +47,15 @@ export function ManageGroupsPage() {
 
     // Type filter
     const matchesType = !filters.type.length || filters.type.includes(group.type);
-    
+
     // Status filter
     const matchesStatus = !filters.status.length || filters.status.includes(group.status);
-    
+
+    // Advanced filters
+    if (filters.hasConnections && (group.connectionIds?.length || 0) === 0) return false;
+    if (filters.hasMembers && (group.userIds?.length || 0) === 0) return false;
+    if (filters.hasAddresses && (group.addresses?.length || 0) === 0) return false;
+
     return matchesType && matchesStatus;
   });
 
@@ -252,6 +260,8 @@ export function ManageGroupsPage() {
                         <label className="flex items-center">
                           <input
                             type="checkbox"
+                            checked={filters.hasConnections}
+                            onChange={(e) => setFilters(prev => ({ ...prev, hasConnections: e.target.checked }))}
                             className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
                           />
                           <span className="ml-2 text-sm text-gray-700">Has Connections</span>
@@ -259,6 +269,8 @@ export function ManageGroupsPage() {
                         <label className="flex items-center">
                           <input
                             type="checkbox"
+                            checked={filters.hasMembers}
+                            onChange={(e) => setFilters(prev => ({ ...prev, hasMembers: e.target.checked }))}
                             className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
                           />
                           <span className="ml-2 text-sm text-gray-700">Has Members</span>
@@ -266,6 +278,8 @@ export function ManageGroupsPage() {
                         <label className="flex items-center">
                           <input
                             type="checkbox"
+                            checked={filters.hasAddresses}
+                            onChange={(e) => setFilters(prev => ({ ...prev, hasAddresses: e.target.checked }))}
                             className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
                           />
                           <span className="ml-2 text-sm text-gray-700">Has Addresses</span>
@@ -278,10 +292,10 @@ export function ManageGroupsPage() {
             </div>
 
             {/* Active Filters */}
-            {(Object.values(filters).some(arr => arr.length > 0) || searchQuery) && (
+            {(filters.type.length > 0 || filters.status.length > 0 || filters.hasConnections || filters.hasMembers || filters.hasAddresses || searchQuery) && (
               <div className="flex flex-wrap gap-2 mb-6">
-                {Object.entries(filters).map(([category, values]) =>
-                  values.map((value) => (
+                {(['type', 'status'] as const).map((category) =>
+                  filters[category].map((value) => (
                     <span
                       key={`${category}-${value}`}
                       className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-brand-lightBlue text-brand-blue"
@@ -290,7 +304,7 @@ export function ManageGroupsPage() {
                       <button
                         onClick={() => setFilters(prev => ({
                           ...prev,
-                          [category]: prev[category as keyof typeof prev].filter(v => v !== value)
+                          [category]: prev[category].filter(v => v !== value)
                         }))}
                         className="ml-2 hover:text-brand-darkBlue"
                       >
@@ -298,6 +312,24 @@ export function ManageGroupsPage() {
                       </button>
                     </span>
                   ))
+                )}
+                {filters.hasConnections && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-brand-lightBlue text-brand-blue">
+                    Has Connections
+                    <button onClick={() => setFilters(prev => ({ ...prev, hasConnections: false }))} className="ml-2 hover:text-brand-darkBlue">×</button>
+                  </span>
+                )}
+                {filters.hasMembers && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-brand-lightBlue text-brand-blue">
+                    Has Members
+                    <button onClick={() => setFilters(prev => ({ ...prev, hasMembers: false }))} className="ml-2 hover:text-brand-darkBlue">×</button>
+                  </span>
+                )}
+                {filters.hasAddresses && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-brand-lightBlue text-brand-blue">
+                    Has Addresses
+                    <button onClick={() => setFilters(prev => ({ ...prev, hasAddresses: false }))} className="ml-2 hover:text-brand-darkBlue">×</button>
+                  </span>
                 )}
                 {searchQuery && (
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
@@ -312,7 +344,7 @@ export function ManageGroupsPage() {
                 )}
                 <button
                   onClick={() => {
-                    setFilters({ type: [], status: [] });
+                    setFilters({ type: [], status: [], hasConnections: false, hasMembers: false, hasAddresses: false });
                     setSearchQuery('');
                   }}
                   className="text-sm text-gray-500 hover:text-gray-700"
