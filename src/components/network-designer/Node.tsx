@@ -217,10 +217,11 @@ export const Node = memo(function Node({
         ref={nodeRef}
         className={`
           absolute w-16 h-16 flex items-center justify-center
-          rounded-lg transition-all duration-200
+          rounded-lg
+          ${isDragging ? 'transition-shadow duration-200' : 'transition-all duration-200'}
           ${background}
           ${isReadOnly ? 'cursor-default' : isCreatingEdge ? 'cursor-crosshair' : isDragging ? 'cursor-grabbing' : 'cursor-grab'}
-          ${isDragging ? 'shadow-lg scale-105' : 'shadow-sm hover:shadow-md'}
+          ${isDragging ? 'shadow-lg' : 'shadow-sm hover:shadow-md'}
           border-2 ${isSelected ? 'border-blue-500' : isCreatingEdge ? 'border-blue-400 border-dashed' : 'border-gray-200'}
         `}
         style={{
