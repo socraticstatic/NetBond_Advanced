@@ -23,6 +23,7 @@ import {
   runSimulation,
   pauseSimulation,
   resumeSimulation,
+  cancelSimulation,
   injectLatency,
   injectPacketLoss,
   injectBandwidthLimit
@@ -128,6 +129,13 @@ export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) 
     networkScores
   });
   
+  // Cancel simulation on unmount to prevent stale state updates
+  useEffect(() => {
+    return () => {
+      cancelSimulation();
+    };
+  }, []);
+
   // Update simulation network scores when networkScores change
   useEffect(() => {
     setSimulationData(prev => ({

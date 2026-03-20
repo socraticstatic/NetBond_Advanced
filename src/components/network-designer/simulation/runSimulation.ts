@@ -34,6 +34,7 @@ export function resumeSimulation() {
 
 export function cancelSimulation() {
   simulationCancelled = true;
+  simulationPaused = false;
 }
 
 export function injectLatency(amount: number) {
