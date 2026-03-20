@@ -20,7 +20,7 @@ interface NodeProps {
 }
 
 // Debug flag - set to true to enable detailed drag logging
-const DEBUG_DRAG = true;
+const DEBUG_DRAG = false;
 
 const debugLog = (...args: any[]) => {
   if (DEBUG_DRAG) {
