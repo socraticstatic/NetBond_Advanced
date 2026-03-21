@@ -3,12 +3,9 @@ import { useState, useEffect } from 'react';
 export function useTour(tourKey: string) {
   const storageKey = `tour-${tourKey}-completed`;
   const [isOpen, setIsOpen] = useState(false);
-  const [hasCompleted, setHasCompleted] = useState(false);
-
-  useEffect(() => {
-    const completed = localStorage.getItem(storageKey) === 'true';
-    setHasCompleted(completed);
-  }, [storageKey]);
+  const [hasCompleted, setHasCompleted] = useState(() =>
+    localStorage.getItem(storageKey) === 'true'
+  );
 
   const startTour = () => {
     setIsOpen(true);

@@ -68,8 +68,8 @@ export function CloudRouterSection({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Cloud Routers</h2>
-          <p className="text-sm text-gray-600 mt-1">
+          <h2 className="text-figma-xl font-bold text-fw-heading tracking-[-0.04em]">Cloud Routers</h2>
+          <p className="text-figma-base text-fw-bodyLight mt-1">
             Manage cloud routers and their network configurations
           </p>
         </div>
@@ -85,49 +85,49 @@ export function CloudRouterSection({
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
+        <div className="bg-fw-accent rounded-lg p-4 border border-fw-active">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-blue-900">Active Cloud Routers</p>
-              <p className="text-2xl font-bold text-blue-700 mt-1">
+              <p className="text-figma-base font-medium text-fw-linkHover">Active Cloud Routers</p>
+              <p className="text-figma-xl font-bold text-fw-linkHover mt-1">
                 {cloudRouters.filter(r => r.status === 'active').length}
               </p>
             </div>
-            <GitBranch className="h-8 w-8 text-blue-600 opacity-50" />
+            <GitBranch className="h-8 w-8 text-fw-link opacity-50" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
+        <div className="bg-green-50 rounded-lg p-4 border border-green-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-green-900">Total Links</p>
-              <p className="text-2xl font-bold text-green-700 mt-1">
+              <p className="text-figma-sm font-medium text-fw-heading">Total Links</p>
+              <p className="text-figma-xl font-bold text-fw-success mt-1">
                 {cloudRouters.reduce((sum, r) => sum + (r.links?.length || 0), 0)}
               </p>
             </div>
-            <GitBranch className="h-8 w-8 text-green-600 opacity-50" />
+            <GitBranch className="h-8 w-8 text-fw-success opacity-50" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 border border-gray-200">
+        <div className="bg-fw-wash rounded-lg p-4 border border-fw-secondary">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-900">Bandwidth</p>
-              <p className="text-2xl font-bold text-gray-700 mt-1">
-                {availableBandwidth.toFixed(1)} <span className="text-sm font-normal">Gbps free</span>
+              <p className="text-figma-base font-medium text-fw-heading">Bandwidth</p>
+              <p className="text-figma-xl font-bold text-fw-body mt-1">
+                {availableBandwidth.toFixed(1)} <span className="text-figma-base font-normal">Gbps free</span>
               </p>
             </div>
             <div className="text-right">
-              <p className="text-xs text-gray-600">{totalUsedBandwidth.toFixed(1)} used</p>
-              <p className="text-xs text-gray-600">{getConnectionBandwidth()} total</p>
+              <p className="text-figma-sm text-fw-bodyLight">{totalUsedBandwidth.toFixed(1)} used</p>
+              <p className="text-figma-sm text-fw-bodyLight">{getConnectionBandwidth()} total</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary">
+        <div className="px-6 py-4 border-b border-fw-secondary">
           <div className="flex items-center justify-between gap-4">
             <div className="relative flex-1 max-w-md">
               <input
@@ -135,10 +135,10 @@ export function CloudRouterSection({
                 placeholder="Search routers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm w-full"
+                className="pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active text-figma-base w-full"
               />
               <svg
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-4 w-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -151,7 +151,7 @@ export function CloudRouterSection({
                 />
               </svg>
             </div>
-            <button className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button className="inline-flex items-center px-4 py-2 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active">
               <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
@@ -162,11 +162,11 @@ export function CloudRouterSection({
 
         {filteredCloudRouters.length === 0 ? (
           <div className="text-center py-16">
-            <GitBranch className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <GitBranch className="h-12 w-12 mx-auto text-fw-bodyLight mb-4" />
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] mb-2">
               {searchQuery ? 'No routers found' : 'No cloud routers'}
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-fw-bodyLight mb-6">
               {searchQuery ? 'Try adjusting your search terms' : 'Get started by adding your first cloud router'}
             </p>
             {!searchQuery && (

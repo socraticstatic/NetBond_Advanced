@@ -1,5 +1,4 @@
-import { Network, DollarSign } from 'lucide-react';
-import { UserIcon } from '../../common/UserIcon';
+import { Users, Network, DollarSign, Activity } from 'lucide-react';
 import { Group } from '../../../types/group';
 
 interface GroupCardMetricsProps {
@@ -7,47 +6,56 @@ interface GroupCardMetricsProps {
 }
 
 export function GroupCardMetrics({ group }: GroupCardMetricsProps) {
+  const utilization = group.performance?.aggregatedMetrics.bandwidthUtilization ?? null;
+  const totalBandwidth = group.performance?.aggregatedMetrics.totalBandwidth ?? null;
+
   return (
     <div className="space-y-3">
-      {/* Top Row: Members & Connections */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         {/* Members */}
-        <div className="flex items-start space-x-3 p-3 bg-fw-blue-light rounded-lg border border-fw-blue-100">
-          <UserIcon size="sm" variant="primary" className="mt-0.5 flex-shrink-0" />
-          <div className="min-w-0 flex-1">
-            <span className="text-xs font-medium text-fw-heading block mb-0.5">Members</span>
-            <p className="text-sm font-semibold text-fw-link">
-              {group.userIds.length} {group.userIds.length === 1 ? 'User' : 'Users'}
-            </p>
-          </div>
+        <div className="bg-fw-wash rounded-[8px] flex flex-col items-center justify-center text-center" style={{ minHeight: '108px' }}>
+          <Users className="h-5 w-5 text-fw-link mb-1.5 flex-shrink-0" />
+          <span className="text-[10px] font-medium text-fw-body">Members</span>
+          <p className="text-figma-lg font-bold text-fw-heading mt-1">
+            {group.userIds.length}
+          </p>
         </div>
 
         {/* Connections */}
-        <div className="flex items-start space-x-3 p-3 bg-fw-wash rounded-lg border border-fw-secondary">
-          <Network className="h-4 w-4 text-fw-body mt-0.5 flex-shrink-0" />
-          <div className="min-w-0 flex-1">
-            <span className="text-xs font-medium text-fw-body block mb-0.5">Connections</span>
-            <p className="text-sm font-semibold text-fw-heading">
-              {group.connectionIds.length} Active
-            </p>
-          </div>
+        <div className="bg-fw-wash rounded-[8px] flex flex-col items-center justify-center text-center" style={{ minHeight: '108px' }}>
+          <Network className="h-5 w-5 text-fw-purple mb-1.5 flex-shrink-0" />
+          <span className="text-[10px] font-medium text-fw-body">Connections</span>
+          <p className="text-figma-lg font-bold text-fw-heading mt-1">
+            {group.connectionIds.length}
+          </p>
+        </div>
+
+        {/* Monthly Cost */}
+        <div className="bg-fw-wash rounded-[8px] flex flex-col items-center justify-center text-center" style={{ minHeight: '108px' }}>
+          <DollarSign className="h-5 w-5 text-fw-success mb-1.5 flex-shrink-0" />
+          <span className="text-[10px] font-medium text-fw-body">Monthly</span>
+          <p className="text-figma-lg font-bold text-fw-heading mt-1">
+            {formatCurrency(group.billing?.monthlyRate || 0)}
+          </p>
         </div>
       </div>
 
-      {/* Bottom Row: Monthly Cost */}
-      <div>
-        <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-fw-success">
-          <div className="flex items-center space-x-2">
-            <DollarSign className="h-4 w-4 text-fw-success flex-shrink-0" />
-            <span className="text-xs font-medium text-fw-success">Monthly Cost</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <p className="text-sm font-semibold text-fw-heading">
-              {formatCurrency(group.billing?.monthlyRate || 0)}
-            </p>
-          </div>
+      {/* Utilization / bandwidth info row */}
+      {(utilization !== null || totalBandwidth) && (
+        <div className="flex items-center justify-between px-1 py-1.5 text-[12px] leading-4 text-fw-bodyLight">
+          {utilization !== null && (
+            <span className="flex items-center gap-1">
+              <Activity className="h-4 w-4 text-fw-bodyLight" />
+              Utilization: <span className="font-medium text-fw-heading">{utilization}%</span>
+            </span>
+          )}
+          {totalBandwidth && (
+            <span>
+              Bandwidth: <span className="font-medium text-fw-heading">{totalBandwidth}</span>
+            </span>
+          )}
         </div>
-      </div>
+      )}
     </div>
   );
 }

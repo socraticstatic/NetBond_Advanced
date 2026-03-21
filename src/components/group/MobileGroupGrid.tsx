@@ -42,27 +42,27 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-fw-wash">
       {/* Mobile Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-fw-base border-b border-fw-secondary sticky top-0 z-10">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center flex-1">
             <button
               onClick={() => navigate(-1)}
-              className="mr-3 p-2 -ml-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+              className="mr-3 p-2 -ml-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
               aria-label="Go back"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Pools</h1>
-              <p className="text-sm text-gray-500">{filteredGroups.length} pools</p>
+              <h1 className="text-xl font-bold tracking-[-0.03em] text-fw-heading">Pools</h1>
+              <p className="text-figma-base text-fw-bodyLight">{filteredGroups.length} pools</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+              className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
               aria-label="Filter pools"
             >
               <Filter className="h-5 w-5" />
@@ -87,18 +87,18 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
         {/* Search Bar */}
         <div className="px-4 pb-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-fw-bodyLight" />
             <input
               type="text"
               placeholder="Search pools..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+              className="w-full pl-10 pr-10 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-transparent"
             />
             {searchTerm && (
               <button
                 onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight hover:text-fw-body"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -115,27 +115,27 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-white border-b border-gray-200 overflow-hidden"
+            className="bg-fw-base border-b border-fw-secondary overflow-hidden"
           >
             <div className="p-4 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-gray-900">Filters</h3>
+                <h3 className="text-figma-base font-medium text-fw-heading">Filters</h3>
                 <button
                   onClick={() => setIsFilterOpen(false)}
-                  className="p-1 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100"
+                  className="p-1 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-figma-base font-medium text-fw-body mb-1">
                   Status
                 </label>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                  className="w-full rounded-lg border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active"
                 >
                   <option value="all">All Statuses</option>
                   <option value="active">Active</option>
@@ -146,13 +146,13 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
               <div className="pt-2 flex justify-between">
                 <button
                   onClick={resetFilters}
-                  className="text-sm text-gray-500 hover:text-gray-700"
+                  className="text-figma-base text-fw-bodyLight hover:text-fw-body"
                 >
                   Reset Filters
                 </button>
                 <button
                   onClick={() => setIsFilterOpen(false)}
-                  className="px-4 py-2 bg-brand-blue text-white rounded-lg text-sm font-medium hover:bg-brand-darkBlue"
+                  className="px-4 py-2 bg-brand-blue text-white rounded-lg text-figma-base font-medium hover:bg-brand-darkBlue"
                 >
                   Apply Filters
                 </button>
@@ -163,19 +163,19 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
       </AnimatePresence>
 
       {/* Quick Stats */}
-      <div className="p-4 bg-white border-b border-gray-200">
+      <div className="p-4 bg-fw-base border-b border-fw-secondary">
         <div className="grid grid-cols-3 gap-3">
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900">{stats.active}</div>
-            <div className="text-xs text-gray-500 mt-1">Active</div>
+            <div className="text-2xl font-bold text-fw-heading">{stats.active}</div>
+            <div className="text-figma-sm text-fw-bodyLight mt-1">Active</div>
           </div>
-          <div className="text-center border-l border-r border-gray-200">
-            <div className="text-2xl font-bold text-gray-900">{stats.totalConnections}</div>
-            <div className="text-xs text-gray-500 mt-1">Connections</div>
+          <div className="text-center border-l border-r border-fw-secondary">
+            <div className="text-2xl font-bold text-fw-heading">{stats.totalConnections}</div>
+            <div className="text-figma-sm text-fw-bodyLight mt-1">Connections</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900">{stats.avgUtilization.toFixed(0)}%</div>
-            <div className="text-xs text-gray-500 mt-1">Avg. Usage</div>
+            <div className="text-2xl font-bold text-fw-heading">{stats.avgUtilization.toFixed(0)}%</div>
+            <div className="text-figma-sm text-fw-bodyLight mt-1">Avg. Usage</div>
           </div>
         </div>
       </div>
@@ -184,9 +184,9 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
       <div className="flex-1 p-4 space-y-3 pb-20">
         {filteredGroups.length === 0 ? (
           <div className="text-center py-12">
-            <Users className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-            <h3 className="text-lg font-medium text-gray-900 mb-1">No pools found</h3>
-            <p className="text-gray-500 text-sm">
+            <Users className="h-12 w-12 text-fw-secondary mx-auto mb-3" />
+            <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em] mb-1">No pools found</h3>
+            <p className="text-fw-bodyLight text-figma-base">
               {searchTerm || statusFilter !== 'all'
                 ? 'Try adjusting your filters'
                 : 'Create your first pool to get started'}
@@ -204,17 +204,17 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden"
+                className="bg-fw-base rounded-lg border border-fw-secondary shadow-sm overflow-hidden"
                 onClick={() => navigate(`/groups/${group.id}`)}
               >
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-base font-semibold text-gray-900 mb-1 truncate">
+                      <h3 className="text-base font-semibold text-fw-heading tracking-[-0.03em] mb-1 truncate">
                         {group.name}
                       </h3>
                       {group.description && (
-                        <p className="text-sm text-gray-500 line-clamp-2">
+                        <p className="text-figma-base text-fw-bodyLight line-clamp-2">
                           {group.description}
                         </p>
                       )}
@@ -224,41 +224,41 @@ export function MobileGroupGrid({ groups }: MobileGroupGridProps) {
 
                   <div className="grid grid-cols-3 gap-3 mb-3">
                     <div className="flex items-center">
-                      <Activity className="h-4 w-4 text-gray-400 mr-2 flex-shrink-0" />
+                      <Activity className="h-4 w-4 text-fw-bodyLight mr-2 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-figma-base font-medium text-fw-heading">
                           {connectionCount}
                         </div>
-                        <div className="text-xs text-gray-500">Connections</div>
+                        <div className="text-figma-sm text-fw-bodyLight">Connections</div>
                       </div>
                     </div>
 
                     <div className="flex items-center">
-                      <Users className="h-4 w-4 text-gray-400 mr-2 flex-shrink-0" />
+                      <Users className="h-4 w-4 text-fw-bodyLight mr-2 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-figma-base font-medium text-fw-heading">
                           {memberCount}
                         </div>
-                        <div className="text-xs text-gray-500">Members</div>
+                        <div className="text-figma-sm text-fw-bodyLight">Members</div>
                       </div>
                     </div>
 
                     <div className="flex items-center">
-                      <TrendingUp className="h-4 w-4 text-gray-400 mr-2 flex-shrink-0" />
+                      <TrendingUp className="h-4 w-4 text-fw-bodyLight mr-2 flex-shrink-0" />
                       <div className="min-w-0">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-figma-base font-medium text-fw-heading">
                           {Math.floor(Math.random() * 40 + 40)}%
                         </div>
-                        <div className="text-xs text-gray-500">Usage</div>
+                        <div className="text-figma-sm text-fw-bodyLight">Usage</div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                    <div className="flex items-center text-xs text-gray-500">
+                  <div className="flex items-center justify-between pt-3 border-t border-fw-secondary">
+                    <div className="flex items-center text-figma-sm text-fw-bodyLight">
                       <span>Updated {formatMobileDate(group.updatedAt || new Date())}</span>
                     </div>
-                    <ChevronRight className="h-5 w-5 text-gray-400" />
+                    <ChevronRight className="h-5 w-5 text-fw-bodyLight" />
                   </div>
                 </div>
               </motion.div>

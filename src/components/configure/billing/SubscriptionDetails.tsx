@@ -29,18 +29,18 @@ export function SubscriptionDetails() {
     <div className="space-y-6">
       {/* Current Plan */}
       <div className="card">
-        <div className="card-header bg-gray-50">
-          <h3 className="text-lg font-medium text-gray-900">Current Plan</h3>
+        <div className="card-header bg-fw-wash">
+          <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">Current Plan</h3>
         </div>
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h4 className="text-2xl font-bold text-gray-900">{subscription.plan}</h4>
-              <p className="text-sm text-gray-500">Billed {subscription.billingCycle.toLowerCase()}</p>
+              <h4 className="text-2xl font-bold text-fw-heading">{subscription.plan}</h4>
+              <p className="text-figma-base text-fw-bodyLight">Billed {subscription.billingCycle.toLowerCase()}</p>
             </div>
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+            <span className={`px-3 py-1 rounded-full text-figma-base font-medium ${
               subscription.status === 'Active'
-                ? 'bg-green-100 text-green-800'
+                ? 'bg-green-50 text-fw-success'
                 : 'bg-yellow-100 text-yellow-800'
             }`}>
               {subscription.status}
@@ -54,22 +54,22 @@ export function SubscriptionDetails() {
 
               return (
                 <div key={resource} className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-gray-700 capitalize">{resource}</span>
-                    <span className="text-gray-500">
+                  <div className="flex items-center justify-between text-figma-base">
+                    <span className="font-medium text-fw-body capitalize">{resource}</span>
+                    <span className="text-fw-bodyLight">
                       {used} / {limit} {resource === 'bandwidth' ? 'Gbps' : resource === 'storage' ? 'GB' : ''}
                     </span>
                   </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-2 bg-fw-neutral rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
-                        isWarning ? 'bg-yellow-500' : 'bg-brand-blue'
+                        isWarning ? 'bg-yellow-500' : 'bg-fw-cobalt-600'
                       }`}
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
                   {isWarning && (
-                    <p className="flex items-center text-xs text-yellow-600">
+                    <p className="flex items-center text-figma-sm text-yellow-600">
                       <AlertTriangle className="h-4 w-4 mr-1" />
                       Approaching limit
                     </p>
@@ -80,11 +80,11 @@ export function SubscriptionDetails() {
           </div>
 
           <div className="space-y-4">
-            <h5 className="text-sm font-medium text-gray-700">Plan Features</h5>
+            <h5 className="text-figma-base font-medium text-fw-body">Plan Features</h5>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {subscription.features.map((feature, index) => (
-                <div key={index} className="flex items-center text-sm text-gray-600">
-                  <Package className="h-4 w-4 text-brand-blue mr-2" />
+                <div key={index} className="flex items-center text-figma-base text-fw-body">
+                  <Package className="h-4 w-4 text-fw-link mr-2" />
                   {feature}
                 </div>
               ))}

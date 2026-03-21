@@ -19,7 +19,7 @@ export function UserPermissionsWidget() {
       <select
         value={selectedUser.id}
         onChange={(e) => setSelectedUser(users.find(u => u.id === e.target.value)!)}
-        className="w-full text-sm border-gray-300 rounded-lg"
+        className="w-full text-figma-base border-fw-secondary rounded-lg"
       >
         {users.map((user) => (
           <option key={user.id} value={user.id}>
@@ -31,24 +31,24 @@ export function UserPermissionsWidget() {
       {/* Permissions Grid */}
       <div className="space-y-2">
         {selectedUser.connectionAccess.map((access) => (
-          <div key={access.connectionId} className="p-2 bg-gray-50 rounded-lg">
+          <div key={access.connectionId} className="p-2 bg-fw-wash rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-900">
+              <span className="text-figma-base font-medium text-fw-heading">
                 {access.name}
               </span>
-              <Shield className="h-4 w-4 text-blue-500" />
+              <Shield className="h-4 w-4 text-fw-link" />
             </div>
             <div className="grid grid-cols-2 gap-2">
               {permissions.map((permission) => (
                 <div
                   key={permission.id}
-                  className="flex items-center justify-between p-1.5 bg-white rounded border border-gray-200"
+                  className="flex items-center justify-between p-1.5 bg-fw-base rounded border border-fw-secondary"
                 >
-                  <span className="text-xs text-gray-600">{permission.label}</span>
+                  <span className="text-figma-sm text-fw-body">{permission.label}</span>
                   {access.permissions.includes(permission.id) ? (
-                    <Check className="h-3 w-3 text-green-500" />
+                    <Check className="h-3 w-3 text-fw-success" />
                   ) : (
-                    <X className="h-3 w-3 text-gray-300" />
+                    <X className="h-3 w-3 text-fw-bodyLight" />
                   )}
                 </div>
               ))}
@@ -57,7 +57,7 @@ export function UserPermissionsWidget() {
         ))}
       </div>
 
-      <button className="w-full px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+      <button className="w-full px-4 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
         Manage Permissions
       </button>
     </div>

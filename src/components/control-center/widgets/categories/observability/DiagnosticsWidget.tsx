@@ -36,33 +36,33 @@ export function DiagnosticsWidget() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <Search className="h-5 w-5 text-blue-500 mr-2" />
-          <span className="text-sm font-medium text-gray-900">System Health</span>
+          <Search className="h-5 w-5 text-fw-link mr-2" />
+          <span className="text-figma-base font-medium text-fw-heading">System Health</span>
         </div>
-        <button className="text-sm text-blue-600 hover:text-blue-700">
+        <button className="text-figma-base text-fw-link hover:text-fw-linkHover">
           Run Tests
         </button>
       </div>
 
       <div className="space-y-2">
         {diagnostics.map((diagnostic) => (
-          <div key={diagnostic.id} className="p-2 bg-gray-50 rounded-lg">
+          <div key={diagnostic.id} className="p-2 bg-fw-wash rounded-lg">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center">
                 {diagnostic.status === 'healthy' ? (
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                  <CheckCircle className="h-4 w-4 text-fw-success mr-2" />
                 ) : (
-                  <XCircle className="h-4 w-4 text-yellow-500 mr-2" />
+                  <XCircle className="h-4 w-4 text-fw-warn mr-2" />
                 )}
-                <span className="text-sm text-gray-900">{diagnostic.name}</span>
+                <span className="text-figma-base text-fw-heading">{diagnostic.name}</span>
               </div>
-              <span className={`text-sm font-medium ${
-                diagnostic.status === 'healthy' ? 'text-green-600' : 'text-yellow-600'
+              <span className={`text-figma-base font-medium ${
+                diagnostic.status === 'healthy' ? 'text-fw-success' : 'text-fw-warn'
               }`}>
                 {diagnostic.metric}
               </span>
             </div>
-            <div className="text-xs text-gray-500 ml-6">
+            <div className="text-figma-sm text-fw-bodyLight ml-6">
               Last checked: {new Date(diagnostic.lastCheck).toLocaleTimeString()}
             </div>
           </div>
@@ -70,10 +70,10 @@ export function DiagnosticsWidget() {
       </div>
 
       <div className="flex space-x-2">
-        <button className="flex-1 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
           View Details
         </button>
-        <button className="flex-1 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
           Configure Tests
         </button>
       </div>

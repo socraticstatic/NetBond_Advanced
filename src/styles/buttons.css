@@ -1,11 +1,11 @@
 /* Button styles */
 
-/* Base button styles */
+/* Base button styles - Figma: pill-shaped (rounded-full) for action buttons */
 button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab, .toggle-switch),
 .btn:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab, .toggle-switch),
 .button:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab, .toggle-switch),
 [class*='btn-']:not(.wizard-card, .mode-selection-card, .network-option, .quick-action-btn, .network-config-tab, .toggle-switch) {
-  @apply rounded-md !important;
+  @apply rounded-full !important;
 }
 
 /* Toggle Switch - Always rounded-full (pills) */
@@ -43,8 +43,10 @@ div[class*="flex border-b border-gray-200"] button {
   border-radius: 0 !important;
 }
 
+button.no-rounded,
+a.no-rounded,
+div.no-rounded,
 .no-rounded {
-  @apply rounded-none !important;
   border-radius: 0 !important;
 }
 
@@ -107,14 +109,14 @@ textarea {
   border-radius: 0.5rem !important;
 }
 
-/* Focus styles for form elements */
+/* Focus styles for form elements - Figma: #0057b8 focus ring, rounded-lg (8px) */
 input:focus,
 select:focus,
 textarea:focus {
   outline: none !important;
-  box-shadow: 0 0 0 2px rgba(0, 49, 132, 0.3) !important;
-  border-color: #003184 !important;
-  border-radius: 0.5rem !important;
+  box-shadow: 0 0 0 2px rgba(0, 87, 184, 0.15) !important;
+  border-color: #0057b8 !important;
+  border-radius: 0.5rem !important; /* rounded-lg - 8px */
 }
 
 /* =================== ADDITIONAL OVERRIDES =================== */
@@ -129,9 +131,9 @@ textarea:focus {
 .widget-card,
 [class*="widget-drawer-item"],
 /* More specific selectors for widget drawer cards */
-div[class*="space-y-6"] div[class*="space-y-2"] button,
-div[id*="root"] div[class*="space-y-6"] div[class*="space-y-2"] button.w-full.p-3,
-div[class*="p-4 space-y-6"] button,
+div[class*="space-y-6"] div[class*="space-y-2"] button:not(.no-rounded),
+div[id*="root"] div[class*="space-y-6"] div[class*="space-y-2"] button.w-full.p-3:not(.no-rounded),
+div[class*="p-4 space-y-6"] button:not(.no-rounded),
 button.w-full.p-3.bg-white.border.border-gray-200 {
   @apply rounded-lg !important;
   border-radius: 0.5rem !important;

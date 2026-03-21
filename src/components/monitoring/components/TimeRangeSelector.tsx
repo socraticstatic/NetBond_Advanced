@@ -67,7 +67,7 @@ export function TimeRangeSelector({
 
       {/* Time Range Description */}
       {currentRange && (
-        <div className="mt-2 text-sm text-gray-500">
+        <div className="mt-2 text-figma-base text-fw-bodyLight">
           {currentRange.description}
         </div>
       )}

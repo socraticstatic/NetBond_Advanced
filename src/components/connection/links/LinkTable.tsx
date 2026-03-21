@@ -33,7 +33,7 @@ export function LinkTable({
       sortable: true,
       sortKey: 'vlanId',
       render: (link) => (
-        <div className="text-sm font-medium text-gray-900">{link.vlanId}</div>
+        <div className="text-figma-base font-medium text-fw-heading">{link.vlanId}</div>
       ),
       csvRender: (link) => String(link.vlanId)
     },
@@ -44,9 +44,9 @@ export function LinkTable({
       sortKey: 'name',
       render: (link) => (
         <div>
-          <div className="text-sm font-medium text-gray-900 truncate">{link.name}</div>
+          <div className="text-figma-base font-medium text-fw-heading truncate">{link.name}</div>
           {link.description && (
-            <div className="text-xs text-gray-500 truncate mt-0.5">{link.description}</div>
+            <div className="text-figma-sm text-fw-bodyLight truncate mt-0.5">{link.description}</div>
           )}
         </div>
       ),
@@ -58,8 +58,8 @@ export function LinkTable({
       sortable: true,
       sortKey: 'status',
       render: (link) => (
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-          link.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-lg text-figma-sm font-medium ${
+          link.status === 'active' ? 'bg-green-50 text-fw-success' : 'bg-fw-neutral text-fw-heading'
         }`}>
           {link.status.charAt(0).toUpperCase() + link.status.slice(1)}
         </span>
@@ -74,7 +74,7 @@ export function LinkTable({
     sortable: true,
     sortKey: 'cloudRouterId',
     render: (link) => (
-      <div className="text-sm font-medium text-gray-900 truncate">{link.cloudRouterName || '—'}</div>
+      <div className="text-figma-base font-medium text-fw-heading truncate">{link.cloudRouterName || '—'}</div>
     ),
     csvRender: (link) => link.cloudRouterName || 'Not assigned'
   };

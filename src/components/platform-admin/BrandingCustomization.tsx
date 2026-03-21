@@ -56,78 +56,78 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
       {/* Configuration Panel */}
       <div className="lg:col-span-2 space-y-6">
         {/* Logo Section */}
-        <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
           <div className="flex items-center space-x-2 mb-4">
             <ImageIcon className="h-5 w-5 text-fw-link" />
-            <h3 className="text-lg font-medium text-fw-heading">Logo</h3>
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Logo</h3>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-fw-body mb-2">Primary Logo</label>
-              <div className="border-2 border-dashed border-fw-secondary rounded-lg p-8 text-center hover:border-brand-blue transition-colors cursor-pointer">
+              <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Primary Logo</label>
+              <div className="border-2 border-dashed border-fw-secondary rounded-lg p-8 text-center hover:border-fw-active transition-colors cursor-pointer">
                 <Upload className="h-8 w-8 text-fw-bodyLight mx-auto mb-2" />
-                <p className="text-sm text-fw-bodyLight">Click to upload or drag and drop</p>
-                <p className="text-xs text-fw-bodyLight mt-1">PNG, JPG up to 2MB</p>
+                <p className="text-figma-sm font-medium text-fw-bodyLight">Click to upload or drag and drop</p>
+                <p className="text-figma-sm font-medium text-fw-bodyLight mt-1">PNG, JPG up to 2MB</p>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-fw-body mb-2">Favicon</label>
-              <div className="border-2 border-dashed border-fw-secondary rounded-lg p-6 text-center hover:border-brand-blue transition-colors cursor-pointer">
+              <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Favicon</label>
+              <div className="border-2 border-dashed border-fw-secondary rounded-lg p-6 text-center hover:border-fw-active transition-colors cursor-pointer">
                 <Upload className="h-6 w-6 text-fw-bodyLight mx-auto mb-2" />
-                <p className="text-xs text-fw-bodyLight">32x32 PNG or ICO</p>
+                <p className="text-figma-sm font-medium text-fw-bodyLight">32x32 PNG or ICO</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Color Scheme Section */}
-        <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
           <div className="flex items-center space-x-2 mb-4">
             <Palette className="h-5 w-5 text-fw-link" />
-            <h3 className="text-lg font-medium text-fw-heading">Color Scheme</h3>
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Color Scheme</h3>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-fw-body mb-2">Primary Color</label>
+              <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Primary Color</label>
               <div className="flex items-center space-x-3">
                 <input
                   type="color"
                   value={primaryColor}
                   onChange={(e) => setPrimaryColor(e.target.value)}
-                  className="h-10 w-16 rounded border border-fw-secondary cursor-pointer"
+                  className="h-9 w-16 rounded border border-fw-secondary cursor-pointer"
                 />
                 <input
                   type="text"
                   value={primaryColor}
                   onChange={(e) => setPrimaryColor(e.target.value)}
-                  className="flex-1 px-3 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue font-mono text-sm"
+                  className="flex-1 px-3 h-9 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active font-mono text-figma-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-fw-body mb-2">Secondary Color</label>
+              <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Secondary Color</label>
               <div className="flex items-center space-x-3">
                 <input
                   type="color"
                   value={secondaryColor}
                   onChange={(e) => setSecondaryColor(e.target.value)}
-                  className="h-10 w-16 rounded border border-fw-secondary cursor-pointer"
+                  className="h-9 w-16 rounded border border-fw-secondary cursor-pointer"
                 />
                 <input
                   type="text"
                   value={secondaryColor}
                   onChange={(e) => setSecondaryColor(e.target.value)}
-                  className="flex-1 px-3 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue font-mono text-sm"
+                  className="flex-1 px-3 h-9 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active font-mono text-figma-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-fw-body mb-2">Color Presets</label>
+              <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Color Presets</label>
               <div className="grid grid-cols-2 gap-2">
                 {colorPresets.map((preset) => (
                   <button
@@ -136,7 +136,7 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
                       setPrimaryColor(preset.primary);
                       setSecondaryColor(preset.secondary);
                     }}
-                    className="flex items-center space-x-2 p-2 rounded-lg border border-fw-secondary hover:border-brand-blue transition-colors"
+                    className="flex items-center space-x-2 p-2 rounded-lg border border-fw-secondary hover:border-fw-active transition-colors"
                   >
                     <div className="flex space-x-1">
                       <div
@@ -148,7 +148,7 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
                         style={{ backgroundColor: preset.secondary }}
                       />
                     </div>
-                    <span className="text-xs text-fw-body">{preset.name}</span>
+                    <span className="text-figma-sm font-medium text-fw-body">{preset.name}</span>
                   </button>
                 ))}
               </div>
@@ -157,18 +157,18 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
         </div>
 
         {/* Typography Section */}
-        <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
           <div className="flex items-center space-x-2 mb-4">
             <Type className="h-5 w-5 text-fw-link" />
-            <h3 className="text-lg font-medium text-fw-heading">Typography</h3>
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Typography</h3>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-fw-body mb-2">Font Family</label>
+            <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Font Family</label>
             <select
               value={fontFamily}
               onChange={(e) => setFontFamily(e.target.value)}
-              className="w-full px-3 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+              className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             >
               {fontOptions.map((font) => (
                 <option key={font} value={font} style={{ fontFamily: font }}>
@@ -176,15 +176,15 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
                 </option>
               ))}
             </select>
-            <p className="text-xs text-fw-bodyLight mt-2">
+            <p className="text-figma-sm font-medium text-fw-bodyLight mt-2">
               Preview text with selected font
             </p>
             <div
               className="mt-3 p-4 bg-fw-wash rounded-lg border border-fw-secondary"
               style={{ fontFamily }}
             >
-              <p className="text-2xl font-bold mb-2">The quick brown fox</p>
-              <p className="text-sm">jumps over the lazy dog</p>
+              <p className="text-figma-xl font-bold mb-2">The quick brown fox</p>
+              <p className="text-figma-base font-medium">jumps over the lazy dog</p>
             </div>
           </div>
         </div>
@@ -202,18 +202,18 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
 
       {/* Live Preview Panel */}
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Eye className="h-5 w-5 text-fw-link" />
-              <h3 className="text-lg font-medium text-fw-heading">Live Preview</h3>
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Live Preview</h3>
             </div>
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setPreviewMode('light')}
-                className={`px-3 py-1 rounded-lg text-sm ${
+                className={`px-3 py-1 rounded-lg text-figma-sm font-medium ${
                   previewMode === 'light'
-                    ? 'bg-brand-blue text-white'
+                    ? 'bg-fw-active text-white'
                     : 'bg-fw-wash text-fw-body'
                 }`}
               >
@@ -221,9 +221,9 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
               </button>
               <button
                 onClick={() => setPreviewMode('dark')}
-                className={`px-3 py-1 rounded-lg text-sm ${
+                className={`px-3 py-1 rounded-lg text-figma-sm font-medium ${
                   previewMode === 'dark'
-                    ? 'bg-brand-blue text-white'
+                    ? 'bg-fw-active text-white'
                     : 'bg-fw-wash text-fw-body'
                 }`}
               >
@@ -246,7 +246,7 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
                 <div className="h-8 w-32 bg-white/20 rounded" />
                 <div className="flex space-x-3">
                   {['Manage', 'Monitor', 'Configure'].map((item) => (
-                    <div key={item} className="text-white text-sm">
+                    <div key={item} className="text-white text-figma-sm font-medium">
                       {item}
                     </div>
                   ))}
@@ -256,11 +256,11 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
             </div>
 
             {/* Mock Content Area */}
-            <div className={previewMode === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}>
+            <div className={previewMode === 'dark' ? 'bg-fw-heading' : 'bg-fw-wash'}>
               <div className="p-6">
                 <h2
-                  className={`text-2xl font-bold mb-4 ${
-                    previewMode === 'dark' ? 'text-white' : 'text-gray-900'
+                  className={`text-figma-xl font-bold mb-4 ${
+                    previewMode === 'dark' ? 'text-white' : 'text-fw-heading'
                   }`}
                 >
                   {tenant.name} Dashboard
@@ -272,8 +272,8 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
                       key={i}
                       className={`p-4 rounded-lg ${
                         previewMode === 'dark'
-                          ? 'bg-gray-800 border border-gray-700'
-                          : 'bg-white border border-gray-200'
+                          ? 'bg-fw-body border border-fw-bodyLight'
+                          : 'bg-white border border-fw-secondary'
                       }`}
                     >
                       <div
@@ -281,15 +281,15 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
                         style={{ backgroundColor: secondaryColor }}
                       />
                       <div
-                        className={`text-2xl font-bold ${
-                          previewMode === 'dark' ? 'text-white' : 'text-gray-900'
+                        className={`text-figma-xl font-bold ${
+                          previewMode === 'dark' ? 'text-white' : 'text-fw-heading'
                         }`}
                       >
                         {i * 12}
                       </div>
                       <div
-                        className={`text-sm ${
-                          previewMode === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                        className={`text-figma-sm font-medium ${
+                          previewMode === 'dark' ? 'text-fw-bodyLight' : 'text-fw-bodyLight'
                         }`}
                       >
                         Metric {i}
@@ -308,8 +308,8 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
                   <button
                     className={`px-4 py-2 rounded-full font-medium ${
                       previewMode === 'dark'
-                        ? 'bg-gray-800 text-white border border-gray-700'
-                        : 'bg-white text-gray-700 border border-gray-300'
+                        ? 'bg-fw-body text-white border border-fw-bodyLight'
+                        : 'bg-white text-fw-body border border-fw-secondary'
                     }`}
                   >
                     Secondary Button
@@ -319,7 +319,7 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
             </div>
           </div>
 
-          <p className="text-xs text-fw-bodyLight mt-4">
+          <p className="text-figma-sm font-medium text-fw-bodyLight mt-4">
             Preview shows how your branding will appear across the platform. Changes are applied immediately to the preview.
           </p>
         </div>

@@ -41,26 +41,26 @@ export function LogStreamWidget() {
       {/* Controls */}
       <div className="flex items-center space-x-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-4 w-4" />
           <input
             type="text"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Filter logs..."
-            className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full pl-9 pr-4 py-2 text-figma-base border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
           />
         </div>
-        <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+        <button className="p-2 text-fw-bodyLight hover:text-fw-body rounded-lg hover:bg-fw-neutral">
           <Filter className="h-4 w-4" />
         </button>
-        <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+        <button className="p-2 text-fw-bodyLight hover:text-fw-body rounded-lg hover:bg-fw-neutral">
           <Download className="h-4 w-4" />
         </button>
-        <button 
+        <button
           className={`p-2 rounded-lg transition-colors ${
-            autoRefresh 
-              ? 'text-blue-600 bg-blue-50 hover:bg-blue-100' 
-              : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+            autoRefresh
+              ? 'text-fw-link bg-fw-accent hover:bg-fw-accent'
+              : 'text-fw-bodyLight hover:text-fw-body hover:bg-fw-neutral'
           }`}
           onClick={() => setAutoRefresh(!autoRefresh)}
         >
@@ -73,20 +73,20 @@ export function LogStreamWidget() {
         {logs.map((log) => (
           <div
             key={log.id}
-            className={`p-2 rounded-lg font-mono text-xs ${
-              log.level === 'error' ? 'bg-red-50 text-red-700' :
-              log.level === 'warning' ? 'bg-yellow-50 text-yellow-700' :
-              'bg-gray-50 text-gray-700'
+            className={`p-2 rounded-lg font-mono text-figma-sm ${
+              log.level === 'error' ? 'bg-red-50 text-fw-error' :
+              log.level === 'warning' ? 'bg-fw-warn/10 text-fw-warn' :
+              'bg-fw-wash text-fw-body'
             }`}
           >
             <div className="flex items-center space-x-2">
-              <span className="text-gray-400">
+              <span className="text-fw-bodyLight">
                 {new Date(log.timestamp).toLocaleTimeString()}
               </span>
-              <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${
-                log.level === 'error' ? 'bg-red-100 text-red-800' :
-                log.level === 'warning' ? 'bg-yellow-100 text-yellow-800' :
-                'bg-blue-100 text-blue-800'
+              <span className={`px-1.5 py-0.5 rounded-full text-figma-sm font-medium ${
+                log.level === 'error' ? 'bg-red-50 text-fw-error' :
+                log.level === 'warning' ? 'bg-fw-warn/10 text-fw-warn' :
+                'bg-fw-accent text-fw-linkHover'
               }`}>
                 {log.level.toUpperCase()}
               </span>
@@ -98,7 +98,7 @@ export function LogStreamWidget() {
       </div>
 
       <div className="flex justify-center">
-        <button className="text-sm text-blue-600 hover:text-blue-700">
+        <button className="text-figma-base text-fw-link hover:text-fw-linkHover">
           Load More Logs
         </button>
       </div>

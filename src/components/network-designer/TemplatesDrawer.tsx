@@ -161,10 +161,10 @@ export function TemplatesDrawer({ onApplyTemplate }: TemplatesDrawerProps) {
           <button
             key={category.id}
             onClick={() => setActiveCategory(category.id)}
-            className={`px-3 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors ${
+            className={`px-3 py-1.5 text-figma-base font-medium rounded-full whitespace-nowrap transition-colors ${
               activeCategory === category.id
                 ? 'bg-brand-blue text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-fw-neutral text-fw-body hover:bg-fw-neutral'
             }`}
           >
             {category.name}
@@ -176,10 +176,10 @@ export function TemplatesDrawer({ onApplyTemplate }: TemplatesDrawerProps) {
         // Loading state
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="animate-pulse bg-white p-8 rounded-lg border-2 border-gray-100 h-48">
-              <div className="h-12 bg-gray-200 rounded-lg mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div key={i} className="animate-pulse bg-fw-base p-8 rounded-lg border-2 border-fw-secondary h-48">
+              <div className="h-12 bg-fw-neutral rounded-lg mb-4"></div>
+              <div className="h-4 bg-fw-neutral rounded w-3/4 mb-2"></div>
+              <div className="h-4 bg-fw-neutral rounded w-1/2"></div>
             </div>
           ))}
         </div>
@@ -194,36 +194,36 @@ export function TemplatesDrawer({ onApplyTemplate }: TemplatesDrawerProps) {
                 p-4 rounded-lg text-left transition-all duration-200 widget-card
                 ${selectedTemplate === item.id
                   ? 'bg-brand-blue text-white'
-                  : 'bg-white border border-gray-200 hover:border-brand-blue hover:shadow-md'
+                  : 'bg-fw-base border border-fw-secondary hover:border-brand-blue hover:shadow-md'
                 }
                 ${item.isLoading ? 'opacity-70 cursor-wait' : ''}
               `}
             >
               {item.preview?.icons && <TemplatePreview icons={item.preview.icons} />}
               
-              <h3 className={`text-sm font-medium mb-1 ${
-                selectedTemplate === item.id ? 'text-white' : 'text-gray-900'
+              <h3 className={`text-figma-base font-medium mb-1 ${
+                selectedTemplate === item.id ? 'text-white' : 'text-fw-heading'
               }`}>
                 {item.name}
                 {item.isLoading && ' (Loading...)'}
               </h3>
               
-              <p className={`text-xs line-clamp-2 ${
-                selectedTemplate === item.id ? 'text-white/80' : 'text-gray-500'
+              <p className={`text-figma-sm line-clamp-2 ${
+                selectedTemplate === item.id ? 'text-white/80' : 'text-fw-bodyLight'
               }`}>
                 {item.description}
               </p>
               
               {/* Category Badge */}
               <div className="mt-2">
-                <span className={`inline-block px-2 py-0.5 text-xs rounded-full ${
-                  selectedTemplate === item.id 
-                    ? 'bg-white/20 text-white' 
+                <span className={`inline-block px-2 py-0.5 text-figma-sm rounded-full ${
+                  selectedTemplate === item.id
+                    ? 'bg-white/20 text-white'
                     : item.category === 'enterprise'
-                      ? 'bg-blue-100 text-blue-800'
+                      ? 'bg-fw-accent text-fw-linkHover'
                       : item.category === 'security'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
+                        ? 'bg-green-50 text-fw-success'
+                        : 'bg-fw-neutral text-fw-heading'
                 }`}>
                   {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
                 </span>
@@ -235,8 +235,8 @@ export function TemplatesDrawer({ onApplyTemplate }: TemplatesDrawerProps) {
       
       {/* Empty state when no templates match the filter */}
       {!isLoading && filteredTemplates.length === 0 && (
-        <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
-          <p className="text-gray-500">No templates found in this category</p>
+        <div className="text-center py-12 bg-fw-wash rounded-lg border border-fw-secondary">
+          <p className="text-fw-bodyLight">No templates found in this category</p>
         </div>
       )}
     </div>

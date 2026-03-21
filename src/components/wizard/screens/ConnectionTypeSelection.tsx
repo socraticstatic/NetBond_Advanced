@@ -31,21 +31,8 @@ const INTERNET_CONNECTION_TYPES = [
     disabled: true,
   },
   {
-    type: 'VPN to Cloud',
-    icon: Lock,
-    description: 'Securely links your network to cloud services',
-    color: 'green',
-    features: [
-      'Features coming soon',
-      'Features coming soon',
-      'Features coming soon',
-      'Features coming soon',
-    ],
-    disabled: true,
-  },
-  {
     type: 'DataCenter/CoLocation to Cloud',
-    icon: Network,
+    icon: Lock,
     description: 'Direct connectivity from data centers to cloud services',
     color: 'purple',
     features: [
@@ -58,9 +45,22 @@ const INTERNET_CONNECTION_TYPES = [
   },
   {
     type: 'Site to Cloud',
-    icon: Network,
+    icon: Lock,
     description: 'Secure branch connectivity to cloud services',
     color: 'indigo',
+    features: [
+      'Features coming soon',
+      'Features coming soon',
+      'Features coming soon',
+      'Features coming soon',
+    ],
+    disabled: true,
+  },
+  {
+    type: 'Internet Direct',
+    icon: Lock,
+    description: 'Direct internet connectivity with advanced security features',
+    color: 'teal',
     features: [
       'Features coming soon',
       'Features coming soon',
@@ -92,7 +92,6 @@ export function ConnectionTypeSelection({
 }: ConnectionTypeSelectionProps) {
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
 
-  // Use the connection types as is, without modifying the description to include provider
   const connectionTypes = INTERNET_CONNECTION_TYPES;
 
   const getProviderLogo = () => {
@@ -109,37 +108,40 @@ export function ConnectionTypeSelection({
   const tooltips: Record<string, string> = {
     'Internet to Cloud': 'High-performance internet connectivity with dedicated bandwidth to cloud services. Includes built-in security, DDoS protection, and 24/7 monitoring.',
     'Cloud to Cloud': 'Direct private connectivity between cloud environments without traversing the public internet for enhanced security and performance.',
-    'VPN to Cloud': 'Encrypted tunnel from your network to cloud services using IPsec or SSL/TLS protocols for secure data transmission.',
     'DataCenter/CoLocation to Cloud': 'Direct fiber connection from your data center or colocation facility to cloud provider for maximum speed and reliability.',
-    'Site to Cloud': 'Secure connectivity from branch offices or remote sites to centralized cloud services with automated failover.'
+    'Site to Cloud': 'Secure connectivity from branch offices or remote sites to centralized cloud services with automated failover.',
+    'Internet Direct': 'Direct internet connectivity with advanced security features including DDoS protection, WAF, and traffic optimization.'
   };
 
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-gray-900 text-center mb-8">Choose Your Connection Type</h3>
-      
+      {/* Content title: 24px w700 #1d2329 */}
+      <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">Choose Your Connection Type</h3>
+
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* Connection Types */}
+        {/* Connection Types - full width cards */}
         <div className="lg:col-span-2">
           <div className="space-y-4">
             {connectionTypes.map(
               ({ type, icon: Icon, description, color, features, disabled }) => (
                 <div key={type} className="relative">
+                  {/* Card: full-width, rounded-2xl (r=16), min-h ~180px */}
                   <button
                     onClick={() => !disabled && onSelect(type as ConnectionType)}
                     disabled={disabled}
                     className={`
-                      w-full p-6 border-2 rounded-lg wizard-card transition-all duration-200
+                      w-full p-6 border rounded-2xl min-h-[180px] transition-all duration-200 text-left
                       ${disabled
-                        ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-60'
+                        ? 'bg-fw-wash border-fw-secondary cursor-not-allowed'
                         : selectedType === type
-                          ? 'border-fw-active bg-fw-accent shadow-lg transform scale-[1.02]'
-                          : 'border-gray-200 hover:border-fw-active hover:bg-fw-accent/50'
+                          ? 'border-fw-active bg-fw-base shadow-lg hover:bg-fw-primary hover:border-fw-active group/card'
+                          : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50'
                       }
                     `}
                   >
                     <div className="flex items-start">
                       <div className="flex-shrink-0">
+                        {/* Card icon: 32x32 */}
                         {type === 'Internet to Cloud' && providerLogo ? (
                           <img
                             src={providerLogo}
@@ -149,51 +151,63 @@ export function ConnectionTypeSelection({
                         ) : (
                           <Icon
                             className={`h-8 w-8 ${
-                              selectedType === type
-                                ? 'text-fw-active'
-                                : 'text-gray-400'
+                              disabled
+                                ? 'text-fw-disabled'
+                                : selectedType === type
+                                  ? 'text-fw-link'
+                                  : 'text-fw-body'
                             } mt-1`}
                           />
                         )}
                       </div>
                       <div className="ml-4 text-left flex-1">
                         <div className="flex items-center">
+                          {/* Card title: 16px w700 #0057b8 (selected) or #1d2329 (active) or 16px w500 #878c94 (disabled) */}
                           <span
-                            className={`text-lg font-medium ${
-                              selectedType === type
-                                ? 'text-fw-active'
-                                : 'text-gray-700'
+                            className={`text-figma-lg ${
+                              disabled
+                                ? 'font-medium text-fw-disabled'
+                                : selectedType === type
+                                  ? 'font-bold text-fw-link'
+                                  : 'font-bold text-fw-heading'
                             }`}
                           >
                             {type}
                           </span>
-                          <button
-                            className="ml-2 text-gray-400 hover:text-gray-600"
-                            onMouseEnter={() => setShowTooltip(type)}
-                            onMouseLeave={() => setShowTooltip(null)}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setShowTooltip(showTooltip === type ? null : type);
-                            }}
-                          >
-                            <Info className="h-4 w-4" />
-                          </button>
+                          {!disabled && (
+                            <button
+                              className="ml-2 text-fw-disabled hover:text-fw-body"
+                              onMouseEnter={() => setShowTooltip(type)}
+                              onMouseLeave={() => setShowTooltip(null)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowTooltip(showTooltip === type ? null : type);
+                              }}
+                            >
+                              <Info className="h-4 w-4" />
+                            </button>
+                          )}
                         </div>
                         {showTooltip === type && (
-                          <div className="absolute z-10 w-80 px-4 py-3 bg-gray-900 text-white text-sm rounded-lg shadow-xl mt-2 left-0">
+                          <div className="absolute z-10 w-80 px-4 py-3 bg-fw-heading text-white text-figma-base rounded-lg shadow-xl mt-2 left-0">
                             {tooltips[type]}
                           </div>
                         )}
-                        <span className="text-sm text-gray-500 block mb-4 mt-1">
+                        {/* Card desc: 14px w500 #454b52 (active) or #878c94 (disabled) */}
+                        <span className={`text-figma-base font-medium block mb-4 mt-1 ${
+                          disabled ? 'text-fw-disabled' : 'text-fw-body'
+                        }`}>
                           {description}
                         </span>
                         <div className="grid grid-cols-2 gap-2">
                           {features.map((feature, index) => (
                             <div
                               key={index}
-                              className="flex items-center text-sm text-gray-600"
+                              className={`flex items-center text-figma-base font-medium ${
+                                disabled ? 'text-fw-disabled' : 'text-fw-body'
+                              }`}
                             >
-                              <Cog className="h-4 w-4 mr-2 text-gray-400" />
+                              <Cog className="h-5 w-5 mr-2 flex-shrink-0 text-fw-disabled" />
                               {feature}
                             </div>
                           ))}
@@ -202,10 +216,10 @@ export function ConnectionTypeSelection({
                     </div>
                   </button>
 
-                  {/* Coming Soon Overlay */}
+                  {/* Coming Soon Badge: bg-black text-white rounded-lg, 12px w500 */}
                   {disabled && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white/10 backdrop-blur-[0.5px] rounded-lg">
-                      <span className="px-3 py-1 bg-gray-900/50 text-white text-sm font-medium rounded-full">
+                    <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
+                      <span className="badge-coming-soon badge-coming-soon-dark">
                         Coming Soon
                       </span>
                     </div>
@@ -218,8 +232,8 @@ export function ConnectionTypeSelection({
 
         {/* Billing Preview */}
         <div className="lg:col-span-1">
-          <BillingPreview 
-            provider={provider as any} 
+          <BillingPreview
+            provider={provider as any}
             type={selectedType}
             selectedPlanId={billingChoice.planId}
             onPlanChange={(planId) => onBillingChange({ ...billingChoice, planId })}

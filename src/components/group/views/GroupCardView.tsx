@@ -9,7 +9,7 @@ interface GroupCardViewProps {
 
 export function GroupCardView({ groups, onDelete, isMinimized = false }: GroupCardViewProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid gap-6" style={{ gridTemplateColumns: 'repeat(auto-fill, 368px)' }}>
       {groups.map(group => (
         <GroupCard 
           key={group.id} 

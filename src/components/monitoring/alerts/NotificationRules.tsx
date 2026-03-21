@@ -145,7 +145,7 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
     <div className="space-y-6">
       {/* Notification Channels */}
       <div className="card p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Notification Channels</h3>
+        <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em] mb-4">Notification Channels</h3>
         <div className="space-y-4">
           <label className="flex items-center space-x-3">
             <input
@@ -155,11 +155,11 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
                 ...prev,
                 email: e.target.checked
               }))}
-              className="h-4 w-4 text-brand-blue rounded border-gray-300 focus:ring-brand-blue"
+              className="h-4 w-4 text-brand-blue rounded border-fw-secondary focus:ring-fw-active"
             />
             <div className="flex items-center">
-              <Mail className="h-5 w-5 text-gray-400 mr-2" />
-              <span className="text-sm text-gray-700">Email Notifications</span>
+              <Mail className="h-5 w-5 text-fw-bodyLight mr-2" />
+              <span className="text-figma-base text-fw-body">Email Notifications</span>
             </div>
           </label>
 
@@ -171,11 +171,11 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
                 ...prev,
                 slack: e.target.checked
               }))}
-              className="h-4 w-4 text-brand-blue rounded border-gray-300 focus:ring-brand-blue"
+              className="h-4 w-4 text-brand-blue rounded border-fw-secondary focus:ring-fw-active"
             />
             <div className="flex items-center">
-              <MessageSquare className="h-5 w-5 text-gray-400 mr-2" />
-              <span className="text-sm text-gray-700">Slack Notifications</span>
+              <MessageSquare className="h-5 w-5 text-fw-bodyLight mr-2" />
+              <span className="text-figma-base text-fw-body">Slack Notifications</span>
             </div>
           </label>
 
@@ -187,11 +187,11 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
                 ...prev,
                 webhook: e.target.checked
               }))}
-              className="h-4 w-4 text-brand-blue rounded border-gray-300 focus:ring-brand-blue"
+              className="h-4 w-4 text-brand-blue rounded border-fw-secondary focus:ring-fw-active"
             />
             <div className="flex items-center">
-              <Settings className="h-5 w-5 text-gray-400 mr-2" />
-              <span className="text-sm text-gray-700">Webhook Notifications</span>
+              <Settings className="h-5 w-5 text-fw-bodyLight mr-2" />
+              <span className="text-figma-base text-fw-body">Webhook Notifications</span>
             </div>
           </label>
         </div>
@@ -202,7 +202,7 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Bell className="h-5 w-5 text-brand-blue mr-2" />
-            <h3 className="text-lg font-medium text-gray-900">Active Notification Rules</h3>
+            <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">Active Notification Rules</h3>
           </div>
           <Button
             variant="primary"
@@ -215,8 +215,8 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
 
         <div className="space-y-3">
           {notificationRules.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <Bell className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+            <div className="text-center py-8 text-fw-bodyLight">
+              <Bell className="h-12 w-12 mx-auto mb-4 text-fw-bodyLight" />
               <p>No notification rules configured</p>
             </div>
           ) : (
@@ -225,16 +225,16 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
-                      <Bell className={`h-5 w-5 ${rule.enabled ? 'text-blue-600' : 'text-gray-400'}`} />
-                      <h4 className="text-base font-semibold text-gray-900">{rule.name}</h4>
+                      <Bell className={`h-5 w-5 ${rule.enabled ? 'text-fw-link' : 'text-fw-bodyLight'}`} />
+                      <h4 className="text-base font-semibold text-fw-heading">{rule.name}</h4>
                       {rule.enabled ? (
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-fw-success" />
                       ) : (
-                        <XCircle className="h-4 w-4 text-gray-400" />
+                        <XCircle className="h-4 w-4 text-fw-bodyLight" />
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{rule.description}</p>
-                    <div className="flex items-center space-x-4 text-xs text-gray-500">
+                    <p className="text-figma-base text-fw-body mb-2">{rule.description}</p>
+                    <div className="flex items-center space-x-4 text-figma-sm text-fw-bodyLight">
                       <span>Metric: {rule.metricId}</span>
                       <span>Threshold: {rule.threshold.operator} {rule.threshold.value}</span>
                       <span>Triggered: {rule.triggerCount} times</span>
@@ -248,7 +248,7 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
                         onChange={() => toggleRule(rule.id)}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                      <div className="w-11 h-6 bg-fw-neutral peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-fw-active rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-fw-secondary after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fw-cobalt-600"></div>
                     </label>
                     <button
                       onClick={() => deleteRule(rule.id)}
@@ -266,17 +266,17 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+          <div className="bg-fw-base rounded-lg p-6 max-w-md w-full">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium">Add Notification Rule</h3>
+              <h3 className="text-lg font-medium tracking-[-0.03em]">Add Notification Rule</h3>
               <button onClick={() => setShowCreateModal(false)}>
-                <XCircle className="h-5 w-5 text-gray-400" />
+                <XCircle className="h-5 w-5 text-fw-bodyLight" />
               </button>
             </div>
-            <div className="text-center py-8 text-gray-500">
-              <Bell className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+            <div className="text-center py-8 text-fw-bodyLight">
+              <Bell className="h-12 w-12 mx-auto mb-4 text-fw-bodyLight" />
               <p>Create notification rule form coming soon</p>
-              <p className="text-xs mt-2">This will allow you to set thresholds for specific metrics</p>
+              <p className="text-figma-sm mt-2">This will allow you to set thresholds for specific metrics</p>
             </div>
           </div>
         </div>

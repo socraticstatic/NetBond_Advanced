@@ -68,14 +68,14 @@ const LineChart = memo(function LineChart({ data, options = {} }: LineChartProps
   if (!isChartReady) {
     return (
       <div className="h-full w-full flex items-center justify-center">
-        <div className="h-4 w-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+        <div className="h-4 w-4 border-2 border-fw-secondary border-t-fw-cobalt-600 rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return chartComponent || (
-    <div className="h-full w-full flex items-center justify-center bg-gray-50 rounded-lg">
-      <span className="text-sm text-gray-500">Chart unavailable</span>
+    <div className="h-full w-full flex items-center justify-center bg-fw-wash rounded-lg">
+      <span className="text-figma-base text-fw-bodyLight">Chart unavailable</span>
     </div>
   );
 });

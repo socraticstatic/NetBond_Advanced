@@ -198,25 +198,187 @@ const MARKETPLACE_ITEMS: MarketplaceItem[] = [
     addon: true
   },
   {
-    id: 'threat-defender',
+    id: 'enhanced-internet',
     provider: 'AT&T',
-    name: 'Threat Defender',
-    description: 'Comprehensive threat detection and response',
+    name: 'Enhanced Internet',
+    description: 'Burstable bandwidth internet with built-in DDoS protection and performance monitoring',
+    type: 'Internet Service',
+    bandwidthOptions: ['10 Mbps', '100 Mbps', '1 Gbps', '10 Gbps'],
+    basePrice: 150,
+    features: [
+      'Burstable bandwidth up to 10 Gbps',
+      'Built-in DDoS scrubbing',
+      'BGP routing support',
+      'Performance SLA guarantees',
+      'Proactive network monitoring'
+    ],
+    icon: 'internet',
+    category: 'Internet',
+    tags: ['Internet', 'DDoS', 'Burstable', 'Enterprise'],
+    rating: { score: 4.7, count: 287 },
+    popularity: 93,
+    sla: {
+      uptime: '99.95%',
+      latency: '<15ms',
+      support: '24/7'
+    },
+    addon: false
+  },
+  {
+    id: 'dedicated-internet',
+    provider: 'AT&T',
+    name: 'Dedicated Internet',
+    description: 'Symmetrical, guaranteed-bandwidth internet with SLA-backed performance',
+    type: 'Internet Service',
+    bandwidthOptions: ['100 Mbps', '1 Gbps', '10 Gbps', '100 Gbps'],
+    basePrice: 300,
+    features: [
+      'Symmetrical upload/download speeds',
+      'Guaranteed bandwidth commitment',
+      'Multiple IP address blocks',
+      'Dual-stack IPv4/IPv6',
+      '24/7 proactive monitoring'
+    ],
+    icon: 'internet',
+    category: 'Internet',
+    tags: ['Internet', 'Dedicated', 'Symmetrical', 'Enterprise'],
+    rating: { score: 4.8, count: 412 },
+    popularity: 94,
+    sla: {
+      uptime: '99.99%',
+      latency: '<10ms',
+      support: '24/7'
+    },
+    addon: false
+  },
+  {
+    id: 'att-netbond',
+    provider: 'AT&T',
+    name: 'NetBond for Cloud',
+    description: 'Private, secure connectivity to major cloud providers over AT&T MPLS backbone',
+    type: 'Direct Connect',
+    bandwidthOptions: ['50 Mbps', '100 Mbps', '1 Gbps', '10 Gbps'],
+    basePrice: 500,
+    features: [
+      'Private MPLS backbone to cloud',
+      'Multi-cloud support (AWS, Azure, GCP, Oracle)',
+      'Traffic encryption in transit',
+      'Dynamic bandwidth allocation',
+      'Integrated cloud gateway'
+    ],
+    icon: 'cloud',
+    category: 'Direct Connect',
+    tags: ['Cloud', 'MPLS', 'Private', 'Multi-Cloud'],
+    rating: { score: 4.9, count: 356 },
+    popularity: 97,
+    sla: {
+      uptime: '99.99%',
+      latency: '<5ms',
+      support: '24/7'
+    },
+    addon: false
+  },
+  {
+    id: 'att-sd-wan',
+    provider: 'AT&T',
+    name: 'AT&T SD-WAN',
+    description: 'Software-defined WAN with application-aware routing and centralized orchestration',
+    type: 'Network Service',
+    bandwidthOptions: ['100 Mbps', '500 Mbps', '1 Gbps', '10 Gbps'],
+    basePrice: 800,
+    features: [
+      'Application-aware path selection',
+      'Centralized policy orchestration',
+      'Multi-transport support (MPLS, broadband, LTE)',
+      'Zero-touch provisioning',
+      'Real-time analytics dashboard'
+    ],
+    icon: 'network',
+    category: 'Network Services',
+    tags: ['SD-WAN', 'WAN', 'Automation', 'Enterprise'],
+    rating: { score: 4.8, count: 298 },
+    popularity: 91,
+    sla: {
+      uptime: '99.99%',
+      latency: '<10ms',
+      support: '24/7'
+    },
+    addon: false
+  },
+  {
+    id: 'att-flexware',
+    provider: 'AT&T',
+    name: 'AT&T FlexWare',
+    description: 'Universal CPE platform running virtual network functions on commodity hardware',
+    type: 'VNF',
+    bandwidthOptions: ['100 Mbps', '1 Gbps', '10 Gbps'],
+    basePrice: 600,
+    features: [
+      'Universal CPE platform',
+      'Multiple VNFs on single device',
+      'Remote lifecycle management',
+      'Service chaining',
+      'White-box hardware'
+    ],
+    icon: 'network',
+    category: 'VNF',
+    tags: ['VNF', 'uCPE', 'FlexWare', 'Network Functions'],
+    rating: { score: 4.6, count: 178 },
+    popularity: 84,
+    sla: {
+      uptime: '99.99%',
+      latency: '<5ms',
+      support: '24/7'
+    },
+    vnf: true
+  },
+  {
+    id: 'att-ddos-defense',
+    provider: 'AT&T',
+    name: 'AT&T DDoS Defense',
+    description: 'Carrier-grade volumetric DDoS detection and mitigation at network edge',
     type: 'Security Add-on',
     bandwidthOptions: ['Included'],
-    basePrice: 350,
+    basePrice: 400,
     features: [
-      'Advanced threat detection',
-      'Malware analysis',
-      'Behavioral analytics',
-      'Incident response',
-      'SOC integration'
+      'Volumetric attack mitigation up to Tbps',
+      'Always-on or on-demand modes',
+      'Network-edge scrubbing centers',
+      'AT&T threat intelligence feeds',
+      'Real-time attack dashboards'
     ],
     icon: 'shield',
     category: 'Security',
-    tags: ['Security', 'Threat Detection', 'SOC', 'Add-on'],
-    rating: { score: 4.8, count: 278 },
-    popularity: 91,
+    tags: ['Security', 'DDoS', 'Mitigation', 'Add-on'],
+    rating: { score: 4.9, count: 345 },
+    popularity: 95,
+    sla: {
+      uptime: '99.99%',
+      latency: '<2ms',
+      support: '24/7'
+    },
+    addon: true
+  },
+  {
+    id: 'att-threat-manager',
+    provider: 'AT&T',
+    name: 'Threat Manager',
+    description: 'Unified security management with SIEM, vulnerability scanning, and compliance reporting',
+    type: 'Security Add-on',
+    bandwidthOptions: ['Included'],
+    basePrice: 550,
+    features: [
+      'SIEM and log management',
+      'Vulnerability scanning',
+      'Asset discovery',
+      'Compliance reporting (PCI, HIPAA)',
+      'Threat intelligence correlation'
+    ],
+    icon: 'shield',
+    category: 'Security',
+    tags: ['Security', 'SIEM', 'Compliance', 'Threat Detection', 'Add-on'],
+    rating: { score: 4.7, count: 234 },
+    popularity: 88,
     sla: {
       uptime: '99.99%',
       latency: '<5ms',
@@ -225,25 +387,52 @@ const MARKETPLACE_ITEMS: MarketplaceItem[] = [
     addon: true
   },
   {
-    id: 'managed-firewall',
+    id: 'att-internet-protect',
     provider: 'AT&T',
-    name: 'Managed Firewall Service',
-    description: 'Enterprise-grade firewall management',
+    name: 'Internet Protect',
+    description: 'Cloud-based secure web gateway with DNS filtering and malware protection',
+    type: 'Security Add-on',
+    bandwidthOptions: ['Included'],
+    basePrice: 200,
+    features: [
+      'DNS-layer security',
+      'Web content filtering',
+      'Malware and phishing protection',
+      'Cloud-delivered - no hardware required',
+      'Per-user or per-site licensing'
+    ],
+    icon: 'shield',
+    category: 'Security',
+    tags: ['Security', 'DNS', 'Web Filtering', 'Cloud Security', 'Add-on'],
+    rating: { score: 4.6, count: 189 },
+    popularity: 86,
+    sla: {
+      uptime: '99.9%',
+      latency: '<10ms',
+      support: '24/7'
+    },
+    addon: true
+  },
+  {
+    id: 'att-managed-firewall',
+    provider: 'AT&T',
+    name: 'AT&T Managed Firewall',
+    description: 'Fully managed next-gen firewall with 24/7 SOC monitoring and policy management',
     type: 'Security Add-on',
     bandwidthOptions: ['Included'],
     basePrice: 450,
     features: [
-      'Next-gen firewall',
-      'Intrusion prevention',
-      'Application control',
-      'URL filtering',
-      '24/7 monitoring'
+      'Next-gen firewall management',
+      'Intrusion prevention system',
+      'Application-layer control',
+      'URL and content filtering',
+      '24/7 SOC monitoring'
     ],
     icon: 'shield',
     category: 'Security',
-    tags: ['Firewall', 'Security', 'Managed Service', 'Add-on'],
-    rating: { score: 4.7, count: 198 },
-    popularity: 87,
+    tags: ['Firewall', 'Security', 'Managed Service', 'SOC', 'Add-on'],
+    rating: { score: 4.7, count: 256 },
+    popularity: 89,
     sla: {
       uptime: '99.99%',
       latency: '<3ms',
@@ -581,63 +770,78 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
   };
 
   return (
-    <div className="flex gap-6">
-      {/* Sidebar - Always visible */}
-      <div className="w-72 shrink-0 space-y-6 animate-in fade-in slide-in-from-left duration-500">
-        {/* Main Tabs */}
-        <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
-          <h3 className="text-sm font-semibold text-fw-heading mb-3">Browse</h3>
-          <div className="space-y-2">
-            <button
-              onClick={() => setActiveTab('aws')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
-                activeTab === 'aws'
-                  ? 'bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-lg'
-                  : 'bg-gradient-to-r from-orange-50 to-blue-50 text-gray-900 hover:from-orange-100 hover:to-blue-100 border border-orange-200'
-              }`}
-            >
-              <Cloud className="h-5 w-5" />
-              <div className="text-left">
-                <div className="font-medium text-sm">AWS Partner</div>
-                <div className={`text-xs ${activeTab === 'aws' ? 'text-white/90' : 'text-gray-600'}`}>
-                  Direct Connect integration
-                </div>
-              </div>
-            </button>
-            <button
-              onClick={() => setActiveTab('all')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
-                activeTab === 'all'
-                  ? 'bg-fw-ctaPrimary text-fw-linkPrimary shadow-sm'
-                  : 'bg-fw-base text-fw-body hover:bg-fw-wash border border-fw-secondary'
-              }`}
-            >
-              <Network className="h-5 w-5" />
-              <div className="text-left">
-                <div className="font-medium text-sm">Browse Products</div>
-                <div className={`text-xs ${activeTab === 'all' ? 'text-white/90' : 'text-fw-bodyLight'}`}>
-                  Network services & add-ons
-                </div>
-              </div>
-            </button>
-            <button
-              onClick={() => setActiveTab('solutions')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
-                activeTab === 'solutions'
-                  ? 'bg-fw-ctaPrimary text-fw-linkPrimary shadow-sm'
-                  : 'bg-fw-base text-fw-body hover:bg-fw-wash border border-fw-secondary'
-              }`}
-            >
-              <Sparkles className="h-5 w-5" />
-              <div className="text-left">
-                <div className="font-medium text-sm">Browse Solutions</div>
-                <div className={`text-xs ${activeTab === 'solutions' ? 'text-white/90' : 'text-fw-bodyLight'}`}>
-                  App-specific configurations
-                </div>
-              </div>
-            </button>
+    <div className="space-y-8">
+      {/* Hero Banner - Figma: rounded-[32px], AT&T brand gradient */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#0057b8] via-[#003d82] to-[#009fdb] rounded-[32px] p-10">
+        <div className="relative z-10 flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="inline-flex items-center px-3 py-1 rounded-lg bg-white/15 text-figma-sm font-medium text-white">
+                <Sparkles className="h-3 w-3 mr-1.5" />
+                Enterprise Network Services
+              </span>
+            </div>
+            <h1 className="text-[40px] font-bold text-white leading-tight tracking-[-0.03em]">
+              Marketplace
+            </h1>
+            <p className="text-figma-base font-medium text-white/70 mt-2 max-w-md tracking-[-0.03em]">
+              Products, services, and solutions for your network
+            </p>
+          </div>
+          <div className="hidden lg:flex items-center gap-4">
+            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
+              <Network className="h-8 w-8 text-white/80" />
+            </div>
+            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
+              <Shield className="h-8 w-8 text-white/80" />
+            </div>
+            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
+              <Zap className="h-8 w-8 text-white/80" />
+            </div>
           </div>
         </div>
+      </div>
+
+    <div className="flex gap-6">
+      {/* Sidebar - Always visible */}
+      <div className="w-[186px] shrink-0 space-y-6 border-r border-fw-secondary pr-4 animate-in fade-in slide-in-from-left duration-500">
+        {/* Main Tabs - VerticalTabGroup standard */}
+        <nav className="space-y-1" aria-label="Browse">
+          <h3 className="text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider mb-2 px-4">Browse</h3>
+          <button
+            onClick={() => setActiveTab('aws')}
+            className={`w-full flex items-center text-left px-4 py-3 text-figma-base font-medium no-rounded tracking-[-0.03em] transition-colors duration-200 border-l-2 ${
+              activeTab === 'aws'
+                ? 'border-fw-active text-fw-link'
+                : 'border-transparent text-fw-heading hover:text-fw-link hover:border-fw-secondary'
+            }`}
+          >
+            <Cloud className={`h-5 w-5 mr-3 ${activeTab === 'aws' ? 'text-fw-link' : 'text-fw-heading'}`} />
+            AWS Partner
+          </button>
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`w-full flex items-center text-left px-4 py-3 text-figma-base font-medium no-rounded tracking-[-0.03em] transition-colors duration-200 border-l-2 ${
+              activeTab === 'all'
+                ? 'border-fw-active text-fw-link'
+                : 'border-transparent text-fw-heading hover:text-fw-link hover:border-fw-secondary'
+            }`}
+          >
+            <Network className={`h-5 w-5 mr-3 ${activeTab === 'all' ? 'text-fw-link' : 'text-fw-heading'}`} />
+            Browse Products
+          </button>
+          <button
+            onClick={() => setActiveTab('solutions')}
+            className={`w-full flex items-center text-left px-4 py-3 text-figma-base font-medium no-rounded tracking-[-0.03em] transition-colors duration-200 border-l-2 ${
+              activeTab === 'solutions'
+                ? 'border-fw-active text-fw-link'
+                : 'border-transparent text-fw-heading hover:text-fw-link hover:border-fw-secondary'
+            }`}
+          >
+            <Sparkles className={`h-5 w-5 mr-3 ${activeTab === 'solutions' ? 'text-fw-link' : 'text-fw-heading'}`} />
+            Browse Solutions
+          </button>
+        </nav>
 
         {/* Category Grid - Always visible */}
         <CategoryGrid
@@ -694,7 +898,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
           selectedCategories={[]}
           onCategoryToggle={() => {}}
           title="Browse by Category"
-          className="bg-fw-base rounded-lg p-4 border border-fw-secondary"
+          className="bg-fw-base rounded-2xl p-4 border border-fw-secondary"
         />
       </div>
 
@@ -712,44 +916,44 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
       {/* Traditional Marketplace */}
       {activeTab !== 'solutions' && activeTab !== 'aws' && (
         <>
-          {/* Hero Section */}
-            <div className="bg-gradient-to-br from-[#003184] via-[#0047BB] to-[#005CDB] rounded-2xl p-8 shadow-xl text-white mb-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="flex items-center mb-3">
-                    <Sparkles className="h-6 w-6 mr-2" />
-                    <h1 className="text-2xl font-bold">Network Marketplace</h1>
-                  </div>
-                  <p className="text-blue-100 text-sm max-w-xl">
-                    Discover enterprise-grade network solutions, security add-ons, and managed services. Build your perfect infrastructure.
-                  </p>
-            </div>
-            <div className="text-right">
-              <div className="text-3xl font-bold">{getFilteredItems().length}</div>
-              <div className="text-blue-100 text-sm">Available Services</div>
+          {/* Promo Banner */}
+          <div className="relative overflow-hidden bg-gradient-to-r from-[#0057b8] to-[#009fdb] rounded-2xl p-6 mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-figma-xl font-bold text-white tracking-[-0.03em]">New product in Marketplace!</h2>
+                <p className="text-figma-base font-medium text-white/80 mt-2 max-w-lg tracking-[-0.03em]">
+                  Explore our latest network solutions and services designed for enterprise cloud connectivity.
+                </p>
+              </div>
+              <ArrowRight className="h-6 w-6 text-white/60 flex-shrink-0" />
             </div>
           </div>
-        </div>
+
+          {/* Breadcrumbs */}
+            <div className="mb-4">
+              <span className="text-figma-sm font-medium text-fw-bodyLight">Browse &gt; Browse by Category</span>
+            </div>
+
 
         {/* Sub-category Tabs */}
-        <div className="bg-fw-base rounded-xl shadow-sm border border-fw-secondary p-2">
-          <div className="flex space-x-2">
+        <div className="border-b border-fw-secondary">
+          <div className="flex space-x-6">
             <button
               onClick={() => setActiveTab('all')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+              className={`px-1 py-3 text-figma-base font-medium transition-all duration-200 border-b-2 no-rounded ${
                 activeTab === 'all'
-                  ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
+                  ? 'border-fw-link text-fw-link'
+                  : 'border-transparent text-fw-heading hover:text-fw-link'
               }`}
             >
               All Services
             </button>
             <button
               onClick={() => setActiveTab('connections')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+              className={`px-1 py-3 text-figma-base font-medium transition-all duration-200 border-b-2 no-rounded ${
                 activeTab === 'connections'
-                  ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
+                  ? 'border-fw-link text-fw-link'
+                  : 'border-transparent text-fw-heading hover:text-fw-link'
               }`}
             >
               <div className="flex items-center justify-center">
@@ -759,10 +963,10 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('addons')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+              className={`px-1 py-3 text-figma-base font-medium transition-all duration-200 border-b-2 no-rounded ${
                 activeTab === 'addons'
-                  ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
+                  ? 'border-fw-link text-fw-link'
+                  : 'border-transparent text-fw-heading hover:text-fw-link'
               }`}
             >
               <div className="flex items-center justify-center">
@@ -772,10 +976,10 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('vnf')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+              className={`px-1 py-3 text-figma-base font-medium transition-all duration-200 border-b-2 no-rounded ${
                 activeTab === 'vnf'
-                  ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
+                  ? 'border-fw-link text-fw-link'
+                  : 'border-transparent text-fw-heading hover:text-fw-link'
               }`}
             >
               <div className="flex items-center justify-center">
@@ -785,10 +989,10 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('api')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+              className={`px-1 py-3 text-figma-base font-medium transition-all duration-200 border-b-2 no-rounded ${
                 activeTab === 'api'
-                  ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
+                  ? 'border-fw-link text-fw-link'
+                  : 'border-transparent text-fw-heading hover:text-fw-link'
               }`}
             >
               <div className="flex items-center justify-center">
@@ -798,10 +1002,10 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
             </button>
             <button
               onClick={() => setActiveTab('managed')}
-              className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+              className={`px-1 py-3 text-figma-base font-medium transition-all duration-200 border-b-2 no-rounded ${
                 activeTab === 'managed'
-                  ? 'bg-[#003184] text-white shadow-sm'
-                  : 'text-fw-body hover:text-fw-heading hover:bg-fw-wash'
+                  ? 'border-fw-link text-fw-link'
+                  : 'border-transparent text-fw-heading hover:text-fw-link'
               }`}
             >
               <div className="flex items-center justify-center">
@@ -813,36 +1017,34 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-fw-base p-5 rounded-xl shadow-sm border border-fw-secondary">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
-              <input
-                type="text"
-                placeholder="Search marketplace..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active transition-all"
-              />
-            </div>
-            <div className="flex items-center space-x-4">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                className="border border-fw-secondary rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-              >
-                <option value="popular">Most Popular</option>
-                <option value="rating">Highest Rated</option>
-                <option value="price">Lowest Price</option>
-              </select>
-              <Button
-                variant="outline"
-                onClick={() => setShowFilters(!showFilters)}
-                icon={Filter}
-              >
-                Filters
-              </Button>
-            </div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-link h-5 w-5" />
+            <input
+              type="text"
+              placeholder="Search marketplace..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-9 pl-10 pr-4 bg-fw-base border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active transition-all"
+            />
+          </div>
+          <div className="flex items-center space-x-3">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              className="h-9 bg-fw-neutral border-0 rounded-lg px-3 text-figma-base focus:ring-2 focus:ring-fw-active"
+            >
+              <option value="popular">Most Popular</option>
+              <option value="rating">Highest Rated</option>
+              <option value="price">Lowest Price</option>
+            </select>
+            <Button
+              variant="outline"
+              onClick={() => setShowFilters(!showFilters)}
+              icon={Filter}
+            >
+              Filters
+            </Button>
           </div>
         </div>
 
@@ -851,12 +1053,12 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
           {getFilteredItems().map((item, index) => (
             <div
               key={item.id}
-              className="group bg-fw-base rounded-xl border border-fw-secondary shadow-sm hover:shadow-2xl hover:border-[#003184] hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-visible"
+              className="group bg-fw-base rounded-2xl border border-fw-secondary hover:shadow-lg hover:border-fw-link hover:-translate-y-0.5 transition-all duration-300 flex flex-col relative overflow-visible"
             >
               {/* Recommendation badge on the first item */}
               {index === 0 && (
                 <div className="absolute -top-3 -right-3 z-50">
-                  <div className="flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold shadow-lg animate-pulse">
+                  <div className="flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-figma-sm font-bold shadow-lg animate-pulse">
                     <Star className="h-3 w-3 mr-1 fill-current" />
                     Top Pick
                   </div>
@@ -866,7 +1068,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               {/* Recommendation badge for the second item */}
               {index === 1 && (
                 <div className="absolute -top-3 -right-3 z-50">
-                  <div className="flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 via-[#003184] to-blue-600 text-white text-xs font-bold shadow-lg">
+                  <div className="flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 via-[#003184] to-blue-600 text-white text-figma-sm font-bold shadow-lg">
                     <Zap className="h-3 w-3 mr-1.5 fill-current" />
                     Recommended
                   </div>
@@ -874,44 +1076,44 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
               )}
 
               {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#003184]/0 to-[#003184]/0 group-hover:from-[#003184]/5 group-hover:to-transparent transition-all duration-300 pointer-events-none rounded-xl" />
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent to-transparent group-hover:from-fw-link/5 group-hover:to-transparent transition-all duration-300 pointer-events-none rounded-2xl" />
 
-              <div className="relative p-5 border-b border-gray-100">
+              <div className="relative p-5 border-b border-fw-secondary">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-sm group-hover:shadow-md transition-all">
+                  <div className="w-10 h-10 bg-fw-wash rounded-lg flex items-center justify-center">
                     {getIcon(item.icon)}
                   </div>
                   <div className="flex items-center gap-2">
                     {item.addon && (
-                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700">
+                      <span className="px-2 py-0.5 text-figma-sm font-medium rounded-full bg-emerald-100 text-emerald-700">
                         Add-on
                       </span>
                     )}
                     {item.vnf && (
-                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                      <span className="px-2 py-0.5 text-figma-sm font-medium rounded-full bg-purple-100 text-purple-700">
                         VNF
                       </span>
                     )}
                     {item.api && (
-                      <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
+                      <span className="px-2 py-0.5 text-figma-sm font-medium rounded-full bg-blue-100 text-blue-700">
                         API
                       </span>
                     )}
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-fw-heading mb-1 group-hover:text-[#003184] transition-colors">{item.name}</h3>
-                <p className="text-xs text-gray-500 mb-2 font-medium">{item.provider}</p>
-                <p className="text-sm text-fw-body leading-relaxed">{item.description}</p>
+                <h3 className="text-figma-lg font-medium text-fw-heading mb-1 group-hover:text-fw-link transition-colors">{item.name}</h3>
+                <p className="text-figma-sm text-fw-bodyLight mb-2 font-medium">{item.provider}</p>
+                <p className="text-figma-base text-fw-body leading-relaxed">{item.description}</p>
                 <div className="flex items-center mt-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
                       key={star}
                       className={`h-3.5 w-3.5 ${
-                        star <= item.rating.score ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                        star <= item.rating.score ? 'text-yellow-400 fill-current' : 'text-fw-bodyLight'
                       }`}
                     />
                   ))}
-                  <span className="ml-2 text-xs text-gray-500">
+                  <span className="ml-2 text-figma-sm text-fw-bodyLight">
                     {item.rating.score} ({item.rating.count})
                   </span>
                 </div>
@@ -923,7 +1125,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                     {item.features.map((feature, index) => (
                       <span
                         key={index}
-                        className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
+                        className="px-2 py-1 bg-fw-neutral text-fw-body rounded-lg text-figma-sm"
                       >
                         {feature}
                       </span>
@@ -931,14 +1133,14 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                   </div>
 
                   <div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500">Bandwidth Options</span>
+                    <div className="flex items-center justify-between text-figma-base">
+                      <span className="text-fw-bodyLight">Bandwidth Options</span>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {item.bandwidthOptions.map((bandwidth) => (
                         <span
                           key={bandwidth}
-                          className="px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs"
+                          className="px-2 py-1 bg-fw-accent text-fw-link rounded-lg text-figma-sm"
                         >
                           {bandwidth}
                         </span>
@@ -948,32 +1150,32 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
 
                   <div className="grid grid-cols-3 gap-2">
                     <div className="text-center">
-                      <div className="text-xs text-gray-500">Uptime</div>
-                      <div className="text-sm font-medium text-fw-heading">{item.sla.uptime}</div>
+                      <div className="text-figma-sm text-fw-bodyLight">Uptime</div>
+                      <div className="text-figma-base font-bold text-fw-heading">{item.sla.uptime}</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-xs text-gray-500">Latency</div>
-                      <div className="text-sm font-medium text-fw-heading">{item.sla.latency}</div>
+                      <div className="text-figma-sm text-fw-bodyLight">Latency</div>
+                      <div className="text-figma-base font-bold text-fw-heading">{item.sla.latency}</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-xs text-gray-500">Support</div>
-                      <div className="text-sm font-medium text-fw-heading">{item.sla.support}</div>
+                      <div className="text-figma-sm text-fw-bodyLight">Support</div>
+                      <div className="text-figma-base font-bold text-fw-heading">{item.sla.support}</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="relative p-5 mt-auto border-t border-gray-100 bg-gradient-to-br from-gray-50 to-white">
+              <div className="relative p-5 mt-auto border-t border-fw-secondary bg-fw-base">
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-left">
-                    <div className="text-xs text-gray-500 font-medium">Starting at</div>
-                    <div className="text-2xl font-bold text-fw-heading">
+                    <div className="text-figma-sm text-fw-bodyLight font-medium">Starting at</div>
+                    <div className="text-figma-xl font-bold text-fw-heading">
                       ${item.basePrice}
-                      <span className="text-sm font-normal text-gray-500">/mo</span>
+                      <span className="text-figma-base font-normal text-fw-bodyLight">/mo</span>
                     </div>
                   </div>
                   {item.popularity >= 90 && (
-                    <div className="flex items-center px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">
+                    <div className="flex items-center px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-figma-sm font-bold">
                       <Zap className="h-3.5 w-3.5 mr-1 fill-current" />
                       Popular
                     </div>
@@ -981,7 +1183,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                 </div>
                 <button
                   onClick={() => handleSelectItem(item)}
-                  className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold transition-all duration-200 text-sm bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--button-primary-focus-ring)] focus:ring-offset-2 rounded-lg shadow-sm hover:shadow-md active:shadow-sm group/btn"
+                  className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold transition-all duration-200 text-figma-base bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--button-primary-focus-ring)] focus:ring-offset-2 rounded-lg shadow-sm hover:shadow-md active:shadow-sm group/btn"
                 >
                   <span>{item.addon || item.vnf || item.api ? 'Add to Connection' : 'Select Plan'}</span>
                   <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -993,6 +1195,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
         </>
       )}
       </div>
+    </div>
     </div>
   );
 }

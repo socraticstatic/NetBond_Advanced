@@ -69,19 +69,19 @@ export function MobileReportingTab({ selectedConnection, timeRange }: MobileRepo
   return (
     <div className="space-y-4">
       {/* Standard Reports Section */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        <div 
+      <div className="bg-fw-base rounded-lg border border-fw-secondary shadow-sm overflow-hidden">
+        <div
           className="p-4 flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection('standard')}
         >
           <div className="flex items-center">
             <FileText className="h-5 w-5 text-brand-blue mr-2" />
-            <h3 className="text-base font-medium text-gray-900">Standard Reports</h3>
+            <h3 className="text-base font-medium text-fw-heading">Standard Reports</h3>
           </div>
           {expandedSections.standard ? (
-            <ChevronUp className="h-5 w-5 text-gray-400" />
+            <ChevronUp className="h-5 w-5 text-fw-bodyLight" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-gray-400" />
+            <ChevronDown className="h-5 w-5 text-fw-bodyLight" />
           )}
         </div>
         
@@ -95,12 +95,12 @@ export function MobileReportingTab({ selectedConnection, timeRange }: MobileRepo
             >
               <div className="px-4 pb-4 space-y-3">
                 {standardReports.map((report) => (
-                  <div key={report.id} className="bg-gray-50 rounded-lg p-3">
+                  <div key={report.id} className="bg-fw-wash rounded-lg p-3">
                     <div className="flex flex-col">
-                      <h4 className="text-sm font-medium text-gray-900">{report.name}</h4>
-                      <p className="text-xs text-gray-500 mt-1">{report.description}</p>
+                      <h4 className="text-figma-base font-medium text-fw-heading">{report.name}</h4>
+                      <p className="text-figma-sm text-fw-bodyLight mt-1">{report.description}</p>
                       <div className="flex items-center justify-between mt-3">
-                        <div className="flex items-center text-xs text-gray-500">
+                        <div className="flex items-center text-figma-sm text-fw-bodyLight">
                           <Clock className="h-3 w-3 mr-1" />
                           <span>
                             {new Date(report.lastGenerated).toLocaleDateString([], {
@@ -120,7 +120,7 @@ export function MobileReportingTab({ selectedConnection, timeRange }: MobileRepo
                                 duration: 3000
                               });
                             }}
-                            className="p-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
+                            className="p-1.5 bg-fw-neutral text-fw-body rounded-md hover:bg-fw-neutral"
                           >
                             <Eye className="h-3.5 w-3.5" />
                           </button>
@@ -150,19 +150,19 @@ export function MobileReportingTab({ selectedConnection, timeRange }: MobileRepo
       </div>
 
       {/* Scheduled Reports Section */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        <div 
+      <div className="bg-fw-base rounded-lg border border-fw-secondary shadow-sm overflow-hidden">
+        <div
           className="p-4 flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection('scheduled')}
         >
           <div className="flex items-center">
             <Calendar className="h-5 w-5 text-brand-blue mr-2" />
-            <h3 className="text-base font-medium text-gray-900">Scheduled Reports</h3>
+            <h3 className="text-base font-medium text-fw-heading">Scheduled Reports</h3>
           </div>
           {expandedSections.scheduled ? (
-            <ChevronUp className="h-5 w-5 text-gray-400" />
+            <ChevronUp className="h-5 w-5 text-fw-bodyLight" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-gray-400" />
+            <ChevronDown className="h-5 w-5 text-fw-bodyLight" />
           )}
         </div>
         
@@ -176,23 +176,23 @@ export function MobileReportingTab({ selectedConnection, timeRange }: MobileRepo
             >
               <div className="px-4 pb-4 space-y-3">
                 {scheduledReports.map((schedule) => (
-                  <div key={schedule.id} className="bg-gray-50 rounded-lg p-3">
+                  <div key={schedule.id} className="bg-fw-wash rounded-lg p-3">
                     <div className="flex flex-col">
                       <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-medium text-gray-900">{schedule.name}</h4>
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                        <h4 className="text-figma-base font-medium text-fw-heading">{schedule.name}</h4>
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-figma-sm font-medium ${
                           schedule.status === 'active'
                             ? 'bg-green-100 text-green-800'
-                            : 'bg-gray-100 text-gray-800'
+                            : 'bg-fw-neutral text-fw-body'
                         }`}>
                           {schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}
                         </span>
                       </div>
-                      <div className="flex items-center mt-2 text-xs text-gray-500">
+                      <div className="flex items-center mt-2 text-figma-sm text-fw-bodyLight">
                         <Calendar className="h-3 w-3 mr-1" />
                         <span>{schedule.frequency}</span>
                       </div>
-                      <div className="flex items-center mt-1 text-xs text-gray-500">
+                      <div className="flex items-center mt-1 text-figma-sm text-fw-bodyLight">
                         <Clock className="h-3 w-3 mr-1" />
                         <span>
                           Next run: {new Date(schedule.nextRun).toLocaleDateString([], {
@@ -213,19 +213,19 @@ export function MobileReportingTab({ selectedConnection, timeRange }: MobileRepo
       </div>
 
       {/* Custom Report Builder */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-        <div 
+      <div className="bg-fw-base rounded-lg border border-fw-secondary shadow-sm overflow-hidden">
+        <div
           className="p-4 flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection('custom')}
         >
           <div className="flex items-center">
             <Settings className="h-5 w-5 text-brand-blue mr-2" />
-            <h3 className="text-base font-medium text-gray-900">Custom Report Builder</h3>
+            <h3 className="text-base font-medium text-fw-heading">Custom Report Builder</h3>
           </div>
           {expandedSections.custom ? (
-            <ChevronUp className="h-5 w-5 text-gray-400" />
+            <ChevronUp className="h-5 w-5 text-fw-bodyLight" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-gray-400" />
+            <ChevronDown className="h-5 w-5 text-fw-bodyLight" />
           )}
         </div>
         
@@ -239,7 +239,7 @@ export function MobileReportingTab({ selectedConnection, timeRange }: MobileRepo
             >
               <div className="px-4 pb-4">
                 <div className="bg-brand-lightBlue border border-brand-blue/20 rounded-lg p-3 mb-3">
-                  <p className="text-sm text-brand-blue">
+                  <p className="text-figma-base text-brand-blue">
                     Create custom reports by selecting metrics, time ranges, and visualization options.
                   </p>
                 </div>

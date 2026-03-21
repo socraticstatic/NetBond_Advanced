@@ -225,21 +225,21 @@ export function StandardReports() {
 
   const getCategoryColor = (category: Report['category']) => {
     switch (category) {
-      case 'performance': return 'bg-blue-100 text-blue-800';
-      case 'security': return 'bg-indigo-100 text-indigo-800';
-      case 'billing': return 'bg-green-100 text-green-800';
-      case 'operations': return 'bg-gray-100 text-gray-800';
+      case 'performance': return 'bg-brand-lightBlue text-brand-blue';
+      case 'security': return 'bg-fw-purpleLight text-fw-purple';
+      case 'billing': return 'bg-fw-successLight text-fw-success';
+      case 'operations': return 'bg-fw-neutral text-fw-body';
     }
   };
 
   const getStatusBadge = (status: Report['status']) => {
     switch (status) {
       case 'ready':
-        return <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Ready</span>;
+        return <span className="px-2 py-1 text-figma-sm font-medium bg-fw-successLight text-fw-success rounded-lg">Ready</span>;
       case 'generating':
-        return <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Generating</span>;
+        return <span className="px-2 py-1 text-figma-sm font-medium bg-fw-infoLight text-fw-info rounded-lg">Generating</span>;
       case 'stale':
-        return <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Needs Update</span>;
+        return <span className="px-2 py-1 text-figma-sm font-medium bg-fw-warnLight text-fw-warn rounded-lg">Needs Update</span>;
     }
   };
 
@@ -1293,8 +1293,8 @@ export function StandardReports() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Standard Reports</h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <h3 className="text-figma-lg font-medium text-fw-heading">Standard Reports</h3>
+          <p className="text-figma-base font-medium text-fw-body mt-1">
             NetBond service reports for inventory, capacity, utilization, trends, and customer analytics
           </p>
         </div>
@@ -1317,21 +1317,21 @@ export function StandardReports() {
       {/* Filters & View Toggle */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-fw-bodyLight" />
           <input
             type="text"
             placeholder="Search reports..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 text-figma-base text-fw-body placeholder:text-fw-disabled border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-transparent"
           />
         </div>
         <div className="relative">
-          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-fw-bodyLight pointer-events-none" />
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer"
+            className="pl-10 pr-8 py-2 text-figma-base text-fw-body border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-transparent appearance-none bg-fw-base cursor-pointer"
           >
             {categories.map(cat => (
               <option key={cat.id} value={cat.id}>
@@ -1339,30 +1339,30 @@ export function StandardReports() {
               </option>
             ))}
           </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-fw-bodyLight pointer-events-none" />
         </div>
-        <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
+        <div className="flex items-center bg-fw-base rounded-lg border border-fw-secondary p-1">
           <button
             onClick={() => setViewMode('card')}
-            className={`p-2 rounded-full transition-colors ${
+            className={`p-2 rounded-md transition-colors ${
               viewMode === 'card'
-                ? 'text-blue-600 bg-blue-50'
-                : 'text-gray-400 hover:text-gray-500'
+                ? 'text-fw-link bg-fw-accent'
+                : 'text-fw-bodyLight hover:text-fw-body'
             }`}
             title="Card View"
           >
-            <LayoutGrid className="h-5 w-5" />
+            <LayoutGrid className="h-4 w-4" />
           </button>
           <button
             onClick={() => setViewMode('table')}
-            className={`p-2 rounded-full transition-colors ${
+            className={`p-2 rounded-md transition-colors ${
               viewMode === 'table'
-                ? 'text-blue-600 bg-blue-50'
-                : 'text-gray-400 hover:text-gray-500'
+                ? 'text-fw-link bg-fw-accent'
+                : 'text-fw-bodyLight hover:text-fw-body'
             }`}
             title="Table View"
           >
-            <List className="h-5 w-5" />
+            <List className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -1377,132 +1377,118 @@ export function StandardReports() {
             return (
               <div
                 key={report.id}
-                className="card p-6 hover:shadow-lg transition-shadow flex flex-col"
+                className="bg-fw-base border border-fw-secondary rounded-3xl p-6 hover:shadow-lg transition-shadow flex flex-col"
               >
-                {/* Header and Description */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">
-                      <Icon className="h-5 w-5 text-gray-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-base font-semibold text-gray-900 mb-1">
-                        {report.name}
-                      </h4>
-                      <p className="text-sm text-gray-600 leading-relaxed">
-                        {report.description}
-                      </p>
-                    </div>
+                {/* Header: Icon 24x24 fill=#0057b8 + Title 16px w500 + Desc 14px w500 */}
+                <div className="flex items-start gap-3 mb-4">
+                  <div className="flex-shrink-0">
+                    <Icon className="h-6 w-6 text-fw-link" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-figma-lg font-medium text-fw-heading mb-1">
+                      {report.name}
+                    </h4>
+                    <p className="text-figma-base font-medium text-fw-body leading-relaxed">
+                      {report.description}
+                    </p>
                   </div>
                 </div>
 
                 {/* Spacer to push content to bottom */}
                 <div className="flex-1"></div>
 
-                {/* Filter Pills - Pinned to bottom */}
+                {/* Tags: fill=#f3f4f6 r=8 pad=4/8, text 12px w500 #454b52 */}
                 <div className="flex items-center flex-wrap gap-2 mb-3">
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(report.category)}`}>
+                  <span className={`px-2 py-1 text-figma-sm font-medium rounded-lg ${getCategoryColor(report.category)}`}>
                     {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
                   </span>
                   {getStatusBadge(isGenerating ? 'generating' : report.status)}
-                  <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                  <span className="px-2 py-1 text-figma-sm font-medium bg-fw-neutral text-fw-body rounded-lg">
                     {report.format}
                   </span>
-                  <span className="px-2 py-1 text-xs text-gray-500">
+                  <span className="px-2 py-1 text-figma-sm font-medium text-fw-body">
                     {report.frequency}
                   </span>
                 </div>
 
-                {/* Last Generated - Pinned to bottom */}
+                {/* Last Generated: 12px w500 #454b52 with clock icon 16x16 */}
                 {report.lastGenerated && (
-                  <div className="flex items-center text-xs text-gray-500 mb-4">
-                    <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                  <div className="flex items-center text-figma-sm font-medium text-fw-body mb-4">
+                    <Calendar className="h-4 w-4 mr-1.5" />
                     <span>
                       Last generated: {new Date(report.lastGenerated).toLocaleDateString()} at{' '}
                       {new Date(report.lastGenerated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                     {report.size && (
-                      <span className="ml-2 text-gray-400">• {report.size}</span>
+                      <span className="ml-2 text-fw-body">- {report.size}</span>
                     )}
                   </div>
                 )}
 
-                {/* Action Buttons */}
-                <div className="flex items-center space-x-2">
-                  {report.lastGenerated && (
-                    <>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => setPreviewReport(report)}
-                        className="flex-1"
-                      >
-                        <Eye className="h-4 w-4 mr-1.5" />
-                        Preview
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => handleDownloadReport(report)}
-                        className="flex-1"
-                      >
-                        <Download className="h-4 w-4 mr-1.5" />
-                        Download
-                      </Button>
-                    </>
-                  )}
-                  <Button
-                    variant="primary"
-                    size="sm"
+                {/* Divider between content and buttons */}
+                <div className="border-t border-fw-secondary mb-4"></div>
+
+                {/* Action Buttons: pill (r=800), h=36, 14px w500 */}
+                <div className="flex items-center gap-2">
+                  <button
                     onClick={() => handleGenerateReport(report.id)}
                     disabled={isGenerating}
-                    className="flex-1"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full bg-fw-primary text-white text-figma-base font-medium hover:bg-fw-primaryHover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
-                    <FileText className="h-4 w-4 mr-1.5" />
+                    <FileText className="h-4 w-4" />
                     {isGenerating ? 'Generating...' : 'Generate'}
-                  </Button>
+                  </button>
+                  {report.lastGenerated && (
+                    <button
+                      onClick={() => setPreviewReport(report)}
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-fw-link text-fw-link text-figma-base font-medium hover:bg-fw-accent transition-colors"
+                    >
+                      <Eye className="h-4 w-4" />
+                      Preview
+                    </button>
+                  )}
                 </div>
               </div>
           );
         })}
       </div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
+          <table className="min-w-full divide-y divide-fw-secondary">
+            <thead className="bg-fw-wash">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Report Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Category
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Last Generated
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-fw-base divide-y divide-fw-secondary">
               {filteredReports.map((report) => {
                 const Icon = getCategoryIcon(report.category);
                 const isGenerating = generatingReports.has(report.id);
 
                 return (
-                  <tr key={report.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={report.id} className="hover:bg-fw-wash transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center">
-                        <div className="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-gray-100 rounded-lg">
-                          <Icon className="h-4 w-4 text-gray-600" />
+                        <div className="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-fw-neutral rounded-lg">
+                          <Icon className="h-4 w-4 text-fw-body" />
                         </div>
                         <div className="ml-3">
-                          <div className="text-sm font-medium text-gray-900">{report.name}</div>
-                          <div className="text-xs text-gray-500">
+                          <div className="text-figma-base font-medium text-fw-heading">{report.name}</div>
+                          <div className="text-figma-sm text-fw-bodyLight">
                             {report.format} • {report.frequency}
                             {report.size && ` • ${report.size}`}
                           </div>
@@ -1510,39 +1496,39 @@ export function StandardReports() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(report.category)}`}>
+                      <span className={`px-2 py-1 text-figma-sm font-medium rounded-full ${getCategoryColor(report.category)}`}>
                         {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-body">
                       {report.lastGenerated ? (
                         <div className="flex items-center">
-                          <Calendar className="h-3.5 w-3.5 mr-1.5 text-gray-400" />
+                          <Calendar className="h-3.5 w-3.5 mr-1.5 text-fw-bodyLight" />
                           <span>
                             {new Date(report.lastGenerated).toLocaleDateString()}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-gray-400">Never</span>
+                        <span className="text-fw-bodyLight">Never</span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {getStatusBadge(isGenerating ? 'generating' : report.status)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium">
                       <div className="flex items-center justify-end space-x-2">
                         {report.lastGenerated && (
                           <>
                             <button
                               onClick={() => setPreviewReport(report)}
-                              className="text-gray-600 hover:text-gray-900 p-1"
+                              className="text-fw-body hover:text-fw-heading p-1"
                               title="Preview"
                             >
                               <Eye className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleDownloadReport(report)}
-                              className="text-gray-600 hover:text-gray-900 p-1"
+                              className="text-fw-body hover:text-fw-heading p-1"
                               title="Download"
                             >
                               <Download className="h-4 w-4" />
@@ -1552,7 +1538,7 @@ export function StandardReports() {
                         <button
                           onClick={() => handleGenerateReport(report.id)}
                           disabled={isGenerating}
-                          className="text-blue-600 hover:text-blue-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="text-fw-link hover:text-fw-linkHover font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                           title="Generate"
                         >
                           <FileText className="h-4 w-4" />
@@ -1569,9 +1555,9 @@ export function StandardReports() {
 
       {filteredReports.length === 0 && (
         <div className="text-center py-12">
-          <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No reports found</h3>
-          <p className="text-gray-600">
+          <FileText className="h-12 w-12 mx-auto text-fw-bodyLight mb-4" />
+          <h3 className="text-figma-lg font-medium text-fw-heading mb-2">No reports found</h3>
+          <p className="text-figma-base font-medium text-fw-body">
             Try adjusting your search or filter criteria
           </p>
         </div>
@@ -1595,15 +1581,15 @@ export function StandardReports() {
                   {/* Summary Cards */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {previewData.summary.map((item, idx) => (
-                      <div key={idx} className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-lg p-4">
-                        <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                      <div key={idx} className="bg-fw-wash border border-fw-secondary rounded-lg p-4">
+                        <div className="text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider mb-1">
                           {item.label}
                         </div>
                         <div className="flex items-baseline justify-between">
-                          <div className="text-2xl font-bold text-gray-900">
+                          <div className="text-figma-xl font-medium text-fw-heading">
                             {item.value}
                           </div>
-                          <div className="text-xs font-semibold text-green-600">
+                          <div className="text-figma-sm font-medium text-fw-success">
                             {item.trend}
                           </div>
                         </div>
@@ -1613,31 +1599,31 @@ export function StandardReports() {
 
                   {/* Data Tables */}
                   {previewData.tables.map((table, tableIdx) => (
-                    <div key={tableIdx} className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-                      <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
-                        <h4 className="text-sm font-semibold text-gray-900">{table.title}</h4>
+                    <div key={tableIdx} className="bg-fw-base border border-fw-secondary rounded-lg overflow-hidden">
+                      <div className="bg-fw-wash px-6 py-3 border-b border-fw-secondary">
+                        <h4 className="text-figma-base font-medium text-fw-heading">{table.title}</h4>
                       </div>
                       <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                          <thead className="bg-gray-50">
+                        <table className="min-w-full divide-y divide-fw-secondary">
+                          <thead className="bg-fw-wash">
                             <tr>
                               {table.headers.map((header, headerIdx) => (
                                 <th
                                   key={headerIdx}
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider"
                                 >
                                   {header}
                                 </th>
                               ))}
                             </tr>
                           </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
+                          <tbody className="bg-fw-base divide-y divide-fw-secondary">
                             {table.rows.map((row, rowIdx) => (
-                              <tr key={rowIdx} className="hover:bg-gray-50 transition-colors">
+                              <tr key={rowIdx} className="hover:bg-fw-wash transition-colors">
                                 {row.map((cell, cellIdx) => (
                                   <td
                                     key={cellIdx}
-                                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                                    className={`px-6 py-4 whitespace-nowrap text-figma-base ${cellIdx === 0 ? 'text-fw-heading font-medium' : 'text-fw-body'}`}
                                   >
                                     {cell}
                                   </td>
@@ -1651,7 +1637,7 @@ export function StandardReports() {
                   ))}
 
                   {/* Action Buttons */}
-                  <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+                  <div className="flex items-center justify-end space-x-3 pt-4 border-t border-fw-secondary">
                     <Button
                       variant="secondary"
                       onClick={() => setPreviewReport(null)}

@@ -88,7 +88,7 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
       size="lg"
       footer={
         <div className="flex items-center justify-between">
-          <div className="text-xs text-fw-bodyLight">
+          <div className="text-figma-sm text-fw-bodyLight">
             {getActiveConnectionsCount()} of {AVAILABLE_CONNECTIONS.length} connections with access
           </div>
           <div className="flex items-center gap-3">
@@ -108,13 +108,13 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
           <div className="flex items-start gap-3">
             <AlertCircle className="h-5 w-5 text-fw-link mt-0.5 flex-shrink-0" />
             <div className="flex-1">
-              <h3 className="text-sm font-semibold text-fw-heading mb-1">
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-1">
                 Connection Access for {user.name}
               </h3>
-              <p className="text-xs text-fw-body mb-2">
+              <p className="text-figma-sm text-fw-body mb-2">
                 Configure which connections {user.name} can access and what actions they can perform on each connection.
               </p>
-              <div className="flex items-center gap-3 text-xs">
+              <div className="flex items-center gap-3 text-figma-sm">
                 <div className="flex items-center gap-2">
                   <span className="text-fw-bodyLight">Role:</span>
                   <span className="px-2 py-0.5 bg-fw-accent text-fw-cobalt-700 rounded-md font-medium border border-fw-active">
@@ -139,7 +139,7 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
         <div className="bg-fw-accent border border-fw-active rounded-lg p-3">
           <div className="flex items-start gap-2">
             <Info className="h-4 w-4 text-fw-link mt-0.5 flex-shrink-0" />
-            <div className="text-xs text-fw-body">
+            <div className="text-figma-sm text-fw-body">
               <span className="font-medium text-fw-heading">Scope Limitations:</span>
               {' '}User's role limits access to connections within their {permissionChecker.getDefaultScope(
                 user.role.toLowerCase().includes('admin') ? 'admin' : 'user'
@@ -151,8 +151,8 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
         {/* Connections List */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-fw-heading">Available Connections</h3>
-            <div className="text-xs text-fw-bodyLight">
+            <h3 className="text-figma-base font-semibold text-fw-heading">Available Connections</h3>
+            <div className="text-figma-sm text-fw-bodyLight">
               Select permissions for each connection
             </div>
           </div>
@@ -178,17 +178,17 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
                         <Network className="h-5 w-5 text-fw-link" />
                       </div>
                       <div>
-                        <div className="text-sm font-semibold text-fw-heading">
+                        <div className="text-figma-base font-semibold text-fw-heading">
                           {connection.name}
                         </div>
-                        <div className="text-xs text-fw-bodyLight">{connection.location}</div>
+                        <div className="text-figma-sm text-fw-bodyLight">{connection.location}</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       {!hasAllPermissions && (
                         <button
                           onClick={() => handleSelectAll(connection.id)}
-                          className="text-xs text-fw-link hover:text-fw-linkHover font-medium"
+                          className="text-figma-sm text-fw-link hover:text-fw-linkHover font-medium"
                         >
                           Select All
                         </button>
@@ -196,7 +196,7 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
                       {hasAnyPermission && (
                         <button
                           onClick={() => handleDeselectAll(connection.id)}
-                          className="text-xs text-fw-bodyLight hover:text-fw-body font-medium"
+                          className="text-figma-sm text-fw-bodyLight hover:text-fw-body font-medium"
                         >
                           Clear All
                         </button>
@@ -206,7 +206,7 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
                   {hasAnyPermission && (
                     <div className="flex items-center gap-2">
                       <div className="h-1.5 w-1.5 rounded-full bg-fw-success"></div>
-                      <span className="text-xs text-fw-success font-medium">
+                      <span className="text-figma-sm text-fw-success font-medium">
                         {(accessConfig[connection.id] || []).length} permission
                         {(accessConfig[connection.id] || []).length !== 1 ? 's' : ''} granted
                       </span>
@@ -240,13 +240,13 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
                             <Icon className={`h-4 w-4 flex-shrink-0 ${
                               isChecked ? 'text-fw-link' : 'text-fw-bodyLight'
                             }`} />
-                            <span className={`text-sm font-medium ${
+                            <span className={`text-figma-base font-medium ${
                               isChecked ? 'text-fw-heading' : 'text-fw-body'
                             }`}>
                               {permission.label}
                             </span>
                           </div>
-                          <p className="text-xs text-fw-bodyLight leading-relaxed">
+                          <p className="text-figma-sm text-fw-bodyLight leading-relaxed">
                             {permission.description}
                           </p>
                         </div>
@@ -265,8 +265,8 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
             <div className="flex items-start gap-3">
               <Shield className="h-5 w-5 text-fw-success mt-0.5 flex-shrink-0" />
               <div>
-                <h3 className="text-sm font-semibold text-fw-heading mb-1">Access Summary</h3>
-                <p className="text-xs text-fw-body">
+                <h3 className="text-figma-base font-semibold text-fw-heading mb-1">Access Summary</h3>
+                <p className="text-figma-sm text-fw-body">
                   {user.name} will have access to {getActiveConnectionsCount()} connection
                   {getActiveConnectionsCount() !== 1 ? 's' : ''} with the configured permissions.
                 </p>

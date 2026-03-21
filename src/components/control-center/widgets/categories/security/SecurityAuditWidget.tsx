@@ -34,25 +34,25 @@ export function SecurityAuditWidget({ connections }: SecurityAuditWidgetProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <FileText className="h-5 w-5 text-purple-500 mr-2" />
-          <span className="text-sm font-medium text-gray-900">Security Audit Log</span>
+          <FileText className="h-5 w-5 text-fw-purple mr-2" />
+          <span className="text-figma-base font-medium text-fw-heading">Security Audit Log</span>
         </div>
-        <button className="text-sm text-blue-600 hover:text-blue-700">
+        <button className="text-figma-base text-fw-link hover:text-fw-linkHover">
           Export Log
         </button>
       </div>
 
       <div className="space-y-3">
         {auditLogs.map((log) => (
-          <div key={log.id} className="p-3 bg-gray-50 rounded-lg">
+          <div key={log.id} className="p-3 bg-fw-wash rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center">
-                <Shield className="h-4 w-4 text-gray-400 mr-2" />
-                <span className="text-sm font-medium text-gray-900">{log.action}</span>
+                <Shield className="h-4 w-4 text-fw-bodyLight mr-2" />
+                <span className="text-figma-base font-medium text-fw-heading">{log.action}</span>
               </div>
             </div>
-            <p className="text-sm text-gray-600 mb-2">{log.details}</p>
-            <div className="flex items-center justify-between text-xs text-gray-500">
+            <p className="text-figma-base text-fw-body mb-2">{log.details}</p>
+            <div className="flex items-center justify-between text-figma-sm text-fw-bodyLight">
               <div className="flex items-center">
                 <User className="h-3 w-3 mr-1" />
                 {log.user}
@@ -66,7 +66,7 @@ export function SecurityAuditWidget({ connections }: SecurityAuditWidgetProps) {
         ))}
       </div>
 
-      <button className="w-full px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+      <button className="w-full px-4 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
         View Full Audit Log
       </button>
     </div>

@@ -7,9 +7,9 @@ interface SecurityOverviewWidgetProps {
 
 export function SecurityOverviewWidget({ connections }: SecurityOverviewWidgetProps) {
   // Calculate security metrics
-  const secureConnections = connections.filter(c => 
-    c.security?.encryption && 
-    c.security?.firewall && 
+  const secureConnections = connections.filter(c =>
+    c.security?.encryption &&
+    c.security?.firewall &&
     c.security?.ddosProtection
   ).length;
 
@@ -23,14 +23,14 @@ export function SecurityOverviewWidget({ connections }: SecurityOverviewWidgetPr
       {/* Security Score */}
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-2xl font-bold text-gray-900">{securityScore}%</div>
+          <div className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">{securityScore}%</div>
           <div className="flex items-center mt-1">
-            <Shield className="h-4 w-4 text-green-500 mr-1" />
-            <span className="text-sm text-green-600">Security Score</span>
+            <Shield className="h-4 w-4 text-fw-success mr-1" />
+            <span className="text-figma-base text-fw-success">Security Score</span>
           </div>
         </div>
-        <div className="h-16 w-16 rounded-full border-4 border-green-500 flex items-center justify-center">
-          <span className="text-lg font-bold text-green-500">{securityScore}</span>
+        <div className="h-16 w-16 rounded-full border-4 border-fw-success flex items-center justify-center">
+          <span className="text-figma-lg font-bold text-fw-success">{securityScore}</span>
         </div>
       </div>
 
@@ -38,26 +38,26 @@ export function SecurityOverviewWidget({ connections }: SecurityOverviewWidgetPr
       <div className="grid grid-cols-3 gap-4">
         <div className="p-3 bg-red-50 rounded-lg">
           <div className="flex items-center justify-between mb-1">
-            <AlertTriangle className="h-4 w-4 text-red-500" />
-            <span className="text-xs text-red-600">Threats</span>
+            <AlertTriangle className="h-4 w-4 text-fw-error" />
+            <span className="text-figma-sm text-fw-error">Threats</span>
           </div>
-          <div className="text-xl font-bold text-red-700">{activeThreats}</div>
+          <div className="text-xl font-bold text-fw-error">{activeThreats}</div>
         </div>
 
-        <div className="p-3 bg-yellow-50 rounded-lg">
+        <div className="p-3 bg-fw-warn/10 rounded-lg">
           <div className="flex items-center justify-between mb-1">
-            <Shield className="h-4 w-4 text-yellow-500" />
-            <span className="text-xs text-yellow-600">Vulnerabilities</span>
+            <Shield className="h-4 w-4 text-fw-warn" />
+            <span className="text-figma-sm text-fw-warn">Vulnerabilities</span>
           </div>
-          <div className="text-xl font-bold text-yellow-700">{vulnerabilities}</div>
+          <div className="text-xl font-bold text-fw-warn">{vulnerabilities}</div>
         </div>
 
         <div className="p-3 bg-green-50 rounded-lg">
           <div className="flex items-center justify-between mb-1">
-            <Lock className="h-4 w-4 text-green-500" />
-            <span className="text-xs text-green-600">Compliance</span>
+            <Lock className="h-4 w-4 text-fw-success" />
+            <span className="text-figma-sm text-fw-success">Compliance</span>
           </div>
-          <div className="text-xl font-bold text-green-700">{complianceScore}%</div>
+          <div className="text-xl font-bold text-fw-success">{complianceScore}%</div>
         </div>
       </div>
 
@@ -69,12 +69,12 @@ export function SecurityOverviewWidget({ connections }: SecurityOverviewWidgetPr
           { name: 'DDoS Protection', enabled: true },
           { name: 'IPSec', enabled: true }
         ].map((feature) => (
-          <div key={feature.name} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+          <div key={feature.name} className="flex items-center justify-between p-2 bg-fw-wash rounded-lg">
             <div className="flex items-center">
-              <Shield className="h-4 w-4 text-gray-400 mr-2" />
-              <span className="text-sm text-gray-700">{feature.name}</span>
+              <Shield className="h-4 w-4 text-fw-bodyLight mr-2" />
+              <span className="text-figma-base text-fw-body">{feature.name}</span>
             </div>
-            <span className={`text-sm ${feature.enabled ? 'text-green-600' : 'text-red-600'}`}>
+            <span className={`text-figma-base ${feature.enabled ? 'text-fw-success' : 'text-fw-error'}`}>
               {feature.enabled ? 'Enabled' : 'Disabled'}
             </span>
           </div>

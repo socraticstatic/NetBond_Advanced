@@ -73,8 +73,8 @@ export function TenantDetailPage() {
             Back
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-fw-heading">{tenant.name}</h1>
-            <p className="text-sm text-fw-bodyLight mt-1">{tenant.subdomain}.att-netbond.com</p>
+            <h1 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">{tenant.name}</h1>
+            <p className="text-figma-sm font-medium text-fw-bodyLight mt-1">{tenant.subdomain}.att-netbond.com</p>
           </div>
         </div>
         <Button variant="primary" icon={Eye}>
@@ -90,64 +90,64 @@ export function TenantDetailPage() {
         {activeTab === 'overview' && (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
-                <h3 className="text-sm font-medium text-fw-bodyLight mb-4">Tenant Information</h3>
+              <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+                <h3 className="text-figma-sm font-medium text-fw-bodyLight mb-4">Tenant Information</h3>
                 <dl className="space-y-3">
                   <div>
-                    <dt className="text-xs text-fw-bodyLight">Tenant ID</dt>
-                    <dd className="text-sm font-medium text-fw-heading mt-1">{tenant.id}</dd>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Tenant ID</dt>
+                    <dd className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mt-1">{tenant.id}</dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-fw-bodyLight">Created</dt>
-                    <dd className="text-sm font-medium text-fw-heading mt-1">
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Created</dt>
+                    <dd className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mt-1">
                       {new Date(tenant.createdAt).toLocaleDateString()}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-fw-bodyLight">Last Activity</dt>
-                    <dd className="text-sm font-medium text-fw-heading mt-1">
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Last Activity</dt>
+                    <dd className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mt-1">
                       {new Date(tenant.lastActivity).toLocaleDateString()}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-fw-bodyLight">Plan</dt>
-                    <dd className="text-sm font-medium text-fw-heading mt-1 capitalize">{tenant.plan}</dd>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Plan</dt>
+                    <dd className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mt-1 capitalize">{tenant.plan}</dd>
                   </div>
                 </dl>
               </div>
 
-              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
-                <h3 className="text-sm font-medium text-fw-bodyLight mb-4">Admin Contact</h3>
+              <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+                <h3 className="text-figma-sm font-medium text-fw-bodyLight mb-4">Admin Contact</h3>
                 <dl className="space-y-3">
                   <div>
-                    <dt className="text-xs text-fw-bodyLight">Name</dt>
-                    <dd className="text-sm font-medium text-fw-heading mt-1">{tenant.adminName}</dd>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Name</dt>
+                    <dd className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mt-1">{tenant.adminName}</dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-fw-bodyLight">Email</dt>
-                    <dd className="text-sm font-medium text-fw-heading mt-1">{tenant.adminEmail}</dd>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Email</dt>
+                    <dd className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mt-1">{tenant.adminEmail}</dd>
                   </div>
                 </dl>
               </div>
 
-              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
-                <h3 className="text-sm font-medium text-fw-bodyLight mb-4">Usage Statistics</h3>
+              <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+                <h3 className="text-figma-sm font-medium text-fw-bodyLight mb-4">Usage Statistics</h3>
                 <dl className="space-y-3">
                   <div>
-                    <dt className="text-xs text-fw-bodyLight">Total Users</dt>
-                    <dd className="text-sm font-medium text-fw-heading mt-1">{tenant.userCount}</dd>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Total Users</dt>
+                    <dd className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mt-1">{tenant.userCount}</dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-fw-bodyLight">Active Connections</dt>
-                    <dd className="text-sm font-medium text-fw-heading mt-1">{tenant.connectionCount}</dd>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Active Connections</dt>
+                    <dd className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mt-1">{tenant.connectionCount}</dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-fw-bodyLight">Storage Used</dt>
-                    <dd className="text-sm font-medium text-fw-heading mt-1">12.4 GB</dd>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Storage Used</dt>
+                    <dd className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mt-1">12.4 GB</dd>
                   </div>
                   <div>
-                    <dt className="text-xs text-fw-bodyLight">API Calls (30d)</dt>
-                    <dd className="text-sm font-medium text-fw-heading mt-1">45,231</dd>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">API Calls (30d)</dt>
+                    <dd className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mt-1">45,231</dd>
                   </div>
                 </dl>
               </div>
@@ -156,10 +156,10 @@ export function TenantDetailPage() {
         )}
 
         {activeTab === 'users' && (
-          <div className="bg-fw-base rounded-lg border border-fw-secondary">
+          <div className="bg-fw-base rounded-2xl border border-fw-secondary">
             <div className="p-6 border-b border-fw-secondary">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium text-fw-heading">Tenant Users</h3>
+                <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Tenant Users</h3>
                 <Button variant="primary" size="sm">
                   Add User
                 </Button>
@@ -169,19 +169,19 @@ export function TenantDetailPage() {
               <table className="w-full">
                 <thead className="bg-fw-wash">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-fw-bodyLight uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-fw-bodyLight uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
                       Email
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-fw-bodyLight uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
                       Role
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-fw-bodyLight uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-fw-bodyLight uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
                       Last Active
                     </th>
                   </tr>
@@ -189,21 +189,21 @@ export function TenantDetailPage() {
                 <tbody className="bg-fw-base divide-y divide-fw-secondary">
                   {mockUsers.map((user) => (
                     <tr key={user.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-fw-heading">
+                      <td className="px-6 py-4 whitespace-nowrap text-figma-base font-medium text-fw-heading tracking-[-0.03em]">
                         {user.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-fw-body">
+                      <td className="px-6 py-4 whitespace-nowrap text-figma-base font-medium text-fw-body">
                         {user.email}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-fw-body">
+                      <td className="px-6 py-4 whitespace-nowrap text-figma-base font-medium text-fw-body">
                         {user.role}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-lg text-figma-sm font-medium bg-fw-successLight text-fw-success">
                           {user.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-fw-bodyLight">
+                      <td className="px-6 py-4 whitespace-nowrap text-figma-base font-medium text-fw-bodyLight">
                         {user.lastActive}
                       </td>
                     </tr>
@@ -217,8 +217,8 @@ export function TenantDetailPage() {
         {activeTab === 'branding' && <BrandingCustomization tenant={tenant} />}
 
         {activeTab === 'features' && (
-          <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
-            <h3 className="text-lg font-medium text-fw-heading mb-6">Feature Toggles</h3>
+          <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-6">Feature Toggles</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {mockFeatures.map((feature) => (
                 <div
@@ -226,8 +226,8 @@ export function TenantDetailPage() {
                   className="flex items-start justify-between p-4 rounded-lg border border-fw-secondary"
                 >
                   <div className="flex-1">
-                    <h4 className="text-sm font-medium text-fw-heading">{feature.name}</h4>
-                    <p className="text-xs text-fw-bodyLight mt-1">{feature.description}</p>
+                    <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{feature.name}</h4>
+                    <p className="text-figma-sm font-medium text-fw-bodyLight mt-1">{feature.description}</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer ml-4">
                     <input
@@ -243,7 +243,7 @@ export function TenantDetailPage() {
                         });
                       }}
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+                    <div className="w-11 h-6 bg-fw-neutral peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-fw-active rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-fw-secondary after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fw-active"></div>
                   </label>
                 </div>
               ))}
@@ -252,9 +252,9 @@ export function TenantDetailPage() {
         )}
 
         {activeTab === 'activity' && (
-          <div className="bg-fw-base rounded-lg border border-fw-secondary">
+          <div className="bg-fw-base rounded-2xl border border-fw-secondary">
             <div className="p-6 border-b border-fw-secondary">
-              <h3 className="text-lg font-medium text-fw-heading">Activity Log</h3>
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Activity Log</h3>
             </div>
             <div className="divide-y divide-fw-secondary">
               {mockActivityLog.map((log, index) => (
@@ -262,11 +262,11 @@ export function TenantDetailPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3">
-                        <p className="text-sm font-medium text-fw-heading">{log.action}</p>
-                        <span className="text-xs text-fw-bodyLight">{log.timestamp}</span>
+                        <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{log.action}</p>
+                        <span className="text-figma-sm font-medium text-fw-bodyLight">{log.timestamp}</span>
                       </div>
-                      <p className="text-sm text-fw-body mt-1">{log.details}</p>
-                      <p className="text-xs text-fw-bodyLight mt-1">by {log.user}</p>
+                      <p className="text-figma-base font-medium text-fw-body mt-1">{log.details}</p>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight mt-1">by {log.user}</p>
                     </div>
                   </div>
                 </div>
@@ -276,39 +276,39 @@ export function TenantDetailPage() {
         )}
 
         {activeTab === 'settings' && (
-          <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
-            <h3 className="text-lg font-medium text-fw-heading mb-6">Tenant Settings</h3>
+          <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-6">Tenant Settings</h3>
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-fw-body mb-2">Tenant Name</label>
+                <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Tenant Name</label>
                 <input
                   type="text"
                   defaultValue={tenant.name}
-                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                  className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-fw-body mb-2">Subdomain</label>
+                <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Subdomain</label>
                 <div className="flex items-center">
                   <input
                     type="text"
                     defaultValue={tenant.subdomain}
-                    className="flex-1 px-4 py-2 border border-fw-secondary rounded-l-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                    className="flex-1 px-3 h-9 border border-fw-secondary rounded-l-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   />
-                  <span className="px-4 py-2 bg-fw-wash border border-l-0 border-fw-secondary rounded-r-lg text-sm text-fw-bodyLight">
+                  <span className="px-4 py-2 bg-fw-wash border border-l-0 border-fw-secondary rounded-r-lg text-figma-base font-medium text-fw-bodyLight">
                     .att-netbond.com
                   </span>
                 </div>
               </div>
 
               <div className="pt-6 border-t border-fw-secondary">
-                <h4 className="text-sm font-medium text-fw-heading mb-4">Danger Zone</h4>
+                <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-4">Danger Zone</h4>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full text-yellow-600 border-yellow-300 hover:bg-yellow-50">
+                  <Button variant="outline" className="w-full text-fw-warn border-fw-warn hover:bg-fw-warnLight">
                     Suspend Tenant
                   </Button>
-                  <Button variant="outline" className="w-full text-red-600 border-red-300 hover:bg-red-50">
+                  <Button variant="outline" className="w-full text-fw-error border-fw-error hover:bg-fw-errorLight">
                     Delete Tenant
                   </Button>
                 </div>

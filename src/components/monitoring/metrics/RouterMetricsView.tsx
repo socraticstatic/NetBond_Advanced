@@ -115,8 +115,8 @@ export function RouterMetricsView() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <Radio className="h-12 w-12 text-gray-400 mx-auto mb-4 animate-pulse" />
-          <p className="text-gray-600">Loading cloud router metrics...</p>
+          <Radio className="h-12 w-12 text-fw-bodyLight mx-auto mb-4 animate-pulse" />
+          <p className="text-fw-body">Loading cloud router metrics...</p>
         </div>
       </div>
     );
@@ -129,12 +129,12 @@ export function RouterMetricsView() {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <Radio className="h-8 w-8 text-blue-600" />
+            <Radio className="h-8 w-8 text-fw-link" />
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-fw-heading tracking-[-0.03em]">
                 {selectedRouter ? `${selectedRouter.name} Performance` : 'Cloud Router Performance'}
               </h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-figma-base text-fw-body mt-1">
                 {selectedRouter ? (
                   <>
                     {selectedRouter.vendor} • {selectedRouter.location} • ASN {selectedRouter.configuration?.asn || 'N/A'}

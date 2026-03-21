@@ -116,10 +116,10 @@ export function AddUserDrawer({ isOpen, onClose, onSave }: AddUserDrawerProps) {
           <div className="flex items-start gap-3">
             <AlertCircle className="h-5 w-5 text-fw-link mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="text-sm font-semibold text-fw-heading mb-1">
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-1">
                 Create User Account
               </h3>
-              <p className="text-xs text-fw-body">
+              <p className="text-figma-sm text-fw-body">
                 New users will receive an email invitation with instructions to set up their account and access the platform.
               </p>
             </div>
@@ -128,7 +128,7 @@ export function AddUserDrawer({ isOpen, onClose, onSave }: AddUserDrawerProps) {
 
         {/* User Information Section */}
         <div>
-          <h3 className="text-sm font-semibold text-fw-heading mb-4">User Information</h3>
+          <h3 className="text-figma-base font-semibold text-fw-heading mb-4">User Information</h3>
           <div className="space-y-4">
             <FormField
               id="name"
@@ -142,7 +142,7 @@ export function AddUserDrawer({ isOpen, onClose, onSave }: AddUserDrawerProps) {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="John Doe"
-                className={`w-full px-3 py-2 border rounded-lg text-sm text-fw-body bg-fw-base focus:ring-2 focus:ring-fw-active focus:border-fw-active ${
+                className={`w-full px-3 h-9 border rounded-lg text-figma-base text-fw-body bg-fw-base focus:ring-2 focus:ring-fw-active focus:border-fw-active ${
                   errors.name ? 'border-fw-error' : 'border-fw-secondary'
                 }`}
               />
@@ -160,7 +160,7 @@ export function AddUserDrawer({ isOpen, onClose, onSave }: AddUserDrawerProps) {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="john.doe@company.com"
-                className={`w-full px-3 py-2 border rounded-lg text-sm text-fw-body bg-fw-base focus:ring-2 focus:ring-fw-active focus:border-fw-active ${
+                className={`w-full px-3 h-9 border rounded-lg text-figma-base text-fw-body bg-fw-base focus:ring-2 focus:ring-fw-active focus:border-fw-active ${
                   errors.email ? 'border-fw-error' : 'border-fw-secondary'
                 }`}
               />
@@ -170,7 +170,7 @@ export function AddUserDrawer({ isOpen, onClose, onSave }: AddUserDrawerProps) {
 
         {/* Role & Access Section */}
         <div>
-          <h3 className="text-sm font-semibold text-fw-heading mb-4">Role & Access</h3>
+          <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Role & Access</h3>
           <div className="space-y-4">
             <FormField
               id="role"
@@ -183,7 +183,7 @@ export function AddUserDrawer({ isOpen, onClose, onSave }: AddUserDrawerProps) {
                 id="role"
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                className={`w-full px-3 py-2 border rounded-lg text-sm text-fw-body bg-fw-base focus:ring-2 focus:ring-fw-active focus:border-fw-active ${
+                className={`w-full px-3 h-9 border rounded-lg text-figma-base text-fw-body bg-fw-base focus:ring-2 focus:ring-fw-active focus:border-fw-active ${
                   errors.role ? 'border-fw-error' : 'border-fw-secondary'
                 }`}
               >
@@ -205,7 +205,7 @@ export function AddUserDrawer({ isOpen, onClose, onSave }: AddUserDrawerProps) {
                 id="department"
                 value={formData.department}
                 onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                className="w-full px-3 py-2 border border-fw-secondary rounded-lg text-sm text-fw-body bg-fw-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                className="w-full px-3 py-2 border border-fw-secondary rounded-lg text-figma-base text-fw-body bg-fw-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
               >
                 <option value="">No department (all resources)</option>
                 {DEPARTMENTS.map((dept) => (
@@ -220,7 +220,7 @@ export function AddUserDrawer({ isOpen, onClose, onSave }: AddUserDrawerProps) {
 
         {/* Status Section */}
         <div>
-          <h3 className="text-sm font-semibold text-fw-heading mb-4">Account Status</h3>
+          <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Account Status</h3>
           <div className="space-y-3">
             <label className="flex items-start gap-3 p-3 border border-fw-secondary rounded-lg cursor-pointer hover:bg-fw-wash transition-colors">
               <input
@@ -230,8 +230,8 @@ export function AddUserDrawer({ isOpen, onClose, onSave }: AddUserDrawerProps) {
                 className="mt-0.5 text-fw-link border-fw-secondary focus:ring-fw-active"
               />
               <div className="flex-1">
-                <div className="text-sm font-medium text-fw-heading">Active</div>
-                <div className="text-xs text-fw-bodyLight">User can log in immediately after setup</div>
+                <div className="text-figma-base font-medium text-fw-heading">Active</div>
+                <div className="text-figma-sm text-fw-bodyLight">User can log in immediately after setup</div>
               </div>
             </label>
 
@@ -243,8 +243,8 @@ export function AddUserDrawer({ isOpen, onClose, onSave }: AddUserDrawerProps) {
                 className="mt-0.5 text-fw-link border-fw-secondary focus:ring-fw-active"
               />
               <div className="flex-1">
-                <div className="text-sm font-medium text-fw-heading">Inactive</div>
-                <div className="text-xs text-fw-bodyLight">User account created but login disabled</div>
+                <div className="text-figma-base font-medium text-fw-heading">Inactive</div>
+                <div className="text-figma-sm text-fw-bodyLight">User account created but login disabled</div>
               </div>
             </label>
           </div>

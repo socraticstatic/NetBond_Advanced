@@ -1,4 +1,4 @@
-import { Network, Router, Share2, Shield, Server, Layers, Cable, Cpu, Cloud } from 'lucide-react';
+import { Network, Share2, Shield, Server, Layers, Cable, Cpu, Cloud } from 'lucide-react';
 
 export interface GlossaryTerm {
   id: string;
@@ -42,7 +42,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     detailedDefinition: 'A Cloud Router (also known as a Cloud Node in AT&T engineering terminology) is a virtual routing instance that serves as a connection hub within your Connection. It handles BGP routing, traffic management, and can have multiple Links (VLANs) attached to it. A single Connection can contain one, some, or many Cloud Routers depending on the Connection Type (Cloud to Cloud, Site to Cloud, VPN to Cloud, CoLocation/Datacenter to Cloud, or Internet to Cloud). Cloud Routers provide the logical separation and routing intelligence needed to manage complex network topologies.',
     example: 'If a Connection is a highway system, a Cloud Router is like a smart interchange hub that decides which exit (Link/VLAN) your traffic should take based on destination and routing rules. For a Cloud to Cloud connection spanning multiple regions, you might have several Cloud Routers acting as regional hubs.',
     relatedTerms: ['connection', 'link', 'vlan', 'routing', 'connection-type'],
-    icon: Router,
+    icon: Share2,
     visualAid: 'hierarchy'
   },
   {

@@ -65,7 +65,7 @@ export function BaseMetricsView({ connections, children, isMobile = false }: Bas
     return (
       <div className="space-y-4">
         {/* Metric Selector */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+        <div className="bg-fw-base rounded-lg border border-fw-secondary p-4 shadow-sm">
           <div className="grid grid-cols-3 gap-2">
             {metricTabs.map((tab) => {
               const Icon = tab.icon;
@@ -74,15 +74,15 @@ export function BaseMetricsView({ connections, children, isMobile = false }: Bas
                   key={tab.id}
                   onClick={() => setActiveMetricView(tab.id)}
                   className={`flex flex-col items-center p-2 rounded-lg ${
-                    activeMetricView === tab.id 
-                      ? 'bg-brand-lightBlue text-brand-blue' 
-                      : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    activeMetricView === tab.id
+                      ? 'bg-brand-lightBlue text-brand-blue'
+                      : 'bg-fw-wash text-fw-body hover:bg-fw-neutral'
                   }`}
                 >
                   <Icon className={`h-5 w-5 mb-1 ${
-                    activeMetricView === tab.id ? 'text-brand-blue' : 'text-gray-400'
+                    activeMetricView === tab.id ? 'text-brand-blue' : 'text-fw-bodyLight'
                   }`} />
-                  <span className="text-xs font-medium text-center">{tab.label}</span>
+                  <span className="text-figma-sm font-medium text-center">{tab.label}</span>
                 </button>
               );
             })}
@@ -90,12 +90,12 @@ export function BaseMetricsView({ connections, children, isMobile = false }: Bas
         </div>
 
         {/* Time Range Selector (simple for mobile) */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">Time Range:</span>
+        <div className="bg-fw-base rounded-lg border border-fw-secondary p-4 shadow-sm flex items-center justify-between">
+          <span className="text-figma-base font-medium text-fw-body">Time Range:</span>
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="ml-3 border-gray-300 rounded-md text-sm"
+            className="ml-3 border-fw-secondary rounded-md text-figma-base"
           >
             <option value="1h">Last Hour</option>
             <option value="6h">Last 6 Hours</option>
@@ -130,9 +130,9 @@ export function BaseMetricsView({ connections, children, isMobile = false }: Bas
   return (
     <div className="space-y-6 w-full">
       {/* Top filter container */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6 w-full">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary p-6 w-full">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Detailed Performance Metrics</h2>
+          <h2 className="text-xl font-semibold text-fw-heading tracking-[-0.03em]">Detailed Performance Metrics</h2>
           <Button
             variant="outline"
             icon={Clock}
@@ -154,12 +154,12 @@ export function BaseMetricsView({ connections, children, isMobile = false }: Bas
                 className={`p-3 rounded-lg border transition-colors ${
                   activeMetricView === tab.id 
                     ? 'bg-brand-lightBlue border-brand-blue text-brand-blue' 
-                    : 'border-gray-200 hover:bg-gray-50'
+                    : 'border-fw-secondary hover:bg-fw-wash'
                 }`}
               >
                 <div className="flex flex-col items-center">
-                  <Icon className={`h-5 w-5 mb-1 ${activeMetricView === tab.id ? 'text-brand-blue' : 'text-gray-400'}`} />
-                  <span className="text-sm font-medium">{tab.label}</span>
+                  <Icon className={`h-5 w-5 mb-1 ${activeMetricView === tab.id ? 'text-brand-blue' : 'text-fw-bodyLight'}`} />
+                  <span className="text-figma-base font-medium">{tab.label}</span>
                 </div>
               </button>
             );
@@ -169,7 +169,7 @@ export function BaseMetricsView({ connections, children, isMobile = false }: Bas
         {/* Time Range Selector */}
         <div className="flex items-center space-x-4 mb-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Time Range</label>
+            <label className="block text-figma-base font-medium text-fw-body mb-1">Time Range</label>
             <select
               value={timeRange}
               onChange={(e) => setTimeRange(e.target.value)}
@@ -183,7 +183,7 @@ export function BaseMetricsView({ connections, children, isMobile = false }: Bas
               <option value="30d">Last 30 Days</option>
             </select>
             {currentRangeOption && (
-              <p className="mt-1 text-xs text-gray-500">{currentRangeOption.description}</p>
+              <p className="mt-1 text-figma-sm text-fw-bodyLight">{currentRangeOption.description}</p>
             )}
           </div>
         </div>

@@ -40,10 +40,10 @@ export function ConnectionCardHeader({
   const nameInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="p-4 border-b border-fw-secondary">
+    <div className="p-6 border-b border-fw-secondary">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="p-2 bg-fw-wash rounded-lg">
+          <div className="w-10 h-10 flex items-center justify-center bg-fw-wash rounded-lg">
             {icon}
           </div>
           <div>
@@ -56,25 +56,25 @@ export function ConnectionCardHeader({
                   onChange={onNameChange}
                   onBlur={onNameSubmit}
                   onKeyDown={onNameKeyDown}
-                  className={`w-full px-2 py-1 text-sm font-medium bg-fw-base border ${nameError ? 'border-fw-error' : 'border-fw-active'} rounded focus:outline-none focus:ring-2 focus:ring-fw-active`}
+                  className={`w-full px-2 py-1 text-figma-lg font-medium bg-fw-base border ${nameError ? 'border-fw-error' : 'border-fw-active'} rounded focus:outline-none focus:ring-2 focus:ring-fw-active`}
                   placeholder="Enter connection name"
                   onClick={(e) => e.stopPropagation()}
                 />
                 {nameError && (
-                  <p className="text-xs text-fw-error mt-1">{nameError}</p>
+                  <p className="text-figma-sm text-fw-error mt-1">{nameError}</p>
                 )}
               </div>
             ) : (
               <div>
                 <h3
-                  className="text-sm font-medium text-fw-heading cursor-text"
+                  className="text-figma-lg font-medium text-fw-heading cursor-text"
                   onClick={onEditNameClick}
                 >
                   {name}
                 </h3>
                 {connection?.origin?.source === 'aws-marketplace' && (
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-orange-100 to-blue-100 border border-orange-300 rounded text-xs font-semibold text-orange-800">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-fw-accent border border-fw-warn/30 rounded text-figma-sm font-semibold text-fw-warn">
                       <img
                         src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg"
                         alt="AWS"
@@ -83,7 +83,7 @@ export function ConnectionCardHeader({
                       Direct Connect
                     </span>
                     {connection?.status === 'Pending' && (
-                      <span className="inline-flex items-center px-2 py-0.5 bg-amber-50 border border-amber-300 rounded text-xs font-semibold text-amber-800">
+                      <span className="inline-flex items-center px-2 py-0.5 bg-fw-warn/10 border border-fw-warn/30 rounded text-figma-sm font-semibold text-fw-warn">
                         Needs Configuration
                       </span>
                     )}
@@ -91,7 +91,10 @@ export function ConnectionCardHeader({
                 )}
               </div>
             )}
-            <p className="text-xs text-fw-bodyLight">{type}</p>
+            <p className="text-figma-sm font-medium text-fw-body">
+              {type}
+              {connection?.cloudRouterName && <> | {connection.cloudRouterName}</>}
+            </p>
           </div>
         </div>
         

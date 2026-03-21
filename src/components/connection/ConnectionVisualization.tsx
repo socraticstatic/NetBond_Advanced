@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Cloud, Server, Network, Activity, Shield, Globe, Clock, Router, Edit2 } from 'lucide-react';
+import { Cloud, Server, Network, Activity, Shield, Globe, Clock, Share2, Edit2 } from 'lucide-react';
 import { Connection, NetworkNode, NetworkEdge } from '../../types';
 import { Canvas } from '../network-designer/Canvas';
 import { Button } from '../common/Button';
@@ -284,22 +284,22 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
       </div>
 
       {/* Connection details overlay at the bottom - Elegant version */}
-      <div className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-3">
+      <div className="absolute bottom-0 left-0 right-0 bg-fw-base/90 backdrop-blur-md border-t border-fw-secondary px-4 py-3">
         <div className="flex items-center justify-between gap-6">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${connection.status === 'Active' ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
-            <span className="text-xs font-semibold text-gray-900">{connection.status}</span>
+            <div className={`w-2 h-2 rounded-full ${connection.status === 'Active' ? 'bg-fw-success animate-pulse' : 'bg-fw-neutral'}`} />
+            <span className="text-figma-sm font-semibold text-fw-heading">{connection.status}</span>
           </div>
 
           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-blue/10 rounded-full">
-            <Network className="h-3.5 w-3.5 text-brand-blue" />
-            <span className="text-xs font-semibold text-brand-blue">{connection.bandwidth}</span>
+            <Network className="h-3.5 w-3.5 text-fw-link" />
+            <span className="text-figma-sm font-semibold text-fw-link">{connection.bandwidth}</span>
           </div>
 
           {connection.performance?.latency && (
             <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 rounded-full">
-              <Clock className="h-3.5 w-3.5 text-green-600" />
-              <span className="text-xs font-semibold text-green-600">{connection.performance.latency}</span>
+              <Clock className="h-3.5 w-3.5 text-fw-success" />
+              <span className="text-figma-sm font-semibold text-fw-success">{connection.performance.latency}</span>
             </div>
           )}
         </div>

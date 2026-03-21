@@ -74,10 +74,10 @@ export function MobileConfigureHub() {
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-fw-heading mb-1">
+                <h1 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mb-1">
                   Configure
                 </h1>
-                <p className="text-sm text-fw-bodyLight">
+                <p className="text-figma-sm font-medium text-fw-bodyLight">
                   System settings & preferences
                 </p>
               </div>
@@ -130,10 +130,10 @@ export function MobileConfigureHub() {
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-base font-bold text-fw-heading mb-0.5">
+                  <h3 className="text-figma-base font-bold text-fw-heading mb-0.5">
                     {section.title}
                   </h3>
-                  <p className="text-sm text-fw-bodyLight truncate">
+                  <p className="text-figma-sm font-medium text-fw-bodyLight truncate">
                     {section.description}
                   </p>
                 </div>
@@ -159,10 +159,10 @@ export function MobileConfigureHub() {
               <Settings className="h-5 w-5 text-fw-cobalt-600" />
             </div>
             <div className="flex-1">
-              <h4 className="text-sm font-semibold text-fw-heading mb-1">
+              <h4 className="text-figma-sm font-semibold text-fw-heading mb-1">
                 Desktop Experience
               </h4>
-              <p className="text-xs text-fw-body leading-relaxed">
+              <p className="text-figma-sm text-fw-body leading-relaxed">
                 Configuration settings are optimized for desktop screens where you can view detailed settings, manage complex configurations, and access advanced features.
               </p>
             </div>

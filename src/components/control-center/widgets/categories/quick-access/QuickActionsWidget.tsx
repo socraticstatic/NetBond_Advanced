@@ -36,25 +36,25 @@ export function QuickActionsWidget() {
             key={action.id}
             className={`
               quick-action-btn p-3 text-left transition-colors
-              ${action.color === 'blue' ? 'bg-blue-50 hover:bg-blue-100' :
-                action.color === 'green' ? 'bg-green-50 hover:bg-green-100' :
-                action.color === 'purple' ? 'bg-purple-50 hover:bg-purple-100' :
-                'bg-orange-50 hover:bg-orange-100'}
+              ${action.color === 'blue' ? 'bg-fw-accent hover:bg-fw-accent' :
+                action.color === 'green' ? 'bg-green-50 hover:bg-green-50' :
+                action.color === 'purple' ? 'bg-purple-50 hover:bg-purple-50' :
+                'bg-fw-warn/10 hover:bg-fw-warn/15'}
             `}
           >
             <action.icon className={`
               h-5 w-5 mb-2
-              ${action.color === 'blue' ? 'text-blue-500' :
-                action.color === 'green' ? 'text-green-500' :
-                action.color === 'purple' ? 'text-purple-500' :
-                'text-orange-500'}
+              ${action.color === 'blue' ? 'text-fw-link' :
+                action.color === 'green' ? 'text-fw-success' :
+                action.color === 'purple' ? 'text-fw-purple' :
+                'text-fw-warn'}
             `} />
             <div className={`
-              text-sm font-medium
-              ${action.color === 'blue' ? 'text-blue-900' :
-                action.color === 'green' ? 'text-green-900' :
-                action.color === 'purple' ? 'text-purple-900' :
-                'text-orange-900'}
+              text-figma-base font-medium
+              ${action.color === 'blue' ? 'text-fw-linkHover' :
+                action.color === 'green' ? 'text-fw-success' :
+                action.color === 'purple' ? 'text-fw-purple' :
+                'text-fw-warn'}
             `}>
               {action.label}
             </div>
@@ -62,12 +62,12 @@ export function QuickActionsWidget() {
         ))}
       </div>
 
-      <button className="quick-action-btn w-full flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+      <button className="quick-action-btn w-full flex items-center justify-between px-4 py-2 text-figma-base text-fw-body hover:bg-fw-wash transition-colors">
         <div className="flex items-center">
-          <Settings className="h-4 w-4 text-gray-400 mr-2" />
+          <Settings className="h-4 w-4 text-fw-bodyLight mr-2" />
           <span>Configure Quick Actions</span>
         </div>
-        <ChevronRight className="h-4 w-4 text-gray-400" />
+        <ChevronRight className="h-4 w-4 text-fw-bodyLight" />
       </button>
     </div>
   );

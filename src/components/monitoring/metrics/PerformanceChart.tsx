@@ -138,7 +138,7 @@ export function PerformanceChart({ data, labels, color }: PerformanceChartProps)
 
   if (!chartLoaded) {
     return <div className="w-full h-full flex items-center justify-center">
-      <div className="bg-gray-100 animate-pulse w-full h-full rounded-lg"></div>
+      <div className="bg-fw-neutral animate-pulse w-full h-full rounded-lg"></div>
     </div>;
   }
 

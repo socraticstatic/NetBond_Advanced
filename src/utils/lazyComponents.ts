@@ -20,7 +20,7 @@ const createLazyComponent = <T = any>(
             <h3 className="text-lg font-medium text-red-800 mb-2">
               Failed to load {componentName}
             </h3>
-            <p className="text-sm text-red-600 mb-4">
+            <p className="text-figma-base text-red-600 mb-4">
               Please refresh the page or try again later.
             </p>
             <button

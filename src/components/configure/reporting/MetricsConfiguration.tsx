@@ -10,6 +10,7 @@ interface Metric {
   enabled: boolean;
   threshold?: number;
   unit?: string;
+  status: 'active' | 'critical' | 'normal';
 }
 
 export function MetricsConfiguration() {
@@ -21,7 +22,8 @@ export function MetricsConfiguration() {
       type: 'performance',
       enabled: true,
       threshold: 10,
-      unit: 'ms'
+      unit: 'ms',
+      status: 'active'
     },
     {
       id: '2',
@@ -30,7 +32,8 @@ export function MetricsConfiguration() {
       type: 'usage',
       enabled: true,
       threshold: 80,
-      unit: '%'
+      unit: '%',
+      status: 'critical'
     },
     {
       id: '3',
@@ -39,27 +42,39 @@ export function MetricsConfiguration() {
       type: 'security',
       enabled: true,
       threshold: 100,
-      unit: 'events'
+      unit: 'events',
+      status: 'active'
     }
   ]);
+
+  const getStatusBadge = (status: Metric['status']) => {
+    switch (status) {
+      case 'active':
+        return <span className="px-2 py-0.5 rounded-lg text-figma-sm font-medium bg-green-50 text-fw-success">Active</span>;
+      case 'critical':
+        return <span className="px-2 py-0.5 rounded-lg text-figma-sm font-medium bg-red-50 text-fw-error">Critical</span>;
+      default:
+        return <span className="px-2 py-0.5 rounded-lg text-figma-sm font-medium bg-fw-neutral text-fw-bodyLight">Normal</span>;
+    }
+  };
 
   const getTypeColor = (type: Metric['type']) => {
     switch (type) {
       case 'performance':
-        return 'bg-brand-lightBlue text-brand-blue';
+        return 'bg-fw-accent text-fw-link';
       case 'security':
-        return 'bg-indigo-100 text-indigo-800';
+        return 'bg-green-50 text-fw-success';
       case 'usage':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-50 text-fw-success';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-fw-neutral text-fw-body';
     }
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium text-gray-900">Metrics Configuration</h3>
+        <div />
         <Button
           variant="primary"
           icon={Plus}
@@ -76,47 +91,38 @@ export function MetricsConfiguration() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-4">
         {metrics.map((metric) => (
           <div
             key={metric.id}
-            className="card p-6 hover:shadow-md transition-shadow"
+            className="bg-fw-base rounded-2xl border border-fw-secondary p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-start justify-between">
               <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0">
-                  <BarChart2 className="h-6 w-6 text-gray-400" />
+                <div className="flex-shrink-0 mt-0.5">
+                  <BarChart2 className="h-6 w-6 text-fw-bodyLight" />
                 </div>
                 <div>
-                  <div className="flex items-center space-x-2">
-                    <h4 className="text-lg font-medium text-gray-900">{metric.name}</h4>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(metric.type)}`}>
+                  <h4 className="text-figma-lg font-medium text-fw-heading tracking-[-0.03em]">{metric.name}</h4>
+                  <p className="text-figma-base font-medium text-fw-body tracking-[-0.03em] mt-1">{metric.description}</p>
+                  <div className="flex items-center space-x-3 mt-3">
+                    {getStatusBadge(metric.status)}
+                    <span className={`px-2 py-0.5 rounded-lg text-figma-sm font-medium ${getTypeColor(metric.type)}`}>
                       {metric.type.charAt(0).toUpperCase() + metric.type.slice(1)}
                     </span>
+                    {metric.threshold && (
+                      <span className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">
+                        Threshold: {metric.threshold} {metric.unit}
+                      </span>
+                    )}
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">{metric.description}</p>
-                  {metric.threshold && (
-                    <div className="mt-4 flex items-center space-x-4">
-                      <div>
-                        <div className="text-sm text-gray-500">Threshold</div>
-                        <div className="text-sm font-medium text-gray-900">
-                          {metric.threshold} {metric.unit}
-                        </div>
-                      </div>
-                      <div className="h-10 border-l border-gray-200" />
-                      <div>
-                        <div className="text-sm text-gray-500">Status</div>
-                        <div className="text-sm font-medium text-green-600">Active</div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <button className="p-2 text-gray-400 hover:text-brand-blue hover:bg-brand-lightBlue rounded-full">
+              <div className="flex items-center space-x-1">
+                <button className="p-2 text-fw-bodyLight hover:text-fw-link rounded-lg hover:bg-fw-accent transition-colors">
                   <Settings className="h-5 w-5" />
                 </button>
-                <button className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full">
+                <button className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-red-50 transition-colors">
                   <Trash2 className="h-5 w-5" />
                 </button>
               </div>

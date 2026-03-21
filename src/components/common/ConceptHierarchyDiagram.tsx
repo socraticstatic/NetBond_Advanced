@@ -1,4 +1,4 @@
-import { Network, Router, Cable, Shield, Server, ArrowDown } from 'lucide-react';
+import { Network, Share2, Cable, Shield, Server, ArrowDown } from 'lucide-react';
 
 interface ConceptNode {
   id: string;
@@ -22,7 +22,7 @@ const conceptHierarchy: ConceptNode[] = [
     id: 'cloud-router',
     title: 'Cloud Router',
     description: 'Virtual routing node that manages traffic and routing',
-    icon: Router,
+    icon: Share2,
     color: 'green',
     examples: ['BGP routing', 'Traffic management', 'Multiple links']
   },
@@ -57,10 +57,10 @@ export function ConceptHierarchyDiagram() {
   return (
     <div className="w-full max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-2xl font-bold text-fw-heading mb-2 tracking-[-0.03em]">
           Network Architecture Hierarchy
         </h2>
-        <p className="text-gray-600">
+        <p className="text-fw-bodyLight">
           Understanding how network components relate to each other
         </p>
       </div>
@@ -77,21 +77,21 @@ export function ConceptHierarchyDiagram() {
               blue: {
                 bg: 'from-blue-500 to-blue-600',
                 border: 'border-blue-300',
-                text: 'text-blue-700',
-                bgLight: 'bg-blue-50',
+                text: 'text-fw-linkHover',
+                bgLight: 'bg-fw-accent',
                 dot: 'bg-blue-500'
               },
               green: {
                 bg: 'from-green-500 to-green-600',
                 border: 'border-green-300',
-                text: 'text-green-700',
+                text: 'text-fw-success',
                 bgLight: 'bg-green-50',
                 dot: 'bg-green-500'
               },
               purple: {
                 bg: 'from-purple-500 to-purple-600',
                 border: 'border-purple-300',
-                text: 'text-purple-700',
+                text: 'text-fw-purple',
                 bgLight: 'bg-purple-50',
                 dot: 'bg-purple-500'
               },
@@ -114,7 +114,7 @@ export function ConceptHierarchyDiagram() {
 
                 <div className={`lg:grid lg:grid-cols-2 lg:gap-8 ${isEven ? '' : 'lg:grid-flow-dense'}`}>
                   <div className={`${isEven ? 'lg:col-start-1 lg:text-right' : 'lg:col-start-2'} lg:pr-12 ${!isEven && 'lg:pl-12 lg:pr-0'}`}>
-                    <div className={`bg-white rounded-xl border-2 ${colors.border} shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl`}>
+                    <div className={`bg-fw-base rounded-xl border-2 ${colors.border} shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl`}>
                       <div className={`bg-gradient-to-r ${colors.bg} p-4`}>
                         <div className="flex items-center gap-3 text-white">
                           <div className="p-2 bg-white bg-opacity-20 rounded-lg backdrop-blur-sm">
@@ -122,22 +122,22 @@ export function ConceptHierarchyDiagram() {
                           </div>
                           <div className="flex-1">
                             <h3 className="text-lg font-bold">{concept.title}</h3>
-                            <p className="text-sm text-white text-opacity-90">Level {index + 1}</p>
+                            <p className="text-figma-base text-white text-opacity-90">Level {index + 1}</p>
                           </div>
                         </div>
                       </div>
 
                       <div className="p-4">
-                        <p className="text-sm text-gray-700 leading-relaxed mb-4">
+                        <p className="text-figma-base text-fw-body leading-relaxed mb-4">
                           {concept.description}
                         </p>
 
                         {concept.examples && concept.examples.length > 0 && (
                           <div className={`${colors.bgLight} rounded-lg p-3 border ${colors.border}`}>
-                            <p className={`text-xs font-semibold ${colors.text} mb-2`}>Examples:</p>
+                            <p className={`text-figma-sm font-semibold ${colors.text} mb-2`}>Examples:</p>
                             <ul className="space-y-1">
                               {concept.examples.map((example, i) => (
-                                <li key={i} className="flex items-start gap-2 text-xs text-gray-700">
+                                <li key={i} className="flex items-start gap-2 text-figma-sm text-fw-body">
                                   <div className={`w-1.5 h-1.5 ${colors.dot} rounded-full mt-1.5 flex-shrink-0`} />
                                   <span>{example}</span>
                                 </li>
@@ -154,7 +154,7 @@ export function ConceptHierarchyDiagram() {
 
                 {index < conceptHierarchy.length - 1 && (
                   <div className="flex justify-center my-4 lg:hidden">
-                    <ArrowDown className="h-6 w-6 text-gray-400 animate-bounce" />
+                    <ArrowDown className="h-6 w-6 text-fw-bodyLight animate-bounce" />
                   </div>
                 )}
               </div>
@@ -163,20 +163,20 @@ export function ConceptHierarchyDiagram() {
         </div>
       </div>
 
-      <div className="mt-12 p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200 shadow-lg">
+      <div className="mt-12 p-6 bg-fw-wash rounded-xl border-2 border-fw-secondary shadow-lg">
         <div className="flex items-start gap-4">
-          <div className="flex-shrink-0 p-3 bg-white rounded-xl shadow-sm">
-            <ipeNode.icon className="h-8 w-8 text-gray-600" />
+          <div className="flex-shrink-0 p-3 bg-fw-base rounded-xl shadow-sm">
+            <ipeNode.icon className="h-8 w-8 text-fw-bodyLight" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">{ipeNode.title}</h3>
-            <p className="text-sm text-gray-700 mb-3">{ipeNode.description}</p>
-            <div className="bg-white rounded-lg p-3 border border-gray-200">
-              <p className="text-xs font-semibold text-gray-700 mb-2">Physical Layer:</p>
+            <h3 className="text-lg font-bold text-fw-heading mb-2 tracking-[-0.03em]">{ipeNode.title}</h3>
+            <p className="text-figma-base text-fw-body mb-3">{ipeNode.description}</p>
+            <div className="bg-fw-base rounded-lg p-3 border border-fw-secondary">
+              <p className="text-figma-sm font-semibold text-fw-body mb-2">Physical Layer:</p>
               <ul className="space-y-1">
                 {ipeNode.examples?.map((example, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-gray-600">
-                    <div className="w-1.5 h-1.5 bg-gray-500 rounded-full mt-1.5 flex-shrink-0" />
+                  <li key={i} className="flex items-start gap-2 text-figma-sm text-fw-bodyLight">
+                    <div className="w-1.5 h-1.5 bg-fw-bodyLight rounded-full mt-1.5 flex-shrink-0" />
                     <span>{example}</span>
                   </li>
                 ))}
@@ -184,24 +184,24 @@ export function ConceptHierarchyDiagram() {
             </div>
           </div>
         </div>
-        <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-          <p className="text-xs text-blue-800 italic">
+        <div className="mt-4 p-3 bg-fw-accent rounded-lg border border-fw-active">
+          <p className="text-figma-sm text-fw-linkHover italic">
             <strong>Important:</strong> All virtual components (Connection, Cloud Router, Links, VNFs) run on physical IPE infrastructure. The IPE provides the actual hardware and bandwidth that makes everything else possible.
           </p>
         </div>
       </div>
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
-          <h4 className="text-sm font-semibold text-blue-900 mb-2">Containment Hierarchy</h4>
-          <p className="text-xs text-blue-800 leading-relaxed">
+        <div className="p-4 bg-fw-accent rounded-lg border border-fw-active">
+          <h4 className="text-figma-base font-semibold text-fw-linkHover mb-2 tracking-[-0.03em]">Containment Hierarchy</h4>
+          <p className="text-figma-sm text-fw-body leading-relaxed">
             Each level contains the levels below it: A Connection contains Cloud Routers, which contain Links, which can have VNFs attached. Think of it as nested layers, each building on the previous one.
           </p>
         </div>
 
-        <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg border border-purple-200">
-          <h4 className="text-sm font-semibold text-purple-900 mb-2">Traffic Flow</h4>
-          <p className="text-xs text-purple-800 leading-relaxed">
+        <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+          <h4 className="text-figma-base font-semibold text-fw-purple mb-2 tracking-[-0.03em]">Traffic Flow</h4>
+          <p className="text-figma-sm text-fw-body leading-relaxed">
             Data flows from top to bottom through each layer. A packet entering your Connection is routed by a Cloud Router, sent through a specific Link (VLAN), and potentially processed by VNFs before reaching its destination.
           </p>
         </div>

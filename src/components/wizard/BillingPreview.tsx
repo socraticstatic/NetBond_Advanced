@@ -217,9 +217,9 @@ export function BillingPreview({
       return {
         bg: 'bg-green-50',
         border: 'border-green-200',
-        text: 'text-green-800',
-        badgeBg: 'bg-green-100',
-        badgeText: 'text-green-800'
+        text: 'text-fw-success',
+        badgeBg: 'bg-green-50',
+        badgeText: 'text-fw-success'
       };
     } else if (plan.id === '36-months') {
       return {
@@ -243,11 +243,11 @@ export function BillingPreview({
   const selectedPlanColors = getPlanColorClasses(selectedPlan);
 
   return (
-    <div ref={containerRef} className="bg-white rounded-lg border border-gray-200">
-      <div className="p-4 border-b border-gray-200 bg-gray-50">
+    <div ref={containerRef} className="bg-fw-base rounded-xl border border-fw-secondary">
+      <div className="p-4 border-b border-fw-secondary bg-fw-wash">
         <div className="flex items-center">
           <Receipt className="h-5 w-5 text-brand-blue mr-2" />
-          <h3 className="text-base font-medium text-gray-900">Cost Summary</h3>
+          <h3 className="text-figma-lg font-medium text-fw-heading tracking-[-0.03em]">Cost Summary</h3>
         </div>
       </div>
 
@@ -256,7 +256,7 @@ export function BillingPreview({
           <button
             onClick={() => setShowPlanSelector(!showPlanSelector)}
             className={`
-              relative w-full inline-flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg
+              relative w-full inline-flex items-center justify-between px-3 py-2 text-figma-base font-medium rounded-lg
               transition-colors duration-200 border
               ${selectedPlanColors.bg} ${selectedPlanColors.border} ${selectedPlanColors.text}
             `}
@@ -268,7 +268,7 @@ export function BillingPreview({
           {showPlanSelector && (
             <div 
               ref={dropdownRef}
-              className="absolute left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+              className="absolute left-0 right-0 mt-1 bg-fw-base rounded-lg shadow-lg border border-fw-secondary z-50"
             >
               {paymentPlans.map(plan => {
                 const planColors = getPlanColorClasses(plan);
@@ -280,20 +280,20 @@ export function BillingPreview({
                       setShowPlanSelector(false);
                     }}
                     className={`
-                      w-full px-4 py-2 text-left hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg
-                      ${selectedPlanId === plan.id ? 'bg-gray-50' : ''}
+                      w-full px-4 py-2 text-left hover:bg-fw-wash first:rounded-t-lg last:rounded-b-lg
+                      ${selectedPlanId === plan.id ? 'bg-fw-wash' : ''}
                     `}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-sm text-gray-900">{plan.name}</span>
+                      <span className="font-medium text-figma-sm text-fw-heading">{plan.name}</span>
                       <span className={`
-                        px-2 py-0.5 text-xs rounded-full
+                        px-2 py-0.5 text-figma-sm rounded-full
                         ${planColors.badgeBg} ${planColors.badgeText}
                       `}>
                         {plan.badge}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-0.5">{plan.description}</p>
+                    <p className="text-figma-xs text-fw-bodyLight mt-0.5">{plan.description}</p>
                   </button>
                 );
               })}
@@ -304,9 +304,9 @@ export function BillingPreview({
         {/* Line Items */}
         <div className="space-y-2 mb-4">
           {lineItems.map((item, index) => (
-            <div key={index} className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">{item.description}</span>
-              <span className="font-medium text-gray-900">
+            <div key={index} className="flex items-center justify-between text-figma-base">
+              <span className="text-fw-bodyLight">{item.description}</span>
+              <span className="font-medium text-fw-heading">
                 {item.amount === 0 ? 'Included' : `$${item.amount.toFixed(2)}`}
               </span>
             </div>
@@ -314,29 +314,29 @@ export function BillingPreview({
         </div>
 
         {/* Totals */}
-        <div className="border-t border-gray-200 pt-3 space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-600">Subtotal</span>
-            <span className="font-medium text-gray-900">${subtotal.toFixed(2)}</span>
+        <div className="border-t border-fw-secondary pt-3 space-y-2">
+          <div className="flex items-center justify-between text-figma-base">
+            <span className="text-fw-bodyLight">Subtotal</span>
+            <span className="font-medium text-fw-heading">${subtotal.toFixed(2)}</span>
           </div>
           {planDiscount > 0 && (
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between text-figma-base">
               <span className="text-complementary-green">Plan Discount</span>
               <span className="font-medium text-complementary-green">-${planDiscount.toFixed(2)}</span>
             </div>
           )}
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-600">Est. Tax (10%)</span>
-            <span className="font-medium text-gray-900">${estimatedTax.toFixed(2)}</span>
+          <div className="flex items-center justify-between text-figma-base">
+            <span className="text-fw-bodyLight">Est. Tax (10%)</span>
+            <span className="font-medium text-fw-heading">${estimatedTax.toFixed(2)}</span>
           </div>
-          <div className="flex items-center justify-between text-base font-medium pt-2 border-t border-gray-200">
-            <span className="text-gray-900">Total</span>
+          <div className="flex items-center justify-between text-figma-lg font-medium pt-2 border-t border-fw-secondary">
+            <span className="text-fw-heading">Total</span>
             <span className="text-brand-blue">${total.toFixed(2)}</span>
           </div>
         </div>
 
         {selectedPlan.id === 'trial' && (
-          <div className="mt-3 flex items-center justify-between text-sm text-complementary-green pt-2 border-t border-gray-200">
+          <div className="mt-3 flex items-center justify-between text-figma-base text-complementary-green pt-2 border-t border-fw-secondary">
             <span className="flex items-center">
               <Clock className="h-4 w-4 mr-1" />
               Trial Period

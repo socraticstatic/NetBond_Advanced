@@ -133,8 +133,8 @@ export function AutomationRules({ selectedConnection }: AutomationRulesProps) {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h3 className="text-lg font-medium text-gray-900">Automation Rules</h3>
-          <p className="text-sm text-gray-500 mt-1">
+          <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">Automation Rules</h3>
+          <p className="text-figma-base text-fw-bodyLight mt-1">
             Automate actions in response to log events and patterns
           </p>
         </div>
@@ -148,12 +148,12 @@ export function AutomationRules({ selectedConnection }: AutomationRulesProps) {
         </Button>
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+      <div className="bg-fw-accent border border-fw-active rounded-lg p-4 mb-6">
         <div className="flex">
-          <Zap className="h-5 w-5 text-blue-600 mr-3 flex-shrink-0 mt-0.5" />
+          <Zap className="h-5 w-5 text-fw-link mr-3 flex-shrink-0 mt-0.5" />
           <div>
-            <h4 className="text-sm font-medium text-blue-900">Automation Best Practices</h4>
-            <p className="text-sm text-blue-700 mt-1">
+            <h4 className="text-figma-base font-medium text-fw-linkHover">Automation Best Practices</h4>
+            <p className="text-figma-base text-fw-link mt-1">
               Always test automation rules in a non-production environment first. Set up proper notifications
               and monitoring for automated actions. Use rate limiting to prevent automation loops.
             </p>
@@ -172,57 +172,57 @@ export function AutomationRules({ selectedConnection }: AutomationRulesProps) {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">
-                  <Zap className={`h-5 w-5 ${rule.enabled ? 'text-purple-600' : 'text-gray-400'}`} />
-                  <h4 className="text-base font-semibold text-gray-900">{rule.name}</h4>
+                  <Zap className={`h-5 w-5 ${rule.enabled ? 'text-fw-purple' : 'text-fw-bodyLight'}`} />
+                  <h4 className="text-base font-semibold text-fw-heading">{rule.name}</h4>
                   {rule.enabled ? (
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <CheckCircle className="h-4 w-4 text-fw-success" />
                   ) : (
-                    <XCircle className="h-4 w-4 text-gray-400" />
+                    <XCircle className="h-4 w-4 text-fw-bodyLight" />
                   )}
                 </div>
 
-                <p className="text-sm text-gray-600 mb-4">{rule.description}</p>
+                <p className="text-figma-base text-fw-body mb-4">{rule.description}</p>
 
                 <div className="space-y-3">
                   <div className="flex items-start">
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider w-24">Trigger:</span>
+                    <span className="text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider w-24">Trigger:</span>
                     <div className="flex-1">
-                      <span className="text-sm text-gray-700 font-medium">{rule.trigger.type.replace('_', ' ')}</span>
-                      <p className="text-xs text-gray-500 mt-1 font-mono">{rule.trigger.condition}</p>
+                      <span className="text-figma-base text-fw-body font-medium">{rule.trigger.type.replace('_', ' ')}</span>
+                      <p className="text-figma-sm text-fw-bodyLight mt-1 font-mono">{rule.trigger.condition}</p>
                     </div>
                   </div>
 
                   <div className="flex items-start">
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider w-24">Action:</span>
+                    <span className="text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider w-24">Action:</span>
                     <div className="flex-1 flex items-start">
                       {getActionIcon(rule.action.type)}
                       <div className="ml-2">
-                        <span className="text-sm text-gray-700 font-medium">{rule.action.type.replace(/_/g, ' ')}</span>
-                        <p className="text-xs text-gray-500 mt-1">{rule.action.details}</p>
+                        <span className="text-figma-base text-fw-body font-medium">{rule.action.type.replace(/_/g, ' ')}</span>
+                        <p className="text-figma-sm text-fw-bodyLight mt-1">{rule.action.details}</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center space-x-6 text-xs">
+                <div className="mt-4 flex items-center space-x-6 text-figma-sm">
                   <div>
-                    <span className="text-gray-500">Executions:</span>
-                    <span className="ml-1 text-gray-900 font-medium">{rule.executionCount}</span>
+                    <span className="text-fw-bodyLight">Executions:</span>
+                    <span className="ml-1 text-fw-heading font-medium">{rule.executionCount}</span>
                   </div>
                   <div>
-                    <span className="text-gray-500">Success Rate:</span>
+                    <span className="text-fw-bodyLight">Success Rate:</span>
                     <span className={`ml-1 font-medium ${
-                      rule.successRate >= 90 ? 'text-green-600' :
+                      rule.successRate >= 90 ? 'text-fw-success' :
                       rule.successRate >= 70 ? 'text-yellow-600' :
-                      'text-red-600'
+                      'text-fw-error'
                     }`}>
                       {rule.successRate}%
                     </span>
                   </div>
                   {rule.lastExecuted && (
                     <div>
-                      <span className="text-gray-500">Last Run:</span>
-                      <span className="ml-1 text-gray-900">{rule.lastExecuted}</span>
+                      <span className="text-fw-bodyLight">Last Run:</span>
+                      <span className="ml-1 text-fw-heading">{rule.lastExecuted}</span>
                     </div>
                   )}
                 </div>
@@ -231,7 +231,7 @@ export function AutomationRules({ selectedConnection }: AutomationRulesProps) {
               <div className="flex items-center space-x-2 ml-4">
                 <button
                   onClick={() => testRule(rule.id)}
-                  className="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50"
+                  className="p-2 text-fw-bodyLight hover:text-fw-link rounded-lg hover:bg-fw-accent"
                   title="Test rule"
                 >
                   <Play className="h-5 w-5" />
@@ -244,7 +244,7 @@ export function AutomationRules({ selectedConnection }: AutomationRulesProps) {
                     onChange={() => toggleRule(rule.id)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                  <div className="w-11 h-6 bg-fw-neutral peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-fw-active rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-fw-secondary after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fw-purple"></div>
                 </label>
 
                 <button
@@ -256,14 +256,14 @@ export function AutomationRules({ selectedConnection }: AutomationRulesProps) {
                       duration: 3000
                     });
                   }}
-                  className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+                  className="p-2 text-fw-bodyLight hover:text-fw-body rounded-lg hover:bg-fw-neutral"
                 >
                   <Edit className="h-5 w-5" />
                 </button>
 
                 <button
                   onClick={() => deleteRule(rule.id)}
-                  className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50"
+                  className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-red-50"
                 >
                   <Trash2 className="h-5 w-5" />
                 </button>
@@ -275,12 +275,12 @@ export function AutomationRules({ selectedConnection }: AutomationRulesProps) {
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-medium mb-4">Create Automation Rule</h3>
-            <div className="text-center py-8 text-gray-500">
-              <Zap className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+          <div className="bg-fw-base rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-medium tracking-[-0.03em] mb-4">Create Automation Rule</h3>
+            <div className="text-center py-8 text-fw-bodyLight">
+              <Zap className="h-12 w-12 mx-auto mb-4 text-fw-bodyLight" />
               <p>Automation rule builder coming soon</p>
-              <p className="text-sm mt-2">Configure triggers, actions, and execution parameters</p>
+              <p className="text-figma-base mt-2">Configure triggers, actions, and execution parameters</p>
             </div>
             <div className="flex justify-end mt-6">
               <Button

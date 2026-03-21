@@ -56,13 +56,13 @@ export function ScopeBadge({ scope, label, showIcon = true, variant = 'default' 
 
   return (
     <div className="relative inline-flex group">
-      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border ${colorClasses}`}>
+      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-figma-sm font-medium border ${colorClasses}`}>
         {showIcon && <Icon className="h-3.5 w-3.5" />}
         <span>{label || config.label}</span>
       </span>
 
       {variant === 'detailed' && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-fw-gray-900 text-fw-linkPrimary text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-fw-gray-900 text-fw-linkPrimary text-figma-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
           {config.description}
           <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
             <div className="border-4 border-transparent border-t-fw-gray-900"></div>
@@ -84,13 +84,13 @@ export function TenantBadge({ tenantName, tenantId, isCrossTenant }: TenantBadge
     <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-fw-base border-2 border-fw-secondary rounded-lg shadow-sm">
       <Building2 className="h-4 w-4 text-fw-body" />
       <div className="flex flex-col">
-        <span className="text-xs font-semibold text-fw-heading">{tenantName}</span>
-        {tenantId && <span className="text-xs text-fw-bodyLight">{tenantId}</span>}
+        <span className="text-figma-sm font-semibold text-fw-heading">{tenantName}</span>
+        {tenantId && <span className="text-figma-sm text-fw-bodyLight">{tenantId}</span>}
       </div>
       {isCrossTenant && (
         <div className="relative group">
           <Lock className="h-3.5 w-3.5 text-fw-warn" />
-          <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-fw-gray-900 text-fw-linkPrimary text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
+          <div className="absolute bottom-full right-0 mb-2 px-2 py-1 bg-fw-gray-900 text-fw-linkPrimary text-figma-sm rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50">
             Cross-tenant access
           </div>
         </div>
@@ -109,7 +109,7 @@ export function AccessPath({ path, className = '' }: AccessPathProps) {
     <div className={`inline-flex items-center gap-2 ${className}`}>
       {path.map((item, index) => (
         <div key={index} className="inline-flex items-center gap-2">
-          <span className="px-2 py-1 bg-fw-wash text-fw-body text-xs font-medium rounded border border-fw-secondary">
+          <span className="px-2 py-1 bg-fw-wash text-fw-body text-figma-sm font-medium rounded border border-fw-secondary">
             {item.name}
           </span>
           {index < path.length - 1 && (
@@ -136,7 +136,7 @@ export function ScopeFilterPills({ activeScope, availableScopes, onScopeChange }
           <button
             key={scope}
             onClick={() => onScopeChange(scope)}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+            className={`px-3 py-1.5 rounded-md text-figma-sm font-medium transition-all ${
               isActive
                 ? 'bg-fw-base text-fw-heading shadow-sm'
                 : 'text-fw-body hover:text-fw-heading'

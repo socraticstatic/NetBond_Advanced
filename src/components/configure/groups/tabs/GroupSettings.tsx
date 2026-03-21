@@ -172,10 +172,10 @@ export function GroupSettings({ group }: GroupSettingsProps) {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="bg-white p-6 rounded-lg border border-gray-200">
+      <div className="bg-fw-base p-6 rounded-lg border border-fw-secondary">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-medium text-gray-900 flex items-center">
-            <Settings className="h-5 w-5 text-brand-blue mr-2" />
+          <h3 className="text-lg font-medium text-fw-heading flex items-center">
+            <Settings className="h-5 w-5 text-fw-link mr-2" />
             General Settings
           </h3>
           <Button
@@ -189,35 +189,35 @@ export function GroupSettings({ group }: GroupSettingsProps) {
         
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Group Name</label>
+            <label className="block text-figma-base font-medium text-fw-body">Group Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleFormChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+              className="mt-1 block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700">Description</label>
+            <label className="block text-figma-base font-medium text-fw-body">Description</label>
             <textarea
               name="description"
               value={formData.description || ''}
               onChange={handleFormChange}
               rows={3}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+              className="mt-1 block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
             />
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Group Type</label>
+              <label className="block text-figma-base font-medium text-fw-body">Group Type</label>
               <select
                 name="type"
                 value={formData.type}
                 onChange={handleFormChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                className="mt-1 block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
               >
                 <option value="business">Business Unit</option>
                 <option value="department">Department</option>
@@ -228,12 +228,12 @@ export function GroupSettings({ group }: GroupSettingsProps) {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700">Status</label>
+              <label className="block text-figma-base font-medium text-fw-body">Status</label>
               <select
                 name="status"
                 value={formData.status}
                 onChange={handleFormChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                className="mt-1 block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
@@ -245,10 +245,10 @@ export function GroupSettings({ group }: GroupSettingsProps) {
       </div>
 
       {/* Addresses Section */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200">
+      <div className="bg-fw-base p-6 rounded-lg border border-fw-secondary">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-medium text-gray-900 flex items-center">
-            <Building className="h-5 w-5 text-brand-blue mr-2" />
+          <h3 className="text-lg font-medium text-fw-heading flex items-center">
+            <Building className="h-5 w-5 text-fw-link mr-2" />
             Addresses
           </h3>
           <Button
@@ -261,57 +261,57 @@ export function GroupSettings({ group }: GroupSettingsProps) {
         </div>
         
         {showAddAddress && (
-          <div className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
-            <h4 className="text-sm font-medium text-gray-900 mb-4">New Address</h4>
+          <div className="mb-6 p-4 border border-fw-secondary rounded-lg bg-fw-wash">
+            <h4 className="text-figma-base font-medium text-fw-heading mb-4">New Address</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Street</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">Street</label>
                 <input
                   type="text"
                   name="street"
                   value={newAddress.street || ''}
                   onChange={handleNewAddressChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">City</label>
                 <input
                   type="text"
                   name="city"
                   value={newAddress.city || ''}
                   onChange={handleNewAddressChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">State/Province</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">State/Province</label>
                 <input
                   type="text"
                   name="state"
                   value={newAddress.state || ''}
                   onChange={handleNewAddressChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Zip/Postal Code</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">Zip/Postal Code</label>
                 <input
                   type="text"
                   name="zipCode"
                   value={newAddress.zipCode || ''}
                   onChange={handleNewAddressChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">Country</label>
                 <input
                   type="text"
                   name="country"
                   value={newAddress.country || ''}
                   onChange={handleNewAddressChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div className="flex items-center h-full pt-6">
@@ -321,9 +321,9 @@ export function GroupSettings({ group }: GroupSettingsProps) {
                     name="isPrimary"
                     checked={newAddress.isPrimary || false}
                     onChange={(e) => setNewAddress({ ...newAddress, isPrimary: e.target.checked })}
-                    className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                    className="rounded border-fw-secondary text-fw-cobalt-600 focus:ring-fw-active h-4 w-4"
                   />
-                  <span className="ml-2 text-sm text-gray-700">Set as primary address</span>
+                  <span className="ml-2 text-figma-base text-fw-body">Set as primary address</span>
                 </label>
               </div>
             </div>
@@ -348,31 +348,31 @@ export function GroupSettings({ group }: GroupSettingsProps) {
           <div className="space-y-4">
             {group.addresses.map((address, index) => (
               <div key={index} className={`p-4 rounded-lg ${
-                address.isPrimary ? 'bg-brand-lightBlue border border-brand-blue/20' : 'bg-gray-50 border border-gray-200'
+                address.isPrimary ? 'bg-fw-accent border border-fw-active' : 'bg-fw-wash border border-fw-secondary'
               }`}>
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="flex items-center mb-2">
-                      <Building className={`h-5 w-5 ${address.isPrimary ? 'text-brand-blue' : 'text-gray-400'} mr-2`} />
-                      <h4 className="text-sm font-medium text-gray-900">
+                      <Building className={`h-5 w-5 ${address.isPrimary ? 'text-fw-link' : 'text-fw-bodyLight'} mr-2`} />
+                      <h4 className="text-figma-base font-medium text-fw-heading">
                         {address.isPrimary ? 'Primary Address' : `Address ${index + 1}`}
                       </h4>
                       {address.isPrimary && (
-                        <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-blue/10 text-brand-blue">
+                        <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium bg-fw-accent text-fw-link">
                           Primary
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-700">{address.street}</p>
-                    <p className="text-sm text-gray-700">{address.city}, {address.state} {address.zipCode}</p>
-                    <p className="text-sm text-gray-700">{address.country}</p>
+                    <p className="text-figma-base text-fw-body">{address.street}</p>
+                    <p className="text-figma-base text-fw-body">{address.city}, {address.state} {address.zipCode}</p>
+                    <p className="text-figma-base text-fw-body">{address.country}</p>
                   </div>
                   <Button
                     variant="outline"
                     size="sm"
                     icon={X}
                     onClick={() => removeAddressFromGroup(group.id, index)}
-                    className="text-gray-400 hover:text-gray-700"
+                    className="text-fw-bodyLight hover:text-fw-body"
                   >
                     Remove
                   </Button>
@@ -382,17 +382,17 @@ export function GroupSettings({ group }: GroupSettingsProps) {
           </div>
         ) : (
           <div className="text-center py-6">
-            <Building className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No addresses added yet</p>
+            <Building className="h-12 w-12 text-fw-bodyLight mx-auto mb-3" />
+            <p className="text-fw-bodyLight">No addresses added yet</p>
           </div>
         )}
       </div>
 
       {/* Contacts Section */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200">
+      <div className="bg-fw-base p-6 rounded-lg border border-fw-secondary">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-medium text-gray-900 flex items-center">
-            <User className="h-5 w-5 text-brand-blue mr-2" />
+          <h3 className="text-lg font-medium text-fw-heading flex items-center">
+            <User className="h-5 w-5 text-fw-link mr-2" />
             Contacts
           </h3>
           <Button
@@ -405,47 +405,47 @@ export function GroupSettings({ group }: GroupSettingsProps) {
         </div>
         
         {showAddContact && (
-          <div className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
-            <h4 className="text-sm font-medium text-gray-900 mb-4">New Contact</h4>
+          <div className="mb-6 p-4 border border-fw-secondary rounded-lg bg-fw-wash">
+            <h4 className="text-figma-base font-medium text-fw-heading mb-4">New Contact</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">Name</label>
                 <input
                   type="text"
                   name="name"
                   value={newContact.name || ''}
                   onChange={handleNewContactChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">Email</label>
                 <input
                   type="email"
                   name="email"
                   value={newContact.email || ''}
                   onChange={handleNewContactChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">Phone</label>
                 <input
                   type="tel"
                   name="phone"
                   value={newContact.phone || ''}
                   onChange={handleNewContactChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">Role</label>
                 <input
                   type="text"
                   name="role"
                   value={newContact.role || ''}
                   onChange={handleNewContactChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div className="md:col-span-2 flex items-center">
@@ -455,9 +455,9 @@ export function GroupSettings({ group }: GroupSettingsProps) {
                     name="isPrimary"
                     checked={newContact.isPrimary || false}
                     onChange={(e) => setNewContact({ ...newContact, isPrimary: e.target.checked })}
-                    className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                    className="rounded border-fw-secondary text-fw-cobalt-600 focus:ring-fw-active h-4 w-4"
                   />
-                  <span className="ml-2 text-sm text-gray-700">Set as primary contact</span>
+                  <span className="ml-2 text-figma-base text-fw-body">Set as primary contact</span>
                 </label>
               </div>
             </div>
@@ -482,30 +482,30 @@ export function GroupSettings({ group }: GroupSettingsProps) {
           <div className="space-y-4">
             {group.contacts.map((contact, index) => (
               <div key={index} className={`p-4 rounded-lg ${
-                contact.isPrimary ? 'bg-brand-lightBlue border border-brand-blue/20' : 'bg-gray-50 border border-gray-200'
+                contact.isPrimary ? 'bg-fw-accent border border-fw-active' : 'bg-fw-wash border border-fw-secondary'
               }`}>
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="flex items-center mb-2">
-                      <User className={`h-5 w-5 ${contact.isPrimary ? 'text-brand-blue' : 'text-gray-400'} mr-2`} />
-                      <h4 className="text-sm font-medium text-gray-900">{contact.name}</h4>
+                      <User className={`h-5 w-5 ${contact.isPrimary ? 'text-fw-link' : 'text-fw-bodyLight'} mr-2`} />
+                      <h4 className="text-figma-base font-medium text-fw-heading">{contact.name}</h4>
                       {contact.isPrimary && (
-                        <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-blue/10 text-brand-blue">
+                        <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium bg-fw-accent text-fw-link">
                           Primary
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-700">{contact.role}</p>
+                    <p className="text-figma-base text-fw-body">{contact.role}</p>
                     <div className="mt-2 flex items-center">
-                      <Mail className="h-4 w-4 text-gray-400 mr-2" />
-                      <a href={`mailto:${contact.email}`} className="text-sm text-brand-blue hover:text-brand-darkBlue">
+                      <Mail className="h-4 w-4 text-fw-bodyLight mr-2" />
+                      <a href={`mailto:${contact.email}`} className="text-figma-base text-fw-link hover:text-fw-linkHover">
                         {contact.email}
                       </a>
                     </div>
                     {contact.phone && (
                       <div className="mt-1 flex items-center">
-                        <Phone className="h-4 w-4 text-gray-400 mr-2" />
-                        <span className="text-sm text-gray-700">{contact.phone}</span>
+                        <Phone className="h-4 w-4 text-fw-bodyLight mr-2" />
+                        <span className="text-figma-base text-fw-body">{contact.phone}</span>
                       </div>
                     )}
                   </div>
@@ -520,7 +520,7 @@ export function GroupSettings({ group }: GroupSettingsProps) {
                         updateGroup(group.id, { contacts: newContacts });
                       }
                     }}
-                    className="text-gray-400 hover:text-gray-700"
+                    className="text-fw-bodyLight hover:text-fw-body"
                   >
                     Remove
                   </Button>
@@ -530,17 +530,17 @@ export function GroupSettings({ group }: GroupSettingsProps) {
           </div>
         ) : (
           <div className="text-center py-6">
-            <User className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No contacts added yet</p>
+            <User className="h-12 w-12 text-fw-bodyLight mx-auto mb-3" />
+            <p className="text-fw-bodyLight">No contacts added yet</p>
           </div>
         )}
       </div>
 
       {/* Tags Section */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200">
+      <div className="bg-fw-base p-6 rounded-lg border border-fw-secondary">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-medium text-gray-900 flex items-center">
-            <Tag className="h-5 w-5 text-brand-blue mr-2" />
+          <h3 className="text-lg font-medium text-fw-heading flex items-center">
+            <Tag className="h-5 w-5 text-fw-link mr-2" />
             Tags
           </h3>
           <Button
@@ -553,27 +553,27 @@ export function GroupSettings({ group }: GroupSettingsProps) {
         </div>
         
         {showAddTag && (
-          <div className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
-            <h4 className="text-sm font-medium text-gray-900 mb-4">New Tag</h4>
+          <div className="mb-6 p-4 border border-fw-secondary rounded-lg bg-fw-wash">
+            <h4 className="text-figma-base font-medium text-fw-heading mb-4">New Tag</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Key</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">Key</label>
                 <input
                   type="text"
                   value={newTag.key}
                   onChange={(e) => setNewTag({ ...newTag, key: e.target.value })}
                   placeholder="e.g., department"
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Value</label>
+                <label className="block text-figma-base font-medium text-fw-body mb-1">Value</label>
                 <input
                   type="text"
                   value={newTag.value}
                   onChange={(e) => setNewTag({ ...newTag, value: e.target.value })}
                   placeholder="e.g., engineering"
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-brand-blue focus:border-brand-blue"
+                  className="block w-full rounded-md border-fw-secondary shadow-sm focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
             </div>
@@ -597,12 +597,12 @@ export function GroupSettings({ group }: GroupSettingsProps) {
         {group.tags && Object.keys(group.tags).length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {Object.entries(group.tags).map(([key, value]) => (
-              <div key={key} className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
+              <div key={key} className="inline-flex items-center px-3 py-1 rounded-full text-figma-base bg-fw-neutral text-fw-body">
                 <span className="font-medium">{key}:</span>
                 <span className="ml-1">{value}</span>
                 <button 
                   onClick={() => handleRemoveTag(key)}
-                  className="ml-2 text-gray-400 hover:text-gray-600"
+                  className="ml-2 text-fw-bodyLight hover:text-fw-body"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -611,9 +611,9 @@ export function GroupSettings({ group }: GroupSettingsProps) {
           </div>
         ) : (
           <div className="text-center py-6">
-            <Tag className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No tags added yet</p>
-            <p className="text-sm text-gray-400 mt-1">Tags help with cost allocation and organization</p>
+            <Tag className="h-12 w-12 text-fw-bodyLight mx-auto mb-3" />
+            <p className="text-fw-bodyLight">No tags added yet</p>
+            <p className="text-figma-base text-fw-bodyLight mt-1">Tags help with cost allocation and organization</p>
           </div>
         )}
       </div>

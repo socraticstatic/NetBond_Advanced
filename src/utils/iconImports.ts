@@ -28,7 +28,7 @@ export {
   Network,
   Cloud,
   Server,
-  Router,
+  Share2,
   Globe
 } from 'lucide-react';
 

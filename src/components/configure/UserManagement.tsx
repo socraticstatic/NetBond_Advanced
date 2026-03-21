@@ -26,7 +26,7 @@ export function UserManagement({ searchQuery, defaultTab = 'users' }: UserManage
 
   return (
     <div className="p-6">
-      <div className="flex">
+      <div className="flex gap-0">
         <VerticalTabGroup
           tabs={tabs}
           activeTab={activeView}

@@ -390,9 +390,9 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
   };
 
   return (
-    <div className="fixed inset-0 w-full h-full flex flex-col bg-white overflow-hidden m-0 p-0">
+    <div className="fixed inset-0 w-full h-full flex flex-col bg-fw-base overflow-hidden m-0 p-0">
       {/* Search Bar and Actions - Fixed at top */}
-      <div className="flex-shrink-0 px-6 py-4 border-b border-gray-200">
+      <div className="flex-shrink-0 px-6 py-4 border-b border-fw-secondary">
         <div className="flex items-center justify-between gap-4">
           <div className="relative flex-1 max-w-md">
             <input
@@ -400,10 +400,10 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
               placeholder="Search VNFs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm w-full"
+              className="pl-10 pr-4 h-9 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active text-figma-base w-full"
             />
             <svg
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -420,7 +420,7 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
             <select
               value={vnfTypeFilter}
               onChange={(e) => setVnfTypeFilter(e.target.value as VNFType | 'all')}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-4 h-10 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
             >
               <option value="all">All Types</option>
               <option value="firewall">Firewall</option>
@@ -431,7 +431,7 @@ export function DetachedVNFTable({ connectionId: initialConnectionId }: Detached
             </select>
             <button
               onClick={handleExportCSV}
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="inline-flex items-center px-4 h-10 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
             >
               <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

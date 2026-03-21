@@ -23,40 +23,40 @@ export function PerformanceCard({
   const getStatusColor = () => {
     switch (status) {
       case 'success':
-        return 'text-complementary-green';
+        return 'text-fw-success';
       case 'warning':
-        return 'text-complementary-amber';
+        return 'text-fw-warn';
       case 'error':
-        return 'text-red-600';
+        return 'text-fw-error';
       default:
-        return 'text-gray-600';
+        return 'text-fw-bodyLight';
     }
   };
-  
+
   const getBackgroundColor = () => {
     switch (status) {
       case 'success':
-        return 'bg-complementary-green/10';
+        return 'bg-fw-successLight';
       case 'warning':
-        return 'bg-complementary-amber/10';
+        return 'bg-fw-warnLight';
       case 'error':
-        return 'bg-red-50';
+        return 'bg-fw-error/10';
       default:
-        return 'bg-gray-50';
+        return 'bg-fw-wash';
     }
   };
   
   if (isMobile) {
     return (
-      <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+      <div className="bg-fw-base p-4 rounded-lg border border-fw-secondary shadow-sm">
         <div className="flex flex-col">
           <div className="flex items-center justify-between mb-1">
-            <h3 className="text-xs font-medium text-gray-500">{title}</h3>
+            <h3 className="text-figma-sm font-medium text-fw-bodyLight">{title}</h3>
             {icon}
           </div>
-          <div className="text-lg font-semibold text-gray-900">{value}</div>
+          <div className="text-lg font-semibold text-fw-heading">{value}</div>
           {change !== undefined && (
-            <div className={`mt-1 text-xs flex items-center ${change < 0 ? 'text-complementary-green' : 'text-red-600'}`}>
+            <div className={`mt-1 text-figma-sm flex items-center ${change < 0 ? 'text-fw-success' : 'text-fw-error'}`}>
               {change < 0 ? (
                 <TrendingDown className="h-3 w-3 mr-1" />
               ) : (
@@ -66,7 +66,7 @@ export function PerformanceCard({
             </div>
           )}
           {description && (
-            <div className="mt-1 text-xs text-gray-500">{description}</div>
+            <div className="mt-1 text-figma-sm text-fw-bodyLight">{description}</div>
           )}
         </div>
       </div>
@@ -75,11 +75,11 @@ export function PerformanceCard({
 
   // Desktop version
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+    <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-4 p-4">
         <div>
-          <h3 className="text-sm font-medium text-gray-900">{title}</h3>
-          {description && <p className="text-xs text-gray-500 mt-1">{description}</p>}
+          <h3 className="text-figma-base font-medium text-fw-heading">{title}</h3>
+          {description && <p className="text-figma-sm text-fw-bodyLight mt-1">{description}</p>}
         </div>
         <div className={`p-2 rounded-lg ${getBackgroundColor()}`}>
           {icon}
@@ -87,10 +87,10 @@ export function PerformanceCard({
       </div>
       
       <div className="flex items-center space-x-3 mb-4 px-4">
-        <div className="text-2xl font-bold text-gray-900">{value}</div>
+        <div className="text-2xl font-bold text-fw-heading">{value}</div>
         {change !== undefined && (
-          <span className={`px-2 py-1 text-xs font-medium rounded-full flex items-center ${
-            change < 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+          <span className={`px-2 py-1 text-figma-sm font-medium rounded-full flex items-center ${
+            change < 0 ? 'bg-fw-successLight text-fw-success' : 'bg-fw-error/10 text-fw-error'
           }`}>
             {change < 0 ? (
               <TrendingDown className="h-3 w-3 mr-1" />
@@ -104,8 +104,8 @@ export function PerformanceCard({
 
       <div className="h-24 w-full px-4 pb-4">
         {/* Chart placeholder - would be replaced with actual chart */}
-        <div className="h-full w-full bg-gray-50 rounded-lg flex items-center justify-center">
-          <span className="text-xs text-gray-400">Chart Placeholder</span>
+        <div className="h-full w-full bg-fw-wash rounded-lg flex items-center justify-center">
+          <span className="text-figma-sm text-fw-bodyLight">Chart Placeholder</span>
         </div>
       </div>
     </div>

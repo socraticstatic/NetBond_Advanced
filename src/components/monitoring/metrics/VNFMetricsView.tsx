@@ -116,8 +116,8 @@ export function VNFMetricsView() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <Box className="h-12 w-12 text-gray-400 mx-auto mb-4 animate-pulse" />
-          <p className="text-gray-600">Loading VNF metrics...</p>
+          <Box className="h-12 w-12 text-fw-bodyLight mx-auto mb-4 animate-pulse" />
+          <p className="text-fw-body">Loading VNF metrics...</p>
         </div>
       </div>
     );
@@ -133,12 +133,12 @@ export function VNFMetricsView() {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            {selectedVNF && <VNFIcon className="h-8 w-8 text-blue-600" />}
+            {selectedVNF && <VNFIcon className="h-8 w-8 text-fw-link" />}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-fw-heading tracking-[-0.03em]">
                 {selectedVNF ? `${selectedVNF.name} Performance` : 'VNF Performance & Capacity'}
               </h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-figma-base text-fw-body mt-1">
                 {selectedVNF ? (
                   <>
                     {vnfTypeInfo?.label} • {selectedVNF.vendor}
@@ -155,14 +155,14 @@ export function VNFMetricsView() {
 
       {/* VNF Type Information */}
       {selectedVNF && vnfTypeInfo && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h3 className="font-medium text-blue-900 mb-2">VNF Type: {vnfTypeInfo.label}</h3>
-          <p className="text-sm text-blue-800 mb-3">{vnfTypeInfo.description}</p>
+        <div className="bg-fw-accent border border-fw-active rounded-lg p-4">
+          <h3 className="font-medium text-fw-linkHover mb-2">VNF Type: {vnfTypeInfo.label}</h3>
+          <p className="text-figma-base text-fw-link mb-3">{vnfTypeInfo.description}</p>
           <div className="flex flex-wrap gap-2">
             {vnfTypeInfo.commonFeatures.slice(0, 5).map((feature, index) => (
               <span
                 key={index}
-                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium bg-fw-accent text-fw-linkHover"
               >
                 {feature}
               </span>
@@ -276,123 +276,123 @@ export function VNFMetricsView() {
 
       {/* VNF Type-Specific Metrics */}
       {selectedVNF && (
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
+        <div className="bg-fw-wash border border-fw-secondary rounded-lg p-6">
+          <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em] mb-4">
             {vnfTypeInfo?.label}-Specific Metrics
           </h3>
 
           {selectedVNF.type === 'firewall' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">Threat Blocks</span>
-                  <Shield className="h-5 w-5 text-red-500" />
+                  <span className="text-figma-base font-medium text-fw-body">Threat Blocks</span>
+                  <Shield className="h-5 w-5 text-fw-error" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{Math.floor(Math.random() * 500 + 1000).toLocaleString()}</p>
-                <p className="text-xs text-gray-500 mt-1">Last hour</p>
+                <p className="text-2xl font-bold text-fw-heading">{Math.floor(Math.random() * 500 + 1000).toLocaleString()}</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Last hour</p>
               </div>
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">Rules Active</span>
-                  <Shield className="h-5 w-5 text-green-500" />
+                  <span className="text-figma-base font-medium text-fw-body">Rules Active</span>
+                  <Shield className="h-5 w-5 text-fw-success" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{Math.floor(Math.random() * 200 + 800)}</p>
-                <p className="text-xs text-gray-500 mt-1">Security policies</p>
+                <p className="text-2xl font-bold text-fw-heading">{Math.floor(Math.random() * 200 + 800)}</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Security policies</p>
               </div>
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">VPN Tunnels</span>
-                  <Shield className="h-5 w-5 text-blue-500" />
+                  <span className="text-figma-base font-medium text-fw-body">VPN Tunnels</span>
+                  <Shield className="h-5 w-5 text-fw-link" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{Math.floor(Math.random() * 20 + 15)}</p>
-                <p className="text-xs text-gray-500 mt-1">Active connections</p>
+                <p className="text-2xl font-bold text-fw-heading">{Math.floor(Math.random() * 20 + 15)}</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Active connections</p>
               </div>
             </div>
           )}
 
           {selectedVNF.type === 'sdwan' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">WAN Links</span>
-                  <Globe className="h-5 w-5 text-purple-500" />
+                  <span className="text-figma-base font-medium text-fw-body">WAN Links</span>
+                  <Globe className="h-5 w-5 text-fw-purple" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{Math.floor(Math.random() * 3 + 3)}</p>
-                <p className="text-xs text-gray-500 mt-1">Active paths</p>
+                <p className="text-2xl font-bold text-fw-heading">{Math.floor(Math.random() * 3 + 3)}</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Active paths</p>
               </div>
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">Path Selection</span>
-                  <Globe className="h-5 w-5 text-green-500" />
+                  <span className="text-figma-base font-medium text-fw-body">Path Selection</span>
+                  <Globe className="h-5 w-5 text-fw-success" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{(Math.random() * 20 + 70).toFixed(1)}%</p>
-                <p className="text-xs text-gray-500 mt-1">Optimal routing</p>
+                <p className="text-2xl font-bold text-fw-heading">{(Math.random() * 20 + 70).toFixed(1)}%</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Optimal routing</p>
               </div>
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">Applications</span>
-                  <Globe className="h-5 w-5 text-blue-500" />
+                  <span className="text-figma-base font-medium text-fw-body">Applications</span>
+                  <Globe className="h-5 w-5 text-fw-link" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{Math.floor(Math.random() * 50 + 150)}</p>
-                <p className="text-xs text-gray-500 mt-1">Recognized apps</p>
+                <p className="text-2xl font-bold text-fw-heading">{Math.floor(Math.random() * 50 + 150)}</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Recognized apps</p>
               </div>
             </div>
           )}
 
           {selectedVNF.type === 'load_balancer' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">Backend Servers</span>
-                  <Scale className="h-5 w-5 text-indigo-500" />
+                  <span className="text-figma-base font-medium text-fw-body">Backend Servers</span>
+                  <Scale className="h-5 w-5 text-fw-purple" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{Math.floor(Math.random() * 5 + 8)}</p>
-                <p className="text-xs text-gray-500 mt-1">Healthy nodes</p>
+                <p className="text-2xl font-bold text-fw-heading">{Math.floor(Math.random() * 5 + 8)}</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Healthy nodes</p>
               </div>
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">Requests/sec</span>
-                  <Scale className="h-5 w-5 text-green-500" />
+                  <span className="text-figma-base font-medium text-fw-body">Requests/sec</span>
+                  <Scale className="h-5 w-5 text-fw-success" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{Math.floor(Math.random() * 5000 + 15000).toLocaleString()}</p>
-                <p className="text-xs text-gray-500 mt-1">Current load</p>
+                <p className="text-2xl font-bold text-fw-heading">{Math.floor(Math.random() * 5000 + 15000).toLocaleString()}</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Current load</p>
               </div>
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">SSL Offload</span>
-                  <Scale className="h-5 w-5 text-blue-500" />
+                  <span className="text-figma-base font-medium text-fw-body">SSL Offload</span>
+                  <Scale className="h-5 w-5 text-fw-link" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{(Math.random() * 30 + 60).toFixed(1)}%</p>
-                <p className="text-xs text-gray-500 mt-1">Enabled</p>
+                <p className="text-2xl font-bold text-fw-heading">{(Math.random() * 30 + 60).toFixed(1)}%</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Enabled</p>
               </div>
             </div>
           )}
 
           {selectedVNF.type === 'ids_ips' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">Threats Detected</span>
+                  <span className="text-figma-base font-medium text-fw-body">Threats Detected</span>
                   <AlertTriangle className="h-5 w-5 text-orange-500" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{Math.floor(Math.random() * 100 + 50)}</p>
-                <p className="text-xs text-gray-500 mt-1">Last hour</p>
+                <p className="text-2xl font-bold text-fw-heading">{Math.floor(Math.random() * 100 + 50)}</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Last hour</p>
               </div>
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">Signatures</span>
-                  <AlertTriangle className="h-5 w-5 text-green-500" />
+                  <span className="text-figma-base font-medium text-fw-body">Signatures</span>
+                  <AlertTriangle className="h-5 w-5 text-fw-success" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{Math.floor(Math.random() * 5000 + 25000).toLocaleString()}</p>
-                <p className="text-xs text-gray-500 mt-1">Active rules</p>
+                <p className="text-2xl font-bold text-fw-heading">{Math.floor(Math.random() * 5000 + 25000).toLocaleString()}</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Active rules</p>
               </div>
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-600">False Positives</span>
+                  <span className="text-figma-base font-medium text-fw-body">False Positives</span>
                   <AlertTriangle className="h-5 w-5 text-yellow-500" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{(Math.random() * 5).toFixed(1)}%</p>
-                <p className="text-xs text-gray-500 mt-1">Detection rate</p>
+                <p className="text-2xl font-bold text-fw-heading">{(Math.random() * 5).toFixed(1)}%</p>
+                <p className="text-figma-sm text-fw-bodyLight mt-1">Detection rate</p>
               </div>
             </div>
           )}
@@ -400,8 +400,8 @@ export function VNFMetricsView() {
           {(!selectedVNF.type ||
             !['firewall', 'sdwan', 'load_balancer', 'ids_ips'].includes(selectedVNF.type)) && (
             <div className="text-center py-8">
-              <Box className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">
+              <Box className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
+              <p className="text-fw-body">
                 Type-specific metrics for {vnfTypeInfo?.label || 'this VNF type'} will be displayed here.
               </p>
             </div>

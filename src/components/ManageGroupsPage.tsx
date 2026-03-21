@@ -127,27 +127,27 @@ export function ManageGroupsPage() {
         return (
           <>
             {/* Search and Controls */}
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
+            <div className="bg-fw-base rounded-2xl border border-fw-secondary shadow-sm mb-6">
               <div className="p-4 flex items-center space-x-4">
                 <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
                   <input
                     type="text"
                     placeholder="Search pools..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                    className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   />
                 </div>
 
                 {/* View Mode Toggle */}
-                <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
+                <div className="flex items-center bg-fw-base rounded-2xl border border-fw-secondary p-1">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={`p-2 rounded-full transition-colors ${
                       viewMode === 'grid' 
-                        ? 'text-brand-blue bg-brand-lightBlue' 
-                        : 'text-gray-400 hover:text-gray-500'
+                        ? 'text-fw-link bg-fw-accent' 
+                        : 'text-fw-bodyLight hover:text-fw-bodyLight'
                     }`}
                     title="Grid View"
                   >
@@ -157,8 +157,8 @@ export function ManageGroupsPage() {
                     onClick={() => setViewMode('list')}
                     className={`p-2 rounded-full transition-colors ${
                       viewMode === 'list' 
-                        ? 'text-brand-blue bg-brand-lightBlue' 
-                        : 'text-gray-400 hover:text-gray-500'
+                        ? 'text-fw-link bg-fw-accent' 
+                        : 'text-fw-bodyLight hover:text-fw-bodyLight'
                     }`}
                     title="List View"
                   >
@@ -198,10 +198,10 @@ export function ManageGroupsPage() {
 
               {/* Expanded Filters */}
               {showFilters && (
-                <div className="mt-4 pt-4 border-t border-gray-200 p-4">
+                <div className="mt-4 pt-4 border-t border-fw-secondary p-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Pool Type</h4>
+                      <h4 className="text-figma-base font-medium text-fw-heading mb-2">Pool Type</h4>
                       <div className="space-y-2">
                         {['business', 'department', 'project', 'team', 'custom'].map((type) => (
                           <label key={type} className="flex items-center">
@@ -215,16 +215,16 @@ export function ManageGroupsPage() {
                                   setFilters({...filters, type: filters.type.filter(t => t !== type)});
                                 }
                               }}
-                              className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                              className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                             />
-                            <span className="ml-2 text-sm text-gray-700 capitalize">{type}</span>
+                            <span className="ml-2 text-figma-base text-fw-body capitalize">{type}</span>
                           </label>
                         ))}
                       </div>
                     </div>
                     
                     <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Status</h4>
+                      <h4 className="text-figma-base font-medium text-fw-heading mb-2">Status</h4>
                       <div className="space-y-2">
                         {['active', 'inactive', 'suspended'].map((status) => (
                           <label key={status} className="flex items-center">
@@ -238,37 +238,37 @@ export function ManageGroupsPage() {
                                   setFilters({...filters, status: filters.status.filter(s => s !== status)});
                                 }
                               }}
-                              className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                              className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                             />
-                            <span className="ml-2 text-sm text-gray-700 capitalize">{status}</span>
+                            <span className="ml-2 text-figma-base text-fw-body capitalize">{status}</span>
                           </label>
                         ))}
                       </div>
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Advanced Filters</h4>
+                      <h4 className="text-figma-base font-medium text-fw-heading mb-2">Advanced Filters</h4>
                       <div className="space-y-2">
                         <label className="flex items-center">
                           <input
                             type="checkbox"
-                            className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                            className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                           />
-                          <span className="ml-2 text-sm text-gray-700">Has Connections</span>
+                          <span className="ml-2 text-figma-base text-fw-body">Has Connections</span>
                         </label>
                         <label className="flex items-center">
                           <input
                             type="checkbox"
-                            className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                            className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                           />
-                          <span className="ml-2 text-sm text-gray-700">Has Members</span>
+                          <span className="ml-2 text-figma-base text-fw-body">Has Members</span>
                         </label>
                         <label className="flex items-center">
                           <input
                             type="checkbox"
-                            className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                            className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                           />
-                          <span className="ml-2 text-sm text-gray-700">Has Addresses</span>
+                          <span className="ml-2 text-figma-base text-fw-body">Has Addresses</span>
                         </label>
                       </div>
                     </div>
@@ -284,7 +284,7 @@ export function ManageGroupsPage() {
                   values.map((value) => (
                     <span
                       key={`${category}-${value}`}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-brand-lightBlue text-brand-blue"
+                      className="inline-flex items-center px-3 py-1 rounded-full text-figma-base bg-fw-accent text-fw-link"
                     >
                       {value.charAt(0).toUpperCase() + value.slice(1)}
                       <button
@@ -292,7 +292,7 @@ export function ManageGroupsPage() {
                           ...prev,
                           [category]: prev[category as keyof typeof prev].filter(v => v !== value)
                         }))}
-                        className="ml-2 hover:text-brand-darkBlue"
+                        className="ml-2 hover:text-fw-linkHover"
                       >
                         ×
                       </button>
@@ -300,11 +300,11 @@ export function ManageGroupsPage() {
                   ))
                 )}
                 {searchQuery && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-figma-base bg-fw-neutral text-fw-body">
                     "{searchQuery}"
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="ml-2 hover:text-gray-900"
+                      className="ml-2 hover:text-fw-heading"
                     >
                       ×
                     </button>
@@ -315,18 +315,18 @@ export function ManageGroupsPage() {
                     setFilters({ type: [], status: [] });
                     setSearchQuery('');
                   }}
-                  className="text-sm text-gray-500 hover:text-gray-700"
+                  className="text-figma-base text-fw-bodyLight hover:text-fw-body"
                 >
                   Clear all
                 </button>
               </div>
             )}
 
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
               {filteredGroups.length === 0 ? (
                 <div className="text-center py-12">
-                  <Layers className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">No pools match your search criteria</p>
+                  <Layers className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
+                  <p className="text-fw-bodyLight">No pools match your search criteria</p>
                 </div>
               ) : viewMode === 'list' ? (
                 <GroupListView 
@@ -346,11 +346,11 @@ export function ManageGroupsPage() {
         );
       case 'marketplace':
         return (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
             <div className="text-center py-12">
-              <ShoppingBag className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Pool Templates Marketplace</h3>
-              <p className="text-gray-500 max-w-md mx-auto">
+              <ShoppingBag className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-2">Pool Templates Marketplace</h3>
+              <p className="text-fw-bodyLight max-w-md mx-auto">
                 Browse and select from pre-configured pool templates for different use cases and organizational structures.
               </p>
               <Button
@@ -376,8 +376,8 @@ export function ManageGroupsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Manage Pools</h1>
-          <p className="mt-1 text-sm text-gray-500">Create and manage your network pools</p>
+          <h1 className="text-figma-xl font-bold text-fw-heading tracking-[-0.04em]">Manage Pools</h1>
+          <p className="mt-1 text-figma-base font-medium text-fw-body">Create and manage your network pools</p>
         </div>
         <Button
           variant="primary"

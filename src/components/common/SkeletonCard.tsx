@@ -14,9 +14,9 @@ export function SkeletonCard({
   className = ''
 }: SkeletonCardProps) {
   return (
-    <div className={`bg-white rounded-lg border border-gray-200 overflow-hidden ${className}`}>
+    <div className={`bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden ${className}`}>
       {header && (
-        <div className="p-4 border-b border-gray-200">
+        <div className="p-4 border-b border-fw-secondary">
           <Skeleton width="40%" height={24} className="mb-2" />
           <Skeleton width="60%" height={16} />
         </div>
@@ -34,7 +34,7 @@ export function SkeletonCard({
       </div>
       
       {footer && (
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-fw-secondary">
           <Skeleton width="30%" height={16} />
         </div>
       )}

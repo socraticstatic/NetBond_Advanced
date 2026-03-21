@@ -44,9 +44,9 @@ export function PricingPlanModal({ isOpen, onClose, currentPlan = 'Pay as you go
       ],
       cta: 'Start Free Trial',
       color: {
-        primary: 'bg-green-500',
+        primary: 'bg-fw-success',
         secondary: 'bg-green-50',
-        accent: 'text-green-600'
+        accent: 'text-fw-success'
       }
     },
     {
@@ -67,9 +67,9 @@ export function PricingPlanModal({ isOpen, onClose, currentPlan = 'Pay as you go
       ],
       cta: 'Upgrade to Pay as you go',
       color: {
-        primary: 'bg-blue-500',
-        secondary: 'bg-blue-50',
-        accent: 'text-blue-600'
+        primary: 'bg-fw-cobalt-600',
+        secondary: 'bg-fw-accent',
+        accent: 'text-fw-link'
       }
     },
     {
@@ -90,9 +90,9 @@ export function PricingPlanModal({ isOpen, onClose, currentPlan = 'Pay as you go
       ],
       cta: 'Upgrade to 12 Months',
       color: {
-        primary: 'bg-blue-500',
-        secondary: 'bg-blue-50',
-        accent: 'text-blue-600'
+        primary: 'bg-fw-cobalt-600',
+        secondary: 'bg-fw-accent',
+        accent: 'text-fw-link'
       }
     },
     {
@@ -114,9 +114,9 @@ export function PricingPlanModal({ isOpen, onClose, currentPlan = 'Pay as you go
       highlight: true,
       cta: 'Upgrade to 24 Months',
       color: {
-        primary: 'bg-blue-500',
-        secondary: 'bg-blue-50',
-        accent: 'text-blue-600'
+        primary: 'bg-fw-cobalt-600',
+        secondary: 'bg-fw-accent',
+        accent: 'text-fw-link'
       }
     },
     {
@@ -137,9 +137,9 @@ export function PricingPlanModal({ isOpen, onClose, currentPlan = 'Pay as you go
       ],
       cta: 'Upgrade to 36 Months',
       color: {
-        primary: 'bg-purple-500',
+        primary: 'bg-fw-purple',
         secondary: 'bg-purple-50',
-        accent: 'text-purple-600'
+        accent: 'text-fw-purple'
       }
     }
   ];
@@ -148,7 +148,7 @@ export function PricingPlanModal({ isOpen, onClose, currentPlan = 'Pay as you go
 
   const handleUpgrade = (plan: string) => {
     if (plan === currentPlan) return;
-    
+
     setSelectedPlan(plan);
     window.addToast({
       type: 'info',
@@ -162,37 +162,37 @@ export function PricingPlanModal({ isOpen, onClose, currentPlan = 'Pay as you go
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay */}
-        <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={onClose} />
+        <div className="fixed inset-0 transition-opacity bg-fw-neutral bg-opacity-75" onClick={onClose} />
 
         {/* Modal panel */}
-        <div className="inline-block w-full max-w-6xl px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:p-6">
+        <div className="inline-block w-full max-w-6xl px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-fw-base rounded-lg shadow-xl sm:my-8 sm:align-middle sm:p-6">
           <div className="absolute top-0 right-0 pt-4 pr-4">
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-500 focus:outline-none rounded-full p-1"
+              className="text-fw-bodyLight hover:text-fw-body focus:outline-none rounded-full p-1"
             >
               <X className="w-6 h-6" />
             </button>
           </div>
 
           <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-gray-900">Choose Your Plan</h3>
-            <p className="mt-2 text-gray-500">Select the plan that best fits your needs</p>
+            <h3 className="text-2xl font-bold text-fw-heading tracking-[-0.03em]">Choose Your Plan</h3>
+            <p className="mt-2 text-fw-bodyLight">Select the plan that best fits your needs</p>
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-8">
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative flex flex-col p-6 bg-white rounded-lg transform transition-all duration-200 hover:scale-[1.02] ${
+                className={`relative flex flex-col p-6 bg-fw-base rounded-lg transform transition-all duration-200 hover:scale-[1.02] ${
                   plan.highlight
                     ? `ring-2 ${plan.color.accent.replace('text-', 'ring-')} shadow-lg`
-                    : 'border border-gray-200'
+                    : 'border border-fw-secondary'
                 }`}
               >
                 {plan.highlight && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <span className={`inline-flex px-4 py-1 text-sm font-semibold text-white rounded-full ${plan.color.primary}`}>
+                    <span className={`inline-flex px-4 py-1 text-figma-base font-semibold text-white rounded-full ${plan.color.primary}`}>
                       Popular
                     </span>
                   </div>
@@ -200,19 +200,19 @@ export function PricingPlanModal({ isOpen, onClose, currentPlan = 'Pay as you go
 
                 <div className="mb-4">
                   <h3 className={`text-lg font-semibold ${plan.color.accent}`}>{plan.name}</h3>
-                  <p className="mt-2 text-sm text-gray-500">{plan.description}</p>
+                  <p className="mt-2 text-figma-base text-fw-bodyLight">{plan.description}</p>
                 </div>
 
                 <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
-                  <span className="text-gray-500">/month</span>
+                  <span className="text-4xl font-bold text-fw-heading">${plan.price}</span>
+                  <span className="text-fw-bodyLight">/month</span>
                 </div>
 
                 <ul className="flex-grow mb-6 space-y-4">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start">
                       <Check className={`w-5 h-5 ${plan.color.accent} shrink-0`} />
-                      <span className="ml-3 text-sm text-gray-500">{feature}</span>
+                      <span className="ml-3 text-figma-base text-fw-bodyLight">{feature}</span>
                     </li>
                   ))}
                 </ul>

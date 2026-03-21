@@ -146,13 +146,13 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="bg-fw-base rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="text-2xl font-bold mb-2">RBAC Demo Control Panel</h2>
-                <p className="text-blue-100 text-sm">
+                <h2 className="text-2xl font-bold mb-2 tracking-[-0.03em]">RBAC Demo Control Panel</h2>
+                <p className="text-blue-100 text-figma-base">
                   Interactive demonstrations of role-based access control best practices
                 </p>
               </div>
@@ -168,15 +168,15 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
           {/* Content */}
           <div className="flex-1 overflow-y-auto p-6">
             {/* Current Role Status */}
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+            <div className="bg-fw-accent border-2 border-fw-active rounded-lg p-4 mb-6">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-fw-cobalt-600 rounded-full flex items-center justify-center">
                     <Shield className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-blue-700 font-medium">Current Role</p>
-                    <p className="text-lg font-bold text-blue-900 capitalize">{currentRole.replace('-', ' ')}</p>
+                    <p className="text-figma-base text-fw-link font-medium">Current Role</p>
+                    <p className="text-lg font-bold text-fw-heading capitalize tracking-[-0.03em]">{currentRole.replace('-', ' ')}</p>
                   </div>
                 </div>
                 <Button
@@ -190,16 +190,16 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
               </div>
 
               {/* Scope & Filter Information */}
-              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-blue-200">
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-fw-active">
                 <div>
-                  <p className="text-xs text-blue-700 font-medium mb-1">Default Resource Filter</p>
+                  <p className="text-figma-sm text-fw-link font-medium mb-1">Default Resource Filter</p>
                   <ResourceFilterBadge
                     filter={permissionChecker.getDefaultScope(currentRole)}
                     showIcon={true}
                   />
                 </div>
                 <div>
-                  <p className="text-xs text-blue-700 font-medium mb-1">Maximum Filter Scope</p>
+                  <p className="text-figma-sm text-fw-link font-medium mb-1">Maximum Filter Scope</p>
                   <ResourceFilterBadge
                     filter={permissionChecker.getMaxScope(currentRole)}
                     showIcon={true}
@@ -207,10 +207,10 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
                 </div>
               </div>
 
-              <div className="mt-3 pt-3 border-t border-blue-200">
+              <div className="mt-3 pt-3 border-t border-fw-active">
                 <div className="flex items-start gap-2">
-                  <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-blue-700">
+                  <Info className="h-4 w-4 text-fw-link mt-0.5 flex-shrink-0" />
+                  <p className="text-figma-sm text-fw-link">
                     <span className="font-semibold">Resource Filters</span> control <em>which</em> resources you can access within your scope.
                     <span className="font-semibold"> Scope paths</span> define <em>where</em> in the hierarchy your permissions apply.
                   </p>
@@ -220,7 +220,7 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
 
             {/* Quick Actions */}
             <div className="mb-6">
-              <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-3 flex items-center gap-2 tracking-[-0.03em]">
                 <Info className="h-4 w-4" />
                 Quick Actions
               </h3>
@@ -231,16 +231,16 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
                     <button
                       key={action.id}
                       onClick={action.action}
-                      className="flex items-center gap-3 p-4 bg-white border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 rounded-lg transition-all text-left group"
+                      className="flex items-center gap-3 p-4 bg-fw-base border-2 border-fw-secondary hover:border-fw-active hover:bg-fw-accent rounded-lg transition-all text-left group"
                     >
-                      <div className="w-10 h-10 bg-gray-100 group-hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors">
-                        <Icon className="h-5 w-5 text-gray-600 group-hover:text-blue-600" />
+                      <div className="w-10 h-10 bg-fw-neutral group-hover:bg-fw-accent rounded-lg flex items-center justify-center transition-colors">
+                        <Icon className="h-5 w-5 text-fw-bodyLight group-hover:text-fw-link" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-semibold text-gray-900">{action.label}</p>
-                        <p className="text-xs text-gray-500">{action.description}</p>
+                        <p className="text-figma-base font-semibold text-fw-heading">{action.label}</p>
+                        <p className="text-figma-sm text-fw-bodyLight">{action.description}</p>
                       </div>
-                      <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600" />
+                      <ChevronRight className="h-5 w-5 text-fw-bodyLight group-hover:text-fw-link" />
                     </button>
                   );
                 })}
@@ -249,7 +249,7 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
 
             {/* Demo Scenarios */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-3 flex items-center gap-2 tracking-[-0.03em]">
                 <Users className="h-4 w-4" />
                 Guided Demo Scenarios
               </h3>
@@ -258,10 +258,10 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
                   const Icon = scenario.icon;
                   const isActive = selectedDemo === scenario.id;
                   const colorClasses = {
-                    blue: 'bg-blue-50 border-blue-300 text-blue-700',
-                    green: 'bg-green-50 border-green-300 text-green-700',
-                    red: 'bg-red-50 border-red-300 text-red-700',
-                    purple: 'bg-purple-50 border-purple-300 text-purple-700'
+                    blue: 'bg-fw-accent border-fw-active text-fw-link',
+                    green: 'bg-green-50 border-green-300 text-fw-success',
+                    red: 'bg-red-50 border-red-300 text-fw-error',
+                    purple: 'bg-purple-50 border-purple-300 text-fw-purple'
                   }[scenario.color];
 
                   return (
@@ -269,8 +269,8 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
                       key={scenario.id}
                       className={`border-2 rounded-lg p-4 transition-all ${
                         isActive
-                          ? 'border-blue-500 bg-blue-50 shadow-md'
-                          : 'border-gray-200 bg-white hover:border-gray-300'
+                          ? 'border-fw-active bg-fw-accent shadow-md'
+                          : 'border-fw-secondary bg-fw-base hover:border-fw-secondary'
                       }`}
                     >
                       <div className="flex items-start gap-4">
@@ -280,8 +280,8 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
                         <div className="flex-1">
                           <div className="flex items-start justify-between mb-2">
                             <div>
-                              <h4 className="text-sm font-semibold text-gray-900">{scenario.title}</h4>
-                              <p className="text-xs text-gray-600 mt-1">{scenario.description}</p>
+                              <h4 className="text-figma-base font-semibold text-fw-heading">{scenario.title}</h4>
+                              <p className="text-figma-sm text-fw-bodyLight mt-1">{scenario.description}</p>
                             </div>
                             <Button
                               variant={isActive ? 'primary' : 'outline'}
@@ -292,8 +292,8 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
                             </Button>
                           </div>
                           <div className="mt-3">
-                            <p className="text-xs font-medium text-gray-700 mb-2">Steps:</p>
-                            <ol className="text-xs text-gray-600 space-y-1 list-decimal list-inside">
+                            <p className="text-figma-sm font-medium text-fw-body mb-2">Steps:</p>
+                            <ol className="text-figma-sm text-fw-bodyLight space-y-1 list-decimal list-inside">
                               {scenario.steps.map((step, idx) => (
                                 <li key={idx}>{step}</li>
                               ))}
@@ -308,8 +308,8 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
             </div>
 
             {/* Role Switcher */}
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <h4 className="text-sm font-semibold text-gray-900 mb-3">Manual Role Switch</h4>
+            <div className="mt-6 p-4 bg-fw-wash rounded-lg border border-fw-secondary">
+              <h4 className="text-figma-base font-semibold text-fw-heading mb-3 tracking-[-0.03em]">Manual Role Switch</h4>
               <div className="grid grid-cols-3 gap-3">
                 {(['user', 'admin', 'super-admin'] as Role[]).map((role) => (
                   <button
@@ -317,12 +317,12 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
                     onClick={() => setRole(role)}
                     className={`p-3 rounded-lg border-2 transition-all ${
                       currentRole === role
-                        ? 'border-blue-500 bg-blue-50 shadow-sm'
-                        : 'border-gray-200 bg-white hover:border-blue-300'
+                        ? 'border-fw-active bg-fw-accent shadow-sm'
+                        : 'border-fw-secondary bg-fw-base hover:border-fw-active'
                     }`}
                   >
-                    <p className={`text-sm font-semibold capitalize ${
-                      currentRole === role ? 'text-blue-900' : 'text-gray-700'
+                    <p className={`text-figma-base font-semibold capitalize ${
+                      currentRole === role ? 'text-fw-heading' : 'text-fw-body'
                     }`}>
                       {role.replace('-', ' ')}
                     </p>
@@ -338,10 +338,10 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-gray-200 p-4 bg-gray-50">
+          <div className="border-t border-fw-secondary p-4 bg-fw-wash">
             <div className="flex items-center justify-between">
-              <p className="text-xs text-gray-600">
-                💡 Tip: Run a demo scenario to see RBAC in action
+              <p className="text-figma-sm text-fw-bodyLight">
+                Tip: Run a demo scenario to see RBAC in action
               </p>
               <Button variant="outline" onClick={onClose}>
                 Close Panel

@@ -123,9 +123,9 @@ export function Layer3IPv4Policy() {
   const renderToggles = (items: PolicyToggle[], section: 'deny' | 'manipulations' | 'allow' | 'advanced') => (
     <div className="space-y-4">
       {items.map(item => (
-        <div key={item.id} className="flex items-center bg-gray-50 p-4 rounded-lg">
+        <div key={item.id} className="flex items-center bg-fw-wash p-4 rounded-xl">
           <div className="flex-1">
-            <div className="text-sm font-medium text-gray-900 mb-2">{item.label}</div>
+            <div className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">{item.label}</div>
             <div className="flex items-center space-x-8">
               {/* On Premise to Partner Toggle */}
               {!item.hideOnPremiseToPartner && (
@@ -134,8 +134,8 @@ export function Layer3IPv4Policy() {
                     onClick={() => handleToggle(section, item.id, 'onPremiseToPartner')}
                     className={`
                       toggle-switch relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer border-2 border-transparent
-                      transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2
-                      ${item.onPremiseToPartner ? 'bg-brand-blue' : 'bg-gray-200'}
+                      transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-fw-active focus:ring-offset-2
+                      ${item.onPremiseToPartner ? 'bg-fw-cobalt-600' : 'bg-fw-neutral'}
                     `}
                   >
                     <span
@@ -146,7 +146,7 @@ export function Layer3IPv4Policy() {
                       `}
                     />
                   </button>
-                  <span className="text-xs font-medium text-gray-500">On Premise → Partner</span>
+                  <span className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">On Premise → Partner</span>
                 </div>
               )}
 
@@ -156,8 +156,8 @@ export function Layer3IPv4Policy() {
                   onClick={() => handleToggle(section, item.id, 'partnerToOnPremise')}
                   className={`
                     toggle-switch relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer border-2 border-transparent
-                    transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2
-                    ${item.partnerToOnPremise ? 'bg-brand-blue' : 'bg-gray-200'}
+                    transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-fw-active focus:ring-offset-2
+                    ${item.partnerToOnPremise ? 'bg-fw-cobalt-600' : 'bg-fw-neutral'}
                   `}
                 >
                   <span
@@ -168,7 +168,7 @@ export function Layer3IPv4Policy() {
                     `}
                   />
                 </button>
-                <span className="text-xs font-medium text-gray-500">Partner → On Premise</span>
+                <span className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">Partner → On Premise</span>
               </div>
             </div>
           </div>
@@ -180,33 +180,33 @@ export function Layer3IPv4Policy() {
   return (
     <div className="space-y-8">
       <div className="card">
-        <div className="card-header bg-gray-50">
-          <h2 className="text-lg font-medium text-gray-900">Layer 3 IPV4 Configuration</h2>
+        <div className="card-header bg-fw-wash">
+          <h2 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] tracking-[-0.03em]">Layer 3 IPV4 Configuration</h2>
         </div>
         
         <div className="p-6">
           <div className="space-y-8">
             {/* Deny Actions */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Deny Actions</h3>
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Deny Actions</h3>
               {renderToggles(denyActions, 'deny')}
             </div>
 
             {/* Manipulations */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Manipulations</h3>
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Manipulations</h3>
               {renderToggles(manipulations, 'manipulations')}
             </div>
 
             {/* Allow Actions */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Allow Actions</h3>
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Allow Actions</h3>
               {renderToggles(allowActions, 'allow')}
             </div>
 
             {/* Advanced */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Advanced</h3>
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Advanced</h3>
               {renderToggles(advanced, 'advanced')}
             </div>
           </div>

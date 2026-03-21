@@ -273,8 +273,8 @@ export function LinkSection({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Links</h2>
-          <p className="text-sm text-gray-600 mt-1">
+          <h2 className="text-figma-xl font-bold text-fw-heading tracking-[-0.04em]">Links</h2>
+          <p className="text-figma-base text-fw-bodyLight mt-1">
             Manage network links (VLANs) and their configurations
           </p>
         </div>
@@ -292,8 +292,8 @@ export function LinkSection({
       <LinkStatusSummary links={links} />
 
       {/* Table Card */}
-      <div className="bg-white rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary">
+        <div className="px-6 py-4 border-b border-fw-secondary">
           <div className="flex items-center justify-between gap-4">
             <div className="relative flex-1 max-w-md">
               <input
@@ -301,10 +301,10 @@ export function LinkSection({
                 placeholder="Search links..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm w-full"
+                className="pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active text-figma-base w-full"
               />
               <svg
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-4 w-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -321,7 +321,7 @@ export function LinkSection({
               <select
                 value={selectedCloudRouter}
                 onChange={(e) => setSelectedCloudRouter(e.target.value)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="px-4 py-2 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
               >
                 <option value="all">All Cloud Routers</option>
                 {cloudRouters.map(router => (
@@ -343,7 +343,7 @@ export function LinkSection({
                   a.click();
                   URL.revokeObjectURL(url);
                 }}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-4 py-2 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
               >
                 <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

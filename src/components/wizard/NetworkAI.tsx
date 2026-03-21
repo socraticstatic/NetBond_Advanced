@@ -295,7 +295,7 @@ export function NetworkAI({
       <button
         className={`
           fixed bottom-8 left-8 flex items-center justify-center h-12 w-12 rounded-full
-          ${isOpen ? 'bg-[#003184] text-white' : 'bg-gray-100 text-[#003184]'}
+          ${isOpen ? 'bg-fw-active text-white' : 'bg-fw-neutral text-fw-link'}
           z-50 transition-all duration-200 shadow-md
         `}
         onClick={() => setIsOpen(!isOpen)}
@@ -308,8 +308,8 @@ export function NetworkAI({
           <div className="relative flex items-center justify-center h-10 w-10">
             <Zap className="h-6 w-6" />
             <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+              <span className="absolute inline-flex h-full w-full rounded-full bg-fw-success opacity-75 animate-ping"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-fw-success"></span>
             </span>
           </div>
         )}
@@ -319,7 +319,7 @@ export function NetworkAI({
       <div
         ref={dragRef}
         className={`
-          fixed bg-white border border-gray-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden
+          fixed bg-fw-base border border-fw-secondary rounded-2xl shadow-2xl flex flex-col overflow-hidden
           ${isOpen ? 'w-96 h-[600px] opacity-100' : 'w-0 h-0 opacity-0 pointer-events-none'}
           ${isDragging ? 'cursor-grabbing select-none' : ''}
         `}
@@ -331,7 +331,7 @@ export function NetworkAI({
       >
         {/* Header - Sticky and Draggable */}
         <div
-          className="flex items-center justify-between p-3 bg-[#003184] text-white sticky top-0 z-10 cursor-grab active:cursor-grabbing"
+          className="flex items-center justify-between p-3 bg-fw-active text-white sticky top-0 z-10 cursor-grab active:cursor-grabbing"
           onMouseDown={handleMouseDown}
         >
           <div className="flex items-center flex-1">
@@ -340,41 +340,41 @@ export function NetworkAI({
               <Zap className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h3 className="text-sm font-medium">Niva</h3>
-              <p className="text-xs text-white/70">NetBond Advanced AI Assistant</p>
+              <h3 className="text-figma-base font-medium">Niva</h3>
+              <p className="text-figma-sm text-white/70">NetBond Advanced AI Assistant</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             <div className="flex h-6 items-center justify-center">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fw-success opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-fw-success"></span>
               </span>
             </div>
           </div>
         </div>
 
         {/* Messages Container - Scrollable */}
-        <div className="p-3 flex-1 overflow-y-auto bg-gray-50">
+        <div className="p-3 flex-1 overflow-y-auto bg-fw-wash">
           {messages.map((message, index) => (
             <div key={index} className={`mb-3 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`
                 max-w-[85%] rounded-lg p-3
                 ${message.role === 'user' 
-                  ? 'bg-[#003184] text-white' 
-                  : 'bg-white border border-gray-200 shadow-sm'
+                  ? 'bg-fw-active text-white' 
+                  : 'bg-fw-base border border-fw-secondary shadow-sm'
                 }
               `}>
                 {message.role === 'assistant' && (
                   <div className="flex items-center mb-1">
-                    <div className="h-5 w-5 rounded-full flex items-center justify-center bg-[#003184]/10 mr-1.5">
-                      <Zap className="h-3.5 w-3.5 text-[#003184]" />
+                    <div className="h-5 w-5 rounded-full flex items-center justify-center bg-fw-active/10 mr-1.5">
+                      <Zap className="h-3.5 w-3.5 text-fw-link" />
                     </div>
-                    <span className="text-xs font-medium text-[#003184]">Niva</span>
+                    <span className="text-figma-sm font-medium text-fw-link">Niva</span>
                   </div>
                 )}
-                <div 
-                  className="text-sm"
+                <div
+                  className="text-figma-base"
                   dangerouslySetInnerHTML={{ 
                     __html: formatMessage(message.content)
                   }}
@@ -386,18 +386,18 @@ export function NetworkAI({
           {/* Typing animation when a message is being typed */}
           {currentTypingMessage && (
             <div className="flex justify-start mb-3">
-              <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm max-w-[85%]">
+              <div className="bg-fw-base border border-fw-secondary rounded-lg p-3 shadow-sm max-w-[85%]">
                 <div className="flex items-center mb-1">
-                  <div className="h-5 w-5 rounded-full flex items-center justify-center bg-[#003184]/10 mr-1.5">
-                    <Zap className="h-3.5 w-3.5 text-[#003184]" />
+                  <div className="h-5 w-5 rounded-full flex items-center justify-center bg-fw-active/10 mr-1.5">
+                    <Zap className="h-3.5 w-3.5 text-fw-link" />
                   </div>
-                  <span className="text-xs font-medium text-[#003184]">Niva</span>
+                  <span className="text-figma-sm font-medium text-fw-link">Niva</span>
                 </div>
-                <div className="text-sm">
+                <div className="text-figma-base">
                   <span dangerouslySetInnerHTML={{
                     __html: formatMessage(currentTypingMessage.substring(0, typingIndex))
                   }} />
-                  <span className="inline-block w-2 h-4 ml-0.5 bg-[#003184] animate-pulse"></span>
+                  <span className="inline-block w-2 h-4 ml-0.5 bg-fw-active animate-pulse"></span>
                 </div>
               </div>
             </div>
@@ -406,17 +406,17 @@ export function NetworkAI({
           {/* Traditional thinking animation */}
           {isThinking && !currentTypingMessage && (
             <div className="flex justify-start mb-3">
-              <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm max-w-[85%]">
+              <div className="bg-fw-base border border-fw-secondary rounded-lg p-3 shadow-sm max-w-[85%]">
                 <div className="flex items-center mb-1">
-                  <div className="h-5 w-5 rounded-full flex items-center justify-center bg-[#003184]/10 mr-1.5">
-                    <Zap className="h-3.5 w-3.5 text-[#003184]" />
+                  <div className="h-5 w-5 rounded-full flex items-center justify-center bg-fw-active/10 mr-1.5">
+                    <Zap className="h-3.5 w-3.5 text-fw-link" />
                   </div>
-                  <span className="text-xs font-medium text-[#003184]">Niva</span>
+                  <span className="text-figma-sm font-medium text-fw-link">Niva</span>
                 </div>
                 <div className="flex space-x-1 items-center">
-                  <div className="h-2 w-2 bg-[#003184] rounded-full animate-pulse"></div>
-                  <div className="h-2 w-2 bg-[#003184] rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="h-2 w-2 bg-[#003184] rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                  <div className="h-2 w-2 bg-fw-active rounded-full animate-pulse"></div>
+                  <div className="h-2 w-2 bg-fw-active rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="h-2 w-2 bg-fw-active rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                 </div>
               </div>
             </div>
@@ -426,14 +426,14 @@ export function NetworkAI({
         </div>
 
         {/* Action Buttons - Sticky Footer */}
-        <div className="p-2 border-t border-gray-200 bg-white sticky bottom-0 z-10">
+        <div className="p-2 border-t border-fw-secondary bg-fw-base sticky bottom-0 z-10">
           {(messages[messages.length - 1]?.content.includes('Would you like me to select') ||
              messages[messages.length - 1]?.content.includes('recommend')) && 
              !isThinking && !currentTypingMessage && (
             <div className="flex space-x-2 mb-2">
               <button
                 onClick={handleApplySuggestion}
-                className="flex-1 flex items-center justify-center bg-[#003184]/10 text-[#003184] rounded-lg px-3 py-2 text-sm font-medium hover:bg-[#003184]/20"
+                className="flex-1 flex items-center justify-center bg-fw-active/10 text-fw-link rounded-lg px-3 py-2 text-figma-base font-medium hover:bg-fw-active/20"
               >
                 <Zap className="h-4 w-4 mr-2" />
                 Apply Recommendation
@@ -441,7 +441,7 @@ export function NetworkAI({
               {onNextStep && (
                 <button
                   onClick={handleAdvanceStep}
-                  className="flex items-center justify-center bg-[#003184]/10 text-[#003184] rounded-lg px-3 py-2 text-sm font-medium hover:bg-[#003184]/20"
+                  className="flex items-center justify-center bg-fw-active/10 text-fw-link rounded-lg px-3 py-2 text-figma-base font-medium hover:bg-fw-active/20"
                 >
                   <ArrowRight className="h-4 w-4" />
                 </button>
@@ -457,7 +457,7 @@ export function NetworkAI({
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder={`${getTimeBasedGreeting()}, how can I help?`}
-                className="w-full rounded-full border-gray-300 pr-10 focus:border-[#003184] focus:ring-[#003184] text-sm"
+                className="w-full rounded-full border-fw-secondary pr-10 focus:border-fw-active focus:ring-fw-active text-figma-base"
                 disabled={isThinking || Boolean(currentTypingMessage)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !isThinking && !currentTypingMessage && inputValue.trim()) {
@@ -469,7 +469,7 @@ export function NetworkAI({
               <button
                 disabled={isThinking || Boolean(currentTypingMessage) || !inputValue.trim()}
                 onClick={handleSubmit}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-[#003184]"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-fw-bodyLight hover:text-fw-link"
                 aria-label="Send message"
               >
                 <Send className="h-4 w-4" />
@@ -485,7 +485,7 @@ export function NetworkAI({
               disabled={isThinking || Boolean(currentTypingMessage)}
               className={`
                 p-2 rounded-full 
-                ${(isThinking || Boolean(currentTypingMessage)) ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-[#003184] text-white hover:bg-[#002255]'}
+                ${(isThinking || Boolean(currentTypingMessage)) ? 'bg-fw-neutral text-fw-bodyLight cursor-not-allowed' : 'bg-fw-active text-white hover:bg-fw-linkHover'}
               `}
               title="Advance to next step"
               aria-label="Advance to next step"
@@ -497,11 +497,11 @@ export function NetworkAI({
           {/* Dynamic footer status message */}
           {(isThinking || currentTypingMessage) ? (
             <div className="mt-1 text-center">
-              <span className="text-xs text-gray-500">Niva is typing...</span>
+              <span className="text-figma-sm text-fw-bodyLight">Niva is typing...</span>
             </div>
           ) : (
             <div className="mt-1 text-center">
-              <span className="text-xs text-gray-500">Powered by AT&T AI</span>
+              <span className="text-figma-sm text-fw-bodyLight">Powered by AT&T AI</span>
             </div>
           )}
         </div>

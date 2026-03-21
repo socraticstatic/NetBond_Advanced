@@ -2,8 +2,8 @@ import { lazy, Suspense, ComponentProps, memo } from 'react';
 
 // Minimal loading placeholder
 const ChartPlaceholder = memo(() => (
-  <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
-    <div className="h-4 w-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+  <div className="w-full h-full flex items-center justify-center bg-fw-wash rounded-lg">
+    <div className="h-4 w-4 border-2 border-fw-secondary border-t-fw-cobalt-600 rounded-full animate-spin"></div>
   </div>
 ));
 

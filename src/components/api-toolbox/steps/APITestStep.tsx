@@ -68,20 +68,20 @@ export function APITestStep({ config, onChange, onNext }: APITestStepProps) {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-gray-900 text-center mb-8">
+      <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">
         Test API Connection
       </h3>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
+      <div className="bg-fw-base border border-fw-secondary rounded-lg p-6">
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-figma-sm font-medium text-fw-body mb-2">
               Select Endpoint to Test
             </label>
             <select
               value={selectedEndpoint}
               onChange={(e) => setSelectedEndpoint(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             >
               <option value="">Choose an endpoint...</option>
               {sampleEndpoints.map((endpoint) => (
@@ -93,13 +93,13 @@ export function APITestStep({ config, onChange, onNext }: APITestStepProps) {
           </div>
 
           <div className="flex items-center justify-between pt-4">
-            <div className="text-sm text-gray-500">
-              API Base URL: <span className="font-mono text-gray-900">{config.baseUrl || 'Not set'}</span>
+            <div className="text-figma-sm text-fw-bodyLight">
+              API Base URL: <span className="font-mono text-fw-heading">{config.baseUrl || 'Not set'}</span>
             </div>
             <button
               onClick={runTest}
               disabled={testing || !selectedEndpoint}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center"
+              className="px-6 py-2 bg-fw-primary text-white rounded-full hover:bg-fw-primaryHover disabled:bg-fw-neutral disabled:cursor-not-allowed transition-colors flex items-center"
             >
               {testing ? (
                 <>
@@ -119,27 +119,27 @@ export function APITestStep({ config, onChange, onNext }: APITestStepProps) {
 
       {testResults && (
         <div className="space-y-4">
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Test Results</h3>
+          <div className="bg-fw-base border border-fw-secondary rounded-lg p-6">
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Test Results</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-fw-wash rounded-lg p-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Status</span>
+                  <span className="text-figma-base font-medium text-fw-body">Status</span>
                   {testResults.status === 'success' && (
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <CheckCircle className="h-5 w-5 text-fw-success" />
                   )}
                   {testResults.status === 'error' && (
-                    <XCircle className="h-5 w-5 text-red-600" />
+                    <XCircle className="h-5 w-5 text-fw-error" />
                   )}
                   {testResults.status === 'pending' && (
-                    <Clock className="h-5 w-5 text-yellow-600 animate-pulse" />
+                    <Clock className="h-5 w-5 text-fw-warn animate-pulse" />
                   )}
                 </div>
-                <div className={`mt-2 text-lg font-semibold ${
-                  testResults.status === 'success' ? 'text-green-600' :
-                  testResults.status === 'error' ? 'text-red-600' :
-                  'text-yellow-600'
+                <div className={`mt-2 text-figma-lg font-semibold ${
+                  testResults.status === 'success' ? 'text-fw-success' :
+                  testResults.status === 'error' ? 'text-fw-error' :
+                  'text-fw-warn'
                 }`}>
                   {testResults.status === 'success' ? 'Success' :
                    testResults.status === 'error' ? 'Failed' :
@@ -147,28 +147,28 @@ export function APITestStep({ config, onChange, onNext }: APITestStepProps) {
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-sm text-gray-600">Response Time</div>
-                <div className="mt-2 text-lg font-semibold text-gray-900">
+              <div className="bg-fw-wash rounded-lg p-4">
+                <div className="text-figma-base font-medium text-fw-body">Response Time</div>
+                <div className="mt-2 text-figma-lg font-semibold text-fw-heading">
                   {testResults.responseTime}ms
                 </div>
-                <div className="mt-1 text-xs text-gray-500">
+                <div className="mt-1 text-figma-sm text-fw-bodyLight">
                   {testResults.responseTime < 100 ? 'Excellent' :
                    testResults.responseTime < 300 ? 'Good' :
                    testResults.responseTime < 1000 ? 'Average' : 'Slow'}
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-sm text-gray-600">Status Code</div>
-                <div className={`mt-2 text-lg font-semibold ${
-                  testResults.statusCode >= 200 && testResults.statusCode < 300 ? 'text-green-600' :
-                  testResults.statusCode >= 400 ? 'text-red-600' :
-                  'text-gray-900'
+              <div className="bg-fw-wash rounded-lg p-4">
+                <div className="text-figma-base font-medium text-fw-body">Status Code</div>
+                <div className={`mt-2 text-figma-lg font-semibold ${
+                  testResults.statusCode >= 200 && testResults.statusCode < 300 ? 'text-fw-success' :
+                  testResults.statusCode >= 400 ? 'text-fw-error' :
+                  'text-fw-heading'
                 }`}>
                   {testResults.statusCode || '—'}
                 </div>
-                <div className="mt-1 text-xs text-gray-500">
+                <div className="mt-1 text-figma-sm text-fw-bodyLight">
                   {testResults.statusCode >= 200 && testResults.statusCode < 300 ? 'OK' :
                    testResults.statusCode >= 400 ? 'Error' : '—'}
                 </div>
@@ -178,17 +178,17 @@ export function APITestStep({ config, onChange, onNext }: APITestStepProps) {
             {testResults.status === 'success' && testResults.data && (
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-sm font-medium text-gray-900 flex items-center">
-                    <FileJson className="h-4 w-4 mr-2 text-blue-600" />
+                  <h4 className="text-figma-base font-medium text-fw-heading flex items-center">
+                    <FileJson className="h-4 w-4 mr-2 text-fw-link" />
                     Response Data
                   </h4>
-                  <button className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center">
+                  <button className="text-figma-base text-fw-link hover:text-fw-linkHover font-medium flex items-center">
                     <Code className="h-4 w-4 mr-1" />
                     Copy JSON
                   </button>
                 </div>
-                <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-                  <pre className="text-xs text-green-400 font-mono">
+                <div className="bg-fw-heading rounded-lg p-4 overflow-x-auto">
+                  <pre className="text-figma-sm text-fw-success font-mono">
                     {JSON.stringify(testResults.data, null, 2)}
                   </pre>
                 </div>
@@ -197,63 +197,63 @@ export function APITestStep({ config, onChange, onNext }: APITestStepProps) {
           </div>
 
           {testResults.status === 'success' && (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Data Mapping Preview</h3>
-              <p className="text-sm text-gray-600 mb-4">
+            <div className="bg-fw-base border border-fw-secondary rounded-lg p-6">
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Data Mapping Preview</h3>
+              <p className="text-figma-base font-medium text-fw-body mb-4">
                 Here's how the API data will be mapped to your network connections:
               </p>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center justify-between p-3 bg-fw-successLight rounded-lg border border-fw-success/20">
                   <div className="flex-1">
-                    <div className="text-xs text-gray-500">API Field</div>
-                    <div className="text-sm font-mono text-gray-900">data.connections[0].bandwidth</div>
+                    <div className="text-figma-sm text-fw-bodyLight">API Field</div>
+                    <div className="text-figma-base font-mono text-fw-heading">data.connections[0].bandwidth</div>
                   </div>
                   <div className="px-4">→</div>
                   <div className="flex-1">
-                    <div className="text-xs text-gray-500">Network Field</div>
-                    <div className="text-sm font-medium text-gray-900">Connection Bandwidth</div>
+                    <div className="text-figma-sm text-fw-bodyLight">Network Field</div>
+                    <div className="text-figma-base font-medium text-fw-heading">Connection Bandwidth</div>
                   </div>
                   <div className="flex-1 text-right">
-                    <div className="text-xs text-gray-500">Value</div>
-                    <div className="text-sm font-semibold text-green-700">10 Gbps</div>
+                    <div className="text-figma-sm text-fw-bodyLight">Value</div>
+                    <div className="text-figma-base font-semibold text-fw-success">10 Gbps</div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center justify-between p-3 bg-fw-successLight rounded-lg border border-fw-success/20">
                   <div className="flex-1">
-                    <div className="text-xs text-gray-500">API Field</div>
-                    <div className="text-sm font-mono text-gray-900">data.connections[0].status</div>
+                    <div className="text-figma-sm text-fw-bodyLight">API Field</div>
+                    <div className="text-figma-base font-mono text-fw-heading">data.connections[0].status</div>
                   </div>
                   <div className="px-4">→</div>
                   <div className="flex-1">
-                    <div className="text-xs text-gray-500">Network Field</div>
-                    <div className="text-sm font-medium text-gray-900">Connection Status</div>
+                    <div className="text-figma-sm text-fw-bodyLight">Network Field</div>
+                    <div className="text-figma-base font-medium text-fw-heading">Connection Status</div>
                   </div>
                   <div className="flex-1 text-right">
-                    <div className="text-xs text-gray-500">Value</div>
-                    <div className="text-sm font-semibold text-green-700">Active</div>
+                    <div className="text-figma-sm text-fw-bodyLight">Value</div>
+                    <div className="text-figma-base font-semibold text-fw-success">Active</div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center justify-between p-3 bg-fw-successLight rounded-lg border border-fw-success/20">
                   <div className="flex-1">
-                    <div className="text-xs text-gray-500">API Field</div>
-                    <div className="text-sm font-mono text-gray-900">data.connections[0].latency</div>
+                    <div className="text-figma-sm text-fw-bodyLight">API Field</div>
+                    <div className="text-figma-base font-mono text-fw-heading">data.connections[0].latency</div>
                   </div>
                   <div className="px-4">→</div>
                   <div className="flex-1">
-                    <div className="text-xs text-gray-500">Network Field</div>
-                    <div className="text-sm font-medium text-gray-900">Connection Latency</div>
+                    <div className="text-figma-sm text-fw-bodyLight">Network Field</div>
+                    <div className="text-figma-base font-medium text-fw-heading">Connection Latency</div>
                   </div>
                   <div className="flex-1 text-right">
-                    <div className="text-xs text-gray-500">Value</div>
-                    <div className="text-sm font-semibold text-green-700">5.2 ms</div>
+                    <div className="text-figma-sm text-fw-bodyLight">Value</div>
+                    <div className="text-figma-base font-semibold text-fw-success">5.2 ms</div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 flex items-center text-sm text-green-700">
+              <div className="mt-4 flex items-center text-figma-base text-fw-success">
                 <CheckCircle className="h-4 w-4 mr-2" />
                 All mappings validated successfully
               </div>
@@ -261,12 +261,12 @@ export function APITestStep({ config, onChange, onNext }: APITestStepProps) {
           )}
 
           {testResults.status === 'error' && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="bg-fw-errorLight border border-fw-error/20 rounded-lg p-4">
               <div className="flex items-start">
-                <XCircle className="h-5 w-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" />
+                <XCircle className="h-5 w-5 text-fw-error mt-0.5 mr-3 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-medium text-red-900">Test Failed</p>
-                  <p className="text-sm text-red-700 mt-1">
+                  <p className="text-figma-base font-medium text-fw-error">Test Failed</p>
+                  <p className="text-figma-base text-fw-error mt-1">
                     Unable to connect to the API. Please check your configuration and try again.
                   </p>
                 </div>
@@ -277,19 +277,19 @@ export function APITestStep({ config, onChange, onNext }: APITestStepProps) {
       )}
 
       {!testResults && (
-        <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
-          <PlayCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600 mb-2">No tests run yet</p>
-          <p className="text-sm text-gray-500">
+        <div className="bg-fw-wash border-2 border-dashed border-fw-secondary rounded-lg p-12 text-center">
+          <PlayCircle className="h-16 w-16 text-fw-bodyLight mx-auto mb-4" />
+          <p className="text-figma-base text-fw-body mb-2">No tests run yet</p>
+          <p className="text-figma-sm text-fw-bodyLight">
             Select an endpoint and click "Run Test" to verify your API connection
           </p>
         </div>
       )}
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-fw-accent border border-fw-active rounded-lg p-4">
         <div className="flex items-start">
-          <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
-          <div className="text-sm text-blue-800">
+          <CheckCircle className="h-5 w-5 text-fw-link mt-0.5 mr-3 flex-shrink-0" />
+          <div className="text-figma-base font-medium text-fw-linkHover">
             <p className="font-medium">Testing Best Practices</p>
             <ul className="mt-2 space-y-1 list-disc list-inside">
               <li>Test all critical endpoints before deploying</li>

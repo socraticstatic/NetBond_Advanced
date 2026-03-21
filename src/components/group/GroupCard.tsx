@@ -8,7 +8,8 @@ import {
   GroupCardMetrics,
   GroupCardFooter,
   GroupCardProgress,
-  GroupCardStatus
+  GroupCardStatus,
+  GroupCardInfo
 } from './card';
 import { GroupOverflowMenu } from './GroupOverflowMenu';
 import { IconButton } from '../common/IconButton';
@@ -38,7 +39,8 @@ export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardPro
 
   return (
     <motion.div
-      className="relative bg-fw-base rounded-xl border border-fw-secondary shadow-sm hover:shadow-md transition-all duration-300 ease-in-out transform hover:translate-y-[-2px] cursor-pointer"
+      className="relative bg-fw-base rounded-[16px] border border-fw-secondary shadow-sm hover:shadow-md transition-all duration-300 ease-in-out transform hover:translate-y-[-2px] cursor-pointer"
+      style={{ width: '368px', minHeight: isMinimized ? 'auto' : '562px' }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -48,13 +50,13 @@ export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardPro
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center space-x-3 flex-1 min-w-0">
             <div className="p-2 bg-fw-wash rounded-lg">
-              <svg className="h-5 w-5 text-fw-link" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-4 w-4 text-fw-link" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-sm font-medium text-fw-heading truncate">{group.name}</h3>
-              <p className="text-xs text-fw-bodyLight truncate">{group.description}</p>
+              <h3 className="text-figma-base font-medium text-fw-heading truncate">{group.name}</h3>
+              <p className="text-figma-sm text-fw-bodyLight truncate">{group.description}</p>
             </div>
           </div>
           <button
@@ -72,7 +74,7 @@ export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardPro
         </div>
       ) : (
         <>
-          <GroupCardHeader group={group}>
+          <GroupCardHeader group={group} onDelete={onDelete}>
             <div className="flex items-center space-x-2">
               <IconButton
                 icon={<Minimize2 className="h-4 w-4" />}
@@ -88,16 +90,30 @@ export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardPro
             </div>
           </GroupCardHeader>
 
-          <div className="p-4 space-y-4">
+          {/* Separator */}
+          <div className="mx-6 border-t border-fw-secondary" />
+
+          <div className="px-6 py-4 space-y-4">
             {/* Performance Progress Bar */}
             <GroupCardProgress group={group} />
 
-            {/* Pool Metrics */}
+            {/* Pool Metrics (stat boxes + utilization row) */}
             <GroupCardMetrics group={group} />
+
+            {/* Tags */}
+            {group.tags && Object.keys(group.tags).length > 0 && (
+              <GroupCardInfo group={group} />
+            )}
           </div>
+
+          {/* Separator */}
+          <div className="mx-6 border-t border-fw-secondary" />
 
           {/* Status */}
           <GroupCardStatus group={group} />
+
+          {/* Separator */}
+          <div className="mx-6 border-t border-fw-secondary" />
 
           {/* Action */}
           <GroupCardFooter onManageClick={handleManageClick} />

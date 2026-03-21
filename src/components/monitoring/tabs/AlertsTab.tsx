@@ -22,7 +22,7 @@ export function AlertsTab() {
     <div className="p-6">
       <div className="flex">
         {/* Vertical Tabs */}
-        <div className="w-48 shrink-0 border-r border-gray-200 pr-4">
+        <div className="w-[186px] shrink-0 border-r border-fw-secondary pr-4">
           <nav className="space-y-1" aria-label="Alerts Navigation">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -31,16 +31,16 @@ export function AlertsTab() {
                   key={tab.id}
                   onClick={() => setActiveSubTab(tab.id as typeof activeSubTab)}
                   className={`
-                    w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg
-                    transition-colors duration-200
+                    w-full flex items-center text-left px-4 py-3 text-figma-base font-medium no-rounded
+                    transition-colors duration-200 border-l-2
                     ${activeSubTab === tab.id
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'border-fw-active text-fw-link'
+                      : 'border-transparent text-fw-heading hover:text-fw-link hover:border-fw-secondary'
                     }
                   `}
                 >
                   <Icon className={`h-5 w-5 mr-3 ${
-                    activeSubTab === tab.id ? 'text-blue-500' : 'text-gray-400'
+                    activeSubTab === tab.id ? 'text-fw-link' : 'text-fw-heading'
                   }`} />
                   {tab.label}
                 </button>

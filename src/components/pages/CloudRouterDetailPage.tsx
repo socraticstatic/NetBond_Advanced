@@ -69,12 +69,12 @@ export function CloudRouterDetailPage() {
   }, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-fw-wash">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <button
             onClick={() => navigate(`/connections/${parentConnection.id}`)}
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4"
+            className="inline-flex items-center text-figma-sm font-medium text-fw-bodyLight hover:text-fw-heading mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Connection
@@ -83,27 +83,27 @@ export function CloudRouterDetailPage() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <GitBranch className="h-8 w-8 text-blue-600" />
-                <h1 className="text-3xl font-bold text-gray-900">{cloudRouter.name}</h1>
+                <GitBranch className="h-8 w-8 text-fw-link" />
+                <h1 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">{cloudRouter.name}</h1>
               </div>
               {cloudRouter.description && (
-                <p className="mt-2 text-gray-600">{cloudRouter.description}</p>
+                <p className="mt-2 text-figma-base font-medium text-fw-body">{cloudRouter.description}</p>
               )}
               <div className="mt-3 flex items-center gap-3 flex-wrap">
                 <StatusBadge
                   status={cloudRouter.status}
                   label={cloudRouter.status.charAt(0).toUpperCase() + cloudRouter.status.slice(1)}
                 />
-                <span className="inline-flex items-center text-sm text-gray-600">
+                <span className="inline-flex items-center text-figma-sm font-medium text-fw-bodyLight">
                   <MapPin className="h-4 w-4 mr-1" />
                   {cloudRouter.location}
                 </span>
                 {cloudRouter.vendor && (
-                  <span className="text-sm text-gray-500">Vendor: {cloudRouter.vendor}</span>
+                  <span className="text-figma-sm font-medium text-fw-bodyLight">Vendor: {cloudRouter.vendor}</span>
                 )}
                 <Link
                   to={`/connections/${parentConnection.id}`}
-                  className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800"
+                  className="inline-flex items-center text-figma-sm text-fw-link hover:text-fw-linkHover"
                 >
                   <ExternalLink className="h-4 w-4 mr-1" />
                   View Parent Connection
@@ -163,7 +163,7 @@ export function CloudRouterDetailPage() {
         </div>
 
         <div className="mb-6">
-          <div className="border-b border-gray-200">
+          <div className="border-b border-fw-secondary">
             <nav className="-mb-px flex space-x-8">
               {[
                 { id: 'overview', label: 'Overview', icon: Settings },
@@ -175,10 +175,10 @@ export function CloudRouterDetailPage() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`
-                    flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm
+                    flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-figma-base no-rounded tracking-[-0.03em]
                     ${activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-fw-active text-fw-link'
+                      : 'border-transparent text-fw-bodyLight hover:text-fw-body hover:border-fw-secondary'
                     }
                   `}
                 >
@@ -194,14 +194,14 @@ export function CloudRouterDetailPage() {
           <div className="space-y-6">
             <Card>
               <div className="p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Router Information</h3>
+                <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Router Information</h3>
                 <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Router ID</dt>
-                    <dd className="mt-1 text-sm text-gray-900 font-mono">{cloudRouter.id}</dd>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Router ID</dt>
+                    <dd className="mt-1 text-figma-base font-medium text-fw-heading font-mono">{cloudRouter.id}</dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Status</dt>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Status</dt>
                     <dd className="mt-1">
                       <StatusBadge
                         status={cloudRouter.status}
@@ -210,27 +210,27 @@ export function CloudRouterDetailPage() {
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Location</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{cloudRouter.location}</dd>
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Location</dt>
+                    <dd className="mt-1 text-figma-base font-medium text-fw-heading">{cloudRouter.location}</dd>
                   </div>
                   {cloudRouter.vendor && (
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">Vendor</dt>
-                      <dd className="mt-1 text-sm text-gray-900">{cloudRouter.vendor}</dd>
+                      <dt className="text-figma-sm font-medium text-fw-bodyLight">Vendor</dt>
+                      <dd className="mt-1 text-figma-base font-medium text-fw-heading">{cloudRouter.vendor}</dd>
                     </div>
                   )}
                   {cloudRouter.ipeName && (
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">IPE</dt>
-                      <dd className="mt-1 text-sm text-gray-900">
+                      <dt className="text-figma-sm font-medium text-fw-bodyLight">IPE</dt>
+                      <dd className="mt-1 text-figma-base font-medium text-fw-heading">
                         {cloudRouter.ipeName}
                         {cloudRouter.ipeLocation && ` (${cloudRouter.ipeLocation})`}
                       </dd>
                     </div>
                   )}
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Created</dt>
-                    <dd className="mt-1 text-sm text-gray-900">
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Created</dt>
+                    <dd className="mt-1 text-figma-base font-medium text-fw-heading">
                       {new Date(cloudRouter.createdAt).toLocaleString()}
                     </dd>
                   </div>
@@ -241,21 +241,21 @@ export function CloudRouterDetailPage() {
             {cloudRouter.configuration && (
               <Card>
                 <div className="p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Configuration</h3>
+                  <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Configuration</h3>
                   <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {cloudRouter.configuration.asn && (
                       <div>
-                        <dt className="text-sm font-medium text-gray-500">ASN</dt>
-                        <dd className="mt-1 text-sm text-gray-900 font-mono">
+                        <dt className="text-figma-sm font-medium text-fw-bodyLight">ASN</dt>
+                        <dd className="mt-1 text-figma-base font-medium text-fw-heading font-mono">
                           {cloudRouter.configuration.asn}
                         </dd>
                       </div>
                     )}
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">BGP</dt>
+                      <dt className="text-figma-sm font-medium text-fw-bodyLight">BGP</dt>
                       <dd className="mt-1">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          cloudRouter.configuration.bgpEnabled ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-lg text-figma-sm font-medium ${
+                          cloudRouter.configuration.bgpEnabled ? 'bg-fw-successLight text-fw-success' : 'bg-fw-neutral text-fw-heading'
                         }`}>
                           {cloudRouter.configuration.bgpEnabled ? 'Enabled' : 'Disabled'}
                         </span>
@@ -263,13 +263,13 @@ export function CloudRouterDetailPage() {
                     </div>
                     {cloudRouter.configuration.routeFilters && cloudRouter.configuration.routeFilters.length > 0 && (
                       <div className="md:col-span-2">
-                        <dt className="text-sm font-medium text-gray-500 mb-2">Route Filters</dt>
+                        <dt className="text-figma-sm font-medium text-fw-bodyLight mb-2">Route Filters</dt>
                         <dd className="mt-1">
                           <div className="flex flex-wrap gap-2">
                             {cloudRouter.configuration.routeFilters.map((filter: string, index: number) => (
                               <span
                                 key={index}
-                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                                className="inline-flex items-center px-2.5 py-0.5 rounded-lg text-figma-sm font-medium bg-fw-accent text-fw-link"
                               >
                                 {filter}
                               </span>
@@ -286,24 +286,24 @@ export function CloudRouterDetailPage() {
             {cloudRouter.policies && (
               <Card>
                 <div className="p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">Policies</h3>
+                  <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Policies</h3>
                   <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {cloudRouter.policies.routingPolicy && (
                       <div>
-                        <dt className="text-sm font-medium text-gray-500">Routing Policy</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{cloudRouter.policies.routingPolicy}</dd>
+                        <dt className="text-figma-sm font-medium text-fw-bodyLight">Routing Policy</dt>
+                        <dd className="mt-1 text-figma-base font-medium text-fw-heading">{cloudRouter.policies.routingPolicy}</dd>
                       </div>
                     )}
                     {cloudRouter.policies.securityPolicy && (
                       <div>
-                        <dt className="text-sm font-medium text-gray-500">Security Policy</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{cloudRouter.policies.securityPolicy}</dd>
+                        <dt className="text-figma-sm font-medium text-fw-bodyLight">Security Policy</dt>
+                        <dd className="mt-1 text-figma-base font-medium text-fw-heading">{cloudRouter.policies.securityPolicy}</dd>
                       </div>
                     )}
                     {cloudRouter.policies.qosPolicy && (
                       <div>
-                        <dt className="text-sm font-medium text-gray-500">QoS Policy</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{cloudRouter.policies.qosPolicy}</dd>
+                        <dt className="text-figma-sm font-medium text-fw-bodyLight">QoS Policy</dt>
+                        <dd className="mt-1 text-figma-base font-medium text-fw-heading">{cloudRouter.policies.qosPolicy}</dd>
                       </div>
                     )}
                   </dl>
@@ -316,12 +316,12 @@ export function CloudRouterDetailPage() {
         {activeTab === 'links' && (
           <Card>
             <div className="p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Links</h3>
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Links</h3>
               {routerLinks.length === 0 ? (
                 <div className="text-center py-12">
-                  <Network className="mx-auto h-12 w-12 text-gray-400" />
-                  <h3 className="mt-2 text-sm font-medium text-gray-900">No links</h3>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <Network className="mx-auto h-12 w-12 text-fw-bodyLight" />
+                  <h3 className="mt-2 text-figma-base font-medium text-fw-heading">No links</h3>
+                  <p className="mt-1 text-figma-sm font-medium text-fw-bodyLight">
                     This router has no associated links.
                   </p>
                 </div>
@@ -330,18 +330,18 @@ export function CloudRouterDetailPage() {
                   {routerLinks.map((link: any) => (
                     <div
                       key={link.id}
-                      className="border border-gray-200 rounded-lg p-4"
+                      className="border border-fw-secondary rounded-lg p-4"
                     >
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="flex items-center gap-3">
-                            <h4 className="font-medium text-gray-900">{link.name}</h4>
+                            <h4 className="font-medium text-fw-heading">{link.name}</h4>
                             <StatusBadge
                               status={link.status}
                               label={link.status.charAt(0).toUpperCase() + link.status.slice(1)}
                             />
                           </div>
-                          <div className="mt-2 flex items-center gap-6 text-sm text-gray-500">
+                          <div className="mt-2 flex items-center gap-6 text-figma-sm font-medium text-fw-bodyLight">
                             <span>VLAN {link.vlanId}</span>
                             {link.bandwidth && <span>{link.bandwidth}</span>}
                             {link.ipSubnet && <span>{link.ipSubnet}</span>}
@@ -360,41 +360,41 @@ export function CloudRouterDetailPage() {
           <div className="space-y-6">
             <Card>
               <div className="p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Performance Metrics</h3>
+                <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Performance Metrics</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Latency</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Latency</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       {cloudRouter.performance?.latency || 'N/A'}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Throughput</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Throughput</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       {cloudRouter.performance?.throughput || 'N/A'}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">CPU Usage</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">CPU Usage</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       {cloudRouter.performance?.cpuUsage || 0}%
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Memory Usage</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Memory Usage</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       {cloudRouter.performance?.memoryUsage || 0}%
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Routing Table Size</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Routing Table Size</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       {cloudRouter.performance?.routingTableSize?.toLocaleString() || 0}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-sm font-medium text-gray-500">Packet Forwarding Rate</dt>
-                    <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                    <dt className="text-figma-sm font-medium text-fw-bodyLight">Packet Forwarding Rate</dt>
+                    <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                       {cloudRouter.performance?.packetForwardingRate || 0} Mpps
                     </dd>
                   </div>
@@ -405,23 +405,23 @@ export function CloudRouterDetailPage() {
             {cloudRouter.performance?.bgpSessions && (
               <Card>
                 <div className="p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">BGP Sessions</h3>
+                  <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">BGP Sessions</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">Total</dt>
-                      <dd className="mt-2 text-3xl font-semibold text-gray-900">
+                      <dt className="text-figma-sm font-medium text-fw-bodyLight">Total</dt>
+                      <dd className="mt-2 text-3xl font-semibold text-fw-heading">
                         {cloudRouter.performance.bgpSessions.total}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">Active</dt>
-                      <dd className="mt-2 text-3xl font-semibold text-green-600">
+                      <dt className="text-figma-sm font-medium text-fw-bodyLight">Active</dt>
+                      <dd className="mt-2 text-3xl font-semibold text-fw-success">
                         {cloudRouter.performance.bgpSessions.active}
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">Idle</dt>
-                      <dd className="mt-2 text-3xl font-semibold text-gray-400">
+                      <dt className="text-figma-sm font-medium text-fw-bodyLight">Idle</dt>
+                      <dd className="mt-2 text-3xl font-semibold text-fw-bodyLight">
                         {cloudRouter.performance.bgpSessions.idle}
                       </dd>
                     </div>

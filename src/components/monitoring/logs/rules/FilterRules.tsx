@@ -149,8 +149,8 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h3 className="text-lg font-medium text-gray-900">Filter Rules</h3>
-          <p className="text-sm text-gray-500 mt-1">
+          <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">Filter Rules</h3>
+          <p className="text-figma-base text-fw-bodyLight mt-1">
             Create and manage custom filters for quick log access
           </p>
         </div>
@@ -166,10 +166,10 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
 
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
         <div className="flex">
-          <Filter className="h-5 w-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
+          <Filter className="h-5 w-5 text-fw-success mr-3 flex-shrink-0 mt-0.5" />
           <div>
-            <h4 className="text-sm font-medium text-green-900">Filter Tips</h4>
-            <p className="text-sm text-green-700 mt-1">
+            <h4 className="text-figma-base font-medium text-green-900">Filter Tips</h4>
+            <p className="text-figma-base text-green-700 mt-1">
               Save frequently used filter combinations as rules for quick access. Set a default filter to automatically
               apply when viewing logs. Combine severity, types, and keywords for precise filtering.
             </p>
@@ -183,37 +183,37 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
             key={rule.id}
             className={`card p-6 hover:shadow-md transition-shadow ${
               !rule.enabled ? 'opacity-60' : ''
-            } ${rule.isDefault ? 'border-2 border-blue-500' : ''}`}
+            } ${rule.isDefault ? 'border-2 border-fw-active' : ''}`}
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">
-                  <Filter className={`h-5 w-5 ${rule.enabled ? 'text-green-600' : 'text-gray-400'}`} />
-                  <h4 className="text-base font-semibold text-gray-900">{rule.name}</h4>
+                  <Filter className={`h-5 w-5 ${rule.enabled ? 'text-fw-success' : 'text-fw-bodyLight'}`} />
+                  <h4 className="text-base font-semibold text-fw-heading">{rule.name}</h4>
                   {rule.isDefault && (
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                    <span className="px-2 py-1 rounded-full text-figma-sm font-medium bg-fw-accent text-fw-linkHover border border-fw-active">
                       DEFAULT
                     </span>
                   )}
                   {rule.enabled ? (
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <CheckCircle className="h-4 w-4 text-fw-success" />
                   ) : (
-                    <XCircle className="h-4 w-4 text-gray-400" />
+                    <XCircle className="h-4 w-4 text-fw-bodyLight" />
                   )}
                 </div>
 
-                <p className="text-sm text-gray-600 mb-4">{rule.description}</p>
+                <p className="text-figma-base text-fw-body mb-4">{rule.description}</p>
 
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2 text-figma-base">
                   {rule.filters.severity && rule.filters.severity.length > 0 && (
                     <div className="flex items-start">
-                      <span className="text-gray-500 w-32">Severity:</span>
+                      <span className="text-fw-bodyLight w-32">Severity:</span>
                       <div className="flex flex-wrap gap-1">
                         {rule.filters.severity.map(sev => (
-                          <span key={sev} className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                            sev === 'error' ? 'bg-red-100 text-red-800' :
+                          <span key={sev} className={`px-2 py-0.5 rounded-full text-figma-sm font-medium ${
+                            sev === 'error' ? 'bg-red-50 text-fw-error' :
                             sev === 'warning' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-blue-100 text-blue-800'
+                            'bg-fw-accent text-fw-linkHover'
                           }`}>
                             {sev}
                           </span>
@@ -224,10 +224,10 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
 
                   {rule.filters.types && rule.filters.types.length > 0 && (
                     <div className="flex items-start">
-                      <span className="text-gray-500 w-32">Types:</span>
+                      <span className="text-fw-bodyLight w-32">Types:</span>
                       <div className="flex flex-wrap gap-1">
                         {rule.filters.types.map(type => (
-                          <span key={type} className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          <span key={type} className="px-2 py-0.5 rounded-full text-figma-sm font-medium bg-fw-neutral text-fw-body">
                             {type}
                           </span>
                         ))}
@@ -237,8 +237,8 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
 
                   {rule.filters.keywords && rule.filters.keywords.length > 0 && (
                     <div className="flex items-start">
-                      <span className="text-gray-500 w-32">Keywords:</span>
-                      <span className="text-gray-900 font-mono text-xs">
+                      <span className="text-fw-bodyLight w-32">Keywords:</span>
+                      <span className="text-fw-heading font-mono text-figma-sm">
                         {rule.filters.keywords.join(', ')}
                       </span>
                     </div>
@@ -246,8 +246,8 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
 
                   {rule.filters.excludeKeywords && rule.filters.excludeKeywords.length > 0 && (
                     <div className="flex items-start">
-                      <span className="text-gray-500 w-32">Exclude:</span>
-                      <span className="text-gray-900 font-mono text-xs">
+                      <span className="text-fw-bodyLight w-32">Exclude:</span>
+                      <span className="text-fw-heading font-mono text-figma-sm">
                         {rule.filters.excludeKeywords.join(', ')}
                       </span>
                     </div>
@@ -255,25 +255,25 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
 
                   {rule.filters.timeRange && (
                     <div className="flex items-start">
-                      <span className="text-gray-500 w-32">Time Range:</span>
-                      <span className="text-gray-900">{rule.filters.timeRange}</span>
+                      <span className="text-fw-bodyLight w-32">Time Range:</span>
+                      <span className="text-fw-heading">{rule.filters.timeRange}</span>
                     </div>
                   )}
                 </div>
 
-                <div className="mt-4 flex items-center space-x-6 text-xs text-gray-500">
+                <div className="mt-4 flex items-center space-x-6 text-figma-sm text-fw-bodyLight">
                   <div>
                     <span>Used:</span>
-                    <span className="ml-1 text-gray-900 font-medium">{rule.usageCount} times</span>
+                    <span className="ml-1 text-fw-heading font-medium">{rule.usageCount} times</span>
                   </div>
                   <div>
                     <span>Created by:</span>
-                    <span className="ml-1 text-gray-900">{rule.createdBy}</span>
+                    <span className="ml-1 text-fw-heading">{rule.createdBy}</span>
                   </div>
                   {rule.lastUsed && (
                     <div>
                       <span>Last used:</span>
-                      <span className="ml-1 text-gray-900">{rule.lastUsed}</span>
+                      <span className="ml-1 text-fw-heading">{rule.lastUsed}</span>
                     </div>
                   )}
                 </div>
@@ -283,7 +283,7 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => applyFilter(rule.id)}
-                    className="px-3 py-1.5 text-sm text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                    className="px-3 py-1.5 text-figma-base text-fw-link hover:text-fw-linkHover bg-fw-accent hover:bg-fw-accent rounded-lg transition-colors"
                     disabled={!rule.enabled}
                   >
                     Apply
@@ -296,7 +296,7 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
                       onChange={() => toggleRule(rule.id)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                    <div className="w-11 h-6 bg-fw-neutral peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-fw-active rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-fw-secondary after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fw-success"></div>
                   </label>
                 </div>
 
@@ -304,7 +304,7 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
                   {!rule.isDefault && (
                     <button
                       onClick={() => setDefaultRule(rule.id)}
-                      className="p-2 text-gray-400 hover:text-blue-600 rounded-lg hover:bg-blue-50"
+                      className="p-2 text-fw-bodyLight hover:text-fw-link rounded-lg hover:bg-fw-accent"
                       title="Set as default"
                     >
                       <Save className="h-5 w-5" />
@@ -320,14 +320,14 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
                         duration: 3000
                       });
                     }}
-                    className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+                    className="p-2 text-fw-bodyLight hover:text-fw-body rounded-lg hover:bg-fw-neutral"
                   >
                     <Edit className="h-5 w-5" />
                   </button>
 
                   <button
                     onClick={() => deleteRule(rule.id)}
-                    className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50"
+                    className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-red-50"
                     disabled={rule.isDefault}
                   >
                     <Trash2 className="h-5 w-5" />
@@ -341,12 +341,12 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
 
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-medium mb-4">Create Filter Rule</h3>
-            <div className="text-center py-8 text-gray-500">
-              <Filter className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+          <div className="bg-fw-base rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-medium tracking-[-0.03em] mb-4">Create Filter Rule</h3>
+            <div className="text-center py-8 text-fw-bodyLight">
+              <Filter className="h-12 w-12 mx-auto mb-4 text-fw-bodyLight" />
               <p>Filter rule builder coming soon</p>
-              <p className="text-sm mt-2">Configure severity, types, keywords, and time ranges</p>
+              <p className="text-figma-base mt-2">Configure severity, types, keywords, and time ranges</p>
             </div>
             <div className="flex justify-end mt-6">
               <Button

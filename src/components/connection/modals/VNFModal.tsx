@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, AlertTriangle, Plus, Info, Network, Shield, Settings, Globe, Router as RouterIcon, ServerCog, Cloud, ExternalLink } from 'lucide-react';
+import { X, AlertTriangle, Plus, Info, Network, Shield, Settings, Globe, Share2 as RouterIcon, ServerCog, Cloud, ExternalLink } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { FormField } from '../../form/FormField';
 import { VNF, VNFType, VNFInterface, VNFTemplate } from '../../../types/vnf';
@@ -447,12 +447,13 @@ export function VNFModal({
           Configure Network Function
           <div className="relative ml-2">
             <Info
-              className="h-4 w-4 text-gray-400 cursor-help"
+              className="h-4 w-4 text-fw-bodyLight cursor-help"
               onMouseEnter={() => setShowVnfTooltip(true)}
               onMouseLeave={() => setShowVnfTooltip(false)}
             />
             {showVnfTooltip && (
-              <div className="absolute z-10 left-0 top-full mt-1 w-72 p-3 bg-gray-900 text-white text-sm rounded-lg">
+              <div className="absolute z-10 left-0 top-full mt-1 w-72 p-3 bg-fw-heading text-white text-figma-base rounded-lg">
+
                 <p>
                   <strong>VNF</strong> is a Network Function - software-based network services such as firewalls, routers, load balancers, and other network services deployed on standard compute infrastructure.
                 </p>
@@ -462,7 +463,7 @@ export function VNFModal({
         </>
       )}
       {selectedTemplate && !showTemplates && (
-        <span className="ml-2 px-2.5 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+        <span className="ml-2 px-2.5 py-0.5 text-figma-sm font-medium rounded-full bg-fw-accent text-fw-linkHover">
           {VNF_TEMPLATES.find(t => t.id === selectedTemplate)?.name}
         </span>
       )}
@@ -499,13 +500,13 @@ export function VNFModal({
       footer={drawerFooter}
     >
       {isEditMode && (
-          <div className="m-6 mb-0 bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start">
-            <AlertTriangle className="h-5 w-5 text-amber-500 mt-0.5 mr-3 flex-shrink-0" />
+          <div className="m-6 mb-0 bg-fw-warn/10 border border-fw-warn/30 rounded-lg p-3 flex items-start">
+            <AlertTriangle className="h-5 w-5 text-fw-warn mt-0.5 mr-3 flex-shrink-0" />
             <div>
-              <p className="text-sm text-amber-800 font-medium">
+              <p className="text-figma-base text-fw-heading font-medium">
                 Warning: Editing VNF Configuration
               </p>
-              <p className="text-sm text-amber-700 mt-1">
+              <p className="text-figma-base text-fw-body mt-1">
                 Changes to VNF settings may impact network connectivity and security. Ensure you understand the implications of these changes.
               </p>
             </div>
@@ -517,7 +518,7 @@ export function VNFModal({
           {showTemplates ? (
             /* Template Selection View */
             <div className="space-y-6">
-              <p className="text-sm text-gray-500">
+              <p className="text-figma-base text-fw-bodyLight">
                 Choose a template to quickly configure a pre-defined network function, or create a custom VNF.
               </p>
 
@@ -530,52 +531,52 @@ export function VNFModal({
                       className={`
                         border rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow ${
                           selectedTemplate === template.id
-                            ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500/50'
-                            : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50/50'
+                            ? 'border-fw-active bg-fw-accent ring-2 ring-fw-active/50'
+                            : 'border-fw-secondary hover:border-fw-active hover:bg-fw-accent/50'
                         }`}
                       onClick={() => applyTemplate(template.id)}
                     >
                       <div className="flex items-center space-x-3 mb-2">
                         <div className={`p-2 rounded-lg ${
                           template.type === 'firewall' ? 'bg-indigo-100' :
-                          template.type === 'sdwan' ? 'bg-purple-100' :
-                          template.type === 'router' ? 'bg-blue-100' :
-                          template.type === 'vnat' ? 'bg-green-100' :
-                          'bg-gray-100'
+                          template.type === 'sdwan' ? 'bg-fw-wash' :
+                          template.type === 'router' ? 'bg-fw-accent' :
+                          template.type === 'vnat' ? 'bg-green-50' :
+                          'bg-fw-neutral'
                         }`}>
                           <Icon className={`h-6 w-6 ${
                             template.type === 'firewall' ? 'text-indigo-500' :
-                            template.type === 'sdwan' ? 'text-purple-500' :
-                            template.type === 'router' ? 'text-blue-500' :
-                            template.type === 'vnat' ? 'text-green-500' :
-                            'text-gray-700'
+                            template.type === 'sdwan' ? 'text-fw-purple' :
+                            template.type === 'router' ? 'text-fw-link' :
+                            template.type === 'vnat' ? 'text-fw-success' :
+                            'text-fw-body'
                           }`} />
                         </div>
                         <div>
-                          <h4 className="text-base font-medium text-gray-900">{template.name}</h4>
-                          <span className="text-xs text-gray-500">{template.vendor} {template.model}</span>
+                          <h4 className="text-base font-medium text-fw-heading">{template.name}</h4>
+                          <span className="text-figma-sm text-fw-bodyLight">{template.vendor} {template.model}</span>
                         </div>
                       </div>
 
-                      <p className="text-sm text-gray-600 mb-2 line-clamp-2">{template.description}</p>
+                      <p className="text-figma-base text-fw-bodyLight mb-2 line-clamp-2">{template.description}</p>
 
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">{getTypeName(template.type)}</span>
-                        <span className="font-medium text-gray-900">{template.throughput}</span>
+                      <div className="flex justify-between text-figma-base">
+                        <span className="text-fw-bodyLight">{getTypeName(template.type)}</span>
+                        <span className="font-medium text-fw-heading">{template.throughput}</span>
                       </div>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+              <div className="bg-fw-wash border border-fw-secondary rounded-lg p-4">
                 <div className="flex items-start">
-                  <Info className="h-5 w-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
+                  <Info className="h-5 w-5 text-fw-link mt-0.5 mr-2 flex-shrink-0" />
                   <div>
-                    <p className="text-sm text-gray-700 font-medium">
+                    <p className="text-figma-base text-fw-body font-medium">
                       BYOL - Bring Your Own License
                     </p>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-figma-base text-fw-bodyLight mt-1">
                       For vendor-specific VNFs, you'll need to provide your own license. Custom VNFs allow you to configure any network function compatible with your environment.
                     </p>
                   </div>
@@ -598,7 +599,7 @@ export function VNFModal({
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                         placeholder="e.g., Edge Firewall"
                       />
                     </FormField>
@@ -612,7 +613,7 @@ export function VNFModal({
                       <select
                         value={type}
                         onChange={(e) => setType(e.target.value as VNFType)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                       >
                         <option value="firewall">Firewall</option>
                         <option value="sdwan">SD-WAN</option>
@@ -633,7 +634,7 @@ export function VNFModal({
                         type="text"
                         value={vendor}
                         onChange={(e) => setVendor(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                         placeholder="e.g., Palo Alto Networks"
                       />
                     </FormField>
@@ -647,7 +648,7 @@ export function VNFModal({
                         type="text"
                         value={model}
                         onChange={(e) => setModel(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                         placeholder="e.g., VM-Series"
                       />
                     </FormField>
@@ -661,7 +662,7 @@ export function VNFModal({
                         type="text"
                         value={version}
                         onChange={(e) => setVersion(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                         placeholder="e.g., 10.0.3"
                       />
                     </FormField>
@@ -675,7 +676,7 @@ export function VNFModal({
                       <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value as VNF['status'])}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                       >
                         <option value="inactive">Inactive</option>
                         <option value="active">Active</option>
@@ -693,7 +694,7 @@ export function VNFModal({
                         type="text"
                         value={throughput}
                         onChange={(e) => setThroughput(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                         placeholder="e.g., 10 Gbps"
                       />
                     </FormField>
@@ -707,7 +708,7 @@ export function VNFModal({
                         type="date"
                         value={licenseExpiry}
                         onChange={(e) => setLicenseExpiry(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                       />
                     </FormField>
                   </div>
@@ -719,14 +720,14 @@ export function VNFModal({
                       required
                       helpText="Select one or more connections whose links/VLANs can be associated with this VNF"
                     >
-                      <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3 bg-white">
+                      <div className="space-y-2 max-h-48 overflow-y-auto border border-fw-secondary rounded-md p-3 bg-fw-base">
                         {connections.length === 0 ? (
-                          <div className="text-sm text-gray-500">
+                          <div className="text-figma-base text-fw-bodyLight">
                             <p>No connections available</p>
                           </div>
                         ) : (
                           connections.map(conn => (
-                            <label key={conn.id} className="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                            <label key={conn.id} className="flex items-center space-x-3 cursor-pointer hover:bg-fw-wash p-2 rounded">
                               <input
                                 type="checkbox"
                                 checked={selectedConnectionsForLinks.includes(conn.id)}
@@ -742,21 +743,21 @@ export function VNFModal({
                                     }));
                                   }
                                 }}
-                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
                               />
                               <div className="flex-1 flex items-center justify-between">
                                 <div>
-                                  <span className="text-sm font-medium text-gray-900">{conn.name}</span>
-                                  <span className="text-xs text-gray-500 ml-2">({conn.type})</span>
+                                  <span className="text-figma-base font-medium text-fw-heading">{conn.name}</span>
+                                  <span className="text-figma-sm text-fw-bodyLight ml-2">({conn.type})</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                                    conn.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                                  <span className={`text-figma-sm px-2 py-0.5 rounded-full ${
+                                    conn.status === 'Active' ? 'bg-green-50 text-fw-success' : 'bg-fw-neutral text-fw-bodyLight'
                                   }`}>
                                     {conn.status}
                                   </span>
                                   {conn.id === connectionId && (
-                                    <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">
+                                    <span className="text-figma-sm px-2 py-0.5 bg-fw-accent text-fw-linkHover rounded-full">
                                       Current
                                     </span>
                                   )}
@@ -769,13 +770,13 @@ export function VNFModal({
                     </FormField>
 
                     {hasCrossConnection && (
-                      <div className="mt-2 bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start">
-                        <ExternalLink className="h-4 w-4 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
+                      <div className="mt-2 bg-fw-accent border border-fw-active rounded-lg p-3 flex items-start">
+                        <ExternalLink className="h-4 w-4 text-fw-link mt-0.5 mr-2 flex-shrink-0" />
                         <div>
-                          <p className="text-sm text-blue-800 font-medium">
+                          <p className="text-figma-base text-fw-linkHover font-medium">
                             Cross-Connection Association
                           </p>
-                          <p className="text-xs text-blue-700 mt-1">
+                          <p className="text-figma-sm text-fw-linkHover mt-1">
                             This VNF will be associated with links from multiple connections. Ensure network policies allow cross-connection routing.
                           </p>
                         </div>
@@ -784,12 +785,12 @@ export function VNFModal({
 
                     {hasMultipleConnections && (
                       <div className="mt-2 bg-green-50 border border-green-200 rounded-lg p-3 flex items-start">
-                        <Network className="h-4 w-4 text-green-600 mt-0.5 mr-2 flex-shrink-0" />
+                        <Network className="h-4 w-4 text-fw-success mt-0.5 mr-2 flex-shrink-0" />
                         <div>
-                          <p className="text-sm text-green-800 font-medium">
+                          <p className="text-figma-base text-fw-success font-medium">
                             Multi-Connection VNF
                           </p>
-                          <p className="text-xs text-green-700 mt-1">
+                          <p className="text-figma-sm text-fw-success mt-1">
                             This VNF can access links from {selectedConnectionsForLinks.length} connections for flexible network design.
                           </p>
                         </div>
@@ -804,23 +805,23 @@ export function VNFModal({
                       required
                       helpText="Select one or more links this VNF will be associated with"
                     >
-                      <div className="space-y-2 max-h-64 overflow-y-auto border border-gray-300 rounded-md p-3 bg-white">
+                      <div className="space-y-2 max-h-64 overflow-y-auto border border-fw-secondary rounded-md p-3 bg-fw-base">
                         {selectedConnectionsForLinks.length === 0 ? (
-                          <div className="text-sm text-gray-500">
+                          <div className="text-figma-base text-fw-bodyLight">
                             <p>Please select at least one connection first</p>
                           </div>
                         ) : availableLinks.length === 0 ? (
-                          <div className="text-sm text-gray-500">
+                          <div className="text-figma-base text-fw-bodyLight">
                             <p>No links available for the selected connection(s)</p>
                             {hasCrossConnection && (
-                              <p className="text-xs mt-1 text-gray-400">
+                              <p className="text-figma-sm mt-1 text-fw-bodyLight">
                                 Cross-connection links need to be loaded separately. Navigate to the selected connection to view its links.
                               </p>
                             )}
                           </div>
                         ) : (
                           availableLinks.map(link => (
-                            <label key={link.id} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                            <label key={link.id} className="flex items-center space-x-2 cursor-pointer hover:bg-fw-wash p-2 rounded">
                               <input
                                 type="checkbox"
                                 checked={linkIds.includes(link.id)}
@@ -831,15 +832,15 @@ export function VNFModal({
                                     setLinkIds(linkIds.filter(id => id !== link.id));
                                   }
                                 }}
-                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
                               />
                               <div className="flex-1 flex items-center justify-between">
                                 <div className="flex flex-col">
-                                  <span className="text-sm font-medium text-gray-900">{link.name}</span>
-                                  <span className="text-xs text-gray-500">VLAN {link.vlanId} • {link.connectionName}</span>
+                                  <span className="text-figma-base font-medium text-fw-heading">{link.name}</span>
+                                  <span className="text-figma-sm text-fw-bodyLight">VLAN {link.vlanId} • {link.connectionName}</span>
                                 </div>
                                 {link.connectionId !== connectionId && (
-                                  <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full flex items-center gap-1">
+                                  <span className="text-figma-sm px-2 py-0.5 bg-fw-accent text-fw-linkHover rounded-full flex items-center gap-1">
                                     <ExternalLink className="h-3 w-3" />
                                     Cross-Connection
                                   </span>
@@ -859,7 +860,7 @@ export function VNFModal({
                       <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                         rows={3}
                         placeholder="Enter a description for this VNF"
                       />
@@ -868,10 +869,10 @@ export function VNFModal({
                 </div>
 
                 {/* Advanced Configuration Toggle */}
-                <div className="pt-4 border-t border-gray-200">
+                <div className="pt-4 border-t border-fw-secondary">
                   <button
                     type="button"
-                    className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center"
+                    className="text-figma-base font-medium text-fw-link hover:text-fw-linkHover flex items-center"
                     onClick={() => setShowAdvanced(!showAdvanced)}
                   >
                     {showAdvanced ? 'Hide Advanced Configuration' : 'Show Advanced Configuration'}
@@ -888,51 +889,51 @@ export function VNFModal({
 
                 {/* Advanced Configuration Section */}
                 {showAdvanced && (
-                  <div className="pt-4 pb-2 space-y-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <div className="pt-4 pb-2 space-y-6 bg-fw-wash p-4 rounded-lg border border-fw-secondary">
                     {/* Network Interfaces Section */}
                     <div>
-                      <h3 className="text-base font-medium text-gray-900 mb-4">Network Interfaces</h3>
+                      <h3 className="text-base font-medium text-fw-heading mb-4">Network Interfaces</h3>
 
                       {/* Existing interfaces table */}
                       {interfaces.length > 0 && (
-                        <div className="overflow-x-auto mb-4 border border-gray-200 rounded-lg">
-                          <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                        <div className="overflow-x-auto mb-4 border border-fw-secondary rounded-lg">
+                          <table className="min-w-full divide-y divide-fw-secondary">
+                            <thead className="bg-fw-wash">
                               <tr>
-                                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
-                                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th scope="col" className="px-4 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">Name</th>
+                                <th scope="col" className="px-4 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">Type</th>
+                                <th scope="col" className="px-4 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">IP Address</th>
+                                <th scope="col" className="px-4 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">Status</th>
+                                <th scope="col" className="px-4 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">Actions</th>
                               </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="bg-fw-base divide-y divide-fw-secondary">
                               {interfaces.map((iface) => (
                                 <tr key={iface.id}>
-                                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">{iface.name}</td>
-                                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{iface.type.toUpperCase()}</td>
-                                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                                  <td className="px-4 py-3 whitespace-nowrap text-figma-base font-medium text-fw-heading">{iface.name}</td>
+                                  <td className="px-4 py-3 whitespace-nowrap text-figma-base text-fw-bodyLight">{iface.type.toUpperCase()}</td>
+                                  <td className="px-4 py-3 whitespace-nowrap text-figma-base text-fw-bodyLight">
                                     {iface.ipAddress ? (
                                       <>
                                         {iface.ipAddress}
-                                        {iface.subnetMask && <span className="text-gray-400"> / {iface.subnetMask}</span>}
+                                        {iface.subnetMask && <span className="text-fw-bodyLight"> / {iface.subnetMask}</span>}
                                       </>
                                     ) : (
-                                      <span className="text-gray-400">Not configured</span>
+                                      <span className="text-fw-bodyLight">Not configured</span>
                                     )}
                                   </td>
                                   <td className="px-4 py-3 whitespace-nowrap">
-                                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                      iface.status === 'up' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                                    <span className={`px-2 py-1 inline-flex text-figma-sm leading-5 font-semibold rounded-full ${
+                                      iface.status === 'up' ? 'bg-green-50 text-fw-success' : 'bg-fw-neutral text-fw-heading'
                                     }`}>
                                       {iface.status.toUpperCase()}
                                     </span>
                                   </td>
-                                  <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                                  <td className="px-4 py-3 whitespace-nowrap text-right text-figma-base font-medium">
                                     <button
                                       type="button"
                                       onClick={() => handleRemoveInterface(iface.id)}
-                                      className="text-red-600 hover:text-red-900"
+                                      className="text-fw-error hover:text-fw-error"
                                     >
                                       Remove
                                     </button>
@@ -945,8 +946,8 @@ export function VNFModal({
                       )}
 
                       {/* Add new interface form */}
-                      <div className="bg-white p-4 rounded-lg border border-gray-200 mb-4">
-                        <h4 className="text-sm font-medium text-gray-900 mb-3">Add Network Interface</h4>
+                      <div className="bg-fw-base p-4 rounded-lg border border-fw-secondary mb-4">
+                        <h4 className="text-figma-base font-medium text-fw-heading mb-3">Add Network Interface</h4>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                           <FormField
                             label="Interface Name"
@@ -956,7 +957,7 @@ export function VNFModal({
                               type="text"
                               value={newInterface.name || ''}
                               onChange={(e) => setNewInterface({...newInterface, name: e.target.value})}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                               placeholder="e.g., WAN1, LAN1"
                             />
                           </FormField>
@@ -967,7 +968,7 @@ export function VNFModal({
                             <select
                               value={newInterface.type}
                               onChange={(e) => setNewInterface({...newInterface, type: e.target.value as any})}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                             >
                               <option value="wan">WAN</option>
                               <option value="lan">LAN</option>
@@ -982,7 +983,7 @@ export function VNFModal({
                             <select
                               value={newInterface.status}
                               onChange={(e) => setNewInterface({...newInterface, status: e.target.value as any})}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                             >
                               <option value="down">Down</option>
                               <option value="up">Up</option>
@@ -998,7 +999,7 @@ export function VNFModal({
                               type="text"
                               value={newInterface.ipAddress || ''}
                               onChange={(e) => setNewInterface({...newInterface, ipAddress: e.target.value})}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                               placeholder="e.g., 192.168.1.1"
                             />
                           </FormField>
@@ -1010,7 +1011,7 @@ export function VNFModal({
                               type="text"
                               value={newInterface.subnetMask || ''}
                               onChange={(e) => setNewInterface({...newInterface, subnetMask: e.target.value})}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                               placeholder="e.g., 255.255.255.0"
                             />
                           </FormField>
@@ -1022,7 +1023,7 @@ export function VNFModal({
                               type="number"
                               value={newInterface.vlanId || ''}
                               onChange={(e) => setNewInterface({...newInterface, vlanId: e.target.value ? parseInt(e.target.value) : undefined})}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                               placeholder="e.g., 100"
                               min="1"
                               max="4094"
@@ -1052,9 +1053,9 @@ export function VNFModal({
                               type="checkbox"
                               checked={highAvailability}
                               onChange={(e) => setHighAvailability(e.target.checked)}
-                              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              className="h-4 w-4 rounded border-fw-secondary text-fw-link focus:ring-fw-active"
                             />
-                            <span className="text-sm text-gray-700">Enable High Availability (HA)</span>
+                            <span className="text-figma-base text-fw-body">Enable High Availability (HA)</span>
                           </label>
                         </div>
 
@@ -1067,14 +1068,14 @@ export function VNFModal({
                             type="text"
                             value={managementIP}
                             onChange={(e) => setManagementIP(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                             placeholder="e.g., 192.168.1.10"
                           />
                         </FormField>
 
                         {/* Routing Protocols */}
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-figma-base font-medium text-fw-body mb-2">
                             Routing Protocols
                           </label>
                           <div className="space-y-2">
@@ -1084,9 +1085,9 @@ export function VNFModal({
                                   type="checkbox"
                                   checked={routingProtocols.includes(protocol)}
                                   onChange={() => handleToggleRoutingProtocol(protocol)}
-                                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                  className="h-4 w-4 rounded border-fw-secondary text-fw-link focus:ring-fw-active"
                                 />
-                                <span className="text-sm text-gray-700">{protocol}</span>
+                                <span className="text-figma-base text-fw-body">{protocol}</span>
                               </label>
                             ))}
                           </div>

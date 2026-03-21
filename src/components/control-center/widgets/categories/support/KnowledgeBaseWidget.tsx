@@ -25,11 +25,11 @@ export function KnowledgeBaseWidget() {
   return (
     <div className="space-y-4">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-4 w-4" />
         <input
           type="text"
           placeholder="Search knowledge base..."
-          className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full pl-9 pr-4 h-9 text-figma-base border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
         />
       </div>
 
@@ -37,25 +37,25 @@ export function KnowledgeBaseWidget() {
         {articles.map((article) => (
           <button
             key={article.id}
-            className="w-full flex items-center justify-between p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+            className="w-full flex items-center justify-between p-2 bg-fw-wash rounded-lg hover:bg-fw-neutral transition-colors group"
           >
             <div className="flex items-center">
-              <Book className="h-4 w-4 text-gray-400 mr-2" />
+              <Book className="h-4 w-4 text-fw-bodyLight mr-2" />
               <div className="text-left">
-                <div className="text-sm font-medium text-gray-900 group-hover:text-blue-600">
+                <div className="text-figma-base font-medium text-fw-heading group-hover:text-fw-link">
                   {article.title}
                 </div>
-                <div className="text-xs text-gray-500">
-                  {article.category} • {article.views.toLocaleString()} views
+                <div className="text-figma-sm text-fw-bodyLight">
+                  {article.category} - {article.views.toLocaleString()} views
                 </div>
               </div>
             </div>
-            <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-500" />
+            <ChevronRight className="h-4 w-4 text-fw-bodyLight group-hover:text-fw-link" />
           </button>
         ))}
       </div>
 
-      <button className="w-full px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+      <button className="w-full px-4 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
         Browse All Articles
       </button>
     </div>

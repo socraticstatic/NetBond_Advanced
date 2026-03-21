@@ -15,21 +15,18 @@ export function LogRuleMaking({ selectedConnection, timeRange }: LogRuleMakingPr
   return (
     <div className="flex">
       {/* Vertical Tabs */}
-      <div className="w-64 shrink-0 border-r border-gray-200 pr-4">
+      <div className="w-[186px] shrink-0 border-r border-fw-secondary pr-4">
         <nav className="space-y-1" aria-label="Rule Types">
           <button
-            className="w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg bg-blue-50 text-blue-700"
+            className="w-full flex items-center px-4 py-3 text-figma-base font-medium text-left tracking-[-0.03em] border-l-2 no-rounded border-fw-active text-fw-link"
           >
-            <Filter className="h-5 w-5 mr-3 text-blue-500" />
-            <div className="text-left">
-              <div>Filter Rules</div>
-              <div className="text-xs text-gray-500 font-normal mt-0.5">Create custom log filters</div>
-            </div>
+            <Filter className="h-5 w-5 mr-3 text-fw-link" />
+            Filter Rules
           </button>
         </nav>
 
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Quick Actions</h4>
+        <div className="mt-6 p-4 bg-fw-wash rounded-lg border border-fw-secondary">
+          <h4 className="text-figma-sm font-semibold text-fw-body uppercase tracking-wider mb-2">Quick Actions</h4>
           <Button
             variant="secondary"
             size="sm"
@@ -51,7 +48,7 @@ export function LogRuleMaking({ selectedConnection, timeRange }: LogRuleMakingPr
 
       {/* Content Area */}
       <div className="flex-1 pl-6">
-        <div className="bg-white rounded-lg">
+        <div className="bg-fw-base rounded-lg">
           <FilterRules selectedConnection={selectedConnection} />
         </div>
       </div>

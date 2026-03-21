@@ -36,21 +36,21 @@ export function PoliciesConfiguration() {
       default:
         return (
           <div className="p-6">
-            <div className="bg-brand-lightBlue border border-brand-blue/20 rounded-lg p-4 mb-6">
-              <p className="text-sm text-brand-blue">
+            <div className="bg-fw-accent border border-fw-active rounded-xl p-4 mb-6">
+              <p className="text-figma-base font-medium text-fw-link tracking-[-0.03em]">
                 Policy configuration allows you to define and manage network policies for different connection types and protocols.
                 Select a policy type from the left to begin configuration.
               </p>
             </div>
 
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="bg-gray-100 rounded-full p-6 mb-4">
-                <Globe className="h-8 w-8 text-gray-400" />
+              <div className="bg-fw-neutral rounded-full p-6 mb-4">
+                <Globe className="h-8 w-8 text-fw-bodyLight" />
               </div>
-              <h3 className="text-lg font-medium text-gray-700 mb-2">
+              <h3 className="text-figma-lg font-bold text-fw-body tracking-[-0.03em] mb-2">
                 Select a Policy Type
               </h3>
-              <p className="text-sm text-gray-500 max-w-md mb-6">
+              <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] max-w-md mb-6">
                 Choose a policy type from the navigation menu to configure specific network policies.
               </p>
               <Button 

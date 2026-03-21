@@ -23,27 +23,27 @@ export function BCorpStatusWidget({ connections }: BCorpStatusWidgetProps) {
       {/* B Corp Score */}
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">
             {totalScore.toFixed(1)} pts
           </div>
           <div className="flex items-center mt-1">
-            <CheckCircle className="h-4 w-4 text-blue-500 mr-1" />
-            <span className="text-sm text-blue-600">{percentageComplete}%</span>
-            <span className="text-sm text-gray-500 ml-1">of certification</span>
+            <CheckCircle className="h-4 w-4 text-fw-link mr-1" />
+            <span className="text-figma-base text-fw-link">{percentageComplete}%</span>
+            <span className="text-figma-base text-fw-bodyLight ml-1">of certification</span>
           </div>
         </div>
-        <Award className="h-8 w-8 text-blue-500" />
+        <Award className="h-8 w-8 text-fw-link" />
       </div>
 
       {/* Certification Progress */}
       <div>
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+        <div className="flex items-center justify-between text-figma-sm text-fw-bodyLight mb-2">
           <span>Certification Progress</span>
           <span>Required: {certificationThreshold} pts</span>
         </div>
-        <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="relative w-full h-2 bg-fw-neutral rounded-full overflow-hidden">
           <div
-            className="absolute left-0 top-0 h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
+            className="absolute left-0 top-0 h-full bg-fw-cobalt-600 rounded-full transition-all duration-500"
             style={{ width: `${percentageComplete}%` }}
           />
         </div>
@@ -58,17 +58,17 @@ export function BCorpStatusWidget({ connections }: BCorpStatusWidgetProps) {
           return (
             <div key={area.name} className="flex items-center justify-between">
               <div className="flex items-center flex-1 min-w-0">
-                <AreaIcon className="h-4 w-4 text-gray-400 mr-2 flex-shrink-0" />
-                <span className="text-sm text-gray-600 truncate">{area.name}</span>
+                <AreaIcon className="h-4 w-4 text-fw-bodyLight mr-2 flex-shrink-0" />
+                <span className="text-figma-base text-fw-body truncate">{area.name}</span>
               </div>
               <div className="flex items-center ml-3">
-                <div className="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden mr-2">
+                <div className="w-20 h-1.5 bg-fw-neutral rounded-full overflow-hidden mr-2">
                   <div
-                    className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                    className="h-full bg-fw-cobalt-600 rounded-full transition-all duration-500"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
-                <span className="text-xs font-medium text-gray-700 w-8 text-right">
+                <span className="text-figma-sm font-medium text-fw-body w-8 text-right">
                   {area.score.toFixed(1)}
                 </span>
               </div>
@@ -78,12 +78,12 @@ export function BCorpStatusWidget({ connections }: BCorpStatusWidgetProps) {
       </div>
 
       {/* Next Steps */}
-      <div className="p-3 bg-blue-50 rounded-lg">
+      <div className="p-3 bg-fw-accent rounded-lg">
         <div className="flex items-start">
-          <Target className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+          <Target className="h-4 w-4 text-fw-link mr-2 mt-0.5 flex-shrink-0" />
           <div>
-            <div className="text-xs font-medium text-blue-700">Next Milestone</div>
-            <div className="text-xs text-blue-600 mt-0.5">
+            <div className="text-figma-sm font-medium text-fw-linkHover">Next Milestone</div>
+            <div className="text-figma-sm text-fw-link mt-0.5">
               +2.1 pts needed for certification
             </div>
           </div>
@@ -92,10 +92,10 @@ export function BCorpStatusWidget({ connections }: BCorpStatusWidgetProps) {
 
       {/* Quick Actions */}
       <div className="flex space-x-2">
-        <button className="flex-1 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
           View Report
         </button>
-        <button className="flex-1 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
           Improve Score
         </button>
       </div>

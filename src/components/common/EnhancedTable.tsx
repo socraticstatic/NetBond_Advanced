@@ -173,13 +173,13 @@ function EnhancedTableComponent<T>({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col rounded-2xl border border-fw-secondary overflow-hidden">
       {showExport && data.length > 0 && (
         <div className="flex justify-end items-center gap-2 mb-3">
           {showExport && (
             <button
               onClick={handleExport}
-              className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-md hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
+              className="inline-flex items-center px-4 h-9 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-full hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
             >
               <Download className="h-4 w-4 mr-2" />
               Export CSV
@@ -195,7 +195,7 @@ function EnhancedTableComponent<T>({
                 <th
                   key={column.id}
                   scope="col"
-                  className={`px-3 py-2 text-left text-xs font-medium text-fw-bodyLight tracking-wider ${
+                  className={`px-6 h-12 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] ${
                     column.sortable ? 'cursor-pointer select-none hover:bg-fw-neutral' : ''
                   }`}
                   onClick={() => handleSort(column)}
@@ -229,7 +229,7 @@ function EnhancedTableComponent<T>({
                       <button
                         ref={columnButtonRef}
                         onClick={() => setShowColumnPopover(!showColumnPopover)}
-                        className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+                        className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral transition-colors"
                         title="Manage Columns"
                         aria-label="Manage table columns"
                       >
@@ -262,12 +262,12 @@ function EnhancedTableComponent<T>({
                   onClick={() => onRowClick?.(item)}
                 >
                   {filteredColumns.map((column) => (
-                    <td key={column.id} className="px-3 py-2 truncate">
+                    <td key={column.id} className="px-6 h-12 text-figma-base font-medium text-fw-heading tracking-[-0.03em] truncate">
                       {column.render(item)}
                     </td>
                   ))}
                   {rowActions && (
-                    <td className="px-3 py-2 text-right text-sm font-medium whitespace-nowrap">
+                    <td className="px-3 py-2 text-right text-figma-base font-medium whitespace-nowrap">
                       <div onClick={(e) => e.stopPropagation()}>
                         {rowActions(item)}
                       </div>
@@ -283,7 +283,7 @@ function EnhancedTableComponent<T>({
       {showPagination && totalPages > 1 && (
         <div className="px-6 py-4 border-t border-fw-secondary bg-fw-base">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-fw-body">
+            <div className="text-figma-base text-fw-body">
               Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
               <span className="font-medium">{Math.min(endIndex, sortedData.length)}</span> of{' '}
               <span className="font-medium">{sortedData.length}</span> results
@@ -312,7 +312,7 @@ function EnhancedTableComponent<T>({
                     <button
                       key={index}
                       onClick={() => goToPage(page)}
-                      className={`px-3 py-1 rounded-md text-sm ${
+                      className={`px-3 py-1 rounded-md text-figma-base ${
                         currentPage === page
                           ? 'bg-fw-ctaPrimary text-fw-linkPrimary'
                           : 'hover:bg-fw-wash text-fw-body'

@@ -88,14 +88,14 @@ export function AccessControlPolicy() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-6">
+      <div className="bg-fw-cobalt-600 text-white rounded-xl p-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
               <Shield className="h-8 w-8" />
-              <h2 className="text-2xl font-bold">Access Control & Security</h2>
+              <h2 className="text-figma-xl font-bold">Access Control & Security</h2>
             </div>
-            <p className="text-blue-100 text-sm max-w-3xl">
+            <p className="text-white/80 text-figma-base max-w-3xl">
               Manage user permissions, roles, and security policies. Control who can access what resources across your organization.
             </p>
           </div>
@@ -111,15 +111,15 @@ export function AccessControlPolicy() {
       </div>
 
       {/* Current Role Status */}
-      <div className="bg-white rounded-lg border-2 border-blue-200 p-4">
+      <div className="bg-fw-base rounded-xl border-2 border-fw-active p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-              <Shield className="h-6 w-6 text-blue-600" />
+            <div className="w-12 h-12 bg-fw-accent rounded-full flex items-center justify-center">
+              <Shield className="h-6 w-6 text-fw-link" />
             </div>
             <div>
-              <p className="text-sm text-gray-600 font-medium">Your Current Role</p>
-              <p className="text-lg font-bold text-gray-900 capitalize">{currentRole.replace('-', ' ')}</p>
+              <p className="text-figma-base font-medium text-fw-body tracking-[-0.03em] font-medium">Your Current Role</p>
+              <p className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] capitalize">{currentRole.replace('-', ' ')}</p>
             </div>
           </div>
           <Button
@@ -135,24 +135,24 @@ export function AccessControlPolicy() {
 
       {/* Key Features */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Key Features</h3>
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Key Features</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             const colorClasses = {
-              blue: 'bg-blue-50 text-blue-600 border-blue-200',
-              green: 'bg-green-50 text-green-600 border-green-200',
-              red: 'bg-red-50 text-red-600 border-red-200',
-              purple: 'bg-purple-50 text-purple-600 border-purple-200'
+              blue: 'bg-fw-accent text-fw-link border-fw-active',
+              green: 'bg-green-50 text-fw-success border-green-200',
+              red: 'bg-red-50 text-fw-error border-red-200',
+              purple: 'bg-purple-50 text-fw-purple border-purple-200'
             }[feature.color];
 
             return (
-              <div key={index} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+              <div key={index} className="bg-fw-base border border-fw-secondary rounded-xl p-4 hover:shadow-md transition-shadow">
                 <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-3 border ${colorClasses}`}>
                   <Icon className="h-6 w-6" />
                 </div>
-                <h4 className="text-base font-semibold text-gray-900 mb-2">{feature.title}</h4>
-                <p className="text-sm text-gray-600">{feature.description}</p>
+                <h4 className="text-figma-base font-semibold text-fw-heading mb-2">{feature.title}</h4>
+                <p className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">{feature.description}</p>
               </div>
             );
           })}
@@ -161,13 +161,13 @@ export function AccessControlPolicy() {
 
       {/* Role Definitions */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Role Definitions</h3>
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Role Definitions</h3>
         <div className="space-y-4">
           {roleDefinitions.map((roleDef) => {
             const Icon = roleDef.icon;
             const isCurrentRole = currentRole === roleDef.role;
             const colorClasses = {
-              blue: 'border-blue-500 bg-blue-50',
+              blue: 'border-fw-active bg-fw-accent',
               purple: 'border-purple-500 bg-purple-50',
               red: 'border-red-500 bg-red-50'
             }[roleDef.color];
@@ -175,21 +175,21 @@ export function AccessControlPolicy() {
             return (
               <div
                 key={roleDef.role}
-                className={`bg-white rounded-lg border-2 p-5 ${
-                  isCurrentRole ? colorClasses : 'border-gray-200'
+                className={`bg-fw-base rounded-xl border-2 p-5 ${
+                  isCurrentRole ? colorClasses : 'border-fw-secondary'
                 }`}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                      isCurrentRole ? colorClasses : 'bg-gray-100'
+                      isCurrentRole ? colorClasses : 'bg-fw-neutral'
                     }`}>
-                      <Icon className={`h-6 w-6 ${isCurrentRole ? `text-${roleDef.color}-600` : 'text-gray-600'}`} />
+                      <Icon className={`h-6 w-6 ${isCurrentRole ? `text-${roleDef.color}-600` : 'text-fw-body'}`} />
                     </div>
                     <div>
-                      <h4 className="text-base font-bold text-gray-900">{roleDef.name}</h4>
+                      <h4 className="text-figma-base font-bold text-fw-heading">{roleDef.name}</h4>
                       {isCurrentRole && (
-                        <span className="text-xs font-medium text-blue-600">Your Current Role</span>
+                        <span className="text-figma-sm font-medium text-fw-link tracking-[-0.03em]">Your Current Role</span>
                       )}
                     </div>
                   </div>
@@ -201,22 +201,22 @@ export function AccessControlPolicy() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs font-semibold text-green-700 mb-2">✓ Permissions</p>
+                    <p className="text-figma-sm font-bold text-fw-success tracking-[-0.03em] mb-2">✓ Permissions</p>
                     <ul className="space-y-1">
                       {roleDef.permissions.map((perm, idx) => (
-                        <li key={idx} className="text-sm text-gray-700 flex items-start gap-2">
-                          <span className="text-green-600 mt-0.5">•</span>
+                        <li key={idx} className="text-figma-base font-medium text-fw-body tracking-[-0.03em] flex items-start gap-2">
+                          <span className="text-fw-success mt-0.5">•</span>
                           {perm}
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-red-700 mb-2">✗ Restrictions</p>
+                    <p className="text-figma-sm font-bold text-fw-error tracking-[-0.03em] mb-2">✗ Restrictions</p>
                     <ul className="space-y-1">
                       {roleDef.restrictions.map((rest, idx) => (
-                        <li key={idx} className="text-sm text-gray-700 flex items-start gap-2">
-                          <span className="text-red-600 mt-0.5">•</span>
+                        <li key={idx} className="text-figma-base font-medium text-fw-body tracking-[-0.03em] flex items-start gap-2">
+                          <span className="text-fw-error mt-0.5">•</span>
                           {rest}
                         </li>
                       ))}
@@ -231,17 +231,17 @@ export function AccessControlPolicy() {
 
       {/* Best Practices */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Security Best Practices</h3>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Security Best Practices</h3>
+        <div className="bg-fw-accent border border-fw-active rounded-xl p-5">
           <div className="space-y-4">
             {bestPractices.map((practice, index) => (
               <div key={index} className="flex items-start gap-3">
-                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-xs font-bold">{index + 1}</span>
+                <div className="w-6 h-6 bg-fw-cobalt-600 text-white rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-figma-sm font-bold">{index + 1}</span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-900 mb-1">{practice.title}</h4>
-                  <p className="text-sm text-gray-700">{practice.description}</p>
+                  <h4 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em] mb-1">{practice.title}</h4>
+                  <p className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">{practice.description}</p>
                 </div>
               </div>
             ))}
@@ -250,14 +250,14 @@ export function AccessControlPolicy() {
       </div>
 
       {/* Interactive Demo CTA */}
-      <div className="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-lg p-6">
+      <div className="bg-fw-accent border-2 border-fw-active rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 bg-fw-purple rounded-lg flex items-center justify-center flex-shrink-0">
             <Sparkles className="h-6 w-6 text-white" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">Try the Interactive RBAC Demo</h3>
-            <p className="text-sm text-gray-700 mb-4">
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-2">Try the Interactive RBAC Demo</h3>
+            <p className="text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-4">
               Experience how role-based access control works with our interactive demonstration. Switch between roles,
               see permission restrictions in action, view audit logs, and understand the complete access control workflow.
             </p>
@@ -282,12 +282,12 @@ export function AccessControlPolicy() {
       </div>
 
       {/* Documentation Links */}
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-5">
+      <div className="bg-fw-wash border border-fw-secondary rounded-xl p-5">
         <div className="flex items-start gap-3 mb-4">
-          <Info className="h-5 w-5 text-gray-600 mt-0.5" />
+          <Info className="h-5 w-5 text-fw-bodyLight mt-0.5" />
           <div>
-            <h4 className="text-sm font-semibold text-gray-900 mb-1">Additional Resources</h4>
-            <p className="text-sm text-gray-600">Learn more about access control and security best practices</p>
+            <h4 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em] mb-1">Additional Resources</h4>
+            <p className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Learn more about access control and security best practices</p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -297,7 +297,7 @@ export function AccessControlPolicy() {
               e.preventDefault();
               window.open('/RBAC_SHOWCASE_SUMMARY.md', '_blank');
             }}
-            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="flex items-center gap-2 text-figma-base font-medium text-fw-link tracking-[-0.03em] hover:text-fw-linkHover font-medium"
           >
             <ExternalLink className="h-4 w-4" />
             Technical Documentation
@@ -308,7 +308,7 @@ export function AccessControlPolicy() {
               e.preventDefault();
               window.open('/RBAC_DEMO_GUIDE.md', '_blank');
             }}
-            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="flex items-center gap-2 text-figma-base font-medium text-fw-link tracking-[-0.03em] hover:text-fw-linkHover font-medium"
           >
             <ExternalLink className="h-4 w-4" />
             Demo Guide
@@ -319,7 +319,7 @@ export function AccessControlPolicy() {
               e.preventDefault();
               window.open('/HOW_TO_SEE_RBAC_DEMO.md', '_blank');
             }}
-            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="flex items-center gap-2 text-figma-base font-medium text-fw-link tracking-[-0.03em] hover:text-fw-linkHover font-medium"
           >
             <ExternalLink className="h-4 w-4" />
             Quick Start Guide

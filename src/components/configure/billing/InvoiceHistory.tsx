@@ -82,7 +82,7 @@ export function InvoiceHistory() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium text-gray-900">Invoice History</h3>
+        <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">Invoice History</h3>
         <div className="flex items-center space-x-4">
           <select
             className="form-control"
@@ -103,19 +103,19 @@ export function InvoiceHistory() {
 
       <div className="card">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-fw-secondary">
+            <thead className="bg-fw-wash">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Invoice
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Date
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Amount
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Status
                 </th>
                 <th scope="col" className="relative px-6 py-3">
@@ -123,43 +123,43 @@ export function InvoiceHistory() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-fw-base divide-y divide-fw-secondary">
               {invoices.map((invoice) => (
-                <tr key={invoice.id} className="hover:bg-gray-50">
+                <tr key={invoice.id} className="hover:bg-fw-wash">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <Receipt className="h-5 w-5 text-gray-400 mr-2" />
-                      <div className="text-sm font-medium text-gray-900">{invoice.id}</div>
+                      <Receipt className="h-5 w-5 text-fw-bodyLight mr-2" />
+                      <div className="text-figma-base font-medium text-fw-heading">{invoice.id}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {new Date(invoice.billingPeriodStart).toLocaleDateString()} - 
+                    <div className="text-figma-base text-fw-heading">
+                      {new Date(invoice.billingPeriodStart).toLocaleDateString()} -
                       {new Date(invoice.billingPeriodEnd).toLocaleDateString()}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
+                    <div className="text-figma-base text-fw-heading">
                       ${invoice.totalAmount.toFixed(2)}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      invoice.paymentStatus === 'Paid' 
-                        ? 'bg-green-100 text-green-800'
+                    <span className={`px-2 inline-flex text-figma-sm leading-5 font-semibold rounded-full ${
+                      invoice.paymentStatus === 'Paid'
+                        ? 'bg-green-50 text-fw-success'
                         : invoice.paymentStatus === 'Due'
                         ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-red-100 text-red-800'
+                        : 'bg-red-50 text-fw-error'
                     }`}>
                       {invoice.paymentStatus}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium">
                     <div className="flex items-center justify-end space-x-3">
-                      <button className="text-gray-400 hover:text-gray-500 rounded-full p-1">
+                      <button className="text-fw-bodyLight hover:text-fw-body rounded-full p-1">
                         <Download className="h-5 w-5" />
                       </button>
-                      <button className="text-gray-400 hover:text-gray-500 rounded-full p-1">
+                      <button className="text-fw-bodyLight hover:text-fw-body rounded-full p-1">
                         <Receipt className="h-5 w-5" />
                       </button>
                     </div>

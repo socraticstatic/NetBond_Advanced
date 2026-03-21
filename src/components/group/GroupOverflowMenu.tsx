@@ -62,39 +62,39 @@ export function GroupOverflowMenu({ group, onDelete }: GroupOverflowMenuProps) {
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+        className="p-1.5 text-fw-bodyLight hover:text-fw-bodyLight hover:bg-fw-neutral rounded-full transition-colors"
         aria-label="More options"
       >
         <MoreVertical className="h-4 w-4" />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-8 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+        <div className="absolute right-0 top-8 w-48 bg-fw-base rounded-lg shadow-lg border border-fw-secondary py-1 z-50">
           <button
             onClick={handleView}
-            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+            className="w-full px-4 py-2 text-left text-figma-base text-fw-body hover:bg-fw-wash flex items-center"
           >
             <Eye className="h-4 w-4 mr-2" />
             View Details
           </button>
           <button
             onClick={handleEdit}
-            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+            className="w-full px-4 py-2 text-left text-figma-base text-fw-body hover:bg-fw-wash flex items-center"
           >
             <Edit2 className="h-4 w-4 mr-2" />
             Edit Pool
           </button>
           <button
             onClick={handleManageMembers}
-            className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center"
+            className="w-full px-4 py-2 text-left text-figma-base text-fw-body hover:bg-fw-wash flex items-center"
           >
             <Users className="h-4 w-4 mr-2" />
             Manage Members
           </button>
-          <div className="border-t border-gray-200 my-1" />
+          <div className="border-t border-fw-secondary my-1" />
           <button
             onClick={handleDelete}
-            className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center"
+            className="w-full px-4 py-2 text-left text-figma-base text-fw-error hover:bg-red-50 flex items-center"
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Delete Pool

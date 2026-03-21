@@ -167,8 +167,8 @@ export function EnhancedMetricsTab() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4 animate-pulse" />
-          <p className="text-gray-600">Loading metrics...</p>
+          <Activity className="h-12 w-12 text-fw-bodyLight mx-auto mb-4 animate-pulse" />
+          <p className="text-fw-bodyLight">Loading metrics...</p>
         </div>
       </div>
     );
@@ -194,48 +194,48 @@ export function EnhancedMetricsTab() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Near Real-Time Network Metrics</h2>
-          <p className="text-sm text-gray-600 mt-1">
+          <h2 className="text-figma-xl font-bold text-fw-heading tracking-[-0.04em]">Detailed Performance Metrics</h2>
+          <p className="text-figma-base font-medium text-fw-bodyLight mt-1">
             Monitoring updates every 2 seconds
           </p>
         </div>
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setSelectedMetric('all')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-figma-base font-medium transition-colors ${
               selectedMetric === 'all'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-fw-cobalt-600 text-white'
+                : 'bg-fw-neutral text-fw-body hover:bg-fw-neutral'
             }`}
           >
             All Metrics
           </button>
           <button
             onClick={() => setSelectedMetric('latency')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-figma-base font-medium transition-colors ${
               selectedMetric === 'latency'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-fw-cobalt-600 text-white'
+                : 'bg-fw-neutral text-fw-body hover:bg-fw-neutral'
             }`}
           >
             Latency
           </button>
           <button
             onClick={() => setSelectedMetric('throughput')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-figma-base font-medium transition-colors ${
               selectedMetric === 'throughput'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-fw-cobalt-600 text-white'
+                : 'bg-fw-neutral text-fw-body hover:bg-fw-neutral'
             }`}
           >
             Throughput
           </button>
           <button
             onClick={() => setSelectedMetric('packetLoss')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-figma-base font-medium transition-colors ${
               selectedMetric === 'packetLoss'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-fw-cobalt-600 text-white'
+                : 'bg-fw-neutral text-fw-body hover:bg-fw-neutral'
             }`}
           >
             Packet Loss
@@ -414,17 +414,17 @@ export function EnhancedMetricsTab() {
       )}
 
       {/* Performance Summary */}
-      <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
+      <div className="bg-fw-accent rounded-lg p-6 border border-fw-active">
         <div className="flex items-start space-x-4">
-          <div className="p-3 bg-white rounded-lg">
-            <Activity className="h-6 w-6 text-blue-600" />
+          <div className="p-3 bg-fw-base rounded-lg">
+            <Activity className="h-6 w-6 text-fw-link" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Network Performance Summary</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <h3 className="text-lg font-semibold text-fw-heading tracking-[-0.03em] mb-2">Network Performance Summary</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-figma-base">
               <div>
-                <p className="text-gray-600 mb-1">Overall Health</p>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-fw-bodyLight mb-1">Overall Health</p>
+                <p className="text-lg font-semibold text-fw-heading">
                   {currentMetrics.latency.status === 'healthy' &&
                    currentMetrics.throughput.status === 'healthy' &&
                    currentMetrics.packetLoss.status === 'healthy'
@@ -437,12 +437,12 @@ export function EnhancedMetricsTab() {
                 </p>
               </div>
               <div>
-                <p className="text-gray-600 mb-1">Data Points Collected</p>
-                <p className="text-lg font-semibold text-gray-900">{metricsData.length}</p>
+                <p className="text-fw-bodyLight mb-1">Data Points Collected</p>
+                <p className="text-lg font-semibold text-fw-heading">{metricsData.length}</p>
               </div>
               <div>
-                <p className="text-gray-600 mb-1">Monitoring Since</p>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-fw-bodyLight mb-1">Monitoring Since</p>
+                <p className="text-lg font-semibold text-fw-heading">
                   {metricsData[0]?.timestamp.toLocaleTimeString()}
                 </p>
               </div>

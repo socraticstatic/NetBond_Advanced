@@ -30,9 +30,9 @@ export function UserActivity() {
   ]);
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium text-gray-900">User Activity</h3>
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">User Activity</h3>
         <Button
           variant="outline"
           icon={Filter}
@@ -56,7 +56,7 @@ export function UserActivity() {
               <div className="relative pb-8">
                 {index !== logs.length - 1 && (
                   <span
-                    className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
+                    className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-fw-secondary"
                     aria-hidden="true"
                   />
                 )}
@@ -68,10 +68,10 @@ export function UserActivity() {
                   </div>
                   <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                     <div>
-                      <p className="text-sm text-gray-900">{log.action}</p>
-                      <p className="text-sm text-gray-500">{log.details}</p>
+                      <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{log.action}</p>
+                      <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">{log.details}</p>
                     </div>
-                    <div className="whitespace-nowrap text-right text-sm text-gray-500">
+                    <div className="whitespace-nowrap text-right text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">
                       {new Date(log.timestamp).toLocaleString()}
                     </div>
                   </div>

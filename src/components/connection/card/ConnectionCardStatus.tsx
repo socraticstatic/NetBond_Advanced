@@ -30,8 +30,8 @@ export function ConnectionCardStatus({
   showEffects
 }: ConnectionCardStatusProps) {
   return (
-    <div className="p-4 border-t border-fw-secondary">
-      <div className="flex items-center justify-between mt-4">
+    <div className="px-6 py-3">
+      <div className="flex items-center justify-between">
         <motion.button
           onClick={(e) => {
             e.stopPropagation();
@@ -39,12 +39,12 @@ export function ConnectionCardStatus({
           }}
           disabled={isPending}
           className={`
-            inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
+            inline-flex items-center px-4 h-9 rounded-full text-figma-base font-medium
             transition-all duration-200 border
             ${isPending
               ? 'bg-fw-blue-light text-fw-link border-fw-active/20 cursor-wait'
               : status === 'Active'
-                ? 'bg-fw-base text-fw-success border-fw-success/20 hover:bg-green-50'
+                ? 'bg-fw-base text-fw-success border-fw-success hover:bg-green-50'
                 : 'bg-fw-base text-fw-body border-fw-secondary hover:bg-fw-wash'
             }
           `}
@@ -81,7 +81,7 @@ export function ConnectionCardStatus({
           )}
         </motion.button>
 
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${healthStatus.color}`}>
+        <span className={`px-2 py-1 rounded-lg text-figma-sm font-medium uppercase ${healthStatus.color}`}>
           {healthStatus.label}
         </span>
       </div>

@@ -194,17 +194,17 @@ export function BandwidthScalingPolicy() {
   return (
     <div className="space-y-6">
       {/* Header Card */}
-      <div className="bg-fw-base border border-fw-secondary rounded-lg shadow-sm">
+      <div className="bg-fw-base border border-fw-secondary rounded-2xl shadow-sm">
         <div className="p-6 border-b border-fw-secondary">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-fw-heading">Bandwidth Auto-Scaling</h2>
-              <p className="text-sm text-fw-bodyLight mt-1">
+              <h2 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">Bandwidth Auto-Scaling</h2>
+              <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">
                 Configure automatic bandwidth scaling policies to optimize network performance and cost efficiency
               </p>
             </div>
             <div className="flex items-center space-x-3">
-              <span className={`text-sm font-medium ${autoScalingEnabled ? 'text-fw-success' : 'text-fw-bodyLight'}`}>
+              <span className={`text-figma-base font-medium ${autoScalingEnabled ? 'text-fw-success' : 'text-fw-bodyLight'}`}>
                 {autoScalingEnabled ? 'Enabled' : 'Disabled'}
               </span>
               <button
@@ -212,7 +212,7 @@ export function BandwidthScalingPolicy() {
                 className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                   autoScalingEnabled
                     ? 'bg-fw-success focus:ring-fw-success shadow-sm'
-                    : 'bg-gray-300 focus:ring-gray-400'
+                    : 'bg-fw-neutral focus:ring-fw-secondary'
                 }`}
                 aria-label="Toggle auto-scaling"
               >
@@ -232,13 +232,13 @@ export function BandwidthScalingPolicy() {
           <div>
             <div className="flex items-center mb-4">
               <Activity className="h-5 w-5 text-fw-link mr-2" />
-              <h3 className="text-lg font-medium text-fw-heading">Scaling Thresholds</h3>
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Scaling Thresholds</h3>
             </div>
 
             {errors.thresholds && (
               <div className="mb-4 bg-fw-error/10 border-l-4 border-fw-error rounded p-3 flex items-start">
                 <AlertTriangle className="h-5 w-5 text-fw-error mt-0.5 mr-2 flex-shrink-0" />
-                <p className="text-sm text-fw-error">{errors.thresholds}</p>
+                <p className="text-figma-base font-medium text-fw-error tracking-[-0.03em]">{errors.thresholds}</p>
               </div>
             )}
 
@@ -305,7 +305,7 @@ export function BandwidthScalingPolicy() {
             <div className="mt-4 bg-fw-wash border border-fw-secondary rounded p-3">
               <div className="flex items-start">
                 <Info className="h-4 w-4 text-fw-info mt-0.5 mr-2 flex-shrink-0" />
-                <p className="text-xs text-fw-bodyLight">
+                <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">
                   <strong>Recommendation:</strong> Maintain at least a 30% gap between scale up and scale down thresholds to prevent rapid oscillation.
                 </p>
               </div>
@@ -316,13 +316,13 @@ export function BandwidthScalingPolicy() {
           <div>
             <div className="flex items-center mb-4">
               <TrendingUp className="h-5 w-5 text-fw-link mr-2" />
-              <h3 className="text-lg font-medium text-fw-heading">Bandwidth Limits</h3>
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Bandwidth Limits</h3>
             </div>
 
             {errors.bandwidth && (
               <div className="mb-4 bg-fw-error/10 border-l-4 border-fw-error rounded p-3 flex items-start">
                 <AlertTriangle className="h-5 w-5 text-fw-error mt-0.5 mr-2 flex-shrink-0" />
-                <p className="text-sm text-fw-error">{errors.bandwidth}</p>
+                <p className="text-figma-base font-medium text-fw-error tracking-[-0.03em]">{errors.bandwidth}</p>
               </div>
             )}
 
@@ -380,7 +380,7 @@ export function BandwidthScalingPolicy() {
           <div>
             <div className="flex items-center mb-4">
               <Clock className="h-5 w-5 text-fw-link mr-2" />
-              <h3 className="text-lg font-medium text-fw-heading">Advanced Settings</h3>
+              <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Advanced Settings</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -440,7 +440,7 @@ export function BandwidthScalingPolicy() {
                   className="h-4 w-4 rounded border-fw-secondary text-fw-link focus:ring-fw-active"
                   disabled={!autoScalingEnabled}
                 />
-                <span className="text-sm text-fw-body">Send notifications on scaling events</span>
+                <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Send notifications on scaling events</span>
               </label>
 
               <label className="flex items-center space-x-3">
@@ -451,7 +451,7 @@ export function BandwidthScalingPolicy() {
                   className="h-4 w-4 rounded border-fw-secondary text-fw-link focus:ring-fw-active"
                   disabled={!autoScalingEnabled}
                 />
-                <span className="text-sm text-fw-body">Enable predictive scaling (uses ML to forecast demand)</span>
+                <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Enable predictive scaling (uses ML to forecast demand)</span>
               </label>
             </div>
           </div>
@@ -461,7 +461,7 @@ export function BandwidthScalingPolicy() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <Calendar className="h-5 w-5 text-fw-link mr-2" />
-                <h3 className="text-lg font-medium text-fw-heading">Schedule Windows</h3>
+                <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Schedule Windows</h3>
               </div>
               <Button
                 variant="outline"
@@ -478,7 +478,7 @@ export function BandwidthScalingPolicy() {
               {scheduleWindows.map((window) => (
                 <div
                   key={window.id}
-                  className={`border rounded-lg p-4 ${
+                  className={`border rounded-xl p-4 ${
                     window.enabled ? 'border-fw-secondary bg-fw-base' : 'border-fw-disabled bg-fw-wash'
                   }`}
                 >
@@ -486,13 +486,13 @@ export function BandwidthScalingPolicy() {
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <h4 className="font-medium text-fw-heading">{window.name}</h4>
-                        <span className={`px-2 py-0.5 text-xs rounded-full ${
+                        <span className={`px-2 py-0.5 text-figma-sm rounded-full ${
                           window.enabled ? 'bg-fw-success/10 text-fw-success' : 'bg-fw-disabled text-fw-bodyLight'
                         }`}>
                           {window.enabled ? 'Active' : 'Disabled'}
                         </span>
                       </div>
-                      <div className="grid grid-cols-3 gap-4 text-sm">
+                      <div className="grid grid-cols-3 gap-4 text-figma-base">
                         <div>
                           <span className="text-fw-bodyLight">Time:</span>
                           <span className="ml-2 text-fw-body">{window.startTime} - {window.endTime}</span>
@@ -510,14 +510,14 @@ export function BandwidthScalingPolicy() {
                     <div className="flex items-center space-x-2 ml-4">
                       <button
                         onClick={() => handleToggleWindow(window.id)}
-                        className="text-fw-link hover:text-fw-linkHover text-sm"
+                        className="text-fw-link hover:text-fw-linkHover text-figma-base"
                         disabled={!autoScalingEnabled}
                       >
                         {window.enabled ? 'Disable' : 'Enable'}
                       </button>
                       <button
                         onClick={() => handleRemoveWindow(window.id)}
-                        className="text-fw-error hover:text-red-700 p-1"
+                        className="text-fw-error hover:text-fw-error p-1"
                         disabled={!autoScalingEnabled}
                       >
                         <X className="h-4 w-4" />
@@ -530,7 +530,7 @@ export function BandwidthScalingPolicy() {
 
             {/* Add Window Form */}
             {showAddWindow && (
-              <div className="mt-4 border border-fw-secondary rounded-lg p-4 bg-fw-wash">
+              <div className="mt-4 border border-fw-secondary rounded-xl p-4 bg-fw-wash">
                 <h4 className="font-medium text-fw-heading mb-4">Add Schedule Window</h4>
                 <div className="space-y-4">
                   <FormField label="Window Name">
@@ -569,7 +569,7 @@ export function BandwidthScalingPolicy() {
                         <button
                           key={day}
                           onClick={() => toggleDayOfWeek(day)}
-                          className={`px-3 py-1 text-sm rounded-md border transition-colors ${
+                          className={`px-3 py-1 text-figma-base rounded-md border transition-colors ${
                             (newWindow.daysOfWeek || []).includes(day)
                               ? 'bg-fw-link text-white border-fw-link'
                               : 'bg-fw-base text-fw-body border-fw-secondary hover:bg-fw-wash'
@@ -617,7 +617,7 @@ export function BandwidthScalingPolicy() {
 
         {/* Footer Actions */}
         <div className="px-6 py-4 bg-fw-wash border-t border-fw-secondary flex justify-between items-center">
-          <div className="text-sm text-fw-bodyLight">
+          <div className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">
             Last saved: Never
           </div>
           <div className="flex space-x-3">

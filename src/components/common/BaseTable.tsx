@@ -75,7 +75,7 @@ export function BaseTable<T>({
       )}
 
       {/* Table */}
-      <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
         <div className="min-w-full divide-y divide-fw-secondary">
         <div className="bg-fw-wash">
           <div className="min-w-full table">
@@ -85,7 +85,7 @@ export function BaseTable<T>({
                   <div
                     key={column.id}
                     scope="col"
-                    className="table-cell px-6 py-3 text-left text-xs font-medium text-fw-bodyLight uppercase tracking-wider whitespace-nowrap"
+                    className="table-cell px-6 h-12 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] whitespace-nowrap"
                     style={column.width ? { width: column.width } : undefined}
                     role="columnheader"
                     aria-sort={
@@ -130,7 +130,7 @@ export function BaseTable<T>({
                       <button
                         ref={columnButtonRef}
                         onClick={() => setShowColumnPopover(!showColumnPopover)}
-                        className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+                        className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral transition-colors"
                         title="Manage Columns"
                         aria-label="Manage table columns"
                       >
@@ -149,7 +149,7 @@ export function BaseTable<T>({
                 <div className="table-row">
                   <div
                     colSpan={filteredColumns.length + (actions ? 1 : 0)}
-                    className="table-cell px-6 py-4 text-center text-sm text-fw-bodyLight"
+                    className="table-cell px-6 py-4 text-center text-figma-base text-fw-bodyLight"
                   >
                     {emptyState || 'No data available'}
                   </div>
@@ -170,7 +170,7 @@ export function BaseTable<T>({
                     {filteredColumns.map((column) => (
                       <div 
                         key={column.id} 
-                        className="table-cell px-6 py-4 whitespace-nowrap"
+                        className="table-cell px-6 h-12 text-figma-base font-medium text-fw-heading tracking-[-0.03em] whitespace-nowrap"
                         role="gridcell"
                       >
                         {column.render(item)}
@@ -178,7 +178,7 @@ export function BaseTable<T>({
                     ))}
                     {actions && (
                       <div 
-                        className="table-cell px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                        className="table-cell px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium"
                         onClick={e => e.stopPropagation()}
                         role="gridcell"
                       >

@@ -41,26 +41,26 @@ export function IPEInfoTooltip({ className = '', variant = 'default' }: IPEInfoT
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
       >
-        <Info className="h-4 w-4 text-gray-400 hover:text-blue-600 transition-colors" />
+        <Info className="h-4 w-4 text-fw-bodyLight hover:text-fw-link transition-colors" />
       </div>
 
       {showTooltip && (
-        <div className="absolute z-50 left-0 top-full mt-2 w-80 p-4 bg-gray-900 text-white text-sm rounded-lg shadow-xl">
+        <div className="absolute z-50 left-0 top-full mt-2 w-80 p-4 bg-fw-gray-900 text-fw-linkPrimary text-figma-sm rounded-lg shadow-xl">
           <div className="flex items-start space-x-2 mb-2">
-            <Server className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+            <Server className="h-5 w-5 text-fw-link flex-shrink-0 mt-0.5" />
             <div>
               <div className="font-semibold mb-1">{content.title}</div>
-              <div className="text-gray-300 text-xs leading-relaxed mb-2">
+              <div className="text-fw-gray-300 text-figma-sm leading-relaxed mb-2">
                 {content.description}
               </div>
               {content.example && (
-                <div className="text-gray-400 text-xs italic border-t border-gray-700 pt-2 mt-2">
+                <div className="text-fw-gray-400 text-figma-sm italic border-t border-fw-gray-700 pt-2 mt-2">
                   {content.example}
                 </div>
               )}
             </div>
           </div>
-          <div className="absolute -top-1 left-4 w-2 h-2 bg-gray-900 transform rotate-45" />
+          <div className="absolute -top-1 left-4 w-2 h-2 bg-fw-gray-900 transform rotate-45" />
         </div>
       )}
     </div>

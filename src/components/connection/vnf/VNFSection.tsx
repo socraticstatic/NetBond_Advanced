@@ -70,8 +70,8 @@ export function VNFSection({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Network Functions</h2>
-          <p className="text-sm text-gray-600 mt-1">
+          <h2 className="text-figma-xl font-bold text-fw-heading tracking-[-0.04em]">Network Functions</h2>
+          <p className="text-figma-base text-fw-bodyLight mt-1">
             Manage network function instances and their configurations
           </p>
         </div>
@@ -89,50 +89,50 @@ export function VNFSection({
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
+        <div className="bg-fw-accent rounded-lg p-4 border border-fw-active">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-blue-900">Active VNFs</p>
-              <p className="text-2xl font-bold text-blue-700 mt-1">{activeVNFs}</p>
+              <p className="text-figma-sm font-medium text-fw-heading">Active VNFs</p>
+              <p className="text-figma-xl font-bold text-fw-link mt-1">{activeVNFs}</p>
             </div>
-            <Shield className="h-8 w-8 text-blue-600 opacity-50" />
+            <Shield className="h-8 w-8 text-fw-link opacity-50" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 border border-red-200">
+        <div className="bg-red-50 rounded-lg p-4 border border-red-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-red-900">Firewalls</p>
-              <p className="text-2xl font-bold text-red-700 mt-1">{vnfsByType.firewall}</p>
+              <p className="text-figma-sm font-medium text-fw-heading">Firewalls</p>
+              <p className="text-figma-xl font-bold text-fw-error mt-1">{vnfsByType.firewall}</p>
             </div>
-            <Shield className="h-8 w-8 text-red-600 opacity-50" />
+            <Shield className="h-8 w-8 text-fw-error opacity-50" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
+        <div className="bg-green-50 rounded-lg p-4 border border-green-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-green-900">SD-WAN</p>
-              <p className="text-2xl font-bold text-green-700 mt-1">{vnfsByType.sdwan}</p>
+              <p className="text-figma-sm font-medium text-fw-heading">SD-WAN</p>
+              <p className="text-figma-xl font-bold text-fw-success mt-1">{vnfsByType.sdwan}</p>
             </div>
-            <Shield className="h-8 w-8 text-green-600 opacity-50" />
+            <Shield className="h-8 w-8 text-fw-success opacity-50" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 border border-gray-200">
+        <div className="bg-fw-wash rounded-lg p-4 border border-fw-secondary">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-900">Routers</p>
-              <p className="text-2xl font-bold text-gray-700 mt-1">{vnfsByType.router}</p>
+              <p className="text-figma-base font-medium text-fw-heading">Routers</p>
+              <p className="text-figma-xl font-bold text-fw-body mt-1">{vnfsByType.router}</p>
             </div>
-            <Shield className="h-8 w-8 text-gray-600 opacity-50" />
+            <Shield className="h-8 w-8 text-fw-bodyLight opacity-50" />
           </div>
         </div>
       </div>
 
       {/* Table Card */}
-      <div className="bg-white rounded-lg border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary">
+        <div className="px-6 py-4 border-b border-fw-secondary">
           <div className="flex items-center justify-between gap-4">
             <div className="relative flex-1 max-w-md">
               <input
@@ -140,10 +140,10 @@ export function VNFSection({
                 placeholder="Search VNFs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm w-full"
+                className="pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active text-figma-base w-full"
               />
               <svg
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-4 w-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -160,7 +160,7 @@ export function VNFSection({
               <select
                 value={vnfTypeFilter}
                 onChange={(e) => setVnfTypeFilter(e.target.value as VNFType | 'all')}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="px-4 py-2 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
               >
                 <option value="all">All Types</option>
                 <option value="firewall">Firewall</option>
@@ -194,7 +194,7 @@ export function VNFSection({
                   a.click();
                   URL.revokeObjectURL(url);
                 }}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-flex items-center px-4 py-2 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
               >
                 <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -207,11 +207,11 @@ export function VNFSection({
 
         {filteredVNFs.length === 0 ? (
           <div className="text-center py-16">
-            <Shield className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <Shield className="h-12 w-12 mx-auto text-fw-bodyLight mb-4" />
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] mb-2">
               {searchQuery || vnfTypeFilter !== 'all' ? 'No VNFs found' : 'No network functions'}
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-fw-bodyLight mb-6">
               {searchQuery || vnfTypeFilter !== 'all'
                 ? 'Try adjusting your filters'
                 : 'Get started by adding your first network function'}

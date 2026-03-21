@@ -224,29 +224,29 @@ export function RealTimeChart({
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4">
+    <div className="bg-fw-base rounded-2xl border border-fw-secondary p-4">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setIsPaused(!isPaused)}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-lg hover:bg-fw-neutral transition-colors"
             title={isPaused ? 'Resume updates' : 'Pause updates'}
           >
             {isPaused ? (
-              <Play className="h-4 w-4 text-gray-600" />
+              <Play className="h-4 w-4 text-fw-body" />
             ) : (
-              <Pause className="h-4 w-4 text-gray-600" />
+              <Pause className="h-4 w-4 text-fw-body" />
             )}
           </button>
           <button
             onClick={handleReset}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-lg hover:bg-fw-neutral transition-colors"
             title="Reset view"
           >
-            <RefreshCw className="h-4 w-4 text-gray-600" />
+            <RefreshCw className="h-4 w-4 text-fw-body" />
           </button>
         </div>
-        <div className="flex items-center space-x-4 text-xs text-gray-600">
+        <div className="flex items-center space-x-4 text-figma-sm text-fw-body">
           {isPaused && (
             <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full font-medium">
               Paused

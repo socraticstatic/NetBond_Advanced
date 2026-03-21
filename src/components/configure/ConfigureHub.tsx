@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import {
   Settings, Users, CreditCard, FileText, Shield,
-  Server, Layers, Building, Clock, Database, Zap, Building2
+  Server, Layers, Building, Clock, Database, Building2
 } from 'lucide-react';
 import { SubNav } from '../navigation/SubNav';
 import { ConnectionManagement } from './ConnectionManagement';
@@ -48,7 +48,6 @@ export function ConfigureHub({ defaultTab = 'connections' }: ConfigureHubProps) 
     { id: 'users', label: 'Users', icon: <Users className="h-5 w-5 mr-2" /> },
     { id: 'billing', label: 'Billing', icon: <CreditCard className="h-5 w-5 mr-2" /> },
     { id: 'reports', label: 'Reports', icon: <FileText className="h-5 w-5 mr-2" /> },
-    { id: 'agentic', label: 'Agentic AI', icon: <Zap className="h-5 w-5 mr-2" /> },
     { id: 'system', label: 'System', icon: <Settings className="h-5 w-5 mr-2" /> },
     { id: 'partners', label: 'Partners', icon: <Building className="h-5 w-5 mr-2" /> },
     { id: 'policies', label: 'Policies', icon: <Shield className="h-5 w-5 mr-2" /> },

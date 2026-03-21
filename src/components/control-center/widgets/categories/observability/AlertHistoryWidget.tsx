@@ -29,10 +29,10 @@ export function AlertHistoryWidget() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <AlertTriangle className="h-5 w-5 text-orange-500 mr-2" />
-          <span className="text-sm font-medium text-gray-900">Alert History</span>
+          <AlertTriangle className="h-5 w-5 text-fw-warn mr-2" />
+          <span className="text-figma-base font-medium text-fw-heading">Alert History</span>
         </div>
-        <button className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+        <button className="p-1 text-fw-bodyLight hover:text-fw-body rounded-lg hover:bg-fw-neutral">
           <Filter className="h-4 w-4" />
         </button>
       </div>
@@ -43,31 +43,31 @@ export function AlertHistoryWidget() {
             key={alert.id}
             className={`p-2 rounded-lg ${
               alert.type === 'error' ? 'bg-red-50' :
-              alert.type === 'warning' ? 'bg-yellow-50' :
-              'bg-blue-50'
+              alert.type === 'warning' ? 'bg-fw-warn/10' :
+              'bg-fw-accent'
             }`}
           >
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center">
                 {alert.status === 'active' ? (
                   <AlertTriangle className={`h-4 w-4 mr-2 ${
-                    alert.type === 'error' ? 'text-red-500' :
-                    alert.type === 'warning' ? 'text-yellow-500' :
-                    'text-blue-500'
+                    alert.type === 'error' ? 'text-fw-error' :
+                    alert.type === 'warning' ? 'text-fw-warn' :
+                    'text-fw-link'
                   }`} />
                 ) : (
-                  <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                  <CheckCircle className="h-4 w-4 mr-2 text-fw-success" />
                 )}
-                <span className={`text-sm ${
-                  alert.type === 'error' ? 'text-red-700' :
-                  alert.type === 'warning' ? 'text-yellow-700' :
-                  'text-blue-700'
+                <span className={`text-figma-base ${
+                  alert.type === 'error' ? 'text-fw-error' :
+                  alert.type === 'warning' ? 'text-fw-warn' :
+                  'text-fw-linkHover'
                 }`}>
                   {alert.message}
                 </span>
               </div>
             </div>
-            <div className="flex items-center text-xs text-gray-500 ml-6">
+            <div className="flex items-center text-figma-sm text-fw-bodyLight ml-6">
               <Clock className="h-3 w-3 mr-1" />
               {new Date(alert.timestamp).toLocaleString()}
             </div>
@@ -75,7 +75,7 @@ export function AlertHistoryWidget() {
         ))}
       </div>
 
-      <button className="w-full px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+      <button className="w-full px-4 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
         View All Alerts
       </button>
     </div>

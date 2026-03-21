@@ -29,14 +29,14 @@ const ToggleComponent = ({
         className="sr-only toggle-switch"
       />
       <div className={`relative inline-block ${dimensions.width} ${dimensions.height} transition-colors duration-200 ease-in-out rounded-full ${
-        checked ? 'bg-[#003184]' : 'bg-gray-400'
+        checked ? 'bg-fw-primary' : 'bg-fw-bodyLight'
       } ${disabled ? 'opacity-50' : ''}`}>
         <div className={`absolute inset-y-0 left-0 ${dimensions.dot} transition duration-200 ease-in-out transform bg-white rounded-full ${
           checked ? dimensions.translate : 'translate-x-0'
         } shadow-md`}></div>
       </div>
       {label && (
-        <span className={`ml-2 text-sm font-medium ${disabled ? 'text-fw-disabled' : 'text-fw-body'}`}>
+        <span className={`ml-2 text-figma-base font-medium ${disabled ? 'text-fw-disabled' : 'text-fw-body'}`}>
           {label}
         </span>
       )}

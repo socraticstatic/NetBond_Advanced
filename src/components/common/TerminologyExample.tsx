@@ -2,22 +2,22 @@ import { TerminologyTooltip } from './TerminologyTooltip';
 
 export function TerminologyExample() {
   return (
-    <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+    <div className="p-6 bg-fw-accent rounded-xl border border-fw-active">
+      <h3 className="text-lg font-semibold text-fw-heading mb-4 tracking-[-0.03em]">
         Understanding Network Architecture
       </h3>
 
-      <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
+      <div className="space-y-3 text-figma-base text-fw-body leading-relaxed">
         <p>
           When you create a{' '}
           <TerminologyTooltip termId="connection">
-            <span className="font-medium text-blue-700 border-b border-blue-300 border-dotted cursor-help">
+            <span className="font-medium text-fw-linkHover border-b border-fw-active border-dotted cursor-help">
               Connection
             </span>
           </TerminologyTooltip>
           , you establish a dedicated network path to cloud providers. Each connection can have multiple{' '}
           <TerminologyTooltip termId="cloud-router">
-            <span className="font-medium text-green-700 border-b border-green-300 border-dotted cursor-help">
+            <span className="font-medium text-fw-success border-b border-green-300 border-dotted cursor-help">
               Cloud Routers
             </span>
           </TerminologyTooltip>
@@ -27,13 +27,13 @@ export function TerminologyExample() {
         <p>
           Within each Cloud Router, you can create{' '}
           <TerminologyTooltip termId="link">
-            <span className="font-medium text-purple-700 border-b border-purple-300 border-dotted cursor-help">
+            <span className="font-medium text-fw-purple border-b border-purple-300 border-dotted cursor-help">
               Links (VLANs)
             </span>
           </TerminologyTooltip>
           {' '}to segment your traffic. Each Link can have its own{' '}
           <TerminologyTooltip termId="routing">
-            <span className="font-medium text-gray-700 border-b border-gray-400 border-dotted cursor-help">
+            <span className="font-medium text-fw-body border-b border-fw-secondary border-dotted cursor-help">
               routing settings
             </span>
           </TerminologyTooltip>
@@ -49,13 +49,13 @@ export function TerminologyExample() {
         <p>
           All of this virtual infrastructure runs on physical{' '}
           <TerminologyTooltip termId="ipe">
-            <span className="font-medium text-gray-800 border-b border-gray-500 border-dotted cursor-help">
+            <span className="font-medium text-fw-heading border-b border-fw-secondary border-dotted cursor-help">
               IPE routers
             </span>
           </TerminologyTooltip>
           {' '}located at data center facilities, which provide the actual{' '}
           <TerminologyTooltip termId="bandwidth">
-            <span className="font-medium text-blue-700 border-b border-blue-300 border-dotted cursor-help">
+            <span className="font-medium text-fw-linkHover border-b border-fw-active border-dotted cursor-help">
               bandwidth
             </span>
           </TerminologyTooltip>
@@ -69,8 +69,8 @@ export function TerminologyExample() {
         </p>
       </div>
 
-      <div className="mt-4 p-3 bg-white rounded-lg border border-blue-200">
-        <p className="text-xs text-blue-800">
+      <div className="mt-4 p-3 bg-fw-base rounded-lg border border-fw-active">
+        <p className="text-figma-sm text-fw-linkHover">
           <strong className="font-semibold">Tip:</strong> Hover over any underlined term to see its definition, examples, and related concepts. Click "Learn More" to view the full glossary entry.
         </p>
       </div>

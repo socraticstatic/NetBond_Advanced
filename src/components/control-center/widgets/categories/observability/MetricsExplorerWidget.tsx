@@ -47,32 +47,32 @@ export function MetricsExplorerWidget({ connections }: MetricsExplorerWidgetProp
     <div className="space-y-6">
       {/* Metric Cards */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-blue-50 rounded-lg p-3">
+        <div className="bg-fw-accent rounded-lg p-3">
           <div className="flex items-center justify-between mb-1">
-            <Activity className="h-4 w-4 text-blue-500" />
-            <span className="text-xs text-blue-600">Latency</span>
+            <Activity className="h-4 w-4 text-fw-link" />
+            <span className="text-figma-sm text-fw-link">Latency</span>
           </div>
-          <div className="text-xl font-semibold text-blue-900">
+          <div className="text-xl font-semibold text-fw-linkHover">
             {metrics.latency.current}ms
           </div>
         </div>
 
         <div className="bg-green-50 rounded-lg p-3">
           <div className="flex items-center justify-between mb-1">
-            <TrendingUp className="h-4 w-4 text-green-500" />
-            <span className="text-xs text-green-600">Bandwidth</span>
+            <TrendingUp className="h-4 w-4 text-fw-success" />
+            <span className="text-figma-sm text-fw-success">Bandwidth</span>
           </div>
-          <div className="text-xl font-semibold text-green-900">
+          <div className="text-xl font-semibold text-fw-success">
             {metrics.bandwidth.current}%
           </div>
         </div>
 
         <div className="bg-purple-50 rounded-lg p-3">
           <div className="flex items-center justify-between mb-1">
-            <ArrowUpDown className="h-4 w-4 text-purple-500" />
-            <span className="text-xs text-purple-600">Packet Loss</span>
+            <ArrowUpDown className="h-4 w-4 text-fw-purple" />
+            <span className="text-figma-sm text-fw-purple">Packet Loss</span>
           </div>
-          <div className="text-xl font-semibold text-purple-900">
+          <div className="text-xl font-semibold text-fw-purple">
             {metrics.packetLoss.current}%
           </div>
         </div>
@@ -81,8 +81,8 @@ export function MetricsExplorerWidget({ connections }: MetricsExplorerWidgetProp
       {/* Chart */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <span className="text-sm font-medium text-gray-900">Trends</span>
-          <select className="text-sm border-gray-300 rounded-md">
+          <span className="text-figma-base font-medium text-fw-heading">Trends</span>
+          <select className="text-figma-base border-fw-secondary rounded-md">
             <option>Last 5 Minutes</option>
             <option>Last Hour</option>
             <option>Last Day</option>
@@ -95,13 +95,13 @@ export function MetricsExplorerWidget({ connections }: MetricsExplorerWidgetProp
 
       {/* Quick Insights */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="p-3 bg-gray-50 rounded-lg">
-          <div className="text-sm font-medium text-gray-900 mb-1">Peak Usage</div>
-          <div className="text-sm text-gray-500">85% at 14:30</div>
+        <div className="p-3 bg-fw-wash rounded-lg">
+          <div className="text-figma-base font-medium text-fw-heading mb-1">Peak Usage</div>
+          <div className="text-figma-base text-fw-bodyLight">85% at 14:30</div>
         </div>
-        <div className="p-3 bg-gray-50 rounded-lg">
-          <div className="text-sm font-medium text-gray-900 mb-1">Avg Response</div>
-          <div className="text-sm text-gray-500">4.2ms today</div>
+        <div className="p-3 bg-fw-wash rounded-lg">
+          <div className="text-figma-base font-medium text-fw-heading mb-1">Avg Response</div>
+          <div className="text-figma-base text-fw-bodyLight">4.2ms today</div>
         </div>
       </div>
     </div>

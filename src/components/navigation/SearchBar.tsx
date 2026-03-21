@@ -22,12 +22,12 @@ export function SearchBar({ onSearch }: SearchBarProps) {
   return (
     <div className="relative">
       {showSearch ? (
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full md:w-[400px] animate-in slide-in-from-right-5">
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full md:w-[560px] animate-in slide-in-from-right-5">
           <div className="relative">
             <input
               type="text"
-              placeholder="Search connections, settings, documentation..."
-              className="w-full pl-11 pr-10 py-2.5 text-sm bg-fw-wash border border-fw-secondary rounded-lg
+              placeholder="Search connections, settings, documentations ..."
+              className="w-full pl-11 pr-10 h-10 text-figma-base font-medium bg-fw-base rounded-full
                 focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-transparent
                 placeholder:text-fw-bodyLight"
               value={searchQuery}
@@ -35,7 +35,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
               onBlur={() => !searchQuery && setShowSearch(false)}
               autoFocus
             />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-fw-bodyLight" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-fw-link" />
             {searchQuery && (
               <button
                 onClick={clearSearch}
@@ -49,7 +49,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
       ) : (
         <button
           onClick={() => setShowSearch(true)}
-          className="p-2 text-fw-bodyLight hover:text-fw-body hover:bg-fw-wash rounded-lg transition-colors duration-200"
+          className="p-2 text-fw-heading hover:text-fw-body hover:bg-fw-wash rounded-lg transition-colors duration-200"
         >
           <Search className="h-5 w-5" />
         </button>

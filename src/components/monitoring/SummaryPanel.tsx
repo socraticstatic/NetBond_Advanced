@@ -12,28 +12,27 @@ export function SummaryPanel({ connections }: SummaryPanelProps) {
   ];
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-medium text-gray-900">
-          <Users className="h-5 w-5 inline-block mr-2 text-blue-500" />
-          Top Users by Bandwidth
-        </h3>
+    <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+      {/* Figma: icon 24x24 + "Usage Analysis" 16px w700, then "Top Users by Bandwidth" 16px w700 */}
+      <div className="flex items-center gap-2 mb-6">
+        <Activity className="h-6 w-6 text-fw-link" />
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Usage Analysis</h3>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <p className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Top Users by Bandwidth</p>
+      {/* Figma: 3 user cells, 352x172, fill=#f8fafb, r=8 */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {topUsers.map((user, index) => (
-          <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div className="flex items-center space-x-3">
-              <div className="flex-shrink-0">
-                <div className="h-10 w-10 rounded-full bg-fw-blue-light flex items-center justify-center border border-fw-secondary">
-                  <Users className="h-5 w-5 text-blue-600" />
-                </div>
-              </div>
-              <div>
-                <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                <div className="text-sm text-gray-500">Total Usage</div>
-              </div>
+          <div key={index} className="bg-fw-wash rounded-lg p-4">
+            <div className="flex items-center gap-3 mb-3">
+              {/* Figma: user icon 24x24 fill=#0057b8 */}
+              <Users className="h-6 w-6 text-fw-link" />
+              {/* Figma: name 16px w500 #1d2329 */}
+              <span className="text-figma-lg font-medium text-fw-heading">{user.name}</span>
             </div>
-            <div className="text-lg font-semibold text-gray-900">{user.usage}</div>
+            {/* Figma: "Total usage" 14px w500 #454b52 */}
+            <div className="text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-1">Total usage</div>
+            {/* Figma: value 24px w700 #1d2329 */}
+            <div className="text-figma-xl font-bold text-fw-heading tracking-[-0.04em]">{user.usage}</div>
           </div>
         ))}
       </div>

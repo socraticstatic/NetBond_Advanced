@@ -110,13 +110,13 @@ export function AuditLogPanel({ isOpen, onClose, filterByResource, filterByUser 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'success':
-        return 'text-green-600 bg-green-50 border-green-200';
+        return 'text-fw-success bg-green-50 border-green-200';
       case 'denied':
-        return 'text-red-600 bg-red-50 border-red-200';
+        return 'text-fw-error bg-red-50 border-red-200';
       case 'warning':
         return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200';
+        return 'text-fw-bodyLight bg-fw-wash border-fw-secondary';
     }
   };
 
@@ -130,31 +130,31 @@ export function AuditLogPanel({ isOpen, onClose, filterByResource, filterByUser 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed right-0 top-0 bottom-0 w-96 bg-white shadow-2xl border-l border-gray-200 z-50 flex flex-col">
+    <div className="fixed right-0 top-0 bottom-0 w-96 bg-fw-base shadow-2xl border-l border-fw-secondary z-50 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+      <div className="flex items-center justify-between p-4 border-b border-fw-secondary bg-fw-wash">
         <div className="flex items-center gap-2">
-          <FileText className="h-5 w-5 text-gray-700" />
-          <h2 className="text-lg font-semibold text-gray-900">Audit Log</h2>
+          <FileText className="h-5 w-5 text-fw-body" />
+          <h2 className="text-lg font-semibold text-fw-heading tracking-[-0.03em]">Audit Log</h2>
         </div>
         <button
           onClick={onClose}
-          className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
+          className="p-1 hover:bg-fw-neutral rounded-lg transition-colors"
         >
-          <X className="h-5 w-5 text-gray-600" />
+          <X className="h-5 w-5 text-fw-bodyLight" />
         </button>
       </div>
 
       {/* Filter */}
-      <div className="p-4 border-b border-gray-200 bg-white">
+      <div className="p-4 border-b border-fw-secondary bg-fw-base">
         <div className="flex items-center gap-2 mb-2">
-          <Filter className="h-4 w-4 text-gray-500" />
-          <span className="text-sm font-medium text-gray-700">Filter by type:</span>
+          <Filter className="h-4 w-4 text-fw-bodyLight" />
+          <span className="text-figma-base font-medium text-fw-body">Filter by type:</span>
         </div>
         <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
         >
           <option value="all">All Activities</option>
           <option value="connection">Connections</option>
@@ -170,8 +170,8 @@ export function AuditLogPanel({ isOpen, onClose, filterByResource, filterByUser 
         <div className="p-4 space-y-3">
           {filteredLogs.length === 0 ? (
             <div className="text-center py-8">
-              <FileText className="h-12 w-12 text-gray-300 mx-auto mb-2" />
-              <p className="text-sm text-gray-500">No audit logs found</p>
+              <FileText className="h-12 w-12 text-fw-bodyLight mx-auto mb-2" />
+              <p className="text-figma-base text-fw-bodyLight">No audit logs found</p>
             </div>
           ) : (
             filteredLogs.map((log) => (
@@ -185,33 +185,33 @@ export function AuditLogPanel({ isOpen, onClose, filterByResource, filterByUser 
                   <div className="flex items-center gap-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       log.resourceType === 'billing' ? 'bg-orange-100 text-orange-600' :
-                      log.resourceType === 'security' ? 'bg-red-100 text-red-600' :
-                      log.resourceType === 'system' ? 'bg-purple-100 text-purple-600' :
-                      'bg-blue-100 text-blue-600'
+                      log.resourceType === 'security' ? 'bg-red-50 text-fw-error' :
+                      log.resourceType === 'system' ? 'bg-purple-50 text-fw-purple' :
+                      'bg-fw-accent text-fw-link'
                     }`}>
                       {getResourceIcon(log.resourceType)}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-gray-900">{log.action}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-figma-base font-semibold text-fw-heading">{log.action}</p>
+                      <p className="text-figma-sm text-fw-bodyLight">
                         {log.timestamp.toLocaleTimeString()}
                       </p>
                     </div>
                   </div>
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${getStatusColor(log.status)}`}>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium border ${getStatusColor(log.status)}`}>
                     {log.status}
                   </span>
                 </div>
 
-                <div className="text-xs text-gray-700 mb-2">
+                <div className="text-figma-sm text-fw-body mb-2">
                   <span className="font-medium">{log.user}</span>
-                  <span className="text-gray-500"> → </span>
+                  <span className="text-fw-bodyLight"> → </span>
                   <span>{log.resource}</span>
                 </div>
 
                 <button
                   onClick={() => setExpandedLog(expandedLog === log.id ? null : log.id)}
-                  className="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                  className="text-figma-sm text-fw-link hover:text-fw-linkHover font-medium flex items-center gap-1"
                 >
                   {expandedLog === log.id ? (
                     <>
@@ -227,18 +227,18 @@ export function AuditLogPanel({ isOpen, onClose, filterByResource, filterByUser 
                 </button>
 
                 {expandedLog === log.id && (
-                  <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+                  <div className="mt-3 pt-3 border-t border-fw-secondary space-y-2">
                     <div>
-                      <p className="text-xs text-gray-500 font-medium">Details:</p>
-                      <p className="text-xs text-gray-700">{log.details}</p>
+                      <p className="text-figma-sm text-fw-bodyLight font-medium">Details:</p>
+                      <p className="text-figma-sm text-fw-body">{log.details}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 font-medium">IP Address:</p>
-                      <p className="text-xs text-gray-700 font-mono">{log.ipAddress}</p>
+                      <p className="text-figma-sm text-fw-bodyLight font-medium">IP Address:</p>
+                      <p className="text-figma-sm text-fw-body font-mono">{log.ipAddress}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 font-medium">Timestamp:</p>
-                      <p className="text-xs text-gray-700">
+                      <p className="text-figma-sm text-fw-bodyLight font-medium">Timestamp:</p>
+                      <p className="text-figma-sm text-fw-body">
                         {log.timestamp.toLocaleString()}
                       </p>
                     </div>
@@ -251,7 +251,7 @@ export function AuditLogPanel({ isOpen, onClose, filterByResource, filterByUser 
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-200 bg-gray-50">
+      <div className="p-4 border-t border-fw-secondary bg-fw-wash">
         <Button variant="outline" onClick={onClose} className="w-full">
           Close
         </Button>
@@ -274,8 +274,8 @@ export function MiniAuditLog({ resourceName, resourceType, limit = 3 }: MiniAudi
   ].slice(0, limit);
 
   return (
-    <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-      <h4 className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
+    <div className="bg-fw-wash rounded-lg p-3 border border-fw-secondary">
+      <h4 className="text-figma-sm font-semibold text-fw-body mb-2 flex items-center gap-1">
         <FileText className="h-3 w-3" />
         Recent Activity
       </h4>
@@ -283,12 +283,12 @@ export function MiniAuditLog({ resourceName, resourceType, limit = 3 }: MiniAudi
         {recentActions.map((action, index) => {
           const Icon = action.icon;
           return (
-            <div key={index} className="flex items-center gap-2 text-xs">
-              <Icon className="h-3 w-3 text-gray-500" />
-              <span className="text-gray-700">
+            <div key={index} className="flex items-center gap-2 text-figma-sm">
+              <Icon className="h-3 w-3 text-fw-bodyLight" />
+              <span className="text-fw-body">
                 <span className="font-medium">{action.user}</span> {action.action}
               </span>
-              <span className="text-gray-500 ml-auto">{action.time}</span>
+              <span className="text-fw-bodyLight ml-auto">{action.time}</span>
             </div>
           );
         })}

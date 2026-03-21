@@ -66,7 +66,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
           transition={{ duration: 0.2 }}
-          className="bg-white rounded-lg border border-fw-secondary overflow-hidden"
+          className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden"
         >
         <div className="flex items-center justify-between p-6">
           <motion.div
@@ -81,11 +81,11 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
               <span className="text-2xl font-medium text-fw-bodyLight">
                 {currentOption?.unit}
               </span>
-              <span className="text-sm font-medium text-fw-bodyLight ml-2">
+              <span className="text-figma-base font-medium text-fw-bodyLight ml-2">
                 ${currentOption?.price.toLocaleString()}/mo
               </span>
             </div>
-            <p className="text-sm text-fw-bodyLight">Current bandwidth allocation</p>
+            <p className="text-figma-base text-fw-bodyLight">Current bandwidth allocation</p>
           </motion.div>
 
           <motion.button
@@ -94,7 +94,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
             whileTap={!isConnectionActive ? { scale: 0.98 } : {}}
             disabled={isConnectionActive}
             title={isConnectionActive ? 'Connection must be deactivated before changing bandwidth' : undefined}
-            className={`ml-6 px-6 py-3 border-2 rounded-lg transition-all font-medium text-sm flex items-center space-x-2 group ${
+            className={`ml-6 px-6 py-3 border-2 rounded-lg transition-all font-medium text-figma-base flex items-center space-x-2 group ${
               isConnectionActive
                 ? 'bg-fw-disabled border-fw-secondary text-fw-bodyLight cursor-not-allowed'
                 : 'bg-fw-base border-fw-secondary text-fw-body hover:border-fw-active hover:bg-fw-wash'
@@ -106,7 +106,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
         </div>
         {isConnectionActive && (
           <div className="px-6 pb-4 pt-0">
-            <div className="flex items-start space-x-2 text-xs text-fw-warn bg-orange-50 border border-orange-200 rounded p-2">
+            <div className="flex items-start space-x-2 text-figma-sm text-fw-warn bg-fw-warn/10 border border-fw-warn/30 rounded p-2">
               <AlertCircle className="h-3.5 w-3.5 flex-shrink-0 mt-0.5" />
               <span>Bandwidth cannot be changed while connection is active. Please deactivate the connection first.</span>
             </div>
@@ -120,17 +120,17 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-          className="bg-white rounded-lg border border-fw-secondary overflow-hidden"
+          className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden"
         >
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-fw-secondary bg-fw-wash">
         <div>
           <h3 className="text-base font-semibold text-fw-heading">Select Bandwidth</h3>
-          <p className="text-xs text-fw-bodyLight mt-0.5">Choose your bandwidth allocation</p>
+          <p className="text-figma-sm text-fw-bodyLight mt-0.5">Choose your bandwidth allocation</p>
         </div>
         <button
           onClick={handleCancel}
-          className="p-1.5 text-fw-bodyLight hover:text-fw-body hover:bg-white rounded transition-colors"
+          className="p-1.5 text-fw-bodyLight hover:text-fw-body hover:bg-fw-base rounded transition-colors"
         >
           <X className="h-5 w-5" />
         </button>
@@ -145,7 +145,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
             exit={{ opacity: 0, height: 0 }}
             className="border-b border-fw-secondary bg-gradient-to-r from-fw-blue-light to-white"
           >
-            <div className="px-6 py-3 flex items-center justify-between text-sm">
+            <div className="px-6 py-3 flex items-center justify-between text-figma-base">
               <div className="flex items-center space-x-2">
                 <span className="text-fw-body font-medium">{currentBandwidth}</span>
                 <ChevronRight className="h-4 w-4 text-fw-bodyLight" />
@@ -178,7 +178,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
                   w-full flex items-center justify-between p-4 rounded-lg border-2 transition-all text-left
                   ${isSelected
                     ? 'border-fw-active bg-fw-blue-light shadow-sm'
-                    : 'border-fw-secondary bg-white hover:border-fw-bodyLight hover:bg-fw-wash'
+                    : 'border-fw-secondary bg-fw-base hover:border-fw-bodyLight hover:bg-fw-wash'
                   }
                 `}
               >
@@ -188,7 +188,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
                     flex-shrink-0 w-5 h-5 rounded-full border-2 transition-all
                     ${isSelected
                       ? 'border-fw-active bg-fw-active'
-                      : 'border-fw-secondary bg-white'
+                      : 'border-fw-secondary bg-fw-base'
                     }
                     flex items-center justify-center
                   `}>
@@ -208,12 +208,12 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
                   {/* Badges */}
                   <div className="flex items-center space-x-2">
                     {isCurrent && (
-                      <span className="px-2 py-0.5 bg-fw-cobalt-700 text-white text-xs font-medium rounded">
+                      <span className="px-2 py-0.5 bg-fw-cobalt-700 text-white text-figma-sm font-medium rounded">
                         Current
                       </span>
                     )}
                     {option.recommended && (
-                      <span className="px-2 py-0.5 bg-gradient-to-r from-complementary-orange to-fw-orange-600 text-white text-xs font-medium rounded">
+                      <span className="px-2 py-0.5 bg-gradient-to-r from-complementary-orange to-fw-orange-600 text-white text-figma-sm font-medium rounded">
                         Recommended
                       </span>
                     )}
@@ -225,7 +225,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
                   <div className={`text-lg font-semibold ${isSelected ? 'text-fw-heading' : 'text-fw-body'}`}>
                     ${option.price.toLocaleString()}
                   </div>
-                  <div className="text-xs text-fw-bodyLight">per month</div>
+                  <div className="text-figma-sm text-fw-bodyLight">per month</div>
                 </div>
               </motion.button>
             );
@@ -235,7 +235,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
         {/* Info Notice */}
         <div className="mt-4 flex items-start space-x-3 p-3 bg-fw-wash rounded-lg">
           <AlertCircle className="h-4 w-4 text-fw-info flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-fw-body leading-relaxed">
+          <p className="text-figma-sm text-fw-body leading-relaxed">
             Bandwidth changes take effect within 2-3 minutes. Billing is prorated from the date of change.
           </p>
         </div>
@@ -245,7 +245,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
       <div className="flex items-center justify-end space-x-3 px-6 py-4 bg-fw-wash border-t border-fw-secondary">
         <button
           onClick={handleCancel}
-          className="px-5 py-2.5 text-fw-body hover:text-fw-heading font-medium text-sm transition-colors"
+          className="px-5 py-2.5 text-fw-body hover:text-fw-heading font-medium text-figma-base transition-colors"
         >
           Cancel
         </button>
@@ -253,7 +253,7 @@ export function BandwidthAdjuster({ currentBandwidth, onBandwidthChange, connect
           onClick={handleSave}
           disabled={isConfirming || selectedBandwidth === currentBandwidth}
           className={`
-            px-6 py-2.5 rounded-lg font-medium text-sm transition-all flex items-center space-x-2
+            px-6 py-2.5 rounded-lg font-medium text-figma-base transition-all flex items-center space-x-2
             ${isConfirming
               ? 'bg-fw-gray-400 text-white cursor-wait'
               : selectedBandwidth === currentBandwidth

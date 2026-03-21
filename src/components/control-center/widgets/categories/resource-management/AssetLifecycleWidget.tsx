@@ -36,26 +36,26 @@ export function AssetLifecycleWidget() {
           <div
             key={asset.name}
             className={`p-3 rounded-lg border ${
-              asset.status === 'warning' ? 'bg-yellow-50 border-yellow-200' : 'bg-white border-gray-200'
+              asset.status === 'warning' ? 'bg-fw-warn/10 border-fw-warn/30' : 'bg-fw-base border-fw-secondary'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center">
                 {asset.status === 'warning' ? (
-                  <AlertTriangle className="h-4 w-4 text-yellow-500 mr-2" />
+                  <AlertTriangle className="h-4 w-4 text-fw-warn mr-2" />
                 ) : (
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                  <CheckCircle className="h-4 w-4 text-fw-success mr-2" />
                 )}
-                <span className="text-sm font-medium text-gray-900">{asset.name}</span>
+                <span className="text-figma-base font-medium text-fw-heading">{asset.name}</span>
               </div>
-              <span className="text-xs text-gray-500">{asset.type}</span>
+              <span className="text-figma-sm text-fw-bodyLight">{asset.type}</span>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="flex items-center text-gray-500">
+            <div className="grid grid-cols-2 gap-2 text-figma-sm">
+              <div className="flex items-center text-fw-bodyLight">
                 <Clock className="h-3 w-3 mr-1" />
                 <span>Age: {asset.age}</span>
               </div>
-              <div className="flex items-center text-gray-500">
+              <div className="flex items-center text-fw-bodyLight">
                 <RefreshCw className="h-3 w-3 mr-1" />
                 <span>Maintenance: {asset.nextMaintenance}</span>
               </div>
@@ -67,12 +67,12 @@ export function AssetLifecycleWidget() {
       {/* Summary Stats */}
       <div className="grid grid-cols-2 gap-2">
         <div className="p-3 bg-green-50 rounded-lg">
-          <div className="text-xs text-green-600 mb-1">Healthy Assets</div>
-          <div className="text-lg font-semibold text-green-700">85%</div>
+          <div className="text-figma-sm text-fw-success mb-1">Healthy Assets</div>
+          <div className="text-figma-lg font-semibold text-fw-success">85%</div>
         </div>
-        <div className="p-3 bg-yellow-50 rounded-lg">
-          <div className="text-xs text-yellow-600 mb-1">Needs Attention</div>
-          <div className="text-lg font-semibold text-yellow-700">15%</div>
+        <div className="p-3 bg-fw-warn/10 rounded-lg">
+          <div className="text-figma-sm text-fw-warn mb-1">Needs Attention</div>
+          <div className="text-figma-lg font-semibold text-fw-warn">15%</div>
         </div>
       </div>
     </div>

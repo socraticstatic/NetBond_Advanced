@@ -53,8 +53,8 @@ export function CapacityPlanningWidget() {
       {/* Capacity Trends */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium text-gray-900">Capacity Trends</h3>
-          <select className="text-sm border-gray-300 rounded-md">
+          <h3 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">Capacity Trends</h3>
+          <select className="text-figma-base border-fw-secondary rounded-md">
             <option>Last 6 Months</option>
             <option>Last 12 Months</option>
             <option>Year to Date</option>
@@ -67,23 +67,23 @@ export function CapacityPlanningWidget() {
 
       {/* Resource Forecasts */}
       <div className="space-y-4">
-        <h3 className="text-sm font-medium text-gray-900">Resource Forecasts</h3>
+        <h3 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">Resource Forecasts</h3>
         {resourceForecasts.map((resource) => (
-          <div key={resource.name} className="p-4 bg-white rounded-lg border border-gray-200">
+          <div key={resource.name} className="p-4 bg-fw-base rounded-lg border border-fw-secondary">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-900">{resource.name}</span>
+              <span className="text-figma-base font-medium text-fw-heading">{resource.name}</span>
               <div className="flex items-center">
                 {resource.trend === 'up' ? (
-                  <ArrowUpRight className="h-4 w-4 text-red-500" />
+                  <ArrowUpRight className="h-4 w-4 text-fw-error" />
                 ) : (
-                  <ArrowDownRight className="h-4 w-4 text-green-500" />
+                  <ArrowDownRight className="h-4 w-4 text-fw-success" />
                 )}
-                <span className="ml-1 text-sm text-gray-600">{resource.projected}</span>
+                <span className="ml-1 text-figma-base text-fw-body">{resource.projected}</span>
               </div>
             </div>
-            <div className="relative h-2 bg-gray-100 rounded-full overflow-hidden mb-2">
+            <div className="relative h-2 bg-fw-neutral rounded-full overflow-hidden mb-2">
               <div
-                className="absolute h-full bg-blue-500 transition-all duration-300"
+                className="absolute h-full bg-fw-cobalt-600 transition-all duration-300"
                 style={{ width: resource.current }}
               />
               <div
@@ -91,9 +91,9 @@ export function CapacityPlanningWidget() {
                 style={{ left: resource.projected }}
               />
             </div>
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-gray-500">Current: {resource.current}</span>
-              <div className="flex items-center text-yellow-600">
+            <div className="flex items-center justify-between text-figma-sm">
+              <span className="text-fw-bodyLight">Current: {resource.current}</span>
+              <div className="flex items-center text-fw-warn">
                 <AlertTriangle className="h-3 w-3 mr-1" />
                 <span>Threshold in {resource.timeToThreshold}</span>
               </div>
@@ -103,15 +103,15 @@ export function CapacityPlanningWidget() {
       </div>
 
       {/* Recommendations */}
-      <div className="p-4 bg-yellow-50 rounded-lg">
+      <div className="p-4 bg-fw-warn/10 rounded-lg">
         <div className="flex items-center mb-2">
-          <AlertTriangle className="h-5 w-5 text-yellow-500 mr-2" />
-          <h3 className="text-sm font-medium text-yellow-900">Capacity Recommendations</h3>
+          <AlertTriangle className="h-5 w-5 text-fw-warn mr-2" />
+          <h3 className="text-figma-sm font-medium text-fw-heading tracking-[-0.03em]">Capacity Recommendations</h3>
         </div>
-        <ul className="space-y-2 text-sm text-yellow-700">
-          <li>• Consider bandwidth upgrade within 45 days</li>
-          <li>• Plan storage expansion for Q3 2024</li>
-          <li>• Review compute resource allocation</li>
+        <ul className="space-y-2 text-figma-sm text-fw-warn">
+          <li>- Consider bandwidth upgrade within 45 days</li>
+          <li>- Plan storage expansion for Q3 2024</li>
+          <li>- Review compute resource allocation</li>
         </ul>
       </div>
     </div>

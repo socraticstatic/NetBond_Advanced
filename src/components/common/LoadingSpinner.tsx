@@ -28,7 +28,7 @@ export function LoadingSpinner({
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <RefreshCw className={`animate-spin ${sizeMap[size]} ${colorMap[color]}`} />
-      {text && <span className="ml-3 text-sm font-medium">{text}</span>}
+      {text && <span className="ml-3 text-figma-base font-medium">{text}</span>}
     </div>
   );
 }

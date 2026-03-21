@@ -12,18 +12,18 @@ interface MetricCardProps {
 
 const variantStyles = {
   default: {
-    bg: 'bg-gray-50',
-    border: 'border-gray-100',
-    iconBg: 'bg-gray-100',
-    iconColor: 'text-gray-600',
-    hoverBorder: 'hover:border-gray-200',
-    hoverBg: 'hover:bg-gray-50/30'
+    bg: 'bg-fw-wash',
+    border: 'border-fw-secondary',
+    iconBg: 'bg-fw-neutral',
+    iconColor: 'text-fw-bodyLight',
+    hoverBorder: 'hover:border-fw-secondary',
+    hoverBg: 'hover:bg-fw-wash/30'
   },
   success: {
     bg: 'bg-green-50',
     border: 'border-green-100',
     iconBg: 'bg-green-100',
-    iconColor: 'text-green-600',
+    iconColor: 'text-fw-success',
     hoverBorder: 'hover:border-green-200',
     hoverBg: 'hover:bg-green-50/30'
   },
@@ -39,17 +39,17 @@ const variantStyles = {
     bg: 'bg-red-50',
     border: 'border-red-100',
     iconBg: 'bg-red-100',
-    iconColor: 'text-red-600',
+    iconColor: 'text-fw-error',
     hoverBorder: 'hover:border-red-200',
     hoverBg: 'hover:bg-red-50/30'
   },
   info: {
-    bg: 'bg-blue-50',
-    border: 'border-blue-100',
-    iconBg: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-    hoverBorder: 'hover:border-blue-200',
-    hoverBg: 'hover:bg-blue-50/30'
+    bg: 'bg-fw-accent',
+    border: 'border-fw-secondary',
+    iconBg: 'bg-fw-accent',
+    iconColor: 'text-fw-link',
+    hoverBorder: 'hover:border-fw-active',
+    hoverBg: 'hover:bg-fw-accent/30'
   }
 };
 
@@ -69,10 +69,10 @@ export function MetricCard({
         <div className={`p-2 ${styles.iconBg} rounded-lg mb-2 ${animate ? 'group-hover:scale-110' : ''} transition-transform duration-200`}>
           <Icon className={`h-4 w-4 ${styles.iconColor}`} />
         </div>
-        <div className="text-base font-bold text-gray-900">{value}</div>
-        <div className="text-xs text-gray-500">{label}</div>
+        <div className="text-base font-bold text-fw-heading">{value}</div>
+        <div className="text-figma-sm text-fw-bodyLight">{label}</div>
         {subtitle && (
-          <div className="text-xs text-gray-400 mt-1">{subtitle}</div>
+          <div className="text-figma-sm text-fw-bodyLight mt-1">{subtitle}</div>
         )}
       </div>
     </div>

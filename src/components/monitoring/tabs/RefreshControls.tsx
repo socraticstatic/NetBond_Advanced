@@ -25,7 +25,7 @@ export function RefreshControls({ className = '' }: RefreshControlsProps) {
 
   return (
     <div className={`flex items-center ${className}`}>
-      <span className="text-sm text-gray-700 mr-2">Auto-refresh:</span>
+      <span className="text-figma-base text-fw-body mr-2">Auto-refresh:</span>
       <select
         value={refreshInterval}
         onChange={(e) => setRefreshInterval(parseInt(e.target.value))}
@@ -51,7 +51,7 @@ export function RefreshControls({ className = '' }: RefreshControlsProps) {
       </Button>
       
       {lastRefreshed && (
-        <span className="ml-4 text-xs text-gray-500">
+        <span className="ml-4 text-figma-sm text-fw-bodyLight">
           Last refreshed: {lastRefreshed.toLocaleTimeString()}
         </span>
       )}

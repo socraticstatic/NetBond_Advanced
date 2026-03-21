@@ -273,11 +273,11 @@ export function CustomTemplates() {
 
   const getTypeColor = (type: Template['type']) => {
     switch (type) {
-      case 'Performance': return 'bg-blue-100 text-blue-800';
-      case 'Security': return 'bg-indigo-100 text-indigo-800';
-      case 'Usage': return 'bg-green-100 text-green-800';
-      case 'Billing': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Performance': return 'bg-brand-lightBlue text-brand-blue';
+      case 'Security': return 'bg-fw-purpleLight text-fw-purple';
+      case 'Usage': return 'bg-fw-successLight text-fw-success';
+      case 'Billing': return 'bg-fw-warnLight text-fw-warn';
+      default: return 'bg-fw-neutral text-fw-body';
     }
   };
 
@@ -347,8 +347,8 @@ export function CustomTemplates() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Report Templates</h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <h3 className="text-figma-lg font-medium text-fw-heading">Report Templates</h3>
+          <p className="text-figma-base font-medium text-fw-body mt-1">
             Create and customize report templates with specific metrics, filters, and layouts
           </p>
         </div>
@@ -363,23 +363,23 @@ export function CustomTemplates() {
 
       {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Total Templates</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
+              <p className="text-figma-base font-medium text-fw-body">Total Templates</p>
+              <p className="text-figma-xl font-medium text-fw-heading mt-1">
                 {templates.length}
               </p>
             </div>
-            <FileText className="h-8 w-8 text-blue-500" />
+            <FileText className="h-8 w-8 text-brand-blue" />
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Default Templates</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
+              <p className="text-figma-base font-medium text-fw-body">Default Templates</p>
+              <p className="text-figma-xl font-medium text-fw-heading mt-1">
                 {templates.filter(t => t.isDefault).length}
               </p>
             </div>
@@ -387,27 +387,27 @@ export function CustomTemplates() {
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Custom Templates</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
+              <p className="text-figma-base font-medium text-fw-body">Custom Templates</p>
+              <p className="text-figma-xl font-medium text-fw-heading mt-1">
                 {templates.filter(t => !t.isDefault).length}
               </p>
             </div>
-            <Layout className="h-8 w-8 text-gray-500" />
+            <Layout className="h-8 w-8 text-fw-bodyLight" />
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Total Usage</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
+              <p className="text-figma-base font-medium text-fw-body">Total Usage</p>
+              <p className="text-figma-xl font-medium text-fw-heading mt-1">
                 {templates.reduce((sum, t) => sum + t.usageCount, 0)}
               </p>
             </div>
-            <Clock className="h-8 w-8 text-gray-500" />
+            <Clock className="h-8 w-8 text-fw-bodyLight" />
           </div>
         </div>
       </div>
@@ -420,7 +420,7 @@ export function CustomTemplates() {
             placeholder="Search templates..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 text-figma-base text-fw-body placeholder:text-fw-disabled border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-transparent"
           />
         </div>
         <div className="flex gap-2 flex-wrap">
@@ -428,38 +428,38 @@ export function CustomTemplates() {
             <button
               key={type}
               onClick={() => setSelectedType(type)}
-              className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+              className={`px-4 py-2 rounded-full text-figma-base font-medium transition-colors ${
                 selectedType === type
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-fw-primary text-white'
+                  : 'bg-fw-neutral text-fw-body hover:bg-fw-wash'
               }`}
             >
               {type === 'all' ? 'All' : type}
             </button>
           ))}
         </div>
-        <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
+        <div className="flex items-center bg-fw-base rounded-lg border border-fw-secondary p-1">
           <button
             onClick={() => setViewMode('card')}
-            className={`p-2 rounded-full transition-colors ${
+            className={`p-2 rounded-md transition-colors ${
               viewMode === 'card'
-                ? 'text-blue-600 bg-blue-50'
-                : 'text-gray-400 hover:text-gray-500'
+                ? 'text-fw-link bg-fw-accent'
+                : 'text-fw-bodyLight hover:text-fw-body'
             }`}
             title="Card View"
           >
-            <LayoutGrid className="h-5 w-5" />
+            <LayoutGrid className="h-4 w-4" />
           </button>
           <button
             onClick={() => setViewMode('table')}
-            className={`p-2 rounded-full transition-colors ${
+            className={`p-2 rounded-md transition-colors ${
               viewMode === 'table'
-                ? 'text-blue-600 bg-blue-50'
-                : 'text-gray-400 hover:text-gray-500'
+                ? 'text-fw-link bg-fw-accent'
+                : 'text-fw-bodyLight hover:text-fw-body'
             }`}
             title="Table View"
           >
-            <List className="h-5 w-5" />
+            <List className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -470,58 +470,64 @@ export function CustomTemplates() {
           {filteredTemplates.map((template) => (
             <div
               key={template.id}
-              className="card p-6 hover:shadow-lg transition-shadow"
+              className="bg-fw-base border border-fw-secondary rounded-3xl p-6 hover:shadow-lg transition-shadow"
             >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-start space-x-3 flex-1">
-                <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">
-                  <FileText className="h-6 w-6 text-gray-600" />
+            <div className="flex items-start gap-3 mb-4">
+              <div className="flex-shrink-0">
+                <FileText className="h-6 w-6 text-fw-link" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <h4 className="text-figma-lg font-medium text-fw-heading">
+                    {template.name}
+                  </h4>
+                  {template.isDefault && (
+                    <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                  )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <h4 className="text-base font-semibold text-gray-900">
-                      {template.name}
-                    </h4>
-                    {template.isDefault && (
-                      <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    {template.description}
-                  </p>
-                </div>
+                <p className="text-figma-base font-medium text-fw-body leading-relaxed">
+                  {template.description}
+                </p>
               </div>
             </div>
 
+            {/* Tags: bg=#f3f4f6, r=8, text 12px w500 #454b52 */}
             <div className="flex items-center flex-wrap gap-2 mb-4">
-              <span className={`px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(template.type)}`}>
+              <span className={`px-2 py-1 text-figma-sm font-medium rounded-lg ${getTypeColor(template.type)}`}>
                 {template.type}
               </span>
-              <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+              <span className="px-2 py-1 text-figma-sm font-medium bg-fw-neutral text-fw-body rounded-lg">
                 {template.format}
               </span>
-              <span className="text-xs text-gray-500">
+              <span className="text-figma-sm font-medium text-fw-body">
                 {template.usageCount} uses
               </span>
             </div>
 
-            <div className="mb-4 pb-4 border-b border-gray-200">
-              <div className="text-xs text-gray-500 mb-2">Sections included:</div>
+            <div className="mb-4 pb-4 border-b border-fw-secondary">
+              <div className="text-figma-sm font-medium text-fw-body mb-2">Sections included:</div>
               <div className="flex flex-wrap gap-1">
                 {template.sections.map((section, idx) => (
-                  <span key={idx} className="px-2 py-0.5 bg-gray-50 text-gray-600 text-xs rounded">
+                  <span key={idx} className="px-2 py-1 bg-fw-neutral text-fw-body text-figma-sm font-medium rounded-lg">
                     {section}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+            {/* Timestamp: 12px w500 #454b52 with clock 16x16 */}
+            <div className="flex items-center justify-between text-figma-sm font-medium text-fw-body mb-4">
               <span>Created by {template.createdBy}</span>
-              <span>Modified {new Date(template.lastModified).toLocaleDateString()}</span>
+              <span className="flex items-center gap-1.5">
+                <Clock className="h-4 w-4" />
+                Modified {new Date(template.lastModified).toLocaleDateString()}
+              </span>
             </div>
 
-            <div className="flex items-center space-x-2">
+            {/* Divider */}
+            <div className="border-t border-fw-secondary mb-4"></div>
+
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => {
                   window.addToast?.({
@@ -531,21 +537,21 @@ export function CustomTemplates() {
                     duration: 2000
                   });
                 }}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-fw-body hover:text-fw-heading hover:bg-fw-neutral rounded-lg transition-colors"
                 title="Edit template"
               >
                 <Edit className="h-5 w-5" />
               </button>
               <button
                 onClick={() => handleDuplicate(template)}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-fw-body hover:text-fw-heading hover:bg-fw-neutral rounded-lg transition-colors"
                 title="Duplicate template"
               >
                 <Copy className="h-5 w-5" />
               </button>
               <button
                 onClick={() => handleDownload(template)}
-                className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-fw-body hover:text-fw-heading hover:bg-fw-neutral rounded-lg transition-colors"
                 title="Generate report"
               >
                 <Download className="h-5 w-5" />
@@ -553,80 +559,78 @@ export function CustomTemplates() {
               {!template.isDefault && (
                 <button
                   onClick={() => handleDelete(template.id)}
-                  className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-2 text-fw-error hover:text-fw-error hover:bg-red-50 rounded-lg transition-colors"
                   title="Delete template"
                 >
                   <Trash2 className="h-5 w-5" />
                 </button>
               )}
-              <Button
-                variant="primary"
-                size="sm"
+              <button
                 onClick={() => handleDownload(template)}
-                className="ml-auto"
+                className="ml-auto inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-fw-primary text-white text-figma-base font-medium hover:bg-fw-primaryHover transition-colors"
               >
-                <FileText className="h-4 w-4 mr-1.5" />
+                <FileText className="h-4 w-4" />
                 Use Template
-              </Button>
+              </button>
             </div>
           </div>
         ))}
       </div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
+          <table className="min-w-full divide-y divide-fw-secondary">
+            <thead className="bg-fw-wash">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Template Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Type
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Usage
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Last Modified
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-fw-base divide-y divide-fw-secondary">
               {filteredTemplates.map((template) => (
-                <tr key={template.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={template.id} className="hover:bg-fw-wash transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-gray-100 rounded-lg">
-                        <FileText className="h-4 w-4 text-gray-600" />
+                      <div className="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-fw-neutral rounded-lg">
+                        <FileText className="h-4 w-4 text-fw-body" />
                       </div>
                       <div className="ml-3">
                         <div className="flex items-center space-x-2">
-                          <div className="text-sm font-medium text-gray-900">{template.name}</div>
+                          <div className="text-figma-base font-medium text-fw-heading">{template.name}</div>
                           {template.isDefault && (
                             <Star className="h-3.5 w-3.5 text-yellow-500 fill-current" />
                           )}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-figma-sm text-fw-bodyLight">
                           {template.format} • {template.createdBy}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(template.type)}`}>
+                    <span className={`px-2 py-1 text-figma-sm font-medium rounded-full ${getTypeColor(template.type)}`}>
                       {template.type}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-body">
                     {template.usageCount} uses
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-body">
                     {new Date(template.lastModified).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium">
                     <div className="flex items-center justify-end space-x-2">
                       <button
                         onClick={() => {
@@ -637,21 +641,21 @@ export function CustomTemplates() {
                             duration: 2000
                           });
                         }}
-                        className="text-gray-600 hover:text-gray-900 p-1"
+                        className="text-fw-body hover:text-fw-heading p-1 transition-colors"
                         title="Edit"
                       >
                         <Edit className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleDuplicate(template)}
-                        className="text-gray-600 hover:text-gray-900 p-1"
+                        className="text-fw-body hover:text-fw-heading p-1 transition-colors"
                         title="Duplicate"
                       >
                         <Copy className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleDownload(template)}
-                        className="text-gray-600 hover:text-gray-900 p-1"
+                        className="text-fw-body hover:text-fw-heading p-1 transition-colors"
                         title="Download"
                       >
                         <Download className="h-4 w-4" />
@@ -659,7 +663,7 @@ export function CustomTemplates() {
                       {!template.isDefault && (
                         <button
                           onClick={() => handleDelete(template.id)}
-                          className="text-red-600 hover:text-red-700 p-1"
+                          className="text-fw-error hover:text-fw-error p-1"
                           title="Delete"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -675,10 +679,10 @@ export function CustomTemplates() {
       )}
 
       {filteredTemplates.length === 0 && (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <Filter className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No templates found</h3>
-          <p className="text-gray-600 mb-4">
+        <div className="text-center py-12 bg-fw-wash rounded-lg">
+          <Filter className="h-12 w-12 mx-auto text-fw-bodyLight mb-4" />
+          <h3 className="text-figma-lg font-medium text-fw-heading mb-2">No templates found</h3>
+          <p className="text-figma-base font-medium text-fw-body mb-4">
             Try adjusting your search or filter criteria
           </p>
         </div>
@@ -692,10 +696,10 @@ export function CustomTemplates() {
           title="Create Report Template"
         >
           <div className="p-6">
-            <p className="text-gray-600 mb-4">
+            <p className="text-fw-body mb-4">
               Template builder interface would include:
             </p>
-            <ul className="list-disc list-inside space-y-2 text-sm text-gray-600 mb-6">
+            <ul className="list-disc list-inside space-y-2 text-figma-base text-fw-body mb-6">
               <li>Template name and description</li>
               <li>Report type selection</li>
               <li>Output format (PDF, CSV, Excel, JSON)</li>

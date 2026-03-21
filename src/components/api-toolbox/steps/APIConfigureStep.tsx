@@ -31,13 +31,13 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
 
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-gray-900 text-center mb-8">
+      <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">
         Configure API Connection
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-figma-sm font-medium text-fw-body mb-2">
             API Name
           </label>
           <input
@@ -45,12 +45,12 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
             value={config.name || ''}
             onChange={(e) => onChange({ ...config, name: e.target.value })}
             placeholder="My Network API"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-figma-sm font-medium text-fw-body mb-2">
             Base URL
           </label>
           <input
@@ -58,13 +58,13 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
             value={config.baseUrl || ''}
             onChange={(e) => onChange({ ...config, baseUrl: e.target.value })}
             placeholder="https://api.example.com/v1"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-figma-sm font-medium text-fw-body mb-2">
           Description
         </label>
         <textarea
@@ -72,18 +72,18 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
           onChange={(e) => onChange({ ...config, description: e.target.value })}
           placeholder="Describe what this API does..."
           rows={3}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
         />
       </div>
 
-      <div className="border-t border-gray-200 pt-6">
+      <div className="border-t border-fw-secondary pt-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-medium text-gray-900 flex items-center">
-              <Shield className="h-5 w-5 mr-2 text-blue-600" />
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] flex items-center">
+              <Shield className="h-5 w-5 mr-2 text-fw-link" />
               Authentication
             </h3>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-figma-sm text-fw-bodyLight mt-1">
               Select your API authentication method
             </p>
           </div>
@@ -96,21 +96,21 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
               onClick={() => onChange({ ...config, authType: type.value as any })}
               className={`quick-action-btn p-4 border text-left transition-all ${
                 config.authType === type.value
-                  ? 'border-gray-900 bg-white shadow-sm'
-                  : 'border-gray-200 bg-white hover:border-gray-400'
+                  ? 'border-fw-heading bg-fw-base shadow-sm'
+                  : 'border-fw-secondary bg-fw-base hover:border-fw-bodyLight'
               }`}
             >
-              <div className="text-sm font-medium text-gray-900">{type.label}</div>
-              <div className="text-xs text-gray-500 mt-1">{type.description}</div>
+              <div className="text-figma-base font-medium text-fw-heading">{type.label}</div>
+              <div className="text-figma-sm text-fw-bodyLight mt-1">{type.description}</div>
             </button>
           ))}
         </div>
 
         {config.authType === 'apiKey' && (
-          <div className="space-y-4 bg-gray-50 p-6 rounded-lg">
+          <div className="space-y-4 bg-fw-wash p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-figma-sm font-medium text-fw-body mb-2">
                   Header Name
                 </label>
                 <input
@@ -123,11 +123,11 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
                     })
                   }
                   placeholder="X-API-Key"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-figma-sm font-medium text-fw-body mb-2">
                   API Key
                 </label>
                 <div className="relative">
@@ -141,12 +141,12 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
                       })
                     }
                     placeholder="Enter your API key"
-                    className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 h-9 pr-10 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   />
                   <button
                     type="button"
                     onClick={() => setShowSecrets(!showSecrets)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight hover:text-fw-body"
                   >
                     {showSecrets ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -157,9 +157,9 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
         )}
 
         {config.authType === 'bearer' && (
-          <div className="space-y-4 bg-gray-50 p-6 rounded-lg">
+          <div className="space-y-4 bg-fw-wash p-6 rounded-lg">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-figma-sm font-medium text-fw-body mb-2">
                 Bearer Token
               </label>
               <div className="relative">
@@ -173,12 +173,12 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
                     })
                   }
                   placeholder="Enter bearer token"
-                  className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 h-9 pr-10 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 />
                 <button
                   type="button"
                   onClick={() => setShowSecrets(!showSecrets)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight hover:text-fw-body"
                 >
                   {showSecrets ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -188,10 +188,10 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
         )}
 
         {config.authType === 'basic' && (
-          <div className="space-y-4 bg-gray-50 p-6 rounded-lg">
+          <div className="space-y-4 bg-fw-wash p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-figma-sm font-medium text-fw-body mb-2">
                   Username
                 </label>
                 <input
@@ -204,11 +204,11 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
                     })
                   }
                   placeholder="Enter username"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-figma-sm font-medium text-fw-body mb-2">
                   Password
                 </label>
                 <div className="relative">
@@ -222,12 +222,12 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
                       })
                     }
                     placeholder="Enter password"
-                    className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 h-9 pr-10 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   />
                   <button
                     type="button"
                     onClick={() => setShowSecrets(!showSecrets)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight hover:text-fw-body"
                   >
                     {showSecrets ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -238,32 +238,32 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
         )}
 
         {config.authType === 'oauth2' && (
-          <div className="space-y-4 bg-gray-50 p-6 rounded-lg">
+          <div className="space-y-4 bg-fw-wash p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-figma-sm font-medium text-fw-body mb-2">
                   Client ID
                 </label>
                 <input
                   type="text"
                   placeholder="Enter client ID"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-figma-sm font-medium text-fw-body mb-2">
                   Client Secret
                 </label>
                 <div className="relative">
                   <input
                     type={showSecrets ? 'text' : 'password'}
                     placeholder="Enter client secret"
-                    className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 h-9 pr-10 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   />
                   <button
                     type="button"
                     onClick={() => setShowSecrets(!showSecrets)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight hover:text-fw-body"
                   >
                     {showSecrets ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -271,45 +271,45 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-figma-sm font-medium text-fw-body mb-2">
                 Authorization URL
               </label>
               <input
                 type="url"
                 placeholder="https://oauth.example.com/authorize"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-figma-sm font-medium text-fw-body mb-2">
                 Token URL
               </label>
               <input
                 type="url"
                 placeholder="https://oauth.example.com/token"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
               />
             </div>
           </div>
         )}
       </div>
 
-      <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Advanced Settings</h3>
+      <div className="border-t border-fw-secondary pt-6">
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Advanced Settings</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-figma-sm font-medium text-fw-body mb-2">
               Request Timeout (ms)
             </label>
             <input
               type="number"
               value={config.timeout || 30000}
               onChange={(e) => onChange({ ...config, timeout: parseInt(e.target.value) })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-figma-sm font-medium text-fw-body mb-2">
               Max Retries
             </label>
             <input
@@ -321,19 +321,19 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
                   retryPolicy: { ...config.retryPolicy!, maxRetries: parseInt(e.target.value) }
                 })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             />
           </div>
         </div>
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-fw-accent border border-fw-active rounded-lg p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-start flex-1">
-            <Key className="h-5 w-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
+            <Key className="h-5 w-5 text-fw-link mt-0.5 mr-3 flex-shrink-0" />
             <div>
-              <p className="text-sm font-medium text-blue-900">Test Your Connection</p>
-              <p className="text-sm text-blue-700 mt-1">
+              <p className="text-figma-base font-medium text-fw-heading">Test Your Connection</p>
+              <p className="text-figma-base font-medium text-fw-body mt-1">
                 Verify your credentials and connectivity before proceeding
               </p>
             </div>
@@ -341,19 +341,19 @@ export function APIConfigureStep({ config, onChange, onNext }: APIConfigureStepP
           <button
             onClick={testConnection}
             disabled={testingConnection || !config.baseUrl}
-            className="ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+            className="ml-4 px-4 py-2 bg-fw-primary text-white rounded-full hover:bg-fw-primaryHover disabled:bg-fw-neutral disabled:cursor-not-allowed transition-colors text-figma-base font-medium"
           >
             {testingConnection ? 'Testing...' : 'Test Connection'}
           </button>
         </div>
         {connectionStatus === 'success' && (
-          <div className="mt-3 flex items-center text-sm text-green-700">
+          <div className="mt-3 flex items-center text-figma-base text-fw-success">
             <CheckCircle className="h-4 w-4 mr-2" />
             Connection successful!
           </div>
         )}
         {connectionStatus === 'error' && (
-          <div className="mt-3 flex items-center text-sm text-red-700">
+          <div className="mt-3 flex items-center text-figma-base text-fw-error">
             <AlertCircle className="h-4 w-4 mr-2" />
             Connection failed. Please check your credentials.
           </div>

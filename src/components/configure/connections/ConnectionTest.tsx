@@ -24,7 +24,7 @@ export function ConnectionTest({ connectionId }: ConnectionTestProps) {
 
   const runTests = async () => {
     setIsRunning(true);
-    
+
     for (let i = 0; i < results.length; i++) {
       setResults(prev => [
         ...prev.slice(0, i),
@@ -54,7 +54,7 @@ export function ConnectionTest({ connectionId }: ConnectionTestProps) {
 
   if (!connectionId) {
     return (
-      <div className="text-center py-12 text-gray-500">
+      <div className="text-center py-12 text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">
         Select a connection to run tests
       </div>
     );
@@ -67,10 +67,10 @@ export function ConnectionTest({ connectionId }: ConnectionTestProps) {
           onClick={runTests}
           disabled={isRunning}
           className={`
-            inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white
+            inline-flex items-center px-4 py-2 h-9 border border-transparent rounded-full text-figma-base font-medium tracking-[-0.03em] text-white transition-colors
             ${isRunning
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-brand-blue hover:bg-brand-darkBlue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue'
+              ? 'bg-fw-neutral cursor-not-allowed'
+              : 'bg-fw-cobalt-600 hover:bg-fw-cobalt-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active'
             }
           `}
         >
@@ -88,29 +88,29 @@ export function ConnectionTest({ connectionId }: ConnectionTestProps) {
           <div
             key={index}
             className={`
-              p-4 rounded-lg border
-              ${result.status === 'success' ? 'border-green-200 bg-green-50' :
-                result.status === 'error' ? 'border-red-200 bg-red-50' :
-                result.status === 'running' ? 'border-brand-blue/20 bg-brand-lightBlue' :
-                'border-gray-200 bg-gray-50'}
+              p-4 rounded-xl border
+              ${result.status === 'success' ? 'border-fw-success bg-green-50' :
+                result.status === 'error' ? 'border-fw-error bg-red-50' :
+                result.status === 'running' ? 'border-fw-active bg-fw-accent' :
+                'border-fw-secondary bg-fw-wash'}
             `}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                {result.status === 'success' && <CheckCircle className="h-5 w-5 text-green-500 mr-2" />}
-                {result.status === 'error' && <XCircle className="h-5 w-5 text-red-500 mr-2" />}
-                {result.status === 'running' && <RefreshCw className="h-5 w-5 text-brand-blue mr-2 animate-spin" />}
-                {result.status === 'pending' && <div className="h-5 w-5 rounded-full border-2 border-gray-200 mr-2" />}
-                <span className="font-medium text-gray-900">{result.name}</span>
+                {result.status === 'success' && <CheckCircle className="h-5 w-5 text-fw-success mr-2" />}
+                {result.status === 'error' && <XCircle className="h-5 w-5 text-fw-error mr-2" />}
+                {result.status === 'running' && <RefreshCw className="h-5 w-5 text-fw-link mr-2 animate-spin" />}
+                {result.status === 'pending' && <div className="h-5 w-5 rounded-full border-2 border-fw-secondary mr-2" />}
+                <span className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">{result.name}</span>
               </div>
               {result.duration && (
-                <span className="text-sm text-gray-500">
+                <span className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">
                   {result.duration}ms
                 </span>
               )}
             </div>
             {result.message && (
-              <p className="mt-1 text-sm text-gray-500 ml-7">
+              <p className="mt-1 text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] ml-7">
                 {result.message}
               </p>
             )}

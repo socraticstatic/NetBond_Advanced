@@ -42,30 +42,30 @@ export function MobileConnectionGrid({ connections }: MobileConnectionGridProps)
   };
 
   return (
-    <div className="flex flex-col bg-gradient-to-b from-gray-50 to-white">
+    <div className="flex flex-col bg-gradient-to-b from-fw-wash to-white">
       {/* Elegant Search Header */}
-      <div className="bg-white sticky top-0 z-10 shadow-sm">
+      <div className="bg-fw-base sticky top-0 z-10 shadow-sm">
         <div className="px-4 pt-4 pb-3">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-fw-bodyLight" />
             <input
               type="text"
               placeholder="Search connections..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-12 py-3 bg-gray-50 border-0 rounded-xl text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-brand-blue focus:bg-white transition-all"
+              className="w-full pl-12 pr-12 py-3 bg-fw-wash border-0 rounded-xl text-fw-heading placeholder-fw-bodyLight focus:ring-2 focus:ring-brand-blue focus:bg-fw-base transition-all"
             />
             {searchTerm ? (
               <button
                 onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 text-fw-bodyLight hover:text-fw-body hover:bg-fw-neutral rounded-full transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
             ) : (
               <button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 text-gray-500 hover:text-brand-blue hover:bg-brand-lightBlue rounded-full transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 text-fw-bodyLight hover:text-brand-blue hover:bg-brand-lightBlue rounded-full transition-colors"
                 aria-label="Filter connections"
               >
                 <Filter className="h-4 w-4" />
@@ -83,14 +83,14 @@ export function MobileConnectionGrid({ connections }: MobileConnectionGridProps)
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="bg-white border-b border-gray-100 overflow-hidden shadow-sm"
+            className="bg-fw-base border-b border-fw-secondary overflow-hidden shadow-sm"
           >
             <div className="p-4 space-y-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-base font-semibold text-gray-900">Filter Connections</h3>
+                <h3 className="text-base font-semibold text-fw-heading">Filter Connections</h3>
                 <button
                   onClick={() => setIsFilterOpen(false)}
-                  className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-1.5 text-fw-bodyLight hover:text-fw-body hover:bg-fw-neutral rounded-full transition-colors"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -98,13 +98,13 @@ export function MobileConnectionGrid({ connections }: MobileConnectionGridProps)
 
               <div className="space-y-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">
                     Status
                   </label>
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue focus:bg-white transition-all"
+                    className="w-full px-3 py-2.5 rounded-xl border-fw-secondary bg-fw-wash text-fw-heading focus:border-brand-blue focus:ring-2 focus:ring-brand-blue focus:bg-fw-base transition-all"
                   >
                     <option value="all">All Statuses</option>
                     <option value="active">Active</option>
@@ -115,13 +115,13 @@ export function MobileConnectionGrid({ connections }: MobileConnectionGridProps)
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">
                     Type
                   </label>
                   <select
                     value={typeFilter}
                     onChange={(e) => setTypeFilter(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue focus:bg-white transition-all"
+                    className="w-full px-3 py-2.5 rounded-xl border-fw-secondary bg-fw-wash text-fw-heading focus:border-brand-blue focus:ring-2 focus:ring-brand-blue focus:bg-fw-base transition-all"
                   >
                     <option value="all">All Types</option>
                     <option value="E-Line">E-Line</option>
@@ -135,13 +135,13 @@ export function MobileConnectionGrid({ connections }: MobileConnectionGridProps)
               <div className="pt-2 flex gap-3">
                 <button
                   onClick={resetFilters}
-                  className="flex-1 px-4 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm font-medium transition-colors"
+                  className="flex-1 px-4 py-2.5 text-fw-body bg-fw-neutral hover:bg-fw-neutral rounded-xl text-figma-base font-medium transition-colors"
                 >
                   Reset
                 </button>
                 <button
                   onClick={() => setIsFilterOpen(false)}
-                  className="flex-1 px-4 py-2.5 bg-gradient-to-r from-brand-blue to-brand-darkBlue text-white rounded-xl text-sm font-medium hover:shadow-lg transition-all"
+                  className="flex-1 px-4 py-2.5 bg-gradient-to-r from-brand-blue to-brand-darkBlue text-white rounded-xl text-figma-base font-medium hover:shadow-lg transition-all"
                 >
                   Apply
                 </button>
@@ -159,11 +159,11 @@ export function MobileConnectionGrid({ connections }: MobileConnectionGridProps)
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-16 px-6"
           >
-            <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-full p-6 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
-              <Activity className="h-10 w-10 text-gray-400" />
+            <div className="bg-gradient-to-br from-fw-neutral to-fw-neutral rounded-full p-6 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+              <Activity className="h-10 w-10 text-fw-bodyLight" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">No connections found</h3>
-            <p className="text-gray-500 text-sm mb-6">
+            <h3 className="text-xl font-bold text-fw-heading mb-2">No connections found</h3>
+            <p className="text-fw-bodyLight text-figma-base mb-6">
               {searchTerm || statusFilter !== 'all' || typeFilter !== 'all'
                 ? 'Try adjusting your filters'
                 : 'Create your first connection to get started'}
@@ -186,19 +186,19 @@ export function MobileConnectionGrid({ connections }: MobileConnectionGridProps)
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: index * 0.05 }}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md overflow-hidden transition-all active:scale-[0.98]"
+              className="bg-fw-base rounded-2xl border border-fw-secondary shadow-sm hover:shadow-md overflow-hidden transition-all active:scale-[0.98]"
               onClick={() => navigate(`/connections/${connection.id}`)}
             >
               <div className="p-4">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-bold text-gray-900 mb-1 truncate">
+                    <h3 className="text-base font-bold text-fw-heading mb-1 truncate">
                       {connection.name}
                     </h3>
-                    <p className="text-sm text-gray-500 truncate flex items-center">
+                    <p className="text-figma-base text-fw-bodyLight truncate flex items-center">
                       <span className="truncate">{connection.provider}</span>
-                      <span className="mx-1.5 text-gray-300">•</span>
+                      <span className="mx-1.5 text-fw-bodyLight">•</span>
                       <span className="truncate">{connection.type}</span>
                     </p>
                   </div>
@@ -209,31 +209,31 @@ export function MobileConnectionGrid({ connections }: MobileConnectionGridProps)
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-3">
                     <div className="flex items-center mb-1">
-                      <Activity className="h-4 w-4 text-blue-600 mr-1.5" />
-                      <span className="text-xs font-medium text-blue-900">Bandwidth</span>
+                      <Activity className="h-4 w-4 text-fw-link mr-1.5" />
+                      <span className="text-figma-sm font-medium text-fw-linkHover">Bandwidth</span>
                     </div>
-                    <div className="text-lg font-bold text-gray-900">
+                    <div className="text-lg font-bold text-fw-heading">
                       {formatMobileBandwidth(connection.bandwidth)}
                     </div>
                   </div>
 
                   <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-3">
                     <div className="flex items-center mb-1">
-                      <TrendingUp className="h-4 w-4 text-green-600 mr-1.5" />
-                      <span className="text-xs font-medium text-green-900">Usage</span>
+                      <TrendingUp className="h-4 w-4 text-fw-success mr-1.5" />
+                      <span className="text-figma-sm font-medium text-fw-success">Usage</span>
                     </div>
-                    <div className="text-lg font-bold text-gray-900">
+                    <div className="text-lg font-bold text-fw-heading">
                       {connection.utilization?.toFixed(0) || 0}%
                     </div>
                   </div>
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-                  <div className="flex items-center text-xs text-gray-500 font-medium">
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-fw-secondary">
+                  <div className="flex items-center text-figma-sm text-fw-bodyLight font-medium">
                     <span>{formatMobileDate(connection.lastUpdated || new Date())}</span>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-gray-300" />
+                  <ChevronRight className="h-5 w-5 text-fw-bodyLight" />
                 </div>
               </div>
             </motion.div>

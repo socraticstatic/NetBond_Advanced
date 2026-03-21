@@ -23,31 +23,31 @@ export function PUEMetricsWidget({ connections }: PUEMetricsWidgetProps) {
       {/* Current PUE Score */}
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">
             {currentPUE.toFixed(2)}
           </div>
           <div className="flex items-center mt-1">
-            <TrendingDown className="h-4 w-4 text-green-500 mr-1" />
-            <span className="text-sm text-green-600">{improvement}%</span>
-            <span className="text-sm text-gray-500 ml-1">better than average</span>
+            <TrendingDown className="h-4 w-4 text-fw-success mr-1" />
+            <span className="text-figma-base text-fw-success">{improvement}%</span>
+            <span className="text-figma-base text-fw-bodyLight ml-1">better than average</span>
           </div>
         </div>
-        <Zap className="h-8 w-8 text-green-500" />
+        <Zap className="h-8 w-8 text-fw-success" />
       </div>
 
       {/* PUE Progress Bar */}
       <div>
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+        <div className="flex items-center justify-between text-figma-sm text-fw-bodyLight mb-2">
           <span>Current vs Target</span>
           <span>Target: {targetPUE.toFixed(2)}</span>
         </div>
-        <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="relative w-full h-2 bg-fw-neutral rounded-full overflow-hidden">
           <div
-            className="absolute left-0 top-0 h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-500"
+            className="absolute left-0 top-0 h-full bg-fw-success rounded-full transition-all duration-500"
             style={{ width: `${(targetPUE / currentPUE) * 100}%` }}
           />
         </div>
-        <div className="flex items-center justify-between text-xs text-gray-400 mt-1">
+        <div className="flex items-center justify-between text-figma-sm text-fw-bodyLight mt-1">
           <span>Efficient</span>
           <span>Industry: {industryAverage}</span>
         </div>
@@ -55,21 +55,21 @@ export function PUEMetricsWidget({ connections }: PUEMetricsWidgetProps) {
 
       {/* Energy Breakdown */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="p-3 bg-gray-50 rounded-lg">
+        <div className="p-3 bg-fw-wash rounded-lg">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-gray-500">IT Load</span>
-            <Server className="h-4 w-4 text-gray-400" />
+            <span className="text-figma-sm text-fw-bodyLight">IT Load</span>
+            <Server className="h-4 w-4 text-fw-bodyLight" />
           </div>
-          <div className="text-sm font-semibold text-gray-900">
+          <div className="text-figma-base font-semibold text-fw-heading">
             {totalPower.toFixed(1)} kW
           </div>
         </div>
-        <div className="p-3 bg-gray-50 rounded-lg">
+        <div className="p-3 bg-fw-wash rounded-lg">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-gray-500">Cooling</span>
-            <ThermometerSun className="h-4 w-4 text-gray-400" />
+            <span className="text-figma-sm text-fw-bodyLight">Cooling</span>
+            <ThermometerSun className="h-4 w-4 text-fw-bodyLight" />
           </div>
-          <div className="text-sm font-semibold text-gray-900">
+          <div className="text-figma-base font-semibold text-fw-heading">
             {coolingPower.toFixed(1)} kW
           </div>
         </div>
@@ -78,20 +78,20 @@ export function PUEMetricsWidget({ connections }: PUEMetricsWidgetProps) {
       {/* Carbon Impact */}
       <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
         <div className="flex items-center">
-          <TrendingDown className="h-4 w-4 text-green-500 mr-2" />
-          <span className="text-sm text-green-700">CO₂ Saved (vs avg)</span>
+          <TrendingDown className="h-4 w-4 text-fw-success mr-2" />
+          <span className="text-figma-base text-fw-success">CO2 Saved (vs avg)</span>
         </div>
-        <span className="text-sm font-medium text-green-700">
+        <span className="text-figma-base font-medium text-fw-success">
           {carbonSaved} kg/month
         </span>
       </div>
 
       {/* Quick Actions */}
       <div className="flex space-x-2">
-        <button className="flex-1 px-3 py-2 text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-green-50 rounded-lg transition-colors">
           View Trends
         </button>
-        <button className="flex-1 px-3 py-2 text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-green-50 rounded-lg transition-colors">
           Set Goals
         </button>
       </div>

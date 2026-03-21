@@ -2,7 +2,7 @@ import { memo, Suspense, lazy } from 'react';
 
 // Fallback icon component
 const IconFallback = memo(() => (
-  <div className="h-5 w-5 bg-gray-200 rounded animate-pulse" />
+  <div className="h-5 w-5 bg-fw-neutral rounded animate-pulse" />
 ));
 
 // Dynamic icon loader

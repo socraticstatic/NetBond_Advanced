@@ -123,7 +123,7 @@ export function OverflowMenu({
                     handleItemClick(item);
                   }}
                   className={`
-                    flex items-center w-full px-4 py-2 text-sm
+                    flex items-center w-full px-4 py-2 text-figma-base
                     ${item.variant === 'danger'
                       ? 'text-fw-error hover:bg-red-50'
                       : 'text-fw-body hover:bg-fw-wash'

@@ -151,30 +151,30 @@ export function PerformanceDistribution({ data }: PerformanceDistributionProps) 
 
   return (
     <Card className="overflow-hidden h-80">
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-fw-secondary">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <BarChart2 className="h-5 w-5 text-brand-blue mr-2" />
-            <h3 className="text-lg font-medium">Latency Distribution</h3>
+            <h3 className="text-lg font-medium tracking-[-0.03em]">Latency Distribution</h3>
           </div>
-          
+
           <div className="flex space-x-4">
             <div className="flex items-center">
               <div className="flex flex-col items-end">
                 <div className="flex items-center">
-                  <Activity className="h-4 w-4 text-gray-500 mr-1" />
-                  <span className="text-sm font-medium">{summaryMetrics.latencyAvg.toFixed(2)}ms</span>
+                  <Activity className="h-4 w-4 text-fw-bodyLight mr-1" />
+                  <span className="text-figma-base font-medium">{summaryMetrics.latencyAvg.toFixed(2)}ms</span>
                 </div>
-                <div className="flex items-center text-xs">
+                <div className="flex items-center text-figma-sm">
                   {summaryMetrics.latencyDelta < 0 ? (
                     <>
-                      <TrendingDown className="h-3 w-3 text-green-500 mr-1" />
-                      <span className="text-green-600">{formatPercentage(Math.abs(summaryMetrics.latencyDelta))}</span>
+                      <TrendingDown className="h-3 w-3 text-fw-success mr-1" />
+                      <span className="text-fw-success">{formatPercentage(Math.abs(summaryMetrics.latencyDelta))}</span>
                     </>
                   ) : (
                     <>
-                      <TrendingUp className="h-3 w-3 text-red-500 mr-1" />
-                      <span className="text-red-600">{formatPercentage(summaryMetrics.latencyDelta)}</span>
+                      <TrendingUp className="h-3 w-3 text-fw-error mr-1" />
+                      <span className="text-fw-error">{formatPercentage(summaryMetrics.latencyDelta)}</span>
                     </>
                   )}
                 </div>

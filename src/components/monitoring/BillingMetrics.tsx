@@ -38,7 +38,7 @@ export function BillingMetrics({ connections }: BillingMetricsProps) {
     datasets: [{
       label: 'Monthly Billing',
       data: [12500, 13200, 14100, 13800, 14500, 15200],
-      borderColor: '#10b981',
+      borderColor: '#2d7e24',
       fill: false
     }]
   };
@@ -51,19 +51,19 @@ export function BillingMetrics({ connections }: BillingMetricsProps) {
           <div className="card-body">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Total Monthly Cost</p>
-                <p className="mt-1 text-3xl font-semibold text-gray-900">
+                <p className="text-figma-base text-fw-bodyLight">Total Monthly Cost</p>
+                <p className="mt-1 text-3xl font-semibold text-fw-heading">
                   {formatCurrency(totalBilling)}
                 </p>
               </div>
-              <div className="p-3 bg-green-50 rounded-full">
-                <DollarSign className="h-6 w-6 text-complementary-green" />
+              <div className="p-3 bg-fw-successLight rounded-full">
+                <DollarSign className="h-6 w-6 text-fw-success" />
               </div>
             </div>
-            <div className="mt-4 flex items-center text-sm">
-              <TrendingUp className="h-4 w-4 text-complementary-green mr-1" />
-              <span className="text-complementary-green">+8.2%</span>
-              <span className="text-gray-500 ml-1">vs last month</span>
+            <div className="mt-4 flex items-center text-figma-base">
+              <TrendingUp className="h-4 w-4 text-fw-success mr-1" />
+              <span className="text-fw-success">+8.2%</span>
+              <span className="text-fw-bodyLight ml-1">vs last month</span>
             </div>
           </div>
         </Card>
@@ -72,19 +72,19 @@ export function BillingMetrics({ connections }: BillingMetricsProps) {
           <div className="card-body">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Average Per Connection</p>
-                <p className="mt-1 text-3xl font-semibold text-gray-900">
+                <p className="text-figma-base text-fw-bodyLight">Average Per Connection</p>
+                <p className="mt-1 text-3xl font-semibold text-fw-heading">
                   {formatCurrency(totalBilling / connections.length)}
                 </p>
               </div>
-              <div className="p-3 bg-brand-lightBlue rounded-full">
-                <CreditCard className="h-6 w-6 text-brand-blue" />
+              <div className="p-3 bg-fw-accent rounded-full">
+                <CreditCard className="h-6 w-6 text-fw-link" />
               </div>
             </div>
-            <div className="mt-4 flex items-center text-sm">
-              <TrendingUp className="h-4 w-4 text-brand-blue mr-1" />
-              <span className="text-brand-blue">+3.5%</span>
-              <span className="text-gray-500 ml-1">vs last month</span>
+            <div className="mt-4 flex items-center text-figma-base">
+              <TrendingUp className="h-4 w-4 text-fw-link mr-1" />
+              <span className="text-fw-link">+3.5%</span>
+              <span className="text-fw-bodyLight ml-1">vs last month</span>
             </div>
           </div>
         </Card>
@@ -93,18 +93,18 @@ export function BillingMetrics({ connections }: BillingMetricsProps) {
           <div className="card-body">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Projected Next Month</p>
-                <p className="mt-1 text-3xl font-semibold text-gray-900">
+                <p className="text-figma-base text-fw-bodyLight">Projected Next Month</p>
+                <p className="mt-1 text-3xl font-semibold text-fw-heading">
                   {formatCurrency(totalBilling * 1.082)}
                 </p>
               </div>
-              <div className="p-3 bg-purple-50 rounded-full">
-                <TrendingUp className="h-6 w-6 text-complementary-purple" />
+              <div className="p-3 bg-fw-purpleLight rounded-full">
+                <TrendingUp className="h-6 w-6 text-fw-purple" />
               </div>
             </div>
-            <div className="mt-4 flex items-center text-sm">
-              <Calendar className="h-4 w-4 text-complementary-purple mr-1" />
-              <span className="text-gray-500">Based on current usage</span>
+            <div className="mt-4 flex items-center text-figma-base">
+              <Calendar className="h-4 w-4 text-fw-purple mr-1" />
+              <span className="text-fw-bodyLight">Based on current usage</span>
             </div>
           </div>
         </Card>
@@ -113,17 +113,17 @@ export function BillingMetrics({ connections }: BillingMetricsProps) {
           <div className="card-body">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500">Additional Services</p>
-                <p className="mt-1 text-3xl font-semibold text-gray-900">
+                <p className="text-figma-base text-fw-bodyLight">Additional Services</p>
+                <p className="mt-1 text-3xl font-semibold text-fw-heading">
                   {formatCurrency(2499.99)}
                 </p>
               </div>
-              <div className="p-3 bg-indigo-50 rounded-full">
-                <CreditCard className="h-6 w-6 text-indigo-600" />
+              <div className="p-3 bg-fw-infoLight rounded-full">
+                <CreditCard className="h-6 w-6 text-fw-info" />
               </div>
             </div>
-            <div className="mt-4 flex items-center text-sm">
-              <span className="text-gray-500">DDoS Protection, Monitoring</span>
+            <div className="mt-4 flex items-center text-figma-base">
+              <span className="text-fw-bodyLight">DDoS Protection, Monitoring</span>
             </div>
           </div>
         </Card>
@@ -133,19 +133,19 @@ export function BillingMetrics({ connections }: BillingMetricsProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <div className="card-body">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Cost by Provider</h3>
+            <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em] mb-4">Cost by Provider</h3>
             <div className="space-y-4">
               {Object.entries(billingByProvider).map(([provider, amount]) => (
                 <div key={provider}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-gray-600">{provider}</span>
-                    <span className="text-sm font-medium text-gray-900">
+                    <span className="text-figma-base text-fw-body">{provider}</span>
+                    <span className="text-figma-base font-medium text-fw-heading">
                       {formatCurrency(amount)}
                     </span>
                   </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-2 bg-fw-neutral rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-brand-blue rounded-full"
+                      className="h-full bg-fw-primary rounded-full"
                       style={{ width: `${(amount / totalBilling) * 100}%` }}
                     />
                   </div>
@@ -157,19 +157,19 @@ export function BillingMetrics({ connections }: BillingMetricsProps) {
 
         <Card>
           <div className="card-body">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Cost by Location</h3>
+            <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em] mb-4">Cost by Location</h3>
             <div className="space-y-4">
               {Object.entries(billingByLocation).map(([location, amount]) => (
                 <div key={location}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-gray-600">{location}</span>
-                    <span className="text-sm font-medium text-gray-900">
+                    <span className="text-figma-base text-fw-body">{location}</span>
+                    <span className="text-figma-base font-medium text-fw-heading">
                       {formatCurrency(amount)}
                     </span>
                   </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-2 bg-fw-neutral rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-complementary-green rounded-full"
+                      className="h-full bg-fw-success rounded-full"
                       style={{ width: `${(amount / totalBilling) * 100}%` }}
                     />
                   </div>
@@ -184,11 +184,11 @@ export function BillingMetrics({ connections }: BillingMetricsProps) {
       <Card>
         <div className="card-body">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-medium text-gray-900">Billing Trends</h3>
+            <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">Billing Trends</h3>
             <select
               value={timeRange}
               onChange={(e) => setTimeRange(e.target.value)}
-              className="form-control text-sm"
+              className="form-control text-figma-base"
             >
               <option value="7d">Last 7 days</option>
               <option value="30d">Last 30 days</option>
@@ -205,48 +205,48 @@ export function BillingMetrics({ connections }: BillingMetricsProps) {
       {/* Detailed Breakdown */}
       <Card>
         <div className="card-body">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Cost Breakdown</h3>
+          <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em] mb-4">Cost Breakdown</h3>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-fw-secondary">
+              <thead className="bg-fw-wash">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                     Connection
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                     Base Fee
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                     Usage
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                     Additional Services
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
                     Total
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-fw-base divide-y divide-fw-secondary">
                 {connections.map((connection) => (
                   <tr key={connection.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{connection.name}</div>
-                      <div className="text-sm text-gray-500">{connection.type}</div>
+                      <div className="text-figma-base font-medium text-fw-heading">{connection.name}</div>
+                      <div className="text-figma-base text-fw-bodyLight">{connection.type}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-heading">
                       {formatCurrency(connection.billing?.baseFee || 0)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-heading">
                       {formatCurrency(connection.billing?.usage || 0)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-heading">
                       {formatCurrency(
                         (connection.billing?.additionalServices || [])
                           .reduce((sum, service) => sum + service.cost, 0)
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-figma-base font-medium text-fw-heading">
                       {formatCurrency(connection.billing?.total || 0)}
                     </td>
                   </tr>

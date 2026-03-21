@@ -32,7 +32,7 @@ export function AdaptiveNavigation({
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
   const [activeTab, setActiveTab] = useState<string>('');
   const verticalNavRef = useRef<HTMLDivElement>(null);
-  
+
   // Initialize expanded sections based on default prop
   useEffect(() => {
     const initialState: Record<string, boolean> = {};
@@ -41,13 +41,13 @@ export function AdaptiveNavigation({
     });
     setExpandedSections(initialState);
   }, [sections]);
-  
+
   // Determine active tab based on current route
   useEffect(() => {
     const path = location.pathname.split('/')[1];
     if (path) {
       setActiveTab(path);
-      
+
       // Auto-expand section that contains active tab when in vertical mode
       if (isVertical) {
         sections.forEach(section => {
@@ -71,7 +71,7 @@ export function AdaptiveNavigation({
         // Don't close if clicking the toggle button
         const target = event.target as HTMLElement;
         if (target.closest('[data-nav-toggle]')) return;
-        
+
         onToggleMode();
       }
     }
@@ -103,7 +103,7 @@ export function AdaptiveNavigation({
     if (onTabChange) {
       onTabChange(tabId);
     }
-    
+
     navigate(`/${tabId}`);
   };
 
@@ -128,7 +128,7 @@ export function AdaptiveNavigation({
             className="fixed inset-0 bg-black/30 z-40"
             onClick={onToggleMode}
           />
-          
+
           {/* Vertical Navigation Panel - Now positioned on the left side */}
           <motion.div
             ref={verticalNavRef}
@@ -136,29 +136,29 @@ export function AdaptiveNavigation({
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-0 left-0 bottom-0 w-64 bg-white z-50 shadow-xl overflow-y-auto"
+            className="fixed top-0 left-0 bottom-0 w-80 bg-fw-base z-50 shadow-xl overflow-y-auto"
           >
-            <div className="p-4 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white z-10">
+            <div className="p-4 border-b border-fw-secondary flex justify-between items-center sticky top-0 bg-fw-base z-10">
               <div className="flex items-center">
-                <span className="text-xl font-bold text-gray-900">AT&T</span>
-                <span className="ml-3 text-xl font-bold text-brand-blue">NetBond® Advanced</span>
+                <span className="text-xl font-bold text-fw-heading">AT&T</span>
+                <span className="ml-3 text-xl font-bold text-fw-att-blue">NetBond® Advanced</span>
               </div>
               <button
                 onClick={onToggleMode}
-                className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
+                className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
                 title="Close navigation menu"
                 aria-label="Close navigation menu"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
-            
+
             <div className="p-4">
               {sections.map((section) => (
                 <div key={section.id} className="mb-6">
                   <button
                     onClick={() => toggleSection(section.id)}
-                    className="w-full flex items-center justify-between px-3 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-50"
+                    className="w-full flex items-center justify-between px-3 py-3 text-figma-base font-medium text-fw-heading rounded-lg hover:bg-fw-wash"
                     aria-expanded={!!expandedSections[section.id]}
                   >
                     <div className="flex items-center">
@@ -166,12 +166,12 @@ export function AdaptiveNavigation({
                       <span className="ml-3">{section.title}</span>
                     </div>
                     {expandedSections[section.id] ? (
-                      <ChevronDown className="h-4 w-4 text-gray-500" />
+                      <ChevronDown className="h-4 w-4 text-fw-bodyLight" />
                     ) : (
-                      <ChevronRight className="h-4 w-4 text-gray-500" />
+                      <ChevronRight className="h-4 w-4 text-fw-bodyLight" />
                     )}
                   </button>
-                  
+
                   <AnimatePresence>
                     {expandedSections[section.id] && (
                       <motion.div
@@ -188,11 +188,11 @@ export function AdaptiveNavigation({
                               onClick={() => handleTabClick(item.id)}
                               disabled={item.disabled}
                               className={`
-                                w-full flex items-center px-4 py-2 text-sm rounded-lg
+                                w-full flex items-center px-4 py-2 text-figma-base rounded-lg
                                 transition-all duration-200
                                 ${activeTab === item.id
-                                  ? 'bg-brand-lightBlue text-brand-blue font-medium'
-                                  : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                                  ? 'bg-fw-accent text-fw-link font-medium border-l-2 border-fw-active'
+                                  : 'text-fw-body hover:bg-fw-wash hover:text-fw-heading border-l-2 border-transparent'
                                 }
                                 ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}
                               `}
@@ -201,10 +201,10 @@ export function AdaptiveNavigation({
                               {item.icon && <span className="mr-3">{item.icon}</span>}
                               <span>{item.label}</span>
                               {item.count !== undefined && (
-                                <span className={`ml-auto px-2.5 py-0.5 text-xs font-medium rounded-full ${
-                                  activeTab === item.id 
-                                    ? 'bg-brand-blue/20 text-brand-blue' 
-                                    : 'bg-gray-100 text-gray-700'
+                                <span className={`ml-auto px-2.5 py-0.5 text-figma-sm font-medium rounded-full ${
+                                  activeTab === item.id
+                                    ? 'bg-fw-cobalt-600/20 text-fw-link'
+                                    : 'bg-fw-neutral text-fw-body'
                                 }`}>
                                   {item.count}
                                 </span>
@@ -218,19 +218,19 @@ export function AdaptiveNavigation({
                 </div>
               ))}
             </div>
-            
-            <div className="px-4 py-6 border-t border-gray-200 mt-auto">
+
+            <div className="px-4 py-6 border-t border-fw-secondary mt-auto">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <img 
-                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                    alt="User" 
+                  <img
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt="User"
                     className="h-8 w-8 rounded-full"
                   />
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">Emilio Estevez</p>
-                  <p className="text-xs text-gray-500">Administrator</p>
+                  <p className="text-figma-base font-medium text-fw-heading">Emilio Estevez</p>
+                  <p className="text-figma-sm text-fw-bodyLight">Administrator</p>
                 </div>
               </div>
             </div>

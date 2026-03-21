@@ -82,19 +82,19 @@ export function BaseAlertsView({
         <div className="flex items-center justify-between">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center py-2 px-4 bg-white border border-gray-200 rounded-lg shadow-sm text-gray-700 hover:bg-gray-50"
+            className="flex items-center py-2 px-4 bg-fw-base border border-fw-secondary rounded-lg shadow-sm text-fw-body hover:bg-fw-wash"
           >
             <Filter className="h-4 w-4 mr-2" />
-            <span className="text-sm font-medium">Filter Alerts</span>
+            <span className="text-figma-base font-medium">Filter Alerts</span>
           </button>
           
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="flex items-center py-2 px-4 bg-white border border-gray-200 rounded-lg shadow-sm text-gray-700 hover:bg-gray-50"
+            className="flex items-center py-2 px-4 bg-fw-base border border-fw-secondary rounded-lg shadow-sm text-fw-body hover:bg-fw-wash"
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-            <span className="text-sm font-medium">{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
+            <span className="text-figma-base font-medium">{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
           </button>
         </div>
 
@@ -106,21 +106,21 @@ export function BaseAlertsView({
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm"
+              className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden shadow-sm"
             >
               <div className="p-4 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-gray-900">Alert Filters</h3>
-                  <button 
+                  <h3 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">Alert Filters</h3>
+                  <button
                     onClick={() => setShowFilters(false)}
-                    className="p-1 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100"
+                    className="p-1 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
                   >
                     <X className="h-5 w-5" />
                   </button>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">
                     Alert Types
                   </label>
                   <div className="space-y-2">
@@ -134,14 +134,14 @@ export function BaseAlertsView({
                           updateFilters({ types });
                         }}
                         className={`
-                          block w-full text-left px-3 py-2 rounded-md text-sm
+                          block w-full text-left px-3 py-2 rounded-md text-figma-base
                           ${activeFilters.types.includes(type as any)
                             ? type === 'critical'
                               ? 'bg-red-50 text-red-700'
                               : type === 'warning'
                                 ? 'bg-amber-50 text-amber-700'
                                 : 'bg-brand-lightBlue text-brand-blue'
-                            : 'text-gray-700 hover:bg-gray-50'
+                            : 'text-fw-body hover:bg-fw-wash'
                           }
                         `}
                       >
@@ -154,13 +154,13 @@ export function BaseAlertsView({
                 <div className="pt-2 flex justify-between">
                   <button
                     onClick={resetFilters}
-                    className="text-sm text-gray-500 hover:text-gray-700"
+                    className="text-figma-base text-fw-bodyLight hover:text-fw-body"
                   >
                     Reset Filters
                   </button>
                   <button
                     onClick={() => setShowFilters(false)}
-                    className="px-4 py-2 bg-brand-blue text-white rounded-lg text-sm font-medium hover:bg-brand-darkBlue"
+                    className="px-4 py-2 bg-brand-blue text-white rounded-lg text-figma-base font-medium hover:bg-brand-darkBlue"
                   >
                     Apply Filters
                   </button>
@@ -176,7 +176,7 @@ export function BaseAlertsView({
             {activeFilters.types.map((type) => (
               <span
                 key={type}
-                className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                className={`inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium ${
                   type === 'critical'
                     ? 'bg-red-50 text-red-700'
                     : type === 'warning'
@@ -198,7 +198,7 @@ export function BaseAlertsView({
               </span>
             ))}
             {activeFilters.search && (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium bg-fw-neutral text-fw-body">
                 "{activeFilters.search}"
                 <button
                   onClick={() => updateFilters({ search: '' })}
@@ -210,7 +210,7 @@ export function BaseAlertsView({
             )}
             <button
               onClick={resetFilters}
-              className="text-xs text-gray-500 hover:text-gray-700"
+              className="text-figma-sm text-fw-bodyLight hover:text-fw-body"
             >
               Clear all
             </button>
@@ -231,16 +231,16 @@ export function BaseAlertsView({
   return (
     <div className="space-y-6">
       {/* Filters and Search */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary p-4">
         <div className="flex items-center justify-between">
           <div className="relative w-64">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight" />
             <input
               type="text"
               value={activeFilters.search}
               onChange={(e) => updateFilters({ search: e.target.value })}
               placeholder="Search alerts..."
-              className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+              className="pl-10 pr-4 h-9 w-full border border-fw-secondary rounded-lg text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             />
           </div>
           
@@ -249,7 +249,7 @@ export function BaseAlertsView({
               {['critical', 'warning', 'info'].map((type) => (
                 <Button
                   key={type}
-                  variant={activeFilters.types.includes(type as any) ? 'primary' : 'outline'}
+                  variant={activeFilters.types.includes(type as any) ? 'primary' : 'ghost'}
                   size="sm"
                   className={
                     activeFilters.types.includes(type as any)
@@ -273,7 +273,7 @@ export function BaseAlertsView({
             </div>
             
             <Button
-              variant="outline"
+              variant="ghost"
               icon={Download}
               onClick={() => {
                 window.addToast({
@@ -286,9 +286,9 @@ export function BaseAlertsView({
             >
               Export
             </Button>
-            
+
             <Button
-              variant="outline"
+              variant="ghost"
               icon={RefreshCw}
               onClick={handleRefresh}
               disabled={isRefreshing}
@@ -305,7 +305,7 @@ export function BaseAlertsView({
             {activeFilters.types.map((type) => (
               <span
                 key={type}
-                className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                className={`inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium ${
                   type === 'critical'
                     ? 'bg-red-50 text-red-700'
                     : type === 'warning'
@@ -327,7 +327,7 @@ export function BaseAlertsView({
               </span>
             ))}
             {activeFilters.search && (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium bg-fw-neutral text-fw-body">
                 "{activeFilters.search}"
                 <button
                   onClick={() => updateFilters({ search: '' })}
@@ -339,7 +339,7 @@ export function BaseAlertsView({
             )}
             <button
               onClick={resetFilters}
-              className="text-xs text-gray-500 hover:text-gray-700"
+              className="text-figma-sm text-fw-bodyLight hover:text-fw-body"
             >
               Clear all
             </button>

@@ -1,4 +1,4 @@
-import { Shield, Globe, Router, Network, Scale, AlertTriangle, Zap, Cloud } from 'lucide-react';
+import { Shield, Globe, Share2, Network, Scale, AlertTriangle, Zap, Cloud } from 'lucide-react';
 import { VNFType, VNFTypeInfo } from '../types/vnf';
 
 export const VNF_TYPE_INFO: Record<VNFType, VNFTypeInfo> = {
@@ -40,7 +40,7 @@ export const VNF_TYPE_INFO: Record<VNFType, VNFTypeInfo> = {
     type: 'router',
     label: 'Virtual Router',
     description: 'Software-based router for packet forwarding and network segmentation',
-    icon: 'Router',
+    icon: 'Share2',
     color: 'blue',
     defaultVendors: ['Cisco', 'Juniper', 'Arista', 'Nokia', 'Huawei'],
     commonFeatures: [
@@ -145,7 +145,7 @@ export function getVNFTypeIcon(type: VNFType) {
   const iconMap = {
     firewall: Shield,
     sdwan: Globe,
-    router: Router,
+    router: Share2,
     vnat: Network,
     load_balancer: Scale,
     ids_ips: AlertTriangle,
@@ -165,7 +165,7 @@ export function getVNFTypeColor(type: VNFType): string {
     indigo: 'text-indigo-500 bg-indigo-100',
     orange: 'text-orange-500 bg-orange-100',
     yellow: 'text-yellow-600 bg-yellow-100',
-    gray: 'text-gray-500 bg-gray-100'
+    gray: 'text-fw-bodyLight bg-fw-wash'
   };
   return colorMap[info.color] || colorMap.gray;
 }

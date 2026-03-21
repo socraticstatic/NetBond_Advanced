@@ -67,12 +67,12 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
   return (
     <div className="p-6">
       {/* Help Banner */}
-      <div className="mb-6 bg-gradient-to-r from-fw-wash to-fw-base border border-fw-secondary rounded-lg p-4">
+      <div className="mb-6 bg-gradient-to-r from-fw-wash to-fw-base border border-fw-secondary rounded-xl p-4">
         <div className="flex items-start">
           <Shield className="h-6 w-6 text-fw-link mr-3 flex-shrink-0" />
           <div>
-            <h3 className="text-sm font-medium text-fw-heading">Connection Governance</h3>
-            <p className="text-sm text-fw-bodyLight mt-1">
+            <h3 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">Connection Governance</h3>
+            <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">
               Configure account-wide policies and standards for connection provisioning, naming, and lifecycle management. These settings apply to all connections in your account.
             </p>
           </div>
@@ -90,9 +90,9 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
           {/* Connection Policies */}
           {activeView === 'policies' && (
             <div className="space-y-6">
-              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
-                <h3 className="text-lg font-semibold text-fw-heading mb-4">Connection Provisioning Policies</h3>
-                <p className="text-sm text-fw-bodyLight mb-6">
+              <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+                <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Connection Provisioning Policies</h3>
+                <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mb-6">
                   Control how connections can be created and managed across your organization.
                 </p>
 
@@ -102,11 +102,11 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={policies.requireApproval}
                       onChange={(e) => setPolicies({...policies, requireApproval: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Require Approval for New Connections</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">All connection requests must be approved by an administrator before provisioning</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Require Approval for New Connections</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">All connection requests must be approved by an administrator before provisioning</p>
                     </div>
                   </label>
 
@@ -115,11 +115,11 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={policies.autoProvision}
                       onChange={(e) => setPolicies({...policies, autoProvision: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Auto-Provision on Approval</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Automatically provision connections when approved (requires approval workflow enabled)</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Auto-Provision on Approval</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Automatically provision connections when approved (requires approval workflow enabled)</p>
                     </div>
                   </label>
 
@@ -128,11 +128,11 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={policies.allowSelfService}
                       onChange={(e) => setPolicies({...policies, allowSelfService: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Allow Self-Service Provisioning</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Enable users to provision connections without administrative approval (within limits)</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Allow Self-Service Provisioning</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Enable users to provision connections without administrative approval (within limits)</p>
                     </div>
                   </label>
 
@@ -141,11 +141,11 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={policies.requireTagging}
                       onChange={(e) => setPolicies({...policies, requireTagging: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Require Resource Tagging</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Connections must be tagged with cost center, environment, and owner information</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Require Resource Tagging</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Connections must be tagged with cost center, environment, and owner information</p>
                     </div>
                   </label>
 
@@ -154,36 +154,36 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={policies.enforceNamingConvention}
                       onChange={(e) => setPolicies({...policies, enforceNamingConvention: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Enforce Naming Convention</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Connection names must follow the defined naming pattern</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Enforce Naming Convention</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Connection names must follow the defined naming pattern</p>
                     </div>
                   </label>
 
                   <div className="pt-4 border-t border-fw-secondary">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-fw-body mb-2">Max Connections Per User</label>
+                        <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Max Connections Per User</label>
                         <input
                           type="number"
                           value={policies.maxConnectionsPerUser}
                           onChange={(e) => setPolicies({...policies, maxConnectionsPerUser: parseInt(e.target.value)})}
                           className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-link focus:border-fw-link"
                         />
-                        <p className="text-xs text-fw-bodyLight mt-1">Maximum connections a single user can create</p>
+                        <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Maximum connections a single user can create</p>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-fw-body mb-2">Max Bandwidth Per Connection (Mbps)</label>
+                        <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Max Bandwidth Per Connection (Mbps)</label>
                         <input
                           type="number"
                           value={policies.maxBandwidthPerConnection}
                           onChange={(e) => setPolicies({...policies, maxBandwidthPerConnection: parseInt(e.target.value)})}
                           className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-link focus:border-fw-link"
                         />
-                        <p className="text-xs text-fw-bodyLight mt-1">Maximum bandwidth limit for new connections</p>
+                        <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Maximum bandwidth limit for new connections</p>
                       </div>
                     </div>
                   </div>
@@ -201,16 +201,16 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
           {/* Default Settings */}
           {activeView === 'defaults' && (
             <div className="space-y-6">
-              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
-                <h3 className="text-lg font-semibold text-fw-heading mb-4">Default Connection Settings</h3>
-                <p className="text-sm text-fw-bodyLight mb-6">
+              <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+                <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Default Connection Settings</h3>
+                <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mb-6">
                   Set default values that will be applied to all new connections unless explicitly overridden.
                 </p>
 
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-fw-body mb-2">Default Bandwidth</label>
+                      <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Default Bandwidth</label>
                       <select
                         value={defaults.defaultBandwidth}
                         onChange={(e) => setDefaults({...defaults, defaultBandwidth: e.target.value})}
@@ -224,7 +224,7 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-fw-body mb-2">Default VLAN Assignment</label>
+                      <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Default VLAN Assignment</label>
                       <select
                         value={defaults.defaultVlan}
                         onChange={(e) => setDefaults({...defaults, defaultVlan: e.target.value})}
@@ -237,7 +237,7 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-fw-body mb-2">Default Routing Protocol</label>
+                      <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Default Routing Protocol</label>
                       <select
                         value={defaults.defaultRoutingProtocol}
                         onChange={(e) => setDefaults({...defaults, defaultRoutingProtocol: e.target.value})}
@@ -250,7 +250,7 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-fw-body mb-2">Default SLA Tier</label>
+                      <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Default SLA Tier</label>
                       <select
                         value={defaults.defaultSLA}
                         onChange={(e) => setDefaults({...defaults, defaultSLA: e.target.value})}
@@ -263,7 +263,7 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-fw-body mb-2">Default Redundancy</label>
+                      <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Default Redundancy</label>
                       <select
                         value={defaults.defaultRedundancy}
                         onChange={(e) => setDefaults({...defaults, defaultRedundancy: e.target.value})}
@@ -282,9 +282,9 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                         type="checkbox"
                         checked={defaults.enableMonitoring}
                         onChange={(e) => setDefaults({...defaults, enableMonitoring: e.target.checked})}
-                        className="h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        className="h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                       />
-                      <span className="text-sm text-fw-body">Enable monitoring for all new connections</span>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Enable monitoring for all new connections</span>
                     </label>
 
                     <label className="flex items-center space-x-3">
@@ -292,9 +292,9 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                         type="checkbox"
                         checked={defaults.enableAlerting}
                         onChange={(e) => setDefaults({...defaults, enableAlerting: e.target.checked})}
-                        className="h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        className="h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                       />
-                      <span className="text-sm text-fw-body">Enable alerting for all new connections</span>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Enable alerting for all new connections</span>
                     </label>
 
                     <label className="flex items-center space-x-3">
@@ -302,9 +302,9 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                         type="checkbox"
                         checked={defaults.autoEnableHA}
                         onChange={(e) => setDefaults({...defaults, autoEnableHA: e.target.checked})}
-                        className="h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        className="h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                       />
-                      <span className="text-sm text-fw-body">Automatically enable high availability for critical connections</span>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Automatically enable high availability for critical connections</span>
                     </label>
                   </div>
                 </div>
@@ -321,9 +321,9 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
           {/* Naming Conventions */}
           {activeView === 'naming' && (
             <div className="space-y-6">
-              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
-                <h3 className="text-lg font-semibold text-fw-heading mb-4">Naming Conventions</h3>
-                <p className="text-sm text-fw-bodyLight mb-6">
+              <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+                <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Naming Conventions</h3>
+                <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mb-6">
                   Define standards for connection naming to ensure consistency and easy identification.
                 </p>
 
@@ -333,17 +333,17 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={namingConvention.usePattern}
                       onChange={(e) => setNamingConvention({...namingConvention, usePattern: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Use Naming Pattern</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Enforce a structured naming pattern for all connections</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Use Naming Pattern</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Enforce a structured naming pattern for all connections</p>
                     </div>
                   </label>
 
                   {namingConvention.usePattern && (
                     <div>
-                      <label className="block text-sm font-medium text-fw-body mb-2">Naming Pattern</label>
+                      <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Naming Pattern</label>
                       <input
                         type="text"
                         value={namingConvention.pattern}
@@ -351,19 +351,19 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                         className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-link focus:border-fw-link font-mono"
                         placeholder="{env}-{region}-{type}-{sequence}"
                       />
-                      <p className="text-xs text-fw-bodyLight mt-2">
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-2">
                         Available variables: {'{env}'}, {'{region}'}, {'{type}'}, {'{sequence}'}, {'{dept}'}, {'{project}'}
                       </p>
                       <div className="mt-3 p-3 bg-fw-wash rounded">
-                        <p className="text-xs text-fw-bodyLight mb-1">Example output:</p>
-                        <p className="text-sm font-mono text-fw-body">prod-us-east-netbond-001</p>
+                        <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Example output:</p>
+                        <p className="text-figma-base font-mono text-fw-body tracking-[-0.03em]">prod-us-east-netbond-001</p>
                       </div>
                     </div>
                   )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-fw-body mb-2">Minimum Name Length</label>
+                      <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Minimum Name Length</label>
                       <input
                         type="number"
                         value={namingConvention.minNameLength}
@@ -373,7 +373,7 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-fw-body mb-2">Maximum Name Length</label>
+                      <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Maximum Name Length</label>
                       <input
                         type="number"
                         value={namingConvention.maxNameLength}
@@ -388,11 +388,11 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={namingConvention.requireDescription}
                       onChange={(e) => setNamingConvention({...namingConvention, requireDescription: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Require Description</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Connection descriptions are mandatory for all new connections</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Require Description</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Connection descriptions are mandatory for all new connections</p>
                     </div>
                   </label>
 
@@ -401,11 +401,11 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={namingConvention.allowCustomNames}
                       onChange={(e) => setNamingConvention({...namingConvention, allowCustomNames: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Allow Custom Names</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Permit custom names that don't follow the pattern (with approval)</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Allow Custom Names</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Permit custom names that don't follow the pattern (with approval)</p>
                     </div>
                   </label>
                 </div>
@@ -422,9 +422,9 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
           {/* Lifecycle Rules */}
           {activeView === 'lifecycle' && (
             <div className="space-y-6">
-              <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
-                <h3 className="text-lg font-semibold text-fw-heading mb-4">Connection Lifecycle Rules</h3>
-                <p className="text-sm text-fw-bodyLight mb-6">
+              <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+                <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Connection Lifecycle Rules</h3>
+                <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mb-6">
                   Automate connection lifecycle management to optimize costs and maintain a clean inventory.
                 </p>
 
@@ -434,24 +434,24 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={lifecycle.autoDecommissionInactive}
                       onChange={(e) => setLifecycle({...lifecycle, autoDecommissionInactive: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Auto-Decommission Inactive Connections</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Automatically decommission connections that have been inactive</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Auto-Decommission Inactive Connections</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Automatically decommission connections that have been inactive</p>
                     </div>
                   </label>
 
                   {lifecycle.autoDecommissionInactive && (
                     <div>
-                      <label className="block text-sm font-medium text-fw-body mb-2">Inactivity Threshold (days)</label>
+                      <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Inactivity Threshold (days)</label>
                       <input
                         type="number"
                         value={lifecycle.inactivityThreshold}
                         onChange={(e) => setLifecycle({...lifecycle, inactivityThreshold: parseInt(e.target.value)})}
                         className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-link focus:border-fw-link"
                       />
-                      <p className="text-xs text-fw-bodyLight mt-1">Days of inactivity before connection is flagged for decommission</p>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Days of inactivity before connection is flagged for decommission</p>
                     </div>
                   )}
 
@@ -460,24 +460,24 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={lifecycle.notifyBeforeDecommission}
                       onChange={(e) => setLifecycle({...lifecycle, notifyBeforeDecommission: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Notify Before Decommission</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Send notification to connection owner before auto-decommissioning</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Notify Before Decommission</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Send notification to connection owner before auto-decommissioning</p>
                     </div>
                   </label>
 
                   {lifecycle.notifyBeforeDecommission && (
                     <div>
-                      <label className="block text-sm font-medium text-fw-body mb-2">Notification Period (days)</label>
+                      <label className="block text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-2">Notification Period (days)</label>
                       <input
                         type="number"
                         value={lifecycle.notificationDays}
                         onChange={(e) => setLifecycle({...lifecycle, notificationDays: parseInt(e.target.value)})}
                         className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-link focus:border-fw-link"
                       />
-                      <p className="text-xs text-fw-bodyLight mt-1">Days before decommission to send notification</p>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Days before decommission to send notification</p>
                     </div>
                   )}
 
@@ -486,11 +486,11 @@ export function ConnectionManagement({ searchQuery }: ConnectionManagementProps)
                       type="checkbox"
                       checked={lifecycle.archiveAfterDecommission}
                       onChange={(e) => setLifecycle({...lifecycle, archiveAfterDecommission: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Archive After Decommission</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Archive connection configuration and history after decommissioning</p>
+                      <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">Archive After Decommission</span>
+                      <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">Archive connection configuration and history after decommissioning</p>
                     </div>
                   </label>
                 </div>

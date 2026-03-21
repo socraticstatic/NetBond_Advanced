@@ -19,10 +19,10 @@ interface CloudRouterCardProps {
   usedBandwidth?: number; // Total used bandwidth across all routers
 }
 
-export function CloudRouterCard({ 
-  cloudRouter, 
+export function CloudRouterCard({
+  cloudRouter,
   vnfs = [],
-  onEdit, 
+  onEdit,
   onDelete,
   isExpanded = true, // Default to expanded
   onToggleExpand,
@@ -46,7 +46,7 @@ export function CloudRouterCard({
 
   // Parse connection bandwidth to a number
   const totalBandwidth = parseFloat(connectionBandwidth.replace(/[^\d.]/g, ''));
-  
+
   // Calculate available bandwidth (total - used across all routers)
   const availableBandwidth = Math.max(0, totalBandwidth - usedBandwidth);
 
@@ -54,10 +54,10 @@ export function CloudRouterCard({
   const getVnfIcon = (type: string) => {
     switch(type) {
       case 'firewall': return <Shield className="h-4 w-4 text-indigo-500" />;
-      case 'sdwan': return <Network className="h-4 w-4 text-purple-500" />;
-      case 'router': return <Router className="h-4 w-4 text-blue-500" />;
-      case 'vnat': return <Network className="h-4 w-4 text-green-500" />;
-      default: return <ServerCog className="h-4 w-4 text-gray-500" />;
+      case 'sdwan': return <Network className="h-4 w-4 text-fw-purple" />;
+      case 'router': return <Router className="h-4 w-4 text-fw-link" />;
+      case 'vnat': return <Network className="h-4 w-4 text-fw-success" />;
+      default: return <ServerCog className="h-4 w-4 text-fw-bodyLight" />;
     }
   };
 
@@ -77,11 +77,11 @@ export function CloudRouterCard({
   const handleSaveLink = (linkData: Partial<Link>) => {
     if (editingLink) {
       // Update existing link
-      const updatedLinks = links.map(link => 
+      const updatedLinks = links.map(link =>
         link.id === editingLink.id ? { ...link, ...linkData } as Link : link
       );
       setLinks(updatedLinks);
-      
+
       window.addToast({
         type: 'success',
         title: 'Link Updated',
@@ -96,9 +96,9 @@ export function CloudRouterCard({
         createdAt: new Date().toISOString(),
         status: 'active'
       } as Link;
-      
+
       setLinks([...links, newLink]);
-      
+
       window.addToast({
         type: 'success',
         title: 'Link Created',
@@ -106,7 +106,7 @@ export function CloudRouterCard({
         duration: 3000
       });
     }
-    
+
     setEditingLink(undefined);
     setShowLinkModal(false);
   };
@@ -114,36 +114,36 @@ export function CloudRouterCard({
   const handleConfirmDeleteLink = () => {
     if (deletingLink) {
       setLinks(links.filter(link => link.id !== deletingLink.id));
-      
+
       window.addToast({
         type: 'success',
         title: 'Link Deleted',
         message: `Link ${deletingLink.name} has been deleted successfully`,
         duration: 3000
       });
-      
+
       setDeletingLink(undefined);
     }
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-fw-base rounded-3xl overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-gray-100 bg-gray-50">
+      <div className="p-4 border-b border-fw-secondary">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div className="p-2 bg-brand-lightBlue rounded-lg mr-3">
-              <GitBranch className="h-5 w-5 text-brand-blue" />
+            <div className="w-10 h-10 flex items-center justify-center bg-fw-link rounded-lg mr-3">
+              <GitBranch className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h3 className="text-base font-medium text-gray-900">{cloudRouter.name}</h3>
-              <p className="text-sm text-gray-500">{cloudRouter.description}</p>
+              <h3 className="text-figma-lg font-medium text-fw-heading">{cloudRouter.name}</h3>
+              <p className="text-figma-sm text-fw-bodyLight">{cloudRouter.description}</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             <button
               onClick={onToggleExpand}
-              className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full"
+              className="p-1.5 text-fw-bodyLight hover:text-fw-body hover:bg-fw-neutral rounded-full"
             >
               {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </button>
@@ -166,20 +166,20 @@ export function CloudRouterCard({
             />
           </div>
         </div>
-        
+
         {/* Status Badge */}
         <div className="mt-3 flex items-center justify-between">
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-            cloudRouter.status === 'active' ? 'bg-green-100 text-green-800' : 
-            cloudRouter.status === 'inactive' ? 'bg-gray-100 text-gray-800' :
-            cloudRouter.status === 'provisioning' ? 'bg-blue-100 text-blue-800' :
-            'bg-red-100 text-red-800'
+          <span className={`inline-flex items-center px-2 py-1 rounded-lg text-figma-sm font-medium uppercase ${
+            cloudRouter.status === 'active' ? 'bg-green-50 text-fw-success' :
+            cloudRouter.status === 'inactive' ? 'bg-fw-secondary text-fw-disabled' :
+            cloudRouter.status === 'provisioning' ? 'bg-fw-accent text-fw-link' :
+            'bg-red-50 text-fw-error'
           }`}>
             {cloudRouter.status.charAt(0).toUpperCase() + cloudRouter.status.slice(1)}
           </span>
-          <div className="flex space-x-3 text-xs text-gray-500">
+          <div className="flex space-x-3 text-figma-sm text-fw-bodyLight">
             <span>Available Bandwidth: {availableBandwidth.toFixed(1)} Gbps</span>
-            <span>Used: {routerBandwidthUsed.toFixed(1)} Gbps</span>
+            <span className="border-l border-fw-secondary pl-3">Used: {routerBandwidthUsed.toFixed(1)} Gbps</span>
           </div>
         </div>
       </div>
@@ -190,29 +190,29 @@ export function CloudRouterCard({
           {/* VNF Functions Section - New Section */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-medium text-gray-900 flex items-center">
-                <Shield className="h-4 w-4 text-gray-500 mr-1.5" />
+              <h4 className="text-figma-base font-bold text-fw-heading tracking-[-0.04em] flex items-center">
+                <Shield className="h-4 w-4 text-fw-bodyLight mr-1.5" />
                 VNF Functions
               </h4>
             </div>
-            
+
             {associatedVNFs.length > 0 ? (
               <div className="space-y-2">
                 {associatedVNFs.map(vnf => (
-                  <div key={vnf.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
+                  <div key={vnf.id} className="flex items-center justify-between p-2 bg-fw-wash rounded-2xl border border-fw-secondary">
                     <div className="flex items-center">
                       {getVnfIcon(vnf.type)}
                       <div className="ml-2">
-                        <div className="text-sm font-medium text-gray-900">{vnf.name}</div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-figma-base font-medium text-fw-heading">{vnf.name}</div>
+                        <div className="text-figma-sm text-fw-bodyLight">
                           {vnf.vendor} {vnf.model} • {vnf.throughput || 'Standard Throughput'}
                         </div>
                       </div>
                     </div>
-                    <span className={`px-2 py-0.5 text-xs rounded-full ${
-                      vnf.status === 'active' ? 'bg-green-100 text-green-800' :
-                      vnf.status === 'inactive' ? 'bg-gray-100 text-gray-800' :
-                      'bg-blue-100 text-blue-800'
+                    <span className={`px-2 py-0.5 text-figma-sm rounded-lg ${
+                      vnf.status === 'active' ? 'bg-green-50 text-fw-success' :
+                      vnf.status === 'inactive' ? 'bg-fw-neutral text-fw-body' :
+                      'bg-fw-accent text-fw-linkHover'
                     }`}>
                       {vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)}
                     </span>
@@ -220,8 +220,8 @@ export function CloudRouterCard({
                 ))}
               </div>
             ) : (
-              <div className="text-center py-3 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-500">No VNF functions attached to this router</p>
+              <div className="text-center py-3 bg-fw-wash rounded-lg">
+                <p className="text-figma-base text-fw-bodyLight">No VNF functions attached to this router</p>
               </div>
             )}
           </div>
@@ -229,13 +229,13 @@ export function CloudRouterCard({
           {/* VLANs Section */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-medium text-gray-900 flex items-center">
-                <Network className="h-4 w-4 text-gray-500 mr-1.5" />
+              <h4 className="text-figma-base font-bold text-fw-heading tracking-[-0.04em] flex items-center">
+                <Network className="h-4 w-4 text-fw-bodyLight mr-1.5" />
                 Virtual Links (VLANs)
               </h4>
               <button
                 onClick={handleAddLink}
-                className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-brand-blue rounded-md hover:bg-brand-darkBlue transition-colors"
+                className="inline-flex items-center px-3 py-1.5 text-figma-base font-medium text-white bg-brand-blue rounded-full hover:bg-brand-darkBlue transition-colors"
               >
                 <Plus className="h-4 w-4 mr-1.5" />
                 Add VLAN
@@ -253,24 +253,24 @@ export function CloudRouterCard({
           {/* Policies Section */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-medium text-gray-900 flex items-center">
-                <Settings className="h-4 w-4 text-gray-500 mr-1.5" />
+              <h4 className="text-figma-base font-bold text-fw-heading tracking-[-0.04em] flex items-center">
+                <Settings className="h-4 w-4 text-fw-bodyLight mr-1.5" />
                 Policies
               </h4>
             </div>
-            
+
             {cloudRouter.policies ? (
               <div className="grid grid-cols-3 gap-2">
                 {Object.entries(cloudRouter.policies).map(([key, value]) => (
-                  <div key={key} className="p-2 bg-gray-50 rounded-lg border border-gray-100">
-                    <div className="text-xs text-gray-500 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
-                    <div className="text-sm font-medium text-gray-900 capitalize">{value}</div>
+                  <div key={key} className="p-2 bg-fw-wash rounded-2xl border border-fw-secondary">
+                    <div className="text-figma-sm text-fw-bodyLight capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                    <div className="text-figma-base font-medium text-fw-heading capitalize">{value}</div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-3 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-500">No policies configured</p>
+              <div className="text-center py-3 bg-fw-wash rounded-lg">
+                <p className="text-figma-base text-fw-bodyLight">No policies configured</p>
               </div>
             )}
           </div>

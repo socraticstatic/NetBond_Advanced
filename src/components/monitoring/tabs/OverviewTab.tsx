@@ -50,52 +50,52 @@ export function OverviewTab() {
     <div className="space-y-6">
       {/* Resource Hierarchy Section */}
       {selectedConnection !== 'all' && (
-        <div className="card p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Resource Hierarchy</h3>
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+          <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Resource Hierarchy</h3>
           <div className="space-y-4">
             {filteredConnections.map(connection => (
-              <div key={connection.id} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <div key={connection.id} className="border border-fw-secondary rounded-lg p-4 bg-fw-wash">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-2">
-                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                    <span className="font-medium text-gray-900">{connection.name}</span>
+                    <div className="h-2 w-2 rounded-full bg-fw-success"></div>
+                    <span className="font-medium text-fw-heading">{connection.name}</span>
                   </div>
-                  <span className="text-xs text-gray-500">{connection.type}</span>
+                  <span className="text-figma-sm text-fw-bodyLight">{connection.type}</span>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3 pl-4 border-l-2 border-blue-200">
-                  <div className="bg-white rounded-lg p-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3 pl-4 border-l-2 border-fw-active">
+                  <div className="bg-fw-base rounded-lg p-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Cloud Routers</span>
-                      <span className="text-lg font-semibold text-blue-600">
+                      <span className="text-figma-base text-fw-bodyLight">Cloud Routers</span>
+                      <span className="text-lg font-semibold text-fw-link">
                         {filteredRouters.filter(r => r.connectionId === connection.id).length}
                       </span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">
+                    <div className="text-figma-sm text-fw-bodyLight mt-1">
                       {filteredRouters.filter(r => r.connectionId === connection.id && r.status === 'active').length} active
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-lg p-3">
+                  <div className="bg-fw-base rounded-lg p-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Links</span>
-                      <span className="text-lg font-semibold text-green-600">
+                      <span className="text-figma-base text-fw-bodyLight">Links</span>
+                      <span className="text-lg font-semibold text-fw-success">
                         {filteredLinks.length}
                       </span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">
+                    <div className="text-figma-sm text-fw-bodyLight mt-1">
                       {filteredLinks.filter(l => l.status === 'active').length} active
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-lg p-3">
+                  <div className="bg-fw-base rounded-lg p-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">VNFs</span>
-                      <span className="text-lg font-semibold text-purple-600">
+                      <span className="text-figma-base text-fw-bodyLight">VNFs</span>
+                      <span className="text-lg font-semibold text-fw-purple">
                         {filteredVNFs.filter(v => v.connectionId === connection.id).length}
                       </span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">
+                    <div className="text-figma-sm text-fw-bodyLight mt-1">
                       {filteredVNFs.filter(v => v.connectionId === connection.id && v.status === 'active').length} active
                     </div>
                   </div>
@@ -107,8 +107,8 @@ export function OverviewTab() {
       )}
 
       {/* Alerts Section */}
-      <div className="card p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Active Alerts</h3>
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Active Alerts</h3>
         <Suspense fallback={<LoadingSpinner size="md" text="Loading alerts..." />}>
           <AlertCards
             selectedConnection={selectedConnection}
@@ -132,8 +132,8 @@ export function OverviewTab() {
         placeholder={<SkeletonCard lines={6} />}
         className="w-full"
       >
-        <div className="card p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Network Performance</h3>
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+          <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Network Performance</h3>
           <Suspense fallback={<LoadingSpinner size="md" text="Loading network metrics..." />}>
             <NetworkMetrics metrics={summary} />
           </Suspense>
@@ -145,8 +145,8 @@ export function OverviewTab() {
         placeholder={<SkeletonCard lines={8} />}
         className="w-full"
       >
-        <div className="card p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Billing Overview</h3>
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+          <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Billing Overview</h3>
           <Suspense fallback={<LoadingSpinner size="md" text="Loading billing data..." />}>
             <BillingMetrics connections={filteredConnections} />
           </Suspense>
@@ -158,8 +158,8 @@ export function OverviewTab() {
         placeholder={<SkeletonCard lines={4} />}
         className="w-full"
       >
-        <div className="card p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Usage Analysis</h3>
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+          <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4">Usage Analysis</h3>
           <Suspense fallback={<LoadingSpinner size="md" text="Loading usage data..." />}>
             <SummaryPanel connections={filteredConnections} />
           </Suspense>

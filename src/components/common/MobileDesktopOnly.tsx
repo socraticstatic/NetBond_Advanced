@@ -61,7 +61,7 @@ export function MobileDesktopOnly({
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
             className="absolute -bottom-2 -right-2 bg-fw-base rounded-full p-3 shadow-lg border-4 border-fw-wash"
           >
-            <Smartphone className="h-6 w-6 text-fw-gray-400" />
+            <Smartphone className="h-6 w-6 text-fw-bodyLight" />
           </motion.div>
         </motion.div>
 
@@ -112,7 +112,7 @@ export function MobileDesktopOnly({
           className="mt-12 max-w-sm"
         >
           <div className="bg-fw-blue-light rounded-xl p-4 border border-fw-cobalt-100">
-            <p className="text-sm text-fw-body">
+            <p className="text-figma-base text-fw-body">
               <span className="font-semibold text-fw-heading">Pro tip:</span> For the full experience, access this feature from a desktop or laptop computer with a screen width of at least 1024px.
             </p>
           </div>

@@ -18,20 +18,20 @@ export function TabGroup({ tabs, activeTab, onChange, className = '' }: TabGroup
             onClick={() => !tab.disabled && onChange(tab.id)}
             disabled={tab.disabled}
             className={`
-              flex items-center whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm no-rounded
+              flex items-center whitespace-nowrap py-4 px-1 border-b-2 font-medium text-figma-base no-rounded tracking-[-0.03em]
               transition-colors duration-200
               ${tab.disabled
                 ? 'border-transparent text-fw-disabled cursor-not-allowed'
                 : activeTab === tab.id
                   ? 'border-fw-active text-fw-link'
-                  : 'border-transparent text-fw-bodyLight hover:text-fw-body hover:border-fw-secondary'
+                  : 'border-transparent text-fw-heading hover:text-fw-link hover:border-fw-secondary'
               }
             `}
           >
             {tab.icon}
             <span>{tab.label}</span>
             {tab.count !== undefined && (
-              <span className={`ml-2 rounded-full px-2.5 py-0.5 text-xs font-medium ${
+              <span className={`ml-2 rounded-full px-2.5 py-0.5 text-figma-sm font-medium ${
                 activeTab === tab.id ? 'bg-fw-blue-light text-fw-link' : 'bg-fw-wash text-fw-heading'
               }`}>
                 {tab.count}

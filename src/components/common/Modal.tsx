@@ -19,8 +19,8 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
   const sizeClasses = {
     sm: 'sm:max-w-md',
     md: 'sm:max-w-lg',
-    lg: 'sm:max-w-xl',
-    xl: 'sm:max-w-4xl',
+    lg: 'sm:max-w-[720px]',
+    xl: 'sm:max-w-[762px]',
     fullscreen: 'max-w-none'
   };
 
@@ -29,7 +29,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
       <div className={`flex items-center justify-center ${isFullscreen ? 'min-h-screen' : 'min-h-screen px-4 py-8'}`}>
         {/* Background overlay */}
         <div
-          className="fixed inset-0 bg-black bg-opacity-50"
+          className="fixed inset-0 bg-black/40"
           onClick={onClose}
         />
 
@@ -37,7 +37,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
         <div className={`relative z-10 w-full flex flex-col text-left transform bg-fw-base shadow-xl ${
           isFullscreen
             ? 'h-screen max-h-screen p-8'
-            : 'max-h-[calc(100vh-4rem)] px-4 pt-5 pb-4 rounded-lg sm:p-6'
+            : 'max-h-[calc(100vh-4rem)] px-6 pt-6 pb-6 rounded-3xl'
         } ${sizeClasses[size]}`}>
           {/* Close button */}
           <div className="absolute top-0 right-0 pt-4 pr-4 z-10">
@@ -53,7 +53,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
           {/* Title */}
           {title && (
             <div className="mb-4 flex-shrink-0">
-              <h3 className="text-lg font-medium text-fw-heading">{title}</h3>
+              <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">{title}</h3>
             </div>
           )}
 

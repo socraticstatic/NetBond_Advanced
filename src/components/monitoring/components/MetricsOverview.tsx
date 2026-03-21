@@ -1,4 +1,4 @@
-import { TrendingUp, ArrowUpDown, Activity, Clock } from 'lucide-react';
+import { TrendingUp, ArrowUpDown, Activity, Clock, Bell } from 'lucide-react';
 
 interface MetricsOverviewProps {
   metrics: {
@@ -12,40 +12,43 @@ export function MetricsOverview({ metrics }: MetricsOverviewProps) {
     {
       label: 'Current Utilization',
       value: '85%',
-      icon: <TrendingUp className="h-6 w-6 text-blue-500" />,
-      color: 'text-blue-500'
+      icon: <TrendingUp className="h-6 w-6 text-fw-link" />,
     },
     {
       label: 'Average Utilization',
       value: '75%',
-      icon: <Activity className="h-6 w-6 text-green-500" />,
-      color: 'text-green-500'
+      icon: <Activity className="h-6 w-6 text-fw-success" />,
     },
     {
       label: 'Peak Utilization',
       value: '95%',
-      icon: <ArrowUpDown className="h-6 w-6 text-purple-500" />,
-      color: 'text-purple-500'
+      icon: <ArrowUpDown className="h-6 w-6 text-fw-purple" />,
     },
     {
       label: 'Uptime',
       value: metrics.uptime,
-      icon: <Clock className="h-6 w-6 text-indigo-500" />,
-      color: 'text-indigo-500'
+      icon: <Clock className="h-6 w-6 text-fw-link" />,
     }
   ];
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
-      <h3 className="text-lg font-medium text-gray-900 mb-6">Performance Summary</h3>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+      {/* Figma: icon 24x24 + "Performance Summary" 16px w700 #1d2329, gap=8 */}
+      <div className="flex items-center gap-2 mb-6">
+        <Bell className="h-6 w-6 text-fw-link" />
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Performance Summary</h3>
+      </div>
+      {/* Figma: 4 metric cells, each 264x144, fill=#f8fafb, r=8 */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {summaryMetrics.map((metric, index) => (
-          <div key={index} className="flex flex-col items-center text-center">
-            <div className={`p-3 rounded-full ${metric.color.replace('text-', 'bg-').replace('500', '100')} mb-3`}>
+          <div key={index} className="bg-fw-wash rounded-lg p-4">
+            {/* Figma: colored icon + label 16px w700 #1d2329 ls:-0.48 */}
+            <div className="flex items-center gap-2 mb-3">
               {metric.icon}
+              <span className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">{metric.label}</span>
             </div>
-            <div className="text-lg font-medium text-gray-900 mb-1">{metric.value}</div>
-            <div className="text-xs text-gray-500">{metric.label}</div>
+            {/* Figma: value 24px w700 #1d2329 ls:-0.96 */}
+            <div className="text-figma-xl font-bold text-fw-heading tracking-[-0.04em]">{metric.value}</div>
           </div>
         ))}
       </div>

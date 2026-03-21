@@ -12,21 +12,21 @@ export function HelpButton() {
       title: 'Documentation',
       description: 'Read our comprehensive guides',
       link: '/support',
-      color: 'bg-blue-50 text-blue-600'
+      color: 'bg-fw-accent text-fw-link'
     },
     {
       icon: PlayCircle,
       title: 'Video Tutorials',
       description: 'Learn through step-by-step videos',
       link: '/support',
-      color: 'bg-purple-50 text-purple-600'
+      color: 'bg-purple-50 text-fw-purple'
     },
     {
       icon: FileText,
       title: 'Knowledge Base',
       description: 'Browse articles and FAQs',
       link: '/support',
-      color: 'bg-green-50 text-green-600'
+      color: 'bg-green-50 text-fw-success'
     },
     {
       icon: Mail,
@@ -50,7 +50,7 @@ export function HelpButton() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+        className="flex items-center justify-center h-9 w-9 text-fw-heading hover:text-fw-body transition-colors duration-200"
         aria-label="Help"
       >
         <HelpCircle className="h-5 w-5" />
@@ -63,9 +63,9 @@ export function HelpButton() {
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
-            <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-[#009fdb]/5 to-transparent">
-              <h3 className="text-lg font-semibold text-gray-900">Help & Resources</h3>
+          <div className="absolute right-0 mt-2 w-80 bg-fw-base rounded-lg shadow-xl border border-fw-secondary z-50 overflow-hidden">
+            <div className="p-4 border-b border-fw-secondary bg-gradient-to-r from-[#009fdb]/5 to-transparent">
+              <h3 className="text-lg font-semibold text-fw-heading tracking-[-0.03em]">Help & Resources</h3>
             </div>
 
             <div className="p-3">
@@ -73,26 +73,26 @@ export function HelpButton() {
                 <button
                   key={index}
                   onClick={() => handleOptionClick(option.link)}
-                  className="w-full flex items-start p-3 rounded-lg hover:bg-gray-50 transition-colors group text-left"
+                  className="w-full flex items-start p-3 rounded-lg hover:bg-fw-wash transition-colors group text-left"
                 >
                   <div className={`p-2 rounded-lg ${option.color} transition-colors`}>
                     <option.icon className="h-5 w-5" />
                   </div>
                   <div className="ml-3 flex-1">
-                    <p className="text-sm font-medium text-gray-900">{option.title}</p>
-                    <p className="text-sm text-gray-500">{option.description}</p>
+                    <p className="text-figma-base font-medium text-fw-heading">{option.title}</p>
+                    <p className="text-figma-base text-fw-bodyLight">{option.description}</p>
                   </div>
                   {option.link.startsWith('http') && (
-                    <ExternalLink className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ExternalLink className="h-4 w-4 text-fw-bodyLight opacity-0 group-hover:opacity-100 transition-opacity" />
                   )}
                 </button>
               ))}
             </div>
 
-            <div className="p-3 bg-gray-50 border-t border-gray-100">
+            <div className="p-3 bg-fw-wash border-t border-fw-secondary">
               <button
                 onClick={() => handleOptionClick('/support')}
-                className="block w-full text-center text-sm font-medium text-[#009fdb] hover:text-[#007fb0] transition-colors"
+                className="block w-full text-center text-figma-base font-medium text-brand-accent hover:text-fw-linkHover transition-colors"
               >
                 Visit Help Center
               </button>

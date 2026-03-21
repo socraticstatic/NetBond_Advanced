@@ -115,8 +115,8 @@ export function LinkMetricsView() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <LinkIcon className="h-12 w-12 text-gray-400 mx-auto mb-4 animate-pulse" />
-          <p className="text-gray-600">Loading link metrics...</p>
+          <LinkIcon className="h-12 w-12 text-fw-bodyLight mx-auto mb-4 animate-pulse" />
+          <p className="text-fw-body">Loading link metrics...</p>
         </div>
       </div>
     );
@@ -129,12 +129,12 @@ export function LinkMetricsView() {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <LinkIcon className="h-8 w-8 text-blue-600" />
+            <LinkIcon className="h-8 w-8 text-fw-link" />
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-fw-heading tracking-[-0.03em]">
                 {selectedLink ? `${selectedLink.name} Performance` : 'Link Performance & Utilization'}
               </h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-figma-base text-fw-body mt-1">
                 {selectedLink ? (
                   <>
                     VLAN {selectedLink.vlanId} • {selectedLink.ipSubnet} • MTU {selectedLink.mtu}

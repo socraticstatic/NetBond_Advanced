@@ -39,15 +39,15 @@ export function IPEList({ ipes, onIPEClick, onAddIPE }: IPEListProps) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-50 rounded-lg">
-              <Server className="h-6 w-6 text-blue-600" />
+            <div className="p-2 bg-fw-accent rounded-lg">
+              <Server className="h-6 w-6 text-fw-link" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">Infrastructure Provider Edge Routers</h2>
-              <p className="text-sm text-gray-500 mt-0.5">Physical network infrastructure at data center locations</p>
+              <h2 className="text-figma-xl font-bold text-fw-heading tracking-[-0.04em]">Infrastructure Provider Edge Routers</h2>
+              <p className="text-figma-base font-medium text-fw-body mt-0.5">Physical network infrastructure at data center locations</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -88,39 +88,39 @@ export function IPEList({ ipes, onIPEClick, onAddIPE }: IPEListProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="text-sm text-gray-600 mb-1">Total IPEs</div>
-            <div className="text-2xl font-bold text-gray-900">{ipes.length}</div>
+          <div className="bg-fw-wash rounded-lg p-4">
+            <div className="text-figma-base text-fw-bodyLight mb-1">Total IPEs</div>
+            <div className="text-2xl font-bold text-fw-heading">{ipes.length}</div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="text-sm text-gray-600 mb-1">Total Capacity</div>
-            <div className="text-2xl font-bold text-gray-900">{totalCapacity.toFixed(1)} Tbps</div>
+          <div className="bg-fw-wash rounded-lg p-4">
+            <div className="text-figma-base text-fw-bodyLight mb-1">Total Capacity</div>
+            <div className="text-2xl font-bold text-fw-heading">{totalCapacity.toFixed(1)} Tbps</div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="text-sm text-gray-600 mb-1">Avg Utilization</div>
-            <div className="text-2xl font-bold text-gray-900">{avgUtilization.toFixed(0)}%</div>
+          <div className="bg-fw-wash rounded-lg p-4">
+            <div className="text-figma-base text-fw-bodyLight mb-1">Avg Utilization</div>
+            <div className="text-2xl font-bold text-fw-heading">{avgUtilization.toFixed(0)}%</div>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="text-sm text-gray-600 mb-1">At Capacity</div>
-            <div className="text-2xl font-bold text-red-600">{criticalIPEs}</div>
+          <div className="bg-fw-wash rounded-lg p-4">
+            <div className="text-figma-base text-fw-bodyLight mb-1">At Capacity</div>
+            <div className="text-2xl font-bold text-fw-error">{criticalIPEs}</div>
           </div>
         </div>
 
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-fw-bodyLight" />
           <input
             type="text"
             placeholder="Search IPEs by name or location..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-fw-secondary rounded-full h-9 focus:ring-2 focus:ring-fw-active focus:border-transparent"
           />
         </div>
 
         {showFilters && (
-          <div className="flex flex-wrap gap-3 mb-4 p-4 bg-gray-50 rounded-lg">
+          <div className="flex flex-wrap gap-3 mb-4 p-4 bg-fw-wash rounded-lg">
             <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-figma-base font-medium text-fw-body mb-1">
                 Data Center Provider
               </label>
               <select
@@ -136,7 +136,7 @@ export function IPEList({ ipes, onIPEClick, onAddIPE }: IPEListProps) {
               </select>
             </div>
             <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-figma-base font-medium text-fw-body mb-1">
                 Region
               </label>
               <select
@@ -168,10 +168,10 @@ export function IPEList({ ipes, onIPEClick, onAddIPE }: IPEListProps) {
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-          <MapPin className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-1">No IPEs Found</h3>
-          <p className="text-gray-500">
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-12 text-center">
+          <MapPin className="h-12 w-12 mx-auto text-fw-bodyLight mb-4" />
+          <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-1">No IPEs Found</h3>
+          <p className="text-fw-bodyLight">
             {searchQuery || selectedProvider !== 'all' || selectedRegion !== 'all'
               ? 'Try adjusting your filters'
               : 'No infrastructure provider edge routers configured yet'}

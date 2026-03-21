@@ -73,11 +73,11 @@ export function RealTimeMetricCard({
         };
       default:
         return {
-          border: 'border-gray-200',
-          bg: 'bg-gray-50',
-          iconBg: 'bg-gray-100',
-          iconColor: 'text-gray-600',
-          badge: 'bg-gray-100 text-gray-800'
+          border: 'border-fw-secondary',
+          bg: 'bg-fw-wash',
+          iconBg: 'bg-fw-neutral',
+          iconColor: 'text-fw-body',
+          badge: 'bg-fw-neutral text-fw-body'
         };
     }
   };
@@ -98,8 +98,8 @@ export function RealTimeMetricCard({
 
   const getTrendColor = () => {
     if (!trend) return '';
-    return trend.direction === 'up' ? 'text-green-600' :
-           trend.direction === 'down' ? 'text-red-600' : 'text-gray-600';
+    return trend.direction === 'up' ? 'text-fw-success' :
+           trend.direction === 'down' ? 'text-fw-error' : 'text-fw-body';
   };
 
   const renderSparkline = () => {
@@ -122,9 +122,9 @@ export function RealTimeMetricCard({
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
-          className={status === 'healthy' ? 'text-green-500' :
+          className={status === 'healthy' ? 'text-fw-success' :
                      status === 'warning' ? 'text-yellow-500' :
-                     status === 'critical' ? 'text-red-500' : 'text-gray-500'}
+                     status === 'critical' ? 'text-fw-error' : 'text-fw-bodyLight'}
           vectorEffect="non-scaling-stroke"
         />
         <polyline
@@ -132,31 +132,31 @@ export function RealTimeMetricCard({
           fill="currentColor"
           fillOpacity="0.1"
           stroke="none"
-          className={status === 'healthy' ? 'text-green-500' :
+          className={status === 'healthy' ? 'text-fw-success' :
                      status === 'warning' ? 'text-yellow-500' :
-                     status === 'critical' ? 'text-red-500' : 'text-gray-500'}
+                     status === 'critical' ? 'text-fw-error' : 'text-fw-bodyLight'}
         />
       </svg>
     );
   };
 
   return (
-    <div className={`bg-white rounded-lg border-2 ${styles.border} transition-all duration-300 hover:shadow-lg ${pulseActive ? 'ring-2 ring-blue-500 ring-opacity-50' : ''}`}>
+    <div className={`bg-fw-base rounded-lg border-2 ${styles.border} transition-all duration-300 hover:shadow-lg ${pulseActive ? 'ring-2 ring-fw-active ring-opacity-50' : ''}`}>
       <div className="p-5">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
-              <h3 className="text-sm font-medium text-gray-700">{title}</h3>
+              <h3 className="text-figma-lg font-medium text-fw-heading">{title}</h3>
               {isLive && (
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fw-cobalt-600 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-fw-cobalt-600"></span>
                 </span>
               )}
             </div>
             {lastUpdate && (
-              <p className="text-xs text-gray-500">
+              <p className="text-figma-sm text-fw-bodyLight">
                 Updated {new Date(lastUpdate).toLocaleTimeString()}
               </p>
             )}
@@ -171,22 +171,22 @@ export function RealTimeMetricCard({
         {/* Value */}
         <div className="mb-3">
           <div className="flex items-baseline space-x-2">
-            <span className="text-3xl font-bold text-gray-900">
+            <span className="text-figma-xl font-bold text-fw-heading">
               {typeof value === 'number' ? value.toFixed(5).replace(/\.?0+$/, '') : value}
             </span>
-            {unit && <span className="text-sm font-medium text-gray-600">{unit}</span>}
+            {unit && <span className="text-figma-base font-medium text-fw-body">{unit}</span>}
           </div>
         </div>
 
         {/* Trend & Status */}
         <div className="flex items-center justify-between mb-3">
           {trend && (
-            <div className={`flex items-center space-x-1 text-xs font-medium ${getTrendColor()}`}>
+            <div className={`flex items-center space-x-1 text-figma-sm font-medium ${getTrendColor()}`}>
               {getTrendIcon()}
               <span>{trend.percentage.toFixed(2)}%</span>
             </div>
           )}
-          <div className={`px-2 py-1 text-xs font-semibold ${styles.badge}`}>
+          <div className={`px-2 py-1 text-figma-sm font-semibold ${styles.badge}`}>
             {status === 'healthy' && <CheckCircle className="inline h-3 w-3 mr-1 -mt-0.5" />}
             {status === 'warning' && <AlertTriangle className="inline h-3 w-3 mr-1 -mt-0.5" />}
             {status === 'critical' && <AlertTriangle className="inline h-3 w-3 mr-1 -mt-0.5" />}
@@ -203,17 +203,17 @@ export function RealTimeMetricCard({
 
         {/* Target Progress */}
         {target && (
-          <div className="mt-3 pt-3 border-t border-gray-100">
-            <div className="flex items-center justify-between text-xs text-gray-600 mb-1.5">
+          <div className="mt-3 pt-3 border-t border-fw-secondary">
+            <div className="flex items-center justify-between text-figma-sm text-fw-body mb-1.5">
               <span>{target.label}</span>
               <span className="font-medium">{target.value}%</span>
             </div>
-            <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-1.5 bg-fw-neutral rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-500 ${
-                  status === 'healthy' ? 'bg-green-500' :
+                  status === 'healthy' ? 'bg-fw-success' :
                   status === 'warning' ? 'bg-yellow-500' :
-                  status === 'critical' ? 'bg-red-500' : 'bg-gray-500'
+                  status === 'critical' ? 'bg-fw-error' : 'bg-fw-bodyLight'
                 }`}
                 style={{ width: `${Math.min(target.value, 100)}%` }}
               />

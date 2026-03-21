@@ -1,4 +1,4 @@
-import { Building, Calendar, Tag } from 'lucide-react';
+import { MapPin, Calendar, Clock, Activity, Tag } from 'lucide-react';
 import { Group } from '../../../types/group';
 
 interface GroupCardInfoProps {
@@ -6,46 +6,69 @@ interface GroupCardInfoProps {
 }
 
 export function GroupCardInfo({ group }: GroupCardInfoProps) {
+  const uptime = group.performance?.aggregatedMetrics?.averageUptime;
+  const latency = group.performance?.aggregatedMetrics?.averageLatency;
+
   return (
     <div className="space-y-3">
-      {/* Additional Info */}
-      <div className="grid grid-cols-2 gap-3">
-        {group.addresses?.length > 0 && (
-          <div className="flex items-start">
-            <Building className="h-3.5 w-3.5 text-gray-400 mr-1.5 mt-0.5 flex-shrink-0" />
-            <div className="text-xs">
-              <p className="font-medium text-gray-600">Location:</p>
-              <p className="text-gray-500 truncate max-w-[120px]">
-                {group.addresses[0].city}, {group.addresses[0].state}
-              </p>
-            </div>
+      {/* Detail rows - Figma: 20x20 icon + 14px/500 label + value */}
+      <div className="grid grid-cols-2 gap-y-2 gap-x-4">
+        {uptime && (
+          <div className="flex items-center gap-1.5">
+            <Activity className="h-5 w-5 text-fw-heading flex-shrink-0" />
+            <span className="text-figma-base font-medium text-fw-heading">Uptime</span>
           </div>
         )}
-        
-        {group.createdAt && (
-          <div className="flex items-start">
-            <Calendar className="h-3.5 w-3.5 text-gray-400 mr-1.5 mt-0.5 flex-shrink-0" />
-            <div className="text-xs">
-              <p className="font-medium text-gray-600">Created:</p>
-              <p className="text-gray-500">
-                {new Date(group.createdAt).toLocaleDateString()}
-              </p>
-            </div>
+        {uptime && (
+          <span className="text-figma-base font-medium text-fw-heading">{uptime}</span>
+        )}
+
+        {group.addresses?.length > 0 && (
+          <div className="flex items-center gap-1.5">
+            <MapPin className="h-5 w-5 text-fw-heading flex-shrink-0" />
+            <span className="text-figma-base font-medium text-fw-heading">Location</span>
           </div>
+        )}
+        {group.addresses?.length > 0 && (
+          <span className="text-figma-base font-medium text-fw-heading truncate">
+            {group.addresses[0].city}, {group.addresses[0].state}
+          </span>
+        )}
+
+        {latency && (
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-5 w-5 text-fw-heading flex-shrink-0" />
+            <span className="text-figma-base font-medium text-fw-heading">Latency</span>
+          </div>
+        )}
+        {latency && (
+          <span className="text-figma-base font-medium text-fw-heading">{latency}</span>
+        )}
+
+        {group.createdAt && (
+          <div className="flex items-center gap-1.5">
+            <Calendar className="h-5 w-5 text-fw-heading flex-shrink-0" />
+            <span className="text-figma-base font-medium text-fw-heading">Created</span>
+          </div>
+        )}
+        {group.createdAt && (
+          <span className="text-figma-base font-medium text-fw-heading">
+            {new Date(group.createdAt).toLocaleDateString()}
+          </span>
         )}
       </div>
 
-      {/* Tags */}
+      {/* Tags - Figma: r=800 pills, h=28, bg=#f8fafb, border=#dcdfe3, icon 16x16, text 12px/500 */}
       {group.tags && Object.keys(group.tags).length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-2">
           {Object.entries(group.tags).slice(0, 3).map(([key, value]) => (
-            <span key={key} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-600 border border-gray-200">
-              <Tag className="h-3 w-3 mr-1" />
+            <span key={key} className="inline-flex items-center px-2.5 rounded-[800px] text-[12px] font-medium bg-fw-wash text-fw-bodyLight border border-fw-secondary" style={{ height: '28px' }}>
+              <Tag className="h-4 w-4 mr-1.5 flex-shrink-0" />
               {key}: {value}
             </span>
           ))}
           {Object.keys(group.tags).length > 3 && (
-            <span className="px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-600 border border-gray-200">
+            <span className="inline-flex items-center px-2.5 rounded-[800px] text-[12px] font-medium bg-fw-wash text-fw-bodyLight border border-fw-secondary" style={{ height: '28px' }}>
               +{Object.keys(group.tags).length - 3} more
             </span>
           )}

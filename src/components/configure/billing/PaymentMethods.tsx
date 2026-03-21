@@ -17,7 +17,7 @@ export function PaymentMethods() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium text-gray-900">Payment Methods</h3>
+        <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">Payment Methods</h3>
         <Button
           variant="primary"
           icon={Plus}
@@ -38,27 +38,27 @@ export function PaymentMethods() {
         {paymentMethods.map((method) => (
           <div
             key={method.id}
-            className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
+            className="bg-fw-base rounded-lg border border-fw-secondary p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="p-2 bg-gray-50 rounded-lg">
-                  <CreditCard className="h-6 w-6 text-gray-400" />
+                <div className="p-2 bg-fw-wash rounded-lg">
+                  <CreditCard className="h-6 w-6 text-fw-bodyLight" />
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <span className="font-medium text-gray-900">
-                      •••• •••• •••• {method.last4}
+                    <span className="font-medium text-fw-heading">
+                      &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; {method.last4}
                     </span>
                     {method.isDefault && (
-                      <span className="px-2 py-1 text-xs font-medium text-brand-blue bg-brand-lightBlue rounded-full">
+                      <span className="px-2 py-1 text-figma-sm font-medium text-fw-link bg-fw-accent rounded-full">
                         Default
                       </span>
                     )}
                   </div>
-                  <div className="text-sm text-gray-500 mt-1">
+                  <div className="text-figma-base text-fw-bodyLight mt-1">
                     <span>{method.cardHolder}</span>
-                    <span className="mx-2">•</span>
+                    <span className="mx-2">&bull;</span>
                     <span>Expires {method.expiry}</span>
                   </div>
                 </div>

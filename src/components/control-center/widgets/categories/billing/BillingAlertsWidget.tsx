@@ -32,10 +32,10 @@ export function BillingAlertsWidget({ connections }: BillingAlertsWidgetProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <Bell className="h-5 w-5 text-orange-500 mr-2" />
-          <span className="text-sm font-medium text-gray-900">Billing Alerts</span>
+          <Bell className="h-5 w-5 text-fw-warn mr-2" />
+          <span className="text-figma-base font-medium text-fw-heading">Billing Alerts</span>
         </div>
-        <button className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+        <button className="p-1 text-fw-bodyLight hover:text-fw-body rounded-lg hover:bg-fw-neutral">
           <Settings className="h-4 w-4" />
         </button>
       </div>
@@ -45,26 +45,26 @@ export function BillingAlertsWidget({ connections }: BillingAlertsWidgetProps) {
           <div
             key={alert.id}
             className={`p-2 rounded-lg ${
-              alert.type === 'warning' ? 'bg-yellow-50' :
-              alert.type === 'info' ? 'bg-blue-50' :
+              alert.type === 'warning' ? 'bg-fw-warn/10' :
+              alert.type === 'info' ? 'bg-fw-accent' :
               'bg-green-50'
             }`}
           >
             <div className="flex items-start">
               <AlertTriangle className={`h-4 w-4 mt-0.5 mr-2 ${
-                alert.type === 'warning' ? 'text-yellow-500' :
-                alert.type === 'info' ? 'text-blue-500' :
-                'text-green-500'
+                alert.type === 'warning' ? 'text-fw-warn' :
+                alert.type === 'info' ? 'text-fw-link' :
+                'text-fw-success'
               }`} />
               <div>
-                <p className={`text-sm ${
-                  alert.type === 'warning' ? 'text-yellow-700' :
-                  alert.type === 'info' ? 'text-blue-700' :
-                  'text-green-700'
+                <p className={`text-figma-base ${
+                  alert.type === 'warning' ? 'text-fw-warn' :
+                  alert.type === 'info' ? 'text-fw-linkHover' :
+                  'text-fw-success'
                 }`}>
                   {alert.message}
                 </p>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="text-figma-sm text-fw-bodyLight mt-0.5">
                   {new Date(alert.timestamp).toLocaleString()}
                 </p>
               </div>
@@ -73,7 +73,7 @@ export function BillingAlertsWidget({ connections }: BillingAlertsWidgetProps) {
         ))}
       </div>
 
-      <button className="w-full px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+      <button className="w-full px-4 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
         Configure Alerts
       </button>
     </div>

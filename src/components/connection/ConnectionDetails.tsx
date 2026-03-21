@@ -437,8 +437,8 @@ export function ConnectionDetails() {
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className={`px-3 py-2 text-2xl font-bold bg-white border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  nameError ? 'border-red-500' : 'border-gray-300'
+                className={`px-3 h-9 text-2xl font-bold tracking-[-0.03em] bg-fw-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-fw-active ${
+                  nameError ? 'border-fw-error' : 'border-fw-secondary'
                 }`}
                 autoFocus
               />
@@ -457,14 +457,14 @@ export function ConnectionDetails() {
                 />
               </div>
               {nameError && (
-                <span className="text-sm text-red-500">{nameError}</span>
+                <span className="text-figma-base text-fw-error">{nameError}</span>
               )}
             </div>
           ) : (
             <div className="flex items-center space-x-2">
               <span>{connection.name}</span>
               <IconButton
-                icon={<Edit2 className="h-5 w-5" />}
+                icon={<Edit2 className="h-8 w-8 text-fw-bodyLight" />}
                 onClick={startEditingName}
                 variant="ghost"
                 title="Edit Name"
@@ -475,66 +475,66 @@ export function ConnectionDetails() {
         description={`${connection.type} - ${connection.location}`}
         action={{
           label: 'Back to Connections',
-          icon: <ArrowLeft className="h-5 w-5 mr-2" />,
+          icon: <ArrowLeft className="h-5 w-5 mr-2 text-fw-link" />,
           onClick: () => navigate('/manage')
         }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Quick Stats */}
-        <div className="grid grid-cols-5 gap-6 mb-8">
+        <div className="grid grid-cols-5 gap-4 mb-8">
           {/* Status Card */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Status</h3>
-              <Activity className="h-5 w-5 text-gray-400" />
+          <div className="bg-fw-base p-5 rounded-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <Activity className="h-5 w-5 text-fw-bodyLight" />
+              <h3 className="text-figma-base font-medium text-fw-bodyLight">Status</h3>
             </div>
             <div className="flex items-center">
-              <div className={`h-3 w-3 rounded-full ${
-                connection.status === 'Active' ? 'bg-green-500' : 'bg-gray-300'
+              <div className={`h-2 w-2 rounded-full ${
+                connection.status === 'Active' ? 'bg-fw-success' : 'bg-fw-neutral'
               }`} />
-              <span className="ml-2 text-lg font-medium text-gray-900">
+              <span className="ml-2 text-figma-lg font-bold text-fw-heading">
                 {connection.status}
               </span>
             </div>
           </div>
 
           {/* Type Card */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Type</h3>
-              <Network className="h-5 w-5 text-gray-400" />
+          <div className="bg-fw-base p-5 rounded-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <Network className="h-5 w-5 text-fw-bodyLight" />
+              <h3 className="text-figma-base font-medium text-fw-bodyLight">Type</h3>
             </div>
-            <p className="text-lg font-medium text-gray-900">{connection.type}</p>
+            <p className="text-figma-lg font-bold text-fw-heading">{connection.type}</p>
           </div>
 
           {/* Pool Card */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Pool</h3>
-              <Users className="h-5 w-5 text-gray-400" />
+          <div className="bg-fw-base p-5 rounded-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <Users className="h-5 w-5 text-fw-bodyLight" />
+              <h3 className="text-figma-base font-medium text-fw-bodyLight">Pool</h3>
             </div>
-            <p className="text-lg font-medium text-gray-900">{connection.poolName || connection.pool || 'None'}</p>
+            <p className="text-figma-lg font-bold text-fw-heading">{connection.poolName || connection.pool || 'None'}</p>
           </div>
 
           {/* Locations Card */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Locations</h3>
-              <Globe className="h-5 w-5 text-gray-400" />
+          <div className="bg-fw-base p-5 rounded-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <Globe className="h-5 w-5 text-fw-bodyLight" />
+              <h3 className="text-figma-base font-medium text-fw-bodyLight">Locations</h3>
             </div>
             <div className="flex flex-wrap gap-1">
               {connection.locations && connection.locations.length > 0 ? (
                 connection.locations.slice(0, 2).map((loc, i) => (
-                  <span key={i} className="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded font-medium">
+                  <span key={i} className="text-figma-sm px-2 py-0.5 bg-fw-accent text-fw-linkHover rounded font-medium">
                     {loc}
                   </span>
                 ))
               ) : (
-                <p className="text-sm font-medium text-gray-900">{connection.location}</p>
+                <p className="text-figma-base font-medium text-fw-heading">{connection.location}</p>
               )}
               {connection.locations && connection.locations.length > 2 && (
-                <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded font-medium">
+                <span className="text-figma-sm px-2 py-0.5 bg-fw-neutral text-fw-bodyLight rounded font-medium">
                   +{connection.locations.length - 2}
                 </span>
               )}
@@ -542,23 +542,23 @@ export function ConnectionDetails() {
           </div>
 
           {/* Vendors Card */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Vendors</h3>
-              <Cloud className="h-5 w-5 text-gray-400" />
+          <div className="bg-fw-base p-5 rounded-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <Cloud className="h-5 w-5 text-fw-bodyLight" />
+              <h3 className="text-figma-base font-medium text-fw-bodyLight">Vendors</h3>
             </div>
             <div className="flex flex-wrap gap-1">
               {connection.providers && connection.providers.length > 0 ? (
                 connection.providers.slice(0, 2).map((vendor, i) => (
-                  <span key={i} className="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded font-medium">
+                  <span key={i} className="text-figma-sm px-2 py-0.5 bg-green-50 text-fw-success rounded font-medium">
                     {vendor}
                   </span>
                 ))
               ) : (
-                <p className="text-sm font-medium text-gray-900">{connection.provider || 'N/A'}</p>
+                <p className="text-figma-base font-medium text-fw-heading">{connection.provider || 'N/A'}</p>
               )}
               {connection.providers && connection.providers.length > 2 && (
-                <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded font-medium">
+                <span className="text-figma-sm px-2 py-0.5 bg-fw-neutral text-fw-bodyLight rounded font-medium">
                   +{connection.providers.length - 2}
                 </span>
               )}
@@ -573,21 +573,24 @@ export function ConnectionDetails() {
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             {/* Status Toggle Button */}
-            <Button
-              variant={connection.status === 'Active' ? 'primary' : 'outline'}
-              icon={connection.status === 'Active' ? Pause : Play}
+            <button
               onClick={handleToggleStatus}
-              className={connection.status === 'Active' ? 'bg-green-600 hover:bg-green-700' : ''}
+              className={`inline-flex items-center justify-center h-9 px-4 rounded-full text-figma-base font-medium gap-2 transition-colors ${
+                connection.status === 'Active'
+                  ? 'border border-fw-success text-fw-success hover:bg-green-50'
+                  : 'border border-fw-secondary text-fw-body hover:bg-fw-wash'
+              }`}
             >
+              {connection.status === 'Active' ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
               {connection.status === 'Active' ? 'Active' : 'Inactive'}
-            </Button>
+            </button>
 
             {/* Delete Button */}
             <Button
               variant="outline"
               icon={Trash2}
               onClick={() => setShowDeleteConfirm(true)}
-              className="text-red-600 border-red-200 hover:bg-red-50"
+              className="text-fw-error border-fw-error hover:bg-red-50"
             >
               Delete
             </Button>
@@ -597,7 +600,7 @@ export function ConnectionDetails() {
             variant={isEditing ? 'primary' : 'outline'}
             icon={Cog}
             onClick={() => setIsEditing(!isEditing)}
-            className={isEditing ? 'bg-green-600 hover:bg-green-700' : ''}
+            className={isEditing ? 'bg-fw-success hover:bg-fw-success' : ''}
           >
             {isEditing ? 'Save Changes' : 'Manage Settings'}
           </Button>
@@ -609,7 +612,7 @@ export function ConnectionDetails() {
         </div>
 
         {/* Content Area */}
-        <div className="bg-white rounded-lg shadow-sm">
+        <div className="bg-fw-base rounded-2xl shadow-sm">
           {renderContent()}
         </div>
       </div>
@@ -621,7 +624,7 @@ export function ConnectionDetails() {
         onConfirm={handleDelete}
         title="Delete Connection"
         message="Are you sure you want to delete this connection? This action cannot be undone."
-        icon={<Trash2 className="w-6 h-6 text-red-600" />}
+        icon={<Trash2 className="w-6 h-6 text-fw-error" />}
         confirmText="Delete"
         confirmVariant="danger"
       />

@@ -39,27 +39,27 @@ export function MobileOverviewTab({ selectedConnection, connections, metrics }: 
     <div className="space-y-4">
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+        <div className="bg-fw-base p-4 rounded-lg border border-fw-secondary shadow-sm">
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-1">
-              <h3 className="text-xs font-medium text-gray-500">Connections</h3>
+              <h3 className="text-figma-sm font-medium text-fw-bodyLight">Connections</h3>
               <Activity className="h-4 w-4 text-brand-blue" />
             </div>
-            <div className="text-xl font-semibold text-gray-900">{connections.length}</div>
-            <div className="mt-1 text-xs text-gray-500">
+            <div className="text-xl font-semibold text-fw-heading">{connections.length}</div>
+            <div className="mt-1 text-figma-sm text-fw-bodyLight">
               {metrics.byStatus.active} active
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+        <div className="bg-fw-base p-4 rounded-lg border border-fw-secondary shadow-sm">
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-1">
-              <h3 className="text-xs font-medium text-gray-500">Avg. Utilization</h3>
+              <h3 className="text-figma-sm font-medium text-fw-bodyLight">Avg. Utilization</h3>
               <TrendingUp className="h-4 w-4 text-green-500" />
             </div>
-            <div className="text-xl font-semibold text-gray-900">{metrics.averageUtilization.toFixed(1)}%</div>
-            <div className="mt-1 text-xs text-gray-500">
+            <div className="text-xl font-semibold text-fw-heading">{metrics.averageUtilization.toFixed(1)}%</div>
+            <div className="mt-1 text-figma-sm text-fw-bodyLight">
               Across all connections
             </div>
           </div>
@@ -67,19 +67,19 @@ export function MobileOverviewTab({ selectedConnection, connections, metrics }: 
       </div>
 
       {/* Alerts Section */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary shadow-sm overflow-hidden">
         <div 
           className="p-4 flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection('alerts')}
         >
           <div className="flex items-center">
             <Bell className="h-5 w-5 text-brand-blue mr-2" />
-            <h3 className="text-base font-medium text-gray-900">Active Alerts</h3>
+            <h3 className="text-base font-medium text-fw-heading">Active Alerts</h3>
           </div>
           {expandedSections.alerts ? (
-            <ChevronUp className="h-5 w-5 text-gray-400" />
+            <ChevronUp className="h-5 w-5 text-fw-bodyLight" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-gray-400" />
+            <ChevronDown className="h-5 w-5 text-fw-bodyLight" />
           )}
         </div>
         
@@ -104,19 +104,19 @@ export function MobileOverviewTab({ selectedConnection, connections, metrics }: 
       </div>
 
       {/* Metrics Overview Section */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary shadow-sm overflow-hidden">
         <div 
           className="p-4 flex items-center justify-between cursor-pointer"
           onClick={() => toggleSection('metrics')}
         >
           <div className="flex items-center">
             <Activity className="h-5 w-5 text-brand-blue mr-2" />
-            <h3 className="text-base font-medium text-gray-900">Performance Summary</h3>
+            <h3 className="text-base font-medium text-fw-heading">Performance Summary</h3>
           </div>
           {expandedSections.metrics ? (
-            <ChevronUp className="h-5 w-5 text-gray-400" />
+            <ChevronUp className="h-5 w-5 text-fw-bodyLight" />
           ) : (
-            <ChevronDown className="h-5 w-5 text-gray-400" />
+            <ChevronDown className="h-5 w-5 text-fw-bodyLight" />
           )}
         </div>
         
@@ -142,7 +142,7 @@ export function MobileOverviewTab({ selectedConnection, connections, metrics }: 
           onClick={() => {
             // Navigate to detailed view
           }}
-          className="w-full flex items-center justify-center p-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+          className="w-full flex items-center justify-center p-3 bg-fw-neutral text-fw-body rounded-lg hover:bg-fw-neutral transition-colors"
         >
           <span className="font-medium">View All Metrics</span>
           <ChevronRight className="h-5 w-5 ml-1" />

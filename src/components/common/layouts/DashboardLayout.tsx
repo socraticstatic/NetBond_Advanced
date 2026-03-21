@@ -46,8 +46,8 @@ export function DashboardLayout({
       return (
         <div className="flex items-center justify-center h-[60vh]">
           <div className="text-center">
-            <h3 className="text-xl font-medium text-red-800 mb-2">Error Loading Content</h3>
-            <p className="text-gray-600 mb-4">We encountered a problem loading this content.</p>
+            <h3 className="text-xl font-medium text-fw-error mb-2">Error Loading Content</h3>
+            <p className="text-fw-body mb-4">We encountered a problem loading this content.</p>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 bg-brand-blue text-white rounded-full"
@@ -61,7 +61,7 @@ export function DashboardLayout({
   };
 
   return (
-    <div className={`min-h-screen flex flex-col bg-white ${pageReady ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}>
+    <div className={`min-h-screen flex flex-col bg-fw-wash ${pageReady ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}>
       <ErrorBoundary>
         <MainNav />
       </ErrorBoundary>
@@ -84,7 +84,7 @@ export function DashboardLayout({
         {/* Main Content */}
         <div className="flex-1">
           <ErrorBoundary>
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+            <main>
               {renderContent()}
             </main>
           </ErrorBoundary>

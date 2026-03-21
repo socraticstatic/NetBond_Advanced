@@ -94,16 +94,16 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
   };
 
   const handleTypeToggle = (type: string) => {
-    setSelectedTypes(prev => 
-      prev.includes(type) 
+    setSelectedTypes(prev =>
+      prev.includes(type)
         ? prev.filter(t => t !== type)
         : [...prev, type]
     );
   };
 
   const handleCategoryToggle = (category: string) => {
-    setSelectedCategories(prev => 
-      prev.includes(category) 
+    setSelectedCategories(prev =>
+      prev.includes(category)
         ? prev.filter(c => c !== category)
         : [...prev, category]
     );
@@ -116,12 +116,12 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
         if (selectedTypes.length > 0 && !selectedTypes.includes(log.type)) {
           return false;
         }
-        
+
         // Category filter
         if (selectedCategories.length > 0 && !selectedCategories.includes(log.category)) {
           return false;
         }
-        
+
         // Search filter
         if (searchQuery.trim()) {
           const searchTerms = searchQuery.toLowerCase().split(' ');
@@ -133,25 +133,25 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
             log.type,
             log.category
           ].filter(Boolean).join(' ').toLowerCase();
-          
+
           return searchTerms.every(term => searchableText.includes(term));
         }
-        
+
         return true;
       })
       .sort((a, b) => {
         const aValue = a[sortField];
         const bValue = b[sortField];
         const modifier = sortDirection === 'asc' ? 1 : -1;
-        
+
         if (sortField === 'timestamp') {
           return (new Date(bValue).getTime() - new Date(aValue).getTime()) * modifier;
         }
-        
+
         if (sortField === 'logId') {
           return (a.logId - b.logId) * modifier;
         }
-        
+
         return String(aValue).localeCompare(String(bValue)) * modifier;
       });
   }, [logs, searchQuery, selectedTypes, selectedCategories, sortField, sortDirection]);
@@ -159,32 +159,32 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'error':
-        return <AlertTriangle className="h-5 w-5 text-red-500" />;
+        return <AlertTriangle className="h-5 w-5 text-fw-error" />;
       case 'warning':
         return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
       case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
+        return <CheckCircle className="h-5 w-5 text-fw-success" />;
       default:
-        return <Info className="h-5 w-5 text-brand-blue" />;
+        return <Info className="h-5 w-5 text-fw-link" />;
     }
   };
 
   const getTypeStyles = (type: string) => {
     switch (type) {
       case 'error':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-50 text-fw-error';
       case 'warning':
         return 'bg-yellow-100 text-yellow-800';
       case 'success':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-50 text-fw-success';
       default:
-        return 'bg-brand-lightBlue text-brand-blue';
+        return 'bg-fw-accent text-fw-link';
     }
   };
 
   if (!connectionId) {
     return (
-      <div className="text-center py-12 text-gray-500">
+      <div className="text-center py-12 text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">
         Select a connection to view logs
       </div>
     );
@@ -196,21 +196,21 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
   return (
     <div className="space-y-4">
       {/* Search and Filters Bar */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200">
+      <div className="bg-fw-base p-4 rounded-2xl border border-fw-secondary">
         <div className="flex items-center justify-between gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
             <input
               type="text"
               placeholder="Search logs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+              className="w-full pl-10 pr-4 h-9 border border-fw-primary rounded-lg text-figma-base font-medium tracking-[-0.03em] text-fw-heading placeholder:text-fw-bodyLight focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             />
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center px-4 py-2 text-gray-700 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100"
+            className="flex items-center px-4 py-2 h-9 text-figma-base font-medium tracking-[-0.03em] text-fw-body bg-fw-base border border-fw-secondary rounded-full hover:bg-fw-wash transition-colors"
           >
             <Filter className="h-5 w-5 mr-2" />
             Filters
@@ -219,20 +219,20 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
 
         {/* Expanded Filters */}
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
+          <div className="mt-4 pt-4 border-t border-fw-secondary">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Log Types */}
               <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Log Types</h4>
+                <h4 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em] mb-2">Log Types</h4>
                 <div className="space-y-2">
                   {logTypes.map((type) => (
                     <button
                       key={type}
                       onClick={() => handleTypeToggle(type)}
-                      className={`block w-full text-left px-3 py-2 rounded-md text-sm ${
+                      className={`block w-full text-left px-3 py-2 rounded-lg text-figma-base ${
                         selectedTypes.includes(type)
                           ? getTypeStyles(type)
-                          : 'text-gray-700 hover:bg-gray-50'
+                          : 'text-fw-body hover:bg-fw-wash'
                       }`}
                     >
                       {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -243,16 +243,16 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
 
               {/* Categories */}
               <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Categories</h4>
+                <h4 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em] mb-2">Categories</h4>
                 <div className="space-y-2">
                   {categories.map((category) => (
                     <button
                       key={category}
                       onClick={() => handleCategoryToggle(category)}
-                      className={`block w-full text-left px-3 py-2 rounded-md text-sm ${
+                      className={`block w-full text-left px-3 py-2 rounded-lg text-figma-base ${
                         selectedCategories.includes(category)
-                          ? 'bg-brand-lightBlue text-brand-blue'
-                          : 'text-gray-700 hover:bg-gray-50'
+                          ? 'bg-fw-accent text-fw-link'
+                          : 'text-fw-body hover:bg-fw-wash'
                       }`}
                     >
                       {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -265,17 +265,17 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
             {/* Active Filters */}
             {(selectedTypes.length > 0 || selectedCategories.length > 0 || searchQuery) && (
               <div className="mt-4 flex items-center gap-2">
-                <span className="text-sm text-gray-500">Active filters:</span>
+                <span className="text-figma-sm text-fw-bodyLight">Active filters:</span>
                 <div className="flex flex-wrap gap-2">
                   {selectedTypes.map(type => (
                     <span
                       key={type}
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getTypeStyles(type)}`}
+                      className={`inline-flex items-center px-3 py-1 rounded-lg text-figma-sm font-medium ${getTypeStyles(type)}`}
                     >
                       {type}
                       <button
                         onClick={() => handleTypeToggle(type)}
-                        className="ml-2 hover:text-blue-900"
+                        className="ml-2 hover:text-fw-linkHover"
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -284,23 +284,23 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
                   {selectedCategories.map(category => (
                     <span
                       key={category}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-lightBlue text-brand-blue"
+                      className="inline-flex items-center px-3 py-1 rounded-lg text-figma-sm font-medium bg-fw-accent text-fw-link"
                     >
                       {category}
                       <button
                         onClick={() => handleCategoryToggle(category)}
-                        className="ml-2 hover:text-blue-900"
+                        className="ml-2 hover:text-fw-linkHover"
                       >
                         <X className="h-4 w-4" />
                       </button>
                     </span>
                   ))}
                   {searchQuery && (
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                    <span className="inline-flex items-center px-3 py-1 rounded-lg text-figma-sm font-medium bg-fw-neutral text-fw-body">
                       "{searchQuery}"
                       <button
                         onClick={() => setSearchQuery('')}
-                        className="ml-2 hover:text-gray-900"
+                        className="ml-2 hover:text-fw-heading"
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -314,14 +314,14 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
       </div>
 
       {/* Logs Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-fw-secondary">
+            <thead className="bg-fw-wash">
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] h-12 cursor-pointer"
                   onClick={() => handleSort('logId')}
                 >
                   <div className="flex items-center space-x-1">
@@ -333,7 +333,7 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] h-12 cursor-pointer"
                   onClick={() => handleSort('timestamp')}
                 >
                   <div className="flex items-center space-x-1">
@@ -345,7 +345,7 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] h-12 cursor-pointer"
                   onClick={() => handleSort('type')}
                 >
                   <div className="flex items-center space-x-1">
@@ -357,7 +357,7 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] h-12 cursor-pointer"
                   onClick={() => handleSort('category')}
                 >
                   <div className="flex items-center space-x-1">
@@ -369,13 +369,13 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] h-12"
                 >
                   Message
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] h-12 cursor-pointer"
                   onClick={() => handleSort('source')}
                 >
                   <div className="flex items-center space-x-1">
@@ -390,46 +390,46 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-fw-base divide-y divide-fw-secondary">
               {filteredLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                  <td colSpan={7} className="px-6 py-4 text-center text-fw-bodyLight">
                     No logs match the current filters
                   </td>
                 </tr>
               ) : (
                 filteredLogs.map((log) => (
-                  <tr key={log.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                  <tr key={log.id} className="hover:bg-fw-wash">
+                    <td className="px-6 py-4 whitespace-nowrap text-figma-base font-medium text-fw-heading tracking-[-0.03em] h-12">
                       #{log.logId}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-figma-base font-medium text-fw-body tracking-[-0.03em] h-12">
                       {new Date(log.timestamp).toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         {getTypeIcon(log.type)}
-                        <span className={`ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getTypeStyles(log.type)}`}>
+                        <span className={`ml-2 px-3 py-0.5 inline-flex text-tag-sm font-medium tracking-[0.04em] rounded-lg border ${getTypeStyles(log.type)}`}>
                           {log.type.charAt(0).toUpperCase() + log.type.slice(1)}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                      <span className="px-3 py-1 text-tag-sm font-medium tracking-[0.04em] bg-fw-neutral text-fw-body rounded-lg">
                         {log.category}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-gray-900">{log.message}</div>
+                    <td className="px-6 py-4 h-12">
+                      <div className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{log.message}</div>
                       {log.details && (
-                        <div className="text-sm text-gray-500 mt-1">{log.details}</div>
+                        <div className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">{log.details}</div>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-figma-base font-medium text-fw-body tracking-[-0.03em] h-12">
                       {log.source}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button className="text-gray-400 hover:text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium">
+                      <button className="text-fw-bodyLight hover:text-fw-body">
                         <MoreVertical className="h-5 w-5" />
                       </button>
                     </td>

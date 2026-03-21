@@ -31,7 +31,7 @@ export function NotificationsPage() {
       icon: Activity,
       description: 'Updates about your network activity',
       color: 'text-fw-success',
-      bgColor: 'bg-green-50',
+      bgColor: 'bg-fw-successLight',
       settings: [
         { key: 'statusChanges', label: 'Connection Status Changes' },
         { key: 'bandwidthAlerts', label: 'Bandwidth Utilization Alerts' },
@@ -45,7 +45,7 @@ export function NotificationsPage() {
       icon: Shield,
       description: 'Important security-related updates',
       color: 'text-fw-error',
-      bgColor: 'bg-red-50',
+      bgColor: 'bg-fw-error/15',
       settings: [
         { key: 'securityAlerts', label: 'Security Alerts & Warnings' },
         { key: 'compliance', label: 'Compliance Updates' },
@@ -59,7 +59,7 @@ export function NotificationsPage() {
       icon: DollarSign,
       description: 'Updates about billing and payments',
       color: 'text-fw-warn',
-      bgColor: 'bg-orange-50',
+      bgColor: 'bg-fw-warnLight',
       settings: [
         { key: 'invoices', label: 'Invoice Notifications' },
         { key: 'paymentFailures', label: 'Payment Failures' },
@@ -73,7 +73,7 @@ export function NotificationsPage() {
       icon: AlertTriangle,
       description: 'Critical system alerts and warnings',
       color: 'text-fw-warn',
-      bgColor: 'bg-orange-50',
+      bgColor: 'bg-fw-warnLight',
       settings: [
         { key: 'criticalOnly', label: 'Critical Alerts Only' },
       ]
@@ -133,15 +133,15 @@ export function NotificationsPage() {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'critical':
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-fw-error/15 text-fw-error border-fw-error';
       case 'high':
-        return 'bg-orange-100 text-orange-800 border-orange-200';
+        return 'bg-fw-warnLight text-fw-warn border-fw-warn';
       case 'medium':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-fw-warnLight text-fw-warn border-fw-warn';
       case 'low':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-fw-accent text-fw-link border-fw-active';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-fw-neutral text-fw-heading border-fw-secondary';
     }
   };
 
@@ -193,25 +193,25 @@ export function NotificationsPage() {
       <div className="mb-8">
         <button
           onClick={() => navigate('/profile')}
-          className="flex items-center text-sm text-gray-600 hover:text-brand-blue mb-4 transition-colors"
+          className="flex items-center text-figma-base text-fw-bodyLight hover:text-fw-link mb-4 transition-colors tracking-[-0.03em]"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to Profile
         </button>
-        <h1 className="text-2xl font-bold text-gray-900">Notification Center</h1>
-        <p className="mt-1 text-sm text-gray-500">Manage your notification preferences and delivery channels</p>
+        <h1 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">Notification Center</h1>
+        <p className="mt-1 text-figma-base font-medium text-fw-body tracking-[-0.03em]">Manage your notification preferences and delivery channels</p>
       </div>
 
       {/* Tab Navigation */}
-      <div className="bg-white rounded-lg shadow mb-6">
-        <div className="border-b border-gray-200">
+      <div className="bg-fw-base rounded-2xl shadow mb-6 border border-fw-secondary">
+        <div className="border-b border-fw-secondary">
           <nav className="flex -mb-px">
             <button
               onClick={() => setActiveTab('notifications')}
-              className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-6 py-4 text-figma-base font-medium border-b-2 no-rounded tracking-[-0.03em] transition-colors ${
                 activeTab === 'notifications'
-                  ? 'border-brand-blue text-brand-blue'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-fw-active text-fw-link'
+                  : 'border-transparent text-fw-heading hover:text-fw-body hover:border-fw-secondary'
               }`}
             >
               <div className="flex items-center">
@@ -221,10 +221,10 @@ export function NotificationsPage() {
             </button>
             <button
               onClick={() => setActiveTab('preferences')}
-              className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-6 py-4 text-figma-base font-medium border-b-2 no-rounded tracking-[-0.03em] transition-colors ${
                 activeTab === 'preferences'
-                  ? 'border-brand-blue text-brand-blue'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-fw-active text-fw-link'
+                  : 'border-transparent text-fw-heading hover:text-fw-body hover:border-fw-secondary'
               }`}
             >
               <div className="flex items-center">
@@ -234,10 +234,10 @@ export function NotificationsPage() {
             </button>
             <button
               onClick={() => setActiveTab('settings')}
-              className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-6 py-4 text-figma-base font-medium border-b-2 no-rounded tracking-[-0.03em] transition-colors ${
                 activeTab === 'settings'
-                  ? 'border-brand-blue text-brand-blue'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-fw-active text-fw-link'
+                  : 'border-transparent text-fw-heading hover:text-fw-body hover:border-fw-secondary'
               }`}
             >
               <div className="flex items-center">
@@ -257,30 +257,30 @@ export function NotificationsPage() {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => setFilterStatus('all')}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    className={`px-3 py-1.5 rounded-full text-figma-base font-medium transition-colors ${
                       filterStatus === 'all'
-                        ? 'bg-brand-blue text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-fw-primary text-white'
+                        : 'bg-fw-neutral text-fw-body hover:bg-fw-neutral'
                     }`}
                   >
                     All ({notifications.filter(n => !n.archived).length})
                   </button>
                   <button
                     onClick={() => setFilterStatus('unread')}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    className={`px-3 py-1.5 rounded-full text-figma-base font-medium transition-colors ${
                       filterStatus === 'unread'
-                        ? 'bg-brand-blue text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-fw-primary text-white'
+                        : 'bg-fw-neutral text-fw-body hover:bg-fw-neutral'
                     }`}
                   >
                     Unread ({unreadCount})
                   </button>
                   <button
                     onClick={() => setFilterStatus('read')}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    className={`px-3 py-1.5 rounded-full text-figma-base font-medium transition-colors ${
                       filterStatus === 'read'
-                        ? 'bg-brand-blue text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-fw-primary text-white'
+                        : 'bg-fw-neutral text-fw-body hover:bg-fw-neutral'
                     }`}
                   >
                     Read ({notifications.filter(n => n.read && !n.archived).length})
@@ -297,7 +297,7 @@ export function NotificationsPage() {
                         duration: 3000
                       });
                     }}
-                    className="text-sm text-brand-blue hover:text-brand-darkBlue font-medium"
+                    className="text-figma-base text-fw-link hover:text-fw-linkHover font-medium"
                   >
                     Mark all as read
                   </button>
@@ -307,9 +307,9 @@ export function NotificationsPage() {
               {/* Notifications List */}
               {filteredNotifications.length === 0 ? (
                 <div className="text-center py-12">
-                  <Bell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No notifications</h3>
-                  <p className="text-sm text-gray-500">
+                  <Bell className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
+                  <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-2">No notifications</h3>
+                  <p className="text-figma-base text-fw-bodyLight">
                     {filterStatus === 'unread' && 'You have no unread notifications'}
                     {filterStatus === 'read' && 'You have no read notifications'}
                     {filterStatus === 'all' && 'You have no notifications'}
@@ -321,17 +321,17 @@ export function NotificationsPage() {
                     <div
                       key={notification.id}
                       className={`relative border rounded-lg p-4 transition-all hover:shadow-md ${
-                        notification.read ? 'bg-white' : 'bg-blue-50 border-blue-200'
+                        notification.read ? 'bg-fw-base' : 'bg-fw-accent border-fw-active'
                       }`}
                     >
                       <div className="flex items-start">
                         {/* Icon */}
                         <div className={`flex-shrink-0 p-2 rounded-lg ${
-                          notification.type === 'security' ? 'bg-red-100 text-red-600' :
-                          notification.type === 'activity' ? 'bg-green-100 text-green-600' :
-                          notification.type === 'billing' ? 'bg-yellow-100 text-yellow-600' :
-                          notification.type === 'alert' ? 'bg-orange-100 text-orange-600' :
-                          'bg-blue-100 text-blue-600'
+                          notification.type === 'security' ? 'bg-fw-error/15 text-fw-error' :
+                          notification.type === 'activity' ? 'bg-fw-successLight text-fw-success' :
+                          notification.type === 'billing' ? 'bg-fw-warnLight text-fw-warn' :
+                          notification.type === 'alert' ? 'bg-fw-warnLight text-fw-warn' :
+                          'bg-fw-accent text-fw-link'
                         }`}>
                           {getTypeIcon(notification.type)}
                         </div>
@@ -341,20 +341,20 @@ export function NotificationsPage() {
                           <div className="flex items-start justify-between">
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center space-x-2 mb-1">
-                                <h3 className={`text-sm font-medium ${notification.read ? 'text-gray-900' : 'text-gray-900 font-semibold'}`}>
+                                <h3 className={`text-figma-base font-medium ${notification.read ? 'text-fw-heading' : 'text-fw-heading font-semibold'}`}>
                                   {notification.title}
                                 </h3>
-                                <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${getPriorityColor(notification.priority)}`}>
+                                <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium border ${getPriorityColor(notification.priority)}`}>
                                   {notification.priority}
                                 </span>
                               </div>
-                              <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
+                              <p className="text-figma-base text-fw-bodyLight mb-2">{notification.message}</p>
                               <div className="flex items-center space-x-4">
-                                <span className="text-xs text-gray-500">{getRelativeTime(notification.timestamp)}</span>
+                                <span className="text-figma-sm text-fw-bodyLight">{getRelativeTime(notification.timestamp)}</span>
                                 {notification.actionUrl && notification.actionLabel && (
                                   <a
                                     href={notification.actionUrl}
-                                    className="text-xs text-brand-blue hover:text-brand-darkBlue font-medium"
+                                    className="text-figma-sm text-fw-link hover:text-fw-linkHover font-medium"
                                   >
                                     {notification.actionLabel} →
                                   </a>
@@ -375,7 +375,7 @@ export function NotificationsPage() {
                                       duration: 2000
                                     });
                                   }}
-                                  className="p-1.5 text-gray-400 hover:text-brand-blue rounded-lg hover:bg-gray-100 transition-colors"
+                                  className="p-1.5 text-fw-bodyLight hover:text-fw-link rounded-lg hover:bg-fw-neutral transition-colors"
                                   title="Mark as read"
                                 >
                                   <Eye className="h-4 w-4" />
@@ -391,7 +391,7 @@ export function NotificationsPage() {
                                     duration: 2000
                                   });
                                 }}
-                                className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                                className="p-1.5 text-fw-bodyLight hover:text-fw-bodyLight rounded-lg hover:bg-fw-neutral transition-colors"
                                 title="Archive"
                               >
                                 <Archive className="h-4 w-4" />
@@ -406,7 +406,7 @@ export function NotificationsPage() {
                                     duration: 2000
                                   });
                                 }}
-                                className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-gray-100 transition-colors"
+                                className="p-1.5 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-fw-neutral transition-colors"
                                 title="Delete"
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -416,7 +416,7 @@ export function NotificationsPage() {
                         </div>
                       </div>
                       {!notification.read && (
-                        <div className="absolute top-4 left-0 w-1 h-8 bg-brand-blue rounded-r" />
+                        <div className="absolute top-4 left-0 w-1 h-8 bg-fw-primary rounded-r" />
                       )}
                     </div>
                   ))}
@@ -432,17 +432,17 @@ export function NotificationsPage() {
                 const categoryPrefs = preferences[category.key];
 
                 return (
-                  <div key={category.key} className="border border-gray-200 rounded-lg">
+                  <div key={category.key} className="border border-fw-secondary rounded-2xl">
                     {/* Category Header */}
-                    <div className="p-6 border-b border-gray-200">
+                    <div className="p-6 border-b border-fw-secondary">
                       <div className="flex items-start justify-between">
                         <div className="flex items-start">
                           <div className={`p-2 ${category.bgColor} rounded-lg mr-4`}>
                             <Icon className={`h-6 w-6 ${category.color}`} />
                           </div>
                           <div>
-                            <h3 className="text-lg font-medium text-gray-900">{category.title}</h3>
-                            <p className="text-sm text-gray-500 mt-1">{category.description}</p>
+                            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">{category.title}</h3>
+                            <p className="text-figma-base text-fw-bodyLight mt-1">{category.description}</p>
                           </div>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
@@ -452,23 +452,23 @@ export function NotificationsPage() {
                             checked={categoryPrefs.enabled}
                             onChange={() => handleToggleCategory(category.key)}
                           />
-                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+                          <div className="w-11 h-6 bg-fw-neutral peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-fw-active rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-fw-secondary after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fw-primary"></div>
                         </label>
                       </div>
 
                       {/* Delivery Channels */}
                       {categoryPrefs.enabled && (
                         <div className="mt-4">
-                          <p className="text-xs font-medium text-gray-700 mb-2">Delivery Channels</p>
+                          <p className="text-figma-sm font-medium text-fw-body mb-2">Delivery Channels</p>
                           <div className="flex flex-wrap gap-2">
                             {(['email', 'sms', 'app', 'browser'] as NotificationChannel[]).map((channel) => (
                               <button
                                 key={channel}
                                 onClick={() => handleToggleChannel(category.key, channel)}
-                                className={`flex items-center px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                                className={`flex items-center px-3 py-1.5 rounded-full text-figma-sm font-medium border transition-colors ${
                                   categoryPrefs.channels.includes(channel)
-                                    ? 'bg-brand-blue text-white border-brand-blue'
-                                    : 'bg-white text-gray-700 border-gray-300 hover:border-brand-blue'
+                                    ? 'bg-fw-primary text-white border-fw-active'
+                                    : 'bg-fw-base text-fw-body border-fw-secondary hover:border-fw-active'
                                 }`}
                               >
                                 {channelIcons[channel]}
@@ -491,7 +491,7 @@ export function NotificationsPage() {
                             const isEnabled = categoryPrefs[setting.key as keyof typeof categoryPrefs];
                             return (
                               <div key={setting.key} className="flex items-center justify-between">
-                                <label className="text-sm text-gray-700">{setting.label}</label>
+                                <label className="text-figma-base text-fw-body">{setting.label}</label>
                                 <label className="relative inline-flex items-center cursor-pointer">
                                   <input
                                     type="checkbox"
@@ -499,7 +499,7 @@ export function NotificationsPage() {
                                     checked={Boolean(isEnabled)}
                                     onChange={() => handleToggleSetting(category.key, setting.key)}
                                   />
-                                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+                                  <div className="w-11 h-6 bg-fw-neutral peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-fw-active rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-fw-secondary after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fw-primary"></div>
                                 </label>
                               </div>
                             );
@@ -516,13 +516,13 @@ export function NotificationsPage() {
           {activeTab === 'settings' && (
             <div className="space-y-6">
               {/* Do Not Disturb */}
-              <div className="border border-gray-200 rounded-lg p-6">
+              <div className="border border-fw-secondary rounded-2xl p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start">
-                    <Moon className="h-5 w-5 text-gray-600 mr-3 mt-0.5" />
+                    <Moon className="h-5 w-5 text-fw-bodyLight mr-3 mt-0.5" />
                     <div>
-                      <h3 className="text-base font-medium text-gray-900">Do Not Disturb</h3>
-                      <p className="text-sm text-gray-500 mt-1">Pause all notifications temporarily</p>
+                      <h3 className="text-figma-lg font-medium text-fw-heading tracking-[-0.03em]">Do Not Disturb</h3>
+                      <p className="text-figma-base text-fw-bodyLight mt-1">Pause all notifications temporarily</p>
                     </div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -540,23 +540,23 @@ export function NotificationsPage() {
                         });
                       }}
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+                    <div className="w-11 h-6 bg-fw-neutral peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-fw-active rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-fw-secondary after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fw-primary"></div>
                   </label>
                 </div>
               </div>
 
               {/* Sound */}
-              <div className="border border-gray-200 rounded-lg p-6">
+              <div className="border border-fw-secondary rounded-2xl p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start">
                     {settings.soundEnabled ? (
-                      <Volume2 className="h-5 w-5 text-gray-600 mr-3 mt-0.5" />
+                      <Volume2 className="h-5 w-5 text-fw-bodyLight mr-3 mt-0.5" />
                     ) : (
-                      <VolumeX className="h-5 w-5 text-gray-600 mr-3 mt-0.5" />
+                      <VolumeX className="h-5 w-5 text-fw-bodyLight mr-3 mt-0.5" />
                     )}
                     <div>
-                      <h3 className="text-base font-medium text-gray-900">Notification Sounds</h3>
-                      <p className="text-sm text-gray-500 mt-1">Play sound when notifications arrive</p>
+                      <h3 className="text-figma-lg font-medium text-fw-heading tracking-[-0.03em]">Notification Sounds</h3>
+                      <p className="text-figma-base text-fw-bodyLight mt-1">Play sound when notifications arrive</p>
                     </div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -574,19 +574,19 @@ export function NotificationsPage() {
                         });
                       }}
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+                    <div className="w-11 h-6 bg-fw-neutral peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-fw-active rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-fw-secondary after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fw-primary"></div>
                   </label>
                 </div>
               </div>
 
               {/* Browser Notifications */}
-              <div className="border border-gray-200 rounded-lg p-6">
+              <div className="border border-fw-secondary rounded-2xl p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start">
-                    <Monitor className="h-5 w-5 text-gray-600 mr-3 mt-0.5" />
+                    <Monitor className="h-5 w-5 text-fw-bodyLight mr-3 mt-0.5" />
                     <div>
-                      <h3 className="text-base font-medium text-gray-900">Browser Notifications</h3>
-                      <p className="text-sm text-gray-500 mt-1">Show notifications in your browser</p>
+                      <h3 className="text-figma-lg font-medium text-fw-heading tracking-[-0.03em]">Browser Notifications</h3>
+                      <p className="text-figma-base text-fw-bodyLight mt-1">Show notifications in your browser</p>
                     </div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -604,19 +604,19 @@ export function NotificationsPage() {
                         });
                       }}
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+                    <div className="w-11 h-6 bg-fw-neutral peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-fw-active rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-fw-secondary after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fw-primary"></div>
                   </label>
                 </div>
               </div>
 
               {/* Digest */}
-              <div className="border border-gray-200 rounded-lg p-6">
+              <div className="border border-fw-secondary rounded-2xl p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start">
-                    <Mail className="h-5 w-5 text-gray-600 mr-3 mt-0.5" />
+                    <Mail className="h-5 w-5 text-fw-bodyLight mr-3 mt-0.5" />
                     <div>
-                      <h3 className="text-base font-medium text-gray-900">Notification Digest</h3>
-                      <p className="text-sm text-gray-500 mt-1">Receive a summary of notifications</p>
+                      <h3 className="text-figma-lg font-medium text-fw-heading tracking-[-0.03em]">Notification Digest</h3>
+                      <p className="text-figma-base text-fw-bodyLight mt-1">Receive a summary of notifications</p>
                     </div>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -634,13 +634,13 @@ export function NotificationsPage() {
                         });
                       }}
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-blue"></div>
+                    <div className="w-11 h-6 bg-fw-neutral peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-fw-active rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-fw-secondary after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fw-primary"></div>
                   </label>
                 </div>
 
                 {settings.digestEnabled && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Frequency</label>
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">Frequency</label>
                     <select
                       value={settings.digestFrequency}
                       onChange={(e) => {
@@ -652,7 +652,7 @@ export function NotificationsPage() {
                           duration: 3000
                         });
                       }}
-                      className="rounded-full w-full border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                      className="rounded-md w-full border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base tracking-[-0.03em]"
                     >
                       <option value="daily">Daily</option>
                       <option value="weekly">Weekly</option>

@@ -185,7 +185,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="name" className="block text-figma-base font-medium text-fw-body mb-1">
           Schedule Name *
         </label>
         <input
@@ -194,13 +194,13 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
           value={formData.name}
           onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
           onBlur={() => handleBlur('name')}
-          className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            touched.name && errors.name ? 'border-red-300' : 'border-gray-300'
+          className={`w-full px-3 h-9 border rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-transparent ${
+            touched.name && errors.name ? 'border-red-300' : 'border-fw-secondary'
           }`}
           placeholder="e.g., Daily Performance Summary"
         />
         {touched.name && errors.name && (
-          <p className="mt-1 text-sm text-red-600 flex items-center">
+          <p className="mt-1 text-figma-base text-red-600 flex items-center">
             <AlertCircle className="h-4 w-4 mr-1" />
             {errors.name}
           </p>
@@ -208,7 +208,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
       </div>
 
       <div>
-        <label htmlFor="reportType" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="reportType" className="block text-figma-base font-medium text-fw-body mb-1">
           Report Type *
         </label>
         <select
@@ -216,8 +216,8 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
           value={formData.reportType}
           onChange={(e) => setFormData(prev => ({ ...prev, reportType: e.target.value }))}
           onBlur={() => handleBlur('reportType')}
-          className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            touched.reportType && errors.reportType ? 'border-red-300' : 'border-gray-300'
+          className={`w-full px-3 h-9 border rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-transparent ${
+            touched.reportType && errors.reportType ? 'border-red-300' : 'border-fw-secondary'
           }`}
         >
           <option value="">Select a report type</option>
@@ -228,7 +228,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
           ))}
         </select>
         {touched.reportType && errors.reportType && (
-          <p className="mt-1 text-sm text-red-600 flex items-center">
+          <p className="mt-1 text-figma-base text-red-600 flex items-center">
             <AlertCircle className="h-4 w-4 mr-1" />
             {errors.reportType}
           </p>
@@ -237,7 +237,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="frequency" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="frequency" className="block text-figma-base font-medium text-fw-body mb-1">
             Frequency *
           </label>
           <select
@@ -248,7 +248,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
               frequency: e.target.value as ScheduleFormData['frequency'],
               schedule: { time: prev.schedule.time }
             }))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-transparent"
           >
             <option value="daily">Daily</option>
             <option value="weekly">Weekly</option>
@@ -258,14 +258,14 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
         </div>
 
         <div>
-          <label htmlFor="format" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="format" className="block text-figma-base font-medium text-fw-body mb-1">
             Format *
           </label>
           <select
             id="format"
             value={formData.format}
             onChange={(e) => setFormData(prev => ({ ...prev, format: e.target.value as ScheduleFormData['format'] }))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-transparent"
           >
             <option value="PDF">PDF</option>
             <option value="Excel">Excel</option>
@@ -276,7 +276,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="time" className="block text-figma-base font-medium text-fw-body mb-1">
             Time *
           </label>
           <input
@@ -288,12 +288,12 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
               schedule: { ...prev.schedule, time: e.target.value }
             }))}
             onBlur={() => handleBlur('time')}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              touched.time && errors.time ? 'border-red-300' : 'border-gray-300'
+            className={`w-full px-3 h-9 border rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-transparent ${
+              touched.time && errors.time ? 'border-red-300' : 'border-fw-secondary'
             }`}
           />
           {touched.time && errors.time && (
-            <p className="mt-1 text-sm text-red-600 flex items-center">
+            <p className="mt-1 text-figma-base text-red-600 flex items-center">
               <AlertCircle className="h-4 w-4 mr-1" />
               {errors.time}
             </p>
@@ -302,7 +302,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
 
         {formData.frequency === 'weekly' && (
           <div>
-            <label htmlFor="dayOfWeek" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="dayOfWeek" className="block text-figma-base font-medium text-fw-body mb-1">
               Day of Week *
             </label>
             <select
@@ -312,8 +312,8 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
                 ...prev,
                 schedule: { ...prev.schedule, dayOfWeek: parseInt(e.target.value) }
               }))}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                errors.dayOfWeek ? 'border-red-300' : 'border-gray-300'
+              className={`w-full px-3 h-9 border rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-transparent ${
+                errors.dayOfWeek ? 'border-red-300' : 'border-fw-secondary'
               }`}
             >
               <option value="">Select a day</option>
@@ -322,7 +322,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
               ))}
             </select>
             {errors.dayOfWeek && (
-              <p className="mt-1 text-sm text-red-600 flex items-center">
+              <p className="mt-1 text-figma-base text-red-600 flex items-center">
                 <AlertCircle className="h-4 w-4 mr-1" />
                 {errors.dayOfWeek}
               </p>
@@ -332,7 +332,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
 
         {(formData.frequency === 'monthly' || formData.frequency === 'quarterly') && (
           <div>
-            <label htmlFor="dayOfMonth" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="dayOfMonth" className="block text-figma-base font-medium text-fw-body mb-1">
               Day of Month *
             </label>
             <input
@@ -345,13 +345,13 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
                 ...prev,
                 schedule: { ...prev.schedule, dayOfMonth: parseInt(e.target.value) }
               }))}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                errors.dayOfMonth ? 'border-red-300' : 'border-gray-300'
+              className={`w-full px-3 h-9 border rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-transparent ${
+                errors.dayOfMonth ? 'border-red-300' : 'border-fw-secondary'
               }`}
               placeholder="1-31"
             />
             {errors.dayOfMonth && (
-              <p className="mt-1 text-sm text-red-600 flex items-center">
+              <p className="mt-1 text-figma-base text-red-600 flex items-center">
                 <AlertCircle className="h-4 w-4 mr-1" />
                 {errors.dayOfMonth}
               </p>
@@ -361,7 +361,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-figma-base font-medium text-fw-body mb-1">
           Recipients *
         </label>
         <div className="flex space-x-2 mb-2">
@@ -375,7 +375,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
                 addRecipient();
               }
             }}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-1 px-3 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-transparent"
             placeholder="email@example.com"
           />
           <Button
@@ -392,14 +392,14 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
             {formData.recipients.map((email) => (
               <div
                 key={email}
-                className="flex items-center space-x-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
+                className="flex items-center space-x-2 px-3 py-1 bg-brand-lightBlue text-brand-blue rounded-full text-figma-base"
               >
                 <Mail className="h-3 w-3" />
                 <span>{email}</span>
                 <button
                   type="button"
                   onClick={() => removeRecipient(email)}
-                  className="text-blue-700 hover:text-blue-900"
+                  className="text-brand-blue hover:text-brand-darkBlue"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -409,7 +409,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
         )}
 
         {touched.recipients && errors.recipients && (
-          <p className="mt-1 text-sm text-red-600 flex items-center">
+          <p className="mt-1 text-figma-base text-red-600 flex items-center">
             <AlertCircle className="h-4 w-4 mr-1" />
             {errors.recipients}
           </p>
@@ -425,13 +425,13 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
               ...prev,
               status: e.target.checked ? 'active' : 'paused'
             }))}
-            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            className="rounded border-fw-secondary text-brand-blue focus:ring-fw-active"
           />
-          <span className="text-sm text-gray-700">Activate schedule immediately</span>
+          <span className="text-figma-base text-fw-body">Activate schedule immediately</span>
         </label>
       </div>
 
-      <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+      <div className="flex justify-end space-x-3 pt-4 border-t border-fw-secondary">
         <Button
           type="button"
           variant="secondary"

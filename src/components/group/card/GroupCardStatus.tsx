@@ -37,22 +37,40 @@ export function GroupCardStatus({ group }: GroupCardStatusProps) {
   const healthStatus = getHealthStatus();
 
   return (
-    <div className="p-4 border-t border-fw-secondary">
-      <div className="flex items-center justify-between mt-4">
-        <button
+    <div className="px-4 pb-2">
+      <div className="flex items-center justify-between">
+        <span
           className={`
-            inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
-            transition-all duration-200 border
+            inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] leading-4 font-medium
             ${group.status === 'active'
-              ? 'bg-fw-base text-fw-success border-fw-success/20'
-              : 'bg-fw-base text-fw-body border-fw-secondary'
+              ? 'text-fw-success'
+              : 'text-fw-body'
             }
           `}
+          style={{
+            backgroundColor: group.status === 'active'
+              ? 'rgba(45,126,36,0.12)'
+              : 'rgba(104,110,116,0.12)',
+          }}
         >
           {group.status === 'active' ? 'Active' : 'Inactive'}
-        </button>
+        </span>
 
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${healthStatus.color}`}>
+        <span
+          className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] leading-4 font-medium"
+          style={{
+            color: healthStatus.color.includes('success') ? '#2d7e24'
+              : healthStatus.color.includes('blue') ? '#0057b8'
+              : healthStatus.color.includes('orange') ? '#ea712f'
+              : healthStatus.color.includes('red') ? '#c70032'
+              : '#686e74',
+            backgroundColor: healthStatus.color.includes('success') ? 'rgba(45,126,36,0.12)'
+              : healthStatus.color.includes('blue') ? 'rgba(0,87,184,0.12)'
+              : healthStatus.color.includes('orange') ? 'rgba(234,113,47,0.12)'
+              : healthStatus.color.includes('red') ? 'rgba(199,0,50,0.12)'
+              : 'rgba(104,110,116,0.12)',
+          }}
+        >
           {healthStatus.label}
         </span>
       </div>

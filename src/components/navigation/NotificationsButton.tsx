@@ -54,31 +54,31 @@ export function NotificationsButton() {
     switch (type) {
       case 'activity':
         return {
-          bg: 'bg-[#e6f6fd]',
-          text: 'text-[#009fdb]',
-          icon: 'text-[#009fdb]',
-          hover: 'hover:bg-[#ccedfa]'
+          bg: 'bg-fw-accent',
+          text: 'text-brand-accent',
+          icon: 'text-brand-accent',
+          hover: 'hover:bg-fw-accent'
         };
       case 'security':
         return {
-          bg: 'bg-[#fef2f2]',
-          text: 'text-[#dc2626]',
-          icon: 'text-[#dc2626]',
-          hover: 'hover:bg-[#fee2e2]'
+          bg: 'bg-fw-error/15',
+          text: 'text-fw-error',
+          icon: 'text-fw-error',
+          hover: 'hover:bg-fw-error/10'
         };
       case 'system':
         return {
-          bg: 'bg-[#f3f4f6]',
-          text: 'text-[#4b5563]',
-          icon: 'text-[#4b5563]',
-          hover: 'hover:bg-[#e5e7eb]'
+          bg: 'bg-fw-neutral',
+          text: 'text-fw-body',
+          icon: 'text-fw-body',
+          hover: 'hover:bg-fw-wash'
         };
       default:
         return {
-          bg: 'bg-gray-50',
-          text: 'text-gray-700',
-          icon: 'text-gray-500',
-          hover: 'hover:bg-gray-100'
+          bg: 'bg-fw-wash',
+          text: 'text-fw-body',
+          icon: 'text-fw-bodyLight',
+          hover: 'hover:bg-fw-neutral'
         };
     }
   };
@@ -92,11 +92,11 @@ export function NotificationsButton() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-gray-500 hover:text-gray-700 transition-colors duration-200 relative"
+        className="flex items-center justify-center h-9 w-9 text-fw-heading hover:text-fw-body transition-colors duration-200 relative"
       >
         <Bell className="h-5 w-5" />
         {notifications.length > 0 && (
-          <span className="absolute -top-1 -right-1 h-4 w-4 text-xs flex items-center justify-center bg-[#dc2626] text-white rounded-full">
+          <span className="absolute -top-1 -right-1 h-4 w-4 text-figma-sm flex items-center justify-center bg-fw-error text-white rounded-full">
             {notifications.length}
           </span>
         )}
@@ -109,9 +109,9 @@ export function NotificationsButton() {
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-            <div className="p-4 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-[#1f2937]">Notifications</h3>
+          <div className="absolute right-0 mt-2 w-96 bg-fw-base rounded-lg shadow-lg border border-fw-secondary z-50">
+            <div className="p-4 border-b border-fw-secondary">
+              <h3 className="text-lg font-semibold text-fw-heading tracking-[-0.03em]">Notifications</h3>
             </div>
             
             <div className="max-h-[400px] overflow-y-auto">
@@ -121,20 +121,20 @@ export function NotificationsButton() {
                 return (
                   <div
                     key={notification.id}
-                    className={`p-4 border-b border-gray-100 transition-colors cursor-pointer ${styles.hover}`}
+                    className={`p-4 border-b border-fw-secondary transition-colors cursor-pointer ${styles.hover}`}
                   >
                     <div className="flex items-start space-x-3">
                       <div className={`p-2 rounded-full ${styles.bg}`}>
                         <Icon className={`h-4 w-4 ${styles.icon}`} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-medium ${styles.text}`}>
+                        <p className={`text-figma-base font-medium ${styles.text}`}>
                           {notification.title}
                         </p>
-                        <p className="text-sm text-gray-600 mt-0.5">
+                        <p className="text-figma-base text-fw-bodyLight mt-0.5">
                           {notification.message}
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-figma-sm text-fw-bodyLight mt-1">
                           {new Date(notification.timestamp).toLocaleTimeString()}
                         </p>
                       </div>
@@ -144,9 +144,9 @@ export function NotificationsButton() {
               })}
             </div>
 
-            <div className="p-4 border-t border-gray-100 bg-[#f9fafb]">
+            <div className="p-4 border-t border-fw-secondary bg-fw-wash">
               <button
-                className="w-full text-center text-sm text-[#009fdb] hover:text-[#007fb0] font-medium transition-colors"
+                className="w-full text-center text-figma-base text-brand-accent hover:text-fw-linkHover font-medium transition-colors"
                 onClick={handleViewAll}
               >
                 View All Notifications

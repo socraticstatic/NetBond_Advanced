@@ -104,9 +104,9 @@ export function ComplianceReports() {
 
   const getStatusColor = (status: ComplianceFramework['status']) => {
     switch (status) {
-      case 'compliant': return 'text-green-700 bg-green-100';
-      case 'at-risk': return 'text-yellow-700 bg-yellow-100';
-      case 'non-compliant': return 'text-red-700 bg-red-100';
+      case 'compliant': return 'text-fw-success bg-fw-successLight';
+      case 'at-risk': return 'text-fw-warn bg-fw-warnLight';
+      case 'non-compliant': return 'text-fw-error bg-red-50';
     }
   };
 
@@ -120,9 +120,9 @@ export function ComplianceReports() {
 
   const getCategoryStatusIcon = (status: ComplianceCategory['status']) => {
     switch (status) {
-      case 'pass': return <CheckCircle className="h-5 w-5 text-green-600" />;
-      case 'warning': return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
-      case 'fail': return <XCircle className="h-5 w-5 text-red-600" />;
+      case 'pass': return <CheckCircle className="h-5 w-5 text-fw-success" />;
+      case 'warning': return <AlertTriangle className="h-5 w-5 text-fw-warn" />;
+      case 'fail': return <XCircle className="h-5 w-5 text-fw-error" />;
     }
   };
 
@@ -148,8 +148,8 @@ export function ComplianceReports() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Compliance Reports</h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <h3 className="text-figma-lg font-medium text-fw-heading">Compliance Reports</h3>
+          <p className="text-figma-base font-medium text-fw-body mt-1">
             Track compliance status across regulatory frameworks and industry standards
           </p>
         </div>
@@ -171,56 +171,56 @@ export function ComplianceReports() {
 
       {/* Overview Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Overall Compliance</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
+              <p className="text-figma-base text-fw-body">Overall Compliance</p>
+              <p className="text-2xl font-semibold text-fw-heading mt-1">
                 {overallCompliance}%
               </p>
             </div>
-            <Shield className="h-8 w-8 text-green-500" />
+            <Shield className="h-8 w-8 text-fw-success" />
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Frameworks</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
+              <p className="text-figma-base text-fw-body">Frameworks</p>
+              <p className="text-2xl font-semibold text-fw-heading mt-1">
                 {frameworks.length}
               </p>
-              <p className="text-xs text-green-600 mt-1">
+              <p className="text-figma-sm text-fw-success mt-1">
                 {frameworks.filter(f => f.status === 'compliant').length} compliant
               </p>
             </div>
-            <FileText className="h-8 w-8 text-blue-500" />
+            <FileText className="h-8 w-8 text-brand-blue" />
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Requirements Met</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
+              <p className="text-figma-base text-fw-body">Requirements Met</p>
+              <p className="text-2xl font-semibold text-fw-heading mt-1">
                 {totalMet}/{totalRequirements}
               </p>
-              <p className="text-xs text-gray-600 mt-1">
+              <p className="text-figma-sm text-fw-body mt-1">
                 {Math.round((totalMet / totalRequirements) * 100)}% complete
               </p>
             </div>
-            <CheckCircle className="h-8 w-8 text-green-500" />
+            <CheckCircle className="h-8 w-8 text-fw-success" />
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Open Issues</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
+              <p className="text-figma-base text-fw-body">Open Issues</p>
+              <p className="text-2xl font-semibold text-fw-heading mt-1">
                 {totalIssues}
               </p>
-              <p className="text-xs text-yellow-600 mt-1">
+              <p className="text-figma-sm text-yellow-600 mt-1">
                 Requires attention
               </p>
             </div>
@@ -237,27 +237,27 @@ export function ComplianceReports() {
           return (
             <div
               key={framework.id}
-              className="card p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              className="bg-fw-base border border-fw-secondary rounded-3xl p-6 hover:shadow-lg transition-shadow cursor-pointer"
               onClick={() => setSelectedFramework(framework)}
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start space-x-3 flex-1">
-                  <div className="flex-shrink-0 p-2 bg-blue-100 rounded-lg">
-                    <Shield className="h-6 w-6 text-blue-600" />
+                  <div className="flex-shrink-0">
+                    <Shield className="h-6 w-6 text-fw-link" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-base font-semibold text-gray-900 mb-1">
+                    <h4 className="text-figma-lg font-medium text-fw-heading mb-1">
                       {framework.name}
                     </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed mb-3">
+                    <p className="text-figma-base font-medium text-fw-body leading-relaxed mb-3">
                       {framework.description}
                     </p>
                     <div className="flex items-center space-x-2">
-                      <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(framework.status)}`}>
+                      <span className={`px-3 py-1 text-figma-sm font-semibold rounded-full ${getStatusColor(framework.status)}`}>
                         <StatusIcon className="inline h-3.5 w-3.5 mr-1 -mt-0.5" />
                         {framework.status.replace('-', ' ').toUpperCase()}
                       </span>
-                      <div className="text-2xl font-bold text-gray-900">
+                      <div className="text-2xl font-bold text-fw-heading">
                         {framework.score}%
                       </div>
                     </div>
@@ -267,21 +267,21 @@ export function ComplianceReports() {
 
               {/* Requirements Progress */}
               <div className="mb-4">
-                <div className="flex items-center justify-between text-sm mb-2">
-                  <span className="text-gray-600">Requirements</span>
-                  <span className="font-medium text-gray-900">
+                <div className="flex items-center justify-between text-figma-base mb-2">
+                  <span className="text-fw-body">Requirements</span>
+                  <span className="font-medium text-fw-heading">
                     {framework.requirements.met}/{framework.requirements.total}
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-fw-neutral rounded-full h-2">
                   <div
-                    className="bg-green-500 h-2 rounded-full transition-all"
+                    className="bg-fw-success h-2 rounded-full transition-all"
                     style={{ width: `${(framework.requirements.met / framework.requirements.total) * 100}%` }}
                   />
                 </div>
-                <div className="flex items-center justify-between text-xs mt-2 text-gray-500">
+                <div className="flex items-center justify-between text-figma-sm mt-2 text-fw-bodyLight">
                   <span className="flex items-center">
-                    <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+                    <span className="w-2 h-2 bg-fw-success rounded-full mr-1"></span>
                     {framework.requirements.met} Met
                   </span>
                   <span className="flex items-center">
@@ -296,7 +296,7 @@ export function ComplianceReports() {
               </div>
 
               {/* Audit Dates */}
-              <div className="flex items-center justify-between text-xs text-gray-600 mb-4 pb-4 border-b border-gray-200">
+              <div className="flex items-center justify-between text-figma-sm text-fw-body mb-4 pb-4 border-b border-fw-secondary">
                 <div className="flex items-center">
                   <Calendar className="h-3.5 w-3.5 mr-1.5" />
                   <span>Last audit: {new Date(framework.lastAudit).toLocaleDateString()}</span>
@@ -310,26 +310,28 @@ export function ComplianceReports() {
               {/* Categories */}
               <div className="space-y-2 mb-4">
                 {framework.categories.slice(0, 3).map((category, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-sm">
+                  <div key={idx} className="flex items-center justify-between text-figma-base">
                     <div className="flex items-center space-x-2">
                       {getCategoryStatusIcon(category.status)}
-                      <span className="text-gray-700">{category.name}</span>
+                      <span className="text-fw-body">{category.name}</span>
                     </div>
-                    <span className="font-medium text-gray-900">{category.score}%</span>
+                    <span className="font-medium text-fw-heading">{category.score}%</span>
                   </div>
                 ))}
                 {framework.categories.length > 3 && (
-                  <p className="text-xs text-gray-500 pl-7">
+                  <p className="text-figma-sm text-fw-bodyLight pl-7">
                     +{framework.categories.length - 3} more categories
                   </p>
                 )}
               </div>
 
               {/* Actions */}
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="secondary"
-                  size="sm"
+              {/* Divider */}
+              <div className="border-t border-fw-secondary mb-4"></div>
+
+              {/* Pill buttons: r=800, h=36, 14px w500 */}
+              <div className="flex items-center gap-2">
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     window.addToast?.({
@@ -339,23 +341,21 @@ export function ComplianceReports() {
                       duration: 3000
                     });
                   }}
-                  className="flex-1"
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full border border-fw-link text-fw-link text-figma-base font-medium hover:bg-fw-accent transition-colors"
                 >
-                  <Activity className="h-4 w-4 mr-1.5" />
+                  <Activity className="h-4 w-4" />
                   View Details
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
+                </button>
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleGenerateReport(framework);
                   }}
-                  className="flex-1"
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-full bg-fw-primary text-white text-figma-base font-medium hover:bg-fw-primaryHover transition-colors"
                 >
-                  <Download className="h-4 w-4 mr-1.5" />
+                  <Download className="h-4 w-4" />
                   Generate Report
-                </Button>
+                </button>
               </div>
             </div>
           );
@@ -365,15 +365,15 @@ export function ComplianceReports() {
       {/* Detailed View Panel */}
       {selectedFramework && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+          <div className="bg-fw-base rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-fw-base border-b border-fw-secondary p-6 flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">{selectedFramework.name}</h3>
-                <p className="text-sm text-gray-600 mt-1">{selectedFramework.description}</p>
+                <h3 className="text-xl font-semibold text-fw-heading">{selectedFramework.name}</h3>
+                <p className="text-figma-base text-fw-body mt-1">{selectedFramework.description}</p>
               </div>
               <button
                 onClick={() => setSelectedFramework(null)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-fw-bodyLight hover:text-fw-heading"
               >
                 <XCircle className="h-6 w-6" />
               </button>
@@ -382,26 +382,26 @@ export function ComplianceReports() {
             <div className="p-6 space-y-6">
               {/* All Categories */}
               <div>
-                <h4 className="text-lg font-semibold text-gray-900 mb-4">Category Breakdown</h4>
+                <h4 className="text-lg font-semibold text-fw-heading mb-4">Category Breakdown</h4>
                 <div className="space-y-4">
                   {selectedFramework.categories.map((category, idx) => (
-                    <div key={idx} className="border border-gray-200 rounded-lg p-4">
+                    <div key={idx} className="border border-fw-secondary rounded-lg p-4">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center space-x-3">
                           {getCategoryStatusIcon(category.status)}
                           <div>
-                            <h5 className="font-medium text-gray-900">{category.name}</h5>
-                            <p className="text-sm text-gray-600">
+                            <h5 className="font-medium text-fw-heading">{category.name}</h5>
+                            <p className="text-figma-base text-fw-body">
                               {category.controls} controls, {category.issues} issues
                             </p>
                           </div>
                         </div>
-                        <span className="text-lg font-semibold text-gray-900">{category.score}%</span>
+                        <span className="text-lg font-semibold text-fw-heading">{category.score}%</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="w-full bg-fw-neutral rounded-full h-2">
                         <div
                           className={`h-2 rounded-full transition-all ${
-                            category.status === 'pass' ? 'bg-green-500' :
+                            category.status === 'pass' ? 'bg-fw-success' :
                             category.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
                           }`}
                           style={{ width: `${category.score}%` }}
@@ -412,7 +412,7 @@ export function ComplianceReports() {
                 </div>
               </div>
 
-              <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+              <div className="flex justify-end space-x-3 pt-4 border-t border-fw-secondary">
                 <Button variant="secondary" onClick={() => setSelectedFramework(null)}>
                   Close
                 </Button>

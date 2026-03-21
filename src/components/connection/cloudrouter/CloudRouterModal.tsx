@@ -210,49 +210,49 @@ export function CloudRouterModal({
         <div>
             {/* Warning message when editing */}
             {isEditMode && (
-              <div className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start">
-                <AlertTriangle className="h-5 w-5 text-amber-500 mt-0.5 mr-3 flex-shrink-0" />
+              <div className="mb-6 bg-fw-warn/10 border border-fw-warn/30 rounded-lg p-3 flex items-start">
+                <AlertTriangle className="h-5 w-5 text-fw-warn mt-0.5 mr-3 flex-shrink-0" />
                 <div>
-                  <p className="text-sm text-amber-800 font-medium">
+                  <p className="text-figma-base text-fw-heading font-medium">
                     Warning: Editing Cloud Router Configuration
                   </p>
-                  <p className="mt-1 text-sm text-amber-700">
+                  <p className="mt-1 text-figma-base text-fw-body">
                     Changes to cloud router settings may impact network connectivity. Ensure all connected systems are properly configured for the updated settings.
                   </p>
                 </div>
               </div>
             )}
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Basic Information */}
               <div className="md:col-span-2">
-                <h4 className="text-base font-medium text-gray-900 mb-4 flex items-center">
-                  <GitBranch className="h-4 w-4 text-gray-500 mr-2" />
+                <h4 className="text-base font-medium text-fw-heading tracking-[-0.03em] mb-4 flex items-center">
+                  <GitBranch className="h-4 w-4 text-fw-bodyLight mr-2" />
                   Basic Information
                 </h4>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField 
-                    label="Cloud Router Name" 
-                    error={errors.name} 
+                  <FormField
+                    label="Cloud Router Name"
+                    error={errors.name}
                     required
                   >
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                       placeholder="e.g., Primary Cloud Router"
                     />
                   </FormField>
-                  
-                  <FormField 
+
+                  <FormField
                     label="Status"
                   >
                     <select
                       value={status}
                       onChange={(e) => setStatus(e.target.value as CloudRouter['status'])}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                     >
                       <option value="inactive">Inactive</option>
                       <option value="active">Active</option>
@@ -260,16 +260,16 @@ export function CloudRouterModal({
                       <option value="error">Error</option>
                     </select>
                   </FormField>
-                  
-                  <FormField 
-                    label="Location" 
-                    error={errors.location} 
+
+                  <FormField
+                    label="Location"
+                    error={errors.location}
                     required
                   >
                     <select
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                     >
                       <option value="">Select a location</option>
                       <option value="US East">US East</option>
@@ -278,7 +278,7 @@ export function CloudRouterModal({
                       <option value="Asia Pacific">Asia Pacific</option>
                     </select>
                   </FormField>
-                  
+
                   <div className="md:col-span-2">
                     <FormField
                       label="Description"
@@ -287,7 +287,7 @@ export function CloudRouterModal({
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                         placeholder="Enter a description for this cloud router"
                       />
                     </FormField>
@@ -296,9 +296,9 @@ export function CloudRouterModal({
               </div>
 
               {/* Link Association */}
-              <div className="md:col-span-2 pt-6 border-t border-gray-200">
-                <h4 className="text-base font-medium text-gray-900 mb-4 flex items-center">
-                  <Network className="h-4 w-4 text-gray-500 mr-2" />
+              <div className="md:col-span-2 pt-6 border-t border-fw-secondary">
+                <h4 className="text-base font-medium text-fw-heading tracking-[-0.03em] mb-4 flex items-center">
+                  <Network className="h-4 w-4 text-fw-bodyLight mr-2" />
                   Link Association
                 </h4>
 
@@ -314,7 +314,7 @@ export function CloudRouterModal({
                         // Clear selected links when changing connection
                         setLinkIds([]);
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                     >
                       {connections.map(conn => (
                         <option key={conn.id} value={conn.id}>
@@ -326,13 +326,13 @@ export function CloudRouterModal({
                   </FormField>
 
                   {isCrossConnection && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start">
-                      <ExternalLink className="h-4 w-4 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
+                    <div className="bg-fw-accent border border-fw-active rounded-lg p-3 flex items-start">
+                      <ExternalLink className="h-4 w-4 text-fw-link mt-0.5 mr-2 flex-shrink-0" />
                       <div>
-                        <p className="text-sm text-blue-800 font-medium">
+                        <p className="text-figma-base text-fw-linkHover font-medium">
                           Cross-Connection Association
                         </p>
-                        <p className="text-xs text-blue-700 mt-1">
+                        <p className="text-figma-sm text-fw-link mt-1">
                           This cloud router will be associated with links from a different connection. Ensure network policies allow cross-connection routing.
                         </p>
                       </div>
@@ -343,19 +343,19 @@ export function CloudRouterModal({
                     label="Links / VLANs"
                     helpText="Select one or more links to associate with this cloud router"
                   >
-                    <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3">
+                    <div className="space-y-2 max-h-48 overflow-y-auto border border-fw-secondary rounded-md p-3">
                       {availableLinks.length === 0 ? (
-                        <div className="text-sm text-gray-500">
+                        <div className="text-figma-base text-fw-bodyLight">
                           <p>No links available for this connection</p>
                           {isCrossConnection && (
-                            <p className="text-xs mt-1 text-gray-400">
+                            <p className="text-figma-sm mt-1 text-fw-bodyLight">
                               Cross-connection links need to be loaded separately. Navigate to the selected connection to view its links.
                             </p>
                           )}
                         </div>
                       ) : (
                         availableLinks.map(link => (
-                          <label key={link.id} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                          <label key={link.id} className="flex items-center space-x-2 cursor-pointer hover:bg-fw-wash p-2 rounded">
                             <input
                               type="checkbox"
                               checked={linkIds.includes(link.id)}
@@ -366,12 +366,12 @@ export function CloudRouterModal({
                                   setLinkIds(linkIds.filter(id => id !== link.id));
                                 }
                               }}
-                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                              className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
                             />
                             <div className="flex-1 flex items-center justify-between">
-                              <span className="text-sm text-gray-700">{link.name} (VLAN {link.vlanId})</span>
+                              <span className="text-figma-base text-fw-body">{link.name} (VLAN {link.vlanId})</span>
                               {isCrossConnection && (
-                                <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full flex items-center gap-1">
+                                <span className="text-figma-sm px-2 py-0.5 bg-fw-accent text-fw-link rounded-full flex items-center gap-1">
                                   <ExternalLink className="h-3 w-3" />
                                   External
                                 </span>
@@ -387,19 +387,19 @@ export function CloudRouterModal({
 
               {/* Policies */}
               <div className="md:col-span-2">
-                <h4 className="text-base font-medium text-gray-900 mb-4 flex items-center">
-                  <Settings className="h-4 w-4 text-gray-500 mr-2" />
+                <h4 className="text-base font-medium text-fw-heading tracking-[-0.03em] mb-4 flex items-center">
+                  <Settings className="h-4 w-4 text-fw-bodyLight mr-2" />
                   Policies
                 </h4>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <FormField 
+                  <FormField
                     label="Routing Policy"
                   >
                     <select
                       value={routingPolicy}
                       onChange={(e) => setRoutingPolicy(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                     >
                       <option value="default">Default</option>
                       <option value="backup">Backup</option>
@@ -407,28 +407,28 @@ export function CloudRouterModal({
                       <option value="failover">Failover</option>
                     </select>
                   </FormField>
-                  
-                  <FormField 
+
+                  <FormField
                     label="Security Policy"
                   >
                     <select
                       value={securityPolicy}
                       onChange={(e) => setSecurityPolicy(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                     >
                       <option value="standard">Standard</option>
                       <option value="strict">Strict</option>
                       <option value="custom">Custom</option>
                     </select>
                   </FormField>
-                  
-                  <FormField 
+
+                  <FormField
                     label="QoS Policy"
                   >
                     <select
                       value={qosPolicy}
                       onChange={(e) => setQosPolicy(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                     >
                       <option value="standard">Standard</option>
                       <option value="business-critical">Business Critical</option>
@@ -438,12 +438,12 @@ export function CloudRouterModal({
                   </FormField>
                 </div>
               </div>
-              
+
               {/* Advanced Settings Toggle */}
-              <div className="md:col-span-2 pt-4 border-t border-gray-200">
+              <div className="md:col-span-2 pt-4 border-t border-fw-secondary">
                 <button
                   type="button"
-                  className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center"
+                  className="text-figma-base font-medium text-fw-link hover:text-fw-linkHover flex items-center"
                   onClick={() => setShowAdvanced(!showAdvanced)}
                 >
                   {showAdvanced ? 'Hide Advanced Settings' : 'Show Advanced Settings'}
@@ -457,24 +457,24 @@ export function CloudRouterModal({
                   </svg>
                 </button>
               </div>
-              
+
               {/* Advanced Settings */}
               {showAdvanced && (
-                <div className="md:col-span-2 pt-4 pb-2 space-y-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div className="md:col-span-2 pt-4 pb-2 space-y-6 bg-fw-wash p-4 rounded-lg border border-fw-secondary">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField 
+                    <FormField
                       label="ASN (Autonomous System Number)"
                     >
                       <input
                         type="number"
                         value={asn || ''}
                         onChange={(e) => setAsn(e.target.value ? parseInt(e.target.value) : undefined)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                         placeholder="e.g., 65000"
                       />
                     </FormField>
-                    
-                    <FormField 
+
+                    <FormField
                       label="BGP Enabled"
                     >
                       <div className="flex items-center h-full">
@@ -483,16 +483,16 @@ export function CloudRouterModal({
                             type="checkbox"
                             checked={bgpEnabled}
                             onChange={(e) => setBgpEnabled(e.target.checked)}
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+                            className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                           />
-                          <span className="ml-2 text-sm text-gray-700">Enable BGP routing</span>
+                          <span className="ml-2 text-figma-base text-fw-body">Enable BGP routing</span>
                         </label>
                       </div>
                     </FormField>
                   </div>
-                  
+
                   <div>
-                    <FormField 
+                    <FormField
                       label="Route Filters"
                     >
                       <div className="space-y-2">
@@ -501,10 +501,10 @@ export function CloudRouterModal({
                             type="text"
                             value={routeFilterInput}
                             onChange={(e) => setRouteFilterInput(e.target.value)}
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-2"
+                            className="flex-1 px-3 py-2 border border-fw-secondary rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active mr-2"
                             placeholder="e.g., 10.0.0.0/8"
                           />
-                          <Button 
+                          <Button
                             type="button"
                             variant="outline"
                             size="sm"
@@ -514,16 +514,16 @@ export function CloudRouterModal({
                             Add
                           </Button>
                         </div>
-                        
+
                         {routeFilters.length > 0 ? (
                           <div className="space-y-2 mt-2">
                             {routeFilters.map((filter, index) => (
-                              <div key={index} className="flex items-center justify-between p-2 bg-white rounded-md border border-gray-200">
-                                <span className="text-sm text-gray-700">{filter}</span>
+                              <div key={index} className="flex items-center justify-between p-2 bg-fw-base rounded-md border border-fw-secondary">
+                                <span className="text-figma-base text-fw-body">{filter}</span>
                                 <button
                                   type="button"
                                   onClick={() => handleRemoveRouteFilter(index)}
-                                  className="text-gray-400 hover:text-red-500"
+                                  className="text-fw-bodyLight hover:text-fw-error"
                                 >
                                   <X className="h-4 w-4" />
                                 </button>
@@ -531,7 +531,7 @@ export function CloudRouterModal({
                             ))}
                           </div>
                         ) : (
-                          <p className="text-sm text-gray-500 mt-2">No route filters added</p>
+                          <p className="text-figma-base text-fw-bodyLight mt-2">No route filters added</p>
                         )}
                       </div>
                     </FormField>

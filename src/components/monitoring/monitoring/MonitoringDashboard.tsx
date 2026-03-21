@@ -56,14 +56,14 @@ export function MonitoringDashboard({ connections }: MonitoringDashboardProps) {
         <AsyncBoundary>
           <Suspense fallback={
             <div className="p-8 flex justify-center">
-              <LoadingSpinner size="lg\" text="Loading data..." />
+              <LoadingSpinner size="lg" text="Loading data..." />
             </div>
           }>
             {activeTab === 'overview' && <OverviewTab />}
             {activeTab === 'metrics' && <MetricsTab />}
             {activeTab === 'alerts' && <AlertsTab />}
             {activeTab === 'logs' && <LogsTab />}
-            {activeTab === 'reports' && <ReportingSection selectedConnection="all" timeRange="1h" defaultTab="standard" />}
+            {activeTab === 'reports' && <ReportingSection selectedConnection="all" timeRange="1h" defaultTab="overview" />}
           </Suspense>
         </AsyncBoundary>
       </div>

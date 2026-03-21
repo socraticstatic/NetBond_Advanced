@@ -73,7 +73,7 @@ export function ControlCenter({ connections }: ControlCenterProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="relative min-h-[calc(100vh-16rem)] bg-gray-50 rounded-lg">
+      <div className="relative min-h-[calc(100vh-16rem)] bg-fw-wash rounded-2xl">
         <WidgetGrid
           widgets={widgets}
           activeId={activeId}

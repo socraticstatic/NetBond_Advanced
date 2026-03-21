@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { MarketplaceCategory } from '../../types/connection';
 
 interface CategoryGridProps {
@@ -16,37 +17,68 @@ export function CategoryGrid({
   title = "Categories",
   className = ""
 }: CategoryGridProps) {
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
+
+  const toggleExpand = (categoryId: string) => {
+    setExpandedCategories(prev =>
+      prev.includes(categoryId)
+        ? prev.filter(id => id !== categoryId)
+        : [...prev, categoryId]
+    );
+  };
+
   return (
     <div className={className}>
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">{title}</h2>
-      <div className="grid grid-cols-2 gap-3">
+      <h2 className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mb-4">{title}</h2>
+      <div className="space-y-2">
         {categories.map((category) => {
           const Icon = category.icon;
           const isSelected = selectedCategories.includes(category.id);
-          
+          const isExpanded = expandedCategories.includes(category.id);
+
           return (
-            <button
-              key={category.id}
-              className={`
-                p-3 rounded-lg text-left transition-all duration-200
-                border border-gray-100 hover:shadow-sm hover:border-gray-200
-                ${isSelected ? `bg-${category.color}-50 border-${category.color}-200` : 'bg-white'}
-              `}
-              onClick={() => onCategoryToggle(category.id)}
-            >
-              <div className={`p-2 rounded-lg bg-${category.color}-50 text-${category.color}-600 w-fit mb-2`}>
-                <Icon className="h-5 w-5" />
-              </div>
-              <h3 className="text-sm font-medium text-gray-900">{category.name}</h3>
-              <p className="text-xs text-gray-500 line-clamp-1 mt-1">{category.description}</p>
-              {category.count > 0 && (
-                <div className="mt-2">
-                  <span className={`text-xs font-medium rounded-full px-2 py-0.5 bg-${category.color}-50 text-${category.color}-700`}>
-                    {category.count} item{category.count !== 1 ? 's' : ''}
+            <div key={category.id}>
+              <button
+                className={`
+                  w-full flex items-center text-left gap-3 px-3 py-2 no-rounded border-l-2 transition-all duration-200
+                  ${isSelected
+                    ? 'border-fw-active text-fw-link'
+                    : 'border-transparent text-fw-heading hover:text-fw-body hover:border-fw-secondary'
+                  }
+                `}
+                onClick={() => onCategoryToggle(category.id)}
+              >
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                  isSelected ? 'bg-fw-link text-white' : 'bg-fw-wash text-fw-bodyLight'
+                }`}>
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div className="flex-1 text-left min-w-0">
+                  <h3 className="text-figma-base font-medium">{category.name}</h3>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {category.count > 0 && (
+                    <span className={`text-figma-sm font-medium rounded-full px-2 py-0.5 ${
+                      isSelected ? 'bg-fw-link text-white' : 'bg-fw-neutral text-fw-bodyLight'
+                    }`}>
+                      {category.count}
+                    </span>
+                  )}
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleExpand(category.id);
+                    }}
+                    className="p-0.5 cursor-pointer hover:bg-fw-wash transition-colors"
+                  >
+                    {isExpanded
+                      ? <ChevronDown className="h-4 w-4" />
+                      : <ChevronRight className="h-4 w-4" />
+                    }
                   </span>
                 </div>
-              )}
-            </button>
+              </button>
+            </div>
           );
         })}
       </div>

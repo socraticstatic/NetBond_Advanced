@@ -19,9 +19,9 @@ export function GroupContactsSection({ group }: GroupContactsSectionProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       {/* Primary Contact */}
       {primaryContact && (
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-medium text-gray-900">Primary Contact</h3>
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Primary Contact</h3>
             <Button
               variant="outline"
               size="sm"
@@ -32,21 +32,21 @@ export function GroupContactsSection({ group }: GroupContactsSectionProps) {
           </div>
           <div className="space-y-4">
             <div className="flex items-start">
-              <User className="h-5 w-5 text-gray-400 mt-0.5 mr-3" />
+              <User className="h-5 w-5 text-fw-bodyLight mt-0.5 mr-3" />
               <div>
-                <div className="text-sm font-medium text-gray-900">{primaryContact.name}</div>
-                <div className="text-sm text-gray-500">{primaryContact.role}</div>
+                <div className="text-figma-base font-medium text-fw-heading">{primaryContact.name}</div>
+                <div className="text-figma-base text-fw-bodyLight">{primaryContact.role}</div>
               </div>
             </div>
             <div className="flex items-center">
-              <Mail className="h-5 w-5 text-gray-400 mr-3" />
-              <a href={`mailto:${primaryContact.email}`} className="text-sm text-brand-blue hover:text-brand-darkBlue">
+              <Mail className="h-5 w-5 text-fw-bodyLight mr-3" />
+              <a href={`mailto:${primaryContact.email}`} className="text-figma-base text-fw-link hover:text-fw-linkHover">
                 {primaryContact.email}
               </a>
             </div>
             <div className="flex items-center">
-              <Phone className="h-5 w-5 text-gray-400 mr-3" />
-              <span className="text-sm text-gray-700">{primaryContact.phone}</span>
+              <Phone className="h-5 w-5 text-fw-bodyLight mr-3" />
+              <span className="text-figma-base text-fw-body">{primaryContact.phone}</span>
             </div>
           </div>
         </div>
@@ -54,9 +54,9 @@ export function GroupContactsSection({ group }: GroupContactsSectionProps) {
 
       {/* Primary Address */}
       {primaryAddress && (
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-medium text-gray-900">Primary Address</h3>
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Primary Address</h3>
             <Button
               variant="outline"
               size="sm"
@@ -66,11 +66,11 @@ export function GroupContactsSection({ group }: GroupContactsSectionProps) {
             </Button>
           </div>
           <div className="flex items-start">
-            <Building className="h-5 w-5 text-gray-400 mt-0.5 mr-3" />
+            <Building className="h-5 w-5 text-fw-bodyLight mt-0.5 mr-3" />
             <div>
-              <p className="text-sm text-gray-700">{primaryAddress.street}</p>
-              <p className="text-sm text-gray-700">{primaryAddress.city}, {primaryAddress.state} {primaryAddress.zipCode}</p>
-              <p className="text-sm text-gray-700">{primaryAddress.country}</p>
+              <p className="text-figma-base text-fw-body">{primaryAddress.street}</p>
+              <p className="text-figma-base text-fw-body">{primaryAddress.city}, {primaryAddress.state} {primaryAddress.zipCode}</p>
+              <p className="text-figma-base text-fw-body">{primaryAddress.country}</p>
             </div>
           </div>
         </div>

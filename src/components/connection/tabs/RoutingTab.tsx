@@ -1,4 +1,4 @@
-import { Router, ArrowRight, Network, Lock, Globe } from 'lucide-react';
+import { Share2, ArrowRight, Network, Lock, Globe } from 'lucide-react';
 
 export function RoutingTab() {
   const sections = [
@@ -52,10 +52,10 @@ export function RoutingTab() {
   return (
     <div className="p-6 space-y-6">
       {sections.map((section, sectionIndex) => (
-        <div key={sectionIndex} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-            <h3 className="text-lg font-medium text-gray-900 flex items-center">
-              <Router className="h-5 w-5 text-blue-500 mr-2" />
+        <div key={sectionIndex} className="bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
+          <div className="px-6 py-4 border-b border-fw-secondary bg-fw-wash">
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] flex items-center">
+              <Share2 className="h-5 w-5 text-fw-link mr-2" />
               {section.title}
             </h3>
           </div>
@@ -66,19 +66,19 @@ export function RoutingTab() {
               return (
                 <div
                   key={subIndex}
-                  className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-200 transition-colors"
+                  className="p-4 bg-fw-wash rounded-lg border border-fw-secondary hover:border-fw-active transition-colors"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-white rounded-lg">
-                        <Icon className="h-5 w-5 text-gray-400" />
+                      <div className="p-2 bg-fw-base rounded-lg">
+                        <Icon className="h-5 w-5 text-fw-bodyLight" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-sm font-medium text-gray-900">{subsection.title}</h4>
+                        <h4 className="text-figma-base font-medium text-fw-heading">{subsection.title}</h4>
                       </div>
                     </div>
                     <button 
-                      className="text-sm text-blue-600 hover:text-blue-700 flex items-center"
+                      className="text-figma-base text-fw-link hover:text-fw-linkHover flex items-center"
                       onClick={() => {
                         window.addToast({
                           type: 'info',

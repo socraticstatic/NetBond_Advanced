@@ -7,7 +7,7 @@ interface BudgetTrackerWidgetProps {
 }
 
 export function BudgetTrackerWidget({ connections }: BudgetTrackerWidgetProps) {
-  const totalBilling = connections.reduce((sum, conn) => 
+  const totalBilling = connections.reduce((sum, conn) =>
     sum + (conn.billing?.total || 0), 0
   );
 
@@ -21,25 +21,25 @@ export function BudgetTrackerWidget({ connections }: BudgetTrackerWidgetProps) {
       {/* Budget Progress */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-500">Monthly Budget</span>
-          <span className="text-sm font-medium text-gray-900">{formatCurrency(budget)}</span>
+          <span className="text-figma-base text-fw-bodyLight">Monthly Budget</span>
+          <span className="text-figma-base font-medium text-fw-heading">{formatCurrency(budget)}</span>
         </div>
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-2 bg-fw-neutral rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-300 ${
-              isOverBudget ? 'bg-red-500' :
-              isNearBudget ? 'bg-yellow-500' :
-              'bg-green-500'
+              isOverBudget ? 'bg-fw-error' :
+              isNearBudget ? 'bg-fw-warn' :
+              'bg-fw-success'
             }`}
             style={{ width: `${Math.min(usagePercentage, 100)}%` }}
           />
         </div>
         <div className="flex items-center justify-between mt-2">
-          <span className="text-sm text-gray-500">Used</span>
-          <span className={`text-sm font-medium ${
-            isOverBudget ? 'text-red-600' :
-            isNearBudget ? 'text-yellow-600' :
-            'text-green-600'
+          <span className="text-figma-base text-fw-bodyLight">Used</span>
+          <span className={`text-figma-base font-medium ${
+            isOverBudget ? 'text-fw-error' :
+            isNearBudget ? 'text-fw-warn' :
+            'text-fw-success'
           }`}>
             {formatCurrency(totalBilling)} ({usagePercentage.toFixed(1)}%)
           </span>
@@ -49,14 +49,14 @@ export function BudgetTrackerWidget({ connections }: BudgetTrackerWidgetProps) {
       {/* Budget Status */}
       {(isOverBudget || isNearBudget) && (
         <div className={`p-3 rounded-lg ${
-          isOverBudget ? 'bg-red-50' : 'bg-yellow-50'
+          isOverBudget ? 'bg-fw-error/10' : 'bg-fw-warn/10'
         }`}>
           <div className="flex items-center">
             <AlertTriangle className={`h-4 w-4 mr-2 ${
-              isOverBudget ? 'text-red-500' : 'text-yellow-500'
+              isOverBudget ? 'text-fw-error' : 'text-fw-warn'
             }`} />
-            <span className={`text-sm ${
-              isOverBudget ? 'text-red-700' : 'text-yellow-700'
+            <span className={`text-figma-base ${
+              isOverBudget ? 'text-fw-error' : 'text-fw-warn'
             }`}>
               {isOverBudget
                 ? 'Budget exceeded! Take action now.'
@@ -69,10 +69,10 @@ export function BudgetTrackerWidget({ connections }: BudgetTrackerWidgetProps) {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-2 gap-2">
-        <button className="px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+        <button className="px-3 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
           Adjust Budget
         </button>
-        <button className="px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+        <button className="px-3 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
           Cost Alerts
         </button>
       </div>

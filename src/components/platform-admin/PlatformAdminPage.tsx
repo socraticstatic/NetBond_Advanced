@@ -15,16 +15,16 @@ export function PlatformAdminPage() {
 
   const getStatusBadge = (status: Tenant['status']) => {
     const config = {
-      active: { bg: 'bg-green-100', text: 'text-green-800', icon: CheckCircle },
-      trial: { bg: 'bg-blue-100', text: 'text-blue-800', icon: Clock },
-      suspended: { bg: 'bg-yellow-100', text: 'text-yellow-800', icon: AlertCircle },
-      archived: { bg: 'bg-gray-100', text: 'text-gray-800', icon: AlertCircle },
+      active: { bg: 'bg-fw-successLight', text: 'text-fw-success', icon: CheckCircle },
+      trial: { bg: 'bg-fw-accent', text: 'text-fw-linkHover', icon: Clock },
+      suspended: { bg: 'bg-fw-warnLight', text: 'text-fw-warn', icon: AlertCircle },
+      archived: { bg: 'bg-fw-neutral', text: 'text-fw-heading', icon: AlertCircle },
     }[status];
 
     const Icon = config.icon;
 
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}>
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-lg text-figma-sm font-medium ${config.bg} ${config.text}`}>
         <Icon className="h-3 w-3 mr-1" />
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
@@ -33,13 +33,13 @@ export function PlatformAdminPage() {
 
   const getPlanBadge = (plan: Tenant['plan']) => {
     const config = {
-      starter: { bg: 'bg-gray-100', text: 'text-gray-800' },
-      professional: { bg: 'bg-blue-100', text: 'text-blue-800' },
-      enterprise: { bg: 'bg-purple-100', text: 'text-purple-800' },
+      starter: { bg: 'bg-fw-neutral', text: 'text-fw-heading' },
+      professional: { bg: 'bg-fw-accent', text: 'text-fw-linkHover' },
+      enterprise: { bg: 'bg-fw-wash', text: 'text-fw-purple' },
     }[plan];
 
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}>
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-lg text-figma-sm font-medium ${config.bg} ${config.text}`}>
         {plan.charAt(0).toUpperCase() + plan.slice(1)}
       </span>
     );
@@ -52,8 +52,8 @@ export function PlatformAdminPage() {
       sortable: true,
       render: (tenant: Tenant) => (
         <div>
-          <div className="text-sm font-medium text-fw-heading">{tenant.name}</div>
-          <div className="text-xs text-fw-bodyLight">{tenant.subdomain}.att-netbond.com</div>
+          <div className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{tenant.name}</div>
+          <div className="text-figma-sm font-medium text-fw-bodyLight">{tenant.subdomain}.att-netbond.com</div>
         </div>
       ),
     },
@@ -75,8 +75,8 @@ export function PlatformAdminPage() {
       sortable: true,
       render: (tenant: Tenant) => (
         <div>
-          <div className="text-sm text-fw-body">{tenant.adminName}</div>
-          <div className="text-xs text-fw-bodyLight">{tenant.adminEmail}</div>
+          <div className="text-figma-base font-medium text-fw-body">{tenant.adminName}</div>
+          <div className="text-figma-sm font-medium text-fw-bodyLight">{tenant.adminEmail}</div>
         </div>
       ),
     },
@@ -85,7 +85,7 @@ export function PlatformAdminPage() {
       label: 'Users',
       sortable: true,
       render: (tenant: Tenant) => (
-        <div className="text-sm text-fw-body">{tenant.userCount}</div>
+        <div className="text-figma-base font-medium text-fw-body">{tenant.userCount}</div>
       ),
     },
     {
@@ -93,7 +93,7 @@ export function PlatformAdminPage() {
       label: 'Connections',
       sortable: true,
       render: (tenant: Tenant) => (
-        <div className="text-sm text-fw-body">{tenant.connectionCount}</div>
+        <div className="text-figma-base font-medium text-fw-body">{tenant.connectionCount}</div>
       ),
     },
     {
@@ -101,7 +101,7 @@ export function PlatformAdminPage() {
       label: 'Created',
       sortable: true,
       render: (tenant: Tenant) => (
-        <div className="text-sm text-fw-bodyLight">
+        <div className="text-figma-sm font-medium text-fw-bodyLight">
           {new Date(tenant.createdAt).toLocaleDateString()}
         </div>
       ),
@@ -154,64 +154,64 @@ export function PlatformAdminPage() {
     <div className="space-y-6">
       {/* Overview Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-fw-bodyLight">Total Tenants</p>
-              <p className="text-2xl font-bold text-fw-heading mt-1">{mockTenants.length}</p>
+              <p className="text-figma-sm font-medium text-fw-bodyLight">Total Tenants</p>
+              <p className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mt-1">{mockTenants.length}</p>
             </div>
-            <CheckCircle className="h-8 w-8 text-green-500" />
+            <CheckCircle className="h-8 w-8 text-fw-success" />
           </div>
         </div>
 
-        <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-fw-bodyLight">Active Tenants</p>
-              <p className="text-2xl font-bold text-fw-heading mt-1">
+              <p className="text-figma-sm font-medium text-fw-bodyLight">Active Tenants</p>
+              <p className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mt-1">
                 {mockTenants.filter((t) => t.status === 'active').length}
               </p>
             </div>
-            <CheckCircle className="h-8 w-8 text-brand-blue" />
+            <CheckCircle className="h-8 w-8 text-fw-link" />
           </div>
         </div>
 
-        <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-fw-bodyLight">Total Users</p>
-              <p className="text-2xl font-bold text-fw-heading mt-1">
+              <p className="text-figma-sm font-medium text-fw-bodyLight">Total Users</p>
+              <p className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mt-1">
                 {mockTenants.reduce((sum, t) => sum + t.userCount, 0)}
               </p>
             </div>
-            <CheckCircle className="h-8 w-8 text-purple-500" />
+            <CheckCircle className="h-8 w-8 text-fw-purple" />
           </div>
         </div>
 
-        <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-fw-bodyLight">Total Connections</p>
-              <p className="text-2xl font-bold text-fw-heading mt-1">
+              <p className="text-figma-sm font-medium text-fw-bodyLight">Total Connections</p>
+              <p className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mt-1">
                 {mockTenants.reduce((sum, t) => sum + t.connectionCount, 0)}
               </p>
             </div>
-            <CheckCircle className="h-8 w-8 text-orange-500" />
+            <CheckCircle className="h-8 w-8 text-fw-warn" />
           </div>
         </div>
       </div>
 
       {/* Search and Controls */}
-      <div className="bg-fw-base p-4 rounded-lg border border-fw-secondary">
+      <div className="bg-fw-base p-4 rounded-2xl border border-fw-secondary">
         <div className="flex items-center justify-between gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
             <input
               type="text"
               placeholder="Search tenants..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+              className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg text-figma-base font-medium text-fw-heading tracking-[-0.03em] placeholder:text-fw-bodyLight focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             />
           </div>
           <div className="flex items-center space-x-4">
@@ -235,7 +235,7 @@ export function PlatformAdminPage() {
           <div className="mt-4 pt-4 border-t border-fw-secondary">
             <div className="grid grid-cols-2 gap-6">
               <div>
-                <h4 className="text-sm font-medium text-fw-heading mb-2">Status</h4>
+                <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">Status</h4>
                 <div className="space-y-2">
                   {['active', 'trial', 'suspended', 'archived'].map((status) => (
                     <label key={status} className="flex items-center">
@@ -251,9 +251,9 @@ export function PlatformAdminPage() {
                             );
                           }
                         }}
-                        className="h-4 w-4 text-brand-blue rounded border-gray-300"
+                        className="h-4 w-4 text-fw-active rounded border-fw-secondary"
                       />
-                      <span className="ml-2 text-sm text-fw-body capitalize">
+                      <span className="ml-2 text-figma-base font-medium text-fw-body capitalize">
                         {status}
                       </span>
                     </label>
@@ -262,7 +262,7 @@ export function PlatformAdminPage() {
               </div>
 
               <div>
-                <h4 className="text-sm font-medium text-fw-heading mb-2">Plan</h4>
+                <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">Plan</h4>
                 <div className="space-y-2">
                   {['starter', 'professional', 'enterprise'].map((plan) => (
                     <label key={plan} className="flex items-center">
@@ -276,9 +276,9 @@ export function PlatformAdminPage() {
                             setSelectedPlans(selectedPlans.filter((p) => p !== plan));
                           }
                         }}
-                        className="h-4 w-4 text-brand-blue rounded border-gray-300"
+                        className="h-4 w-4 text-fw-active rounded border-fw-secondary"
                       />
-                      <span className="ml-2 text-sm text-fw-body capitalize">
+                      <span className="ml-2 text-figma-base font-medium text-fw-body capitalize">
                         {plan}
                       </span>
                     </label>
@@ -291,7 +291,7 @@ export function PlatformAdminPage() {
       </div>
 
       {/* Tenants Table */}
-      <div className="bg-fw-base rounded-lg border border-fw-secondary">
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary">
         <BaseTable
           columns={columns}
           data={filteredTenants}

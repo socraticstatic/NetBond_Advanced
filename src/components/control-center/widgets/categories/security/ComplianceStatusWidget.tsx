@@ -34,20 +34,20 @@ export function ComplianceStatusWidget({ connections }: ComplianceStatusWidgetPr
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <Shield className="h-5 w-5 text-green-500 mr-2" />
-          <span className="text-sm font-medium text-gray-900">Compliance Status</span>
+          <Shield className="h-5 w-5 text-fw-success mr-2" />
+          <span className="text-figma-base font-medium text-fw-heading">Compliance Status</span>
         </div>
       </div>
 
       <div className="space-y-3">
         {complianceFrameworks.map((framework) => (
-          <div key={framework.name} className="p-3 bg-gray-50 rounded-lg">
+          <div key={framework.name} className="p-3 bg-fw-wash rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-900">{framework.name}</span>
-              <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+              <span className="text-figma-base font-medium text-fw-heading">{framework.name}</span>
+              <span className={`px-2 py-1 text-figma-sm font-medium rounded-full ${
                 framework.status === 'compliant'
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-yellow-100 text-yellow-800'
+                  ? 'bg-green-50 text-fw-success'
+                  : 'bg-fw-warn/10 text-fw-warn'
               }`}>
                 {framework.status === 'compliant' ? (
                   <Check className="h-3 w-3 inline mr-1" />
@@ -57,18 +57,18 @@ export function ComplianceStatusWidget({ connections }: ComplianceStatusWidgetPr
                 {framework.status.charAt(0).toUpperCase() + framework.status.slice(1)}
               </span>
             </div>
-            <div className="flex items-center justify-between text-xs text-gray-500">
+            <div className="flex items-center justify-between text-figma-sm text-fw-bodyLight">
               <div className="flex items-center">
                 <Clock className="h-3 w-3 mr-1" />
                 Next audit: {framework.nextAudit}
               </div>
-              <span className="font-medium text-gray-700">{framework.score}%</span>
+              <span className="font-medium text-fw-body">{framework.score}%</span>
             </div>
           </div>
         ))}
       </div>
 
-      <button className="w-full px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+      <button className="w-full px-4 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
         View Compliance Reports
       </button>
     </div>

@@ -41,16 +41,16 @@ export function SmartAssistant() {
 
       {/* Assistant Panel */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 mb-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
+        <div className="absolute bottom-16 right-0 mb-2 w-80 bg-fw-base rounded-2xl shadow-xl border border-fw-secondary overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between p-3 border-b border-gray-200 bg-brand-lightBlue">
+          <div className="flex items-center justify-between p-3 border-b border-fw-secondary bg-fw-accent">
             <div className="flex items-center">
-              <Zap className="h-4 w-4 text-brand-blue mr-2" />
-              <h3 className="text-sm font-medium text-gray-900">NetBond Assistant</h3>
+              <Zap className="h-4 w-4 text-fw-link mr-2" />
+              <h3 className="text-figma-base font-medium text-fw-heading">NetBond Assistant</h3>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 text-gray-400 hover:text-gray-500 rounded-full"
+              className="p-1 text-fw-bodyLight hover:text-fw-body rounded-full"
               aria-label="Close assistant"
             >
               <X className="h-4 w-4" />
@@ -58,17 +58,17 @@ export function SmartAssistant() {
           </div>
 
           {/* Content */}
-          <div className="p-3 h-64 overflow-y-auto bg-gray-50">
-            <div className="p-4 bg-white rounded-lg border border-gray-200">
-              <p className="text-sm">
+          <div className="p-3 h-64 overflow-y-auto bg-fw-wash">
+            <div className="p-4 bg-fw-base rounded-lg border border-fw-secondary">
+              <p className="text-figma-base font-medium text-fw-body">
                 How can I help you with your network connections today?
               </p>
             </div>
           </div>
 
           {/* Input */}
-          <div className="p-3 border-t border-gray-200">
-            <div className="relative flex items-center bg-gray-50 rounded-full border border-gray-200">
+          <div className="p-3 border-t border-fw-secondary">
+            <div className="relative flex items-center bg-fw-wash rounded-full border border-fw-secondary">
               <input
                 ref={inputRef}
                 type="text"
@@ -76,12 +76,12 @@ export function SmartAssistant() {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Type your question..."
-                className="flex-1 py-2 pl-4 pr-10 bg-transparent border-none focus:outline-none text-sm"
+                className="flex-1 py-2 pl-4 pr-10 bg-transparent border-none focus:outline-none text-figma-base"
               />
               <button
                 onClick={handleSendMessage}
                 disabled={!message.trim()}
-                className="absolute right-2 p-1.5 rounded-full text-white bg-brand-blue hover:bg-brand-darkBlue disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="absolute right-2 p-1.5 rounded-full text-white bg-fw-primary hover:bg-fw-primary/90 disabled:bg-fw-neutral disabled:cursor-not-allowed"
                 aria-label="Send message"
               >
                 <Send className="h-3.5 w-3.5" />

@@ -46,7 +46,7 @@ export function AsyncBoundary({
       <h3 className="text-lg font-medium text-red-800 mb-2">
         Unable to load content
       </h3>
-      <p className="text-sm text-red-600 text-center max-w-md mb-4">
+      <p className="text-figma-base text-red-600 text-center max-w-md mb-4">
         We encountered a problem loading this content. Please try again later.
       </p>
     </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Router, Link2, Box } from 'lucide-react';
+import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Share2, Link2, Box } from 'lucide-react';
 import { Connection } from '../../../types';
 import { ConnectionVisualization } from '../ConnectionVisualization';
 import { IPEInfoTooltip } from '../../common/IPEInfoTooltip';
@@ -32,51 +32,54 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
 
       {/* Network Architecture Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+        <div className="bg-fw-wash rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center mb-2">
-                <Router className="h-5 w-5 text-gray-600 mr-2" />
-                <p className="text-sm font-medium text-gray-600">Cloud Routers</p>
+                <Share2 className="h-5 w-5 text-fw-bodyLight mr-2" />
+                <p className="text-figma-lg font-bold text-fw-heading">Cloud Routers</p>
               </div>
-              <p className="text-3xl font-bold text-gray-900">{connection.cloudRouterCount || cloudRoutersCount}</p>
-              <p className="text-xs text-gray-500 mt-1">Virtual routing instances</p>
+              <p className="text-figma-xl font-bold text-fw-heading">{connection.cloudRouterCount || cloudRoutersCount}</p>
+              <p className="text-figma-sm text-fw-bodyLight mt-1">Virtual routing instances</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+        <div className="bg-fw-wash rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center mb-2">
-                <Link2 className="h-5 w-5 text-gray-600 mr-2" />
-                <p className="text-sm font-medium text-gray-600">Links (VLANs)</p>
+                <Link2 className="h-5 w-5 text-fw-bodyLight mr-2" />
+                <p className="text-figma-lg font-bold text-fw-heading">Links (VLANs)</p>
               </div>
-              <p className="text-3xl font-bold text-gray-900">{connection.linkCount || linksCount}</p>
-              <p className="text-xs text-gray-500 mt-1">Virtual network segments</p>
+              <p className="text-figma-xl font-bold text-fw-heading">{connection.linkCount || linksCount}</p>
+              <p className="text-figma-sm text-fw-bodyLight mt-1">Virtual network segments</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+        <div className="bg-fw-wash rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center mb-2">
-                <Box className="h-5 w-5 text-gray-600 mr-2" />
-                <p className="text-sm font-medium text-gray-600">VNFs</p>
+                <Box className="h-5 w-5 text-fw-bodyLight mr-2" />
+                <p className="text-figma-lg font-bold text-fw-heading">VNFs</p>
               </div>
-              <p className="text-3xl font-bold text-gray-900">{vnfsCount}</p>
-              <p className="text-xs text-gray-500 mt-1">Virtual network functions</p>
+              <p className="text-figma-xl font-bold text-fw-heading">{vnfsCount}</p>
+              <p className="text-figma-sm text-fw-bodyLight mt-1">Virtual network functions</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Network Visualization */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-        <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">Network Topology</h3>
-          <p className="text-sm text-gray-500">Interactive visualization of your network connection</p>
+      <div className="bg-fw-wash rounded-lg overflow-hidden">
+        <div className="px-6 py-4 border-b border-fw-secondary">
+          <div className="flex items-center gap-2">
+            <Network className="h-6 w-6 text-fw-heading" />
+            <h3 className="text-figma-lg font-medium text-fw-heading">Network Topology</h3>
+          </div>
+          <p className="text-figma-base text-fw-bodyLight mt-1">Interactive visualization of your network connection</p>
         </div>
         <div className="h-[400px] relative">
           <ConnectionVisualization connection={connection} />
@@ -86,58 +89,58 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
       {/* Connection Configuration */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Connection Information */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-fw-wash rounded-lg p-6">
           <div className="flex items-center mb-4">
-            <Network className="h-5 w-5 text-gray-600 mr-2" />
-            <h3 className="text-lg font-medium text-gray-900">Connection Information</h3>
+            <Network className="h-5 w-5 text-fw-bodyLight mr-2" />
+            <h3 className="text-figma-lg font-medium text-fw-heading">Connection Information</h3>
           </div>
-          
+
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm text-gray-700">Status</span>
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                connection.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+            <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+              <span className="text-figma-base text-fw-body">Status</span>
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium ${
+                connection.status === 'Active' ? 'bg-green-50 text-fw-success' : 'bg-fw-neutral text-fw-heading'
               }`}>
                 {connection.status}
               </span>
             </div>
-            
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm text-gray-700">Type</span>
-              <span className="text-sm font-medium text-gray-900">{connection.type}</span>
+
+            <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+              <span className="text-figma-base text-fw-body">Type</span>
+              <span className="text-figma-base font-medium text-fw-heading">{connection.type}</span>
             </div>
-            
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm text-gray-700">Bandwidth</span>
-              <span className="text-sm font-medium text-gray-900">{currentBandwidth}</span>
+
+            <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+              <span className="text-figma-base text-fw-body">Bandwidth</span>
+              <span className="text-figma-base font-medium text-fw-heading">{currentBandwidth}</span>
             </div>
-            
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm text-gray-700">Location</span>
-              <span className="text-sm font-medium text-gray-900">{connection.location}</span>
+
+            <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+              <span className="text-figma-base text-fw-body">Location</span>
+              <span className="text-figma-base font-medium text-fw-heading">{connection.location}</span>
             </div>
-            
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm text-gray-700">Cloud Provider</span>
-              <span className="text-sm font-medium text-gray-900">{connection.provider || 'N/A'}</span>
+
+            <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+              <span className="text-figma-base text-fw-body">Cloud Provider</span>
+              <span className="text-figma-base font-medium text-fw-heading">{connection.provider || 'N/A'}</span>
             </div>
 
             {connection.primaryIPE && (
               <>
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg border border-fw-secondary">
                   <div className="flex items-center">
-                    <Server className="h-4 w-4 text-blue-600 mr-2" />
-                    <span className="text-sm text-gray-700">Primary IPE</span>
+                    <Server className="h-4 w-4 text-fw-link mr-2" />
+                    <span className="text-figma-base text-fw-body">Primary IPE</span>
                   </div>
-                  <span className="text-sm font-medium text-gray-900">{connection.primaryIPE}</span>
+                  <span className="text-figma-base font-medium text-fw-heading">{connection.primaryIPE}</span>
                 </div>
                 {connection.secondaryIPE && (
                   <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
                     <div className="flex items-center">
-                      <Server className="h-4 w-4 text-green-600 mr-2" />
-                      <span className="text-sm text-gray-700">Secondary IPE (Redundant)</span>
+                      <Server className="h-4 w-4 text-fw-success mr-2" />
+                      <span className="text-figma-base text-fw-body">Secondary IPE (Redundant)</span>
                     </div>
-                    <span className="text-sm font-medium text-gray-900">{connection.secondaryIPE}</span>
+                    <span className="text-figma-base font-medium text-fw-heading">{connection.secondaryIPE}</span>
                   </div>
                 )}
               </>
@@ -145,9 +148,9 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
           </div>
 
           {connection.primaryIPE && (
-            <div className="mt-4 pt-4 border-t border-gray-100 flex items-start space-x-2">
+            <div className="mt-4 pt-4 border-t border-fw-secondary flex items-start space-x-2">
               <IPEInfoTooltip variant="connection" className="flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-gray-500">
+              <p className="text-figma-base text-fw-bodyLight">
                 <strong>IPE (Infrastructure Provider Edge Router)</strong> is the physical router at the data center where your virtual connection runs. It provides the actual network capacity and cloud provider on-ramps.
               </p>
             </div>
@@ -155,23 +158,23 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
         </div>
 
         {/* Network Architecture Explanation */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-fw-wash rounded-lg p-6">
           <div className="flex items-center mb-4">
-            <Network className="h-5 w-5 text-gray-600 mr-2" />
-            <h3 className="text-lg font-medium text-gray-900">Network Architecture</h3>
+            <Network className="h-5 w-5 text-fw-bodyLight mr-2" />
+            <h3 className="text-figma-lg font-medium text-fw-heading">Network Architecture</h3>
           </div>
 
           <div className="space-y-4">
-            <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+            <div className="p-4 bg-fw-accent rounded-lg border border-fw-active">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
-                    <Router className="h-4 w-4 text-white" />
+                  <div className="w-8 h-8 rounded-full bg-fw-bodyLight flex items-center justify-center">
+                    <Share2 className="h-4 w-4 text-white" />
                   </div>
                 </div>
                 <div className="ml-3">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-1">Cloud Routers</h4>
-                  <p className="text-sm text-gray-600">
+                  <h4 className="text-figma-base font-semibold text-fw-heading tracking-[-0.03em] mb-1">Cloud Routers</h4>
+                  <p className="text-figma-base text-fw-bodyLight">
                     Virtual routing instances that provide connectivity to cloud providers and other networks. Each cloud router can be associated with multiple links.
                   </p>
                 </div>
@@ -179,19 +182,19 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
             </div>
 
             <div className="flex items-center justify-center">
-              <div className="text-gray-400">↓</div>
+              <div className="text-fw-bodyLight">↓</div>
             </div>
 
             <div className="p-4 bg-green-50 rounded-lg border border-green-100">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-fw-success flex items-center justify-center">
                     <Link2 className="h-4 w-4 text-white" />
                   </div>
                 </div>
                 <div className="ml-3">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-1">Links (VLANs)</h4>
-                  <p className="text-sm text-gray-600">
+                  <h4 className="text-figma-base font-semibold text-fw-heading tracking-[-0.03em] mb-1">Links (VLANs)</h4>
+                  <p className="text-figma-base text-fw-bodyLight">
                     Virtual network segments that connect to one or more cloud routers. Links provide Layer 2/3 connectivity and can carry traffic for multiple VNFs.
                   </p>
                 </div>
@@ -199,19 +202,19 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
             </div>
 
             <div className="flex items-center justify-center">
-              <div className="text-gray-400">↓</div>
+              <div className="text-fw-bodyLight">↓</div>
             </div>
 
-            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="p-4 bg-fw-wash rounded-lg border border-fw-secondary">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-fw-bodyLight flex items-center justify-center">
                     <Box className="h-4 w-4 text-white" />
                   </div>
                 </div>
                 <div className="ml-3">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-1">Virtual Network Functions</h4>
-                  <p className="text-sm text-gray-600">
+                  <h4 className="text-figma-base font-semibold text-fw-heading tracking-[-0.03em] mb-1">Virtual Network Functions</h4>
+                  <p className="text-figma-base text-fw-bodyLight">
                     Software-based network services (firewalls, load balancers, SD-WAN) that run on one or more links. VNFs provide advanced networking capabilities.
                   </p>
                 </div>
@@ -219,115 +222,115 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
             </div>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <p className="text-xs text-gray-500">
+          <div className="mt-4 pt-4 border-t border-fw-secondary">
+            <p className="text-figma-sm text-fw-bodyLight">
               <strong>Hierarchy:</strong> Connection → Cloud Routers ← Links (many-to-many) → VNFs (many-to-many)
             </p>
           </div>
         </div>
-        
+
         {/* Security Overview */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-fw-wash rounded-lg p-6">
           <div className="flex items-center mb-4">
-            <Shield className="h-5 w-5 text-gray-600 mr-2" />
-            <h3 className="text-lg font-medium text-gray-900">Security Overview</h3>
+            <Shield className="h-5 w-5 text-fw-bodyLight mr-2" />
+            <h3 className="text-figma-lg font-medium text-fw-heading">Security Overview</h3>
           </div>
-          
+
           <div className="space-y-4">
             {Object.entries(connection.security || {}).map(([key, value]) => (
-              <div key={key} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <span className="text-sm text-gray-700">
+              <div key={key} className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
+                <span className="text-figma-base text-fw-body">
                   {key.replace(/([A-Z])/g, ' $1').trim()}
                 </span>
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  value === true ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium ${
+                  value === true ? 'bg-green-50 text-fw-success' : 'bg-fw-accent text-fw-linkHover'
                 }`}>
                   {typeof value === 'boolean' ? (value ? 'Enabled' : 'Disabled') : value}
                 </span>
               </div>
             ))}
           </div>
-          
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <p className="text-sm text-gray-500">
+
+          <div className="mt-4 pt-4 border-t border-fw-secondary">
+            <p className="text-figma-base text-fw-bodyLight">
               Security features protect your data during transit through encryption, firewall rules, and DDoS protection mechanisms.
             </p>
           </div>
         </div>
-        
+
         {/* Performance Metrics */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-fw-wash rounded-lg p-6">
           <div className="flex items-center mb-4">
-            <Activity className="h-5 w-5 text-gray-600 mr-2" />
-            <h3 className="text-lg font-medium text-gray-900">Performance Metrics</h3>
+            <Activity className="h-5 w-5 text-fw-bodyLight mr-2" />
+            <h3 className="text-figma-lg font-medium text-fw-heading">Performance Metrics</h3>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-3 bg-gray-50 rounded-lg">
+            <div className="p-3 bg-fw-wash rounded-lg">
               <div className="flex flex-col">
-                <span className="text-xs text-gray-500 mb-1">Latency</span>
-                <span className="text-lg font-medium text-gray-900">{connection.performance?.latency || 'N/A'}</span>
+                <span className="text-figma-sm text-fw-bodyLight mb-1">Latency</span>
+                <span className="text-figma-lg font-medium text-fw-heading">{connection.performance?.latency || 'N/A'}</span>
               </div>
             </div>
-            
-            <div className="p-3 bg-gray-50 rounded-lg">
+
+            <div className="p-3 bg-fw-wash rounded-lg">
               <div className="flex flex-col">
-                <span className="text-xs text-gray-500 mb-1">Packet Loss</span>
-                <span className="text-lg font-medium text-gray-900">{connection.performance?.packetLoss || 'N/A'}</span>
+                <span className="text-figma-sm text-fw-bodyLight mb-1">Packet Loss</span>
+                <span className="text-figma-lg font-medium text-fw-heading">{connection.performance?.packetLoss || 'N/A'}</span>
               </div>
             </div>
-            
-            <div className="p-3 bg-gray-50 rounded-lg">
+
+            <div className="p-3 bg-fw-wash rounded-lg">
               <div className="flex flex-col">
-                <span className="text-xs text-gray-500 mb-1">Uptime</span>
-                <span className="text-lg font-medium text-gray-900">{connection.performance?.uptime || 'N/A'}</span>
+                <span className="text-figma-sm text-fw-bodyLight mb-1">Uptime</span>
+                <span className="text-figma-lg font-medium text-fw-heading">{connection.performance?.uptime || 'N/A'}</span>
               </div>
             </div>
-            
-            <div className="p-3 bg-gray-50 rounded-lg">
+
+            <div className="p-3 bg-fw-wash rounded-lg">
               <div className="flex flex-col">
-                <span className="text-xs text-gray-500 mb-1">Bandwidth Utilization</span>
-                <span className="text-lg font-medium text-gray-900">{connection.performance?.bandwidthUtilization || 0}%</span>
+                <span className="text-figma-sm text-fw-bodyLight mb-1">Bandwidth Utilization</span>
+                <span className="text-figma-lg font-medium text-fw-heading">{connection.performance?.bandwidthUtilization || 0}%</span>
               </div>
             </div>
           </div>
-          
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <p className="text-sm text-gray-500">
+
+          <div className="mt-4 pt-4 border-t border-fw-secondary">
+            <p className="text-figma-base text-fw-bodyLight">
               Performance metrics are updated every 5 minutes. These metrics help you monitor the health and efficiency of your connection.
             </p>
           </div>
         </div>
-        
+
         {/* Connection Features */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-fw-wash rounded-lg p-6">
           <div className="flex items-center mb-4">
-            <Server className="h-5 w-5 text-gray-600 mr-2" />
-            <h3 className="text-lg font-medium text-gray-900">Connection Features</h3>
+            <Server className="h-5 w-5 text-fw-bodyLight mr-2" />
+            <h3 className="text-figma-lg font-medium text-fw-heading">Connection Features</h3>
           </div>
-          
+
           <div className="grid grid-cols-1 gap-4">
             {Object.entries(connection.features || {}).map(([key, value]) => (
-              <div key={key} className="flex items-center p-3 bg-gray-50 rounded-lg">
+              <div key={key} className="flex items-center p-3 bg-fw-wash rounded-lg">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                    <Server className="h-4 w-4 text-blue-600" />
+                  <div className="w-8 h-8 rounded-full bg-fw-accent flex items-center justify-center">
+                    <Server className="h-4 w-4 text-fw-link" />
                   </div>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-figma-base font-medium text-fw-heading">
                     {key.replace(/([A-Z])/g, ' $1').trim()}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-figma-base text-fw-bodyLight">
                     {typeof value === 'boolean' ? (value ? 'Enabled' : 'Disabled') : value}
                   </p>
                 </div>
               </div>
             ))}
           </div>
-          
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <p className="text-sm text-gray-500">
+
+          <div className="mt-4 pt-4 border-t border-fw-secondary">
+            <p className="text-figma-base text-fw-bodyLight">
               Connection features define capabilities like redundancy, load balancing, and auto-scaling that enhance your network's resilience and performance.
             </p>
           </div>

@@ -7,7 +7,7 @@ interface ControlCenterManagerProps {
 
 export function ControlCenterManager({ connections }: ControlCenterManagerProps) {
   return (
-    <div className="relative min-h-[calc(100vh-16rem)] bg-gray-50 rounded-lg">
+    <div className="relative min-h-[calc(100vh-16rem)] bg-fw-wash rounded-lg">
       <ControlCenter connections={connections} />
     </div>
   );

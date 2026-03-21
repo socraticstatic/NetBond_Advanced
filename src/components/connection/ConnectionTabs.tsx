@@ -17,25 +17,25 @@ export function ConnectionTabs({ activeTab, onTabChange, connectionCount, groupC
   ];
 
   return (
-    <div className="border-b border-gray-200">
+    <div className="border-b border-fw-secondary">
       <nav className="-mb-px flex space-x-8" data-onboarding="marketplace">
         {orderedTabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={`
-              flex items-center whitespace-nowrap pt-1 pb-2 px-1 border-b-2 font-medium text-sm no-rounded
+              flex items-center whitespace-nowrap pt-1 pb-2 px-1 border-b-2 font-medium text-figma-base no-rounded tracking-[-0.03em]
               ${activeTab === tab.id
                 ? 'border-fw-active text-fw-link'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                : 'border-transparent text-fw-heading hover:text-fw-body hover:border-fw-secondary'
               }
             `}
           >
             {tab.icon}
             <span>{tab.label}</span>
             {tab.count !== undefined && (
-              <span className={`ml-2 rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                activeTab === tab.id ? 'bg-fw-accent text-fw-link' : 'bg-gray-100 text-gray-900'
+              <span className={`ml-2 inline-flex items-center justify-center min-w-[20px] h-5 rounded-full px-1.5 text-[10px] font-medium ${
+                activeTab === tab.id ? 'bg-fw-primary text-white' : 'bg-fw-neutral text-fw-heading'
               }`}>
                 {tab.count}
               </span>

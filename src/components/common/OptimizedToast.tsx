@@ -47,7 +47,7 @@ const ToastItem = memo(({
       <div className="flex justify-between items-start">
         <div className="flex-1">
           <h4 className="font-medium">{toast.title}</h4>
-          <p className="text-sm mt-1">{toast.message}</p>
+          <p className="text-figma-base mt-1">{toast.message}</p>
         </div>
         <button
           onClick={() => onRemove(toast.id)}

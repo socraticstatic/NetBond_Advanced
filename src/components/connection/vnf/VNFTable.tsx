@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Router as RouterIcon, Network, Settings, Shield, Globe, CreditCard as Edit2, Trash2, Eye, ExternalLink, Scale, AlertTriangle, Zap, MapPin, Gauge } from 'lucide-react';
+import { Share2 as RouterIcon, Network, Settings, Shield, Globe, CreditCard as Edit2, Trash2, Eye, ExternalLink, Scale, AlertTriangle, Zap, MapPin, Gauge } from 'lucide-react';
 import { VNF } from '../../../types/vnf';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { CloudRouter } from '../../../types/cloudrouter';
@@ -33,16 +33,16 @@ export function VNFTable({
     const Icon = getVNFTypeIcon(type);
     const info = getVNFTypeInfo(type);
     const colorMap: Record<string, string> = {
-      red: 'text-red-500',
-      purple: 'text-gray-600',
-      blue: 'text-gray-600',
-      green: 'text-emerald-600',
-      indigo: 'text-gray-600',
-      orange: 'text-amber-600',
-      yellow: 'text-amber-600',
-      gray: 'text-gray-500'
+      red: 'text-fw-error',
+      purple: 'text-fw-purple',
+      blue: 'text-fw-link',
+      green: 'text-fw-success',
+      indigo: 'text-fw-link',
+      orange: 'text-fw-warn',
+      yellow: 'text-fw-warn',
+      gray: 'text-fw-bodyLight'
     };
-    const colorClass = colorMap[info.color] || 'text-gray-500';
+    const colorClass = colorMap[info.color] || 'text-fw-bodyLight';
     return <Icon className={`h-5 w-5 ${colorClass}`} />;
   };
 
@@ -54,15 +54,15 @@ export function VNFTable({
   const getStatusColor = (status: VNF['status']) => {
     switch(status) {
       case 'active':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-50 text-fw-success';
       case 'inactive':
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-fw-neutral text-fw-heading';
       case 'provisioning':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-fw-accent text-fw-linkHover';
       case 'error':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-50 text-fw-error';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-fw-neutral text-fw-heading';
     }
   };
 
@@ -82,11 +82,11 @@ export function VNFTable({
         <div className="flex items-center">
           <div className="flex-shrink-0">
             <div className={`p-2 rounded-lg ${
-              vnf.type === 'firewall' ? 'bg-red-100' :
-              vnf.type === 'sdwan' ? 'bg-gray-100' :
-              vnf.type === 'router' ? 'bg-blue-100' :
-              vnf.type === 'vnat' ? 'bg-green-100' :
-              'bg-gray-100'
+              vnf.type === 'firewall' ? 'bg-red-50' :
+              vnf.type === 'sdwan' ? 'bg-fw-neutral' :
+              vnf.type === 'router' ? 'bg-fw-accent' :
+              vnf.type === 'vnat' ? 'bg-green-50' :
+              'bg-fw-neutral'
             }`}>
               {getTypeIcon(vnf.type)}
             </div>
@@ -94,11 +94,11 @@ export function VNFTable({
           <div className="ml-3">
             <button
               onClick={() => navigate(`/vnfs/${vnf.id}`)}
-              className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline text-left"
+              className="text-figma-base font-medium text-fw-link hover:text-fw-linkHover hover:underline text-left"
             >
               {vnf.name}
             </button>
-            <div className="text-xs text-gray-500">{vnf.description}</div>
+            <div className="text-figma-sm text-fw-bodyLight">{vnf.description}</div>
           </div>
         </div>
       ),
@@ -110,7 +110,7 @@ export function VNFTable({
       sortable: true,
       sortKey: 'type',
       render: (vnf) => (
-        <span className="text-sm text-gray-900 truncate block">{getTypeName(vnf.type)}</span>
+        <span className="text-figma-base text-fw-heading truncate block">{getTypeName(vnf.type)}</span>
       ),
       csvRender: (vnf) => getTypeName(vnf.type)
     },
@@ -120,7 +120,7 @@ export function VNFTable({
       sortable: true,
       sortKey: 'vendor',
       render: (vnf) => (
-        <span className="text-sm text-gray-900">{vnf.vendor || 'N/A'}</span>
+        <span className="text-figma-base text-fw-heading">{vnf.vendor || 'N/A'}</span>
       ),
       csvRender: (vnf) => vnf.vendor || 'N/A'
     },
@@ -130,7 +130,7 @@ export function VNFTable({
       sortable: true,
       sortKey: 'model',
       render: (vnf) => (
-        <span className="text-sm text-gray-700">{vnf.model || 'N/A'}</span>
+        <span className="text-figma-base text-fw-body">{vnf.model || 'N/A'}</span>
       ),
       csvRender: (vnf) => vnf.model || 'N/A'
     },
@@ -140,7 +140,7 @@ export function VNFTable({
       sortable: true,
       sortKey: 'version',
       render: (vnf) => (
-        <span className="text-sm text-gray-700">{vnf.version || 'N/A'}</span>
+        <span className="text-figma-base text-fw-body">{vnf.version || 'N/A'}</span>
       ),
       csvRender: (vnf) => vnf.version || 'N/A'
     },
@@ -150,7 +150,7 @@ export function VNFTable({
       sortable: true,
       sortKey: 'throughput',
       render: (vnf) => (
-        <span className="text-sm text-gray-700">{vnf.throughput || 'N/A'}</span>
+        <span className="text-figma-base text-fw-body">{vnf.throughput || 'N/A'}</span>
       ),
       csvRender: (vnf) => vnf.throughput || 'N/A'
     },
@@ -160,7 +160,7 @@ export function VNFTable({
       sortable: true,
       sortKey: 'status',
       render: (vnf) => (
-        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(vnf.status)}`}>
+        <span className={`px-2 py-1 inline-flex text-figma-sm leading-5 font-semibold rounded-lg ${getStatusColor(vnf.status)}`}>
           {vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)}
         </span>
       ),
@@ -171,7 +171,7 @@ export function VNFTable({
       label: 'Cloud Router',
       sortable: false,
       render: (vnf) => (
-        <span className="text-sm text-gray-700">{getCloudRouterName(vnf.cloudRouterId)}</span>
+        <span className="text-figma-base text-fw-body">{getCloudRouterName(vnf.cloudRouterId)}</span>
       ),
       csvRender: (vnf) => getCloudRouterName(vnf.cloudRouterId)
     }
@@ -195,7 +195,7 @@ export function VNFTable({
           <button
             onClick={onDetach}
             disabled={isDetached}
-            className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title={isDetached ? 'Table Detached' : 'Detach Table'}
             aria-label={isDetached ? 'Table Detached' : 'Detach Table'}
           >

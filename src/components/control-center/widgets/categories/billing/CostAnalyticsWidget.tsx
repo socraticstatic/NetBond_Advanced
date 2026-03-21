@@ -45,8 +45,8 @@ export function CostAnalyticsWidget({ connections }: CostAnalyticsWidgetProps) {
       {/* Cost Trends */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium text-gray-900">Cost Trends</h3>
-          <select className="text-sm border-gray-300 rounded-md">
+          <h3 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">Cost Trends</h3>
+          <select className="text-figma-base border-fw-secondary rounded-md">
             <option>Last 6 Months</option>
             <option>Last 12 Months</option>
             <option>Year to Date</option>
@@ -61,17 +61,17 @@ export function CostAnalyticsWidget({ connections }: CostAnalyticsWidgetProps) {
       <div className="grid grid-cols-2 gap-6">
         {/* By Provider */}
         <div>
-          <h4 className="text-sm font-medium text-gray-900 mb-3">Cost by Provider</h4>
+          <h4 className="text-figma-base font-medium text-fw-heading mb-3 tracking-[-0.03em]">Cost by Provider</h4>
           <div className="space-y-3">
             {Object.entries(costByProvider).map(([provider, percentage]) => (
               <div key={provider}>
-                <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="text-gray-600">{provider}</span>
-                  <span className="font-medium text-gray-900">{percentage}%</span>
+                <div className="flex items-center justify-between text-figma-base mb-1">
+                  <span className="text-fw-body">{provider}</span>
+                  <span className="font-medium text-fw-heading">{percentage}%</span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-2 bg-fw-neutral rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-blue-500 rounded-full"
+                    className="h-full bg-fw-cobalt-600 rounded-full"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
@@ -82,15 +82,15 @@ export function CostAnalyticsWidget({ connections }: CostAnalyticsWidgetProps) {
 
         {/* By Type */}
         <div>
-          <h4 className="text-sm font-medium text-gray-900 mb-3">Cost by Type</h4>
+          <h4 className="text-figma-base font-medium text-fw-heading mb-3 tracking-[-0.03em]">Cost by Type</h4>
           <div className="space-y-3">
             {Object.entries(costByType).map(([type, percentage]) => (
               <div key={type}>
-                <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="text-gray-600">{type}</span>
-                  <span className="font-medium text-gray-900">{percentage}%</span>
+                <div className="flex items-center justify-between text-figma-base mb-1">
+                  <span className="text-fw-body">{type}</span>
+                  <span className="font-medium text-fw-heading">{percentage}%</span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-2 bg-fw-neutral rounded-full overflow-hidden">
                   <div
                     className="h-full bg-purple-500 rounded-full"
                     style={{ width: `${percentage}%` }}
@@ -105,20 +105,20 @@ export function CostAnalyticsWidget({ connections }: CostAnalyticsWidgetProps) {
       {/* Cost Insights */}
       <div className="grid grid-cols-2 gap-4">
         <div className="p-3 bg-green-50 rounded-lg">
-          <div className="flex items-center text-green-600 mb-1">
+          <div className="flex items-center text-fw-success mb-1">
             <ArrowDownRight className="h-4 w-4 mr-1" />
-            <span className="text-xs font-medium">Cost Optimization</span>
+            <span className="text-figma-sm font-medium">Cost Optimization</span>
           </div>
-          <p className="text-sm text-green-700">
+          <p className="text-figma-base text-fw-success">
             Potential savings of {formatCurrency(1234)} identified
           </p>
         </div>
-        <div className="p-3 bg-blue-50 rounded-lg">
-          <div className="flex items-center text-blue-600 mb-1">
+        <div className="p-3 bg-fw-accent rounded-lg">
+          <div className="flex items-center text-fw-link mb-1">
             <ArrowUpRight className="h-4 w-4 mr-1" />
-            <span className="text-xs font-medium">Usage Forecast</span>
+            <span className="text-figma-sm font-medium">Usage Forecast</span>
           </div>
-          <p className="text-sm text-blue-700">
+          <p className="text-figma-base text-fw-linkHover">
             15% increase expected next month
           </p>
         </div>

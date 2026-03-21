@@ -327,8 +327,8 @@ export function ScheduledReports() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Scheduled Reports</h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <h3 className="text-figma-lg font-medium text-fw-heading">Scheduled Reports</h3>
+          <p className="text-figma-base font-medium text-fw-body mt-1">
             Automatically generate and deliver reports on a recurring schedule
           </p>
         </div>
@@ -343,51 +343,51 @@ export function ScheduledReports() {
 
       {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Total Schedules</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
+              <p className="text-figma-base font-medium text-fw-body">Total Schedules</p>
+              <p className="text-figma-xl font-medium text-fw-heading mt-1">
                 {reports.length}
               </p>
             </div>
-            <Calendar className="h-8 w-8 text-blue-500" />
+            <Calendar className="h-8 w-8 text-brand-blue" />
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Active</p>
-              <p className="text-2xl font-semibold text-green-600 mt-1">
+              <p className="text-figma-base font-medium text-fw-body">Active</p>
+              <p className="text-figma-xl font-medium text-fw-success mt-1">
                 {reports.filter(r => r.status === 'active').length}
               </p>
             </div>
-            <CheckCircle className="h-8 w-8 text-green-500" />
+            <CheckCircle className="h-8 w-8 text-fw-success" />
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Paused</p>
-              <p className="text-2xl font-semibold text-gray-600 mt-1">
+              <p className="text-figma-base font-medium text-fw-body">Paused</p>
+              <p className="text-figma-xl font-medium text-fw-body mt-1">
                 {reports.filter(r => r.status === 'paused').length}
               </p>
             </div>
-            <Pause className="h-8 w-8 text-gray-500" />
+            <Pause className="h-8 w-8 text-fw-bodyLight" />
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <div className="bg-fw-base border border-fw-secondary rounded-3xl p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Avg Success Rate</p>
-              <p className="text-2xl font-semibold text-gray-900 mt-1">
+              <p className="text-figma-base font-medium text-fw-body">Avg Success Rate</p>
+              <p className="text-figma-xl font-medium text-fw-heading mt-1">
                 {(reports.reduce((sum, r) => sum + r.successRate, 0) / reports.length).toFixed(1)}%
               </p>
             </div>
-            <FileText className="h-8 w-8 text-gray-500" />
+            <FileText className="h-8 w-8 text-fw-bodyLight" />
           </div>
         </div>
       </div>
@@ -397,64 +397,64 @@ export function ScheduledReports() {
         {reports.map((report) => (
           <div
             key={report.id}
-            className={`card p-6 transition-all ${
+            className={`bg-fw-base border border-fw-secondary rounded-3xl p-6 transition-all ${
               report.status === 'paused' ? 'opacity-60' : ''
             }`}
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">
-                  <h4 className="text-base font-semibold text-gray-900">
+                  <h4 className="text-figma-lg font-medium text-fw-heading">
                     {report.name}
                   </h4>
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                  <span className={`px-2 py-1 text-figma-sm font-medium rounded-lg ${
                     report.status === 'active'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-gray-100 text-gray-800'
+                      ? 'bg-fw-successLight text-fw-success'
+                      : 'bg-fw-neutral text-fw-body'
                   }`}>
                     {report.status === 'active' ? 'Active' : 'Paused'}
                   </span>
-                  <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                  <span className="px-2 py-1 text-figma-sm font-medium bg-fw-neutral text-fw-body rounded-lg">
                     {report.format}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mb-3">
+                <p className="text-figma-base font-medium text-fw-body mb-3">
                   {report.reportType}
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                  <div className="flex items-center text-gray-600">
-                    <Clock className="h-4 w-4 mr-2 text-gray-400" />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-figma-base">
+                  <div className="flex items-center text-fw-body">
+                    <Clock className="h-4 w-4 mr-2 text-fw-bodyLight" />
                     <div>
-                      <div className="font-medium text-gray-900">{getFrequencyLabel(report.frequency)}</div>
-                      <div className="text-xs">{getScheduleDetails(report)}</div>
+                      <div className="font-medium text-fw-heading">{getFrequencyLabel(report.frequency)}</div>
+                      <div className="text-figma-sm">{getScheduleDetails(report)}</div>
                     </div>
                   </div>
 
-                  <div className="flex items-center text-gray-600">
-                    <Calendar className="h-4 w-4 mr-2 text-gray-400" />
+                  <div className="flex items-center text-fw-body">
+                    <Calendar className="h-4 w-4 mr-2 text-fw-bodyLight" />
                     <div>
-                      <div className="font-medium text-gray-900">Next Run</div>
-                      <div className="text-xs">
+                      <div className="font-medium text-fw-heading">Next Run</div>
+                      <div className="text-figma-sm">
                         {new Date(report.nextRun).toLocaleDateString()} at{' '}
                         {new Date(report.nextRun).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center text-gray-600">
-                    <FileText className="h-4 w-4 mr-2 text-gray-400" />
+                  <div className="flex items-center text-fw-body">
+                    <FileText className="h-4 w-4 mr-2 text-fw-bodyLight" />
                     <div>
-                      <div className="font-medium text-gray-900">{report.totalRuns} Runs</div>
-                      <div className="text-xs">{report.successRate}% success rate</div>
+                      <div className="font-medium text-fw-heading">{report.totalRuns} Runs</div>
+                      <div className="text-figma-sm">{report.successRate}% success rate</div>
                     </div>
                   </div>
 
-                  <div className="flex items-center text-gray-600">
-                    <Mail className="h-4 w-4 mr-2 text-gray-400" />
+                  <div className="flex items-center text-fw-body">
+                    <Mail className="h-4 w-4 mr-2 text-fw-bodyLight" />
                     <div>
-                      <div className="font-medium text-gray-900">{report.recipients.length} Recipients</div>
-                      <div className="text-xs truncate">{report.recipients[0]}</div>
+                      <div className="font-medium text-fw-heading">{report.recipients.length} Recipients</div>
+                      <div className="text-figma-sm truncate">{report.recipients[0]}</div>
                     </div>
                   </div>
                 </div>
@@ -463,7 +463,7 @@ export function ScheduledReports() {
               <div className="flex items-center space-x-2 ml-4">
                 <button
                   onClick={() => toggleReportStatus(report.id)}
-                  className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-fw-body hover:text-fw-heading hover:bg-fw-neutral rounded-lg transition-colors"
                   title={report.status === 'active' ? 'Pause schedule' : 'Activate schedule'}
                 >
                   {report.status === 'active' ? (
@@ -477,14 +477,14 @@ export function ScheduledReports() {
                     setSelectedReport(report);
                     setShowEditModal(true);
                   }}
-                  className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-fw-body hover:text-fw-heading hover:bg-fw-neutral rounded-lg transition-colors"
                   title="Edit schedule"
                 >
                   <Edit className="h-5 w-5" />
                 </button>
                 <button
                   onClick={() => setReportToDelete(report)}
-                  className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-2 text-fw-error hover:text-fw-error hover:bg-red-50 rounded-lg transition-colors"
                   title="Delete schedule"
                 >
                   <Trash2 className="h-5 w-5" />
@@ -493,9 +493,9 @@ export function ScheduledReports() {
             </div>
 
             {report.lastRun && (
-              <div className="pt-3 border-t border-gray-200">
-                <div className="flex items-center text-xs text-gray-500">
-                  <CheckCircle className="h-3.5 w-3.5 mr-1.5 text-green-500" />
+              <div className="pt-3 border-t border-fw-secondary">
+                <div className="flex items-center text-figma-sm text-fw-bodyLight">
+                  <CheckCircle className="h-3.5 w-3.5 mr-1.5 text-fw-success" />
                   Last run: {new Date(report.lastRun).toLocaleDateString()} at{' '}
                   {new Date(report.lastRun).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
@@ -506,10 +506,10 @@ export function ScheduledReports() {
       </div>
 
       {reports.length === 0 && (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <Calendar className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No scheduled reports</h3>
-          <p className="text-gray-600 mb-4">
+        <div className="text-center py-12 bg-fw-wash rounded-lg">
+          <Calendar className="h-12 w-12 mx-auto text-fw-bodyLight mb-4" />
+          <h3 className="text-figma-lg font-medium text-fw-heading mb-2">No scheduled reports</h3>
+          <p className="text-figma-base font-medium text-fw-body mb-4">
             Create a schedule to automatically generate and deliver reports
           </p>
           <Button variant="primary" onClick={() => setShowCreateModal(true)}>

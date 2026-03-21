@@ -7,17 +7,20 @@ interface StatusBadgeProps {
 export function StatusBadge({ status, size = 'md', className = '' }: StatusBadgeProps) {
   const normalizedStatus = status.toLowerCase();
 
+  // Figma: pill-shaped badges with stroke borders, 12px text, tag letter-spacing
   const sizeClasses = {
-    sm: 'px-2 py-0.5 text-xs',
-    md: 'px-2.5 py-0.5 text-xs',
-    lg: 'px-3 py-1 text-sm'
+    sm: 'px-2 py-0.5 text-tag-xs',
+    md: 'px-3 py-1 text-tag-sm',
+    lg: 'px-4 py-1.5 text-figma-sm'
   };
 
+  // Figma-matched: stroke colors from connection cards
+  // Active: green stroke #2d7e24, Inactive: gray stroke #878c94
   const statusStyles = {
-    active: 'bg-green-50 text-fw-success border-fw-success',
-    inactive: 'bg-fw-wash text-fw-body border-fw-secondary',
-    suspended: 'bg-red-50 text-fw-error border-fw-error',
-    pending: 'bg-orange-50 text-fw-warn border-fw-warn'
+    active: 'text-fw-success border-fw-success',
+    inactive: 'text-fw-disabled border-fw-bodyLight',
+    suspended: 'text-fw-error border-fw-error',
+    pending: 'text-fw-warn border-fw-warn'
   };
 
   const statusLabels = {
@@ -31,12 +34,12 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
   const label = statusLabels[normalizedStatus as keyof typeof statusLabels] || status;
 
   return (
-    <span className={`inline-flex items-center ${sizeClasses[size]} rounded-full font-medium border ${style} ${className}`}>
-      <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-        normalizedStatus === 'active' ? 'bg-fw-green-600' :
-        normalizedStatus === 'inactive' ? 'bg-fw-gray-500' :
-        normalizedStatus === 'suspended' ? 'bg-fw-red-600' :
-        'bg-fw-orange-600'
+    <span className={`inline-flex items-center gap-1.5 ${sizeClasses[size]} rounded-full font-medium border ${style} ${className}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${
+        normalizedStatus === 'active' ? 'bg-fw-success' :
+        normalizedStatus === 'inactive' ? 'bg-fw-bodyLight' :
+        normalizedStatus === 'suspended' ? 'bg-fw-error' :
+        'bg-fw-warn'
       }`} />
       {label}
     </span>

@@ -229,8 +229,8 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-fw-heading">Routing Policies</h2>
-          <p className="text-sm text-fw-bodyLight mt-1">
+          <h2 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">Routing Policies</h2>
+          <p className="text-figma-sm text-fw-bodyLight mt-1">
             Manage routing policies for {connection.name}
           </p>
         </div>
@@ -247,7 +247,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
       </div>
 
       {/* Search and Controls */}
-      <div className="bg-fw-base rounded-lg border border-fw-secondary p-4">
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-4">
         <div className="flex items-center space-x-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fw-disabled h-5 w-5" />
@@ -256,7 +256,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               placeholder="Search policies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+              className="w-full pl-10 pr-4 py-2 h-10 border border-fw-bodyLight rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             />
           </div>
 
@@ -282,7 +282,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
           <div className="mt-4 pt-4 border-t border-fw-secondary">
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <h4 className="text-sm font-medium text-fw-body mb-2">Action</h4>
+                <h4 className="text-figma-sm font-medium text-fw-body mb-2">Action</h4>
                 <div className="space-y-2">
                   {['allow', 'deny', 'manipulate', 'advertise'].map((action) => (
                     <label key={action} className="flex items-center">
@@ -298,14 +298,14 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         }}
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-fw-body capitalize">{action}</span>
+                      <span className="ml-2 text-figma-base text-fw-body capitalize">{action}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div>
-                <h4 className="text-sm font-medium text-fw-body mb-2">Applies To</h4>
+                <h4 className="text-figma-sm font-medium text-fw-body mb-2">Applies To</h4>
                 <div className="space-y-2">
                   {['all', 'links', 'cloudrouters', 'vnfs'].map((type) => (
                     <label key={type} className="flex items-center">
@@ -321,14 +321,14 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         }}
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-fw-body capitalize">{type}</span>
+                      <span className="ml-2 text-figma-base text-fw-body capitalize">{type}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div>
-                <h4 className="text-sm font-medium text-fw-body mb-2">Status</h4>
+                <h4 className="text-figma-sm font-medium text-fw-body mb-2">Status</h4>
                 <div className="space-y-2">
                   {['all', 'enabled', 'disabled'].map((status) => (
                     <label key={status} className="flex items-center">
@@ -339,7 +339,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         onChange={() => setFilters({ ...filters, enabled: status as any })}
                         className="border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-fw-body capitalize">{status}</span>
+                      <span className="ml-2 text-figma-base text-fw-body capitalize">{status}</span>
                     </label>
                   ))}
                 </div>
@@ -352,10 +352,10 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
       {/* Policies List */}
       <div className="space-y-3">
         {filteredPolicies.length === 0 ? (
-          <div className="text-center py-12 bg-fw-wash rounded-lg border border-fw-secondary">
+          <div className="text-center py-12 bg-fw-wash rounded-2xl border border-fw-secondary">
             <Shield className="h-12 w-12 text-fw-disabled mx-auto mb-3" />
             <p className="text-fw-body">No routing policies found</p>
-            <p className="text-sm text-fw-bodyLight mt-1">
+            <p className="text-figma-sm text-fw-bodyLight mt-1">
               {searchQuery || filters.action.length || filters.appliesTo.length
                 ? 'Try adjusting your filters'
                 : 'Create your first routing policy to get started'
@@ -366,7 +366,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
           filteredPolicies.map((policy) => (
             <div
               key={policy.id}
-              className="bg-fw-base rounded-lg border border-fw-secondary hover:shadow-md transition-shadow"
+              className="bg-fw-base rounded-2xl border border-fw-secondary hover:shadow-md transition-shadow"
             >
               {/* Policy Header */}
               <div className="p-4 flex items-center justify-between">
@@ -379,8 +379,8 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                   />
 
                   {/* Priority Badge */}
-                  <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-fw-accent">
-                    <span className="text-sm font-semibold text-fw-link">{policy.priority}</span>
+                  <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-lg bg-fw-wash">
+                    <span className="text-figma-base font-semibold text-fw-link">{policy.priority}</span>
                   </div>
 
                   {/* Policy Info */}
@@ -389,7 +389,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                       <h3 className="text-base font-medium text-fw-heading truncate">{policy.name}</h3>
 
                       {/* Action Badge */}
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-figma-sm font-medium ${
                         policy.action === 'allow'
                           ? 'bg-[var(--status-active-bg)] text-[var(--status-active-text)]'
                           : policy.action === 'deny'
@@ -406,16 +406,16 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                       </span>
 
                       {/* Protocol Badge */}
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-fw-neutral text-fw-body">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-figma-sm font-medium bg-fw-neutral text-fw-body">
                         {policy.protocol.toUpperCase()}
                       </span>
                     </div>
-                    <p className="text-sm text-fw-bodyLight mt-1 truncate">{policy.description}</p>
+                    <p className="text-figma-sm text-fw-bodyLight mt-1 truncate">{policy.description}</p>
 
                     {/* Targets */}
                     <div className="flex items-center space-x-2 mt-2">
                       {getTargetIcon(policy.appliesTo)}
-                      <span className="text-xs text-fw-bodyLight">
+                      <span className="text-figma-sm text-fw-bodyLight">
                         {policy.appliesTo === 'all'
                           ? 'Applied to all resources'
                           : `Applied to ${policy.targetIds.length} ${policy.appliesTo}`
@@ -466,10 +466,10 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                   <div className="grid grid-cols-2 gap-6">
                     {/* Conditions */}
                     <div>
-                      <h4 className="text-sm font-medium text-fw-heading mb-3">Conditions</h4>
+                      <h4 className="text-figma-base font-medium text-fw-heading mb-3">Conditions</h4>
                       <div className="space-y-2">
                         {policy.conditions.map((condition) => (
-                          <div key={condition.id} className="flex items-center space-x-2 text-sm">
+                          <div key={condition.id} className="flex items-center space-x-2 text-figma-base">
                             <span className="px-2 py-1 bg-fw-base rounded text-fw-bodyLight font-mono">
                               {condition.type}
                             </span>
@@ -484,13 +484,13 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
 
                     {/* Targets */}
                     <div>
-                      <h4 className="text-sm font-medium text-fw-heading mb-3">Applied To</h4>
+                      <h4 className="text-figma-base font-medium text-fw-heading mb-3">Applied To</h4>
                       {policy.appliesTo === 'all' ? (
-                        <p className="text-sm text-fw-bodyLight">All links, cloud routers, and VNFs</p>
+                        <p className="text-figma-sm text-fw-bodyLight">All links, cloud routers, and VNFs</p>
                       ) : (
                         <div className="space-y-2">
                           {policy.targetIds.map((targetId) => (
-                            <div key={targetId} className="flex items-center space-x-2 text-sm">
+                            <div key={targetId} className="flex items-center space-x-2 text-figma-base">
                               {getTargetIcon(policy.appliesTo)}
                               <span className="text-fw-body">{getTargetName(targetId)}</span>
                             </div>
@@ -501,7 +501,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                   </div>
 
                   {/* Metadata */}
-                  <div className="mt-4 pt-4 border-t border-fw-secondary text-xs text-fw-bodyLight">
+                  <div className="mt-4 pt-4 border-t border-fw-secondary text-figma-sm text-fw-bodyLight">
                     <div className="flex items-center justify-between">
                       <span>Created by {policy.createdBy} on {new Date(policy.createdAt).toLocaleDateString()}</span>
                       <span>Last updated {new Date(policy.updatedAt).toLocaleDateString()}</span>
@@ -544,7 +544,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
         }
       >
         <div className="space-y-6">
-          <p className="text-sm text-fw-bodyLight">
+          <p className="text-figma-sm text-fw-bodyLight">
             Create routing policies to control traffic flow across your network infrastructure.
             Configure actions and conditions based on your network requirements.
           </p>
@@ -558,14 +558,14 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
             <FormField label="Policy Name" required>
               <input
                 type="text"
-                className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 placeholder="e.g., Production Traffic Priority"
               />
             </FormField>
 
             <FormField label="Description">
               <textarea
-                className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                className="w-full px-3 py-2 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 rows={3}
                 placeholder="Describe what this policy does and when it should be applied..."
               />
@@ -574,7 +574,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
             <FormField label="Priority" required helpText="Higher numbers = higher priority (1-1000)">
               <input
                 type="number"
-                className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 placeholder="100"
                 min="1"
                 max="1000"
@@ -592,7 +592,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
             <div className="grid grid-cols-2 gap-4">
               <FormField label="Action" required helpText="Inherited from Configure > Policies">
                 <select
-                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                  className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   value={selectedAction}
                   onChange={(e) => setSelectedAction(e.target.value as PolicyAction)}
                 >
@@ -604,7 +604,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               </FormField>
 
               <FormField label="Protocol" required>
-                <select className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active">
+                <select className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active">
                   <option value="any">Any</option>
                   <option value="tcp">TCP</option>
                   <option value="udp">UDP</option>
@@ -627,7 +627,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                     onChange={(e) => setPolicyDirection(e.target.value as typeof policyDirection)}
                     className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary"
                   />
-                  <span className="ml-2 text-sm text-fw-body">On Premise → Partner</span>
+                  <span className="ml-2 text-figma-base text-fw-body">On Premise → Partner</span>
                 </label>
                 <label className="flex items-center">
                   <input
@@ -638,7 +638,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                     onChange={(e) => setPolicyDirection(e.target.value as typeof policyDirection)}
                     className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary"
                   />
-                  <span className="ml-2 text-sm text-fw-body">Partner → On Premise</span>
+                  <span className="ml-2 text-figma-base text-fw-body">Partner → On Premise</span>
                 </label>
                 <label className="flex items-center">
                   <input
@@ -649,14 +649,14 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                     onChange={(e) => setPolicyDirection(e.target.value as typeof policyDirection)}
                     className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary"
                   />
-                  <span className="ml-2 text-sm text-fw-body">Both Directions</span>
+                  <span className="ml-2 text-figma-base text-fw-body">Both Directions</span>
                 </label>
               </div>
             </FormField>
 
             {/* Action-Specific Options */}
             <div className="bg-fw-wash p-4 rounded-lg">
-              <h4 className="text-sm font-medium text-fw-body mb-3">
+              <h4 className="text-figma-sm font-medium text-fw-body mb-3">
                 {selectedAction === 'allow' ? 'Allow Options' :
                  selectedAction === 'deny' ? 'Deny Options' :
                  selectedAction === 'manipulate' ? 'Manipulation Options' :
@@ -672,7 +672,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         onChange={(e) => setSpecificOptions({...specificOptions, matchingRoutes: e.target.checked})}
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-fw-body">Matching Routes</span>
+                      <span className="ml-2 text-figma-base text-fw-body">Matching Routes</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -681,7 +681,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         onChange={(e) => setSpecificOptions({...specificOptions, communityValueFilter: e.target.checked})}
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-fw-body">Community Value Filter</span>
+                      <span className="ml-2 text-figma-base text-fw-body">Community Value Filter</span>
                     </label>
                   </>
                 )}
@@ -694,7 +694,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         onChange={(e) => setSpecificOptions({...specificOptions, matchingRoutes: e.target.checked})}
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-fw-body">Matching Routes</span>
+                      <span className="ml-2 text-figma-base text-fw-body">Matching Routes</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -703,7 +703,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         onChange={(e) => setSpecificOptions({...specificOptions, blockDefaultRoutes: e.target.checked})}
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-fw-body">Block Default Routes</span>
+                      <span className="ml-2 text-figma-base text-fw-body">Block Default Routes</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -712,7 +712,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         onChange={(e) => setSpecificOptions({...specificOptions, communityValueFilter: e.target.checked})}
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-fw-body">Community Value Filter</span>
+                      <span className="ml-2 text-figma-base text-fw-body">Community Value Filter</span>
                     </label>
                   </>
                 )}
@@ -725,7 +725,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         onChange={(e) => setSpecificOptions({...specificOptions, prependASN: e.target.checked})}
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-fw-body">Prepend Advertisements with Extra BGP ASNs</span>
+                      <span className="ml-2 text-figma-base text-fw-body">Prepend Advertisements with Extra BGP ASNs</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -734,7 +734,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         onChange={(e) => setSpecificOptions({...specificOptions, cvTagging: e.target.checked})}
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-fw-body">Selective CV Tagging to Routes/Prefixes</span>
+                      <span className="ml-2 text-figma-base text-fw-body">Selective CV Tagging to Routes/Prefixes</span>
                     </label>
                   </>
                 )}
@@ -746,7 +746,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                       onChange={(e) => setSpecificOptions({...specificOptions, advertiseStatic: e.target.checked})}
                       className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                     />
-                    <span className="ml-2 text-sm text-fw-body">Advertise Static Routes</span>
+                    <span className="ml-2 text-figma-base text-fw-body">Advertise Static Routes</span>
                   </label>
                 )}
               </div>
@@ -761,7 +761,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
 
             <FormField label="Target Resources" required>
               <select
-                className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 value={selectedAppliesTo}
                 onChange={(e) => {
                   setSelectedAppliesTo(e.target.value as PolicyAppliesTo);
@@ -778,7 +778,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
             {/* Show resource selection when not "all" */}
             {selectedAppliesTo === 'links' && allLinks.length > 0 && (
               <div className="bg-fw-wash p-4 rounded-lg">
-                <h4 className="text-sm font-medium text-fw-body mb-3">Select Links</h4>
+                <h4 className="text-figma-sm font-medium text-fw-body mb-3">Select Links</h4>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {allLinks.map((link) => (
                     <label key={link.id} className="flex items-center p-2 hover:bg-fw-base rounded transition-colors">
@@ -795,8 +795,8 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
                       <div className="ml-3 flex-1">
-                        <div className="text-sm font-medium text-fw-body">{link.name}</div>
-                        <div className="text-xs text-fw-bodyLight">
+                        <div className="text-figma-sm font-medium text-fw-body">{link.name}</div>
+                        <div className="text-figma-sm text-fw-bodyLight">
                           VLAN {link.vlanId} • {link.status === 'active' ? 'Active' : 'Inactive'}
                           {link.ipSubnet && ` • ${link.ipSubnet}`}
                         </div>
@@ -804,7 +804,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                     </label>
                   ))}
                 </div>
-                <div className="mt-2 text-xs text-fw-bodyLight">
+                <div className="mt-2 text-figma-sm text-fw-bodyLight">
                   {selectedTargetIds.length} of {allLinks.length} links selected
                 </div>
               </div>
@@ -812,7 +812,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
 
             {selectedAppliesTo === 'cloudrouters' && cloudRouters.length > 0 && (
               <div className="bg-fw-wash p-4 rounded-lg">
-                <h4 className="text-sm font-medium text-fw-body mb-3">Select Cloud Routers</h4>
+                <h4 className="text-figma-sm font-medium text-fw-body mb-3">Select Cloud Routers</h4>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {cloudRouters.map((cr) => (
                     <label key={cr.id} className="flex items-center p-2 hover:bg-fw-base rounded transition-colors">
@@ -829,15 +829,15 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
                       <div className="ml-3 flex-1">
-                        <div className="text-sm font-medium text-fw-body">{cr.name}</div>
-                        <div className="text-xs text-fw-bodyLight">
+                        <div className="text-figma-sm font-medium text-fw-body">{cr.name}</div>
+                        <div className="text-figma-sm text-fw-bodyLight">
                           {cr.provider} • BGP ASN: {cr.bgpAsn}
                         </div>
                       </div>
                     </label>
                   ))}
                 </div>
-                <div className="mt-2 text-xs text-fw-bodyLight">
+                <div className="mt-2 text-figma-sm text-fw-bodyLight">
                   {selectedTargetIds.length} of {cloudRouters.length} cloud routers selected
                 </div>
               </div>
@@ -845,7 +845,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
 
             {selectedAppliesTo === 'vnfs' && vnfs.length > 0 && (
               <div className="bg-fw-wash p-4 rounded-lg">
-                <h4 className="text-sm font-medium text-fw-body mb-3">Select VNFs</h4>
+                <h4 className="text-figma-sm font-medium text-fw-body mb-3">Select VNFs</h4>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {vnfs.map((vnf) => (
                     <label key={vnf.id} className="flex items-center p-2 hover:bg-fw-base rounded transition-colors">
@@ -862,15 +862,15 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                       />
                       <div className="ml-3 flex-1">
-                        <div className="text-sm font-medium text-fw-body">{vnf.name}</div>
-                        <div className="text-xs text-fw-bodyLight">
+                        <div className="text-figma-sm font-medium text-fw-body">{vnf.name}</div>
+                        <div className="text-figma-sm text-fw-bodyLight">
                           {vnf.type} • {vnf.provider}
                         </div>
                       </div>
                     </label>
                   ))}
                 </div>
-                <div className="mt-2 text-xs text-fw-bodyLight">
+                <div className="mt-2 text-figma-sm text-fw-bodyLight">
                   {selectedTargetIds.length} of {vnfs.length} VNFs selected
                 </div>
               </div>
@@ -882,7 +882,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
             <h3 className="text-base font-semibold text-fw-heading border-b border-fw-secondary pb-2">
               Policy Conditions
             </h3>
-            <p className="text-sm text-fw-bodyLight">
+            <p className="text-figma-sm text-fw-bodyLight">
               Define conditions that must be met for this policy to apply. Leave empty to match all traffic.
             </p>
 
@@ -890,7 +890,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               <FormField label="Source Prefix">
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                  className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   placeholder="e.g., 10.0.0.0/8"
                 />
               </FormField>
@@ -898,7 +898,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               <FormField label="Destination Prefix">
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                  className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   placeholder="e.g., 192.168.0.0/16"
                 />
               </FormField>
@@ -906,7 +906,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               <FormField label="BGP Community">
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                  className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   placeholder="e.g., 65000:100"
                 />
               </FormField>
@@ -914,7 +914,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               <FormField label="AS Path (Regex)">
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                  className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   placeholder="e.g., ^65001"
                 />
               </FormField>

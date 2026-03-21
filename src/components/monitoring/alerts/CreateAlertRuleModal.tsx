@@ -104,14 +104,14 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-900">
+      <div className="bg-fw-base rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-fw-base border-b border-fw-secondary px-6 py-4 flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-fw-heading tracking-[-0.03em]">
             {editRule ? 'Edit Alert Rule' : 'Create Alert Rule'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-fw-bodyLight hover:text-fw-body transition-colors"
           >
             <X className="h-6 w-6" />
           </button>
@@ -120,40 +120,40 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-figma-base font-medium text-fw-body mb-1">
                 Rule Name *
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                className="w-full rounded-lg border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active"
                 placeholder="e.g., High Latency Detection"
                 required
               />
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-figma-base font-medium text-fw-body mb-1">
                 Description
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                className="w-full rounded-lg border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active"
                 rows={2}
                 placeholder="Describe when this rule should trigger"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-figma-base font-medium text-fw-body mb-1">
                 Priority *
               </label>
               <select
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value as RulePriority })}
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                className="w-full rounded-lg border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active"
                 required
               >
                 <option value="low">Low</option>
@@ -164,23 +164,23 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-figma-base font-medium text-fw-body mb-1">
                 Cooldown (minutes)
               </label>
               <input
                 type="number"
                 value={formData.cooldownMinutes}
                 onChange={(e) => setFormData({ ...formData, cooldownMinutes: parseInt(e.target.value) })}
-                className="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                className="w-full rounded-lg border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active"
                 min="0"
               />
-              <p className="text-xs text-gray-500 mt-1">Time before rule can trigger again</p>
+              <p className="text-figma-sm text-fw-bodyLight mt-1">Time before rule can trigger again</p>
             </div>
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-3">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-figma-base font-medium text-fw-body">
                 Conditions *
               </label>
               <Button
@@ -196,12 +196,12 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
 
             <div className="space-y-3">
               {conditions.map((condition, index) => (
-                <div key={index} className="flex items-start gap-2 p-3 bg-gray-50 rounded-lg">
+                <div key={index} className="flex items-start gap-2 p-3 bg-fw-wash rounded-lg">
                   <div className="flex-1 grid grid-cols-4 gap-2">
                     <select
                       value={condition.type}
                       onChange={(e) => handleConditionChange(index, 'type', e.target.value)}
-                      className="rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue text-sm"
+                      className="rounded-lg border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
                     >
                       <option value="severity">Severity</option>
                       <option value="keyword">Keyword</option>
@@ -214,13 +214,13 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
                       value={condition.field}
                       onChange={(e) => handleConditionChange(index, 'field', e.target.value)}
                       placeholder="Field name"
-                      className="rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue text-sm"
+                      className="rounded-lg border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
                     />
 
                     <select
                       value={condition.operator}
                       onChange={(e) => handleConditionChange(index, 'operator', e.target.value)}
-                      className="rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue text-sm"
+                      className="rounded-lg border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
                     >
                       <option value="equals">Equals</option>
                       <option value="not_equals">Not Equals</option>
@@ -236,7 +236,7 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
                       value={condition.value}
                       onChange={(e) => handleConditionChange(index, 'value', e.target.value)}
                       placeholder="Value"
-                      className="rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue text-sm"
+                      className="rounded-lg border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
                     />
                   </div>
 
@@ -255,7 +255,7 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-figma-base font-medium text-fw-body mb-3">
               Notification Channels
             </label>
             <div className="space-y-2">
@@ -264,9 +264,9 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
                   type="checkbox"
                   checked={formData.emailEnabled}
                   onChange={(e) => setFormData({ ...formData, emailEnabled: e.target.checked })}
-                  className="h-4 w-4 text-brand-blue rounded border-gray-300 focus:ring-brand-blue"
+                  className="h-4 w-4 text-brand-blue rounded border-fw-secondary focus:ring-fw-active"
                 />
-                <span className="ml-2 text-sm text-gray-700">Email</span>
+                <span className="ml-2 text-figma-base text-fw-body">Email</span>
               </label>
 
               <label className="flex items-center">
@@ -274,9 +274,9 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
                   type="checkbox"
                   checked={formData.slackEnabled}
                   onChange={(e) => setFormData({ ...formData, slackEnabled: e.target.checked })}
-                  className="h-4 w-4 text-brand-blue rounded border-gray-300 focus:ring-brand-blue"
+                  className="h-4 w-4 text-brand-blue rounded border-fw-secondary focus:ring-fw-active"
                 />
-                <span className="ml-2 text-sm text-gray-700">Slack</span>
+                <span className="ml-2 text-figma-base text-fw-body">Slack</span>
               </label>
 
               <label className="flex items-center">
@@ -284,14 +284,14 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
                   type="checkbox"
                   checked={formData.webhookEnabled}
                   onChange={(e) => setFormData({ ...formData, webhookEnabled: e.target.checked })}
-                  className="h-4 w-4 text-brand-blue rounded border-gray-300 focus:ring-brand-blue"
+                  className="h-4 w-4 text-brand-blue rounded border-fw-secondary focus:ring-fw-active"
                 />
-                <span className="ml-2 text-sm text-gray-700">Webhook</span>
+                <span className="ml-2 text-figma-base text-fw-body">Webhook</span>
               </label>
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-3 pt-4 border-t border-fw-secondary">
             <Button
               type="button"
               variant="secondary"

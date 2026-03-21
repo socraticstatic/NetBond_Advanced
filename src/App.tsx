@@ -24,6 +24,7 @@ import { MobileDesktopOnly } from './components/common/MobileDesktopOnly';
 import { GlobalKeyboardShortcuts } from './components/common/GlobalKeyboardShortcuts';
 import { ImpersonationBanner } from './components/common/ImpersonationBanner';
 import { PWAUpdatePrompt, usePWAUpdate } from './components/common/PWAUpdatePrompt';
+import { MaintenanceModal } from './components/common/MaintenanceModal';
 
 // Optimized lazy loading with better error handling
 const LazyConnectionWizard = lazy(() =>
@@ -147,6 +148,48 @@ const LazyTenantDetailPage = lazy(() =>
   }))
 );
 
+const LazyTicketingIndex = lazy(() =>
+  import('./components/ticketing/TicketingIndex').then(module => ({
+    default: module.TicketingIndex
+  }))
+);
+
+const LazyCreateTicket = lazy(() =>
+  import('./components/ticketing/CreateTicket').then(module => ({
+    default: module.CreateTicket
+  }))
+);
+
+const LazyTicketDetail = lazy(() =>
+  import('./components/ticketing/TicketDetail').then(module => ({
+    default: module.TicketDetail
+  }))
+);
+
+const LazyLoginPage = lazy(() =>
+  import('./components/pages/LoginPage').then(module => ({
+    default: module.LoginPage
+  }))
+);
+
+const LazyOnboardingWizard = lazy(() =>
+  import('./components/onboarding/OnboardingWizard').then(module => ({
+    default: module.OnboardingWizard
+  }))
+);
+
+const LazyOffboardingWizard = lazy(() =>
+  import('./components/offboarding/OffboardingWizard').then(module => ({
+    default: module.OffboardingWizard
+  }))
+);
+
+const LazyNoInternetPage = lazy(() =>
+  import('./components/pages/NoInternetPage').then(module => ({
+    default: module.NoInternetPage
+  }))
+);
+
 // Optimized loading fallback
 const LoadingFallback = memo(() => (
   <div className="min-h-[400px] flex items-center justify-center">
@@ -164,9 +207,20 @@ function App() {
   const [isMobile, setIsMobile] = useState(false);
   const tour = useTour('main-app');
   const pwaUpdate = usePWAUpdate();
+  const [showMaintenance, setShowMaintenance] = useState(false);
 
-  // Check if current route is a detached window
+  const maintenanceSchedule = {
+    date: 'March 25, 2026',
+    startTime: '2026-03-25T02:00:00',
+    endTime: '2026-03-25T06:00:00',
+    duration: '4 hours',
+    description: 'We will be performing scheduled maintenance to upgrade our network infrastructure. During this time, the management portal will be temporarily unavailable.',
+    affectedServices: ['Management Portal', 'API Gateway', 'Monitoring Dashboard'],
+  };
+
+  // Check if current route is a detached window or standalone page
   const isDetachedWindow = location.pathname.startsWith('/detached/');
+  const isStandalonePage = location.pathname === '/login' || location.pathname === '/onboarding' || location.pathname === '/offboarding' || location.pathname === '/no-internet';
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -221,6 +275,34 @@ function App() {
               </Suspense>
             } />
 
+            {/* Login - standalone, no layout */}
+            <Route path="/login" element={
+              <Suspense fallback={<LoadingFallback />}>
+                <LazyLoginPage />
+              </Suspense>
+            } />
+
+            {/* Onboarding - standalone, no layout */}
+            <Route path="/onboarding" element={
+              <Suspense fallback={<LoadingFallback />}>
+                <LazyOnboardingWizard />
+              </Suspense>
+            } />
+
+            {/* Offboarding - standalone, no layout */}
+            <Route path="/offboarding" element={
+              <Suspense fallback={<LoadingFallback />}>
+                <LazyOffboardingWizard />
+              </Suspense>
+            } />
+
+            {/* No Internet - standalone, no layout */}
+            <Route path="/no-internet" element={
+              <Suspense fallback={<LoadingFallback />}>
+                <LazyNoInternetPage />
+              </Suspense>
+            } />
+
             {/* Main app routes - with layout wrapper */}
             <Route path="*" element={
               <DashboardLayout>
@@ -272,9 +354,11 @@ function App() {
 
                 <Route path="/api-toolbox" element={
                   <AsyncBoundary fallback={<LoadingFallback />}>
-                    <Suspense fallback={<LoadingFallback />}>
-                      <LazyAPIToolbox />
-                    </Suspense>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyAPIToolbox />
+                      </Suspense>
+                    </div>
                   </AsyncBoundary>
                 } />
                 
@@ -288,7 +372,7 @@ function App() {
                     />
                   ) : (
                     <SubNav
-                      title="Network Connections"
+                      title="Networks"
                       description="Manage your network connections across clouds and data centers"
                     >
                       <div className="mb-8">
@@ -328,7 +412,7 @@ function App() {
                       </Suspense>
                     ) : (
                       <SubNav
-                        title="Network Monitoring"
+                        title="Performance"
                         description="Near real-time monitoring and analytics for your network connections"
                       >
                         <Suspense fallback={<LoadingFallback />}>
@@ -371,16 +455,18 @@ function App() {
 
                 <Route path="/notifications" element={
                   <AsyncBoundary fallback={<LoadingFallback />}>
-                    <Suspense fallback={<LoadingFallback />}>
-                      <LazyNotificationsPage />
-                    </Suspense>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyNotificationsPage />
+                      </Suspense>
+                    </div>
                   </AsyncBoundary>
                 } />
 
                 <Route path="/support" element={
                   <AsyncBoundary fallback={<LoadingFallback />}>
                     <SubNav
-                      title="Help & Resources"
+                      title="Information Center"
                       description="Access documentation, support, and resources"
                     >
                       <Suspense fallback={<LoadingFallback />}>
@@ -392,48 +478,101 @@ function App() {
 
                 <Route path="/glossary" element={
                   <AsyncBoundary fallback={<LoadingFallback />}>
-                    <Suspense fallback={<LoadingFallback />}>
-                      <LazyGlossaryPage />
-                    </Suspense>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyGlossaryPage />
+                      </Suspense>
+                    </div>
+                  </AsyncBoundary>
+                } />
+
+                <Route path="/tickets" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <SubNav
+                      title="Ticketing"
+                      description="Manage support tickets and service requests"
+                    >
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyTicketingIndex />
+                      </Suspense>
+                    </SubNav>
+                  </AsyncBoundary>
+                } />
+
+                <Route path="/tickets/create" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <SubNav
+                      title="Create a new ticket"
+                      description="Submit a new support request"
+                    >
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyCreateTicket />
+                      </Suspense>
+                    </SubNav>
+                  </AsyncBoundary>
+                } />
+
+                <Route path="/tickets/:id" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <SubNav
+                      title="Ticket Detail"
+                      description="View ticket information and activity"
+                    >
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyTicketDetail />
+                      </Suspense>
+                    </SubNav>
                   </AsyncBoundary>
                 } />
 
                 <Route path="/connections/:id/*" element={
                   <AsyncBoundary fallback={<LoadingFallback />}>
-                    <Suspense fallback={<LoadingFallback />}>
-                      <LazyConnectionDetails />
-                    </Suspense>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyConnectionDetails />
+                      </Suspense>
+                    </div>
                   </AsyncBoundary>
                 } />
 
                 <Route path="/groups" element={
-                  <Suspense fallback={<LoadingFallback />}>
-                    <LazyManageGroupsPage />
-                  </Suspense>
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyManageGroupsPage />
+                    </Suspense>
+                  </div>
                 } />
-                
+
                 <Route path="/groups/:id/*" element={
-                  <Suspense fallback={<LoadingFallback />}>
-                    <LazyGroupDetailsPage />
-                  </Suspense>
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyGroupDetailsPage />
+                    </Suspense>
+                  </div>
                 } />
 
                 <Route path="/pools/:id" element={
-                  <Suspense fallback={<LoadingFallback />}>
-                    <LazyPoolDetailPage />
-                  </Suspense>
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyPoolDetailPage />
+                    </Suspense>
+                  </div>
                 } />
 
                 <Route path="/cloud-routers/:id" element={
-                  <Suspense fallback={<LoadingFallback />}>
-                    <LazyCloudRouterDetailPage />
-                  </Suspense>
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyCloudRouterDetailPage />
+                    </Suspense>
+                  </div>
                 } />
 
                 <Route path="/vnfs/:id" element={
-                  <Suspense fallback={<LoadingFallback />}>
-                    <LazyVNFDetailPage />
-                  </Suspense>
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyVNFDetailPage />
+                    </Suspense>
+                  </div>
                 } />
 
                 <Route path="/configure/platform/tenants/:id/*" element={
@@ -452,13 +591,15 @@ function App() {
                 <Route path="/" element={<Navigate to="/manage" />} />
                 
                 <Route path="*" element={
-                  <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                    <div className="text-center max-w-md p-8">
-                      <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-                      <h2 className="text-xl font-medium text-gray-800 mb-6">Page Not Found</h2>
-                      <button 
+                  <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-fw-wash">
+                    <div className="flex flex-col items-start max-w-[350px]">
+                      <h1 className="text-[48px] font-bold text-fw-heading tracking-[-0.03em] mb-4">Page not found.</h1>
+                      <p className="text-[14px] font-medium text-fw-body tracking-[-0.03em] mb-8">
+                        We couldn't find the page you're looking for. It might have been moved or doesn't exist anymore.
+                      </p>
+                      <button
                         onClick={() => navigate('/')}
-                        className="px-6 py-2 bg-brand-blue text-white rounded-full hover:bg-brand-darkBlue"
+                        className="inline-flex items-center justify-center h-9 px-6 bg-fw-active text-white rounded-full text-[14px] font-medium hover:bg-fw-linkHover transition-colors"
                       >
                         Back to Home
                       </button>
@@ -472,7 +613,7 @@ function App() {
           </Routes>
         </ErrorBoundary>
         
-        {!isDetachedWindow && (
+        {!isDetachedWindow && !isStandalonePage && (
           <>
             <MobileMenu
               isOpen={false}
@@ -481,6 +622,12 @@ function App() {
               notifications={3}
             />
             <SmartAssistant />
+            <MaintenanceModal
+              isOpen={showMaintenance}
+              onClose={() => setShowMaintenance(false)}
+              schedule={maintenanceSchedule}
+              variant="modal"
+            />
             <ProductTour
               steps={mainAppTour}
               isOpen={tour.isOpen}

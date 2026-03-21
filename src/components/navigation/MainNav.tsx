@@ -10,6 +10,7 @@ import { HelpButton } from './HelpButton';
 import { UserMenu } from './UserMenu';
 import { MobileMenu } from './MobileMenu';
 import { AdaptiveNavigation } from './AdaptiveNavigation';
+import { TenantSelector } from './TenantSelector';
 import { TabItem } from '../../types/navigation';
 import { Button } from '../common/Button';
 
@@ -140,21 +141,21 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
 
   return (
     <nav
-      className="bg-fw-base border-b border-fw-secondary"
+      className="sticky top-0 z-50 bg-fw-wash/80 backdrop-blur-md border-b border-fw-secondary"
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Left Side: Logo and Navigation */}
           <div className="flex items-center">
             {/* Hamburger Menu Button - Now next to the logo */}
             <button
               onClick={() => setIsVerticalNav(!isVerticalNav)}
-              className="p-2 text-fw-bodyLight hover:text-fw-body hover:bg-fw-wash no-rounded"
+              className="lg:hidden flex items-center justify-center h-9 w-9 rounded-full text-fw-bodyLight hover:text-fw-body hover:bg-fw-wash"
               data-nav-toggle="true"
             >
-              <Menu className="h-6 w-6" />
+              <Menu className="h-5 w-5" />
             </button>
             
             <div 
@@ -164,13 +165,13 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
               tabIndex={0}
             >
               <div className="flex items-center">
-                <span className="text-xl font-bold text-fw-heading">AT&T</span>
-                <span className="ml-3 text-xl font-bold text-fw-link">NetBond® Advanced</span>
+                <span className="text-base font-bold text-brand-accent tracking-[-0.03em]">AT&T</span>
+                <span className="ml-2 text-base font-bold text-black tracking-[-0.03em]">NetBond<sup className="text-[10px]">®</sup> Advanced</span>
               </div>
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:ml-8 lg:flex lg:space-x-8 lg:items-center lg:h-full">
+            <div className="hidden lg:ml-8 lg:flex lg:items-center lg:h-full" style={{ gap: '61px' }}>
               {navItems.map((item) => {
                 const Icon = item.icon;
                 // Special handling: /groups routes should be considered part of /manage
@@ -185,22 +186,22 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
                     onMouseEnter={() => setHoveredItem(item.href)}
                     onMouseLeave={() => setHoveredItem(null)}
                     className={`
-                      group relative inline-flex items-center px-1 py-4 border-b-2 text-sm font-medium no-rounded
-                      transition-all duration-200 h-full
+                      group relative inline-flex items-center px-1 py-4 border-b-2 text-figma-base font-medium no-rounded
+                      transition-all duration-200 h-full tracking-[-0.03em]
                       ${isActive
                         ? 'border-fw-active text-fw-link'
-                        : 'border-transparent text-fw-bodyLight hover:border-fw-secondary hover:text-fw-body'
+                        : 'border-transparent text-fw-heading hover:border-fw-secondary hover:text-fw-body'
                       }
                     `}
                   >
                     <Icon className={`
-                      h-4 w-4 mr-2 transition-transform duration-200
+                      h-5 w-5 mr-2 transition-transform duration-200
                       ${hoveredItem === item.href ? 'scale-110' : ''}
-                      ${isActive ? 'text-fw-link' : 'text-fw-bodyLight'}
+                      ${isActive ? 'text-fw-link' : 'text-fw-heading'}
                     `} 
                     />
                     <span className={`
-                      transition-all duration-200
+                      transition-all duration-200 tracking-[-0.03em]
                       ${hoveredItem === item.href ? 'transform translate-y-[-1px]' : ''}
                     `}>
                       {item.label}
@@ -213,10 +214,10 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
                       >
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-fw-heading">{item.label}</span>
+                            <span className="text-figma-base font-medium text-fw-heading">{item.label}</span>
                             <Icon className="h-4 w-4 text-fw-bodyLight" />
                           </div>
-                          <p className="whitespace-normal text-xs text-fw-bodyLight">{item.description}</p>
+                          <p className="whitespace-normal text-figma-sm text-fw-bodyLight">{item.description}</p>
                         </div>
                         <div className="absolute -top-1 left-1/2 transform -translate-x-1/2">
                           <div className="border-x-4 border-x-transparent border-b-4 border-b-fw-base"></div>
@@ -234,10 +235,13 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
             {!isMenuOpen && !isMobile && (
               <>
                 <SearchBar onSearch={onSearch} />
-                <div className="h-6 w-px bg-fw-secondary" />
+                <div className="h-5 w-px bg-fw-secondary" />
                 <HelpButton />
-                <div className="h-6 w-px bg-fw-secondary" />
+                <div className="h-5 w-px bg-fw-secondary" />
                 <NotificationsButton count={notifications} />
+                <div className="h-5 w-px bg-fw-secondary" />
+                <TenantSelector />
+                <div className="h-5 w-px bg-fw-secondary" />
                 <UserMenu
                   name={userInfo.name}
                   role={userInfo.role}

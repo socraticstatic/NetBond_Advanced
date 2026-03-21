@@ -81,11 +81,11 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
   // Get connection status display
   const getStatusDisplay = (status: string) => {
     const statusColor = status === 'Active' 
-      ? 'bg-green-100 text-green-800' 
-      : 'bg-gray-100 text-gray-800';
+      ? 'bg-green-50 text-fw-success' 
+      : 'bg-fw-neutral text-fw-body';
       
     return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColor}`}>
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium ${statusColor}`}>
         {status}
       </span>
     );
@@ -94,16 +94,16 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
   return (
     <div className="p-6 space-y-6">
       {/* Search and Controls */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200">
+      <div className="bg-fw-base p-4 rounded-lg border border-fw-secondary">
         <div className="flex items-center justify-between gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
             <input
               type="text"
               placeholder="Search connections..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+              className="w-full pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             />
           </div>
           <div className="flex items-center space-x-4">
@@ -148,10 +148,10 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
       </div>
 
       {/* Connections Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
         {filteredConnections.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-gray-500 mb-4">No connections in this group yet</p>
+            <p className="text-fw-bodyLight mb-4">No connections in this group yet</p>
             <Button
               variant="primary"
               icon={PlusCircle}
@@ -168,8 +168,8 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
                 label: 'Name',
                 render: (item: Connection) => (
                   <div>
-                    <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                    <div className="text-xs text-gray-500">{item.type}</div>
+                    <div className="text-figma-base font-medium text-fw-heading">{item.name}</div>
+                    <div className="text-figma-sm text-fw-bodyLight">{item.type}</div>
                   </div>
                 )
               },
@@ -182,14 +182,14 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
                 id: 'bandwidth',
                 label: 'Bandwidth',
                 render: (item: Connection) => (
-                  <div className="text-sm text-gray-900">{item.bandwidth}</div>
+                  <div className="text-figma-base text-fw-heading">{item.bandwidth}</div>
                 )
               },
               {
                 id: 'location',
                 label: 'Location',
                 render: (item: Connection) => (
-                  <div className="text-sm text-gray-900">{item.location}</div>
+                  <div className="text-figma-base text-fw-heading">{item.location}</div>
                 )
               }
             ]}
@@ -206,14 +206,14 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
                   e.stopPropagation();
                   setShowRemoveConfirm(item.id.toString());
                 }}
-                className="text-red-600 hover:bg-red-50 hover:border-red-300"
+                className="text-fw-error hover:bg-red-50 hover:border-red-300"
               >
                 Remove
               </Button>
             )}
             emptyState={
               <div className="text-center py-8">
-                <p className="text-gray-500">No connections match your search criteria</p>
+                <p className="text-fw-bodyLight">No connections match your search criteria</p>
               </div>
             }
           />
@@ -222,13 +222,13 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
       
       {/* Add Connections Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full mx-4 sm:mx-auto shadow-xl overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-              <h3 className="text-lg font-medium text-gray-900">Add Connections to Group</h3>
+        <div className="fixed inset-0 bg-fw-neutral bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-fw-base rounded-lg max-w-2xl w-full mx-4 sm:mx-auto shadow-xl overflow-hidden">
+            <div className="px-6 py-4 border-b border-fw-secondary flex justify-between items-center">
+              <h3 className="text-lg font-medium text-fw-heading">Add Connections to Group</h3>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-gray-400 hover:text-gray-500"
+                className="text-fw-bodyLight hover:text-fw-body"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -237,11 +237,11 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
             <div className="p-6">
               <div className="mb-4">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
                   <input
                     type="text"
                     placeholder="Search available connections..."
-                    className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                    className="pl-10 pr-4 h-9 w-full border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   />
                 </div>
               </div>
@@ -249,7 +249,7 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
               <div className="max-h-80 overflow-y-auto">
                 {availableConnections.length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-gray-500">No available connections to add</p>
+                    <p className="text-fw-bodyLight">No available connections to add</p>
                   </div>
                 ) : (
                   <div className="space-y-2">
@@ -259,8 +259,8 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
                         className={`
                           flex items-center justify-between p-3 rounded-lg border
                           ${selectedConnectionIds.includes(conn.id.toString()) 
-                            ? 'border-brand-blue bg-brand-lightBlue' 
-                            : 'border-gray-200 hover:bg-gray-50'
+                            ? 'border-fw-active bg-fw-accent' 
+                            : 'border-fw-secondary hover:bg-fw-wash'
                           }
                         `}
                       >
@@ -277,11 +277,11 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
                                 );
                               }
                             }}
-                            className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                            className="rounded border-fw-secondary text-fw-cobalt-600 focus:ring-fw-active h-4 w-4"
                           />
                           <div className="ml-3">
-                            <div className="text-sm font-medium text-gray-900">{conn.name}</div>
-                            <div className="text-xs text-gray-500">
+                            <div className="text-figma-base font-medium text-fw-heading">{conn.name}</div>
+                            <div className="text-figma-sm text-fw-bodyLight">
                               {conn.type} • {conn.location} • {conn.bandwidth}
                             </div>
                           </div>

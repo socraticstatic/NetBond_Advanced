@@ -1,3 +1,4 @@
+import { BarChart2 } from 'lucide-react';
 import { Group } from '../../../types/group';
 
 interface GroupCardProgressProps {
@@ -22,26 +23,22 @@ export function GroupCardProgress({ group }: GroupCardProgressProps) {
 
   const performanceScore = getPerformanceScore();
 
-  const getProgressColor = () => {
-    if (performanceScore > 95) return 'bg-complementary-green';
-    if (performanceScore > 90) return 'bg-brand-blue';
-    if (performanceScore > 80) return 'bg-complementary-amber';
-    return 'bg-red-500';
-  };
-
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-gray-500">Pool Performance</span>
-        <span className="font-medium text-gray-900">{performanceScore.toFixed(1)}%</span>
+      <div className="flex items-center justify-between text-figma-base">
+        <span className="flex items-center gap-1.5 text-fw-body font-medium">
+          <BarChart2 className="h-5 w-5 text-fw-warn" />
+          Performance
+        </span>
+        <span className="font-medium text-fw-heading">{performanceScore.toFixed(1)}%</span>
       </div>
-      <div className="h-2 bg-gray-50 rounded-full overflow-hidden">
+      <div className="h-2 bg-fw-wash rounded-[30px] overflow-hidden" style={{ maxWidth: '320px' }}>
         <div
-          className={`h-full transition-all duration-300 ${getProgressColor()}`}
+          className="h-full transition-all duration-300 rounded-[30px] bg-fw-warn"
           style={{ width: `${performanceScore}%` }}
         />
       </div>
-      <div className="flex justify-between text-xs text-gray-500">
+      <div className="flex justify-between text-figma-sm text-fw-bodyLight">
         <span>0%</span>
         <span>
           {group.performance?.aggregatedMetrics.averageUptime || 'N/A'}

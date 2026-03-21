@@ -14,8 +14,8 @@ export function RenewableEnergyWidget({ connections }: RenewableEnergyWidgetProp
 
   // Energy sources breakdown
   const energySources = [
-    { name: 'Solar', percentage: 42, icon: Sun, color: 'text-yellow-500' },
-    { name: 'Wind', percentage: 28, icon: Wind, color: 'text-blue-500' },
+    { name: 'Solar', percentage: 42, icon: Sun, color: 'text-fw-warn' },
+    { name: 'Wind', percentage: 28, icon: Wind, color: 'text-fw-link' },
     { name: 'Hydro', percentage: 3, icon: Battery, color: 'text-cyan-500' }
   ];
 
@@ -24,26 +24,26 @@ export function RenewableEnergyWidget({ connections }: RenewableEnergyWidgetProp
       {/* Renewable Percentage */}
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-2xl font-bold text-gray-900">
+          <div className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">
             {renewablePercentage}%
           </div>
           <div className="flex items-center mt-1">
-            <Zap className="h-4 w-4 text-green-500 mr-1" />
-            <span className="text-sm text-gray-500">Renewable Energy</span>
+            <Zap className="h-4 w-4 text-fw-success mr-1" />
+            <span className="text-figma-base text-fw-bodyLight">Renewable Energy</span>
           </div>
         </div>
-        <Sun className="h-8 w-8 text-yellow-500" />
+        <Sun className="h-8 w-8 text-fw-warn" />
       </div>
 
       {/* Renewable Progress */}
       <div>
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+        <div className="flex items-center justify-between text-figma-sm text-fw-bodyLight mb-2">
           <span>Clean Energy Mix</span>
           <span>{renewableEnergy.toFixed(1)} kWh</span>
         </div>
-        <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="relative w-full h-2 bg-fw-neutral rounded-full overflow-hidden">
           <div
-            className="absolute left-0 top-0 h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-500"
+            className="absolute left-0 top-0 h-full bg-fw-success rounded-full transition-all duration-500"
             style={{ width: `${renewablePercentage}%` }}
           />
         </div>
@@ -59,16 +59,16 @@ export function RenewableEnergyWidget({ connections }: RenewableEnergyWidgetProp
             <div key={source.name} className="flex items-center justify-between">
               <div className="flex items-center flex-1 min-w-0">
                 <SourceIcon className={`h-4 w-4 ${source.color} mr-2 flex-shrink-0`} />
-                <span className="text-sm text-gray-600 truncate">{source.name}</span>
+                <span className="text-figma-base text-fw-body truncate">{source.name}</span>
               </div>
               <div className="flex items-center ml-3">
-                <div className="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden mr-2">
+                <div className="w-20 h-1.5 bg-fw-neutral rounded-full overflow-hidden mr-2">
                   <div
-                    className="h-full bg-green-500 rounded-full transition-all duration-500"
+                    className="h-full bg-fw-success rounded-full transition-all duration-500"
                     style={{ width: `${source.percentage}%` }}
                   />
                 </div>
-                <span className="text-xs font-medium text-gray-700 w-12 text-right">
+                <span className="text-figma-sm font-medium text-fw-body w-12 text-right">
                   {source.percentage}%
                 </span>
               </div>
@@ -81,19 +81,19 @@ export function RenewableEnergyWidget({ connections }: RenewableEnergyWidgetProp
       <div className="grid grid-cols-2 gap-3">
         <div className="p-3 bg-green-50 rounded-lg">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-green-700">Renewable</span>
-            <Zap className="h-4 w-4 text-green-500" />
+            <span className="text-figma-sm text-fw-success">Renewable</span>
+            <Zap className="h-4 w-4 text-fw-success" />
           </div>
-          <div className="text-sm font-semibold text-green-900">
+          <div className="text-figma-base font-semibold text-fw-success">
             {renewableEnergy.toFixed(1)} kWh
           </div>
         </div>
-        <div className="p-3 bg-gray-50 rounded-lg">
+        <div className="p-3 bg-fw-wash rounded-lg">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-gray-600">Grid</span>
-            <Zap className="h-4 w-4 text-gray-400" />
+            <span className="text-figma-sm text-fw-body">Grid</span>
+            <Zap className="h-4 w-4 text-fw-bodyLight" />
           </div>
-          <div className="text-sm font-semibold text-gray-900">
+          <div className="text-figma-base font-semibold text-fw-heading">
             {gridEnergy.toFixed(1)} kWh
           </div>
         </div>
@@ -101,10 +101,10 @@ export function RenewableEnergyWidget({ connections }: RenewableEnergyWidgetProp
 
       {/* Quick Actions */}
       <div className="flex space-x-2">
-        <button className="flex-1 px-3 py-2 text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-green-50 rounded-lg transition-colors">
           Energy Report
         </button>
-        <button className="flex-1 px-3 py-2 text-sm text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-green-50 rounded-lg transition-colors">
           Add Sources
         </button>
       </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, Clock, Mail, Users } from 'lucide-react';
+import { Calendar, Clock, Mail, Users, Plus } from 'lucide-react';
 import { Button } from '../../common/Button';
 
 interface Schedule {
@@ -54,22 +54,23 @@ export function ScheduleSettings() {
   const getFrequencyColor = (frequency: Schedule['frequency']) => {
     switch (frequency) {
       case 'Daily':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-50 text-fw-success';
       case 'Weekly':
-        return 'bg-brand-lightBlue text-brand-blue';
+        return 'bg-fw-accent text-fw-link';
       case 'Monthly':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-purple-50 text-fw-purple';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-fw-neutral text-fw-body';
     }
   };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium text-gray-900">Schedule Settings</h3>
+        <div />
         <Button
           variant="primary"
+          icon={Plus}
           onClick={() => {
             window.addToast({
               type: 'info',
@@ -83,58 +84,50 @@ export function ScheduleSettings() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-4">
         {schedules.map((schedule) => (
           <div
             key={schedule.id}
-            className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow"
+            className="bg-fw-base rounded-2xl border border-fw-secondary p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-start justify-between">
-              <div className="space-y-4">
-                <div>
-                  <h4 className="text-lg font-medium text-gray-900">{schedule.reportName}</h4>
-                  <span className={`mt-2 inline-flex px-2 py-1 rounded-full text-xs font-medium ${getFrequencyColor(schedule.frequency)}`}>
-                    {schedule.frequency}
-                  </span>
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 mt-0.5">
+                  <Calendar className="h-6 w-6 text-fw-bodyLight" />
                 </div>
+                <div className="space-y-3">
+                  <div>
+                    <h4 className="text-figma-lg font-medium text-fw-heading tracking-[-0.03em]">{schedule.reportName}</h4>
+                  </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center space-x-2">
-                    <Clock className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">{schedule.time}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">
-                      Next run: {new Date(schedule.nextRun).toLocaleDateString()}
+                  <div className="flex items-center flex-wrap gap-2">
+                    <span className={`px-2 py-0.5 rounded-lg text-figma-sm font-medium ${getFrequencyColor(schedule.frequency)}`}>
+                      {schedule.frequency}
                     </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Mail className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">
-                      {schedule.recipients.length} recipient{schedule.recipients.length !== 1 ? 's' : ''}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Users className="h-5 w-5 text-gray-400" />
-                    <span className="text-sm text-gray-600">
-                      {schedule.recipients[0]}{schedule.recipients.length > 1 ? ` +${schedule.recipients.length - 1} more` : ''}
-                    </span>
+                    <span className="text-fw-secondary">|</span>
+                    <div className="flex items-center space-x-1.5 text-figma-base font-medium text-fw-body tracking-[-0.03em]">
+                      <Clock className="h-4 w-4 text-fw-bodyLight" />
+                      <span>{schedule.time}</span>
+                    </div>
+                    <span className="text-fw-secondary">|</span>
+                    <div className="flex items-center space-x-1.5 text-figma-base font-medium text-fw-body tracking-[-0.03em]">
+                      <Calendar className="h-4 w-4 text-fw-bodyLight" />
+                      <span>Next: {new Date(schedule.nextRun).toLocaleDateString()}</span>
+                    </div>
+                    <span className="text-fw-secondary">|</span>
+                    <div className="flex items-center space-x-1.5 text-figma-base font-medium text-fw-body tracking-[-0.03em]">
+                      <Mail className="h-4 w-4 text-fw-bodyLight" />
+                      <span>{schedule.recipients[0]}{schedule.recipients.length > 1 ? ` +${schedule.recipients.length - 1} more` : ''}</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div className="flex space-x-2">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                >
+                <Button variant="outline" size="sm">
                   Edit
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                >
+                <Button variant="outline" size="sm">
                   {schedule.status === 'active' ? 'Pause' : 'Activate'}
                 </Button>
               </div>

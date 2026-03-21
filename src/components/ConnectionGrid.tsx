@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GridView } from './connection/views/GridView';
 import { ListView } from './connection/views/ListView';
 import { TopologyView } from './connection/views/TopologyView';
 import { MobileConnectionGrid } from './connection/MobileConnectionGrid';
-import { Search, Filter, LayoutGrid, List, Network, Download, Minimize2, Maximize2, Group as GroupIcon, X } from 'lucide-react';
+import { Search, Filter, LayoutGrid, List, Network, Download, Minimize2, Maximize2, Group as GroupIcon, X, PlusCircle } from 'lucide-react';
 import { Connection, ViewMode } from '../types';
 import { Button } from './common/Button';
 import { useStore } from '../store/useStore';
@@ -17,6 +18,7 @@ interface ConnectionGridProps {
 export function ConnectionGrid({ connections }: ConnectionGridProps) {
   const groups = useStore(state => state.groups);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
@@ -81,102 +83,129 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
 
   return (
     <div className="space-y-6 min-h-[calc(100vh-16rem)] pb-12">
-      <div className="bg-fw-base rounded-lg border border-fw-secondary">
-        <div className="p-4 flex items-center space-x-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-            />
-          </div>
-          <div className="flex items-center bg-fw-base rounded-lg border border-fw-secondary p-1">
-            <button
-              onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-full transition-colors ${
-                viewMode === 'grid'
-                  ? 'text-fw-link bg-fw-accent'
-                  : 'text-fw-disabled hover:text-fw-bodyLight'
-              }`}
-              title="Grid View"
-            >
-              <LayoutGrid className="h-5 w-5" />
-            </button>
-            <button
-              onClick={() => setViewMode('list')}
-              className={`p-2 rounded-full transition-colors ${
-                viewMode === 'list'
-                  ? 'text-fw-link bg-fw-accent'
-                  : 'text-fw-disabled hover:text-fw-bodyLight'
-              }`}
-              title="List View"
-            >
-              <List className="h-5 w-5" />
-            </button>
-            <button
-              onClick={() => setViewMode('topology')}
-              className={`p-2 rounded-full transition-colors ${
-                viewMode === 'topology'
-                  ? 'text-fw-link bg-fw-accent'
-                  : 'text-fw-disabled hover:text-fw-bodyLight'
-              }`}
-              title="Topology View"
-            >
-              <Network className="h-5 w-5" />
-            </button>
-          </div>
-          {viewMode === 'grid' && (
-            <Button 
-              variant="outline"
-              icon={areAllMinimized ? Maximize2 : Minimize2}
-              onClick={() => setAreAllMinimized(!areAllMinimized)}
-              size="md"
-            >
-              {areAllMinimized ? 'Expand All' : 'Minimize All'}
-            </Button>
-          )}
-          <Button
-            variant="outline"
-            icon={Filter}
-            onClick={() => setShowFilters(true)}
-            size="md"
-          >
-            Filters
-          </Button>
-          <Button
-            variant="outline"
-            icon={Download}
-            onClick={() => {
-              const csv = [
-                ['Name', 'Type', 'Status', 'Bandwidth', 'Location'].join(','),
-                ...filteredConnections.map(c =>
-                  [c.name, c.type, c.status, c.bandwidth, c.location].join(',')
-                )
-              ].join('\n');
-
-              const blob = new Blob([csv], { type: 'text/csv' });
-              const url = URL.createObjectURL(blob);
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = 'connections.csv';
-              link.click();
-              URL.revokeObjectURL(url);
-
-              window.addToast({
-                type: 'success',
-                title: 'Export Complete',
-                message: 'Connections exported successfully',
-                duration: 3000
-              });
-            }}
-            size="md"
-          >
-            Export
-          </Button>
+      <div className="flex items-center space-x-4">
+        {/* Search - Figma: search input with icon */}
+        <div className="relative" style={{ width: '372px' }}>
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fw-link h-5 w-5" />
+          <input
+            type="text"
+            placeholder="Search connections ..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-full bg-fw-base text-figma-base font-medium placeholder:text-fw-disabled focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+          />
         </div>
+
+        {/* Divider */}
+        <div className="h-6 w-px bg-fw-secondary" />
+
+        {/* Filter - Figma: flat icon + text, no border */}
+        <Button
+          variant="ghost"
+          icon={Filter}
+          onClick={() => setShowFilters(true)}
+          size="md"
+        >
+          Filter
+        </Button>
+
+        {/* Minimize All - Figma: flat icon + text, no border */}
+        {viewMode === 'grid' && (
+          <Button
+            variant="ghost"
+            icon={areAllMinimized ? Maximize2 : Minimize2}
+            onClick={() => setAreAllMinimized(!areAllMinimized)}
+            size="md"
+          >
+            {areAllMinimized ? 'Expand All' : 'Minimize All'}
+          </Button>
+        )}
+
+        {/* Export - Figma: flat icon + text, no border */}
+        <Button
+          variant="ghost"
+          icon={Download}
+          onClick={() => {
+            const csv = [
+              ['Name', 'Type', 'Status', 'Bandwidth', 'Location'].join(','),
+              ...filteredConnections.map(c =>
+                [c.name, c.type, c.status, c.bandwidth, c.location].join(',')
+              )
+            ].join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'connections.csv';
+            link.click();
+            URL.revokeObjectURL(url);
+
+            window.addToast({
+              type: 'success',
+              title: 'Export Complete',
+              message: 'Connections exported successfully',
+              duration: 3000
+            });
+          }}
+          size="md"
+        >
+          Export
+        </Button>
+
+        {/* Divider */}
+        <div className="h-6 w-px bg-fw-secondary" />
+
+        {/* View toggles - Figma: grouped icon buttons */}
+        <div className="flex items-center bg-fw-base rounded-lg border border-fw-secondary p-1">
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`quick-action-btn p-2 transition-colors ${
+              viewMode === 'grid'
+                ? 'text-white bg-fw-primary'
+                : 'text-fw-disabled hover:text-fw-bodyLight'
+            }`}
+            title="Grid View"
+          >
+            <LayoutGrid className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setViewMode('list')}
+            className={`quick-action-btn p-2 transition-colors ${
+              viewMode === 'list'
+                ? 'text-white bg-fw-primary'
+                : 'text-fw-disabled hover:text-fw-bodyLight'
+            }`}
+            title="List View"
+          >
+            <List className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => setViewMode('topology')}
+            className={`quick-action-btn p-2 transition-colors ${
+              viewMode === 'topology'
+                ? 'text-white bg-fw-primary'
+                : 'text-fw-disabled hover:text-fw-bodyLight'
+            }`}
+            title="Topology View"
+          >
+            <Network className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Divider */}
+        <div className="h-6 w-px bg-fw-secondary" />
+
+        {/* Create Connection - Figma: primary blue pill button */}
+        <Button
+          variant="primary"
+          icon={PlusCircle}
+          onClick={() => navigate('/create')}
+          size="md"
+          className="px-6"
+        >
+          Create Connection
+        </Button>
       </div>
 
       {/* Filters dialog */}
@@ -198,7 +227,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div>
-                  <h3 className="text-sm font-medium text-fw-heading mb-2">Status</h3>
+                  <h3 className="text-figma-base font-medium text-fw-heading mb-2">Status</h3>
                   <div className="space-y-2">
                     {['Active', 'Inactive'].map((status) => (
                       <label key={status} className="flex items-center">
@@ -214,14 +243,14 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                           }}
                           className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-fw-body">{status}</span>
+                        <span className="ml-2 text-figma-base text-fw-body">{status}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-fw-heading mb-2">Connection Type</h3>
+                  <h3 className="text-figma-base font-medium text-fw-heading mb-2">Connection Type</h3>
                   <div className="space-y-2 max-h-40 overflow-y-auto">
                     {Array.from(new Set(connections.map(c => c.type))).map((type) => (
                       <label key={type} className="flex items-center">
@@ -237,14 +266,14 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                           }}
                           className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-fw-body">{type}</span>
+                        <span className="ml-2 text-figma-base text-fw-body">{type}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-fw-heading mb-2">Location</h3>
+                  <h3 className="text-figma-base font-medium text-fw-heading mb-2">Location</h3>
                   <div className="space-y-2">
                     {Array.from(new Set(connections.map(c => c.location))).map((location) => (
                       <label key={location} className="flex items-center">
@@ -260,14 +289,14 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                           }}
                           className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-fw-body">{location}</span>
+                        <span className="ml-2 text-figma-base text-fw-body">{location}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-fw-heading mb-2 flex items-center">
+                  <h3 className="text-figma-base font-medium text-fw-heading mb-2 flex items-center">
                     <GroupIcon className="h-4 w-4 mr-1.5" />
                     Groups
                   </h3>
@@ -286,7 +315,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
                           }}
                           className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
                         />
-                        <span className="ml-2 text-sm text-fw-body">{group.name}</span>
+                        <span className="ml-2 text-figma-base text-fw-body">{group.name}</span>
                       </label>
                     ))}
                   </div>
@@ -333,7 +362,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
               return (
                 <span
                   key={`${category}-${value}`}
-                  className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-fw-accent text-fw-link"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-figma-base bg-fw-accent text-fw-link"
                 >
                   {category === 'groups' ? (
                     <>
@@ -357,7 +386,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
             })
           )}
           {searchQuery && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-fw-wash text-fw-body">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-figma-base bg-fw-wash text-fw-body">
               "{searchQuery}"
               <button
                 onClick={() => setSearchQuery('')}
@@ -372,30 +401,32 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
               setFilters({ status: [], type: [], location: [], groups: [] });
               setSearchQuery('');
             }}
-            className="text-sm text-fw-disabled hover:text-fw-body"
+            className="text-figma-base text-fw-disabled hover:text-fw-body"
           >
             Clear all
           </button>
         </div>
       )}
 
-      <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
+      <div>
         {filteredConnections.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-fw-disabled">No connections match your search criteria</p>
           </div>
         ) : viewMode === 'list' ? (
-          <div className="overflow-x-auto">
+          <div className="bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
             <ListView
               connections={filteredConnections}
               groups={groups}
             />
           </div>
         ) : viewMode === 'topology' ? (
-          <TopologyView
-            connections={filteredConnections}
-            groups={groups}
-          />
+          <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+            <TopologyView
+              connections={filteredConnections}
+              groups={groups}
+            />
+          </div>
         ) : (
           <GridView
             connections={filteredConnections}

@@ -39,14 +39,14 @@ export function ConnectionCardMinimized({
     <div className="h-full p-4 flex items-center">
       {/* Left Side: Icon and Name */}
       <div className="flex items-center space-x-3 min-w-0">
-        <div className="p-2 bg-gray-50 rounded-lg shrink-0">
+        <div className="p-2 bg-fw-wash rounded-lg shrink-0">
           {getCardIcon()}
         </div>
         <div className="min-w-0">
-          <h3 className="text-sm font-medium text-gray-900 truncate">
+          <h3 className="text-figma-base font-medium text-fw-heading truncate">
             {connection.name}
           </h3>
-          <p className="text-xs text-gray-500 truncate">{connection.type}</p>
+          <p className="text-figma-sm text-fw-bodyLight truncate">{connection.type}</p>
         </div>
       </div>
 
@@ -67,14 +67,14 @@ export function ConnectionCardMinimized({
               }
             } : {}}
           />
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-figma-base font-medium text-fw-body">
             {connection.performance?.bandwidthUtilization || 0}%
           </span>
         </div>
 
         {/* Groups Badge - always show, empty state if no groups */}
         <div className="flex items-center">
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
+          <span className="inline-flex items-center px-2 py-1 rounded-full text-figma-sm bg-fw-neutral text-fw-bodyLight">
             <Layers className="h-3 w-3 mr-1" />
             {groups.length > 0 ? groups.length : '0'}
           </span>
@@ -89,13 +89,13 @@ export function ConnectionCardMinimized({
             }}
             disabled={isPending}
             className={`
-              inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
+              inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium
               transition-all duration-200 border
               ${isPending 
                 ? 'bg-brand-lightBlue text-brand-blue border-brand-blue/20 cursor-wait' 
                 : connection.status === 'Active'
-                  ? 'bg-white text-complementary-green border-complementary-green/20 hover:bg-complementary-green/10'
-                  : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                  ? 'bg-fw-base text-complementary-green border-complementary-green/20 hover:bg-complementary-green/10'
+                  : 'bg-fw-base text-fw-body border-fw-secondary hover:bg-fw-wash'
               }
             `}
             // Add pulse animation when pending

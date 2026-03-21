@@ -26,34 +26,34 @@ export function DataCenterWidget() {
           <Card key={dc.name}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <Server className="h-5 w-5 text-blue-500 mr-2" />
-                <h3 className="text-sm font-medium text-gray-900">{dc.name}</h3>
+                <Server className="h-5 w-5 text-fw-link mr-2" />
+                <h3 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{dc.name}</h3>
               </div>
-              <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+              <span className="px-2 py-1 text-figma-sm font-medium rounded-full bg-green-50 text-fw-success">
                 {dc.status}
               </span>
             </div>
             <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center text-gray-500">
+              <div className="flex items-center justify-between text-figma-base">
+                <div className="flex items-center text-fw-bodyLight">
                   <Activity className="h-4 w-4 mr-1" />
                   <span>Capacity</span>
                 </div>
-                <span className="font-medium text-gray-900">{dc.capacity}%</span>
+                <span className="font-medium text-fw-heading">{dc.capacity}%</span>
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center text-gray-500">
+              <div className="flex items-center justify-between text-figma-base">
+                <div className="flex items-center text-fw-bodyLight">
                   <Thermometer className="h-4 w-4 mr-1" />
                   <span>Temperature</span>
                 </div>
-                <span className="font-medium text-gray-900">{dc.temperature}</span>
+                <span className="font-medium text-fw-heading">{dc.temperature}</span>
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center text-gray-500">
+              <div className="flex items-center justify-between text-figma-base">
+                <div className="flex items-center text-fw-bodyLight">
                   <Power className="h-4 w-4 mr-1" />
                   <span>Power Usage</span>
                 </div>
-                <span className="font-medium text-gray-900">{dc.power}</span>
+                <span className="font-medium text-fw-heading">{dc.power}</span>
               </div>
             </div>
           </Card>

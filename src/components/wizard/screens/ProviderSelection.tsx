@@ -99,7 +99,7 @@ export function ProviderSelection({
 
   return (
     <div className="space-y-8">
-      <h3 className="text-xl font-semibold text-gray-900 text-center mb-8">
+      <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">
         Select Your Cloud Provider
       </h3>
 
@@ -114,13 +114,13 @@ export function ProviderSelection({
                 }
                 disabled={provider.disabled}
                 className={`
-                  w-full py-12 px-8 border-2 rounded-xl wizard-card network-option transition-all duration-200
+                  w-full py-12 px-8 border-2 rounded-2xl wizard-card network-option transition-all duration-200
                   ${
                     provider.disabled
-                      ? 'border-gray-200 bg-gray-50 cursor-not-allowed'
+                      ? 'border-fw-secondary bg-fw-wash cursor-not-allowed'
                       : selectedProvider === provider.id
-                      ? 'border-brand-blue bg-brand-lightBlue shadow-lg transform scale-[1.02]'
-                      : 'border-gray-200 hover:border-brand-blue/30 hover:bg-brand-lightBlue/30'
+                      ? 'border-fw-active bg-fw-primary shadow-lg transform scale-[1.02]'
+                      : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50 hover:bg-fw-base'
                   }
                 `}
               >
@@ -134,7 +134,7 @@ export function ProviderSelection({
                         provider.disabled
                           ? 'filter grayscale opacity-50'
                           : selectedProvider === provider.id
-                          ? '' // Full color when selected
+                          ? 'brightness-0 invert' // White logo on blue bg
                           : 'filter grayscale hover:filter-none' // B&W by default, color on hover
                       }
                     `}
@@ -144,12 +144,13 @@ export function ProviderSelection({
 
               {/* Coming Soon Overlay */}
               {provider.disabled && (
-                <div className="absolute inset-0 flex flex-col justify-end items-center p-4 bg-white/10 backdrop-blur-[0.5px] rounded-xl">
-                  <span className="px-3 py-1 bg-gray-900/50 text-white text-sm font-medium rounded-full whitespace-nowrap">
+                <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
+                  <span className="badge-coming-soon badge-coming-soon-dark">
                     Coming Soon
                   </span>
                 </div>
               )}
+
             </div>
           ))}
         </div>
@@ -164,13 +165,13 @@ export function ProviderSelection({
                 }
                 disabled={provider.disabled}
                 className={`
-                  w-full py-12 px-8 border-2 rounded-xl wizard-card network-option transition-all duration-200
+                  w-full py-12 px-8 border-2 rounded-2xl wizard-card network-option transition-all duration-200
                   ${
                     provider.disabled
-                      ? 'border-gray-200 bg-gray-50 cursor-not-allowed'
+                      ? 'border-fw-secondary bg-fw-wash cursor-not-allowed'
                       : selectedProvider === provider.id
-                      ? 'border-brand-blue bg-brand-lightBlue shadow-lg transform scale-[1.02]'
-                      : 'border-gray-200 hover:border-brand-blue/30 hover:bg-brand-lightBlue/30'
+                      ? 'border-fw-active bg-fw-primary shadow-lg transform scale-[1.02]'
+                      : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50 hover:bg-fw-base'
                   }
                 `}
               >
@@ -184,7 +185,7 @@ export function ProviderSelection({
                         provider.disabled
                           ? 'filter grayscale opacity-50'
                           : selectedProvider === provider.id
-                          ? '' // Full color when selected
+                          ? 'brightness-0 invert' // White logo on blue bg
                           : 'filter grayscale hover:filter-none' // B&W by default, color on hover
                       }
                     `}
@@ -194,12 +195,13 @@ export function ProviderSelection({
 
               {/* Coming Soon Overlay */}
               {provider.disabled && (
-                <div className="absolute inset-0 flex flex-col justify-end items-center p-4 bg-white/10 backdrop-blur-[0.5px] rounded-xl">
-                  <span className="px-3 py-1 bg-gray-900/50 text-white text-sm font-medium rounded-full whitespace-nowrap">
+                <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
+                  <span className="badge-coming-soon badge-coming-soon-dark">
                     Coming Soon
                   </span>
                 </div>
               )}
+
             </div>
           ))}
         </div>
@@ -214,13 +216,13 @@ export function ProviderSelection({
                 }
                 disabled={provider.disabled}
                 className={`
-                  w-full py-12 px-8 border-2 rounded-xl wizard-card network-option transition-all duration-200
+                  w-full py-12 px-8 border-2 rounded-2xl wizard-card network-option transition-all duration-200
                   ${
                     provider.disabled
-                      ? 'border-gray-200 bg-gray-50 cursor-not-allowed'
+                      ? 'border-fw-secondary bg-fw-wash cursor-not-allowed'
                       : selectedProvider === provider.id
-                      ? 'border-brand-blue bg-brand-lightBlue shadow-lg transform scale-[1.02]'
-                      : 'border-gray-200 hover:border-brand-blue/30 hover:bg-brand-lightBlue/30'
+                      ? 'border-fw-active bg-fw-primary shadow-lg transform scale-[1.02]'
+                      : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50 hover:bg-fw-base'
                   }
                 `}
               >
@@ -234,7 +236,7 @@ export function ProviderSelection({
                         provider.disabled
                           ? 'filter grayscale opacity-50'
                           : selectedProvider === provider.id
-                          ? '' // Full color when selected
+                          ? 'brightness-0 invert' // White logo on blue bg
                           : 'filter grayscale hover:filter-none' // B&W by default, color on hover
                       }
                     `}
@@ -244,12 +246,13 @@ export function ProviderSelection({
 
               {/* Coming Soon Overlay */}
               {provider.disabled && (
-                <div className="absolute inset-0 flex flex-col justify-end items-center p-4 bg-white/10 backdrop-blur-[0.5px] rounded-xl">
-                  <span className="px-3 py-1 bg-gray-900/50 text-white text-sm font-medium rounded-full whitespace-nowrap">
+                <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
+                  <span className="badge-coming-soon badge-coming-soon-dark">
                     Coming Soon
                   </span>
                 </div>
               )}
+
             </div>
           ))}
         </div>
@@ -263,13 +266,13 @@ export function ProviderSelection({
               }
               disabled={lastProvider.disabled}
               className={`
-                w-full py-12 px-8 border-2 rounded-xl wizard-card network-option transition-all duration-200
+                w-full py-12 px-8 border-2 rounded-2xl wizard-card network-option transition-all duration-200
                 ${
                   lastProvider.disabled
-                    ? 'border-gray-200 bg-gray-50 cursor-not-allowed'
+                    ? 'border-fw-secondary bg-fw-wash cursor-not-allowed'
                     : selectedProvider === lastProvider.id
-                    ? 'border-brand-blue bg-brand-lightBlue shadow-lg transform scale-[1.02]'
-                    : 'border-gray-200 hover:border-brand-blue/30 hover:bg-brand-lightBlue/30'
+                    ? 'border-fw-active bg-fw-primary shadow-lg'
+                    : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50 hover:bg-fw-base'
                 }
               `}
             >
@@ -283,7 +286,7 @@ export function ProviderSelection({
                       lastProvider.disabled
                         ? 'filter grayscale opacity-50'
                         : selectedProvider === lastProvider.id
-                        ? '' // Full color when selected
+                        ? 'brightness-0 invert' // White logo on blue bg
                         : 'filter grayscale hover:filter-none' // B&W by default, color on hover
                     }
                   `}
@@ -293,8 +296,8 @@ export function ProviderSelection({
 
             {/* Coming Soon Overlay */}
             {lastProvider.disabled && (
-              <div className="absolute inset-0 flex flex-col justify-end items-center p-4 bg-white/10 backdrop-blur-[0.5px] rounded-xl">
-                <span className="px-3 py-1 bg-gray-900/50 text-white text-sm font-medium rounded-full whitespace-nowrap">
+              <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
+                <span className="badge-coming-soon badge-coming-soon-dark">
                   Coming Soon
                 </span>
               </div>

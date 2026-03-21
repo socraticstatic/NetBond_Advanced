@@ -19,23 +19,23 @@ export function ConnectionCardProgress({
   
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-gray-500">Bandwidth Utilization</span>
-        <span className="font-medium text-gray-900">{bandwidthUtil}%</span>
+      <div className="flex items-center justify-between text-figma-base">
+        <span className="font-medium text-fw-body">Bandwidth Utilization</span>
+        <span className="font-medium text-fw-heading">{bandwidthUtil}%</span>
       </div>
-      <div className="h-2 bg-gray-50 rounded-full overflow-hidden">
-        <div 
-          className={`h-full transition-all duration-300 ${
+      <div className="h-2 bg-fw-wash rounded-full overflow-hidden relative">
+        <div
+          className={`h-full rounded-full transition-all duration-300 ${
             bandwidthUtil > 90 ? 'bg-red-500' :
             bandwidthUtil > 80 ? 'bg-complementary-amber' :
             bandwidthUtil > 60 ? 'bg-brand-blue' :
-            'bg-complementary-green'
+            'bg-fw-success'
           }`}
           style={{ width: `${bandwidthUtil}%` }}
         />
       </div>
-      <div className="flex justify-between text-xs text-gray-500">
-        <span>0%</span>
+      <div className="flex justify-between text-figma-sm font-medium text-fw-bodyLight">
+        <span>0</span>
         <span>{bandwidth}</span>
       </div>
     </div>

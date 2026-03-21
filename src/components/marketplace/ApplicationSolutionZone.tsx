@@ -32,65 +32,65 @@ export function ApplicationSolutionZone() {
 
   const colorClasses: Record<string, { bg: string; text: string; border: string; gradient: string }> = {
     blue: {
-      bg: 'bg-slate-50',
-      text: 'text-slate-700',
-      border: 'border-slate-200',
-      gradient: 'from-slate-500 to-slate-600'
+      bg: 'bg-fw-wash',
+      text: 'text-fw-body',
+      border: 'border-fw-secondary',
+      gradient: 'from-fw-secondary to-fw-secondary'
     },
     indigo: {
-      bg: 'bg-gray-50',
-      text: 'text-gray-700',
-      border: 'border-gray-200',
-      gradient: 'from-gray-500 to-gray-600'
+      bg: 'bg-fw-wash',
+      text: 'text-fw-body',
+      border: 'border-fw-secondary',
+      gradient: 'from-fw-secondary to-fw-secondary'
     },
     green: {
-      bg: 'bg-emerald-50',
-      text: 'text-emerald-700',
-      border: 'border-emerald-200',
-      gradient: 'from-emerald-500 to-emerald-600'
+      bg: 'bg-green-50',
+      text: 'text-fw-success',
+      border: 'border-green-200',
+      gradient: 'from-fw-success to-fw-success'
     },
     cyan: {
-      bg: 'bg-slate-50',
-      text: 'text-slate-700',
-      border: 'border-slate-200',
-      gradient: 'from-slate-500 to-slate-600'
+      bg: 'bg-fw-wash',
+      text: 'text-fw-body',
+      border: 'border-fw-secondary',
+      gradient: 'from-fw-secondary to-fw-secondary'
     },
     purple: {
-      bg: 'bg-gray-50',
-      text: 'text-gray-700',
-      border: 'border-gray-200',
-      gradient: 'from-gray-500 to-gray-600'
+      bg: 'bg-fw-wash',
+      text: 'text-fw-body',
+      border: 'border-fw-secondary',
+      gradient: 'from-fw-secondary to-fw-secondary'
     },
     orange: {
-      bg: 'bg-amber-50',
-      text: 'text-amber-700',
-      border: 'border-amber-200',
-      gradient: 'from-amber-500 to-amber-600'
+      bg: 'bg-[#fff7ed]',
+      text: 'text-fw-warn',
+      border: 'border-fw-warn/30',
+      gradient: 'from-[#f59e0b] to-[#d97706]'
     },
     pink: {
-      bg: 'bg-gray-50',
-      text: 'text-gray-700',
-      border: 'border-gray-200',
-      gradient: 'from-gray-500 to-gray-600'
+      bg: 'bg-fw-wash',
+      text: 'text-fw-body',
+      border: 'border-fw-secondary',
+      gradient: 'from-fw-secondary to-fw-secondary'
     },
     red: {
       bg: 'bg-red-50',
-      text: 'text-red-700',
+      text: 'text-fw-error',
       border: 'border-red-200',
-      gradient: 'from-red-500 to-red-600'
+      gradient: 'from-[#ef4444] to-[#dc2626]'
     }
   };
 
   return (
     <div className="space-y-8" style={{ isolation: 'auto' }}>
-      <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-2xl p-8 text-white shadow-xl">
+      <div className="bg-fw-neutral rounded-2xl p-8 text-fw-heading shadow-xl">
         <div className="flex items-start gap-4">
-          <div className="p-3 bg-white bg-opacity-20 rounded-xl backdrop-blur-sm">
+          <div className="p-3 bg-fw-base bg-opacity-20 rounded-xl backdrop-blur-sm">
             <Sparkles className="h-8 w-8" />
           </div>
           <div className="flex-1">
             <h2 className="text-3xl font-bold mb-2">Solution Builder</h2>
-            <p className="text-gray-200 text-lg mb-4">
+            <p className="text-fw-body text-lg mb-4">
               Build optimized network connections for your business applications
             </p>
             <p className="text-white text-opacity-90 leading-relaxed">
@@ -101,7 +101,7 @@ export function ApplicationSolutionZone() {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <h3 className="text-lg font-semibold text-fw-heading tracking-[-0.03em] mb-4">
           Available Solutions
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ isolation: 'auto' }}>
@@ -111,44 +111,44 @@ export function ApplicationSolutionZone() {
             return (
               <div
                 key={solution.id}
-                className="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all duration-200 overflow-visible group flex flex-col relative"
+                className="bg-fw-base rounded-2xl border border-fw-secondary hover:border-fw-link hover:shadow-lg transition-all duration-200 overflow-visible group flex flex-col relative"
               >
                 {solution.popular && (
                   <div className="absolute -top-3 -right-3 z-50">
-                    <div className="px-3 py-1.5 bg-[#003184] rounded-full shadow-md">
+                    <div className="px-3 py-1.5 bg-fw-active rounded-full shadow-md">
                       <Star className="h-4 w-4 text-white" fill="currentColor" />
                     </div>
                   </div>
                 )}
-                <div className="p-6 border-b border-gray-200 bg-gradient-to-b from-gray-50 to-white">
+                <div className="p-6 border-b border-fw-secondary bg-gradient-to-b from-fw-wash to-fw-base">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       {solution.logo && (
-                        <div className="p-2 bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div className="p-2 bg-fw-base rounded-lg shadow-sm border border-fw-secondary">
                           <img src={solution.logo} alt={`${solution.name} logo`} className="h-8 w-8 object-contain" />
                         </div>
                       )}
                       <div>
-                        <h4 className="text-xl font-bold text-gray-900">{solution.name}</h4>
-                        <p className="text-sm text-gray-600">{solution.category}</p>
+                        <h4 className="text-figma-base font-medium text-fw-heading">{solution.name}</h4>
+                        <p className="text-figma-sm text-fw-bodyLight">{solution.category}</p>
                       </div>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 line-clamp-3">{solution.description}</p>
+                  <p className="text-figma-base text-fw-bodyLight line-clamp-3">{solution.description}</p>
                 </div>
 
                 <div className="p-6 space-y-4 flex-1 flex flex-col">
                   <div>
-                    <h5 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Common Use Cases</h5>
+                    <h5 className="text-figma-sm font-semibold text-fw-body mb-2 uppercase tracking-wide">Common Use Cases</h5>
                     <ul className="space-y-1.5">
                       {solution.useCases.slice(0, 3).map((useCase, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
-                          <CheckCircle className="h-4 w-4 text-[#003184] flex-shrink-0 mt-0.5" />
+                        <li key={idx} className="flex items-start gap-2 text-figma-base text-fw-body">
+                          <CheckCircle className="h-4 w-4 text-fw-link flex-shrink-0 mt-0.5" />
                           <span>{useCase}</span>
                         </li>
                       ))}
                       {solution.useCases.length > 3 && (
-                        <li className="text-xs text-gray-500 ml-6">
+                        <li className="text-figma-sm text-fw-bodyLight ml-6">
                           +{solution.useCases.length - 3} more
                         </li>
                       )}
@@ -156,22 +156,22 @@ export function ApplicationSolutionZone() {
                   </div>
 
                   <div className={`${colors.bg} ${colors.border} border rounded-lg p-4`}>
-                    <h5 className="text-xs font-semibold text-gray-700 mb-3 uppercase tracking-wide">
+                    <h5 className="text-figma-sm font-semibold text-fw-body mb-3 uppercase tracking-wide">
                       Recommended Setup
                     </h5>
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-2 text-figma-base">
                       <div className="flex items-center gap-2">
                         <Zap className={`h-4 w-4 ${colors.text}`} />
-                        <span className="text-gray-700">{solution.recommendedSetup.connectionType}</span>
+                        <span className="text-fw-body">{solution.recommendedSetup.connectionType}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <TrendingUp className={`h-4 w-4 ${colors.text}`} />
-                        <span className="text-gray-700">{solution.recommendedSetup.bandwidth}</span>
+                        <span className="text-fw-body">{solution.recommendedSetup.bandwidth}</span>
                       </div>
                       {solution.recommendedSetup.redundancy && (
                         <div className="flex items-center gap-2">
                           <Shield className={`h-4 w-4 ${colors.text}`} />
-                          <span className="text-gray-700">Redundancy Enabled</span>
+                          <span className="text-fw-body">Redundancy Enabled</span>
                         </div>
                       )}
                     </div>
@@ -179,17 +179,17 @@ export function ApplicationSolutionZone() {
 
                   <div className="flex-1"></div>
 
-                  <div className="pt-4 border-t border-gray-200 space-y-3">
-                    <div className="flex items-center justify-between text-sm">
+                  <div className="pt-4 border-t border-fw-secondary space-y-3">
+                    <div className="flex items-center justify-between text-figma-base">
                       <div className="flex items-baseline gap-0.5">
-                        <DollarSign className="h-4 w-4 text-gray-700" />
-                        <span className="text-lg font-bold text-gray-900">{solution.monthlyStartingPrice}</span>
-                        <span className="text-xs text-gray-600">/month</span>
+                        <DollarSign className="h-4 w-4 text-fw-body" />
+                        <span className="text-figma-xl font-bold text-fw-heading">{solution.monthlyStartingPrice}</span>
+                        <span className="text-figma-sm text-fw-bodyLight">/month</span>
                       </div>
                     </div>
                     <button
                       onClick={() => handleBuildNetwork(solution)}
-                      className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold transition-all duration-200 text-sm bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--button-primary-focus-ring)] focus:ring-offset-2 rounded-lg shadow-sm hover:shadow-md active:shadow-sm group/btn"
+                      className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold transition-all duration-200 text-figma-base bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--button-primary-focus-ring)] focus:ring-offset-2 rounded-lg shadow-sm hover:shadow-md active:shadow-sm group/btn"
                     >
                       <span>Select Plan</span>
                       <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -204,82 +204,82 @@ export function ApplicationSolutionZone() {
 
       {selectedSolution && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black bg-opacity-70 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
-            <div className="bg-gradient-to-b from-gray-50 to-white p-6 border-b border-gray-200">
+          <div className="bg-fw-base rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
+            <div className="bg-gradient-to-b from-fw-wash to-fw-base p-6 border-b border-fw-secondary">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
                   {selectedSolution.logo && (
-                    <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div className="p-3 bg-fw-base rounded-xl shadow-sm border border-fw-secondary">
                       <img src={selectedSolution.logo} alt={`${selectedSolution.name} logo`} className="h-10 w-10 object-contain" />
                     </div>
                   )}
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{selectedSolution.name} Network</h3>
-                    <p className="text-gray-600">Pre-configured network solution</p>
+                    <h3 className="text-2xl font-bold text-fw-heading tracking-[-0.03em]">{selectedSolution.name} Network</h3>
+                    <p className="text-fw-bodyLight">Pre-configured network solution</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setSelectedSolution(null)}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-fw-neutral rounded-lg transition-colors"
                 >
-                  <ArrowRight className="h-5 w-5 rotate-90 text-gray-600" />
+                  <ArrowRight className="h-5 w-5 rotate-90 text-fw-bodyLight" />
                 </button>
               </div>
             </div>
 
             <div className="p-6 space-y-6">
               <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">What You'll Get</h4>
+                <h4 className="text-figma-base font-semibold text-fw-heading mb-3 uppercase tracking-wide">What You'll Get</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {selectedSolution.benefits.map((benefit, idx) => (
-                    <div key={idx} className="flex items-start gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                      <CheckCircle className="h-5 w-5 text-[#003184] flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-gray-700">{benefit}</span>
+                    <div key={idx} className="flex items-start gap-2 p-3 bg-fw-wash rounded-lg border border-fw-secondary">
+                      <CheckCircle className="h-5 w-5 text-fw-link flex-shrink-0 mt-0.5" />
+                      <span className="text-figma-base text-fw-body">{benefit}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">Security Features</h4>
+                <h4 className="text-figma-base font-semibold text-fw-heading mb-3 uppercase tracking-wide">Security Features</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {selectedSolution.recommendedSetup.security.map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
-                      <Shield className="h-4 w-4 text-[#003184]" />
-                      <span className="text-sm text-gray-700">{feature}</span>
+                    <div key={idx} className="flex items-center gap-2 p-2 bg-fw-wash rounded-lg">
+                      <Shield className="h-4 w-4 text-fw-link" />
+                      <span className="text-figma-base text-fw-body">{feature}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl p-6 border border-gray-200">
-                <h4 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">Setup Summary</h4>
+              <div className="bg-fw-wash rounded-xl p-6 border border-fw-secondary">
+                <h4 className="text-figma-base font-semibold text-fw-heading mb-4 uppercase tracking-wide">Setup Summary</h4>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
-                    <div className="text-xs text-gray-600 mb-1">Connection Type</div>
-                    <div className="text-sm font-semibold text-gray-900">{selectedSolution.recommendedSetup.connectionType}</div>
+                    <div className="text-figma-sm text-fw-bodyLight mb-1">Connection Type</div>
+                    <div className="text-figma-base font-semibold text-fw-heading">{selectedSolution.recommendedSetup.connectionType}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 mb-1">Bandwidth</div>
-                    <div className="text-sm font-semibold text-gray-900">{selectedSolution.recommendedSetup.bandwidth}</div>
+                    <div className="text-figma-sm text-fw-bodyLight mb-1">Bandwidth</div>
+                    <div className="text-figma-base font-semibold text-fw-heading">{selectedSolution.recommendedSetup.bandwidth}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 mb-1">Cloud Provider</div>
-                    <div className="text-sm font-semibold text-gray-900">{selectedSolution.providers.join(', ')}</div>
+                    <div className="text-figma-sm text-fw-bodyLight mb-1">Cloud Provider</div>
+                    <div className="text-figma-base font-semibold text-fw-heading">{selectedSolution.providers.join(', ')}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 mb-1">Setup Time</div>
-                    <div className="text-sm font-semibold text-gray-900">{selectedSolution.estimatedSetupTime}</div>
+                    <div className="text-figma-sm text-fw-bodyLight mb-1">Setup Time</div>
+                    <div className="text-figma-base font-semibold text-fw-heading">{selectedSolution.estimatedSetupTime}</div>
                   </div>
                 </div>
                 <div className="flex items-baseline gap-1 mb-4">
-                  <span className="text-sm text-gray-600">Starting at</span>
-                  <span className="text-3xl font-bold text-gray-900">${selectedSolution.monthlyStartingPrice}</span>
-                  <span className="text-sm text-gray-600">/month</span>
+                  <span className="text-figma-base text-fw-bodyLight">Starting at</span>
+                  <span className="text-figma-xl font-bold text-fw-heading">${selectedSolution.monthlyStartingPrice}</span>
+                  <span className="text-figma-base text-fw-bodyLight">/month</span>
                 </div>
                 <button
                   onClick={handleStartSetup}
-                  className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold transition-all duration-200 text-sm bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--button-primary-focus-ring)] focus:ring-offset-2 rounded-lg shadow-sm hover:shadow-md active:shadow-sm group/btn"
+                  className="w-full inline-flex items-center justify-center px-6 py-3.5 font-semibold transition-all duration-200 text-figma-base bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--button-primary-focus-ring)] focus:ring-offset-2 rounded-lg shadow-sm hover:shadow-md active:shadow-sm group/btn"
                 >
                   <span>Select Plan</span>
                   <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />

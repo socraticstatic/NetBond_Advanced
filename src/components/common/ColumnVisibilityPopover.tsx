@@ -118,7 +118,7 @@ function ColumnVisibilityPopoverComponent({
       <div className="flex items-center justify-between px-4 py-3 border-b border-fw-secondary bg-fw-wash">
         <div className="flex items-center space-x-2">
           <Settings className="h-4 w-4 text-brand-blue" />
-          <h3 className="text-sm font-medium text-fw-heading">Manage Columns</h3>
+          <h3 className="text-figma-base font-medium text-fw-heading">Manage Columns</h3>
         </div>
         <button
           onClick={onClose}
@@ -131,7 +131,7 @@ function ColumnVisibilityPopoverComponent({
 
       {/* Stats */}
       <div className="px-4 py-2 bg-brand-lightBlue/20 border-b border-fw-secondary">
-        <div className="flex items-center justify-between text-xs">
+        <div className="flex items-center justify-between text-figma-sm">
           <span className="text-fw-bodyLight">
             Showing <span className="font-medium text-brand-blue">{visibleCount}</span> of {totalCount} columns
           </span>
@@ -147,7 +147,7 @@ function ColumnVisibilityPopoverComponent({
             placeholder="Search columns..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-sm border border-fw-secondary rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent"
+            className="w-full pl-9 pr-3 py-2 text-figma-base border border-fw-secondary rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent"
             autoFocus
           />
         </div>
@@ -156,7 +156,7 @@ function ColumnVisibilityPopoverComponent({
       {/* Column List */}
       <div className="max-h-64 overflow-y-auto">
         {filteredColumns.length === 0 ? (
-          <div className="px-4 py-8 text-center text-sm text-fw-bodyLight">
+          <div className="px-4 py-8 text-center text-figma-base text-fw-bodyLight">
             No columns match your search
           </div>
         ) : (
@@ -178,12 +178,12 @@ function ColumnVisibilityPopoverComponent({
                     checked={isVisible}
                     onChange={() => !isRequired && toggleColumn(tableId, column.id)}
                     disabled={isRequired}
-                    className="h-4 w-4 text-brand-blue border-gray-300 rounded focus:ring-brand-blue"
+                    className="h-4 w-4 text-brand-blue border-fw-secondary rounded focus:ring-brand-blue"
                   />
-                  <span className="ml-3 text-sm text-fw-body flex-1">
+                  <span className="ml-3 text-figma-base text-fw-body flex-1">
                     {column.label}
                     {isRequired && (
-                      <span className="ml-2 text-xs text-fw-bodyLight">(Required)</span>
+                      <span className="ml-2 text-figma-sm text-fw-bodyLight">(Required)</span>
                     )}
                   </span>
                   {isVisible ? (
@@ -203,19 +203,19 @@ function ColumnVisibilityPopoverComponent({
         <div className="flex items-center justify-between gap-2">
           <button
             onClick={() => showAllColumns(tableId, allColumnIds)}
-            className="flex-1 px-3 py-1.5 text-xs font-medium text-brand-blue hover:bg-brand-lightBlue/30 rounded-md transition-colors"
+            className="flex-1 px-3 py-1.5 text-figma-sm font-medium text-brand-blue hover:bg-brand-lightBlue/30 rounded-md transition-colors"
           >
             Show All
           </button>
           <button
             onClick={() => hideAllColumns(tableId, allColumnIds)}
-            className="flex-1 px-3 py-1.5 text-xs font-medium text-fw-body hover:bg-fw-neutral rounded-md transition-colors"
+            className="flex-1 px-3 py-1.5 text-figma-sm font-medium text-fw-body hover:bg-fw-neutral rounded-md transition-colors"
           >
             Hide All
           </button>
           <button
             onClick={() => resetToDefaults(tableId)}
-            className="flex items-center justify-center px-3 py-1.5 text-xs font-medium text-fw-body hover:bg-fw-neutral rounded-md transition-colors"
+            className="flex items-center justify-center px-3 py-1.5 text-figma-sm font-medium text-fw-body hover:bg-fw-neutral rounded-md transition-colors"
             title="Reset to defaults"
           >
             <RotateCcw className="h-3.5 w-3.5" />

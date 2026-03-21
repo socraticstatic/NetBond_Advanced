@@ -21,10 +21,10 @@ function PageSection({
         <div className="flex items-center justify-between">
           <div>
             {title && (
-              <h2 className="text-lg font-medium text-gray-900">{title}</h2>
+              <h2 className="text-lg font-medium text-fw-heading">{title}</h2>
             )}
             {description && (
-              <p className="mt-1 text-sm text-gray-500">{description}</p>
+              <p className="mt-1 text-figma-base text-fw-bodyLight">{description}</p>
             )}
           </div>
           {action && <div>{action}</div>}

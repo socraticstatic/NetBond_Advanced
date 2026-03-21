@@ -41,8 +41,8 @@ export function ThreatDetectionWidget({ connections }: ThreatDetectionWidgetProp
       {/* Threat Level Chart */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium text-gray-900">Threat Level</h3>
-          <select className="text-sm border-gray-300 rounded-md">
+          <h3 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">Threat Level</h3>
+          <select className="text-figma-base border-fw-secondary rounded-md">
             <option>Last Hour</option>
             <option>Last 24 Hours</option>
             <option>Last 7 Days</option>
@@ -55,24 +55,24 @@ export function ThreatDetectionWidget({ connections }: ThreatDetectionWidgetProp
 
       {/* Active Threats */}
       <div>
-        <h4 className="text-sm font-medium text-gray-900 mb-3">Active Threats</h4>
+        <h4 className="text-figma-base font-medium text-fw-heading mb-3 tracking-[-0.03em]">Active Threats</h4>
         <div className="space-y-3">
           {activeThreats.map((threat) => (
             <div key={threat.id} className="p-3 bg-red-50 rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center">
-                  <AlertTriangle className="h-4 w-4 text-red-500 mr-2" />
-                  <span className="text-sm font-medium text-red-700">{threat.type} Attack</span>
+                  <AlertTriangle className="h-4 w-4 text-fw-error mr-2" />
+                  <span className="text-figma-base font-medium text-fw-error">{threat.type} Attack</span>
                 </div>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                  threat.severity === 'high' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
+                <span className={`px-2 py-1 text-figma-sm font-medium rounded-full ${
+                  threat.severity === 'high' ? 'bg-red-50 text-fw-error' : 'bg-fw-warn/10 text-fw-warn'
                 }`}>
                   {threat.severity.toUpperCase()}
                 </span>
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-red-600">{threat.target}</span>
-                <span className="text-red-600">{threat.status}</span>
+              <div className="flex items-center justify-between text-figma-base">
+                <span className="text-fw-error">{threat.target}</span>
+                <span className="text-fw-error">{threat.status}</span>
               </div>
             </div>
           ))}
@@ -81,26 +81,26 @@ export function ThreatDetectionWidget({ connections }: ThreatDetectionWidgetProp
 
       {/* Quick Stats */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="p-3 bg-gray-50 rounded-lg">
+        <div className="p-3 bg-fw-wash rounded-lg">
           <div className="flex items-center justify-between mb-1">
-            <Activity className="h-4 w-4 text-gray-400" />
-            <span className="text-xs text-gray-500">24h Threats</span>
+            <Activity className="h-4 w-4 text-fw-bodyLight" />
+            <span className="text-figma-sm text-fw-bodyLight">24h Threats</span>
           </div>
-          <div className="text-xl font-bold text-gray-900">24</div>
+          <div className="text-xl font-bold text-fw-heading">24</div>
         </div>
-        <div className="p-3 bg-gray-50 rounded-lg">
+        <div className="p-3 bg-fw-wash rounded-lg">
           <div className="flex items-center justify-between mb-1">
-            <Shield className="h-4 w-4 text-gray-400" />
-            <span className="text-xs text-gray-500">Blocked</span>
+            <Shield className="h-4 w-4 text-fw-bodyLight" />
+            <span className="text-figma-sm text-fw-bodyLight">Blocked</span>
           </div>
-          <div className="text-xl font-bold text-gray-900">98%</div>
+          <div className="text-xl font-bold text-fw-heading">98%</div>
         </div>
-        <div className="p-3 bg-gray-50 rounded-lg">
+        <div className="p-3 bg-fw-wash rounded-lg">
           <div className="flex items-center justify-between mb-1">
-            <AlertTriangle className="h-4 w-4 text-gray-400" />
-            <span className="text-xs text-gray-500">Risk Level</span>
+            <AlertTriangle className="h-4 w-4 text-fw-bodyLight" />
+            <span className="text-figma-sm text-fw-bodyLight">Risk Level</span>
           </div>
-          <div className="text-xl font-bold text-gray-900">Low</div>
+          <div className="text-xl font-bold text-fw-heading">Low</div>
         </div>
       </div>
     </div>

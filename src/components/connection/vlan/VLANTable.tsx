@@ -34,13 +34,13 @@ export function VLANTable({
   const getStatusBadge = (status: string) => {
     const statusLower = status?.toLowerCase() || 'unknown';
     const colorMap: Record<string, string> = {
-      active: 'bg-green-100 text-green-800',
-      inactive: 'bg-gray-100 text-gray-800',
-      provisioning: 'bg-blue-100 text-blue-800',
-      error: 'bg-red-100 text-red-800',
-      pending: 'bg-yellow-100 text-yellow-800'
+      active: 'bg-green-50 text-fw-success',
+      inactive: 'bg-fw-neutral text-fw-heading',
+      provisioning: 'bg-fw-accent text-fw-linkHover',
+      error: 'bg-red-50 text-fw-error',
+      pending: 'bg-fw-warn/10 text-fw-warn'
     };
-    return colorMap[statusLower] || 'bg-gray-100 text-gray-800';
+    return colorMap[statusLower] || 'bg-fw-neutral text-fw-heading';
   };
 
   const columns: TableColumn<Link>[] = [
@@ -51,7 +51,7 @@ export function VLANTable({
       sortKey: 'vlanId',
       width: 'w-24',
       render: (vlan) => (
-        <div className="text-sm font-mono font-medium text-fw-heading">
+        <div className="text-figma-base font-mono font-medium text-fw-heading">
           {vlan.vlanId || '—'}
         </div>
       ),
@@ -59,14 +59,14 @@ export function VLANTable({
     },
     {
       id: 'name',
-      label: 'NAME',
+      label: 'Name',
       sortable: true,
       sortKey: 'name',
       render: (vlan) => (
         <div>
-          <div className="text-sm font-medium text-fw-heading">{vlan.name}</div>
+          <div className="text-figma-base font-medium text-fw-heading">{vlan.name}</div>
           {vlan.description && (
-            <div className="text-xs text-fw-bodyLight mt-0.5">{vlan.description}</div>
+            <div className="text-figma-sm text-fw-bodyLight mt-0.5">{vlan.description}</div>
           )}
         </div>
       ),
@@ -74,10 +74,10 @@ export function VLANTable({
     },
     {
       id: 'cloudRouter',
-      label: 'CLOUD ROUTER',
+      label: 'Cloud Router',
       sortable: false,
       render: () => (
-        <div className="text-sm text-fw-body">
+        <div className="text-figma-base text-fw-body">
           {cloudRouterName || '—'}
         </div>
       ),
@@ -85,12 +85,12 @@ export function VLANTable({
     },
     {
       id: 'bandwidth',
-      label: 'BANDWIDTH',
+      label: 'Bandwidth',
       sortable: true,
       sortKey: 'bandwidth',
       width: 'w-28',
       render: (vlan) => (
-        <div className="text-sm text-fw-body">
+        <div className="text-figma-base text-fw-body">
           {vlan.bandwidth || '1 Gbps'}
         </div>
       ),
@@ -98,12 +98,12 @@ export function VLANTable({
     },
     {
       id: 'status',
-      label: 'STATUS',
+      label: 'Status',
       sortable: true,
       sortKey: 'status',
       width: 'w-28',
       render: (vlan) => (
-        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(vlan.status || 'active')}`}>
+        <span className={`inline-flex px-2 py-1 text-figma-sm font-medium rounded-lg ${getStatusBadge(vlan.status || 'active')}`}>
           {(vlan.status || 'Active').charAt(0).toUpperCase() + (vlan.status || 'Active').slice(1)}
         </span>
       ),

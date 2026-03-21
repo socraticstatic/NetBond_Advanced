@@ -134,7 +134,7 @@ export function MobilePerformanceChart({ data, labels, color }: MobilePerformanc
 
   if (!isChartLoaded) {
     return (
-      <div className="w-full h-full animate-pulse bg-gray-100 rounded-md"></div>
+      <div className="w-full h-full animate-pulse bg-fw-neutral rounded-md"></div>
     );
   }
 

@@ -52,45 +52,45 @@ function SortableWidget({
       style={style}
       {...attributes}
       className={`
-        bg-white rounded-xl border border-gray-200 shadow-sm
+        bg-fw-base rounded-2xl border border-fw-secondary shadow-sm
         hover:shadow-md transition-shadow duration-200
         ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}
       `}
     >
       {/* Widget Header */}
-      <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+      <div className="p-4 border-b border-fw-secondary flex items-center justify-between">
         <div className="flex items-center">
           <div className={`
             p-1.5 rounded-lg
-            ${widgetDef.color === 'blue' ? 'bg-blue-50' :
-              widgetDef.color === 'green' ? 'bg-green-50' :
-              widgetDef.color === 'purple' ? 'bg-purple-50' :
-              widgetDef.color === 'orange' ? 'bg-orange-50' :
-              'bg-gray-50'}
+            ${widgetDef.color === 'blue' ? 'bg-fw-accent' :
+              widgetDef.color === 'green' ? 'bg-fw-successLight' :
+              widgetDef.color === 'purple' ? 'bg-fw-purple/10' :
+              widgetDef.color === 'orange' ? 'bg-fw-warnLight' :
+              'bg-fw-wash'}
           `}>
             <widgetDef.icon className={`
               h-4 w-4
-              ${widgetDef.color === 'blue' ? 'text-blue-500' :
-                widgetDef.color === 'green' ? 'text-green-500' :
-                widgetDef.color === 'purple' ? 'text-purple-500' :
-                widgetDef.color === 'orange' ? 'text-orange-500' :
-                'text-gray-500'}
+              ${widgetDef.color === 'blue' ? 'text-fw-link' :
+                widgetDef.color === 'green' ? 'text-fw-success' :
+                widgetDef.color === 'purple' ? 'text-fw-purple' :
+                widgetDef.color === 'orange' ? 'text-fw-warn' :
+                'text-fw-bodyLight'}
             `} />
           </div>
-          <h3 className="ml-2 text-sm font-medium text-gray-900">
+          <h3 className="ml-2 text-figma-base font-medium text-fw-heading tracking-[-0.03em]">
             {widgetDef.title}
           </h3>
         </div>
         <div className="flex items-center space-x-2">
           <button
             {...listeners}
-            className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50"
+            className="p-1 text-fw-bodyLight hover:text-fw-body rounded-lg hover:bg-fw-wash"
           >
             <GripVertical className="h-4 w-4" />
           </button>
           <button
             onClick={onRemove}
-            className="p-1 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50"
+            className="p-1 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-fw-error/10"
           >
             <X className="h-4 w-4" />
           </button>
@@ -143,13 +143,13 @@ export function WidgetGrid({
         {/* Empty State */}
         {widgets.length === 0 && (
           <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
-            <div className="bg-gray-100 rounded-full p-3 mb-4">
-              <GripVertical className="h-6 w-6 text-gray-400" />
+            <div className="bg-fw-neutral rounded-full p-3 mb-4">
+              <GripVertical className="h-6 w-6 text-fw-bodyLight" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-figma-lg font-bold text-fw-heading mb-2 tracking-[-0.03em]">
               Your Customized Insights are Waiting...
             </h3>
-            <p className="text-sm text-gray-500 max-w-md">
+            <p className="text-figma-base font-medium text-fw-body max-w-md">
               Add widgets from the drawer on the right to customize your insights.
               Drag and drop widgets to rearrange them.
             </p>

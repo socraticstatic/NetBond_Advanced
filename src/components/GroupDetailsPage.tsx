@@ -129,8 +129,8 @@ export function GroupDetailsPage() {
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className={`px-3 py-2 text-2xl font-bold bg-white border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  nameError ? 'border-red-500' : 'border-gray-300'
+                className={`px-3 h-9 text-figma-xl font-bold bg-fw-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-fw-active ${
+                  nameError ? 'border-fw-error' : 'border-fw-secondary'
                 }`}
                 autoFocus
               />
@@ -149,7 +149,7 @@ export function GroupDetailsPage() {
                 />
               </div>
               {nameError && (
-                <span className="text-sm text-red-500">{nameError}</span>
+                <span className="text-figma-base text-fw-error">{nameError}</span>
               )}
             </div>
           ) : (
@@ -176,59 +176,59 @@ export function GroupDetailsPage() {
         {/* Quick Stats */}
         <div className="grid grid-cols-5 gap-6 mb-8">
           {/* Status Card */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
+          <div className="bg-fw-base p-6 rounded-2xl border border-fw-secondary">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Status</h3>
-              <Activity className="h-5 w-5 text-gray-400" />
+              <h3 className="text-figma-base font-medium text-fw-bodyLight">Status</h3>
+              <Activity className="h-5 w-5 text-fw-bodyLight" />
             </div>
             <div className="flex items-center">
               <div className={`h-3 w-3 rounded-full ${
-                group.status === 'active' ? 'bg-green-500' : 'bg-gray-300'
+                group.status === 'active' ? 'bg-fw-success' : 'bg-fw-neutral'
               }`} />
-              <span className="ml-2 text-lg font-medium text-gray-900 capitalize">
+              <span className="ml-2 text-figma-lg font-medium text-fw-heading capitalize">
                 {group.status}
               </span>
             </div>
           </div>
 
           {/* Type Card */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
+          <div className="bg-fw-base p-6 rounded-2xl border border-fw-secondary">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Type</h3>
-              <Tag className="h-5 w-5 text-gray-400" />
+              <h3 className="text-figma-base font-medium text-fw-bodyLight">Type</h3>
+              <Tag className="h-5 w-5 text-fw-bodyLight" />
             </div>
-            <p className="text-lg font-medium text-gray-900 capitalize">{group.type}</p>
+            <p className="text-figma-lg font-medium text-fw-heading capitalize">{group.type}</p>
           </div>
 
           {/* Members Card */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
+          <div className="bg-fw-base p-6 rounded-2xl border border-fw-secondary">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Members</h3>
-              <User className="h-5 w-5 text-gray-400" />
+              <h3 className="text-figma-base font-medium text-fw-bodyLight">Members</h3>
+              <User className="h-5 w-5 text-fw-bodyLight" />
             </div>
-            <p className="text-lg font-medium text-gray-900">
+            <p className="text-figma-lg font-medium text-fw-heading">
               {group.userIds.length} {group.userIds.length === 1 ? 'User' : 'Users'}
             </p>
           </div>
 
           {/* Connections Card */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
+          <div className="bg-fw-base p-6 rounded-2xl border border-fw-secondary">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Connections</h3>
-              <Network className="h-5 w-5 text-gray-400" />
+              <h3 className="text-figma-base font-medium text-fw-bodyLight">Connections</h3>
+              <Network className="h-5 w-5 text-fw-bodyLight" />
             </div>
-            <p className="text-lg font-medium text-gray-900">
+            <p className="text-figma-lg font-medium text-fw-heading">
               {group.connectionIds.length} Active
             </p>
           </div>
 
           {/* Monthly Cost Card */}
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
+          <div className="bg-fw-base p-6 rounded-2xl border border-fw-secondary">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-500">Monthly Cost</h3>
-              <CreditCard className="h-5 w-5 text-gray-400" />
+              <h3 className="text-figma-base font-medium text-fw-bodyLight">Monthly Cost</h3>
+              <CreditCard className="h-5 w-5 text-fw-bodyLight" />
             </div>
-            <p className="text-lg font-medium text-gray-900">
+            <p className="text-figma-lg font-medium text-fw-heading">
               ${group.billing?.monthlyRate?.toFixed(0) || '0'}
             </p>
           </div>
@@ -240,7 +240,7 @@ export function GroupDetailsPage() {
             {/* Status Badge */}
             <Button
               variant={group.status === 'active' ? 'primary' : 'outline'}
-              className={group.status === 'active' ? 'bg-green-600 hover:bg-green-700' : ''}
+              className={group.status === 'active' ? 'bg-fw-success hover:bg-fw-success/90' : ''}
             >
               {group.status === 'active' ? 'Active' : 'Inactive'}
             </Button>
@@ -250,7 +250,7 @@ export function GroupDetailsPage() {
               variant="outline"
               icon={Trash2}
               onClick={() => setShowDeleteConfirm(true)}
-              className="text-red-600 border-red-200 hover:bg-red-50"
+              className="text-fw-error border-fw-error/30 hover:bg-fw-error/10"
             >
               Delete
             </Button>
@@ -260,7 +260,7 @@ export function GroupDetailsPage() {
             variant={isEditing ? 'primary' : 'outline'}
             icon={Edit2}
             onClick={() => setIsEditing(!isEditing)}
-            className={isEditing ? 'bg-green-600 hover:bg-green-700' : ''}
+            className={isEditing ? 'bg-fw-success hover:bg-fw-success/90' : ''}
           >
             {isEditing ? 'Save Changes' : 'Manage Settings'}
           </Button>
@@ -275,7 +275,7 @@ export function GroupDetailsPage() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`
-                    whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm no-rounded
+                    whitespace-nowrap py-4 px-1 border-b-2 font-medium text-figma-base no-rounded
                     transition-colors duration-200
                     ${activeTab === tab.id
                       ? 'border-fw-active text-fw-link'
@@ -291,7 +291,7 @@ export function GroupDetailsPage() {
         </div>
 
         {/* Content Area */}
-        <div className="bg-white rounded-lg shadow-sm">
+        <div className="bg-fw-base rounded-2xl shadow-sm">
           {renderContent()}
         </div>
       </div>
@@ -303,7 +303,7 @@ export function GroupDetailsPage() {
         onConfirm={handleDeleteGroup}
         title="Delete Pool"
         message={`Are you sure you want to delete the pool "${group.name}"? This will remove all associations but won't delete the actual users or connections.`}
-        icon={<Trash2 className="w-6 h-6 text-red-600" />}
+        icon={<Trash2 className="w-6 h-6 text-fw-error" />}
         confirmText="Delete"
         confirmVariant="danger"
       />

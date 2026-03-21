@@ -88,15 +88,15 @@ export function ListView({ connections, groups }: ListViewProps) {
           <ChevronUp
             className={`h-3 w-3 ${
               isSorted && sortDirection === 'asc'
-                ? 'text-gray-700'
-                : 'text-gray-400 group-hover:text-gray-500'
+                ? 'text-fw-body'
+                : 'text-fw-bodyLight group-hover:text-fw-bodyLight'
             }`}
           />
           <ChevronDown
             className={`h-3 w-3 -mt-1 ${
               isSorted && sortDirection === 'desc'
-                ? 'text-gray-700'
-                : 'text-gray-400 group-hover:text-gray-500'
+                ? 'text-fw-body'
+                : 'text-fw-bodyLight group-hover:text-fw-bodyLight'
             }`}
           />
         </span>
@@ -110,13 +110,13 @@ export function ListView({ connections, groups }: ListViewProps) {
         return (
           <div className="flex items-center">
             {connection.type.toLowerCase().includes('internet') ? (
-              <Globe className="h-5 w-5 text-blue-500 mr-3" aria-hidden="true" />
+              <Globe className="h-5 w-5 text-fw-link mr-3" aria-hidden="true" />
             ) : (
-              <Network className="h-5 w-5 text-blue-500 mr-3" aria-hidden="true" />
+              <Network className="h-5 w-5 text-fw-link mr-3" aria-hidden="true" />
             )}
             <div className="min-w-0 flex-1">
-              <div className="text-sm font-medium text-gray-900 truncate">{connection.name}</div>
-              <div className="text-sm text-gray-500 truncate">{connection.type}</div>
+              <div className="text-figma-base font-medium text-fw-heading truncate">{connection.name}</div>
+              <div className="text-figma-base text-fw-bodyLight truncate">{connection.type}</div>
             </div>
           </div>
         );
@@ -127,54 +127,54 @@ export function ListView({ connections, groups }: ListViewProps) {
             {connectionGroups.length > 0 ? (
               connectionGroups.slice(0, 2).map(group => (
                 <div key={group.id} className="flex items-center">
-                  <GroupIcon className="h-4 w-4 text-gray-400 mr-1.5 flex-shrink-0" />
-                  <span className="text-sm text-gray-600 truncate">{group.name}</span>
+                  <GroupIcon className="h-4 w-4 text-fw-bodyLight mr-1.5 flex-shrink-0" />
+                  <span className="text-figma-base text-fw-bodyLight truncate">{group.name}</span>
                 </div>
               ))
             ) : (
-              <span className="text-sm text-gray-500">No groups</span>
+              <span className="text-figma-base text-fw-bodyLight">No groups</span>
             )}
             {connectionGroups.length > 2 && (
-              <span className="text-xs text-gray-400">
+              <span className="text-figma-sm text-fw-bodyLight">
                 +{connectionGroups.length - 2} more
               </span>
             )}
           </div>
         );
       case 'type':
-        return <span className="text-sm text-gray-900 truncate">{connection.type}</span>;
+        return <span className="text-figma-base text-fw-heading truncate">{connection.type}</span>;
       case 'status':
         return (
-          <span 
-            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${
+          <span
+            className={`inline-flex items-center px-2.5 py-1 rounded-lg text-figma-sm font-medium ${
               connection.status === 'Active'
-                ? 'bg-green-100 text-green-800'
-                : 'bg-yellow-100 text-yellow-800'
+                ? 'bg-green-50 text-fw-success'
+                : 'bg-fw-secondary text-fw-disabled'
             }`}
             role="status"
           >
-            {connection.status}
+            {connection.status === 'Active' ? 'Active' : 'Inactive'}
           </span>
         );
       case 'performance':
         return connection.performance && (
           <div className="flex items-center space-x-4 overflow-hidden">
             <div className="flex items-center" title="Latency">
-              <Activity className="h-4 w-4 text-gray-400 mr-1" aria-hidden="true" />
-              <span className="text-sm text-gray-900">{connection.performance.latency}</span>
+              <Activity className="h-4 w-4 text-fw-bodyLight mr-1" aria-hidden="true" />
+              <span className="text-figma-base text-fw-heading">{connection.performance.latency}</span>
             </div>
             <div className="flex items-center" title="Packet Loss">
-              <Network className="h-4 w-4 text-gray-400 mr-1" aria-hidden="true" />
-              <span className="text-sm text-gray-900">{connection.performance.packetLoss}</span>
+              <Network className="h-4 w-4 text-fw-bodyLight mr-1" aria-hidden="true" />
+              <span className="text-figma-base text-fw-heading">{connection.performance.packetLoss}</span>
             </div>
           </div>
         );
       case 'bandwidth':
-        return <span className="text-sm text-gray-900 truncate">{connection.bandwidth}</span>;
+        return <span className="text-figma-base text-fw-heading truncate">{connection.bandwidth}</span>;
       case 'location':
-        return <span className="text-sm text-gray-900 truncate">{connection.location}</span>;
+        return <span className="text-figma-base text-fw-heading truncate">{connection.location}</span>;
       case 'provider':
-        return <span className="text-sm text-gray-900 truncate">{connection.provider || 'N/A'}</span>;
+        return <span className="text-figma-base text-fw-heading truncate">{connection.provider || 'N/A'}</span>;
       default:
         return null;
     }
@@ -190,13 +190,13 @@ export function ListView({ connections, groups }: ListViewProps) {
           List of network connections showing details like name, type, status, performance metrics,
           bandwidth, location, and provider. Click column headers to sort, and use row actions for management.
         </caption>
-        <thead className="bg-gray-50">
+        <thead className="bg-fw-wash">
           <tr>
             {displayColumns.map((column) => (
               <th
                 key={column.id}
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider whitespace-nowrap overflow-hidden text-ellipsis"
+                className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis"
                 role="columnheader"
                 aria-sort={sortField === column.id ? sortDirection : 'none'}
               >
@@ -212,7 +212,7 @@ export function ListView({ connections, groups }: ListViewProps) {
                 <button
                   ref={columnButtonRef}
                   onClick={() => setShowColumnPopover(true)}
-                  className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+                  className="p-2 text-fw-bodyLight hover:text-fw-bodyLight rounded-full hover:bg-fw-neutral transition-colors"
                   title="Manage Columns"
                   aria-label="Manage table columns"
                 >
@@ -232,12 +232,12 @@ export function ListView({ connections, groups }: ListViewProps) {
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-fw-base divide-y divide-fw-secondary">
           {sortedConnections.length === 0 ? (
             <tr>
               <td
                 colSpan={displayColumns.length + 1}
-                className="px-6 py-4 text-center text-sm text-gray-500"
+                className="px-6 py-4 text-center text-figma-base text-fw-bodyLight"
               >
                 No connections found
               </td>
@@ -247,7 +247,7 @@ export function ListView({ connections, groups }: ListViewProps) {
               <tr
                 key={connection.id}
                 onClick={() => navigate(`/connections/${connection.id}`)}
-                className="hover:bg-gray-50 cursor-pointer"
+                className="hover:bg-fw-wash cursor-pointer"
                 role="row"
                 aria-rowindex={rowIndex + 1}
               >
@@ -261,7 +261,7 @@ export function ListView({ connections, groups }: ListViewProps) {
                   </td>
                 ))}
                 <td 
-                  className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium w-16"
+                  className="px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium w-16"
                   role="gridcell"
                 >
                   <div 

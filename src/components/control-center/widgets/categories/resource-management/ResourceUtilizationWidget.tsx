@@ -34,9 +34,9 @@ export function ResourceUtilizationWidget() {
 
   const getUtilizationColor = (current: number, threshold: number) => {
     const percentage = (current / threshold) * 100;
-    if (percentage > 90) return 'bg-red-500';
-    if (percentage > 75) return 'bg-yellow-500';
-    return 'bg-green-500';
+    if (percentage > 90) return 'bg-fw-error';
+    if (percentage > 75) return 'bg-fw-warn';
+    return 'bg-fw-success';
   };
 
   return (
@@ -49,29 +49,29 @@ export function ResourceUtilizationWidget() {
           <div key={resource.name} className="space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Activity className="h-4 w-4 text-gray-400 mr-2" />
-                <span className="text-sm font-medium text-gray-900">{resource.name}</span>
+                <Activity className="h-4 w-4 text-fw-bodyLight mr-2" />
+                <span className="text-figma-base font-medium text-fw-heading">{resource.name}</span>
               </div>
               <div className="flex items-center">
                 {trend >= 0 ? (
-                  <ArrowUpRight className="h-4 w-4 text-red-500" />
+                  <ArrowUpRight className="h-4 w-4 text-fw-error" />
                 ) : (
-                  <ArrowDownRight className="h-4 w-4 text-green-500" />
+                  <ArrowDownRight className="h-4 w-4 text-fw-success" />
                 )}
-                <span className="ml-1 text-sm text-gray-600">
+                <span className="ml-1 text-figma-base text-fw-body">
                   {resource.current}{resource.unit}
                 </span>
               </div>
             </div>
 
-            <div className="relative h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="relative h-2 bg-fw-neutral rounded-full overflow-hidden">
               <div
                 className={`absolute h-full ${utilizationColor} transition-all duration-300`}
                 style={{ width: `${(resource.current / resource.threshold) * 100}%` }}
               />
             </div>
 
-            <div className="flex justify-between text-xs text-gray-500">
+            <div className="flex justify-between text-figma-sm text-fw-bodyLight">
               <span>Current: {resource.current}{resource.unit}</span>
               <span>Threshold: {resource.threshold}{resource.unit}</span>
             </div>
@@ -79,10 +79,10 @@ export function ResourceUtilizationWidget() {
         );
       })}
 
-      <div className="p-3 bg-blue-50 rounded-lg">
+      <div className="p-3 bg-fw-accent rounded-lg">
         <div className="flex items-center">
-          <TrendingUp className="h-4 w-4 text-blue-500 mr-2" />
-          <span className="text-sm text-blue-700">Overall Efficiency: 82%</span>
+          <TrendingUp className="h-4 w-4 text-fw-link mr-2" />
+          <span className="text-figma-base text-fw-linkHover">Overall Efficiency: 82%</span>
         </div>
       </div>
     </div>

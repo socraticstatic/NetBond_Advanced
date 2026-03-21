@@ -7,7 +7,7 @@ interface TemplatePreviewProps {
 
 export function TemplatePreview({ icons }: TemplatePreviewProps) {
   return (
-    <div className="h-12 flex items-center justify-center mb-2 bg-gray-50 rounded">
+    <div className="h-12 flex items-center justify-center mb-2 bg-fw-wash rounded">
       <div className="flex items-center space-x-3 scale-75">
         {icons.map((col, colIndex) => (
           <div key={colIndex} className="flex flex-col space-y-2">

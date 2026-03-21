@@ -85,8 +85,8 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
             )}
           </div>
           <div className="ml-4 max-w-[calc(100%-44px)]">
-            <div className="text-sm font-medium text-gray-900 truncate">{user.name}</div>
-            <div className="text-sm text-gray-500 truncate">{user.email}</div>
+            <div className="text-figma-base font-medium text-fw-heading truncate">{user.name}</div>
+            <div className="text-figma-base text-fw-bodyLight truncate">{user.email}</div>
           </div>
         </div>
       )
@@ -96,7 +96,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
       label: 'User Role',
       width: '35%',
       render: (user: UserType) => (
-        <div className="text-sm text-gray-500 truncate max-w-[120px]">{user.role}</div>
+        <div className="text-figma-base text-fw-bodyLight truncate max-w-[120px]">{user.role}</div>
       )
     },
     {
@@ -104,10 +104,10 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
       label: 'Status',
       width: '20%',
       render: (user: UserType) => (
-        <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+        <span className={`px-2 py-1 inline-flex text-figma-sm leading-5 font-semibold rounded-full ${
           user.status === 'active'
-            ? 'bg-green-100 text-green-800'
-            : 'bg-gray-100 text-gray-800'
+            ? 'bg-green-50 text-fw-success'
+            : 'bg-fw-neutral text-fw-body'
         }`}>
           {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
         </span>
@@ -118,16 +118,16 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
   return (
     <div className="p-6 space-y-6">
       {/* Search and Controls */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200">
+      <div className="bg-fw-base p-4 rounded-lg border border-fw-secondary">
         <div className="flex items-center justify-between gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
             <input
               type="text"
               placeholder="Search members..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+              className="w-full pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             />
           </div>
           <div className="flex items-center space-x-4">
@@ -164,48 +164,48 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
 
         {/* Expanded Filters */}
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
+          <div className="mt-4 pt-4 border-t border-fw-secondary">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">User Role</h4>
+                <h4 className="text-figma-base font-medium text-fw-heading mb-2">User Role</h4>
                 <div className="space-y-2">
                   {['Network Administrator', 'Security Engineer', 'Security Analyst'].map((role) => (
                     <label key={role} className="flex items-center">
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                        className="rounded border-fw-secondary text-fw-cobalt-600 focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-gray-700">{role}</span>
+                      <span className="ml-2 text-figma-base text-fw-body">{role}</span>
                     </label>
                   ))}
                 </div>
               </div>
               
               <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Group Permissions</h4>
+                <h4 className="text-figma-base font-medium text-fw-heading mb-2">Group Permissions</h4>
                 <div className="space-y-2">
                   {['Owner', 'Admin', 'Editor', 'Viewer'].map((permission) => (
                     <label key={permission} className="flex items-center">
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                        className="rounded border-fw-secondary text-fw-cobalt-600 focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-gray-700">{permission}</span>
+                      <span className="ml-2 text-figma-base text-fw-body">{permission}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Status</h4>
+                <h4 className="text-figma-base font-medium text-fw-heading mb-2">Status</h4>
                 <div className="space-y-2">
                   {['Active', 'Inactive'].map((status) => (
                     <label key={status} className="flex items-center">
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                        className="rounded border-fw-secondary text-fw-cobalt-600 focus:ring-fw-active h-4 w-4"
                       />
-                      <span className="ml-2 text-sm text-gray-700">{status}</span>
+                      <span className="ml-2 text-figma-base text-fw-body">{status}</span>
                     </label>
                   ))}
                 </div>
@@ -216,7 +216,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
       </div>
 
       {/* Members Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
         <BaseTable
           columns={columns}
           data={filteredUsers}
@@ -265,7 +265,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
           emptyState={
             <div className="text-center py-12">
               <UserIcon size="xl" variant="muted" className="mx-auto mb-4" />
-              <p className="text-gray-500">No members found in this group</p>
+              <p className="text-fw-bodyLight">No members found in this group</p>
             </div>
           }
         />
@@ -287,21 +287,21 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             {/* Background overlay */}
-            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={() => setShowAddUserModal(false)} />
+            <div className="fixed inset-0 transition-opacity bg-fw-neutral bg-opacity-75" onClick={() => setShowAddUserModal(false)} />
 
             {/* Modal panel */}
-            <div className="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-xl shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
+            <div className="inline-block overflow-hidden text-left align-bottom transition-all transform bg-fw-base rounded-xl shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="px-4 pt-5 pb-4 bg-fw-base sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
-                  <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-blue-100 rounded-full sm:mx-0 sm:h-10 sm:w-10">
-                    <UserPlus className="w-6 h-6 text-blue-600" />
+                  <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-fw-accent rounded-full sm:mx-0 sm:h-10 sm:w-10">
+                    <UserPlus className="w-6 h-6 text-fw-link" />
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3 className="text-lg font-medium leading-6 text-gray-900">
+                    <h3 className="text-lg font-medium leading-6 text-fw-heading">
                       Add User to Group
                     </h3>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500">
+                      <p className="text-figma-base text-fw-bodyLight">
                         Select a user to add to this group. They will automatically receive read access to group resources.
                       </p>
                     </div>
@@ -310,20 +310,20 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
 
                 {/* Search for users */}
                 <div className="relative mt-6">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
                   <input
                     type="text"
                     placeholder="Search users..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                    className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   />
                 </div>
 
                 {/* User list */}
                 <div className="mt-4 max-h-60 overflow-y-auto">
                   {availableUsers.length > 0 ? (
-                    <ul className="divide-y divide-gray-200">
+                    <ul className="divide-y divide-fw-secondary">
                       {availableUsers.map(user => (
-                        <li key={user.id} className="py-3 flex items-center hover:bg-gray-50 px-2 rounded-lg">
+                        <li key={user.id} className="py-3 flex items-center hover:bg-fw-wash px-2 rounded-lg">
                           <div className="flex-shrink-0 h-10 w-10">
                             {user.avatar ? (
                               <img 
@@ -332,18 +332,18 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
                                 alt={user.name}
                               />
                             ) : (
-                              <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                              <div className="h-10 w-10 rounded-full bg-fw-neutral flex items-center justify-center">
                                 <UserIcon size="md" variant="muted" />
                               </div>
                             )}
                           </div>
                           <div className="ml-3 flex-1">
-                            <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                            <div className="text-sm text-gray-500">{user.email}</div>
+                            <div className="text-figma-base font-medium text-fw-heading">{user.name}</div>
+                            <div className="text-figma-base text-fw-bodyLight">{user.email}</div>
                           </div>
                           <button
                             onClick={() => handleAddUser(user.id)}
-                            className="ml-2 inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-full shadow-sm text-white bg-brand-blue hover:bg-brand-darkBlue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue"
+                            className="ml-2 inline-flex items-center px-3 py-1 border border-transparent text-figma-base leading-4 font-medium rounded-full shadow-sm text-white bg-fw-cobalt-600 hover:bg-fw-cobalt-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
                           >
                             Add
                           </button>
@@ -352,15 +352,15 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
                     </ul>
                   ) : (
                     <div className="py-4 text-center">
-                      <p className="text-sm text-gray-500">No available users to add</p>
+                      <p className="text-figma-base text-fw-bodyLight">No available users to add</p>
                     </div>
                   )}
                 </div>
               </div>
-              <div className="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
+              <div className="px-4 py-3 bg-fw-wash sm:px-6 sm:flex sm:flex-row-reverse">
                 <button
                   type="button"
-                  className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-blue-600 border border-transparent rounded-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-fw-cobalt-600 border border-transparent rounded-full shadow-sm hover:bg-fw-cobalt-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active sm:ml-3 sm:w-auto sm:text-figma-base"
                   onClick={() => setShowAddUserModal(false)}
                 >
                   Close

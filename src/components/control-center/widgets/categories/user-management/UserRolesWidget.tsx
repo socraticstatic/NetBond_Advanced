@@ -15,23 +15,23 @@ export function UserRolesWidget() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <Shield className="h-5 w-5 text-orange-500 mr-2" />
-          <span className="text-sm font-medium text-gray-900">User Roles</span>
+          <Shield className="h-5 w-5 text-fw-warn mr-2" />
+          <span className="text-figma-base font-medium text-fw-heading">User Roles</span>
         </div>
-        <button className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+        <button className="p-1 text-fw-bodyLight hover:text-fw-body rounded-lg hover:bg-fw-neutral">
           <UserPlus className="h-4 w-4" />
         </button>
       </div>
 
       <div className="space-y-2">
         {roles.map((role) => (
-          <div key={role.id} className="p-2 bg-gray-50 rounded-lg">
+          <div key={role.id} className="p-2 bg-fw-wash rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <Users className="h-4 w-4 text-gray-400 mr-2" />
-                <span className="text-sm text-gray-900">{role.name}</span>
+                <Users className="h-4 w-4 text-fw-bodyLight mr-2" />
+                <span className="text-figma-base text-fw-heading">{role.name}</span>
               </div>
-              <span className="text-xs font-medium text-gray-500">
+              <span className="text-figma-sm font-medium text-fw-bodyLight">
                 {role.count} users
               </span>
             </div>
@@ -39,7 +39,7 @@ export function UserRolesWidget() {
         ))}
       </div>
 
-      <button className="w-full px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+      <button className="w-full px-4 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg transition-colors">
         Manage Roles
       </button>
     </div>

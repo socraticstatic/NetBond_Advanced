@@ -84,14 +84,14 @@ export function PermissionBadge({ requirement, variant = 'default', showTooltip 
   return (
     <div className="relative inline-flex group">
       <span
-        className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium border ${colorClasses}`}
+        className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-figma-sm font-medium border ${colorClasses}`}
       >
         {getIcon()}
         {variant !== 'compact' && <span>{getLabel()}</span>}
       </span>
 
       {showTooltip && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-fw-gray-900 text-fw-linkPrimary text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-pre-line z-50 pointer-events-none min-w-max">
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-fw-gray-900 text-fw-linkPrimary text-figma-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-pre-line z-50 pointer-events-none min-w-max">
           {getTooltipContent()}
           <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
             <div className="border-4 border-transparent border-t-fw-gray-900"></div>
@@ -111,7 +111,7 @@ interface PermissionIndicatorProps {
 export function PermissionIndicator({ allowed, reason, className = '' }: PermissionIndicatorProps) {
   if (allowed) {
     return (
-      <div className={`inline-flex items-center gap-1 text-green-700 text-xs ${className}`}>
+      <div className={`inline-flex items-center gap-1 text-fw-success text-figma-sm ${className}`}>
         <CheckCircle className="h-3 w-3" />
         <span>Allowed</span>
       </div>
@@ -120,16 +120,16 @@ export function PermissionIndicator({ allowed, reason, className = '' }: Permiss
 
   return (
     <div className="relative inline-flex group">
-      <div className={`inline-flex items-center gap-1 text-red-700 text-xs ${className}`}>
+      <div className={`inline-flex items-center gap-1 text-fw-error text-figma-sm ${className}`}>
         <AlertCircle className="h-3 w-3" />
         <span>Restricted</span>
       </div>
 
       {reason && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-fw-gray-900 text-fw-linkPrimary text-figma-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
           {reason}
           <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
-            <div className="border-4 border-transparent border-t-gray-900"></div>
+            <div className="border-4 border-transparent border-t-fw-gray-900"></div>
           </div>
         </div>
       )}
@@ -151,15 +151,15 @@ export function PermissionLockOverlay({ requirement, reason, onRequestAccess, ch
         {children}
       </div>
 
-      <div className="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-5 backdrop-blur-[1px]">
-        <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4 border-2 border-gray-200">
+      <div className="absolute inset-0 flex items-center justify-center bg-fw-gray-900 bg-opacity-5 backdrop-blur-[1px]">
+        <div className="bg-fw-base rounded-lg shadow-lg p-6 max-w-sm mx-4 border-2 border-fw-secondary">
           <div className="flex items-start gap-3 mb-4">
-            <div className="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-              <Lock className="h-5 w-5 text-red-600" />
+            <div className="flex-shrink-0 w-10 h-10 bg-red-50 rounded-full flex items-center justify-center">
+              <Lock className="h-5 w-5 text-fw-error" />
             </div>
             <div className="flex-1">
-              <h3 className="text-sm font-semibold text-gray-900 mb-1">Permission Required</h3>
-              <p className="text-xs text-gray-600">{reason}</p>
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-1 tracking-[-0.03em]">Permission Required</h3>
+              <p className="text-figma-sm text-fw-bodyLight">{reason}</p>
             </div>
           </div>
 
@@ -170,7 +170,7 @@ export function PermissionLockOverlay({ requirement, reason, onRequestAccess, ch
           {onRequestAccess && (
             <button
               onClick={onRequestAccess}
-              className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+              className="w-full px-4 py-2 bg-fw-cobalt-600 hover:bg-fw-ctaPrimaryHover text-white text-figma-base font-medium rounded-lg transition-colors"
             >
               Request Access
             </button>

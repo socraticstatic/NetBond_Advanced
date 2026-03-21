@@ -6,13 +6,14 @@ interface GroupCardFooterProps {
 
 export function GroupCardFooter({ onManageClick }: GroupCardFooterProps) {
   return (
-    <div className="p-4 border-t border-gray-100">
+    <div className="px-4 pb-4 pt-2">
       <button
         onClick={onManageClick}
-        className="w-full flex items-center justify-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-center gap-2 rounded-[800px] text-figma-base font-medium text-fw-link hover:bg-fw-accent border border-fw-secondary transition-colors"
+        style={{ height: '36px', maxWidth: '320px', margin: '0 auto' }}
       >
+        <ChevronRight className="h-5 w-5" />
         Manage Pool
-        <ChevronRight className="ml-2 h-4 w-4" />
       </button>
     </div>
   );

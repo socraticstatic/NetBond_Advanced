@@ -130,37 +130,37 @@ export function GroupNetworkTab({ group, connections }: GroupNetworkTabProps) {
   return (
     <div className="space-y-6 p-6">
       {/* Section Tabs */}
-      <div className="flex space-x-1 bg-gray-100 rounded-lg p-1 mb-6 max-w-xs">
+      <div className="flex space-x-1 bg-fw-neutral rounded-lg p-1 mb-6 max-w-xs">
         <button
           onClick={() => setActiveTabSection('vnfs')}
-          className={`flex items-center flex-1 justify-center py-2 px-3 rounded-md text-sm font-medium ${
+          className={`flex items-center flex-1 justify-center py-2 px-3 rounded-md text-figma-base font-medium ${
             activeTabSection === 'vnfs'
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'bg-fw-base text-fw-heading shadow-sm'
+              : 'text-fw-bodyLight hover:text-fw-body'
           }`}
         >
           <Shield className="h-4 w-4 mr-1.5" />
           VNF Functions
           <span className="relative ml-1 group">
-            <span className="cursor-help text-xs text-gray-500">i</span>
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            <span className="cursor-help text-figma-sm text-fw-bodyLight">i</span>
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-2 bg-fw-gray-900 text-white text-figma-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
               VNF (Virtual Network Function): Software-based network services that run on virtualized infrastructure, replacing traditional hardware appliances.
             </div>
           </span>
         </button>
         <button
           onClick={() => setActiveTabSection('links')}
-          className={`flex items-center flex-1 justify-center py-2 px-3 rounded-md text-sm font-medium ${
+          className={`flex items-center flex-1 justify-center py-2 px-3 rounded-md text-figma-base font-medium ${
             activeTabSection === 'links'
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-500 hover:text-gray-700'
+              ? 'bg-fw-base text-fw-heading shadow-sm'
+              : 'text-fw-bodyLight hover:text-fw-body'
           }`}
         >
           <Activity className="h-4 w-4 mr-1.5" />
           Links
           <span className="relative ml-1 group">
-            <span className="cursor-help text-xs text-gray-500">i</span>
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            <span className="cursor-help text-figma-sm text-fw-bodyLight">i</span>
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-2 bg-fw-gray-900 text-white text-figma-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
               Virtual Link: A logical network segment that allows devices to communicate as if they were on the same physical network, even when they are on different physical segments.
             </div>
           </span>

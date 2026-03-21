@@ -121,11 +121,11 @@ export function APIToolbox() {
   const CurrentStepComponent = stepComponents[currentStep - 1];
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8">
+    <div className="bg-fw-base rounded-2xl shadow-xl p-8">
       <div className="flex items-center justify-center space-x-4 mb-8">
         <button
           onClick={handleCancel}
-          className="text-brand-blue hover:text-brand-darkBlue flex items-center"
+          className="text-fw-link hover:text-fw-linkHover flex items-center"
         >
           Change Creation Mode
         </button>

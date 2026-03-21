@@ -109,33 +109,33 @@ export function MobileMonitoringDashboard({ connections }: MobileMonitoringDashb
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-fw-wash">
       {/* Mobile Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-fw-base border-b border-fw-secondary sticky top-0 z-10">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center">
-            <button 
+            <button
               onClick={() => navigate(-1)}
-              className="mr-3 p-2 -ml-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+              className="mr-3 p-2 -ml-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">Network Monitoring</h1>
-              <p className="text-sm text-gray-500">Real-time network insights</p>
+              <h1 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">Network Monitoring</h1>
+              <p className="text-figma-sm font-medium text-fw-bodyLight">Real-time network insights</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <button 
+            <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+              className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
               aria-label="Filter"
             >
               <Filter className="h-5 w-5" />
             </button>
-            <button 
+            <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+              className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
               aria-label="Menu"
             >
               <Menu className="h-5 w-5" />
@@ -144,24 +144,24 @@ export function MobileMonitoringDashboard({ connections }: MobileMonitoringDashb
         </div>
 
         {/* Mobile Tab Navigation */}
-        <div className="flex overflow-x-auto hide-scrollbar border-t border-gray-200">
+        <div className="flex overflow-x-auto hide-scrollbar border-t border-fw-secondary">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
               className={`
                 flex-1 flex flex-col items-center py-3 px-1 min-w-[4rem]
-                transition-colors duration-200
+                transition-colors duration-200 no-rounded tracking-[-0.03em]
                 ${activeTab === tab.id
-                  ? 'text-brand-blue border-b-2 border-brand-blue'
-                  : 'text-gray-500 border-b-2 border-transparent'
+                  ? 'text-fw-link border-b-2 border-fw-active'
+                  : 'text-fw-heading border-b-2 border-transparent'
                 }
               `}
             >
               <tab.icon className={`h-5 w-5 mb-1 ${
-                activeTab === tab.id ? 'text-brand-blue' : 'text-gray-400'
+                activeTab === tab.id ? 'text-fw-link' : 'text-fw-heading'
               }`} />
-              <span className="text-xs font-medium whitespace-nowrap">{tab.label}</span>
+              <span className="text-figma-sm font-medium whitespace-nowrap">{tab.label}</span>
             </button>
           ))}
         </div>
@@ -175,27 +175,27 @@ export function MobileMonitoringDashboard({ connections }: MobileMonitoringDashb
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-white border-b border-gray-200 overflow-hidden"
+            className="bg-fw-base border-b border-fw-secondary overflow-hidden"
           >
             <div className="p-4 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-gray-900">Filters</h3>
-                <button 
+                <h3 className="text-figma-sm font-medium text-fw-heading">Filters</h3>
+                <button
                   onClick={() => setIsFilterOpen(false)}
-                  className="p-1 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100"
+                  className="p-1 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-figma-sm font-medium text-fw-bodyLight mb-1">
                   Connection
                 </label>
                 <select
                   value={selectedConnection}
                   onChange={(e) => setSelectedConnection(e.target.value)}
-                  className="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                  className="w-full px-3 rounded-lg h-9 text-figma-base border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active"
                 >
                   <option value="all">All Connections</option>
                   {connections.map((conn) => (
@@ -205,15 +205,15 @@ export function MobileMonitoringDashboard({ connections }: MobileMonitoringDashb
                   ))}
                 </select>
               </div>
-              
+
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-figma-sm font-medium text-fw-bodyLight mb-1">
                   Time Range
                 </label>
                 <select
                   value={timeRange}
                   onChange={(e) => setTimeRange(e.target.value)}
-                  className="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                  className="w-full px-3 rounded-lg h-9 text-figma-base border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active"
                 >
                   <option value="1h">Last Hour</option>
                   <option value="6h">Last 6 Hours</option>
@@ -229,13 +229,13 @@ export function MobileMonitoringDashboard({ connections }: MobileMonitoringDashb
                     setSelectedConnection('all');
                     setTimeRange('1h');
                   }}
-                  className="text-sm text-gray-500 hover:text-gray-700"
+                  className="text-figma-sm text-fw-bodyLight hover:text-fw-body"
                 >
                   Reset Filters
                 </button>
                 <button
                   onClick={() => setIsFilterOpen(false)}
-                  className="px-4 py-2 bg-brand-blue text-white rounded-lg text-sm font-medium hover:bg-brand-darkBlue"
+                  className="px-4 py-2 bg-fw-primary text-white rounded-full text-figma-sm font-medium hover:bg-brand-darkBlue"
                 >
                   Apply Filters
                 </button>
@@ -253,19 +253,19 @@ export function MobileMonitoringDashboard({ connections }: MobileMonitoringDashb
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-white border-b border-gray-200 overflow-hidden"
+            className="bg-fw-base border-b border-fw-secondary overflow-hidden"
           >
             <div className="p-4 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-gray-900">Quick Menu</h3>
-                <button 
+                <h3 className="text-figma-sm font-medium text-fw-heading">Quick Menu</h3>
+                <button
                   onClick={() => setIsMenuOpen(false)}
-                  className="p-1 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100"
+                  className="p-1 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              
+
               <div className="space-y-2">
                 <button
                   onClick={() => {
@@ -277,43 +277,43 @@ export function MobileMonitoringDashboard({ connections }: MobileMonitoringDashb
                     });
                     setIsMenuOpen(false);
                   }}
-                  className="w-full flex items-center p-3 text-left text-gray-700 hover:bg-gray-50 rounded-lg"
+                  className="w-full flex items-center p-3 text-left text-fw-body hover:bg-fw-wash rounded-lg"
                 >
-                  <RefreshCw className="h-5 w-5 text-gray-400 mr-3" />
+                  <RefreshCw className="h-5 w-5 text-fw-bodyLight mr-3" />
                   <span>Refresh Data</span>
                 </button>
-                
+
                 <button
                   onClick={() => {
                     navigate('/monitor', { state: { defaultTab: 'reports' } });
                     setActiveTab('reports');
                     setIsMenuOpen(false);
                   }}
-                  className="w-full flex items-center p-3 text-left text-gray-700 hover:bg-gray-50 rounded-lg"
+                  className="w-full flex items-center p-3 text-left text-fw-body hover:bg-fw-wash rounded-lg"
                 >
-                  <FileText className="h-5 w-5 text-gray-400 mr-3" />
+                  <FileText className="h-5 w-5 text-fw-bodyLight mr-3" />
                   <span>Generate Report</span>
                 </button>
-                
+
                 <button
                   onClick={() => {
                     navigate('/notifications');
                     setIsMenuOpen(false);
                   }}
-                  className="w-full flex items-center p-3 text-left text-gray-700 hover:bg-gray-50 rounded-lg"
+                  className="w-full flex items-center p-3 text-left text-fw-body hover:bg-fw-wash rounded-lg"
                 >
-                  <Bell className="h-5 w-5 text-gray-400 mr-3" />
+                  <Bell className="h-5 w-5 text-fw-bodyLight mr-3" />
                   <span>View Notifications</span>
                 </button>
-                
+
                 <button
                   onClick={() => {
                     navigate('/support');
                     setIsMenuOpen(false);
                   }}
-                  className="w-full flex items-center p-3 text-left text-gray-700 hover:bg-gray-50 rounded-lg"
+                  className="w-full flex items-center p-3 text-left text-fw-body hover:bg-fw-wash rounded-lg"
                 >
-                  <BarChart2 className="h-5 w-5 text-gray-400 mr-3" />
+                  <BarChart2 className="h-5 w-5 text-fw-bodyLight mr-3" />
                   <span>Help & Resources</span>
                 </button>
               </div>

@@ -17,6 +17,7 @@ interface WizardStepProps {
 
 /**
  * Component for displaying individual wizard steps
+ * Figma spec: 20x20 circles, 2px connector lines, specific colors per state
  */
 export function WizardStep({
   title,
@@ -29,30 +30,39 @@ export function WizardStep({
   return (
     <div className="flex-1">
       <div className="flex items-center">
+        {/* Step circle: 20x20 (w-5 h-5) */}
         <div className={`
-          relative flex items-center justify-center w-8 h-8 rounded-full
+          relative flex items-center justify-center w-5 h-5 rounded-full flex-shrink-0
           transition-colors duration-300 ease-in-out
-          ${isActive || isCompleted ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}
+          ${isCompleted
+            ? 'bg-fw-success text-white'
+            : isActive
+              ? 'bg-fw-primary text-white'
+              : 'bg-fw-disabled text-white'
+          }
         `}>
           {isCompleted ? (
-            <Check className="w-5 h-5" />
+            <Check className="w-3 h-3" />
           ) : (
-            <span>{number}</span>
+            <span className="text-figma-base font-medium leading-none">{number}</span>
           )}
         </div>
+        {/* Connector line: h-0.5 (2px), bg-gray-300, rounded-full */}
         {!isLast && (
-          <div className="flex-1 h-0.5 mx-2">
+          <div className="flex-1 h-0.5 mx-2 bg-fw-secondary rounded-full overflow-hidden">
             <div className={`
               h-full origin-left
               transition-all duration-500 ease-in-out
-              ${isCompleted ? 'bg-blue-600 scale-x-100' : 'bg-gray-200 scale-x-0'}
+              ${isCompleted ? 'bg-fw-success scale-x-100' : 'scale-x-0'}
             `} />
           </div>
         )}
       </div>
       <div className="mt-2">
-        <p className="text-sm font-medium text-gray-900 whitespace-nowrap">{title}</p>
-        <p className="text-xs text-gray-500 mt-1 whitespace-normal">{description}</p>
+        {/* Step title: 16px w500 #1d2329 */}
+        <p className="text-figma-lg font-medium text-fw-heading whitespace-nowrap">{title}</p>
+        {/* Step description: 14px w500 #454b52, wrapping ~100px */}
+        <p className="text-figma-base font-medium text-fw-body mt-1 whitespace-normal max-w-[100px]">{description}</p>
       </div>
     </div>
   );

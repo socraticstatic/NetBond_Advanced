@@ -10,7 +10,7 @@ interface VerticalTabGroupProps {
 export function VerticalTabGroup({ tabs, activeTab, onChange, className = '' }: VerticalTabGroupProps) {
   // Group tabs by category
   const groupedTabs: Record<string, TabItem[]> = {};
-  
+
   tabs.forEach(tab => {
     const category = tab.category || 'default';
     if (!groupedTabs[category]) {
@@ -20,12 +20,12 @@ export function VerticalTabGroup({ tabs, activeTab, onChange, className = '' }: 
   });
 
   return (
-    <div className={`w-64 shrink-0 border-r border-gray-200 pr-4 ${className}`}>
+    <div className={`w-[186px] shrink-0 border-r border-fw-secondary pr-4 ${className}`}>
       <nav className="space-y-1" aria-label="Tabs">
         {Object.entries(groupedTabs).map(([category, categoryTabs]) => (
           <div key={category} className="mb-4">
             {category !== 'default' && (
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-4">
+              <h3 className="text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider mb-2 px-4">
                 {category}
               </h3>
             )}
@@ -37,25 +37,25 @@ export function VerticalTabGroup({ tabs, activeTab, onChange, className = '' }: 
                     onClick={() => !tab.disabled && onChange(tab.id)}
                     disabled={tab.disabled}
                     className={`
-                      w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg
-                      transition-colors duration-200
+                      w-full flex items-center text-left px-4 py-3 text-figma-base font-medium no-rounded tracking-[-0.03em]
+                      transition-colors duration-200 border-l-2
                       ${tab.disabled
-                        ? 'text-gray-300 cursor-not-allowed'
+                        ? 'text-fw-bodyLight cursor-not-allowed border-transparent'
                         : activeTab === tab.id
-                          ? 'bg-brand-lightBlue text-brand-blue'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                          ? 'border-fw-active text-fw-link'
+                          : 'border-transparent text-fw-heading hover:text-fw-link hover:border-fw-secondary'
                       }
                     `}
                   >
                     {tab.icon && (
-                      <span className={`mr-3 ${activeTab === tab.id ? 'text-brand-blue' : 'text-gray-400'}`}>
+                      <span className={`mr-3 ${activeTab === tab.id ? 'text-fw-link' : 'text-fw-heading'}`}>
                         {tab.icon}
                       </span>
                     )}
                     {tab.label}
                     {tab.count !== undefined && (
-                      <span className={`ml-auto rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        activeTab === tab.id ? 'bg-brand-lightBlue text-brand-blue' : 'bg-gray-100 text-gray-600'
+                      <span className={`ml-auto rounded-full px-2.5 py-0.5 text-figma-sm font-medium ${
+                        activeTab === tab.id ? 'bg-fw-accent text-fw-link' : 'bg-fw-neutral text-fw-bodyLight'
                       }`}>
                         {tab.count}
                       </span>

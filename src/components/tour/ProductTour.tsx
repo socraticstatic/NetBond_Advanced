@@ -193,13 +193,13 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
             }}
           >
             {/* Top-left corner */}
-            <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-blue-400 rounded-tl-lg" />
+            <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-fw-active rounded-tl-lg" />
             {/* Top-right corner */}
-            <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-blue-400 rounded-tr-lg" />
+            <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-fw-active rounded-tr-lg" />
             {/* Bottom-left corner */}
-            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-blue-400 rounded-bl-lg" />
+            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-fw-active rounded-bl-lg" />
             {/* Bottom-right corner */}
-            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-blue-400 rounded-br-lg" />
+            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-fw-active rounded-br-lg" />
           </div>
 
           {/* Animated pointer based on tooltip placement */}
@@ -227,7 +227,7 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
                 zIndex: 10001
               }}
             >
-              <MousePointer className="w-6 h-6 text-blue-400 drop-shadow-lg" />
+              <MousePointer className="w-6 h-6 text-fw-active drop-shadow-lg" />
             </div>
           )}
         </>
@@ -237,7 +237,7 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
 
       <div
         ref={tooltipRef}
-        className="absolute bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden animate-in fade-in zoom-in-95 duration-300"
+        className="absolute bg-fw-base rounded-2xl shadow-2xl border border-fw-secondary overflow-hidden animate-in fade-in zoom-in-95 duration-300"
         style={{
           top: tooltipPosition.top,
           left: tooltipPosition.left,
@@ -246,13 +246,13 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
           zIndex: 10002
         }}
       >
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 text-white">
+        <div className="bg-gradient-to-r from-[#0057b8] to-fw-cobalt-700 px-6 py-4 text-white">
           <div className="flex items-start justify-between gap-4 mb-3">
             <div className="flex items-center gap-2">
               <div className="p-1.5 bg-white bg-opacity-20 rounded-lg backdrop-blur-sm">
                 <Sparkles className="h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold">{step.title}</h3>
+              <h3 className="text-figma-lg font-bold tracking-[-0.03em]">{step.title}</h3>
             </div>
             <button
               onClick={handleSkip}
@@ -263,9 +263,9 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
             </button>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-blue-100">
+          <div className="flex items-center gap-2 text-figma-sm text-white/80">
             <span className="font-medium">Step {currentStep + 1} of {steps.length}</span>
-            <div className="flex-1 h-1.5 bg-blue-800 bg-opacity-30 rounded-full overflow-hidden">
+            <div className="flex-1 h-1.5 bg-fw-cobalt-900/30 rounded-full overflow-hidden">
               <div
                 className="h-full bg-white rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
@@ -275,14 +275,14 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
         </div>
 
         <div className="p-6">
-          <p className="text-sm text-gray-700 leading-relaxed mb-6">
+          <p className="text-figma-base font-medium text-fw-body leading-relaxed mb-6">
             {step.description}
           </p>
 
           {step.action && (
             <button
               onClick={step.action.onClick}
-              className="w-full mb-4 px-4 py-2.5 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 border-2 border-blue-200 text-blue-700 font-medium rounded-xl transition-all duration-200"
+              className="w-full mb-4 px-4 py-2.5 bg-fw-accent hover:bg-fw-accent border-2 border-fw-active text-fw-link font-medium rounded-full transition-all duration-200"
             >
               {step.action.label}
             </button>
@@ -291,7 +291,7 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
           <div className="flex items-center justify-between gap-3">
             <button
               onClick={handleSkip}
-              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition-colors"
+              className="px-4 py-2 text-figma-base text-fw-bodyLight hover:text-fw-heading font-medium transition-colors"
             >
               Skip Tour
             </button>
@@ -311,7 +311,7 @@ export function ProductTour({ steps, isOpen, onClose, onComplete, storageKey = '
                 variant="primary"
                 size="sm"
                 onClick={handleNext}
-                className="!px-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                className="!px-4 bg-fw-active hover:bg-fw-linkHover"
               >
                 {isLastStep ? (
                   <>

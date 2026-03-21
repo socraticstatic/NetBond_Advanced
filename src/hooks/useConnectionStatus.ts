@@ -89,7 +89,7 @@ export function useConnectionStatus(
   };
 
   const getHealthStatus = () => {
-    if (connection.status !== 'Active') return { label: 'Inactive', color: 'bg-gray-100 text-gray-600' };
+    if (connection.status !== 'Active') return { label: 'Inactive', color: 'bg-fw-wash text-fw-body' };
 
     const utilization = connection.performance?.bandwidthUtilization || 0;
     if (utilization > 90) {
@@ -104,7 +104,7 @@ export function useConnectionStatus(
   };
 
   const getStatusDotColor = () => {
-    if (connection.status !== 'Active') return 'bg-gray-400';
+    if (connection.status !== 'Active') return 'bg-fw-bodyLight';
     const utilization = connection.performance?.bandwidthUtilization || 0;
     if (utilization > 90) return 'bg-red-500';
     if (utilization > 80) return 'bg-complementary-amber';

@@ -25,37 +25,37 @@ export function NetworkMetrics({ metrics }: NetworkMetricsProps) {
     {
       title: 'Current Utilization',
       value: `${bandwidthData.current}%`,
-      icon: <TrendingUp className={`h-5 w-5 ${bandwidthData.current > 90 ? 'text-red-500' : bandwidthData.current > 80 ? 'text-yellow-500' : 'text-green-500'}`} />,
+      icon: <TrendingUp className={`h-5 w-5 ${bandwidthData.current > 90 ? 'text-fw-error' : bandwidthData.current > 80 ? 'text-fw-warn' : 'text-fw-success'}`} />,
       status: bandwidthData.current > 90 ? 'error' : bandwidthData.current > 80 ? 'warning' : 'success',
       description: 'Real-time bandwidth usage',
       chart: {
         data: bandwidthData.history,
         labels: timeLabels,
-        color: '#3b82f6'
+        color: '#0057b8'
       }
     },
     {
       title: 'Average Utilization',
       value: `${bandwidthData.average}%`,
-      icon: <Activity className={`h-5 w-5 ${bandwidthData.average > 90 ? 'text-red-500' : bandwidthData.average > 80 ? 'text-yellow-500' : 'text-green-500'}`} />,
+      icon: <Activity className={`h-5 w-5 ${bandwidthData.average > 90 ? 'text-fw-error' : bandwidthData.average > 80 ? 'text-fw-warn' : 'text-fw-success'}`} />,
       status: bandwidthData.average > 90 ? 'error' : bandwidthData.average > 80 ? 'warning' : 'success',
       description: 'Average usage over time period',
       chart: {
         data: [70, 72, 75, 73, 75, 74, 75],
         labels: timeLabels,
-        color: '#10b981'
+        color: '#2d7e24'
       }
     },
     {
       title: 'Security Status',
       value: 'Protected',
-      icon: <ArrowUpDown className="h-5 w-5 text-green-500" />,
+      icon: <ArrowUpDown className="h-5 w-5 text-fw-success" />,
       status: 'success',
       description: 'Network security status',
       chart: {
         data: [100, 100, 100, 98, 100, 100, 100],
         labels: timeLabels,
-        color: '#8b5cf6'
+        color: '#af29bb'
       }
     }
   ];

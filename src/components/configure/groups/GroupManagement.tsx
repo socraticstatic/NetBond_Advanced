@@ -69,8 +69,8 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
         <div className="flex items-start">
           <Shield className="h-6 w-6 text-fw-link mr-3 flex-shrink-0" />
           <div>
-            <h3 className="text-sm font-medium text-fw-heading">Pool Governance</h3>
-            <p className="text-sm text-fw-bodyLight mt-1">
+            <h3 className="text-figma-base font-medium text-fw-heading">Pool Governance</h3>
+            <p className="text-figma-base text-fw-bodyLight mt-1">
               Configure account-wide policies for pool creation, organization, and management. These settings define how resources can be grouped and shared across your organization.
             </p>
           </div>
@@ -90,7 +90,7 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
             <div className="space-y-6">
               <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
                 <h3 className="text-lg font-semibold text-fw-heading mb-4">Pool Creation & Management Policies</h3>
-                <p className="text-sm text-fw-bodyLight mb-6">
+                <p className="text-figma-base text-fw-bodyLight mb-6">
                   Control how pools can be created and managed across your organization.
                 </p>
 
@@ -100,11 +100,11 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                       type="checkbox"
                       checked={policies.requireApprovalForPoolCreation}
                       onChange={(e) => setPolicies({...policies, requireApprovalForPoolCreation: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Require Approval for Pool Creation</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">All pool creation requests must be approved by an administrator</p>
+                      <span className="text-figma-base font-medium text-fw-body">Require Approval for Pool Creation</span>
+                      <p className="text-figma-sm text-fw-bodyLight mt-1">All pool creation requests must be approved by an administrator</p>
                     </div>
                   </label>
 
@@ -113,11 +113,11 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                       type="checkbox"
                       checked={policies.allowUserManagedPools}
                       onChange={(e) => setPolicies({...policies, allowUserManagedPools: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Allow User-Managed Pools</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Enable non-admin users to create and manage their own pools (within limits)</p>
+                      <span className="text-figma-base font-medium text-fw-body">Allow User-Managed Pools</span>
+                      <p className="text-figma-sm text-fw-bodyLight mt-1">Enable non-admin users to create and manage their own pools (within limits)</p>
                     </div>
                   </label>
 
@@ -126,11 +126,11 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                       type="checkbox"
                       checked={policies.enforcePoolTypes}
                       onChange={(e) => setPolicies({...policies, enforcePoolTypes: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Enforce Pool Types</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Pools must be categorized using predefined types (Department, Project, Business Unit, etc.)</p>
+                      <span className="text-figma-base font-medium text-fw-body">Enforce Pool Types</span>
+                      <p className="text-figma-sm text-fw-bodyLight mt-1">Pools must be categorized using predefined types (Department, Project, Business Unit, etc.)</p>
                     </div>
                   </label>
 
@@ -139,11 +139,11 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                       type="checkbox"
                       checked={policies.requireCostCenter}
                       onChange={(e) => setPolicies({...policies, requireCostCenter: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Require Cost Center Assignment</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Every pool must be associated with a cost center for billing allocation</p>
+                      <span className="text-figma-base font-medium text-fw-body">Require Cost Center Assignment</span>
+                      <p className="text-figma-sm text-fw-bodyLight mt-1">Every pool must be associated with a cost center for billing allocation</p>
                     </div>
                   </label>
 
@@ -152,36 +152,36 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                       type="checkbox"
                       checked={policies.inheritBillingFromParent}
                       onChange={(e) => setPolicies({...policies, inheritBillingFromParent: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Inherit Billing from Parent Pool</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Child pools automatically inherit billing settings from parent pools</p>
+                      <span className="text-figma-base font-medium text-fw-body">Inherit Billing from Parent Pool</span>
+                      <p className="text-figma-sm text-fw-bodyLight mt-1">Child pools automatically inherit billing settings from parent pools</p>
                     </div>
                   </label>
 
                   <div className="pt-4 border-t border-fw-secondary">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-fw-body mb-2">Maximum Members Per Pool</label>
+                        <label className="block text-figma-base font-medium text-fw-body mb-2">Maximum Members Per Pool</label>
                         <input
                           type="number"
                           value={policies.maxMembersPerPool}
                           onChange={(e) => setPolicies({...policies, maxMembersPerPool: parseInt(e.target.value)})}
                           className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-link focus:border-fw-link"
                         />
-                        <p className="text-xs text-fw-bodyLight mt-1">Maximum number of users that can be added to a single pool</p>
+                        <p className="text-figma-sm text-fw-bodyLight mt-1">Maximum number of users that can be added to a single pool</p>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-fw-body mb-2">Maximum Connections Per Pool</label>
+                        <label className="block text-figma-base font-medium text-fw-body mb-2">Maximum Connections Per Pool</label>
                         <input
                           type="number"
                           value={policies.maxConnectionsPerPool}
                           onChange={(e) => setPolicies({...policies, maxConnectionsPerPool: parseInt(e.target.value)})}
                           className="w-full px-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-link focus:border-fw-link"
                         />
-                        <p className="text-xs text-fw-bodyLight mt-1">Maximum number of connections that can be assigned to a pool</p>
+                        <p className="text-figma-sm text-fw-bodyLight mt-1">Maximum number of connections that can be assigned to a pool</p>
                       </div>
                     </div>
                   </div>
@@ -201,7 +201,7 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
             <div className="space-y-6">
               <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
                 <h3 className="text-lg font-semibold text-fw-heading mb-4">Pool Templates</h3>
-                <p className="text-sm text-fw-bodyLight mb-6">
+                <p className="text-figma-base text-fw-bodyLight mb-6">
                   Define standard pool templates that provide consistent structures and settings for common organizational patterns.
                 </p>
 
@@ -211,17 +211,17 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                       type="checkbox"
                       checked={templates.enableTemplates}
                       onChange={(e) => setTemplates({...templates, enableTemplates: e.target.checked})}
-                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                      className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                     />
                     <div>
-                      <span className="text-sm font-medium text-fw-body">Enable Pool Templates</span>
-                      <p className="text-xs text-fw-bodyLight mt-1">Allow users to create pools from predefined templates</p>
+                      <span className="text-figma-base font-medium text-fw-body">Enable Pool Templates</span>
+                      <p className="text-figma-sm text-fw-bodyLight mt-1">Allow users to create pools from predefined templates</p>
                     </div>
                   </label>
 
                   {templates.enableTemplates && (
                     <div className="pt-4 border-t border-fw-secondary">
-                      <h4 className="text-sm font-semibold text-fw-heading mb-4">Available Templates</h4>
+                      <h4 className="text-figma-base font-semibold text-fw-heading mb-4">Available Templates</h4>
                       <div className="space-y-3">
                         {templates.availableTemplates.map((template) => (
                           <div key={template.id} className="flex items-center justify-between p-4 bg-fw-wash rounded-lg">
@@ -235,11 +235,11 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                                   );
                                   setTemplates({...templates, availableTemplates: updated});
                                 }}
-                                className="h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                                className="h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                               />
                               <div>
-                                <p className="text-sm font-medium text-fw-body">{template.name}</p>
-                                <p className="text-xs text-fw-bodyLight">
+                                <p className="text-figma-base font-medium text-fw-body">{template.name}</p>
+                                <p className="text-figma-sm text-fw-bodyLight">
                                   {template.id === 'dept' && 'Organize resources by department with automatic cost allocation'}
                                   {template.id === 'project' && 'Group connections and users by project with time-based lifecycle'}
                                   {template.id === 'business' && 'Manage resources at business unit level with hierarchical billing'}
@@ -277,26 +277,26 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
             <div className="space-y-6">
               <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
                 <h3 className="text-lg font-semibold text-fw-heading mb-4">Pool Categorization & Tagging</h3>
-                <p className="text-sm text-fw-bodyLight mb-6">
+                <p className="text-figma-base text-fw-bodyLight mb-6">
                   Define tagging standards and categorization rules to ensure consistent pool organization.
                 </p>
 
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-fw-body mb-2">Required Tags</label>
-                    <p className="text-xs text-fw-bodyLight mb-3">
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">Required Tags</label>
+                    <p className="text-figma-sm text-fw-bodyLight mb-3">
                       These tags must be present on all pools
                     </p>
                     <div className="space-y-2">
                       {categorization.requiredTags.map((tag, index) => (
                         <div key={index} className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
-                          <span className="text-sm text-fw-body font-mono">{tag}</span>
+                          <span className="text-figma-base text-fw-body font-mono">{tag}</span>
                           <button
                             onClick={() => {
                               const updated = categorization.requiredTags.filter((_, i) => i !== index);
                               setCategorization({...categorization, requiredTags: updated});
                             }}
-                            className="text-xs text-fw-error hover:text-fw-errorHover"
+                            className="text-figma-sm text-fw-error hover:text-fw-errorHover"
                           >
                             Remove
                           </button>
@@ -316,11 +316,11 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                         type="checkbox"
                         checked={categorization.allowCustomTags}
                         onChange={(e) => setCategorization({...categorization, allowCustomTags: e.target.checked})}
-                        className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                       />
                       <div>
-                        <span className="text-sm font-medium text-fw-body">Allow Custom Tags</span>
-                        <p className="text-xs text-fw-bodyLight mt-1">Users can add additional tags beyond required ones</p>
+                        <span className="text-figma-base font-medium text-fw-body">Allow Custom Tags</span>
+                        <p className="text-figma-sm text-fw-bodyLight mt-1">Users can add additional tags beyond required ones</p>
                       </div>
                     </label>
 
@@ -329,11 +329,11 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                         type="checkbox"
                         checked={categorization.enforceTagFormat}
                         onChange={(e) => setCategorization({...categorization, enforceTagFormat: e.target.checked})}
-                        className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                       />
                       <div>
-                        <span className="text-sm font-medium text-fw-body">Enforce Tag Format</span>
-                        <p className="text-xs text-fw-bodyLight mt-1">Tags must follow a defined format (e.g., key:value)</p>
+                        <span className="text-figma-base font-medium text-fw-body">Enforce Tag Format</span>
+                        <p className="text-figma-sm text-fw-bodyLight mt-1">Tags must follow a defined format (e.g., key:value)</p>
                       </div>
                     </label>
 
@@ -342,18 +342,18 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                         type="checkbox"
                         checked={categorization.autoTagging}
                         onChange={(e) => setCategorization({...categorization, autoTagging: e.target.checked})}
-                        className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                        className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                       />
                       <div>
-                        <span className="text-sm font-medium text-fw-body">Auto-Tagging</span>
-                        <p className="text-xs text-fw-bodyLight mt-1">Automatically apply tags based on pool type and organizational hierarchy</p>
+                        <span className="text-figma-base font-medium text-fw-body">Auto-Tagging</span>
+                        <p className="text-figma-sm text-fw-bodyLight mt-1">Automatically apply tags based on pool type and organizational hierarchy</p>
                       </div>
                     </label>
                   </div>
 
                   <div className="pt-4 border-t border-fw-secondary">
-                    <h4 className="text-sm font-semibold text-fw-heading mb-3">Tag Governance Rules</h4>
-                    <div className="bg-fw-wash p-4 rounded-lg space-y-2 text-xs text-fw-bodyLight">
+                    <h4 className="text-figma-base font-semibold text-fw-heading mb-3">Tag Governance Rules</h4>
+                    <div className="bg-fw-wash p-4 rounded-lg space-y-2 text-figma-sm text-fw-bodyLight">
                       <p>• All tags are automatically propagated to connections within the pool</p>
                       <p>• Cost center tags are used for billing allocation and reporting</p>
                       <p>• Environment tags (dev, staging, prod) determine default security policies</p>
@@ -376,24 +376,24 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
             <div className="space-y-6">
               <div className="bg-fw-base rounded-lg border border-fw-secondary p-6">
                 <h3 className="text-lg font-semibold text-fw-heading mb-4">Pool Permissions & Access Control</h3>
-                <p className="text-sm text-fw-bodyLight mb-6">
+                <p className="text-figma-base text-fw-bodyLight mb-6">
                   Define default permissions and access control policies for pool owners and members.
                 </p>
 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="text-sm font-semibold text-fw-heading mb-3">Pool Owner Permissions</h4>
+                    <h4 className="text-figma-base font-semibold text-fw-heading mb-3">Pool Owner Permissions</h4>
                     <div className="space-y-3">
                       <label className="flex items-start space-x-3">
                         <input
                           type="checkbox"
                           checked={permissions.poolOwnersCanManageMembers}
                           onChange={(e) => setPermissions({...permissions, poolOwnersCanManageMembers: e.target.checked})}
-                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                         />
                         <div>
-                          <span className="text-sm font-medium text-fw-body">Manage Pool Members</span>
-                          <p className="text-xs text-fw-bodyLight mt-1">Pool owners can add/remove users from their pools</p>
+                          <span className="text-figma-base font-medium text-fw-body">Manage Pool Members</span>
+                          <p className="text-figma-sm text-fw-bodyLight mt-1">Pool owners can add/remove users from their pools</p>
                         </div>
                       </label>
 
@@ -402,11 +402,11 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                           type="checkbox"
                           checked={permissions.poolOwnersCanManageConnections}
                           onChange={(e) => setPermissions({...permissions, poolOwnersCanManageConnections: e.target.checked})}
-                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                         />
                         <div>
-                          <span className="text-sm font-medium text-fw-body">Manage Pool Connections</span>
-                          <p className="text-xs text-fw-bodyLight mt-1">Pool owners can assign/unassign connections to their pools</p>
+                          <span className="text-figma-base font-medium text-fw-body">Manage Pool Connections</span>
+                          <p className="text-figma-sm text-fw-bodyLight mt-1">Pool owners can assign/unassign connections to their pools</p>
                         </div>
                       </label>
 
@@ -415,29 +415,29 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                           type="checkbox"
                           checked={permissions.poolOwnersCanManageBilling}
                           onChange={(e) => setPermissions({...permissions, poolOwnersCanManageBilling: e.target.checked})}
-                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                         />
                         <div>
-                          <span className="text-sm font-medium text-fw-body">Manage Billing Settings</span>
-                          <p className="text-xs text-fw-bodyLight mt-1">Pool owners can modify cost center and billing allocation</p>
+                          <span className="text-figma-base font-medium text-fw-body">Manage Billing Settings</span>
+                          <p className="text-figma-sm text-fw-bodyLight mt-1">Pool owners can modify cost center and billing allocation</p>
                         </div>
                       </label>
                     </div>
                   </div>
 
                   <div className="pt-4 border-t border-fw-secondary">
-                    <h4 className="text-sm font-semibold text-fw-heading mb-3">Access Control</h4>
+                    <h4 className="text-figma-base font-semibold text-fw-heading mb-3">Access Control</h4>
                     <div className="space-y-3">
                       <label className="flex items-start space-x-3">
                         <input
                           type="checkbox"
                           checked={permissions.allowCrossPoolResourceSharing}
                           onChange={(e) => setPermissions({...permissions, allowCrossPoolResourceSharing: e.target.checked})}
-                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                         />
                         <div>
-                          <span className="text-sm font-medium text-fw-body">Allow Cross-Pool Resource Sharing</span>
-                          <p className="text-xs text-fw-bodyLight mt-1">Enable connections and resources to be shared across multiple pools</p>
+                          <span className="text-figma-base font-medium text-fw-body">Allow Cross-Pool Resource Sharing</span>
+                          <p className="text-figma-sm text-fw-bodyLight mt-1">Enable connections and resources to be shared across multiple pools</p>
                         </div>
                       </label>
 
@@ -446,39 +446,39 @@ export function GroupManagement({ searchQuery }: GroupManagementProps) {
                           type="checkbox"
                           checked={permissions.enforceRBAC}
                           onChange={(e) => setPermissions({...permissions, enforceRBAC: e.target.checked})}
-                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-gray-300 rounded"
+                          className="mt-1 h-4 w-4 text-fw-link focus:ring-fw-link border-fw-secondary rounded"
                         />
                         <div>
-                          <span className="text-sm font-medium text-fw-body">Enforce Role-Based Access Control</span>
-                          <p className="text-xs text-fw-bodyLight mt-1">Apply strict RBAC rules based on user roles within pools</p>
+                          <span className="text-figma-base font-medium text-fw-body">Enforce Role-Based Access Control</span>
+                          <p className="text-figma-sm text-fw-bodyLight mt-1">Apply strict RBAC rules based on user roles within pools</p>
                         </div>
                       </label>
                     </div>
                   </div>
 
                   <div className="pt-4 border-t border-fw-secondary">
-                    <h4 className="text-sm font-semibold text-fw-heading mb-3">Default Role Mappings</h4>
+                    <h4 className="text-figma-base font-semibold text-fw-heading mb-3">Default Role Mappings</h4>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
                         <div>
-                          <p className="text-sm font-medium text-fw-body">Pool Owner</p>
-                          <p className="text-xs text-fw-bodyLight">Full control over pool resources and settings</p>
+                          <p className="text-figma-base font-medium text-fw-body">Pool Owner</p>
+                          <p className="text-figma-sm text-fw-bodyLight">Full control over pool resources and settings</p>
                         </div>
-                        <span className="text-xs text-fw-success font-medium">Active</span>
+                        <span className="text-figma-sm text-fw-success font-medium">Active</span>
                       </div>
                       <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
                         <div>
-                          <p className="text-sm font-medium text-fw-body">Pool Admin</p>
-                          <p className="text-xs text-fw-bodyLight">Can manage members and view billing</p>
+                          <p className="text-figma-base font-medium text-fw-body">Pool Admin</p>
+                          <p className="text-figma-sm text-fw-bodyLight">Can manage members and view billing</p>
                         </div>
-                        <span className="text-xs text-fw-success font-medium">Active</span>
+                        <span className="text-figma-sm text-fw-success font-medium">Active</span>
                       </div>
                       <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
                         <div>
-                          <p className="text-sm font-medium text-fw-body">Pool Member</p>
-                          <p className="text-xs text-fw-bodyLight">Read access to pool connections and metrics</p>
+                          <p className="text-figma-base font-medium text-fw-body">Pool Member</p>
+                          <p className="text-figma-sm text-fw-bodyLight">Read access to pool connections and metrics</p>
                         </div>
-                        <span className="text-xs text-fw-success font-medium">Active</span>
+                        <span className="text-figma-sm text-fw-success font-medium">Active</span>
                       </div>
                     </div>
                   </div>

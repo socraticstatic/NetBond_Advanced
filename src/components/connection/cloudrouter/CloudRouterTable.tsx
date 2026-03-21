@@ -62,12 +62,12 @@ export function CloudRouterTable({
         <div>
           <button
             onClick={() => navigate(`/cloud-routers/${router.id}`)}
-            className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline text-left"
+            className="text-figma-base font-medium text-fw-link hover:text-fw-linkHover hover:underline text-left"
           >
             {router.name}
           </button>
           {router.description && (
-            <div className="text-xs text-gray-500 truncate mt-0.5">{router.description}</div>
+            <div className="text-figma-sm text-fw-bodyLight truncate mt-0.5">{router.description}</div>
           )}
         </div>
       ),
@@ -79,11 +79,11 @@ export function CloudRouterTable({
       sortable: true,
       sortKey: 'status',
       render: (router) => (
-        <span className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-medium rounded-full ${
-          router.status === 'active' ? 'bg-green-100 text-green-800' :
-          router.status === 'inactive' ? 'bg-gray-100 text-gray-800' :
-          router.status === 'provisioning' ? 'bg-blue-100 text-blue-800' :
-          'bg-red-100 text-red-800'
+        <span className={`px-2.5 py-0.5 inline-flex text-figma-sm leading-5 font-medium rounded-lg ${
+          router.status === 'active' ? 'bg-green-50 text-fw-success' :
+          router.status === 'inactive' ? 'bg-fw-neutral text-fw-body' :
+          router.status === 'provisioning' ? 'bg-fw-accent text-fw-linkHover' :
+          'bg-red-50 text-fw-error'
         }`}>
           {router.status.charAt(0).toUpperCase() + router.status.slice(1)}
         </span>
@@ -94,8 +94,8 @@ export function CloudRouterTable({
       id: 'resources',
       label: 'Links',
       render: (router) => (
-        <div className="flex items-center text-sm text-gray-700">
-          <Network className="h-3.5 w-3.5 text-gray-400 mr-1" />
+        <div className="flex items-center text-figma-base text-fw-body">
+          <Network className="h-3.5 w-3.5 text-fw-bodyLight mr-1" />
           <span>{router.links?.length || 0}</span>
         </div>
       ),

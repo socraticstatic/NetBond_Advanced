@@ -11,23 +11,23 @@ export function ConnectionsWidget({ connections }: ConnectionsWidgetProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-500">Active Connections</span>
-        <span className="text-sm font-medium text-gray-900">{activeConnections.length}/{connections.length}</span>
+        <span className="text-figma-base text-fw-bodyLight">Active Connections</span>
+        <span className="text-figma-base font-medium text-fw-heading">{activeConnections.length}/{connections.length}</span>
       </div>
 
       <div className="space-y-2">
         {activeConnections.slice(0, 3).map((connection) => (
-          <div key={connection.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+          <div key={connection.id} className="flex items-center justify-between p-2 bg-fw-wash rounded-lg">
             <div className="flex items-center">
-              <Network className="h-4 w-4 text-gray-400 mr-2" />
+              <Network className="h-4 w-4 text-fw-bodyLight mr-2" />
               <div>
-                <div className="text-sm font-medium text-gray-900">{connection.name}</div>
-                <div className="text-xs text-gray-500">{connection.type}</div>
+                <div className="text-figma-base font-medium text-fw-heading">{connection.name}</div>
+                <div className="text-figma-sm text-fw-bodyLight">{connection.type}</div>
               </div>
             </div>
             <div className="flex items-center">
-              <Activity className="h-4 w-4 text-green-500 mr-1" />
-              <span className="text-xs text-green-600">{connection.performance?.latency}</span>
+              <Activity className="h-4 w-4 text-fw-success mr-1" />
+              <span className="text-figma-sm text-fw-success">{connection.performance?.latency}</span>
             </div>
           </div>
         ))}
@@ -35,7 +35,7 @@ export function ConnectionsWidget({ connections }: ConnectionsWidgetProps) {
 
       {activeConnections.length > 3 && (
         <div className="text-center">
-          <button className="text-sm text-blue-600 hover:text-blue-700">
+          <button className="text-figma-base text-fw-link hover:text-fw-linkHover">
             View {activeConnections.length - 3} more
           </button>
         </div>

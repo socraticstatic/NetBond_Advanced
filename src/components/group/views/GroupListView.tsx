@@ -67,28 +67,28 @@ export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps
   const getGroupTypeColor = (type: Group['type']) => {
     switch (type) {
       case 'business':
-        return 'bg-slate-100 text-slate-700';
+        return 'bg-fw-wash text-fw-heading';
       case 'department':
-        return 'bg-gray-100 text-gray-700';
+        return 'bg-fw-neutral text-fw-body';
       case 'project':
         return 'bg-emerald-50 text-emerald-700';
       case 'team':
         return 'bg-amber-50 text-amber-700';
       default:
-        return 'bg-gray-100 text-gray-700';
+        return 'bg-fw-neutral text-fw-body';
     }
   };
 
   const getStatusColor = (status: Group['status']) => {
     switch (status) {
       case 'active':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-50 text-fw-success';
       case 'inactive':
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-fw-neutral text-fw-heading';
       case 'suspended':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-50 text-fw-error';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-fw-neutral text-fw-heading';
     }
   };
 
@@ -100,41 +100,41 @@ export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps
       case 'name':
         return (
           <div className="max-w-[200px]">
-            <div className="text-sm font-medium text-gray-900 truncate">{group.name}</div>
-            <div className="text-sm text-gray-500 truncate">{group.description}</div>
+            <div className="text-figma-base font-medium text-fw-heading truncate">{group.name}</div>
+            <div className="text-figma-base text-fw-bodyLight truncate">{group.description}</div>
           </div>
         );
       case 'type':
         return (
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getGroupTypeColor(group.type)} capitalize`}>
+          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium ${getGroupTypeColor(group.type)} capitalize`}>
             {group.type}
           </span>
         );
       case 'connections':
         return (
           <div className="flex items-center">
-            <Network className="h-4 w-4 text-gray-400 mr-2" />
-            <span className="text-sm text-gray-900">{group.connectionIds.length}</span>
+            <Network className="h-4 w-4 text-fw-bodyLight mr-2" />
+            <span className="text-figma-base text-fw-heading">{group.connectionIds.length}</span>
           </div>
         );
       case 'members':
         return (
           <div className="flex items-center">
-            <Users className="h-4 w-4 text-gray-400 mr-2" />
-            <span className="text-sm text-gray-900">{group.userIds.length}</span>
+            <Users className="h-4 w-4 text-fw-bodyLight mr-2" />
+            <span className="text-figma-base text-fw-heading">{group.userIds.length}</span>
           </div>
         );
       case 'status':
         return (
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(group.status)} capitalize`}>
+          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium ${getStatusColor(group.status)} capitalize`}>
             {group.status}
           </span>
         );
       case 'billing':
         return (
           <div className="flex items-center">
-            <CreditCard className="h-4 w-4 text-gray-400 mr-2" />
-            <span className="text-sm text-gray-900">
+            <CreditCard className="h-4 w-4 text-fw-bodyLight mr-2" />
+            <span className="text-figma-base text-fw-heading">
               ${group.billing?.monthlyRate.toFixed(2) || '0.00'}
             </span>
           </div>
@@ -142,8 +142,8 @@ export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps
       case 'performance':
         return (
           <div className="flex items-center">
-            <Activity className="h-4 w-4 text-gray-400 mr-2" />
-            <span className="text-sm text-gray-900">
+            <Activity className="h-4 w-4 text-fw-bodyLight mr-2" />
+            <span className="text-figma-base text-fw-heading">
               {group.performance?.aggregatedMetrics.averageUptime || 'N/A'}
             </span>
           </div>
@@ -198,8 +198,8 @@ export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps
         )}
         emptyState={
           <div className="text-center py-12">
-            <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500">No pools found</p>
+            <Users className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
+            <p className="text-fw-bodyLight">No pools found</p>
           </div>
         }
       />

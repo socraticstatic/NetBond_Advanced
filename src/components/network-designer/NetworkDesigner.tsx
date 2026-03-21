@@ -144,9 +144,9 @@ export function NetworkDesigner({
     handleEdgeSelection(id);
   }, [handleEdgeSelection]);
 
-  // Add a router node (Phase 1 minimal - full dropdown in Task 10)
-  const handleAddNode = useCallback(() => {
-    addNode('function', 'router');
+  // Add a node from the categorized dropdown
+  const handleAddNode = useCallback((type: string, subType?: string, meta?: Record<string, string>) => {
+    addNode(type, subType || type, meta);
   }, [addNode]);
 
   // Build connections from edges and call onComplete

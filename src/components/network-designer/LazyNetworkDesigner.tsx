@@ -35,11 +35,11 @@ function LazyNetworkDesigner({
 
   // Error fallback component
   const NetworkDesignerErrorFallback = () => (
-    <div className="min-h-[800px] flex items-center justify-center bg-gray-50 rounded-xl border-2 border-gray-200">
+    <div className="min-h-[800px] flex items-center justify-center bg-fw-wash rounded-xl border-2 border-fw-secondary">
       <div className="text-center max-w-md p-8">
-        <h3 className="text-xl font-bold text-red-800 mb-4">Unable to load Network Designer</h3>
-        <p className="text-gray-600 mb-6">We encountered an error loading the network designer component.</p>
-        
+        <h3 className="text-xl font-bold tracking-[-0.03em] text-fw-error mb-4">Unable to load Network Designer</h3>
+        <p className="text-fw-bodyLight mb-6">We encountered an error loading the network designer component.</p>
+
         {retryCount < 2 ? (
           <button
             onClick={() => {
@@ -51,17 +51,17 @@ function LazyNetworkDesigner({
             Retry Loading
           </button>
         ) : null}
-        
+
         <button
           onClick={() => window.location.reload()}
-          className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 mb-4 w-full"
+          className="px-6 py-3 bg-fw-neutral text-fw-body rounded-full hover:bg-fw-neutral mb-4 w-full"
         >
           Refresh Page
         </button>
-        
+
         <button
           onClick={onCancel}
-          className="px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-full hover:bg-gray-50 w-full"
+          className="px-6 py-3 bg-fw-base border border-fw-secondary text-fw-body rounded-full hover:bg-fw-wash w-full"
         >
           Cancel
         </button>
@@ -71,10 +71,10 @@ function LazyNetworkDesigner({
 
   // Loading fallback
   const LoadingFallback = (
-    <div className="min-h-[800px] flex items-center justify-center bg-gray-50 rounded-xl border-2 border-gray-200">
+    <div className="min-h-[800px] flex items-center justify-center bg-fw-wash rounded-xl border-2 border-fw-secondary">
       <div className="text-center">
         <LoadingSpinner size="lg" color="brand" />
-        <p className="mt-4 text-gray-600">Loading Network Designer...</p>
+        <p className="mt-4 text-fw-bodyLight">Loading Network Designer...</p>
       </div>
     </div>
   );

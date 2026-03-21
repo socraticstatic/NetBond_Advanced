@@ -183,22 +183,20 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   };
 
   const getHealthStatus = () => {
-    if (connection.status !== 'Active') return { label: 'Inactive', color: 'bg-gray-100 text-gray-600' };
+    if (connection.status !== 'Active') return { label: 'INACTIVE', color: 'bg-fw-secondary text-fw-disabled' };
 
     const utilization = connection.performance?.bandwidthUtilization || 0;
     if (utilization > 90) {
-      return { label: 'Critical', color: 'bg-red-50 text-red-700' };
+      return { label: 'CRITICAL', color: 'bg-red-50 text-fw-error' };
     } else if (utilization > 80) {
-      return { label: 'Warning', color: 'bg-amber-50 text-amber-700' };
-    } else if (utilization > 60) {
-      return { label: 'Good', color: 'bg-brand-lightBlue text-brand-blue' };
+      return { label: 'WARNING', color: 'bg-fw-warn/10 text-fw-warn' };
     } else {
-      return { label: 'Optimal', color: 'bg-complementary-green/10 text-complementary-green' };
+      return { label: 'GOOD', color: 'bg-fw-accent text-fw-link' };
     }
   };
 
   const getStatusDotColor = () => {
-    if (connection.status !== 'Active') return 'bg-gray-400';
+    if (connection.status !== 'Active') return 'bg-fw-neutral';
     const utilization = connection.performance?.bandwidthUtilization || 0;
     if (utilization > 90) return 'bg-red-500';
     if (utilization > 80) return 'bg-complementary-amber';
@@ -256,12 +254,12 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
     <motion.div
       className={`
         relative
-        bg-fw-base rounded-xl border border-fw-secondary
+        bg-fw-base rounded-2xl border border-fw-secondary
         shadow-sm
         hover:shadow-md
         transition-all duration-300 ease-in-out
         transform hover:translate-y-[-2px]
-        ${isMinimized ? 'h-[88px]' : 'h-[480px]'}
+        ${isMinimized ? 'h-[88px]' : ''}
         ${isPendingAWS ? 'opacity-75' : ''}
         cursor-pointer
         flex flex-col
@@ -281,7 +279,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
     >
       {/* Progress Bar */}
       {isPending && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-fw-neutral rounded-t-xl overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-fw-neutral rounded-t-2xl overflow-hidden">
           <motion.div
             className="h-full bg-fw-link transition-all duration-300 ease-linear"
             style={{ width: `${progress}%` }}
@@ -331,7 +329,19 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
             connection={connection}
           />
 
-          <div className="p-4 space-y-4 flex-grow">
+          {/* Status - Figma: immediately after header */}
+          <ConnectionCardStatus
+            status={connection.status}
+            bandwidthUtilization={connection.performance?.bandwidthUtilization || 0}
+            isPending={isPending}
+            progress={progress}
+            remainingTime={remainingTime}
+            handleToggleStatus={handleToggleStatus}
+            healthStatus={healthStatus}
+            showEffects={showEffects}
+          />
+
+          <div className="p-6 space-y-4 flex-grow">
             {/* Bandwidth Utilization Bar */}
             <ConnectionCardProgress
               performance={connection.performance}
@@ -346,27 +356,15 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
             />
           </div>
 
-          {/* Status */}
-          <ConnectionCardStatus
-            status={connection.status}
-            bandwidthUtilization={connection.performance?.bandwidthUtilization || 0}
-            isPending={isPending}
-            progress={progress}
-            remainingTime={remainingTime}
-            handleToggleStatus={handleToggleStatus}
-            healthStatus={healthStatus}
-            showEffects={showEffects}
-          />
-
           {/* Action */}
           {isPendingAWS ? (
-            <div className="p-4 border-t border-gray-100 mt-auto">
+            <div className="p-6 border-t border-fw-secondary mt-auto">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowAWSConfigModal(true);
                 }}
-                className="w-full flex items-center justify-center px-4 py-2 bg-white border-2 border-amber-500 rounded-lg text-sm font-medium text-amber-700 hover:bg-amber-50 transition-all shadow-sm hover:shadow-md"
+                className="w-full flex items-center justify-center h-9 px-4 rounded-full text-figma-base font-medium text-fw-warn hover:text-fw-warn hover:bg-fw-warn/10 transition-colors"
               >
                 Pending Activation
                 <ChevronRight className="ml-2 h-4 w-4" />

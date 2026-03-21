@@ -40,39 +40,39 @@ export function ResourceInventoryWidget() {
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         {resources.map((resource) => (
-          <div key={resource.category} className="bg-white p-4 rounded-lg border border-gray-200">
+          <div key={resource.category} className="bg-fw-base p-4 rounded-lg border border-fw-secondary">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center">
-                <resource.icon className="h-5 w-5 text-blue-500 mr-2" />
-                <h3 className="text-sm font-medium text-gray-900">{resource.category}</h3>
+                <resource.icon className="h-5 w-5 text-fw-link mr-2" />
+                <h3 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{resource.category}</h3>
               </div>
-              <span className="text-lg font-semibold text-gray-900">{resource.total}</span>
+              <span className="text-figma-lg font-semibold text-fw-heading">{resource.total}</span>
             </div>
             <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Active</span>
-                <span className="text-green-600">{resource.active}</span>
+              <div className="flex justify-between text-figma-base">
+                <span className="text-fw-bodyLight">Active</span>
+                <span className="text-fw-success">{resource.active}</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Maintenance</span>
-                <span className="text-yellow-600">{resource.maintenance}</span>
+              <div className="flex justify-between text-figma-base">
+                <span className="text-fw-bodyLight">Maintenance</span>
+                <span className="text-fw-warn">{resource.maintenance}</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Inactive</span>
-                <span className="text-gray-600">{resource.inactive}</span>
+              <div className="flex justify-between text-figma-base">
+                <span className="text-fw-bodyLight">Inactive</span>
+                <span className="text-fw-body">{resource.inactive}</span>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="p-4 bg-blue-50 rounded-lg">
+      <div className="p-4 bg-fw-accent rounded-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <Database className="h-5 w-5 text-blue-500 mr-2" />
-            <span className="text-sm font-medium text-blue-900">Resource Health</span>
+            <Database className="h-5 w-5 text-fw-link mr-2" />
+            <span className="text-figma-base font-medium text-fw-linkHover">Resource Health</span>
           </div>
-          <span className="text-sm text-blue-600">94.8% Healthy</span>
+          <span className="text-figma-base text-fw-link">94.8% Healthy</span>
         </div>
       </div>
     </div>

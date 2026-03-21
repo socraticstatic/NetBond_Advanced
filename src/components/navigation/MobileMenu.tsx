@@ -26,37 +26,37 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
 
   // Define navigation items with enabled/disabled state
   const navItems = [
-    { 
-      label: 'Create', 
-      icon: PlusCircle, 
+    {
+      label: 'Create',
+      icon: PlusCircle,
       href: '/create',
       description: 'Create a New Connection',
       disabled: true
     },
-    { 
-      label: 'Manage', 
-      icon: Settings, 
+    {
+      label: 'Manage',
+      icon: Settings,
       href: '/manage',
       description: 'Manage Your Connections',
       disabled: true
     },
-    { 
-      label: 'Monitor', 
-      icon: BarChart2, 
+    {
+      label: 'Monitor',
+      icon: BarChart2,
       href: '/monitor',
       description: 'Monitor and Report',
       disabled: false
     },
-    { 
-      label: 'Configure', 
-      icon: Sliders, 
+    {
+      label: 'Configure',
+      icon: Sliders,
       href: '/configure',
       description: 'Configure Settings',
       disabled: true
     },
-    { 
-      label: 'Utilities', 
-      icon: Tool, 
+    {
+      label: 'Utilities',
+      icon: Tool,
       href: '/profile',
       description: 'Access System Utilities',
       disabled: false
@@ -77,13 +77,12 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
 
   const handleNavigation = (path: string, disabled: boolean = false) => {
     if (disabled) {
-      // Do nothing for disabled items
       return;
     }
-    onClose(); // Close first for smooth transition
+    onClose();
     setTimeout(() => {
       navigate(path);
-    }, 100); // Small delay allows the menu to start closing animation
+    }, 100);
   };
 
   return (
@@ -106,43 +105,43 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ 
-              type: 'spring', 
-              damping: 30, 
+            transition={{
+              type: 'spring',
+              damping: 30,
               stiffness: 300,
               duration: 0.3
             }}
             onAnimationComplete={() => setAnimationComplete(true)}
-            className="fixed top-0 right-0 bottom-0 w-full max-w-[320px] bg-white shadow-xl z-[101] flex flex-col"
+            className="fixed top-0 right-0 bottom-0 w-full max-w-[320px] bg-fw-base shadow-xl z-[101] flex flex-col"
           >
             {/* Header */}
-            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+            <div className="p-4 border-b border-fw-secondary flex items-center justify-between">
               <div className="flex items-center">
                 <button
                   onClick={onClose}
-                  className="p-2 -ml-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+                  className="p-2 -ml-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
                   aria-label="Close menu"
                 >
                   <X className="h-6 w-6" />
                 </button>
-                <h2 className="ml-2 text-lg font-semibold text-gray-900">Menu</h2>
+                <h2 className="ml-2 text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">Menu</h2>
               </div>
               <div className="flex items-center space-x-2">
                 <button
-                  className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+                  className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
                   onClick={() => handleNavigation('/notifications')}
                 >
                   <div className="relative">
                     <Bell className="h-6 w-6" />
                     {notifications > 0 && (
-                      <span className="absolute -top-1 -right-1 h-4 w-4 text-xs flex items-center justify-center bg-red-600 text-white rounded-full">
+                      <span className="absolute -top-1 -right-1 h-4 w-4 text-figma-sm flex items-center justify-center bg-fw-error text-white rounded-full">
                         {notifications}
                       </span>
                     )}
                   </div>
                 </button>
                 <button
-                  className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+                  className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
                   onClick={() => handleNavigation('/support')}
                 >
                   <HelpCircle className="h-6 w-6" />
@@ -151,42 +150,42 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
             </div>
 
             {/* Search */}
-            <div className="p-4 border-b border-gray-200">
+            <div className="p-4 border-b border-fw-secondary">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
                 <input
                   type="text"
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                  className="w-full pl-10 pr-4 h-10 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 />
               </div>
             </div>
 
             {/* User Profile */}
-            <div className="p-4 border-b border-gray-200 bg-gray-50">
+            <div className="p-4 border-b border-fw-secondary bg-fw-wash">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   {userInfo.avatar ? (
                     <img
                       src={userInfo.avatar}
                       alt={userInfo.name}
-                      className="h-12 w-12 rounded-full object-cover border-2 border-white shadow-sm"
+                      className="h-12 w-12 rounded-full object-cover border-2 border-fw-base shadow-sm"
                     />
                   ) : (
-                    <div className="h-12 w-12 rounded-full bg-brand-blue flex items-center justify-center text-white text-lg font-semibold">
+                    <div className="h-12 w-12 rounded-full bg-fw-cobalt-600 flex items-center justify-center text-white text-figma-lg font-semibold">
                       {userInfo.name.charAt(0)}
                     </div>
                   )}
                 </div>
                 <div className="ml-3">
-                  <p className="text-base font-medium text-gray-900">{userInfo.name}</p>
-                  <p className="text-sm text-gray-500">{userInfo.role}</p>
-                  <p className="text-xs text-gray-400">{userInfo.account}</p>
+                  <p className="text-figma-base font-medium text-fw-heading">{userInfo.name}</p>
+                  <p className="text-figma-sm font-medium text-fw-bodyLight">{userInfo.role}</p>
+                  <p className="text-figma-sm text-fw-bodyLight">{userInfo.account}</p>
                 </div>
                 <button
-                  className="ml-auto p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-200"
+                  className="ml-auto p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
                   onClick={() => handleNavigation('/profile')}
                 >
                   <ChevronRight className="h-5 w-5" />
@@ -204,7 +203,7 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
                         key={item.href}
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ 
+                        transition={{
                           delay: index * 0.05,
                           duration: 0.2
                         }}
@@ -212,26 +211,26 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
                         <button
                           onClick={() => handleNavigation(item.href, item.disabled)}
                           className={`
-                            w-full flex items-center px-4 py-3 text-base rounded-xl transition-colors
+                            w-full flex items-center px-4 py-3 text-figma-base rounded-2xl transition-colors
                             ${location.pathname === item.href && !item.disabled
-                              ? 'bg-brand-lightBlue text-brand-blue font-medium'
+                              ? 'bg-fw-accent text-fw-link font-medium'
                               : item.disabled
-                                ? 'text-gray-400 cursor-not-allowed'
-                                : 'text-gray-700 hover:bg-gray-100'
+                                ? 'text-fw-bodyLight cursor-not-allowed'
+                                : 'text-fw-body hover:bg-fw-neutral'
                             }
                           `}
                           disabled={item.disabled}
                         >
                           <item.icon className={`h-6 w-6 mr-3 ${
-                            location.pathname === item.href && !item.disabled 
-                              ? 'text-brand-blue' 
+                            location.pathname === item.href && !item.disabled
+                              ? 'text-fw-link'
                               : item.disabled
-                                ? 'text-gray-300'
-                                : 'text-gray-500'
+                                ? 'text-fw-bodyLight'
+                                : 'text-fw-bodyLight'
                           }`} />
                           <div className="text-left">
                             <div>{item.label}</div>
-                            <div className="text-xs text-gray-500">{item.description}</div>
+                            <div className="text-figma-sm text-fw-bodyLight">{item.description}</div>
                           </div>
                         </button>
                       </motion.div>
@@ -242,10 +241,9 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-gray-200">
+            <div className="p-4 border-t border-fw-secondary">
               <button
                 onClick={() => {
-                  // Handle logout
                   window.addToast({
                     type: 'info',
                     title: 'Logging out',
@@ -254,13 +252,13 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
                   });
                   onClose();
                 }}
-                className="w-full flex items-center justify-center px-4 py-3 text-base text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className="w-full flex items-center justify-center px-4 py-3 text-figma-base text-fw-body bg-fw-neutral rounded-full hover:bg-fw-wash transition-colors"
               >
                 <LogOut className="h-5 w-5 mr-2" />
                 Sign Out
               </button>
-              <div className="mt-4 text-center text-xs text-gray-500">
-                <p className="font-semibold">AT&T NetBond® Advanced • v2.0.1</p>
+              <div className="mt-4 text-center text-figma-sm text-fw-bodyLight">
+                <p className="font-semibold text-fw-heading">AT&T NetBond® Advanced • v2.0.1</p>
                 <p className="mt-1">© 2025 AT&T Intellectual Property. All rights reserved.</p>
               </div>
             </div>

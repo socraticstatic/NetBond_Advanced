@@ -46,13 +46,13 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
             <div className="bg-gradient-to-br from-brand-blue to-brand-darkBlue rounded-full p-6 mb-4">
               <Grid className="h-12 w-12 text-white" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Control Center</h3>
-            <p className="text-gray-600 mb-6 max-w-sm">
+            <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mb-2">Control Center</h3>
+            <p className="text-figma-base font-medium text-fw-bodyLight mb-6 max-w-sm">
               The Control Center is optimized for desktop. Switch to a larger screen for the full experience.
             </p>
             <button
               onClick={() => onTabChange('connections')}
-              className="px-6 py-3 bg-brand-blue text-white rounded-xl font-medium hover:bg-brand-darkBlue transition-colors"
+              className="px-6 py-3 bg-fw-active text-white rounded-full font-medium hover:bg-brand-darkBlue transition-colors"
             >
               View Connections
             </button>
@@ -61,16 +61,16 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
       case 'marketplace':
         return (
           <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center">
-            <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-full p-6 mb-4">
+            <div className="bg-gradient-to-br from-fw-success to-fw-success rounded-full p-6 mb-4">
               <ShoppingBag className="h-12 w-12 text-white" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Marketplace</h3>
-            <p className="text-gray-600 mb-6 max-w-sm">
+            <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mb-2">Marketplace</h3>
+            <p className="text-figma-base font-medium text-fw-bodyLight mb-6 max-w-sm">
               Browse solutions and integrations on desktop for the best experience.
             </p>
             <button
               onClick={() => onTabChange('connections')}
-              className="px-6 py-3 bg-brand-blue text-white rounded-xl font-medium hover:bg-brand-darkBlue transition-colors"
+              className="px-6 py-3 bg-fw-active text-white rounded-full font-medium hover:bg-brand-darkBlue transition-colors"
             >
               View Connections
             </button>
@@ -85,25 +85,25 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
   const showHeader = activeTab === 'connections' || activeTab === 'groups';
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="flex flex-col min-h-screen bg-fw-wash">
       {showHeader && (
         <>
           {/* Elegant Header */}
-          <div className="bg-white border-b border-gray-100 shadow-sm">
+          <div className="bg-fw-base border-b border-fw-secondary shadow-sm">
             <div className="px-4 pt-6 pb-4">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                  <h1 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mb-1">
                     Network Management
                   </h1>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-figma-sm font-medium text-fw-bodyLight">
                     {activeTab === 'connections' ? 'Your connections at a glance' : 'Manage your pools'}
                   </p>
                 </div>
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => navigate('/notifications')}
-                    className="relative p-3 text-gray-600 hover:text-gray-900 rounded-full hover:bg-gray-100 transition-colors"
+                    className="relative p-3 text-fw-bodyLight hover:text-fw-heading rounded-full hover:bg-fw-neutral transition-colors"
                     aria-label="Notifications"
                   >
                     <Bell className="h-5 w-5" />
@@ -111,7 +111,7 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
                   </button>
                   <button
                     onClick={() => navigate('/profile')}
-                    className="p-3 text-gray-600 hover:text-gray-900 rounded-full hover:bg-gray-100 transition-colors"
+                    className="p-3 text-fw-bodyLight hover:text-fw-heading rounded-full hover:bg-fw-neutral transition-colors"
                     aria-label="Profile"
                   >
                     <User className="h-5 w-5" />
@@ -126,39 +126,39 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-3"
+                    className="bg-fw-wash rounded-lg p-3"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <Activity className="h-4 w-4 text-blue-600" />
+                      <Activity className="h-4 w-4 text-fw-link" />
                     </div>
-                    <div className="text-xl font-bold text-gray-900">{stats.activeConnections}</div>
-                    <div className="text-xs text-gray-600 font-medium">Active</div>
+                    <div className="text-figma-lg font-bold text-fw-heading">{stats.activeConnections}</div>
+                    <div className="text-figma-sm text-fw-bodyLight font-medium">Active</div>
                   </motion.div>
 
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-3"
+                    className="bg-fw-wash rounded-lg p-3"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <TrendingUp className="h-4 w-4 text-green-600" />
+                      <TrendingUp className="h-4 w-4 text-fw-success" />
                     </div>
-                    <div className="text-xl font-bold text-gray-900">{stats.avgUtilization.toFixed(0)}%</div>
-                    <div className="text-xs text-gray-600 font-medium">Usage</div>
+                    <div className="text-figma-lg font-bold text-fw-heading">{stats.avgUtilization.toFixed(0)}%</div>
+                    <div className="text-figma-sm text-fw-bodyLight font-medium">Usage</div>
                   </motion.div>
 
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-3"
+                    className="bg-fw-wash rounded-lg p-3"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <Zap className="h-4 w-4 text-purple-600" />
+                      <Zap className="h-4 w-4 text-fw-link" />
                     </div>
-                    <div className="text-xl font-bold text-gray-900">{stats.connections}</div>
-                    <div className="text-xs text-gray-600 font-medium">Total</div>
+                    <div className="text-figma-lg font-bold text-fw-heading">{stats.connections}</div>
+                    <div className="text-figma-sm text-fw-bodyLight font-medium">Total</div>
                   </motion.div>
                 </div>
               )}
@@ -166,7 +166,7 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
 
             {/* Elegant Tab Navigation */}
             <div className="px-2 pb-2">
-              <div className="flex bg-gray-100 rounded-xl p-1">
+              <div className="flex bg-fw-neutral rounded-xl p-1">
                 {tabs.map((tab, index) => (
                   <button
                     key={tab.id}
@@ -176,22 +176,22 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
                     {activeTab === tab.id && (
                       <motion.div
                         layoutId="activeTab"
-                        className="absolute inset-0 bg-white rounded-lg shadow-sm"
+                        className="absolute inset-0 bg-fw-base rounded-lg shadow-sm"
                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                       />
                     )}
                     <div className="relative z-10">
                       <tab.icon className={`h-5 w-5 mb-1 mx-auto transition-colors ${
-                        activeTab === tab.id ? 'text-brand-blue' : 'text-gray-500'
+                        activeTab === tab.id ? 'text-brand-blue' : 'text-fw-bodyLight'
                       }`} />
-                      <span className={`text-xs font-medium transition-colors ${
-                        activeTab === tab.id ? 'text-gray-900' : 'text-gray-600'
+                      <span className={`text-figma-sm font-medium transition-colors ${
+                        activeTab === tab.id ? 'text-fw-heading' : 'text-fw-bodyLight'
                       }`}>
                         {tab.label}
                       </span>
                       {tab.count > 0 && (
-                        <span className={`ml-1 text-xs ${
-                          activeTab === tab.id ? 'text-gray-500' : 'text-gray-400'
+                        <span className={`ml-1 text-figma-sm ${
+                          activeTab === tab.id ? 'text-fw-bodyLight' : 'text-fw-bodyLight'
                         }`}>
                           ({tab.count})
                         </span>

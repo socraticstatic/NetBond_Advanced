@@ -32,7 +32,7 @@ function KeyboardShortcutsModalComponent({ isOpen, onClose }: KeyboardShortcutsM
             </div>
             <div>
               <h2 className="text-2xl font-bold text-fw-heading">Keyboard Shortcuts</h2>
-              <p className="text-sm text-fw-bodyLight mt-1">
+              <p className="text-figma-base text-fw-bodyLight mt-1">
                 Speed up your workflow with keyboard shortcuts
               </p>
             </div>
@@ -48,7 +48,7 @@ function KeyboardShortcutsModalComponent({ isOpen, onClose }: KeyboardShortcutsM
 
         {/* Platform indicator */}
         <div className="mb-6 p-3 bg-fw-wash rounded-lg border border-fw-secondary">
-          <p className="text-sm text-fw-body">
+          <p className="text-figma-base text-fw-body">
             <span className="font-medium">Platform:</span>{' '}
             {isMac ? 'macOS (using ⌘ Command key)' : 'Windows/Linux (using Ctrl key)'}
           </p>
@@ -67,7 +67,7 @@ function KeyboardShortcutsModalComponent({ isOpen, onClose }: KeyboardShortcutsM
                   <h3 className="text-lg font-semibold text-fw-heading">
                     {categoryInfo.label}
                   </h3>
-                  <p className="text-sm text-fw-bodyLight">
+                  <p className="text-figma-base text-fw-bodyLight">
                     {categoryInfo.description}
                   </p>
                 </div>
@@ -77,10 +77,10 @@ function KeyboardShortcutsModalComponent({ isOpen, onClose }: KeyboardShortcutsM
                       key={shortcut.id}
                       className="flex items-center justify-between p-3 bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash transition-colors"
                     >
-                      <span className="text-sm text-fw-body">
+                      <span className="text-figma-base text-fw-body">
                         {shortcut.description}
                       </span>
-                      <kbd className="px-3 py-1.5 text-sm font-mono font-semibold text-fw-heading bg-fw-wash border border-fw-secondary rounded-md shadow-sm">
+                      <kbd className="px-3 py-1.5 text-figma-base font-mono font-semibold text-fw-heading bg-fw-wash border border-fw-secondary rounded-md shadow-sm">
                         {formatShortcut(shortcut)}
                       </kbd>
                     </div>
@@ -93,9 +93,9 @@ function KeyboardShortcutsModalComponent({ isOpen, onClose }: KeyboardShortcutsM
 
         {/* Footer tip */}
         <div className="mt-6 p-4 bg-brand-lightBlue/20 border border-brand-blue/30 rounded-lg">
-          <p className="text-sm text-fw-body">
+          <p className="text-figma-base text-fw-body">
             <span className="font-medium">Tip:</span> Press{' '}
-            <kbd className="px-2 py-1 text-xs font-mono font-semibold bg-white border border-fw-secondary rounded">
+            <kbd className="px-2 py-1 text-figma-sm font-mono font-semibold bg-fw-base border border-fw-secondary rounded">
               ?
             </kbd>{' '}
             to show this dialog anytime

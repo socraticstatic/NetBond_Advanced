@@ -269,7 +269,7 @@ export function VLANModal({
     <div className="flex items-center">
       <span>{isEditMode ? 'Edit Link' : 'Add New Link'}</span>
       {isEditMode && (
-        <span className="ml-2 px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded-full">
+        <span className="ml-2 px-2 py-1 text-figma-sm bg-fw-accent text-fw-linkHover rounded-full">
           ID: {vlan?.vlanId}
         </span>
       )}
@@ -304,13 +304,13 @@ export function VLANModal({
     >
       {/* Warning message when editing */}
       {isEditMode && (
-        <div className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start">
-          <AlertTriangle className="h-5 w-5 text-amber-500 mt-0.5 mr-3 flex-shrink-0" />
+        <div className="mb-6 bg-fw-warn/10 border border-fw-warn/30 rounded-lg p-3 flex items-start">
+          <AlertTriangle className="h-5 w-5 text-fw-warn mt-0.5 mr-3 flex-shrink-0" />
           <div>
-            <p className="text-sm text-amber-800 font-medium">
+            <p className="text-figma-base text-fw-heading font-medium">
               Warning: Editing Link Configuration
             </p>
-            <p className="text-sm text-amber-700 mt-1">
+            <p className="text-figma-base text-fw-body mt-1">
               Changes to link settings may impact network traffic. Ensure all connected systems are properly configured for the updated settings.
             </p>
           </div>
@@ -328,12 +328,12 @@ export function VLANModal({
                   required
                   helpText="Select one or more cloud routers this link will be associated with"
                 >
-                  <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-300 rounded-md p-3">
+                  <div className="space-y-2 max-h-48 overflow-y-auto border border-fw-secondary rounded-md p-3">
                     {cloudRouters.length === 0 ? (
-                      <p className="text-sm text-gray-500">No cloud routers available</p>
+                      <p className="text-figma-base text-fw-bodyLight">No cloud routers available</p>
                     ) : (
                       cloudRouters.map(router => (
-                        <label key={router.id} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                        <label key={router.id} className="flex items-center space-x-2 cursor-pointer hover:bg-fw-wash p-2 rounded">
                           <input
                             type="checkbox"
                             checked={cloudRouterIds.includes(router.id)}
@@ -344,9 +344,9 @@ export function VLANModal({
                                 setCloudRouterIds(cloudRouterIds.filter(id => id !== router.id));
                               }
                             }}
-                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                            className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
                           />
-                          <span className="text-sm text-gray-700">{router.name}</span>
+                          <span className="text-figma-base text-fw-body">{router.name}</span>
                         </label>
                       ))
                     )}
@@ -366,7 +366,7 @@ export function VLANModal({
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                       placeholder="e.g., Production Network"
                     />
                   </FormField>
@@ -383,7 +383,7 @@ export function VLANModal({
                       type="number"
                       value={vlanId}
                       onChange={(e) => setVlanId(e.target.value ? parseInt(e.target.value) : '')}
-                      className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                       placeholder="1-4094"
                       min="1"
                       max="4094"
@@ -399,7 +399,7 @@ export function VLANModal({
                     <select
                       value={status}
                       onChange={(e) => setStatus(e.target.value as 'active' | 'inactive')}
-                      className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                     >
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
@@ -414,7 +414,7 @@ export function VLANModal({
                     <select
                       value={trafficType}
                       onChange={(e) => setTrafficType(e.target.value as VLAN['type'])}
-                      className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                     >
                       <option value="data">Data</option>
                       <option value="voice">Voice</option>
@@ -435,7 +435,7 @@ export function VLANModal({
                     <select
                       value={linkType}
                       onChange={(e) => setLinkType(e.target.value as 'Layer 1' | 'Layer 2' | 'Layer 3')}
-                      className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                     >
                       <option value="Layer 1">Layer 1</option>
                       <option value="Layer 2">Layer 2</option>
@@ -455,7 +455,7 @@ export function VLANModal({
                       type="number"
                       value={bandwidth}
                       onChange={(e) => setBandwidth(e.target.value)}
-                      className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                       placeholder="e.g., 1"
                       min="0.1"
                       max={availableBandwidth}
@@ -474,7 +474,7 @@ export function VLANModal({
                       type="text"
                       value={ipSubnet}
                       onChange={(e) => setIpSubnet(e.target.value)}
-                      className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                       placeholder="e.g., 192.168.1.0/24"
                     />
                   </FormField>
@@ -487,7 +487,7 @@ export function VLANModal({
                     <textarea
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="vlan-input w-full px-3 py-2 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                       rows={3}
                       placeholder="Enter a description for this link"
                     />
@@ -505,7 +505,7 @@ export function VLANModal({
                         value={tagInput}
                         onChange={(e) => setTagInput(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mr-2 flex-1"
+                        className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active mr-2 flex-1"
                         placeholder="Enter a tag and press Enter"
                       />
                       <Button 
@@ -525,14 +525,14 @@ export function VLANModal({
                         {tags.map((tag, index) => (
                           <div 
                             key={index}
-                            className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700"
+                            className="inline-flex items-center px-2.5 py-1 rounded-full text-figma-sm font-medium bg-fw-accent text-fw-linkHover"
                           >
                             <Tag className="h-3 w-3 mr-1" />
                             {tag}
                             <button
                               type="button"
                               onClick={() => handleRemoveTag(tag)}
-                              className="ml-1.5 text-blue-400 hover:text-blue-600"
+                              className="ml-1.5 text-fw-link hover:text-fw-link"
                             >
                               <X className="h-3 w-3" />
                             </button>
@@ -545,20 +545,20 @@ export function VLANModal({
               </div>
 
               {/* Routing Configuration Section */}
-              <div className="pt-6 border-t-2 border-gray-300">
+              <div className="pt-6 border-t-2 border-fw-secondary">
                 <div className="flex items-center mb-4">
-                  <GitBranch className="h-5 w-5 text-blue-600 mr-2" />
-                  <h3 className="text-lg font-semibold text-gray-900">Routing Configuration</h3>
+                  <GitBranch className="h-5 w-5 text-fw-link mr-2" />
+                  <h3 className="text-lg font-semibold text-fw-heading">Routing Configuration</h3>
                 </div>
 
-                <div className="space-y-6 bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <div className="space-y-6 bg-fw-accent border border-fw-active rounded-lg p-6">
                   {/* Routing Protocol Selection */}
                   <div>
                     <FormField label="Routing Protocol" required>
                       <select
                         value={routingProtocol}
                         onChange={(e) => setRoutingProtocol(e.target.value as 'bgp' | 'static' | 'none')}
-                        className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                       >
                         <option value="bgp">BGP (Border Gateway Protocol)</option>
                         <option value="static">Static Routes</option>
@@ -569,10 +569,10 @@ export function VLANModal({
 
                   {/* BGP Configuration */}
                   {routingProtocol === 'bgp' && (
-                    <div className="space-y-4 bg-white p-4 rounded-lg border border-blue-300">
+                    <div className="space-y-4 bg-fw-base p-4 rounded-lg border border-fw-active">
                       <div className="flex items-center mb-2">
-                        <Network className="h-4 w-4 text-blue-600 mr-2" />
-                        <h4 className="text-sm font-semibold text-gray-900">BGP Settings</h4>
+                        <Network className="h-4 w-4 text-fw-link mr-2" />
+                        <h4 className="text-figma-base font-semibold text-fw-heading">BGP Settings</h4>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -585,7 +585,7 @@ export function VLANModal({
                             type="text"
                             value={localAsn}
                             onChange={(e) => setLocalAsn(e.target.value)}
-                            className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                             placeholder="e.g., 65001"
                           />
                         </FormField>
@@ -599,7 +599,7 @@ export function VLANModal({
                             type="text"
                             value={remoteAsn}
                             onChange={(e) => setRemoteAsn(e.target.value)}
-                            className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                             placeholder="e.g., 65002"
                           />
                         </FormField>
@@ -612,7 +612,7 @@ export function VLANModal({
                             type="password"
                             value={bgpPassword}
                             onChange={(e) => setBgpPassword(e.target.value)}
-                            className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                             placeholder="Leave empty for no auth"
                           />
                         </FormField>
@@ -623,9 +623,9 @@ export function VLANModal({
                               type="checkbox"
                               checked={bfdEnabled}
                               onChange={(e) => setBfdEnabled(e.target.checked)}
-                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                              className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
                             />
-                            <span className="ml-2 text-sm font-medium text-gray-700">
+                            <span className="ml-2 text-figma-base font-medium text-fw-body">
                               Enable BFD (Bidirectional Forwarding Detection)
                             </span>
                           </label>
@@ -633,7 +633,7 @@ export function VLANModal({
                       </div>
 
                       {bfdEnabled && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 p-4 bg-gray-50 rounded border border-gray-300">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 p-4 bg-fw-wash rounded border border-fw-secondary">
                           <FormField
                             label="BFD Interval (ms)"
                             helpText="Detection interval"
@@ -642,7 +642,7 @@ export function VLANModal({
                               type="number"
                               value={bfdInterval}
                               onChange={(e) => setBfdInterval(parseInt(e.target.value))}
-                              className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                               min="50"
                               max="1000"
                               step="50"
@@ -657,7 +657,7 @@ export function VLANModal({
                               type="number"
                               value={bfdMultiplier}
                               onChange={(e) => setBfdMultiplier(parseInt(e.target.value))}
-                              className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                               min="2"
                               max="10"
                               step="1"
@@ -678,13 +678,13 @@ export function VLANModal({
                                 type="text"
                                 value={newFilterPrefix}
                                 onChange={(e) => setNewFilterPrefix(e.target.value)}
-                                className="vlan-input flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="vlan-input flex-1 px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                                 placeholder="e.g., 10.0.0.0/8"
                               />
                               <select
                                 value={newFilterAction}
                                 onChange={(e) => setNewFilterAction(e.target.value as 'permit' | 'deny')}
-                                className="vlan-input px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="vlan-input px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                               >
                                 <option value="permit">Permit</option>
                                 <option value="deny">Deny</option>
@@ -703,13 +703,13 @@ export function VLANModal({
                             {routeFilters.length > 0 && (
                               <div className="space-y-2">
                                 {routeFilters.map((filter, index) => (
-                                  <div key={index} className="flex items-center justify-between bg-white p-3 rounded border border-gray-200">
+                                  <div key={index} className="flex items-center justify-between bg-fw-base p-3 rounded border border-fw-secondary">
                                     <div className="flex items-center space-x-3">
-                                      <span className="text-sm font-mono text-gray-700">{filter.prefix}</span>
-                                      <span className={`px-2 py-0.5 text-xs font-medium rounded ${
+                                      <span className="text-figma-base font-mono text-fw-body">{filter.prefix}</span>
+                                      <span className={`px-2 py-0.5 text-figma-sm font-medium rounded ${
                                         filter.action === 'permit'
-                                          ? 'bg-green-100 text-green-700'
-                                          : 'bg-red-100 text-red-700'
+                                          ? 'bg-green-50 text-fw-success'
+                                          : 'bg-red-50 text-fw-error'
                                       }`}>
                                         {filter.action}
                                       </span>
@@ -717,7 +717,7 @@ export function VLANModal({
                                     <button
                                       type="button"
                                       onClick={() => handleRemoveRouteFilter(index)}
-                                      className="text-gray-400 hover:text-red-600"
+                                      className="text-fw-bodyLight hover:text-red-600"
                                     >
                                       <X className="h-4 w-4" />
                                     </button>
@@ -733,10 +733,10 @@ export function VLANModal({
 
                   {/* Static Routes Configuration */}
                   {routingProtocol === 'static' && (
-                    <div className="space-y-4 bg-white p-4 rounded-lg border border-blue-300">
+                    <div className="space-y-4 bg-fw-base p-4 rounded-lg border border-fw-active">
                       <div className="flex items-center mb-2">
-                        <Route className="h-4 w-4 text-blue-600 mr-2" />
-                        <h4 className="text-sm font-semibold text-gray-900">Static Routes</h4>
+                        <Route className="h-4 w-4 text-fw-link mr-2" />
+                        <h4 className="text-figma-base font-semibold text-fw-heading">Static Routes</h4>
                       </div>
 
                       <FormField
@@ -749,7 +749,7 @@ export function VLANModal({
                               type="text"
                               value={newRouteDestination}
                               onChange={(e) => setNewRouteDestination(e.target.value)}
-                              className="vlan-input px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              className="vlan-input px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                               placeholder="Destination (e.g., 10.0.0.0/24)"
                             />
                             <div className="flex gap-2">
@@ -757,7 +757,7 @@ export function VLANModal({
                                 type="text"
                                 value={newRouteNextHop}
                                 onChange={(e) => setNewRouteNextHop(e.target.value)}
-                                className="vlan-input flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="vlan-input flex-1 px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                                 placeholder="Next Hop (e.g., 192.168.1.1)"
                               />
                               <Button
@@ -775,16 +775,16 @@ export function VLANModal({
                           {staticRoutes.length > 0 && (
                             <div className="space-y-2">
                               {staticRoutes.map((route, index) => (
-                                <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded border border-gray-200">
+                                <div key={index} className="flex items-center justify-between bg-fw-wash p-3 rounded border border-fw-secondary">
                                   <div className="flex items-center space-x-3">
-                                    <span className="text-sm font-mono text-gray-700">{route.destination}</span>
-                                    <span className="text-gray-400">→</span>
-                                    <span className="text-sm font-mono text-gray-700">{route.nextHop}</span>
+                                    <span className="text-figma-base font-mono text-fw-body">{route.destination}</span>
+                                    <span className="text-fw-bodyLight">→</span>
+                                    <span className="text-figma-base font-mono text-fw-body">{route.nextHop}</span>
                                   </div>
                                   <button
                                     type="button"
                                     onClick={() => handleRemoveStaticRoute(index)}
-                                    className="text-gray-400 hover:text-red-600"
+                                    className="text-fw-bodyLight hover:text-red-600"
                                   >
                                     <X className="h-4 w-4" />
                                   </button>
@@ -799,12 +799,12 @@ export function VLANModal({
 
                   {/* No Routing Info */}
                   {routingProtocol === 'none' && (
-                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <div className="bg-fw-wash border border-fw-secondary rounded-lg p-4">
                       <div className="flex items-start">
-                        <Info className="h-5 w-5 text-gray-500 mt-0.5 mr-3 flex-shrink-0" />
+                        <Info className="h-5 w-5 text-fw-bodyLight mt-0.5 mr-3 flex-shrink-0" />
                         <div>
-                          <p className="text-sm text-gray-700 font-medium">No Routing Protocol Selected</p>
-                          <p className="text-sm text-gray-600 mt-1">
+                          <p className="text-figma-base text-fw-body font-medium">No Routing Protocol Selected</p>
+                          <p className="text-figma-base text-fw-bodyLight mt-1">
                             This link will not participate in dynamic routing. Layer 2 switching will be used for traffic forwarding.
                           </p>
                         </div>
@@ -815,10 +815,10 @@ export function VLANModal({
               </div>
 
               {/* Advanced Settings Toggle */}
-              <div className="pt-4 border-t border-gray-200">
+              <div className="pt-4 border-t border-fw-secondary">
                 <button
                   type="button"
-                  className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center"
+                  className="text-figma-base font-medium text-fw-link hover:text-fw-linkHover flex items-center"
                   onClick={() => setShowAdvanced(!showAdvanced)}
                 >
                   {showAdvanced ? 'Hide Advanced Settings' : 'Show Advanced Settings'}
@@ -835,7 +835,7 @@ export function VLANModal({
 
               {/* Advanced Settings */}
               {showAdvanced && (
-                <div className="pt-4 pb-2 space-y-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div className="pt-4 pb-2 space-y-4 bg-fw-wash p-4 rounded-lg border border-fw-secondary">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="col-span-1">
                       <FormField 
@@ -847,7 +847,7 @@ export function VLANModal({
                           type="number"
                           value={mtu}
                           onChange={(e) => setMtu(parseInt(e.target.value))}
-                          className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                           min="1280"
                           max="9216"
                           step="1"
@@ -863,7 +863,7 @@ export function VLANModal({
                         <select
                           value={qosPriority}
                           onChange={(e) => setQosPriority(parseInt(e.target.value))}
-                          className="vlan-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="vlan-input w-full px-3 h-9 border border-fw-secondary rounded-lg shadow-sm text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                         >
                           <option value="0">0 - Background (lowest)</option>
                           <option value="1">1 - Best Effort</option>
@@ -879,14 +879,14 @@ export function VLANModal({
                   </div>
 
                   {/* Help information */}
-                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                  <div className="bg-fw-accent border border-fw-active rounded-lg p-4">
                     <div className="flex">
                       <div className="flex-shrink-0">
-                        <HelpCircle className="h-5 w-5 text-blue-500" />
+                        <HelpCircle className="h-5 w-5 text-fw-link" />
                       </div>
                       <div className="ml-3">
-                        <h3 className="text-sm font-medium text-blue-800">Advanced Link Settings</h3>
-                        <div className="mt-2 text-sm text-blue-700">
+                        <h3 className="text-figma-base font-medium text-fw-linkHover">Advanced Link Settings</h3>
+                        <div className="mt-2 text-figma-base text-fw-linkHover">
                           <p>
                             <strong>MTU Size:</strong> Defines the maximum packet size. Standard is 1500, but jumbo frames allow values up to 9216.
                           </p>

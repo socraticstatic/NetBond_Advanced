@@ -47,7 +47,7 @@ export function RuleMaking({ selectedConnection, timeRange, defaultTab = 'alerts
   return (
     <div className="flex">
       {/* Vertical Tabs */}
-      <div className="w-64 shrink-0 border-r border-gray-200 pr-4">
+      <div className="w-[186px] shrink-0 border-r border-fw-secondary pr-4">
         <nav className="space-y-1" aria-label="Rule Types">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -56,28 +56,25 @@ export function RuleMaking({ selectedConnection, timeRange, defaultTab = 'alerts
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
                 className={`
-                  w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg
-                  transition-colors duration-200
+                  w-full flex items-center px-4 py-3 text-figma-base font-medium text-left tracking-[-0.03em]
+                  transition-colors duration-200 border-l-2 no-rounded
                   ${activeTab === tab.id
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'border-fw-active text-fw-link'
+                    : 'border-transparent text-fw-heading hover:bg-fw-wash'
                   }
                 `}
               >
                 <Icon className={`h-5 w-5 mr-3 ${
-                  activeTab === tab.id ? 'text-blue-500' : 'text-gray-400'
+                  activeTab === tab.id ? 'text-fw-link' : 'text-fw-heading'
                 }`} />
-                <div className="text-left">
-                  <div>{tab.label}</div>
-                  <div className="text-xs text-gray-500 font-normal mt-0.5">{tab.description}</div>
-                </div>
+                {tab.label}
               </button>
             );
           })}
         </nav>
 
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Quick Actions</h4>
+        <div className="mt-6 p-4 bg-fw-wash rounded-lg border border-fw-secondary">
+          <h4 className="text-figma-sm font-semibold text-fw-body uppercase tracking-wider mb-2">Quick Actions</h4>
           <Button
             variant="secondary"
             size="sm"
@@ -99,7 +96,7 @@ export function RuleMaking({ selectedConnection, timeRange, defaultTab = 'alerts
 
       {/* Content Area */}
       <div className="flex-1 pl-6">
-        <div className="bg-white rounded-lg">
+        <div className="bg-fw-base rounded-lg">
           {renderContent()}
         </div>
       </div>

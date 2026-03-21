@@ -112,73 +112,73 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
 
   return (
     <Card className="overflow-hidden">
-      <div className="p-6 border-b border-gray-200">
+      <div className="p-6 border-b border-fw-secondary">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <ShieldAlert className="h-5 w-5 text-red-500 mr-2" />
-            <h3 className="text-lg font-medium">Network Error Analysis</h3>
+            <ShieldAlert className="h-5 w-5 text-fw-error mr-2" />
+            <h3 className="text-lg font-medium tracking-[-0.03em]">Network Error Analysis</h3>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-figma-base text-fw-bodyLight">
             Based on {data.length} data points over {timeRange}
           </div>
         </div>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 border-b border-gray-200">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 border-b border-fw-secondary">
         <div className="lg:col-span-1 space-y-4">
           <div>
-            <h4 className="text-base font-medium text-gray-900 mb-3">Error Summary</h4>
+            <h4 className="text-base font-medium text-fw-heading tracking-[-0.03em] mb-3">Error Summary</h4>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-sm text-gray-500 mb-1">Average Rate</div>
-                <div className="text-xl font-semibold text-gray-900">{formatPercentage(stats.avg)}</div>
+              <div className="bg-fw-wash rounded-lg p-4">
+                <div className="text-figma-base text-fw-bodyLight mb-1">Average Rate</div>
+                <div className="text-xl font-semibold text-fw-heading">{formatPercentage(stats.avg)}</div>
               </div>
-              
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="text-sm text-gray-500 mb-1">Peak Rate</div>
-                <div className="text-xl font-semibold text-gray-900">{formatPercentage(stats.peak)}</div>
+
+              <div className="bg-fw-wash rounded-lg p-4">
+                <div className="text-figma-base text-fw-bodyLight mb-1">Peak Rate</div>
+                <div className="text-xl font-semibold text-fw-heading">{formatPercentage(stats.peak)}</div>
               </div>
             </div>
           </div>
           
           <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-2">Error Distribution</h4>
+            <h4 className="text-figma-base font-medium text-fw-heading mb-2">Error Distribution</h4>
             <div className="space-y-3">
               <div>
-                <div className="flex justify-between text-xs mb-1">
+                <div className="flex justify-between text-figma-sm mb-1">
                   <span className="flex items-center">
-                    <div className="h-2 w-2 rounded-full bg-red-500 mr-1"></div>
+                    <div className="h-2 w-2 rounded-full bg-fw-error mr-1"></div>
                     <span>TCP Errors</span>
                   </span>
                   <span>{Math.round(stats.byType.tcp / stats.total * 100)}%</span>
                 </div>
-                <div className="h-1.5 bg-gray-100 rounded-full">
-                  <div className="h-1.5 rounded-full bg-red-500" style={{ width: `${stats.byType.tcp / stats.total * 100}%` }}></div>
+                <div className="h-1.5 bg-fw-neutral rounded-full">
+                  <div className="h-1.5 rounded-full bg-fw-error" style={{ width: `${stats.byType.tcp / stats.total * 100}%` }}></div>
                 </div>
               </div>
               
               <div>
-                <div className="flex justify-between text-xs mb-1">
+                <div className="flex justify-between text-figma-sm mb-1">
                   <span className="flex items-center">
                     <div className="h-2 w-2 rounded-full bg-amber-500 mr-1"></div>
                     <span>Protocol Errors</span>
                   </span>
                   <span>{Math.round(stats.byType.protocol / stats.total * 100)}%</span>
                 </div>
-                <div className="h-1.5 bg-gray-100 rounded-full">
+                <div className="h-1.5 bg-fw-neutral rounded-full">
                   <div className="h-1.5 rounded-full bg-amber-500" style={{ width: `${stats.byType.protocol / stats.total * 100}%` }}></div>
                 </div>
               </div>
               
               <div>
-                <div className="flex justify-between text-xs mb-1">
+                <div className="flex justify-between text-figma-sm mb-1">
                   <span className="flex items-center">
                     <div className="h-2 w-2 rounded-full bg-indigo-500 mr-1"></div>
                     <span>Timeout Errors</span>
                   </span>
                   <span>{Math.round(stats.byType.timeout / stats.total * 100)}%</span>
                 </div>
-                <div className="h-1.5 bg-gray-100 rounded-full">
+                <div className="h-1.5 bg-fw-neutral rounded-full">
                   <div className="h-1.5 rounded-full bg-indigo-500" style={{ width: `${stats.byType.timeout / stats.total * 100}%` }}></div>
                 </div>
               </div>
@@ -188,18 +188,18 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
         
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
-            <h4 className="text-base font-medium text-gray-900">Error Pattern Analysis</h4>
-            
+            <h4 className="text-base font-medium text-fw-heading tracking-[-0.03em]">Error Pattern Analysis</h4>
+
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-1">
-                <Clock className="h-4 w-4 text-gray-500" />
-                <span className="text-xs text-gray-500">Peak Hour: {stats.peakHour}:00</span>
+                <Clock className="h-4 w-4 text-fw-bodyLight" />
+                <span className="text-figma-sm text-fw-bodyLight">Peak Hour: {stats.peakHour}:00</span>
               </div>
-              <div className={`px-2 py-1 rounded text-xs font-medium ${
-                stats.avg < 0.01 ? 'bg-green-100 text-green-800' :
-                stats.avg < 0.05 ? 'bg-blue-100 text-blue-800' :
+              <div className={`px-2 py-1 rounded text-figma-sm font-medium ${
+                stats.avg < 0.01 ? 'bg-green-50 text-fw-success' :
+                stats.avg < 0.05 ? 'bg-fw-accent text-fw-linkHover' :
                 stats.avg < 0.1 ? 'bg-yellow-100 text-yellow-800' :
-                'bg-red-100 text-red-800'
+                'bg-red-50 text-fw-error'
               }`}>
                 {stats.avg < 0.01 ? 'Excellent' :
                 stats.avg < 0.05 ? 'Good' :
@@ -209,14 +209,14 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
             </div>
           </div>
           
-          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+          <div className="bg-fw-wash rounded-lg p-4 border border-fw-secondary">
             <div className="flex items-start">
               {stats.avg < 0.05 ? (
                 <>
-                  <Zap className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
+                  <Zap className="h-5 w-5 text-fw-success mr-2 mt-0.5" />
                   <div>
-                    <h5 className="text-sm font-medium text-gray-900">Healthy Error Profile</h5>
-                    <p className="mt-1 text-sm text-gray-600">
+                    <h5 className="text-figma-base font-medium text-fw-heading">Healthy Error Profile</h5>
+                    <p className="mt-1 text-figma-base text-fw-bodyLight">
                       Your network is showing normal error patterns with minimal TCP errors and no significant spikes.
                       The current error rate is within expected ranges for enterprise connections.
                     </p>
@@ -226,8 +226,8 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
                 <>
                   <AlertTriangle className="h-5 w-5 text-yellow-500 mr-2 mt-0.5" />
                   <div>
-                    <h5 className="text-sm font-medium text-gray-900">Elevated Error Rate Detected</h5>
-                    <p className="mt-1 text-sm text-gray-600">
+                    <h5 className="text-figma-base font-medium text-fw-heading">Elevated Error Rate Detected</h5>
+                    <p className="mt-1 text-figma-base text-fw-bodyLight">
                       Your network is showing an increased error rate, particularly with TCP errors.
                       This could indicate network congestion, hardware issues, or interference.
                       Consider investigating during the peak error period around {stats.peakHour}:00.
@@ -239,34 +239,34 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
           </div>
           
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-fw-wash rounded-lg p-4">
               <div className="flex items-center mb-2">
-                <Network className="h-4 w-4 text-gray-500 mr-1" />
-                <span className="text-sm font-medium text-gray-900">Connection Status</span>
+                <Network className="h-4 w-4 text-fw-bodyLight mr-1" />
+                <span className="text-figma-base font-medium text-fw-heading">Connection Status</span>
               </div>
-              <div className="text-sm text-gray-500">
+              <div className="text-figma-base text-fw-bodyLight">
                 {stats.peak < 0.1 ? (
-                  <span className="text-green-600">All diagnostic tests passing</span>
+                  <span className="text-fw-success">All diagnostic tests passing</span>
                 ) : stats.peak < 0.5 ? (
                   <span className="text-yellow-600">Minor issues detected</span>
                 ) : (
-                  <span className="text-red-600">Performance degradation likely</span>
+                  <span className="text-fw-error">Performance degradation likely</span>
                 )}
               </div>
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-fw-wash rounded-lg p-4">
               <div className="flex items-center mb-2">
-                <AlertTriangle className="h-4 w-4 text-gray-500 mr-1" />
-                <span className="text-sm font-medium text-gray-900">Recommended Action</span>
+                <AlertTriangle className="h-4 w-4 text-fw-bodyLight mr-1" />
+                <span className="text-figma-base font-medium text-fw-heading">Recommended Action</span>
               </div>
-              <div className="text-sm text-gray-500">
+              <div className="text-figma-base text-fw-bodyLight">
                 {stats.peak < 0.1 ? (
-                  <span className="text-green-600">No action needed</span>
+                  <span className="text-fw-success">No action needed</span>
                 ) : stats.peak < 0.5 ? (
                   <span className="text-yellow-600">Monitor for changes</span>
                 ) : (
-                  <span className="text-red-600">Investigate network issues</span>
+                  <span className="text-fw-error">Investigate network issues</span>
                 )}
               </div>
             </div>
@@ -276,8 +276,8 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
       
       <div className="p-6">
         <div className="mb-6">
-          <h4 className="text-base font-medium text-gray-900 mb-2">Error Type Breakdown</h4>
-          <p className="text-sm text-gray-500">
+          <h4 className="text-base font-medium text-fw-heading tracking-[-0.03em] mb-2">Error Type Breakdown</h4>
+          <p className="text-figma-base text-fw-bodyLight">
             This chart shows the different types of errors detected on your connection over time.
           </p>
         </div>
@@ -286,7 +286,7 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
           <LineChart data={chartData} />
         </div>
         
-        <div className="mt-6 text-sm text-gray-500">
+        <div className="mt-6 text-figma-base text-fw-bodyLight">
           <p>The chart shows the distribution of different error types over time. TCP errors typically indicate network congestion or routing issues, while protocol errors may suggest configuration issues. Timeout errors often point to connectivity problems or resource constraints.</p>
         </div>
       </div>

@@ -4,8 +4,8 @@ import { lazy, Suspense, ComponentProps, memo } from 'react';
 
 // Loading placeholder
 const ChartPlaceholder = memo(() => (
-  <div className="w-full h-full flex items-center justify-center bg-gray-50 rounded-lg">
-    <div className="animate-pulse bg-gray-200 rounded-lg h-[80%] w-[90%]"></div>
+  <div className="w-full h-full flex items-center justify-center bg-fw-wash rounded-lg">
+    <div className="animate-pulse bg-fw-neutral rounded-lg h-[80%] w-[90%]"></div>
   </div>
 ));
 

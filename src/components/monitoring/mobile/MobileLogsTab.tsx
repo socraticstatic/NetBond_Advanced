@@ -113,28 +113,28 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'system':
-        return <Settings className="h-4 w-4 text-gray-500" />;
+        return <Settings className="h-4 w-4 text-fw-bodyLight" />;
       case 'security':
-        return <Shield className="h-4 w-4 text-red-500" />;
+        return <Shield className="h-4 w-4 text-fw-error" />;
       case 'user':
         return <Activity className="h-4 w-4 text-brand-blue" />;
       case 'performance':
-        return <Terminal className="h-4 w-4 text-purple-500" />;
+        return <Terminal className="h-4 w-4 text-fw-purple" />;
       default:
-        return <Activity className="h-4 w-4 text-gray-500" />;
+        return <Activity className="h-4 w-4 text-fw-bodyLight" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'error':
-        return 'text-red-600 bg-red-50';
+        return 'text-fw-error bg-red-50';
       case 'warning':
         return 'text-yellow-600 bg-yellow-50';
       case 'info':
         return 'text-brand-blue bg-brand-lightBlue';
       default:
-        return 'text-gray-600 bg-gray-50';
+        return 'text-fw-body bg-fw-wash';
     }
   };
 
@@ -144,18 +144,18 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
       <div className="flex items-center justify-between">
         <button
           onClick={() => setShowSearch(!showSearch)}
-          className="flex items-center py-2 px-4 bg-white border border-gray-200 rounded-lg shadow-sm text-gray-700 hover:bg-gray-50"
+          className="flex items-center py-2 px-4 bg-fw-base border border-fw-secondary rounded-lg shadow-sm text-fw-body hover:bg-fw-wash"
         >
           <Search className="h-4 w-4 mr-2" />
-          <span className="text-sm font-medium">Search</span>
+          <span className="text-figma-base font-medium">Search</span>
         </button>
         
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center py-2 px-4 bg-white border border-gray-200 rounded-lg shadow-sm text-gray-700 hover:bg-gray-50"
+          className="flex items-center py-2 px-4 bg-fw-base border border-fw-secondary rounded-lg shadow-sm text-fw-body hover:bg-fw-wash"
         >
           <Filter className="h-4 w-4 mr-2" />
-          <span className="text-sm font-medium">Filter</span>
+          <span className="text-figma-base font-medium">Filter</span>
         </button>
       </div>
 
@@ -167,22 +167,22 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm"
+            className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden shadow-sm"
           >
             <div className="p-4">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
                 <input
                   type="text"
                   placeholder="Search logs..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+                  className="w-full pl-10 pr-4 py-2 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-500"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight hover:text-fw-body"
                   >
                     <X className="h-5 w-5" />
                   </button>
@@ -201,21 +201,21 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm"
+            className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden shadow-sm"
           >
             <div className="p-4 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-gray-900">Log Filters</h3>
-                <button 
+                <h3 className="text-figma-base font-medium text-fw-heading">Log Filters</h3>
+                <button
                   onClick={() => setShowFilters(false)}
-                  className="p-1 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100"
+                  className="p-1 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-figma-base font-medium text-fw-body mb-2">
                   Log Types
                 </label>
                 <div className="space-y-2">
@@ -228,10 +228,10 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
                           : [...prev, type]
                       )}
                       className={`
-                        block w-full text-left px-3 py-2 rounded-md text-sm
+                        block w-full text-left px-3 py-2 rounded-md text-figma-base
                         ${selectedTypes.includes(type)
                           ? 'bg-brand-lightBlue text-brand-blue'
-                          : 'text-gray-700 hover:bg-gray-50'
+                          : 'text-fw-body hover:bg-fw-wash'
                         }
                       `}
                     >
@@ -245,7 +245,7 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-figma-base font-medium text-fw-body mb-2">
                   Severity Levels
                 </label>
                 <div className="space-y-2">
@@ -258,10 +258,10 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
                           : [...prev, severity]
                       )}
                       className={`
-                        block w-full text-left px-3 py-2 rounded-md text-sm
+                        block w-full text-left px-3 py-2 rounded-md text-figma-base
                         ${selectedSeverities.includes(severity)
                           ? getSeverityColor(severity)
-                          : 'text-gray-700 hover:bg-gray-50'
+                          : 'text-fw-body hover:bg-fw-wash'
                         }
                       `}
                     >
@@ -272,13 +272,13 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-figma-base font-medium text-fw-body mb-2">
                   Time Range
                 </label>
                 <select
                   value={timeRange}
                   onChange={(e) => setTimeRange(e.target.value)}
-                  className="w-full rounded-lg border-gray-300 shadow-sm focus:border-brand-blue focus:ring-brand-blue"
+                  className="w-full rounded-lg border-fw-secondary shadow-sm focus:border-fw-active focus:ring-fw-active"
                 >
                   <option value="1h">Last Hour</option>
                   <option value="6h">Last 6 Hours</option>
@@ -295,13 +295,13 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
                     setSelectedSeverities([]);
                     setTimeRange('24h');
                   }}
-                  className="text-sm text-gray-500 hover:text-gray-700"
+                  className="text-figma-base text-fw-bodyLight hover:text-fw-body"
                 >
                   Reset Filters
                 </button>
                 <button
                   onClick={() => setShowFilters(false)}
-                  className="px-4 py-2 bg-brand-blue text-white rounded-lg text-sm font-medium hover:bg-brand-darkBlue"
+                  className="px-4 py-2 bg-brand-blue text-white rounded-lg text-figma-base font-medium hover:bg-brand-darkBlue"
                 >
                   Apply Filters
                 </button>
@@ -317,7 +317,7 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
           {selectedTypes.map(type => (
             <span
               key={type}
-              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-brand-lightBlue text-brand-blue"
+              className="inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium bg-brand-lightBlue text-brand-blue"
             >
               {type}
               <button
@@ -331,7 +331,7 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
           {selectedSeverities.map(severity => (
             <span
               key={severity}
-              className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+              className={`inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium ${
                 getSeverityColor(severity)
               }`}
             >
@@ -345,11 +345,11 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
             </span>
           ))}
           {searchQuery && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium bg-fw-neutral text-fw-body">
               "{searchQuery}"
               <button
                 onClick={() => setSearchQuery('')}
-                className="ml-1 hover:text-gray-900"
+                className="ml-1 hover:text-fw-heading"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -359,10 +359,10 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
       )}
 
       {/* Logs List */}
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm divide-y divide-gray-200">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary shadow-sm divide-y divide-fw-secondary">
         {filteredLogs.length === 0 ? (
-          <div className="p-6 text-center text-gray-500">
-            <p className="text-sm">No logs match the current filters</p>
+          <div className="p-6 text-center text-fw-bodyLight">
+            <p className="text-figma-base">No logs match the current filters</p>
           </div>
         ) : (
           filteredLogs.map((log) => (
@@ -373,27 +373,27 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
                 </div>
                 <div className="ml-3 flex-1">
                   <div className="flex items-center justify-between">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-figma-sm font-medium ${
                       getSeverityColor(log.severity)
                     }`}>
                       {log.severity.toUpperCase()}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-figma-sm text-fw-bodyLight">
                       {log.timestamp}
                     </span>
                   </div>
-                  <p className="mt-1 text-sm text-gray-900">{log.message}</p>
-                  <div className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-figma-base text-fw-heading">{log.message}</p>
+                  <div className="mt-1 text-figma-sm text-fw-bodyLight">
                     <span className="font-medium">Source:</span> {log.source}
                   </div>
                   {log.metadata && (
-                    <div className="mt-2 pt-2 border-t border-gray-100">
-                      <div className="text-xs text-gray-500 font-medium">Details:</div>
+                    <div className="mt-2 pt-2 border-t border-fw-secondary">
+                      <div className="text-figma-sm text-fw-bodyLight font-medium">Details:</div>
                       <div className="mt-1 grid grid-cols-2 gap-2">
                         {Object.entries(log.metadata).map(([key, value]) => (
-                          <div key={key} className="text-xs">
-                            <span className="text-gray-500">{key}:</span>{' '}
-                            <span className="text-gray-900">{value}</span>
+                          <div key={key} className="text-figma-sm">
+                            <span className="text-fw-bodyLight">{key}:</span>{' '}
+                            <span className="text-fw-heading">{value}</span>
                           </div>
                         ))}
                       </div>

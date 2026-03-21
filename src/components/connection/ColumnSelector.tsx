@@ -145,7 +145,7 @@ export function ColumnSelector({
       <button
         ref={triggerRef}
         onClick={() => handleOpenChange(!isOpen)}
-        className="p-2 text-gray-400 hover:text-gray-500 rounded-full hover:bg-gray-100 transition-colors"
+        className="p-2 text-fw-bodyLight hover:text-fw-bodyLight rounded-full hover:bg-fw-neutral transition-colors"
         title="Customize Columns"
         aria-label="Customize table columns"
         aria-haspopup="dialog"
@@ -172,7 +172,7 @@ export function ColumnSelector({
             <div
               ref={modalContentRef}
               className={`
-                bg-white rounded-lg shadow-xl border border-gray-200
+                bg-fw-base rounded-lg shadow-xl border border-fw-secondary
                 transform transition-all duration-200 ease-out
                 ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}
               `}
@@ -188,11 +188,11 @@ export function ColumnSelector({
               {showAllOptions ? (
                 // All Options View
                 <div>
-                  <div className="sticky top-0 px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-white z-10">
-                    <h3 id="column-selector-title" className="text-sm font-medium text-gray-900">All Available Fields</h3>
+                  <div className="sticky top-0 px-4 py-3 border-b border-fw-secondary flex items-center justify-between bg-fw-base z-10">
+                    <h3 id="column-selector-title" className="text-figma-base font-medium text-fw-heading">All Available Fields</h3>
                     <button
                       onClick={() => setShowAllOptions(false)}
-                      className="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-blue rounded-full p-1"
+                      className="text-fw-bodyLight hover:text-fw-bodyLight focus:outline-none focus:ring-2 focus:ring-brand-blue rounded-full p-1"
                       aria-label="Back to column list"
                     >
                       <X className="h-5 w-5" />
@@ -201,7 +201,7 @@ export function ColumnSelector({
                   <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(80vh - 56px)' }}>
                     {Object.entries(ALL_DATA_POINTS).map(([category, { label, fields }]) => (
                       <div key={category} className="mb-6 last:mb-0">
-                        <h4 className="text-sm font-medium text-gray-900 mb-3">{label}</h4>
+                        <h4 className="text-figma-base font-medium text-fw-heading mb-3">{label}</h4>
                         <div className="grid grid-cols-2 gap-3">
                           {fields.map((field) => {
                             const isActive = columns.some(col => col.id === field.id);
@@ -210,16 +210,16 @@ export function ColumnSelector({
                                 key={field.id}
                                 onClick={() => handleAddColumn(field)}
                                 className={`
-                                  flex items-center justify-between p-2 rounded text-sm
+                                  flex items-center justify-between p-2 rounded text-figma-base
                                   ${isActive 
-                                    ? 'bg-blue-50 text-blue-700 hover:bg-blue-100' 
-                                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                                    ? 'bg-fw-accent text-fw-linkHover hover:bg-fw-accent' 
+                                    : 'bg-fw-wash text-fw-body hover:bg-fw-neutral'
                                   }
                                   focus:outline-none focus:ring-2 focus:ring-brand-blue
                                 `}
                               >
                                 <span>{field.label}</span>
-                                {isActive && <span className="text-xs">Added</span>}
+                                {isActive && <span className="text-figma-sm">Added</span>}
                               </button>
                             );
                           })}
@@ -231,8 +231,8 @@ export function ColumnSelector({
               ) : (
                 // Current Columns View
                 <div>
-                  <div className="sticky top-0 px-4 py-3 border-b border-gray-200 bg-white z-10">
-                    <h3 id="column-selector-title" className="text-sm font-medium text-gray-900">Customize Columns</h3>
+                  <div className="sticky top-0 px-4 py-3 border-b border-fw-secondary bg-fw-base z-10">
+                    <h3 id="column-selector-title" className="text-figma-base font-medium text-fw-heading">Customize Columns</h3>
                   </div>
                   <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(80vh - 56px)' }}>
                     <div className="space-y-2">
@@ -242,18 +242,18 @@ export function ColumnSelector({
                           draggable
                           onDragStart={() => handleDragStart(column.id)}
                           onDragOver={(e) => handleDragOver(e, column.id)}
-                          className="flex items-center justify-between p-2 bg-white hover:bg-gray-50 rounded cursor-move"
+                          className="flex items-center justify-between p-2 bg-fw-base hover:bg-fw-wash rounded cursor-move"
                         >
                           <div className="flex items-center">
-                            <GripVertical className="h-4 w-4 text-gray-400 mr-2" />
+                            <GripVertical className="h-4 w-4 text-fw-bodyLight mr-2" />
                             <label className="flex items-center">
                               <input
                                 type="checkbox"
                                 checked={column.visible}
                                 onChange={() => handleColumnToggle(column.id)}
-                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2"
+                                className="rounded border-fw-secondary text-fw-link focus:ring-fw-active mr-2"
                               />
-                              <span className="text-sm text-gray-700">{column.label}</span>
+                              <span className="text-figma-base text-fw-body">{column.label}</span>
                             </label>
                           </div>
                         </div>
@@ -261,12 +261,12 @@ export function ColumnSelector({
                     </div>
                     <button
                       onClick={() => setShowAllOptions(true)}
-                      className="mt-4 w-full flex items-center justify-between px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue"
+                      className="mt-4 w-full flex items-center justify-between px-4 py-2 text-figma-base text-fw-link hover:bg-fw-accent rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-blue"
                     >
                       <span>See All Available Fields</span>
                       <ChevronRight className="h-4 w-4" />
                     </button>
-                    <div className="mt-4 text-xs text-gray-500">
+                    <div className="mt-4 text-figma-sm text-fw-bodyLight">
                       Drag columns to reorder. Toggle visibility using checkboxes.
                     </div>
                   </div>

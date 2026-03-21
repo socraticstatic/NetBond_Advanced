@@ -83,37 +83,37 @@ export function MobileMetricsTab({ metrics }: MobileMetricsTabProps) {
               <MetricsSummary metrics={metrics} isMobile={true} />
               
               {/* Resource Utilization */}
-              <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+              <div className="bg-fw-base rounded-lg border border-fw-secondary p-4 shadow-sm">
                 <div className="flex items-center space-x-2 mb-4">
-                  <TrendingUp className="h-5 w-5 text-green-500" />
-                  <h3 className="text-lg font-medium text-gray-900">Resource Utilization</h3>
+                  <TrendingUp className="h-5 w-5 text-fw-success" />
+                  <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">Resource Utilization</h3>
                 </div>
                 <div className="space-y-3">
                   <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-500">Memory</span>
-                      <span className="font-medium text-gray-900">68%</span>
+                    <div className="flex justify-between text-figma-base mb-1">
+                      <span className="text-fw-bodyLight">Memory</span>
+                      <span className="font-medium text-fw-heading">68%</span>
                     </div>
-                    <div className="h-2 bg-gray-100 rounded-full">
-                      <div className="h-2 bg-blue-500 rounded-full w-[68%]"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-500">CPU</span>
-                      <span className="font-medium text-gray-900">45%</span>
-                    </div>
-                    <div className="h-2 bg-gray-100 rounded-full">
-                      <div className="h-2 bg-green-500 rounded-full w-[45%]"></div>
+                    <div className="h-2 bg-fw-neutral rounded-full">
+                      <div className="h-2 bg-fw-cobalt-600 rounded-full w-[68%]"></div>
                     </div>
                   </div>
                   <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-500">Network I/O</span>
-                      <span className="font-medium text-gray-900">82%</span>
+                    <div className="flex justify-between text-figma-base mb-1">
+                      <span className="text-fw-bodyLight">CPU</span>
+                      <span className="font-medium text-fw-heading">45%</span>
                     </div>
-                    <div className="h-2 bg-gray-100 rounded-full">
-                      <div className="h-2 bg-purple-500 rounded-full w-[82%]"></div>
+                    <div className="h-2 bg-fw-neutral rounded-full">
+                      <div className="h-2 bg-fw-success rounded-full w-[45%]"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-figma-base mb-1">
+                      <span className="text-fw-bodyLight">Network I/O</span>
+                      <span className="font-medium text-fw-heading">82%</span>
+                    </div>
+                    <div className="h-2 bg-fw-neutral rounded-full">
+                      <div className="h-2 bg-fw-purple rounded-full w-[82%]"></div>
                     </div>
                   </div>
                 </div>
@@ -121,10 +121,10 @@ export function MobileMetricsTab({ metrics }: MobileMetricsTabProps) {
             </>
           ) : (
             // Detailed metric view based on selection
-            <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+            <div className="bg-fw-base rounded-lg border border-fw-secondary p-4 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em] flex items-center">
                     {activeMetricView === 'latency' && (
                       <>
                         <Activity className="h-5 w-5 text-brand-blue mr-2" />
@@ -133,13 +133,13 @@ export function MobileMetricsTab({ metrics }: MobileMetricsTabProps) {
                     )}
                     {activeMetricView === 'packet-loss' && (
                       <>
-                        <TrendingUp className="h-5 w-5 text-red-500 mr-2" />
+                        <TrendingUp className="h-5 w-5 text-fw-error mr-2" />
                         {metricData.packetLoss.title}
                       </>
                     )}
                     {activeMetricView === 'bandwidth' && (
                       <>
-                        <ArrowUpDown className="h-5 w-5 text-green-500 mr-2" />
+                        <ArrowUpDown className="h-5 w-5 text-fw-success mr-2" />
                         {metricData.bandwidth.title}
                       </>
                     )}
@@ -150,7 +150,7 @@ export function MobileMetricsTab({ metrics }: MobileMetricsTabProps) {
                       </>
                     )}
                   </h3>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-figma-base text-fw-bodyLight mt-1">
                     {activeMetricView === 'latency' && metricData.latency.description}
                     {activeMetricView === 'packet-loss' && metricData.packetLoss.description}
                     {activeMetricView === 'bandwidth' && metricData.bandwidth.description}
@@ -159,7 +159,7 @@ export function MobileMetricsTab({ metrics }: MobileMetricsTabProps) {
                     }
                   </p>
                 </div>
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold text-fw-heading">
                   {activeMetricView === 'latency' && metricData.latency.value}
                   {activeMetricView === 'packet-loss' && metricData.packetLoss.value}
                   {activeMetricView === 'bandwidth' && metricData.bandwidth.value}
@@ -192,16 +192,16 @@ export function MobileMetricsTab({ metrics }: MobileMetricsTabProps) {
                   />
                 )}
                 {(activeMetricView !== 'latency' && activeMetricView !== 'packet-loss' && activeMetricView !== 'bandwidth') && (
-                  <div className="h-full bg-gray-100 rounded-lg flex items-center justify-center">
-                    <span className="text-gray-500">Chart placeholder</span>
+                  <div className="h-full bg-fw-neutral rounded-lg flex items-center justify-center">
+                    <span className="text-fw-bodyLight">Chart placeholder</span>
                   </div>
                 )}
               </div>
               
-              <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+              <div className="grid grid-cols-3 gap-4 p-4 bg-fw-wash rounded-lg">
                 <div>
-                  <div className="text-sm text-gray-500">Average</div>
-                  <div className="text-lg font-medium text-gray-900">
+                  <div className="text-figma-base text-fw-bodyLight">Average</div>
+                  <div className="text-lg font-medium text-fw-heading">
                     {activeMetricView === 'latency' && metricData.latency.stats.average}
                     {activeMetricView === 'packet-loss' && metricData.packetLoss.stats.average}
                     {activeMetricView === 'bandwidth' && metricData.bandwidth.stats.average}
@@ -211,8 +211,8 @@ export function MobileMetricsTab({ metrics }: MobileMetricsTabProps) {
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-500">Peak</div>
-                  <div className="text-lg font-medium text-gray-900">
+                  <div className="text-figma-base text-fw-bodyLight">Peak</div>
+                  <div className="text-lg font-medium text-fw-heading">
                     {activeMetricView === 'latency' && metricData.latency.stats.peak}
                     {activeMetricView === 'packet-loss' && metricData.packetLoss.stats.peak}
                     {activeMetricView === 'bandwidth' && metricData.bandwidth.stats.peak}
@@ -222,8 +222,8 @@ export function MobileMetricsTab({ metrics }: MobileMetricsTabProps) {
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-500">SLA Target</div>
-                  <div className="text-lg font-medium text-green-600">
+                  <div className="text-figma-base text-fw-bodyLight">SLA Target</div>
+                  <div className="text-lg font-medium text-fw-success">
                     {activeMetricView === 'latency' && metricData.latency.stats.target}
                     {activeMetricView === 'packet-loss' && metricData.packetLoss.stats.target}
                     {activeMetricView === 'bandwidth' && metricData.bandwidth.stats.target}

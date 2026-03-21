@@ -114,13 +114,13 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
   return (
     <div className="space-y-6">
       {/* Current Plan Overview */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-medium text-gray-900">Current Plan</h3>
-          <span className={`px-2 py-1 text-sm rounded-full ${
-            config.plan.status === 'active' 
-              ? 'bg-green-100 text-green-800'
-              : 'bg-yellow-100 text-yellow-800'
+          <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em]">Current Plan</h3>
+          <span className={`px-2 py-1 text-figma-sm rounded-lg ${
+            config.plan.status === 'active'
+              ? 'bg-green-50 text-fw-success'
+              : 'bg-fw-warn/10 text-fw-warn'
           }`}>
             {config.plan.status.toUpperCase()}
           </span>
@@ -128,57 +128,57 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div>
-            <span className="text-sm text-gray-500">Base Plan</span>
+            <span className="text-figma-sm text-fw-bodyLight">Base Plan</span>
             <div className="mt-1">
-              <span className="text-2xl font-bold text-gray-900">${config.plan.basePrice}</span>
-              <span className="text-gray-500">/{config.plan.billingCycle}</span>
+              <span className="text-figma-xl font-bold text-fw-heading">${config.plan.basePrice}</span>
+              <span className="text-fw-bodyLight">/{config.plan.billingCycle}</span>
             </div>
           </div>
           <div>
-            <span className="text-sm text-gray-500">Billing Cycle</span>
+            <span className="text-figma-sm text-fw-bodyLight">Billing Cycle</span>
             <div className="mt-1 flex items-center">
-              <Calendar className="h-5 w-5 text-gray-400 mr-2" />
-              <span className="text-gray-900">Monthly</span>
+              <Calendar className="h-5 w-5 text-fw-bodyLight mr-2" />
+              <span className="text-fw-heading">Monthly</span>
             </div>
           </div>
           <div>
-            <span className="text-sm text-gray-500">Next Billing Date</span>
+            <span className="text-figma-sm text-fw-bodyLight">Next Billing Date</span>
             <div className="mt-1 flex items-center">
-              <Clock className="h-5 w-5 text-gray-400 mr-2" />
-              <span className="text-gray-900">{new Date(config.plan.nextBillingDate).toLocaleDateString()}</span>
+              <Clock className="h-5 w-5 text-fw-bodyLight mr-2" />
+              <span className="text-fw-heading">{new Date(config.plan.nextBillingDate).toLocaleDateString()}</span>
             </div>
           </div>
           <div>
-            <span className="text-sm text-gray-500">Auto-Renew</span>
+            <span className="text-figma-sm text-fw-bodyLight">Auto-Renew</span>
             <div className="mt-1 flex items-center">
-              <RefreshCw className="h-5 w-5 text-gray-400 mr-2" />
-              <span className="text-gray-900">{config.plan.autoRenew ? 'Enabled' : 'Disabled'}</span>
+              <RefreshCw className="h-5 w-5 text-fw-bodyLight mr-2" />
+              <span className="text-fw-heading">{config.plan.autoRenew ? 'Enabled' : 'Disabled'}</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Usage & Metering */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">Usage & Metering</h3>
-        
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] mb-6">Usage & Metering</h3>
+
         {/* Bandwidth Usage */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Bandwidth Usage</span>
-            <span className="text-sm text-gray-500">
+            <span className="text-figma-sm font-medium text-fw-body">Bandwidth Usage</span>
+            <span className="text-figma-sm text-fw-bodyLight">
               {config.usage.bandwidth.current} of {config.usage.bandwidth.included} included
             </span>
           </div>
           <div className="relative">
-            <div className="h-2 bg-gray-200 rounded-full">
-              <div 
-                className="h-2 bg-blue-500 rounded-full"
+            <div className="h-2 bg-fw-neutral rounded-full">
+              <div
+                className="h-2 bg-fw-cobalt-600 rounded-full"
                 style={{ width: `${(parseFloat(config.usage.bandwidth.current) / parseFloat(config.usage.bandwidth.included.replace('TB', ''))) * 100}%` }}
               />
             </div>
           </div>
-          <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
+          <div className="mt-2 flex items-center justify-between text-figma-sm text-fw-bodyLight">
             <span>Forecast: {config.usage.bandwidth.forecast}</span>
             <span>Overage Rate: {config.usage.bandwidth.overage}</span>
           </div>
@@ -187,45 +187,45 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
         {/* Port Usage */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Port Usage</span>
-            <span className="text-sm text-gray-500">
+            <span className="text-figma-sm font-medium text-fw-body">Port Usage</span>
+            <span className="text-figma-sm text-fw-bodyLight">
               {config.usage.ports.current} of {config.usage.ports.included} included
             </span>
           </div>
           <div className="relative">
-            <div className="h-2 bg-gray-200 rounded-full">
-              <div 
-                className="h-2 bg-blue-500 rounded-full"
+            <div className="h-2 bg-fw-neutral rounded-full">
+              <div
+                className="h-2 bg-fw-cobalt-600 rounded-full"
                 style={{ width: `${(config.usage.ports.current / config.usage.ports.included) * 100}%` }}
               />
             </div>
           </div>
-          <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
+          <div className="mt-2 flex items-center justify-between text-figma-sm text-fw-bodyLight">
             <span>Additional Ports: {config.usage.ports.overage}</span>
           </div>
         </div>
       </div>
 
       {/* Add-ons */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">Add-ons & Features</h3>
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] mb-6">Add-ons & Features</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {config.addons.map((addon) => (
-            <div key={addon.name} className="p-4 bg-gray-50 rounded-lg">
+            <div key={addon.name} className="p-4 bg-fw-wash rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <span className="font-medium text-gray-900">{addon.name}</span>
-                <span className="text-blue-600">${addon.price}/mo</span>
+                <span className="font-medium text-fw-heading">{addon.name}</span>
+                <span className="text-fw-link">${addon.price}/mo</span>
               </div>
-              <p className="text-sm text-gray-500 mb-3">{addon.details}</p>
+              <p className="text-figma-sm text-fw-bodyLight mb-3">{addon.details}</p>
               <div className="flex items-center justify-between">
-                <span className={`px-2 py-1 text-xs rounded-full ${
+                <span className={`px-2 py-1 text-figma-sm rounded-lg ${
                   addon.status === 'active'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-gray-100 text-gray-800'
+                    ? 'bg-green-50 text-fw-success'
+                    : 'bg-fw-neutral text-fw-heading'
                 }`}>
                   {addon.status.toUpperCase()}
                 </span>
-                <button className="text-sm text-red-600 hover:text-red-700">
+                <button className="text-figma-base text-fw-error hover:text-fw-error">
                   Remove
                 </button>
               </div>
@@ -235,41 +235,41 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
       </div>
 
       {/* Payment Information */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-medium text-gray-900">Payment Information</h3>
-          <button className="text-sm text-blue-600 hover:text-blue-700">
+          <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em]">Payment Information</h3>
+          <button className="text-figma-base text-fw-link hover:text-fw-linkHover">
             Update Payment Method
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-4 bg-gray-50 rounded-lg">
+          <div className="p-4 bg-fw-wash rounded-lg">
             <div className="flex items-center space-x-3">
-              <CreditCard className="h-5 w-5 text-gray-400" />
+              <CreditCard className="h-5 w-5 text-fw-bodyLight" />
               <div>
-                <div className="text-sm font-medium text-gray-900">
+                <div className="text-figma-base font-medium text-fw-heading">
                   {config.payment.card.brand.toUpperCase()} ending in {config.payment.card.last4}
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-figma-sm text-fw-bodyLight">
                   Expires {config.payment.card.expiry}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="p-4 bg-gray-50 rounded-lg">
+          <div className="p-4 bg-fw-wash rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-900">Auto-Pay</span>
-              <span className={`px-2 py-1 text-xs rounded-full ${
+              <span className="text-figma-base font-medium text-fw-heading">Auto-Pay</span>
+              <span className={`px-2 py-1 text-figma-sm rounded-lg ${
                 config.payment.autopay
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-gray-100 text-gray-800'
+                  ? 'bg-green-50 text-fw-success'
+                  : 'bg-fw-neutral text-fw-heading'
               }`}>
                 {config.payment.autopay ? 'ENABLED' : 'DISABLED'}
               </span>
             </div>
-            <div className="text-sm text-gray-500">
+            <div className="text-figma-sm text-fw-bodyLight">
               Billing Email: {config.payment.billingEmail}
             </div>
           </div>
@@ -277,29 +277,29 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
       </div>
 
       {/* Billing History */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-medium text-gray-900">Billing History</h3>
-          <button className="text-sm text-blue-600 hover:text-blue-700 flex items-center">
+          <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em]">Billing History</h3>
+          <button className="text-figma-base text-fw-link hover:text-fw-linkHover flex items-center">
             <Download className="h-4 w-4 mr-1" />
             Export All
           </button>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-fw-secondary">
+            <thead className="bg-fw-wash">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
                   Invoice
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
                   Date
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
                   Amount
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
                   Status
                 </th>
                 <th scope="col" className="relative px-6 py-3">
@@ -307,34 +307,34 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-fw-base divide-y divide-fw-secondary">
               {config.history.map((invoice) => (
-                <tr key={invoice.id} className="hover:bg-gray-50">
+                <tr key={invoice.id} className="hover:bg-fw-wash">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <FileText className="h-5 w-5 text-gray-400 mr-2" />
-                      <div className="text-sm font-medium text-gray-900">{invoice.id}</div>
+                      <FileText className="h-5 w-5 text-fw-bodyLight mr-2" />
+                      <div className="text-figma-base font-medium text-fw-heading">{invoice.id}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
+                    <div className="text-figma-base text-fw-heading">
                       {new Date(invoice.date).toLocaleDateString()}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${invoice.amount.toFixed(2)}</div>
+                    <div className="text-figma-base text-fw-heading">${invoice.amount.toFixed(2)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                    <span className={`px-2 py-1 inline-flex text-figma-sm leading-5 font-semibold rounded-lg ${
                       invoice.status === 'paid'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-green-50 text-fw-success'
+                        : 'bg-fw-warn/10 text-fw-warn'
                     }`}>
                       {invoice.status.toUpperCase()}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium">
+                    <button className="text-fw-link hover:text-fw-linkHover">
                       Download
                     </button>
                   </td>
@@ -346,38 +346,38 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
       </div>
 
       {/* Cost Allocation */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">Cost Allocation</h3>
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] mb-6">Cost Allocation</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Department</label>
+                <label className="block text-figma-sm font-medium text-fw-body">Department</label>
                 <input
                   type="text"
                   value={config.costAllocation.department}
                   disabled={!isEditing}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                  className="mt-1 block w-full px-3 rounded-lg border-fw-bodyLight h-9 text-figma-base focus:border-fw-active focus:ring-fw-active disabled:bg-fw-wash disabled:text-fw-bodyLight"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Cost Center</label>
+                <label className="block text-figma-sm font-medium text-fw-body">Cost Center</label>
                 <input
                   type="text"
                   value={config.costAllocation.costCenter}
                   disabled={!isEditing}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                  className="mt-1 block w-full px-3 rounded-lg border-fw-bodyLight h-9 text-figma-base focus:border-fw-active focus:ring-fw-active disabled:bg-fw-wash disabled:text-fw-bodyLight"
                 />
               </div>
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+            <label className="block text-figma-sm font-medium text-fw-body mb-2">Tags</label>
             <div className="space-y-2">
               {Object.entries(config.costAllocation.tags).map(([key, value]) => (
                 <div key={key} className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-500">{key}:</span>
-                  <span className="text-sm text-gray-900">{value}</span>
+                  <span className="text-figma-sm text-fw-bodyLight">{key}:</span>
+                  <span className="text-figma-base text-fw-heading">{value}</span>
                 </div>
               ))}
             </div>
@@ -386,43 +386,43 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
       </div>
 
       {/* Billing Alerts */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">Billing Alerts</h3>
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] mb-6">Billing Alerts</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Usage Threshold</label>
+              <label className="block text-figma-sm font-medium text-fw-body">Usage Threshold</label>
               <div className="mt-1 flex items-center">
                 <input
                   type="number"
                   value={config.alerts.usageThreshold}
                   disabled={!isEditing}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                  className="block w-full px-3 rounded-lg border-fw-bodyLight h-9 text-figma-base focus:border-fw-active focus:ring-fw-active disabled:bg-fw-wash disabled:text-fw-bodyLight"
                 />
                 <span className="ml-2">%</span>
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Budget Threshold</label>
+              <label className="block text-figma-sm font-medium text-fw-body">Budget Threshold</label>
               <div className="mt-1 flex items-center">
                 <input
                   type="number"
                   value={config.alerts.budgetThreshold}
                   disabled={!isEditing}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                  className="block w-full px-3 rounded-lg border-fw-bodyLight h-9 text-figma-base focus:border-fw-active focus:ring-fw-active disabled:bg-fw-wash disabled:text-fw-bodyLight"
                 />
                 <span className="ml-2">%</span>
               </div>
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Alert Recipients</label>
+            <label className="block text-figma-sm font-medium text-fw-body mb-2">Alert Recipients</label>
             <div className="space-y-2">
               {config.alerts.recipients.map((recipient) => (
                 <div key={recipient} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-900">{recipient}</span>
+                  <span className="text-figma-base text-fw-heading">{recipient}</span>
                   {isEditing && (
-                    <button className="text-sm text-red-600 hover:text-red-700">
+                    <button className="text-figma-base text-fw-error hover:text-fw-error">
                       Remove
                     </button>
                   )}

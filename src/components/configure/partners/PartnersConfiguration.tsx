@@ -49,7 +49,7 @@ export function PartnersConfiguration() {
       label: 'Company Name',
       sortable: true,
       render: (partner: Partner) => (
-        <div className="text-sm font-medium text-gray-900">{partner.companyName}</div>
+        <div className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{partner.companyName}</div>
       )
     },
     {
@@ -57,7 +57,7 @@ export function PartnersConfiguration() {
       label: 'Region',
       sortable: true,
       render: (partner: Partner) => (
-        <div className="text-sm text-gray-500">{partner.region}</div>
+        <div className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">{partner.region}</div>
       )
     },
     {
@@ -65,7 +65,7 @@ export function PartnersConfiguration() {
       label: 'ID',
       sortable: true,
       render: (partner: Partner) => (
-        <div className="text-sm text-gray-500">{partner.id}</div>
+        <div className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">{partner.id}</div>
       )
     },
     {
@@ -73,7 +73,7 @@ export function PartnersConfiguration() {
       label: 'Country Name',
       sortable: true,
       render: (partner: Partner) => (
-        <div className="text-sm text-gray-500">{partner.countryName}</div>
+        <div className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">{partner.countryName}</div>
       )
     },
     {
@@ -84,7 +84,7 @@ export function PartnersConfiguration() {
           href={partner.meetMeLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm text-brand-blue hover:text-brand-darkBlue flex items-center"
+          className="text-figma-base font-medium text-fw-link tracking-[-0.03em] hover:text-fw-linkHover flex items-center"
         >
           View Link
           <ExternalLink className="h-4 w-4 ml-1" />
@@ -132,16 +132,16 @@ export function PartnersConfiguration() {
   return (
     <div className="p-6">
       {/* Search and Controls */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 mb-6">
+      <div className="bg-fw-base p-4 rounded-2xl border border-fw-secondary mb-6">
         <div className="flex items-center justify-between gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
             <input
               type="text"
               placeholder="Search partners..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+              className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg text-figma-base font-medium text-fw-heading tracking-[-0.03em] placeholder:text-fw-bodyLight focus:ring-2 focus:ring-fw-active focus:border-fw-active"
             />
           </div>
           <div className="flex items-center space-x-4">
@@ -171,11 +171,11 @@ export function PartnersConfiguration() {
 
         {/* Expanded Filters */}
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
+          <div className="mt-4 pt-4 border-t border-fw-secondary">
             <div className="grid grid-cols-2 gap-6">
               {/* Regions */}
               <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Regions</h4>
+                <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">Regions</h4>
                 <div className="space-y-2">
                   {['North America', 'Europe', 'Asia Pacific', 'South America'].map((region) => (
                     <label key={region} className="flex items-center">
@@ -189,9 +189,9 @@ export function PartnersConfiguration() {
                             setSelectedRegions(selectedRegions.filter(r => r !== region));
                           }
                         }}
-                        className="h-4 w-4 text-brand-blue rounded border-gray-300"
+                        className="h-4 w-4 text-fw-cobalt-600 rounded border-fw-secondary"
                       />
-                      <span className="ml-2 text-sm text-gray-700">{region}</span>
+                      <span className="ml-2 text-figma-base font-medium text-fw-body tracking-[-0.03em]">{region}</span>
                     </label>
                   ))}
                 </div>
@@ -199,7 +199,7 @@ export function PartnersConfiguration() {
 
               {/* Countries */}
               <div>
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Countries</h4>
+                <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">Countries</h4>
                 <div className="space-y-2">
                   {['United States', 'Germany', 'Singapore', 'Brazil'].map((country) => (
                     <label key={country} className="flex items-center">
@@ -213,9 +213,9 @@ export function PartnersConfiguration() {
                             setSelectedCountries(selectedCountries.filter(c => c !== country));
                           }
                         }}
-                        className="h-4 w-4 text-brand-blue rounded border-gray-300"
+                        className="h-4 w-4 text-fw-cobalt-600 rounded border-fw-secondary"
                       />
-                      <span className="ml-2 text-sm text-gray-700">{country}</span>
+                      <span className="ml-2 text-figma-base font-medium text-fw-body tracking-[-0.03em]">{country}</span>
                     </label>
                   ))}
                 </div>
@@ -254,7 +254,7 @@ export function PartnersConfiguration() {
           )}
           emptyState={
             <div className="text-center py-12">
-              <p className="text-gray-500">No partners found</p>
+              <p className="text-fw-bodyLight">No partners found</p>
             </div>
           }
         />

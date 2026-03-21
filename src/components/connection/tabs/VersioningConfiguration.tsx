@@ -146,48 +146,48 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
   const getStatusColor = (status: Version['status']) => {
     switch (status) {
       case 'deployed':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-50 text-fw-success';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-fw-warn/10 text-fw-warn';
       case 'rollback':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-fw-accent text-fw-linkHover';
       case 'failed':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-50 text-fw-error';
     }
   };
 
   const getTypeColor = (type: Version['type']) => {
     switch (type) {
       case 'major':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-purple-50 text-fw-purple';
       case 'minor':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-fw-accent text-fw-linkHover';
       case 'patch':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-50 text-fw-success';
       case 'config':
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-fw-neutral text-fw-heading';
     }
   };
 
   const getChangeTypeColor = (type: 'added' | 'modified' | 'removed') => {
     switch (type) {
       case 'added':
-        return 'text-green-600';
+        return 'text-fw-success';
       case 'modified':
-        return 'text-blue-600';
+        return 'text-fw-link';
       case 'removed':
-        return 'text-red-600';
+        return 'text-fw-error';
     }
   };
 
   return (
     <div className="space-y-6">
       {/* Version Control Header */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <h3 className="text-lg font-medium text-gray-900">Version Control</h3>
-            <span className="px-2 py-1 text-sm bg-blue-100 text-brand-blue rounded-full">
+            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em]">Version Control</h3>
+            <span className="px-2 py-1 text-figma-sm bg-fw-accent text-brand-blue rounded-lg">
               Current: v{currentVersion}
             </span>
           </div>
@@ -217,12 +217,12 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="p-4 bg-blue-50 rounded-lg">
+          <div className="p-4 bg-fw-accent rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-blue-900">Create Version</span>
-              <GitCommit className="h-5 w-5 text-blue-500" />
+              <span className="text-figma-base font-medium text-fw-linkHover">Create Version</span>
+              <GitCommit className="h-5 w-5 text-fw-link" />
             </div>
-            <p className="text-xs text-blue-600 mb-3">Create a new version from current configuration</p>
+            <p className="text-figma-sm text-fw-link mb-3">Create a new version from current configuration</p>
             <Button variant="primary" className="w-full">
               Create Version
             </Button>
@@ -230,21 +230,21 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
 
           <div className="p-4 bg-green-50 rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-green-900">Backup Configuration</span>
-              <Download className="h-5 w-5 text-green-500" />
+              <span className="text-figma-base font-medium text-fw-success">Backup Configuration</span>
+              <Download className="h-5 w-5 text-fw-success" />
             </div>
-            <p className="text-xs text-green-600 mb-3">Export current configuration as backup</p>
-            <Button variant="primary" className="w-full bg-green-600 hover:bg-green-700">
+            <p className="text-figma-sm text-fw-success mb-3">Export current configuration as backup</p>
+            <Button variant="primary" className="w-full bg-fw-success hover:bg-fw-success">
               Export Config
             </Button>
           </div>
 
           <div className="p-4 bg-purple-50 rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-purple-900">Restore Version</span>
-              <Upload className="h-5 w-5 text-purple-500" />
+              <span className="text-figma-base font-medium text-fw-purple">Restore Version</span>
+              <Upload className="h-5 w-5 text-fw-purple" />
             </div>
-            <p className="text-xs text-purple-600 mb-3">Restore configuration from backup</p>
+            <p className="text-figma-sm text-fw-purple mb-3">Restore configuration from backup</p>
             <Button variant="primary" className="w-full bg-purple-600 hover:bg-purple-700">
               Restore Config
             </Button>
@@ -254,29 +254,29 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
         {/* Version Timeline or List */}
         {showHistory ? (
           <div className="relative">
-            <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200" />
+            <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-fw-neutral" />
             <div className="space-y-6">
               {versions.map((version) => (
                 <div key={version.id} className="relative pl-8">
                   <div className={`absolute left-0 w-8 h-8 rounded-full flex items-center justify-center ${
                     version.id === currentVersion
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 text-gray-600'
+                      ? 'bg-fw-cobalt-600 text-white'
+                      : 'bg-fw-neutral text-fw-bodyLight'
                   }`}>
                     <GitCommit className="h-4 w-4" />
                   </div>
-                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <div className="bg-fw-base p-4 rounded-2xl border border-fw-secondary">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
-                        <span className="font-medium text-gray-900">v{version.number}</span>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(version.type)}`}>
+                        <span className="font-medium text-fw-heading">v{version.number}</span>
+                        <span className={`px-2 py-1 text-figma-sm font-medium rounded-lg ${getTypeColor(version.type)}`}>
                           {version.type}
                         </span>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(version.status)}`}>
+                        <span className={`px-2 py-1 text-figma-sm font-medium rounded-lg ${getStatusColor(version.status)}`}>
                           {version.status}
                         </span>
                       </div>
-                      <div className="flex items-center space-x-2 text-sm text-gray-500">
+                      <div className="flex items-center space-x-2 text-figma-sm text-fw-bodyLight">
                         <Clock className="h-4 w-4" />
                         <span>{new Date(version.timestamp).toLocaleString()}</span>
                       </div>
@@ -284,37 +284,37 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
 
                     <div className="space-y-2 mb-3">
                       {version.changes.map((change, idx) => (
-                        <div key={idx} className={`text-sm ${getChangeTypeColor(change.type)}`}>
-                          {change.type === 'added' && '+'} 
-                          {change.type === 'removed' && '-'} 
-                          {change.type === 'modified' && '•'} 
+                        <div key={idx} className={`text-figma-base ${getChangeTypeColor(change.type)}`}>
+                          {change.type === 'added' && '+'}
+                          {change.type === 'removed' && '-'}
+                          {change.type === 'modified' && '•'}
                           {change.component}: {change.description}
                         </div>
                       ))}
                     </div>
 
-                    <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center justify-between text-figma-base">
                       <div className="flex items-center space-x-2">
-                        <span className="text-gray-600">Author:</span>
-                        <span className="font-medium text-gray-900">{version.author}</span>
+                        <span className="text-fw-bodyLight">Author:</span>
+                        <span className="font-medium text-fw-heading">{version.author}</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-gray-600">CR:</span>
-                        <span className="font-medium text-gray-900">{version.compliance.changeRequest}</span>
+                        <span className="text-fw-bodyLight">CR:</span>
+                        <span className="font-medium text-fw-heading">{version.compliance.changeRequest}</span>
                       </div>
                     </div>
 
                     {version.metadata.approvedBy && (
-                      <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between text-sm">
+                      <div className="mt-2 pt-2 border-t border-fw-secondary flex items-center justify-between text-figma-base">
                         <div className="flex items-center space-x-2">
-                          <Check className="h-4 w-4 text-green-500" />
-                          <span className="text-gray-600">Approved by {version.metadata.approvedBy}</span>
+                          <Check className="h-4 w-4 text-fw-success" />
+                          <span className="text-fw-bodyLight">Approved by {version.metadata.approvedBy}</span>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <span className="text-gray-600">Risk:</span>
+                          <span className="text-fw-bodyLight">Risk:</span>
                           <span className={`font-medium ${
-                            version.compliance.riskAssessment === 'low' ? 'text-green-600' :
-                            version.compliance.riskAssessment === 'medium' ? 'text-yellow-600' : 'text-red-600'
+                            version.compliance.riskAssessment === 'low' ? 'text-fw-success' :
+                            version.compliance.riskAssessment === 'medium' ? 'text-fw-warn' : 'text-fw-error'
                           }`}>
                             {version.compliance.riskAssessment}
                           </span>
@@ -331,10 +331,10 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
             {versions.map((version) => (
               <div
                 key={version.id}
-                className={`p-4 border rounded-lg ${
+                className={`p-4 border rounded-2xl ${
                   selectedVersions.includes(version.id)
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200'
+                    ? 'border-fw-active bg-fw-accent'
+                    : 'border-fw-secondary'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -351,40 +351,40 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
                           setSelectedVersions(selectedVersions.filter(id => id !== version.id));
                         }
                       }}
-                      className="rounded border-gray-300 text-blue-600"
+                      className="rounded border-fw-secondary text-fw-link"
                     />
                     <div>
                       <div className="flex items-center space-x-2">
-                        <span className="font-medium text-gray-900">Version {version.number}</span>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(version.type)}`}>
+                        <span className="font-medium text-fw-heading">Version {version.number}</span>
+                        <span className={`px-2 py-1 text-figma-sm font-medium rounded-lg ${getTypeColor(version.type)}`}>
                           {version.type}
                         </span>
                         {version.id === currentVersion && (
-                          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                          <span className="px-2 py-1 text-figma-sm font-medium bg-fw-accent text-fw-linkHover rounded-lg">
                             Current
                           </span>
                         )}
                       </div>
-                      <div className="text-sm text-gray-500 mt-1">
+                      <div className="text-figma-sm text-fw-bodyLight mt-1">
                         {new Date(version.timestamp).toLocaleString()}
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <button
-                      className="text-gray-400 hover:text-gray-500 p-2 rounded-full hover:bg-gray-100"
+                      className="text-fw-bodyLight hover:text-fw-body p-2 rounded-full hover:bg-fw-neutral"
                       title="Download Configuration"
                     >
                       <Download className="h-5 w-5" />
                     </button>
                     <button
-                      className="text-gray-400 hover:text-gray-500 p-2 rounded-full hover:bg-gray-100"
+                      className="text-fw-bodyLight hover:text-fw-body p-2 rounded-full hover:bg-fw-neutral"
                       title="Restore Version"
                     >
                       <RefreshCw className="h-5 w-5" />
                     </button>
                     <button
-                      className="text-gray-400 hover:text-gray-500 p-2 rounded-full hover:bg-gray-100"
+                      className="text-fw-bodyLight hover:text-fw-body p-2 rounded-full hover:bg-fw-neutral"
                       title="Lock Version"
                     >
                       <Lock className="h-5 w-5" />
@@ -393,38 +393,38 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
                 </div>
 
                 {/* Version Details */}
-                <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                <div className="mt-4 grid grid-cols-2 gap-4 text-figma-base">
                   <div>
-                    <span className="text-gray-500">Change Request:</span>
-                    <span className="ml-2 text-gray-900">{version.compliance.changeRequest}</span>
+                    <span className="text-fw-bodyLight">Change Request:</span>
+                    <span className="ml-2 text-fw-heading">{version.compliance.changeRequest}</span>
                   </div>
                   <div>
-                    <span className="text-gray-500">Risk Level:</span>
+                    <span className="text-fw-bodyLight">Risk Level:</span>
                     <span className={`ml-2 font-medium ${
-                      version.compliance.riskAssessment === 'low' ? 'text-green-600' :
-                      version.compliance.riskAssessment === 'medium' ? 'text-yellow-600' : 'text-red-600'
+                      version.compliance.riskAssessment === 'low' ? 'text-fw-success' :
+                      version.compliance.riskAssessment === 'medium' ? 'text-fw-warn' : 'text-fw-error'
                     }`}>
                       {version.compliance.riskAssessment.toUpperCase()}
                     </span>
                   </div>
                   <div>
-                    <span className="text-gray-500">Approvals:</span>
-                    <span className="ml-2 text-gray-900">
+                    <span className="text-fw-bodyLight">Approvals:</span>
+                    <span className="ml-2 text-fw-heading">
                       {version.compliance.approvals.received}/{version.compliance.approvals.required}
                     </span>
                   </div>
                   <div>
-                    <span className="text-gray-500">Environment:</span>
-                    <span className="ml-2 text-gray-900">{version.metadata.environment}</span>
+                    <span className="text-fw-bodyLight">Environment:</span>
+                    <span className="ml-2 text-fw-heading">{version.metadata.environment}</span>
                   </div>
                 </div>
 
                 {/* Dependencies */}
                 <div className="mt-4">
-                  <span className="text-xs text-gray-500">Dependencies:</span>
+                  <span className="text-figma-sm text-fw-bodyLight">Dependencies:</span>
                   <div className="flex flex-wrap gap-2 mt-1">
                     {version.metadata.dependencies.map((dep) => (
-                      <span key={dep.name} className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">
+                      <span key={dep.name} className="px-2 py-1 text-figma-sm bg-fw-neutral text-fw-body rounded-lg">
                         {dep.name}@{dep.version}
                       </span>
                     ))}

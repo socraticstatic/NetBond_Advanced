@@ -37,9 +37,9 @@ export function AccessConfiguration() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-medium text-gray-900">Access Control</h3>
+          <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em]">Access Control</h3>
           <Button
             variant="primary"
             icon={UserPlus}
@@ -58,20 +58,20 @@ export function AccessConfiguration() {
 
         <div className="space-y-4">
           {accessRules.map((rule) => (
-            <div key={rule.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div key={rule.id} className="flex items-center justify-between p-4 bg-fw-wash rounded-2xl">
               <div className="flex items-center space-x-4">
                 <div className="h-10 w-10 rounded-full bg-fw-blue-light flex items-center justify-center border border-fw-secondary">
-                  <Users className="h-5 w-5 text-gray-500" />
+                  <Users className="h-5 w-5 text-fw-bodyLight" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{rule.user}</p>
-                  <p className="text-sm text-gray-500">{rule.role}</p>
+                  <p className="text-figma-base font-medium text-fw-heading">{rule.user}</p>
+                  <p className="text-figma-sm text-fw-bodyLight">{rule.role}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <p className="text-sm text-gray-500">Last access</p>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-figma-sm text-fw-bodyLight">Last access</p>
+                  <p className="text-figma-base font-medium text-fw-heading">
                     {new Date(rule.lastAccess).toLocaleString()}
                   </p>
                 </div>
@@ -96,38 +96,38 @@ export function AccessConfiguration() {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">Role Permissions</h3>
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+        <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] mb-6">Role Permissions</h3>
         <div className="space-y-4">
-          <div className="p-4 bg-gray-50 rounded-lg">
+          <div className="p-4 bg-fw-wash rounded-lg">
             <div className="flex items-center space-x-3 mb-4">
               <Shield className="h-5 w-5 text-brand-blue" />
-              <h4 className="text-sm font-medium text-gray-900">Administrator</h4>
+              <h4 className="text-figma-base font-medium text-fw-heading">Administrator</h4>
             </div>
             <div className="flex flex-wrap gap-2">
-              <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Full Access</span>
-              <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">View</span>
-              <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Edit</span>
-              <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Delete</span>
+              <span className="px-2 py-1 text-figma-sm font-medium bg-fw-accent text-fw-linkHover rounded-lg">Full Access</span>
+              <span className="px-2 py-1 text-figma-sm font-medium bg-fw-accent text-fw-linkHover rounded-lg">View</span>
+              <span className="px-2 py-1 text-figma-sm font-medium bg-fw-accent text-fw-linkHover rounded-lg">Edit</span>
+              <span className="px-2 py-1 text-figma-sm font-medium bg-fw-accent text-fw-linkHover rounded-lg">Delete</span>
             </div>
           </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
+          <div className="p-4 bg-fw-wash rounded-lg">
             <div className="flex items-center space-x-3 mb-4">
-              <Shield className="h-5 w-5 text-green-500" />
-              <h4 className="text-sm font-medium text-gray-900">Network Engineer</h4>
+              <Shield className="h-5 w-5 text-fw-success" />
+              <h4 className="text-figma-base font-medium text-fw-heading">Network Engineer</h4>
             </div>
             <div className="flex flex-wrap gap-2">
-              <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">View</span>
-              <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Edit</span>
+              <span className="px-2 py-1 text-figma-sm font-medium bg-green-50 text-fw-success rounded-lg">View</span>
+              <span className="px-2 py-1 text-figma-sm font-medium bg-green-50 text-fw-success rounded-lg">Edit</span>
             </div>
           </div>
-          <div className="p-4 bg-gray-50 rounded-lg">
+          <div className="p-4 bg-fw-wash rounded-lg">
             <div className="flex items-center space-x-3 mb-4">
-              <Shield className="h-5 w-5 text-gray-500" />
-              <h4 className="text-sm font-medium text-gray-900">Read Only</h4>
+              <Shield className="h-5 w-5 text-fw-bodyLight" />
+              <h4 className="text-figma-base font-medium text-fw-heading">Read Only</h4>
             </div>
             <div className="flex flex-wrap gap-2">
-              <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">View</span>
+              <span className="px-2 py-1 text-figma-sm font-medium bg-fw-neutral text-fw-heading rounded-lg">View</span>
             </div>
           </div>
         </div>

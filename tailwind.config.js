@@ -8,140 +8,179 @@ export default {
         sans: ['ATT Aleck Sans', 'Inter var', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // AT&T Flywheel Design System - Light Mode Colors
+        // AT&T Flywheel Design System - Figma-matched (SDCI.fig)
         fw: {
-          // Base Colors
-          'att-blue': 'rgb(0 159 219)', // Primary brand
-          'functional-blue': 'rgb(0 116 179)', // Interactive elements
+          // Brand
+          'att-blue': '#009fdb',
+          'functional-blue': '#0074b3',
 
-          // AT&T Blue variants
+          // AT&T Blue ramp
           blue: {
-            DEFAULT: 'rgb(0 159 219)',
-            '000': 'rgb(0 171 235)', // Lighter
-            '100': 'rgb(102 200 240)', // Even lighter
-            '200': 'rgb(153 218 245)', // Very light
-            light: 'rgb(230 246 253)', // Background tint
-            functional: 'rgb(0 116 179)',
+            DEFAULT: '#009fdb',
+            '000': '#00abeb',
+            '100': '#66c8f0',
+            '200': '#99daf5',
+            light: '#e6f6fd',
+            functional: '#0074b3',
           },
 
-          // Cobalt variants
+          // Cobalt - Primary interactive scale
           cobalt: {
-            '100': 'rgb(230 240 250)', // Very light
-            '400': 'rgb(51 116 204)',
-            '600': 'rgb(0 87 184)', // Hover states
-            '700': 'rgb(0 56 143)', // Primary CTAs
-            '800': 'rgb(0 35 90)', // Dark mode
+            '100': '#e6f0fa',   // Ghost button bg
+            '400': '#3374cc',
+            '600': '#0057b8',   // PRIMARY - buttons, links, active nav
+            '700': '#00388f',   // Pressed/hover states
+            '800': '#00235a',   // Dark mode
           },
 
-          // Flywheel Gray Scale
+          // Flywheel Gray Scale (Figma-matched)
           gray: {
-            '100': 'rgb(248 250 251)', // Lightest backgrounds
-            '200': 'rgb(243 244 246)', // Subtle backgrounds
-            '300': 'rgb(220 223 227)', // Borders, dividers
-            '400': 'rgb(189 194 199)', // Disabled states
-            '500': 'rgb(135 140 148)', // Muted elements
-            '600': 'rgb(104 110 116)', // Secondary text
-            '700': 'rgb(69 75 82)', // Body text
-            '800': 'rgb(29 35 41)', // Dark text
-            '900': 'rgb(19 23 27)', // Headings
+            '100': '#f8fafb',   // Page wash background
+            '200': '#f3f4f6',   // Subtle backgrounds
+            '300': '#dcdfe3',   // Borders, dividers (25x in Figma)
+            '400': '#bdc2c7',   // Disabled states
+            '500': '#878c94',   // Muted text, placeholders
+            '600': '#686e74',   // Secondary text
+            '700': '#454b52',   // Body text (32x in Figma)
+            '800': '#1d2329',   // Dark text, headings (79x in Figma)
+            '900': '#13171b',   // Darkest
           },
 
           // Semantic Colors
           green: {
-            '400': 'rgb(74 175 66)',
-            '600': 'rgb(45 126 36)', // Success
+            '400': '#4aaf42',
+            '600': '#2d7e24',   // Success
           },
           orange: {
-            '400': 'rgb(255 143 77)',
-            '600': 'rgb(234 113 47)', // Warning
+            '400': '#ff8f4d',
+            '600': '#ea712f',   // Warning
           },
           red: {
-            '400': 'rgb(255 92 115)',
-            '600': 'rgb(199 0 50)', // Error
+            '400': '#ff5c73',
+            '600': '#c70032',   // Error
           },
+
+          // Accent Colors (from Figma)
+          purple: '#af29bb',    // Visual Designer, secondary flows
         },
-        // Legacy colors for gradual migration
+        // Shorthand grays
         gray: {
-          50: 'rgb(248 250 251)',
-          100: 'rgb(243 244 246)',
-          200: 'rgb(220 223 227)',
-          300: 'rgb(220 223 227)',
-          400: 'rgb(189 194 199)',
-          500: 'rgb(135 140 148)',
-          600: 'rgb(104 110 116)',
-          700: 'rgb(69 75 82)',
-          800: 'rgb(29 35 41)',
-          900: 'rgb(19 23 27)',
+          50: '#f8fafb',
+          100: '#f3f4f6',
+          200: '#dcdfe3',
+          300: '#dcdfe3',
+          400: '#bdc2c7',
+          500: '#878c94',
+          600: '#686e74',
+          700: '#454b52',
+          800: '#1d2329',
+          900: '#13171b',
         },
         brand: {
-          blue: 'rgb(0 56 143)', // Cobalt 700 for CTAs
-          lightBlue: 'rgb(230 246 253)',
-          darkBlue: 'rgb(0 56 143)',
-          accent: 'rgb(0 159 219)', // AT&T Blue
-          neutral: 'rgb(104 110 116)',
+          blue: '#0057b8',      // Cobalt 600 - PRIMARY interactive
+          lightBlue: '#e6f6fd',
+          darkBlue: '#00388f',  // Cobalt 700 - pressed states
+          accent: '#009fdb',    // AT&T Blue
+          neutral: '#686e74',
+          purple: '#af29bb',    // Figma purple accent
         },
         complementary: {
-          teal: '#00A3A6',
-          orange: 'rgb(234 113 47)', // Flywheel Orange
-          amber: '#F59E0B',
-          green: 'rgb(45 126 36)', // Flywheel Green
-          purple: '#6B5B95',
+          teal: '#00a3a6',
+          orange: '#ea712f',
+          green: '#2d7e24',
+          purple: '#af29bb',
         }
       },
       textColor: {
-        // Flywheel Text Tokens
-        'fw-heading': 'rgb(19 23 27)', // Gray 900
-        'fw-body': 'rgb(69 75 82)', // Gray 700
-        'fw-bodyLight': 'rgb(104 110 116)', // Gray 600
-        'fw-disabled': 'rgb(135 140 148)', // Gray 500
-        'fw-legal': 'rgb(104 110 116)', // Gray 600
-        'fw-link': 'rgb(0 116 179)', // Functional Blue
-        'fw-linkHover': 'rgb(0 87 184)', // Cobalt 600
-        'fw-linkPrimary': 'rgb(255 255 255)', // White
-        'fw-linkSecondary': 'rgb(0 56 143)', // Cobalt 700
-        'fw-success': 'rgb(45 126 36)', // Green 600
-        'fw-warn': 'rgb(234 113 47)', // Orange 600
-        'fw-error': 'rgb(199 0 50)', // Red 600
-        'fw-info': 'rgb(0 116 179)', // Functional Blue
+        // Flywheel Text Tokens - Figma-matched
+        'fw-heading': '#1d2329',   // Gray 800 (Figma heading color)
+        'fw-body': '#454b52',      // Gray 700
+        'fw-bodyLight': '#686e74', // Gray 600
+        'fw-disabled': '#878c94',  // Gray 500
+        'fw-legal': '#686e74',     // Gray 600
+        'fw-link': '#0057b8',      // Cobalt 600 - primary interactive
+        'fw-linkHover': '#00388f', // Cobalt 700
+        'fw-linkPrimary': '#ffffff',
+        'fw-linkSecondary': '#0057b8', // Cobalt 600
+        'fw-success': '#2d7e24',
+        'fw-warn': '#ea712f',
+        'fw-error': '#c70032',
+        'fw-info': '#0074b3',
+        'fw-purple': '#af29bb',    // Purple accent text
       },
       backgroundColor: {
-        // Flywheel Background Tokens
-        'fw-base': 'rgb(255 255 255)', // White
-        'fw-wash': 'rgb(248 250 251)', // Gray 100
-        'fw-neutral': 'rgb(243 244 246)', // Gray 200
-        'fw-accent': 'rgb(230 246 253)', // AT&T Blue 000 - very light
-        'fw-primary': 'rgb(0 56 143)', // Cobalt 700
-        'fw-ctaPrimary': 'rgb(0 56 143)', // Cobalt 700
-        'fw-ctaPrimaryHover': 'rgb(0 87 184)', // Cobalt 600
-        'fw-ctaGhost': 'rgb(230 240 250)', // Cobalt 100
-        'fw-disabled': 'rgb(220 223 227)', // Gray 300
-        'fw-success': 'rgb(45 126 36)', // Green 600
-        'fw-warn': 'rgb(234 113 47)', // Orange 600
-        'fw-error': 'rgb(199 0 50)', // Red 600
+        // Flywheel Background Tokens - Figma-matched
+        'fw-base': '#ffffff',
+        'fw-wash': '#f8fafb',      // Gray 100 - page background
+        'fw-neutral': '#f3f4f6',   // Gray 200
+        'fw-accent': '#e6f6fd',    // AT&T Blue light tint
+        'fw-primary': '#0057b8',   // Cobalt 600 - PRIMARY
+        'fw-ctaPrimary': '#0057b8',
+        'fw-ctaPrimaryHover': '#00388f', // Cobalt 700
+        'fw-ctaGhost': '#e6f0fa',  // Cobalt 100
+        'fw-disabled': '#dcdfe3',  // Gray 300
+        'fw-active': '#0057b8',    // Cobalt 600 - active/selected state
+        'fw-success': '#2d7e24',
+        'fw-warn': '#ea712f',
+        'fw-error': '#c70032',
+        'fw-purple': '#af29bb',
+        'fw-successLight': 'rgb(98 208 45 / 0.15)',  // 15% opacity
+        'fw-warnLight': 'rgb(249 124 0 / 0.15)',
+        'fw-infoLight': 'rgb(0 132 255 / 0.15)',
+        'fw-purpleLight': 'rgb(175 41 187 / 0.15)',
       },
       borderColor: {
-        // Flywheel Border Tokens
-        'fw-primary': 'rgb(104 110 116)', // Gray 600
-        'fw-secondary': 'rgb(220 223 227)', // Gray 300
-        'fw-active': 'rgb(0 116 179)', // Functional Blue
-        'fw-hover': 'rgb(0 116 179)', // Functional Blue
-        'fw-focus': 'rgb(29 35 41)', // Gray 800
-        'fw-disabled': 'rgb(220 223 227)', // Gray 300
-        'fw-success': 'rgb(45 126 36)', // Green 600
-        'fw-warn': 'rgb(234 113 47)', // Orange 600
-        'fw-error': 'rgb(199 0 50)', // Red 600
-        'fw-ctaPrimary': 'rgb(0 56 143)', // Cobalt 700
+        // Flywheel Border Tokens - Figma-matched
+        'fw-primary': '#686e74',   // Gray 600
+        'fw-secondary': '#dcdfe3', // Gray 300 - most common border
+        'fw-active': '#0057b8',    // Cobalt 600
+        'fw-hover': '#0057b8',
+        'fw-focus': '#1d2329',     // Gray 800
+        'fw-disabled': '#dcdfe3',
+        'fw-success': '#2d7e24',
+        'fw-warn': '#ea712f',
+        'fw-error': '#c70032',
+        'fw-ctaPrimary': '#0057b8',
+        'fw-purple': '#af29bb',
       },
       ringColor: {
-        // Flywheel Focus Ring Tokens
-        'fw-active': 'rgb(0 116 179)', // Functional Blue
+        'fw-active': '#0074b3',    // Functional Blue
+      },
+      fontSize: {
+        // Figma typography scale
+        'figma-xs': ['0.625rem', { lineHeight: '1rem', letterSpacing: '-0.03em' }],      // 10px - bodyXS
+        'figma-sm': ['0.75rem', { lineHeight: '1rem', letterSpacing: '-0.03em' }],       // 12px - bodyS
+        'figma-base': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '-0.03em' }], // 14px - bodyBase
+        'figma-lg': ['1rem', { lineHeight: '1.5rem', letterSpacing: '-0.03em' }],        // 16px - h6
+        'figma-xl': ['1.5rem', { lineHeight: '2rem', letterSpacing: '-0.03em' }],        // 24px - h5
+        'figma-2xl': ['2rem', { lineHeight: '2.5rem', letterSpacing: '-0.03em' }],       // 32px - h4
+        'figma-3xl': ['2.5rem', { lineHeight: '3rem', letterSpacing: '-0.03em' }],       // 40px - h3
+        'figma-4xl': ['3rem', { lineHeight: '3.5rem', letterSpacing: '-0.03em' }],       // 48px - h2
+        'figma-5xl': ['3.5rem', { lineHeight: '4rem', letterSpacing: '-0.03em' }],       // 56px - h1
+        // Tag variants (positive letter-spacing)
+        'tag-sm': ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.04em' }],          // 12px tag
+        'tag-xs': ['0.625rem', { lineHeight: '1rem', letterSpacing: '0.04em' }],         // 10px tag
       },
       borderRadius: {
-        'full': '9999px',
-        'lg': '0.5rem',
-        'md': '0.375rem',
-        'xl': '0.75rem',
-        '2xl': '1rem'
+        'full': '9999px',    // Buttons, pills, search, tags, badges, progress bars
+        'lg': '0.5rem',      // 8px - Inputs, dropdowns, metric cells
+        'md': '0.375rem',    // 6px
+        'xl': '0.75rem',     // 12px
+        '2xl': '1rem',       // 16px - Cards, containers, tables
+        '3xl': '1.5rem',     // 24px - Modals, role cards
+      },
+      width: {
+        'sidebar': '186px',        // Vertical tab group sidebar
+        'sidebar-overlay': '320px', // Overlay nav panel
+        'search': '560px',         // Search bar width
+      },
+      height: {
+        'input': '2.5rem',   // 40px - Standard input height
+        'btn': '2.25rem',    // 36px - Standard button height
+        'btn-sm': '1.75rem', // 28px - Small button
+        'btn-lg': '2.75rem', // 44px - Large button
+        'nav': '4rem',       // 64px - Nav bar height
+        'separator': '1.25rem', // 20px - Vertical separator lines
       }
     },
   },

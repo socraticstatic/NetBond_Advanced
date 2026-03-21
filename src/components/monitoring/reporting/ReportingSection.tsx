@@ -4,21 +4,22 @@ import { StandardReports } from './StandardReports';
 import { CustomTemplates } from './CustomTemplates';
 import { ScheduledReports } from './ScheduledReports';
 import { ComplianceReports } from './ComplianceReports';
-import { FileText, Calendar, BookTemplate as Template, ShieldCheck } from 'lucide-react';
+import { FileText, Calendar, BookTemplate as Template, ShieldCheck, LayoutGrid } from 'lucide-react';
+
+type ReportTab = 'overview' | 'standard' | 'templates' | 'scheduled' | 'compliance';
 
 interface ReportingProps {
   selectedConnection: string;
   timeRange: string;
-  defaultTab?: 'standard' | 'templates' | 'scheduled' | 'compliance';
+  defaultTab?: ReportTab;
 }
 
-export function ReportingSection({ selectedConnection, timeRange, defaultTab = 'standard' }: ReportingProps) {
+export function ReportingSection({ selectedConnection, timeRange, defaultTab = 'overview' }: ReportingProps) {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'standard' | 'templates' | 'scheduled' | 'compliance'>(defaultTab);
+  const [activeTab, setActiveTab] = useState<ReportTab>(defaultTab);
 
-  // Set initial active tab from location state or props
   useEffect(() => {
-    const state = location.state as { defaultReportTab?: typeof activeTab };
+    const state = location.state as { defaultReportTab?: ReportTab };
     if (state?.defaultReportTab) {
       setActiveTab(state.defaultReportTab);
     } else {
@@ -26,15 +27,20 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
     }
   }, [location, defaultTab]);
 
+  // Figma tab order: History, Standard Reports, Compliance, Templates, Scheduled
+  // Figma layout: vertical sidebar nav on left, content on right, separated by vertical line
   const tabs = [
-    { id: 'standard', label: 'Standard Reports', icon: FileText },
-    { id: 'templates', label: 'Templates', icon: Template },
-    { id: 'scheduled', label: 'Scheduled', icon: Calendar },
-    { id: 'compliance', label: 'Compliance', icon: ShieldCheck }
+    { id: 'overview' as const, label: 'History', icon: LayoutGrid },
+    { id: 'standard' as const, label: 'Standard Reports', icon: FileText },
+    { id: 'compliance' as const, label: 'Compliance', icon: ShieldCheck },
+    { id: 'templates' as const, label: 'Templates', icon: Template },
+    { id: 'scheduled' as const, label: 'Scheduled', icon: Calendar }
   ];
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'overview':
+        return <StandardReports />;
       case 'standard':
         return <StandardReports />;
       case 'templates':
@@ -50,26 +56,27 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
 
   return (
     <div className="flex">
-      {/* Vertical Tabs */}
-      <div className="w-64 shrink-0 border-r border-gray-200 pr-4">
+      {/* Figma: Vertical sidebar nav - border-l-2 active state, icon 20x20 + text 14px w500 */}
+      <div className="w-[186px] shrink-0 border-r border-fw-secondary pr-4">
         <nav className="space-y-1" aria-label="Report Types">
           {tabs.map((tab) => {
             const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                onClick={() => setActiveTab(tab.id)}
                 className={`
-                  w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg
-                  transition-colors duration-200
-                  ${activeTab === tab.id
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  w-full flex items-center text-left gap-2 px-4 py-3 text-figma-base font-medium no-rounded
+                  transition-colors duration-200 border-l-2
+                  ${isActive
+                    ? 'border-fw-active text-fw-link'
+                    : 'border-transparent text-fw-heading hover:text-fw-link hover:border-fw-secondary'
                   }
                 `}
               >
-                <Icon className={`h-5 w-5 mr-3 ${
-                  activeTab === tab.id ? 'text-blue-500' : 'text-gray-400'
+                <Icon className={`h-5 w-5 ${
+                  isActive ? 'text-fw-link' : 'text-fw-heading'
                 }`} />
                 {tab.label}
               </button>
@@ -80,9 +87,7 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
 
       {/* Content Area */}
       <div className="flex-1 pl-6">
-        <div className="bg-white rounded-lg">
-          {renderContent()}
-        </div>
+        {renderContent()}
       </div>
     </div>
   );
