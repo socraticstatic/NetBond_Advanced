@@ -1,537 +1,262 @@
-// Add TypeScript interface to make this importable for type checking
+import { useEffect, useCallback } from 'react';
+import { Minimize2 } from 'lucide-react';
+import type { Connection, NetworkNode as LegacyNetworkNode, NetworkEdge as LegacyNetworkEdge } from '../../types';
+import type { NetworkNode, NetworkEdge } from './types/designer';
+import { useDesignerStore } from './store/useDesignerStore';
+import { useNetworkManager } from './hooks/useNetworkManager';
+import { useSelectionManager } from './hooks/useSelectionManager';
+import { useEdgeCreator } from './hooks/useEdgeCreator';
+import { useNetworkHistory } from './hooks/useNetworkHistory';
+import { Canvas } from './Canvas';
+import { Node } from './Node';
+import { Edge } from './Edge';
+import { ZoomControls } from './ZoomControls';
+import { Toolbar } from './Toolbar';
+import { StatusBar } from './StatusBar';
+
+// Preserve the props interface so LazyNetworkDesigner and ConnectionWizard still work
 interface NetworkDesignerProps {
   onComplete: (config: Connection[]) => void;
   onCancel: () => void;
-  initialNodes?: NetworkNode[];
-  initialEdges?: NetworkEdge[];
+  initialNodes?: LegacyNetworkNode[];
+  initialEdges?: LegacyNetworkEdge[];
   editMode?: boolean;
   connectionId?: string;
 }
 
-import { useState, useEffect } from 'react';
-import { Server, Cloud, Router, Network, Settings, Zap, Sparkles, MessageSquare as MessageSquareIcon, Globe } from 'lucide-react';
-import { Connection, NetworkNode, NetworkEdge } from '../../types';
-import { Canvas } from './Canvas';
-import { Toolbar } from './Toolbar';
-import { StatusBar } from './StatusBar';
-import { ConfigurationPanel } from './panels/ConfigurationPanel';
-import { TemplatesDrawer } from './TemplatesDrawer';
-import { AIRecommendationEngine } from './panels/AIRecommendationEngine';
-import { ScenarioConsole } from './ScenarioConsole';
+function legacyNodeToNew(n: LegacyNetworkNode): NetworkNode {
+  return {
+    id: n.id,
+    type: n.type === 'source' || n.type === 'router' ? 'function' : (n.type as NetworkNode['type']),
+    functionType: n.type,
+    x: n.x,
+    y: n.y,
+    name: n.name,
+    icon: 'Box',
+    status: n.status === 'active' ? 'active' : 'inactive',
+    config: n.config || {},
+  };
+}
 
-// Preload common templates at the module level
-import { preloadCommonTemplates } from './templates';
+function legacyEdgeToNew(e: LegacyNetworkEdge): NetworkEdge {
+  return {
+    id: e.id,
+    source: e.source,
+    target: e.target,
+    type: e.type || 'Ethernet',
+    bandwidth: e.bandwidth || '1 Gbps',
+    status: e.status === 'active' ? 'active' : 'inactive',
+  };
+}
 
-export function NetworkDesigner({ 
-  onComplete, 
+export function NetworkDesigner({
+  onComplete,
   onCancel,
   initialNodes = [],
   initialEdges = [],
   editMode = false,
-  connectionId
+  connectionId,
 }: NetworkDesignerProps) {
-  // Preload common templates when the component loads
-  useEffect(() => {
-    preloadCommonTemplates();
-  }, []);
+  // Store state
+  const nodes = useDesignerStore((s) => s.nodes);
+  const edges = useDesignerStore((s) => s.edges);
+  const isMaximized = useDesignerStore((s) => s.isMaximized);
+  const selectedNodeId = useDesignerStore((s) => s.selectedNodeId);
+  const selectedEdgeId = useDesignerStore((s) => s.selectedEdgeId);
+  const setNodes = useDesignerStore((s) => s.setNodes);
+  const setEdges = useDesignerStore((s) => s.setEdges);
+  const toggleMaximize = useDesignerStore((s) => s.toggleMaximize);
+  const saveToHistoryStore = useDesignerStore((s) => s.saveToHistory);
 
-  console.log("NetworkDesigner received props:", {
-    initialNodes,
-    initialEdges,
-    editMode,
-    connectionId
-  });
+  // Hooks
+  const { addNode, moveNode, updateNode, deleteNode, deleteEdge, clearCanvas } = useNetworkManager();
+  const { handleNodeSelection, handleEdgeSelection, clearSelection } = useSelectionManager();
+  const { isCreatingEdge, edgeStartNodeId, toggleEdgeCreation, handleNodeClickForEdge, cancelEdgeCreation } = useEdgeCreator();
+  const { undo, canUndo } = useNetworkHistory();
 
-  // Initialize with provided nodes/edges or empty arrays
-  const [nodes, setNodes] = useState<NetworkNode[]>([]);
-  const [edges, setEdges] = useState<NetworkEdge[]>([]);
-  const [selectedNode, setSelectedNode] = useState<NetworkNode | null>(null);
-  const [selectedEdge, setSelectedEdge] = useState<NetworkEdge | null>(null);
-  const [isCreatingEdge, setIsCreatingEdge] = useState(false);
-  const [edgeStart, setEdgeStart] = useState<string | null>(null);
-  const [isRunningScenario, setIsRunningScenario] = useState(false);
-  const [activeTab, setActiveTab] = useState<'config' | 'templates' | 'ai'>('config');
-  const [showEffects, setShowEffects] = useState(true);
-  const [canvasDimensions, setCanvasDimensions] = useState({ width: 800, height: 600 });
-  
-  // History for undo functionality
-  const [history, setHistory] = useState<{
-    nodes: NetworkNode[][];
-    edges: NetworkEdge[][];
-    currentIndex: number;
-  }>({
-    nodes: [[]],
-    edges: [[]],
-    currentIndex: 0
-  });
-
-  // Initialize with the provided initial nodes and edges
+  // Initialize store with initial nodes/edges on mount
   useEffect(() => {
     if (initialNodes.length > 0 || initialEdges.length > 0) {
-      console.log("Initializing NetworkDesigner with:", { initialNodes, initialEdges });
-      setNodes([...initialNodes]); // Use spread to ensure we create new arrays
-      setEdges([...initialEdges]);
-      setHistory({
-        nodes: [[...initialNodes]],
-        edges: [[...initialEdges]],
-        currentIndex: 0
-      });
-    } else {
-      console.log("No initial nodes/edges provided, using empty arrays");
+      const converted = initialNodes.map(legacyNodeToNew);
+      const convertedEdges = initialEdges.map(legacyEdgeToNew);
+      setNodes(converted);
+      setEdges(convertedEdges);
+      saveToHistoryStore();
     }
-  }, [initialNodes, initialEdges]);
+    // Only run on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const saveToHistory = (newNodes: NetworkNode[], newEdges: NetworkEdge[]) => {
-    const newHistory = {
-      nodes: [...history.nodes.slice(0, history.currentIndex + 1), [...newNodes]],
-      edges: [...history.edges.slice(0, history.currentIndex + 1), [...newEdges]],
-      currentIndex: history.currentIndex + 1
-    };
-    setHistory(newHistory);
-  };
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
 
-  const handleUndo = () => {
-    if (history.currentIndex > 0) {
-      const newIndex = history.currentIndex - 1;
-      setNodes([...history.nodes[newIndex]]);
-      setEdges([...history.edges[newIndex]]);
-      setHistory({ ...history, currentIndex: newIndex });
-      
-      // Clear selections when undoing
-      setSelectedNode(null);
-      setSelectedEdge(null);
-      setIsCreatingEdge(false);
-      setEdgeStart(null);
-    }
-  };
-
-  const handleRunScenario = async () => {
-    if (!edges.length) return;
-
-    setIsRunningScenario(true);
-  };
-
-  const handleScenarioComplete = () => {
-    // Reset status after scenario completes
-    setNodes(prev => prev.map(node => ({ ...node, status: 'inactive' })));
-    setEdges(prev => prev.map(e => ({ ...e, status: 'inactive' })));
-    setIsRunningScenario(false);
-
-    window.addToast({
-      type: 'success',
-      title: 'Scenario Complete',
-      message: 'Network simulation completed successfully',
-      duration: 3000
-    });
-  };
-
-  const getNodeIcon = (type: NetworkNode['type']) => {
-    switch (type) {
-      case 'source':
-        return Server;
-      case 'destination':
-        return Cloud;
-      case 'router':
-        return Router;
-      case 'network':
-        return Network;
-      default:
-        return Server;
-    }
-  };
-
-  const handleAddNode = (type: NetworkNode['type']) => {
-    // Calculate position based on node type and canvas dimensions
-    let x = 0, y = 0;
-    const canvasWidth = canvasDimensions.width;
-    const canvasHeight = canvasDimensions.height;
-    
-    // Place nodes in a more organized way based on their type
-    switch (type) {
-      case 'source':
-        // Sources on the left side
-        x = canvasWidth * 0.2;
-        y = canvasHeight * 0.3 + Math.random() * (canvasHeight * 0.4);
-        break;
-      case 'destination':
-        // Destinations on the right side
-        x = canvasWidth * 0.8;
-        y = canvasHeight * 0.3 + Math.random() * (canvasHeight * 0.4);
-        break;
-      case 'router':
-        // Routers in the center
-        x = canvasWidth * 0.5;
-        y = canvasHeight * 0.3 + Math.random() * (canvasHeight * 0.4);
-        break;
-      case 'network':
-        // Networks in the lower part
-        x = canvasWidth * 0.2 + Math.random() * (canvasWidth * 0.6);
-        y = canvasHeight * 0.7;
-        break;
-      default:
-        x = Math.random() * (canvasWidth * 0.8) + (canvasWidth * 0.1);
-        y = Math.random() * (canvasHeight * 0.8) + (canvasHeight * 0.1);
-    }
-    
-    // Ensure y is within bounds
-    y = Math.min(y, canvasDimensions.height - 64);
-    
-    // Snap to grid (assuming grid size of 20)
-    x = Math.round(x / 20) * 20;
-    y = Math.round(y / 20) * 20;
-
-    const newNode: NetworkNode = {
-      id: `node-${Date.now()}`,
-      type,
-      x,
-      y,
-      name: `${type.charAt(0).toUpperCase() + type.slice(1)} Node`,
-      status: 'inactive',
-      config: {} // Initialize empty config object
-    };
-
-    const newNodes = [...nodes, newNode];
-    setNodes(newNodes);
-    setSelectedNode(newNode);
-    saveToHistory(newNodes, edges);
-  };
-
-  const handleNodeClick = (node: NetworkNode) => {
-    if (isCreatingEdge) {
-      if (edgeStart) {
-        if (edgeStart !== node.id) {
-          const newEdge: NetworkEdge = {
-            id: `edge-${Date.now()}`,
-            source: edgeStart,
-            target: node.id,
-            type: 'Internet to Cloud',
-            bandwidth: '1 Gbps',
-            status: 'inactive'
-          };
-          const newEdges = [...edges, newEdge];
-          setEdges(newEdges);
-          setSelectedEdge(newEdge);
-          saveToHistory(nodes, newEdges);
-        }
-        setIsCreatingEdge(false);
-        setEdgeStart(null);
-      } else {
-        setEdgeStart(node.id);
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (selectedNodeId) deleteNode(selectedNodeId);
+        else if (selectedEdgeId) deleteEdge(selectedEdgeId);
       }
-    } else {
-      setSelectedNode(node);
-      setSelectedEdge(null);
-      setActiveTab('config');
-    }
-  };
 
-  const handleNodeDrag = (nodeId: string, x: number, y: number) => {
-    const adjustedY = Math.min(y, 600 - 64);
-    
-    const newNodes = nodes.map(node =>
-      node.id === nodeId ? { ...node, x, y: adjustedY } : node
-    );
-    setNodes(newNodes);
-  };
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        e.preventDefault();
+        undo();
+      }
 
-  const handleNodeDragEnd = () => {
-    saveToHistory(nodes, edges);
-  };
-
-  const handleEdgeClick = (edge: NetworkEdge) => {
-    setSelectedEdge(edge);
-    setSelectedNode(null);
-    setActiveTab('config');
-  };
-
-  const handleUpdateNode = (nodeId: string, updates: Partial<NetworkNode>) => {
-    const node = nodes.find(n => n.id === nodeId);
-    if (!node) return;
-
-    // Create a new node object with the updates
-    const updatedNode = {
-      ...node,
-      ...updates,
-      // If updating config, merge it with existing config
-      config: updates.config ? { ...node.config, ...updates.config } : node.config
+      if (e.key === 'Escape') {
+        if (isCreatingEdge) {
+          cancelEdgeCreation();
+        } else {
+          clearSelection();
+        }
+      }
     };
 
-    // If y coordinate is being updated, ensure it's within bounds
-    if (typeof updatedNode.y === 'number') {
-      updatedNode.y = Math.min(updatedNode.y, 600 - 64);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedNodeId, selectedEdgeId, isCreatingEdge, deleteNode, deleteEdge, undo, cancelEdgeCreation, clearSelection]);
+
+  // Node handlers
+  const handleNodeSelect = useCallback((id: string) => {
+    if (!isCreatingEdge) {
+      handleNodeSelection(id);
     }
+  }, [isCreatingEdge, handleNodeSelection]);
 
-    const newNodes = nodes.map(n => n.id === nodeId ? updatedNode : n);
-    setNodes(newNodes);
-    saveToHistory(newNodes, edges);
-  };
+  const handleNodeDrag = useCallback((id: string, x: number, y: number) => {
+    moveNode(id, x, y);
+  }, [moveNode]);
 
-  const handleUpdateEdge = (edgeId: string, updates: Partial<NetworkEdge>) => {
-    const newEdges = edges.map(edge =>
-      edge.id === edgeId ? { ...edge, ...updates } : edge
-    );
-    setEdges(newEdges);
-    saveToHistory(nodes, newEdges);
-  };
+  const handleNodeDragEnd = useCallback(() => {
+    saveToHistoryStore();
+  }, [saveToHistoryStore]);
 
-  const handleDeleteNode = (nodeId: string) => {
-    const newNodes = nodes.filter(n => n.id !== nodeId);
-    const newEdges = edges.filter(e => 
-      e.source !== nodeId && e.target !== nodeId
-    );
-    setNodes(newNodes);
-    setEdges(newEdges);
-    setSelectedNode(null);
-    saveToHistory(newNodes, newEdges);
-  };
+  const handleNodeEdgeClick = useCallback((id: string) => {
+    handleNodeClickForEdge(id);
+  }, [handleNodeClickForEdge]);
 
-  const handleDeleteEdge = (edgeId: string) => {
-    const newEdges = edges.filter(e => e.id !== edgeId);
-    setEdges(newEdges);
-    setSelectedEdge(null);
-    saveToHistory(nodes, newEdges);
-  };
+  const handleNodeRename = useCallback((id: string, name: string) => {
+    updateNode(id, { name });
+  }, [updateNode]);
 
-  const handleClearCanvas = () => {
-    if (nodes.length === 0 && edges.length === 0) return;
-    
-    setNodes([]);
-    setEdges([]);
-    setSelectedNode(null);
-    setSelectedEdge(null);
-    setIsCreatingEdge(false);
-    setEdgeStart(null);
-    saveToHistory([], []);
-    
-    window.addToast({
-      type: 'info',
-      title: 'Canvas Cleared',
-      message: 'All nodes and connections have been removed',
-      duration: 3000
-    });
-  };
+  // Edge handler
+  const handleEdgeClick = useCallback((id: string) => {
+    handleEdgeSelection(id);
+  }, [handleEdgeSelection]);
 
-  const handleCreateConnections = () => {
+  // Add a router node (Phase 1 minimal - full dropdown in Task 10)
+  const handleAddNode = useCallback(() => {
+    addNode('function', 'router');
+  }, [addNode]);
+
+  // Build connections from edges and call onComplete
+  const handleCreateConnections = useCallback(() => {
     if (edges.length === 0) {
-      window.addToast({
+      window.addToast?.({
         type: 'warning',
         title: 'No Connections',
         message: 'Please create at least one connection before proceeding',
-        duration: 3000
+        duration: 3000,
       });
       return;
     }
-    
-    // Convert network design to connections
-    const connections = edges.map(edge => {
-      const sourceNode = nodes.find(n => n.id === edge.source);
-      const targetNode = nodes.find(n => n.id === edge.target);
-      
+
+    const connections: Connection[] = edges.map((edge) => {
+      const sourceNode = nodes.find((n) => n.id === edge.source);
+      const targetNode = nodes.find((n) => n.id === edge.target);
+
       return {
-        id: editMode && connectionId ? connectionId : `conn-${Date.now()}`,
+        id: editMode && connectionId ? connectionId : `conn-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
         name: `${sourceNode?.name || 'Source'} to ${targetNode?.name || 'Target'}`,
-        type: edge.type,
+        type: (edge.type as Connection['type']) || 'Internet to Cloud',
         status: 'Inactive',
         bandwidth: edge.bandwidth,
         location: sourceNode?.config?.region || targetNode?.config?.region || 'US East',
-        provider: targetNode?.config?.provider || 'AWS'
+        provider: targetNode?.config?.provider,
       };
     });
-    
+
     onComplete(connections);
-  };
+  }, [edges, nodes, editMode, connectionId, onComplete]);
 
-  const handleToggleEffects = () => {
-    setShowEffects(!showEffects);
-  };
+  // Layout
+  const containerClass = isMaximized
+    ? 'fixed inset-0 z-50 bg-fw-wash'
+    : 'relative w-full h-[600px] bg-fw-wash rounded-2xl border border-fw-secondary overflow-hidden';
 
-  const handleApplyAIRecommendation = (newNodes: NetworkNode[], newEdges: NetworkEdge[]) => {
-    setNodes(newNodes);
-    setEdges(newEdges);
-    saveToHistory(newNodes, newEdges);
-    setActiveTab('config');
-    
-    window.addToast({
-      type: 'success',
-      title: 'AI Recommendation Applied',
-      message: 'Network topology has been created based on your requirements',
-      duration: 3000
-    });
-  };
+  // Render edges as SVG content, nodes as children
+  const svgContent = (
+    <>
+      {edges.map((edge) => (
+        <Edge
+          key={edge.id}
+          edge={edge}
+          nodes={nodes}
+          isSelected={edge.id === selectedEdgeId}
+          onClick={handleEdgeClick}
+        />
+      ))}
+    </>
+  );
 
-  // Update canvas dimensions when the component mounts or window resizes
-  useEffect(() => {
-    const updateDimensions = () => {
-      const container = document.querySelector('.network-designer-container');
-      if (container) {
-        const rect = container.getBoundingClientRect();
-        setCanvasDimensions({
-          width: rect.width,
-          height: Math.min(rect.height, 600)
-        });
-      }
-    };
-    
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    
-    return () => {
-      window.removeEventListener('resize', updateDimensions);
-    };
-  }, []);
+  const nodeChildren = (
+    <>
+      {nodes.map((node) => (
+        <Node
+          key={node.id}
+          node={node}
+          isSelected={node.id === selectedNodeId}
+          isEdgeTarget={isCreatingEdge && node.id !== edgeStartNodeId}
+          hasValidationError={false}
+          isCreatingEdge={isCreatingEdge}
+          onSelect={handleNodeSelect}
+          onDrag={handleNodeDrag}
+          onDragEnd={handleNodeDragEnd}
+          onEdgeClick={handleNodeEdgeClick}
+          onRename={handleNodeRename}
+        />
+      ))}
+    </>
+  );
 
   return (
-    <div className="flex flex-col h-[1000px] bg-gray-50 rounded-xl border-2 border-gray-200 overflow-hidden network-designer-container">
-      {/* Header with special effects toggle */}
-      <div className="bg-white border-b border-gray-200 p-4 flex justify-between items-center">
-        <div className="flex items-center">
-          <Sparkles className="h-5 w-5 text-brand-blue mr-2" />
-          <h2 className="text-lg font-medium text-gray-900">
-            {editMode ? 'Edit Network Topology' : 'Network Designer'}
-          </h2>
-        </div>
-        <button 
-          onClick={handleToggleEffects}
-          className={`flex items-center px-3 py-1.5 rounded-full text-sm ${
-            showEffects 
-              ? 'bg-brand-blue text-white' 
-              : 'bg-gray-100 text-gray-700'
-          }`}
+    <div className={containerClass}>
+      {/* Floating minimize button when maximized */}
+      {isMaximized && (
+        <button
+          onClick={toggleMaximize}
+          className="fixed top-4 right-4 z-[60] inline-flex items-center gap-2 h-9 px-4 text-figma-base font-medium text-fw-heading bg-fw-base border border-fw-secondary rounded-full shadow-lg hover:bg-fw-wash transition-colors"
         >
-          <Zap className="h-4 w-4 mr-1.5" />
-          {showEffects ? 'Effects On' : 'Effects Off'}
+          <Minimize2 className="h-4 w-4" />
+          Minimize
         </button>
+      )}
+
+      {/* StatusBar - top center */}
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20">
+        <StatusBar nodes={nodes} edges={edges} />
       </div>
 
-      {/* Main Content Area */}
-      <div className="relative flex-1">
-        <Toolbar
-          onAddNode={handleAddNode}
-          onToggleEdgeCreation={() => setIsCreatingEdge(!isCreatingEdge)}
-          isCreatingEdge={isCreatingEdge}
-          onCancel={handleUndo}
-          hasConnections={edges.length > 0}
-          canUndo={history.currentIndex > 0}
-          onRunScenario={handleRunScenario}
-          isRunningScenario={isRunningScenario}
-          onClearCanvas={handleClearCanvas}
-          onCreateConnections={handleCreateConnections}
-        />
+      {/* Canvas - fills the container */}
+      <Canvas svgContent={svgContent}>
+        {nodeChildren}
+      </Canvas>
 
-        <StatusBar
-          nodes={nodes}
-          edges={edges}
-          onRefresh={() => {
-            window.addToast({
-              type: 'info',
-              title: 'Refreshing Network',
-              message: 'Updating network status and metrics...',
-              duration: 2000
-            });
-          }}
-        />
+      {/* ZoomControls - bottom right */}
+      <ZoomControls />
 
-        <Canvas
-          nodes={nodes}
-          edges={edges}
-          selectedNode={selectedNode?.id || null}
-          selectedEdge={selectedEdge?.id || null}
-          isCreatingEdge={isCreatingEdge}
-          edgeStart={edgeStart}
-          onNodeClick={handleNodeClick}
-          onNodeDrag={handleNodeDrag}
-          onNodeDragEnd={handleNodeDragEnd}
-          onEdgeClick={handleEdgeClick}
-          maxY={600}
-          showEffects={showEffects}
-        />
-      </div>
-
-      {/* Bottom Panel */}
-      <div className="h-[400px] bg-white border-t border-gray-200">
-        <div className="flex border-b border-gray-200">
-          <button
-            onClick={() => setActiveTab('config')}
-            className={`
-              flex items-center px-6 py-3 text-sm font-medium
-              ${activeTab === 'config'
-                ? 'text-brand-blue border-b-2 border-brand-blue'
-                : 'text-gray-500 hover:text-gray-700'
-              }
-            `}
-          >
-            <Settings className={`h-4 w-4 mr-2 ${
-              activeTab === 'config' ? 'text-brand-blue' : 'text-gray-400'
-            }`} />
-            Configuration
-          </button>
-          <button
-            onClick={() => setActiveTab('templates')}
-            className={`
-              flex items-center px-6 py-3 text-sm font-medium
-              ${activeTab === 'templates'
-                ? 'text-brand-blue border-b-2 border-brand-blue'
-                : 'text-gray-500 hover:text-gray-700'
-              }
-            `}
-          >
-            <Cloud className={`h-4 w-4 mr-2 ${
-              activeTab === 'templates' ? 'text-brand-blue' : 'text-gray-400'
-            }`} />
-            Templates
-          </button>
-          <button
-            onClick={() => setActiveTab('ai')}
-            className={`
-              flex items-center px-6 py-3 text-sm font-medium
-              ${activeTab === 'ai'
-                ? 'text-brand-blue border-b-2 border-brand-blue'
-                : 'text-gray-500 hover:text-gray-700'
-              }
-            `}
-          >
-            <MessageSquareIcon className={`h-4 w-4 mr-2 ${
-              activeTab === 'ai' ? 'text-brand-blue' : 'text-gray-400'
-            }`} />
-            A.I. Recommendation Engine
-          </button>
-        </div>
-
-        <div className="p-4 h-[calc(100%-49px)] overflow-y-auto">
-          {activeTab === 'templates' && (
-            <TemplatesDrawer onApplyTemplate={(newNodes, newEdges) => {
-              setNodes(newNodes);
-              setEdges(newEdges);
-              saveToHistory(newNodes, newEdges);
-              setActiveTab('config');
-            }} />
-          )}
-
-          {activeTab === 'config' && (
-            <ConfigurationPanel
-              selectedNode={selectedNode}
-              selectedEdge={selectedEdge}
-              onUpdateNode={handleUpdateNode}
-              onUpdateEdge={handleUpdateEdge}
-              onDeleteNode={handleDeleteNode}
-              onDeleteEdge={handleDeleteEdge}
-            />
-          )}
-
-          {activeTab === 'ai' && (
-            <AIRecommendationEngine 
-              onApplyRecommendation={handleApplyAIRecommendation}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Scenario Console */}
-      <ScenarioConsole 
-        isRunning={isRunningScenario}
-        nodes={nodes}
-        edges={edges}
-        onComplete={handleScenarioComplete}
+      {/* Toolbar - bottom center */}
+      <Toolbar
+        onAddNode={handleAddNode}
+        onToggleEdgeCreation={toggleEdgeCreation}
+        isCreatingEdge={isCreatingEdge}
+        onUndo={undo}
+        canUndo={canUndo}
+        onClearCanvas={clearCanvas}
+        onToggleMaximize={toggleMaximize}
+        isMaximized={isMaximized}
+        onCreateConnections={handleCreateConnections}
+        hasConnections={edges.length > 0}
       />
     </div>
   );
