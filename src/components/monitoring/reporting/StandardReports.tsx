@@ -1453,23 +1453,23 @@ export function StandardReports() {
         })}
       </div>
       ) : (
-        <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
-          <table className="min-w-full divide-y divide-fw-secondary">
+        <div className="bg-fw-base rounded-2xl overflow-hidden">
+          <table className="w-full divide-y divide-fw-secondary">
             <thead className="bg-fw-wash">
               <tr>
-                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Report Name
                 </th>
-                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Category
                 </th>
-                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Last Generated
                 </th>
-                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Status
                 </th>
-                <th className="px-6 py-3 text-right text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th className="px-6 h-12 text-right text-[14px] font-medium text-fw-heading">
                   Actions
                 </th>
               </tr>
@@ -1500,7 +1500,7 @@ export function StandardReports() {
                         {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-body">
+                    <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-body">
                       {report.lastGenerated ? (
                         <div className="flex items-center">
                           <Calendar className="h-3.5 w-3.5 mr-1.5 text-fw-bodyLight" />
@@ -1515,7 +1515,7 @@ export function StandardReports() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {getStatusBadge(isGenerating ? 'generating' : report.status)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-[14px] font-medium">
                       <div className="flex items-center justify-end space-x-2">
                         {report.lastGenerated && (
                           <>

@@ -344,22 +344,22 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
         <table className="w-full divide-y divide-fw-secondary min-w-[1000px]">
           <thead className="bg-fw-wash">
             <tr>
-              <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                 Time
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                 Type
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                 Severity
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                 Message
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                 Source
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                 User
               </th>
             </tr>
@@ -373,8 +373,8 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
               </tr>
             ) : (
               filteredLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-fw-wash">
-                  <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-bodyLight">
+                <tr key={log.id} className="hover:bg-fw-wash transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-body">
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 text-fw-bodyLight mr-2" />
                       <span className="font-mono">{log.timestamp}</span>
@@ -383,7 +383,7 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       {getTypeIcon(log.type)}
-                      <span className="ml-2 text-figma-base text-fw-body capitalize">{log.type}</span>
+                      <span className="ml-2 text-[14px] text-fw-body capitalize">{log.type}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -394,7 +394,7 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-figma-base text-fw-heading">{log.message}</div>
+                    <div className="text-[14px] text-fw-heading">{log.message}</div>
                     {log.metadata && (
                       <div className="mt-1 text-figma-sm text-fw-bodyLight">
                         {Object.entries(log.metadata).map(([key, value]) => (
@@ -405,10 +405,10 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
                       </div>
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-bodyLight">
+                  <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-body">
                     {log.source}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-bodyLight">
+                  <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-body">
                     {log.user}
                   </td>
                 </tr>

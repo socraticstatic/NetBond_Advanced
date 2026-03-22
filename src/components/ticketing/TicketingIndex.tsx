@@ -147,17 +147,17 @@ export function TicketingIndex() {
       </div>
 
       {/* Table Card */}
-      <div className="bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
-        <table className="w-full">
+      <div className="bg-fw-base rounded-2xl overflow-hidden">
+        <table className="w-full divide-y divide-fw-secondary">
           <thead>
-            <tr className="bg-fw-wash border-b border-fw-secondary">
-              <th className="w-10 px-4 py-3">
+            <tr className="bg-fw-wash">
+              <th className="w-10 px-4 h-12">
                 <input type="checkbox" className="h-5 w-5 rounded border-fw-secondary" />
               </th>
               {columns.map(col => (
                 <th
                   key={col.key}
-                  className="px-4 py-3 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] cursor-pointer select-none"
+                  className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading tracking-[-0.03em] cursor-pointer select-none"
                   onClick={() => handleSort(col.key)}
                 >
                   <span className="inline-flex items-center gap-1">
@@ -166,19 +166,19 @@ export function TicketingIndex() {
                   </span>
                 </th>
               ))}
-              <th className="w-10 px-4 py-3" />
+              <th className="w-10 px-4 h-12" />
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-fw-secondary">
             {paginatedTickets.map(ticket => (
               <tr
                 key={ticket.id}
-                className="border-b border-fw-secondary last:border-b-0 hover:bg-fw-wash/50 transition-colors"
+                className="hover:bg-fw-wash transition-colors"
               >
-                <td className="px-4 py-3">
+                <td className="px-6 py-4">
                   <input type="checkbox" className="h-5 w-5 rounded border-fw-secondary" />
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-6 py-4">
                   <button
                     onClick={() => navigate(`/tickets/${ticket.id}`)}
                     className="text-figma-base font-medium text-fw-link tracking-[-0.03em] hover:underline"
@@ -186,29 +186,29 @@ export function TicketingIndex() {
                     {ticket.ticketNumber}
                   </button>
                 </td>
-                <td className="px-4 py-3 text-figma-base font-medium text-fw-body tracking-[-0.03em]">
+                <td className="px-6 py-4 text-[14px] text-fw-body tracking-[-0.03em]">
                   {ticket.description}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-6 py-4">
                   <span className="inline-flex items-center gap-1 text-figma-base font-medium text-fw-heading tracking-[-0.03em]">
                     <span className="h-3.5 w-3.5 rounded-full border-2 border-fw-active" />
                     {ticket.state}
                   </span>
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-6 py-4">
                   <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${PRIORITY_STYLES[ticket.priority]}`}>
                     {ticket.priority}
                   </span>
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-6 py-4">
                   <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${STATUS_STYLES[ticket.stage]}`}>
                     {ticket.stage}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-figma-base font-medium text-fw-heading tracking-[-0.03em]">
+                <td className="px-6 py-4 text-[14px] text-fw-body tracking-[-0.03em]">
                   {ticket.asset}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-6 py-4">
                   <button className="p-1 rounded hover:bg-fw-wash">
                     <MoreHorizontal className="h-5 w-5 text-fw-body" />
                   </button>
@@ -217,7 +217,7 @@ export function TicketingIndex() {
             ))}
             {paginatedTickets.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-4 py-16 text-center">
+                <td colSpan={8} className="px-6 py-16 text-center">
                   <div className="flex flex-col items-center">
                     <Ticket className="h-12 w-12 text-fw-bodyLight mb-4" />
                     <h3 className="text-figma-lg font-bold text-fw-heading mb-2">No tickets found</h3>

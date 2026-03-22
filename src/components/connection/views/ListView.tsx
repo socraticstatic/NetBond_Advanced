@@ -185,7 +185,7 @@ export function ListView({ connections, groups }: ListViewProps) {
 
   return (
     <div className="overflow-hidden">
-      <table className="w-full table-fixed border-collapse">
+      <table className="w-full table-fixed divide-y divide-fw-secondary">
         <caption className="sr-only">
           List of network connections showing details like name, type, status, performance metrics,
           bandwidth, location, and provider. Click column headers to sort, and use row actions for management.
@@ -196,7 +196,7 @@ export function ListView({ connections, groups }: ListViewProps) {
               <th
                 key={column.id}
                 scope="col"
-                className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis"
+                className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis"
                 role="columnheader"
                 aria-sort={sortField === column.id ? sortDirection : 'none'}
               >
@@ -205,7 +205,7 @@ export function ListView({ connections, groups }: ListViewProps) {
             ))}
             <th
               scope="col"
-              className="relative px-6 py-3 w-16"
+              className="relative px-6 h-12 w-16"
               role="columnheader"
             >
               <div className="flex justify-end">
@@ -247,14 +247,14 @@ export function ListView({ connections, groups }: ListViewProps) {
               <tr
                 key={connection.id}
                 onClick={() => navigate(`/connections/${connection.id}`)}
-                className="hover:bg-fw-wash cursor-pointer"
+                className="hover:bg-fw-wash transition-colors cursor-pointer"
                 role="row"
                 aria-rowindex={rowIndex + 1}
               >
                 {displayColumns.map((column) => (
                   <td
                     key={column.id}
-                    className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis"
+                    className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis"
                     role="gridcell"
                   >
                     {renderColumnContent(connection, column.id)}

@@ -314,9 +314,9 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
       </div>
 
       {/* Logs Table */}
-      <div className="bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
+      <div className="bg-fw-base rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-fw-secondary">
+          <table className="w-full divide-y divide-fw-secondary">
             <thead className="bg-fw-wash">
               <tr>
                 <th
@@ -399,7 +399,7 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
                 </tr>
               ) : (
                 filteredLogs.map((log) => (
-                  <tr key={log.id} className="hover:bg-fw-wash">
+                  <tr key={log.id} className="hover:bg-fw-wash transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-figma-base font-medium text-fw-heading tracking-[-0.03em] h-12">
                       #{log.logId}
                     </td>
