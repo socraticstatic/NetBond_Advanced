@@ -3,7 +3,7 @@ import { ReactNode, memo, forwardRef, isValidElement, ComponentType } from 'reac
 interface ButtonProps {
   children: ReactNode;
   icon?: ReactNode | ComponentType<any>;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'outline-danger';
   fullWidth?: boolean;
   onClick?: () => void;
   disabled?: boolean;
@@ -24,7 +24,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
   size = 'md',
 }, ref) => {
   // Figma: pill-shaped buttons, ATT Aleck Sans 500 14px, -3% letter-spacing
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-full transition-colors tracking-[-0.03em]';
+  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-full transition-colors tracking-[-0.03em] active:scale-[0.98]';
 
   // Figma button heights: sm=28px, md=36px (standard), lg=44px
   // Figma padding: 8px vertical, 16px horizontal for md
@@ -41,6 +41,7 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
     outline: 'bg-fw-base border border-fw-active text-fw-link hover:bg-fw-active/5 transition-all',
     ghost: 'bg-transparent text-fw-heading hover:bg-fw-wash border border-transparent transition-all',
     danger: 'bg-fw-error text-white hover:bg-red-800 focus:ring-2 focus:ring-fw-error border border-transparent transition-all',
+    'outline-danger': 'bg-transparent text-fw-error hover:bg-red-50 border border-fw-error transition-all',
   };
 
   // Figma icon size: 20px for md, 16px for sm

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal, ArrowUpDown } from 'lucide-react';
+import { Plus, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal, ArrowUpDown, Ticket } from 'lucide-react';
 import { Button } from '../common/Button';
 
 type TicketStatus = 'active' | 'queued' | 'deferred' | 'ready to close' | 'device down';
@@ -217,8 +217,19 @@ export function TicketingIndex() {
             ))}
             {paginatedTickets.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-4 py-12 text-center text-figma-base text-fw-bodyLight tracking-[-0.03em]">
-                  No tickets found matching your filters.
+                <td colSpan={8} className="px-4 py-16 text-center">
+                  <div className="flex flex-col items-center">
+                    <Ticket className="h-12 w-12 text-fw-bodyLight mb-4" />
+                    <h3 className="text-figma-lg font-bold text-fw-heading mb-2">No tickets found</h3>
+                    <p className="text-figma-base text-fw-bodyLight max-w-md mx-auto mb-6 tracking-[-0.03em]">
+                      {searchQuery || statusFilter !== 'all' || priorityFilter !== 'all'
+                        ? 'Try adjusting your search or filter criteria.'
+                        : 'No support tickets have been created yet.'}
+                    </p>
+                    <Button variant="primary" icon={Plus} onClick={() => navigate('/tickets/create')}>
+                      Create Ticket
+                    </Button>
+                  </div>
                 </td>
               </tr>
             )}

@@ -1,4 +1,4 @@
-import { Megaphone, ChevronRight, Calendar } from 'lucide-react';
+import { Megaphone, ChevronRight, Calendar, Newspaper } from 'lucide-react';
 import { Badge } from '../common/Badge';
 
 type NewsCategory = 'maintenance' | 'feature' | 'upgrade' | 'security' | 'announcement';
@@ -82,7 +82,15 @@ export function NewsPage() {
 
       {/* News List */}
       <div className="flex flex-col gap-4">
-        {newsItems.map((item) => {
+        {newsItems.length === 0 ? (
+          <div className="text-center py-16">
+            <Newspaper className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
+            <h3 className="text-figma-lg font-bold text-fw-heading mb-2">No announcements yet</h3>
+            <p className="text-figma-base text-fw-bodyLight max-w-md mx-auto tracking-[-0.03em]">
+              Check back later for platform updates, maintenance windows, and service announcements.
+            </p>
+          </div>
+        ) : newsItems.map((item) => {
           const cat = categoryConfig[item.category];
           return (
             <article

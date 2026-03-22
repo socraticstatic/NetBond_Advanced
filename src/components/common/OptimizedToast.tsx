@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef, memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ToastMessage {
   id: string;
@@ -37,12 +38,12 @@ const ToastItem = memo(({
   }[toast.type];
 
   return (
-    <div 
-      className={`
-        transform transition-all duration-300 ease-in-out border rounded-lg p-4 shadow-lg
-        ${styles}
-        ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}
-      `}
+    <motion.div
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 50 }}
+      exit={{ opacity: 0, x: 50 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      className={`border rounded-lg p-4 shadow-lg ${styles}`}
     >
       <div className="flex justify-between items-start">
         <div className="flex-1">
@@ -56,7 +57,7 @@ const ToastItem = memo(({
           ×
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 });
 
@@ -88,11 +89,13 @@ export const OptimizedToastContainer = memo(() => {
 
   return (
     <div className="fixed bottom-0 right-0 p-6 space-y-4 pointer-events-none z-50 max-w-md">
-      {toasts.map(toast => (
-        <div key={toast.id} className="pointer-events-auto">
-          <ToastItem toast={toast} onRemove={removeToast} />
-        </div>
-      ))}
+      <AnimatePresence>
+        {toasts.map(toast => (
+          <div key={toast.id} className="pointer-events-auto">
+            <ToastItem toast={toast} onRemove={removeToast} />
+          </div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 });

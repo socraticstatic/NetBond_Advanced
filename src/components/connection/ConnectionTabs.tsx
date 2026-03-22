@@ -24,7 +24,7 @@ export function ConnectionTabs({ activeTab, onTabChange, connectionCount, groupC
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={`
-              flex items-center whitespace-nowrap pt-1 pb-2 px-1 border-b-2 font-medium text-figma-base no-rounded tracking-[-0.03em]
+              flex items-center whitespace-nowrap pt-1 pb-2 px-1 border-b-2 font-medium text-figma-base no-rounded tracking-[-0.03em] transition-all duration-200
               ${activeTab === tab.id
                 ? 'border-fw-active text-fw-link'
                 : 'border-transparent text-fw-heading hover:text-fw-body hover:border-fw-secondary'
