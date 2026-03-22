@@ -308,7 +308,7 @@ export function TenantDetailPage() {
                   <Button variant="outline" className="w-full text-fw-warn border-fw-warn hover:bg-fw-warnLight">
                     Suspend Tenant
                   </Button>
-                  <Button variant="outline" className="w-full text-fw-error border-fw-error hover:bg-fw-errorLight">
+                  <Button variant="outline-danger" className="w-full">
                     Delete Tenant
                   </Button>
                 </div>
