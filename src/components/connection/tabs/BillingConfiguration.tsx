@@ -352,27 +352,27 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
           <div>
             <div className="space-y-4">
               <div>
-                <label className="block text-figma-sm font-medium text-fw-body">Department</label>
+                <label className="fw-label">Department</label>
                 <input
                   type="text"
                   value={config.costAllocation.department}
                   disabled={!isEditing}
-                  className="mt-1 block w-full px-3 rounded-lg border-fw-bodyLight h-9 text-figma-base focus:border-fw-active focus:ring-fw-active disabled:bg-fw-wash disabled:text-fw-bodyLight"
+                  className="fw-input disabled:bg-fw-wash disabled:text-fw-bodyLight"
                 />
               </div>
               <div>
-                <label className="block text-figma-sm font-medium text-fw-body">Cost Center</label>
+                <label className="fw-label">Cost Center</label>
                 <input
                   type="text"
                   value={config.costAllocation.costCenter}
                   disabled={!isEditing}
-                  className="mt-1 block w-full px-3 rounded-lg border-fw-bodyLight h-9 text-figma-base focus:border-fw-active focus:ring-fw-active disabled:bg-fw-wash disabled:text-fw-bodyLight"
+                  className="fw-input disabled:bg-fw-wash disabled:text-fw-bodyLight"
                 />
               </div>
             </div>
           </div>
           <div>
-            <label className="block text-figma-sm font-medium text-fw-body mb-2">Tags</label>
+            <label className="fw-label">Tags</label>
             <div className="space-y-2">
               {Object.entries(config.costAllocation.tags).map(([key, value]) => (
                 <div key={key} className="flex items-center space-x-2">
@@ -391,32 +391,32 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-figma-sm font-medium text-fw-body">Usage Threshold</label>
-              <div className="mt-1 flex items-center">
+              <label className="fw-label">Usage Threshold</label>
+              <div className="flex items-center">
                 <input
                   type="number"
                   value={config.alerts.usageThreshold}
                   disabled={!isEditing}
-                  className="block w-full px-3 rounded-lg border-fw-bodyLight h-9 text-figma-base focus:border-fw-active focus:ring-fw-active disabled:bg-fw-wash disabled:text-fw-bodyLight"
+                  className="fw-input disabled:bg-fw-wash disabled:text-fw-bodyLight"
                 />
                 <span className="ml-2">%</span>
               </div>
             </div>
             <div>
-              <label className="block text-figma-sm font-medium text-fw-body">Budget Threshold</label>
-              <div className="mt-1 flex items-center">
+              <label className="fw-label">Budget Threshold</label>
+              <div className="flex items-center">
                 <input
                   type="number"
                   value={config.alerts.budgetThreshold}
                   disabled={!isEditing}
-                  className="block w-full px-3 rounded-lg border-fw-bodyLight h-9 text-figma-base focus:border-fw-active focus:ring-fw-active disabled:bg-fw-wash disabled:text-fw-bodyLight"
+                  className="fw-input disabled:bg-fw-wash disabled:text-fw-bodyLight"
                 />
                 <span className="ml-2">%</span>
               </div>
             </div>
           </div>
           <div>
-            <label className="block text-figma-sm font-medium text-fw-body mb-2">Alert Recipients</label>
+            <label className="fw-label">Alert Recipients</label>
             <div className="space-y-2">
               {config.alerts.recipients.map((recipient) => (
                 <div key={recipient} className="flex items-center justify-between">

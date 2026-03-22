@@ -437,8 +437,8 @@ export function ConnectionDetails() {
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className={`px-3 h-9 text-2xl font-bold tracking-[-0.03em] bg-fw-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-fw-active ${
-                  nameError ? 'border-fw-error' : 'border-fw-secondary'
+                className={`fw-input w-auto text-2xl font-bold tracking-[-0.03em] bg-fw-base ${
+                  nameError ? 'border-fw-error' : ''
                 }`}
                 autoFocus
               />
@@ -587,10 +587,9 @@ export function ConnectionDetails() {
 
             {/* Delete Button */}
             <Button
-              variant="outline"
+              variant="outline-danger"
               icon={Trash2}
               onClick={() => setShowDeleteConfirm(true)}
-              className="text-fw-error border-fw-error hover:bg-red-50"
             >
               Delete
             </Button>
