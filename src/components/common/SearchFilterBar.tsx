@@ -49,7 +49,7 @@ export function SearchFilterBar({
       {/* Filter */}
       {showFilter && (onFilter || filterContent) && (
         filterContent || (
-          <Button variant="ghost" icon={Filter} onClick={onFilter} size="md">
+          <Button variant="secondary" icon={Filter} onClick={onFilter} size="md">
             Filter
           </Button>
         )
@@ -57,7 +57,7 @@ export function SearchFilterBar({
 
       {/* Export */}
       {showExport && onExport && (
-        <Button variant="ghost" icon={Download} onClick={onExport} size="md">
+        <Button variant="secondary" icon={Download} onClick={onExport} size="md">
           Export
         </Button>
       )}

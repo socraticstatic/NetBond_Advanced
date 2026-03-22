@@ -10,7 +10,7 @@ export function LogsTab() {
   const { selectedConnection, filteredConnections } = useMonitoring();
 
   return (
-    <div className="p-6">
+    <div>
       <LazyLoadSection
         placeholder={<SkeletonTable rows={5} columns={6} />}
         className="w-full"

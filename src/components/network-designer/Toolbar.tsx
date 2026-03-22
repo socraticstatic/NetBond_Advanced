@@ -16,8 +16,8 @@ interface ToolbarProps {
   onOpenTemplates: () => void;
   onOpenSaveTemplate: () => void;
   onExportPDF: () => void;
-  onSaveDraft: () => void;
-  onOpenDrafts: () => void;
+  onSaveDraft?: () => void;
+  onOpenDrafts?: () => void;
 }
 
 type MenuKey = 'function' | 'cloud' | 'datacenter' | 'network' | null;
@@ -249,29 +249,6 @@ export function Toolbar({
         }`}
       >
         <Save className="h-4 w-4" />
-      </button>
-
-      {/* Save Draft */}
-      <button
-        onClick={onSaveDraft}
-        disabled={!hasConnections}
-        title="Save draft"
-        className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium rounded-full transition-colors ${
-          hasConnections ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
-        }`}
-      >
-        <Save className="h-4 w-4" />
-        <span>Draft</span>
-      </button>
-
-      {/* Open Drafts */}
-      <button
-        onClick={onOpenDrafts}
-        title="Open saved drafts"
-        className="flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium text-fw-heading hover:bg-fw-wash rounded-full transition-colors"
-      >
-        <FolderOpen className="h-4 w-4" />
-        <span>Drafts</span>
       </button>
 
       <div className="w-px h-5 bg-fw-secondary mx-1" />

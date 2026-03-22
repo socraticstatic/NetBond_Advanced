@@ -72,21 +72,86 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
         </div>
       </div>
 
-      {/* Network Visualization */}
-      <div className="bg-fw-wash rounded-2xl overflow-hidden" style={{ minHeight: '300px' }}>
-        <div className="px-6 py-4 border-b border-fw-secondary">
-          <div className="flex items-center gap-2">
-            <Network className="h-6 w-6 text-fw-heading" />
-            <h3 className="text-figma-lg font-medium text-fw-heading">Network Topology</h3>
+      {/* Network Topology Preview */}
+      <div className="bg-fw-wash rounded-2xl overflow-hidden">
+        <div className="px-6 py-4 flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <Network className="h-5 w-5 text-fw-heading" />
+              <h3 className="text-[14px] font-medium text-fw-heading">Network Topology</h3>
+            </div>
+            <p className="text-[12px] text-fw-bodyLight mt-0.5">Interactive visualization of your network connection</p>
           </div>
-          <p className="text-figma-base text-fw-bodyLight mt-1">Interactive visualization of your network connection</p>
+          <button className="tab-button text-[14px] font-medium text-fw-link hover:text-fw-linkHover transition-colors">
+            Edit Topology
+          </button>
         </div>
-        <div className="p-8 flex flex-col items-center justify-center" style={{ minHeight: '240px' }}>
-          <Network className="h-12 w-12 text-fw-bodyLight mb-4" />
-          <h3 className="text-figma-lg font-bold text-fw-heading mb-2">Network Topology</h3>
-          <p className="text-figma-base text-fw-bodyLight text-center max-w-md">
-            Interactive visualization of your network connection topology. Click "Edit Topology" to configure.
-          </p>
+        {/* Mini topology diagram */}
+        <div className="px-6 pb-6">
+          <div className="bg-fw-base rounded-xl p-6" style={{ minHeight: '200px' }}>
+            <div className="flex items-center justify-center gap-0">
+              {/* Connection source */}
+              <div className="flex flex-col items-center" style={{ width: '120px' }}>
+                <div className="w-12 h-12 rounded-xl bg-fw-accent flex items-center justify-center border border-fw-active">
+                  <Globe className="h-6 w-6 text-fw-link" />
+                </div>
+                <div className="text-[12px] font-medium text-fw-heading mt-2">{connection.location || 'Source'}</div>
+                <div className="text-[11px] text-fw-bodyLight">{connection.type}</div>
+              </div>
+              {/* Arrow */}
+              <div className="flex items-center self-start" style={{ marginTop: '20px' }}>
+                <div className="h-0.5 w-6 bg-fw-link" />
+                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px] border-l-fw-link" />
+              </div>
+              {/* Cloud Routers */}
+              <div className="flex flex-col items-center" style={{ width: '120px' }}>
+                <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center border border-green-300">
+                  <Server className="h-6 w-6 text-fw-success" />
+                </div>
+                <div className="text-[12px] font-medium text-fw-heading mt-2">Cloud Routers</div>
+                <div className="text-[11px] text-fw-bodyLight">{cloudRoutersCount} active</div>
+              </div>
+              {/* Arrow */}
+              <div className="flex items-center self-start" style={{ marginTop: '20px' }}>
+                <div className="h-0.5 w-6 bg-fw-link" />
+                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px] border-l-fw-link" />
+              </div>
+              {/* Links */}
+              <div className="flex flex-col items-center" style={{ width: '120px' }}>
+                <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center border border-purple-300">
+                  <Link2 className="h-6 w-6 text-purple-600" />
+                </div>
+                <div className="text-[12px] font-medium text-fw-heading mt-2">Links (VLANs)</div>
+                <div className="text-[11px] text-fw-bodyLight">{linksCount} segments</div>
+              </div>
+              {/* Arrow */}
+              <div className="flex items-center self-start" style={{ marginTop: '20px' }}>
+                <div className="h-0.5 w-6 bg-fw-link" />
+                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px] border-l-fw-link" />
+              </div>
+              {/* VNFs */}
+              <div className="flex flex-col items-center" style={{ width: '120px' }}>
+                <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center border border-orange-300">
+                  <Shield className="h-6 w-6 text-fw-warn" />
+                </div>
+                <div className="text-[12px] font-medium text-fw-heading mt-2">VNFs</div>
+                <div className="text-[11px] text-fw-bodyLight">{vnfsCount} functions</div>
+              </div>
+              {/* Arrow */}
+              <div className="flex items-center self-start" style={{ marginTop: '20px' }}>
+                <div className="h-0.5 w-6 bg-fw-link" />
+                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px] border-l-fw-link" />
+              </div>
+              {/* Cloud destination */}
+              <div className="flex flex-col items-center" style={{ width: '120px' }}>
+                <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-300">
+                  <Box className="h-6 w-6 text-fw-link" />
+                </div>
+                <div className="text-[12px] font-medium text-fw-heading mt-2">{connection.vendor || 'Cloud'}</div>
+                <div className="text-[11px] text-fw-bodyLight">{connection.bandwidth}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

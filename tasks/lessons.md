@@ -24,3 +24,31 @@
 ### 5. Read the behavioral guidelines at session start
 **Correction:** Had the guidelines in memory but didn't actively follow them. No lessons file. No self-improvement loop.
 **Rule:** Read feedback_behavioral_guidelines.md at the start of every session. Create tasks/lessons.md immediately.
+
+### 6. Build the common component AFTER perfecting one instance
+**Correction:** Tried to standardize tables across 19 files without having a single perfect reference. Each fix was partial.
+**Rule:** Perfect ONE table completely (alignment, borders, sort, gear, overflow, column visibility, SearchFilterBar). Then extract the pattern into a shared component. Then wire all instances.
+
+### 7. Compare feature-by-feature, not just structure
+**Correction:** Said Logs matched Connections but missed sort arrows, gear icon, and column visibility. Compared container/border structure but not interactive features.
+**Rule:** Make a checklist: container, border, thead border-b, sort arrows, gear icon, column visibility, divide-y on tbody, hover states, overflow menu alignment, text truncation, table-fixed. Check EVERY item.
+
+### 8. Components often have mobile AND desktop render paths
+**Correction:** Fixed Refresh button in the mobile render path of DashboardFilters but the desktop path (line 352) still had variant="ghost".
+**Rule:** When fixing a component, search for ALL instances of the element. grep the file for the handler name (e.g. handleRefresh) to find every render path.
+
+### 9. The table pattern (from Connections ListView)
+**Standard checklist:**
+- Container: `rounded-lg border border-fw-secondary overflow-hidden`
+- No parent `p-6` wrapper that misaligns edges
+- `<table className="w-full table-fixed">`
+- `<thead className="bg-fw-wash border-b border-fw-secondary">`
+- Header cells: `px-6 h-12 text-[14px] font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis align-middle`
+- Sort arrows: ChevronUp/ChevronDown per sortable column
+- Gear column: `w-16 px-6 h-12 align-middle` with Settings icon + ColumnVisibilityPopover
+- `<tbody className="bg-fw-base divide-y divide-fw-secondary">`
+- Row: `hover:bg-fw-wash transition-colors cursor-pointer`
+- Body cells: `px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis`
+- Actions cell: `w-16 px-6 py-4` with `flex justify-end` wrapper
+- Column visibility: useColumnVisibility hook, guard `visibleColumns.length === 0` to show all
+- SearchFilterBar inside border: `px-6 py-4 border-b border-fw-secondary`

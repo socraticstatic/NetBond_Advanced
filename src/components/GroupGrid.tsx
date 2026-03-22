@@ -5,6 +5,7 @@ import {
 import { Group } from '../types/group';
 import { useNavigate } from 'react-router-dom';
 import { Button } from './common/Button';
+import { SearchFilterBar } from './common/SearchFilterBar';
 import { useStore } from '../store/useStore';
 import { AddGroupModal } from './configure/groups/AddGroupModal';
 import { GroupCardView, GroupListView } from './group/views';
@@ -133,7 +134,7 @@ export function GroupGrid({ groups }: GroupGridProps) {
     <div className="space-y-6 min-h-[calc(100vh-16rem)] pb-12">
       {/* Search and Controls */}
       <div className="flex items-center space-x-4">
-        {/* Search - wider input */}
+        {/* Search */}
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
           <input
@@ -141,7 +142,7 @@ export function GroupGrid({ groups }: GroupGridProps) {
             placeholder="Search pools ..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg bg-fw-base text-figma-base font-medium placeholder:text-fw-disabled focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+            className="fw-input pl-10"
           />
         </div>
 
@@ -150,7 +151,7 @@ export function GroupGrid({ groups }: GroupGridProps) {
 
         {/* Filter */}
         <Button
-          variant="ghost"
+          variant="secondary"
           icon={Filter}
           onClick={() => setShowFilters(!showFilters)}
           size="md"
@@ -172,7 +173,7 @@ export function GroupGrid({ groups }: GroupGridProps) {
 
         {/* Export */}
         <Button
-          variant="ghost"
+          variant="secondary"
           icon={Download}
           onClick={exportGroups}
           size="md"
