@@ -121,7 +121,7 @@ export function GroupPerformance({ group, connections }: GroupPerformanceProps) 
       </div>
       
       {/* Connection Status Table */}
-      <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
+      <div className="bg-fw-base rounded-2xl overflow-hidden">
         <div className="px-6 py-4 border-b border-fw-secondary">
           <h3 className="text-lg font-medium text-fw-heading">Connection Status</h3>
         </div>
@@ -130,13 +130,13 @@ export function GroupPerformance({ group, connections }: GroupPerformanceProps) 
           <table className="min-w-full divide-y divide-fw-secondary">
             <thead className="bg-fw-wash">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Connection
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Status
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Last Updated
                 </th>
               </tr>
@@ -144,7 +144,7 @@ export function GroupPerformance({ group, connections }: GroupPerformanceProps) 
             <tbody className="bg-fw-base divide-y divide-fw-secondary">
               {connections.length > 0 ? (
                 connections.map((conn) => (
-                  <tr key={conn.id} className="hover:bg-fw-wash">
+                  <tr key={conn.id} className="hover:bg-fw-wash transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-figma-base font-medium text-fw-heading">{conn.name}</div>
                       <div className="text-figma-base text-fw-bodyLight">{conn.type}</div>

@@ -277,7 +277,7 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
       </div>
 
       {/* Billing History */}
-      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+      <div className="bg-fw-base rounded-2xl p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em]">Billing History</h3>
           <button className="text-figma-base text-fw-link hover:text-fw-linkHover flex items-center">
@@ -290,26 +290,26 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
           <table className="min-w-full divide-y divide-fw-secondary">
             <thead className="bg-fw-wash">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Invoice
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Date
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Amount
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Status
                 </th>
-                <th scope="col" className="relative px-6 py-3">
+                <th scope="col" className="relative px-6 h-12">
                   <span className="sr-only">Actions</span>
                 </th>
               </tr>
             </thead>
             <tbody className="bg-fw-base divide-y divide-fw-secondary">
               {config.history.map((invoice) => (
-                <tr key={invoice.id} className="hover:bg-fw-wash">
+                <tr key={invoice.id} className="hover:bg-fw-wash transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <FileText className="h-5 w-5 text-fw-bodyLight mr-2" />

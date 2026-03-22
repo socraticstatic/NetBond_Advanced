@@ -91,8 +91,7 @@ export function DeleteCloudRouterModal({
             Cancel
           </Button>
           <Button
-            variant="primary"
-            className="bg-fw-error hover:bg-fw-error focus:ring-fw-error"
+            variant="danger"
             disabled={!isConfirmEnabled}
             onClick={() => {
               onConfirm();

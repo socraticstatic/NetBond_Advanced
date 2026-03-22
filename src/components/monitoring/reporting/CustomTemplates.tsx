@@ -577,23 +577,23 @@ export function CustomTemplates() {
         ))}
       </div>
       ) : (
-        <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
+        <div className="bg-fw-base rounded-2xl overflow-hidden">
           <table className="min-w-full divide-y divide-fw-secondary">
             <thead className="bg-fw-wash">
               <tr>
-                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Template Name
                 </th>
-                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Type
                 </th>
-                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Usage
                 </th>
-                <th className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Last Modified
                 </th>
-                <th className="px-6 py-3 text-right text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th className="px-6 h-12 text-right text-[14px] font-medium text-fw-heading">
                   Actions
                 </th>
               </tr>

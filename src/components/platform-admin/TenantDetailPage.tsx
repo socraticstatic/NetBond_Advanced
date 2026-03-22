@@ -169,26 +169,26 @@ export function TenantDetailPage() {
               <table className="w-full">
                 <thead className="bg-fw-wash">
                   <tr>
-                    <th className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+                    <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+                    <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                       Email
                     </th>
-                    <th className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+                    <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                       Role
                     </th>
-                    <th className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+                    <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-figma-base font-medium text-fw-heading">
+                    <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                       Last Active
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-fw-base divide-y divide-fw-secondary">
                   {mockUsers.map((user) => (
-                    <tr key={user.id}>
+                    <tr key={user.id} className="hover:bg-fw-wash transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap text-figma-base font-medium text-fw-heading tracking-[-0.03em]">
                         {user.name}
                       </td>
@@ -305,7 +305,7 @@ export function TenantDetailPage() {
               <div className="pt-6 border-t border-fw-secondary">
                 <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-4">Danger Zone</h4>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full text-fw-warn border-fw-warn hover:bg-fw-warnLight">
+                  <Button variant="outline-danger" className="w-full">
                     Suspend Tenant
                   </Button>
                   <Button variant="outline-danger" className="w-full">

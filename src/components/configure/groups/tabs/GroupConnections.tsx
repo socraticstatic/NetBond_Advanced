@@ -148,7 +148,7 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
       </div>
 
       {/* Connections Table */}
-      <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
+      <div className="bg-fw-base rounded-2xl overflow-hidden">
         {filteredConnections.length === 0 ? (
           <div className="p-8 text-center">
             <p className="text-fw-bodyLight mb-4">No connections in this group yet</p>

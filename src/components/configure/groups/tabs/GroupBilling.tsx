@@ -138,7 +138,7 @@ export function GroupBilling({ group, connections }: GroupBillingProps) {
       </div>
       
       {/* Invoice History */}
-      <div className="bg-fw-base rounded-xl border border-fw-secondary shadow-sm overflow-hidden">
+      <div className="bg-fw-base rounded-2xl overflow-hidden shadow-sm">
         <div className="px-6 py-4 border-b border-fw-secondary flex justify-between items-center">
           <h3 className="text-lg font-medium text-fw-heading flex items-center">
             <Receipt className="h-5 w-5 text-fw-link mr-2" />
@@ -156,19 +156,19 @@ export function GroupBilling({ group, connections }: GroupBillingProps) {
           <table className="min-w-full divide-y divide-fw-secondary">
             <thead className="bg-fw-wash">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Invoice
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Date
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Amount
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                   Status
                 </th>
-                <th scope="col" className="relative px-6 py-3">
+                <th scope="col" className="relative px-6 h-12">
                   <span className="sr-only">Actions</span>
                 </th>
               </tr>
@@ -176,7 +176,7 @@ export function GroupBilling({ group, connections }: GroupBillingProps) {
             <tbody className="bg-fw-base divide-y divide-fw-secondary">
               {group.billing.invoiceHistory ? (
                 group.billing.invoiceHistory.map((invoice) => (
-                  <tr key={invoice.id} className="hover:bg-fw-wash">
+                  <tr key={invoice.id} className="hover:bg-fw-wash transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <FileText className="h-5 w-5 text-fw-bodyLight mr-2" />

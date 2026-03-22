@@ -213,12 +213,12 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                   {selectedUsers.length} users selected
                 </span>
               </div>
-              <div className="border border-fw-secondary rounded-lg overflow-hidden">
+              <div className="rounded-2xl overflow-hidden">
                 <div className="max-h-60 overflow-y-auto">
                   <table className="min-w-full divide-y divide-fw-secondary">
                     <thead className="bg-fw-wash">
                       <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                        <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                           <input
                             type="checkbox"
                             className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
@@ -232,20 +232,20 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                             checked={selectedUsers.length === users.length && users.length > 0}
                           />
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                        <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                           Name
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                        <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                           Role
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                        <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                           Email
                         </th>
                       </tr>
                     </thead>
                     <tbody className="bg-fw-base divide-y divide-fw-secondary">
                       {users.map((user) => (
-                        <tr key={user.id} className="hover:bg-fw-wash">
+                        <tr key={user.id} className="hover:bg-fw-wash transition-colors">
                           <td className="px-6 py-4 whitespace-nowrap">
                             <input
                               type="checkbox"
@@ -261,7 +261,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                             />
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-[14px] font-bold text-[#454b52]">{user.name}</div>
+                            <div className="text-[14px] font-medium text-fw-heading">{user.name}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-[14px] text-fw-bodyLight">{user.role}</div>
@@ -284,12 +284,12 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                 <label className="block text-[14px] font-medium text-fw-heading mb-2">
                   Select Connections
                 </label>
-                <div className="border border-fw-secondary rounded-lg overflow-hidden">
+                <div className="rounded-2xl overflow-hidden">
                   <div className="max-h-60 overflow-y-auto">
                     <table className="min-w-full divide-y divide-fw-secondary">
                       <thead className="bg-fw-wash">
                         <tr>
-                          <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                          <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                             <input
                               type="checkbox"
                               className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
@@ -303,20 +303,20 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                               checked={selectedConnections.length === connections.length && connections.length > 0}
                             />
                           </th>
-                          <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                          <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                             Name
                           </th>
-                          <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                          <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                             Type
                           </th>
-                          <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                          <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                             Status
                           </th>
                         </tr>
                       </thead>
                       <tbody className="bg-fw-base divide-y divide-fw-secondary">
                         {connections.map((connection) => (
-                          <tr key={connection.id} className="hover:bg-fw-wash">
+                          <tr key={connection.id} className="hover:bg-fw-wash transition-colors">
                             <td className="px-6 py-4 whitespace-nowrap">
                               <input
                                 type="checkbox"
@@ -333,7 +333,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                               />
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-[14px] font-bold text-[#454b52]">{connection.name}</div>
+                              <div className="text-[14px] font-medium text-fw-heading">{connection.name}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-[14px] text-fw-bodyLight">{connection.type}</div>

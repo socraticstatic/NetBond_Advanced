@@ -490,22 +490,22 @@ export function AppsConfiguration() {
                 <table className="w-full">
                   <thead className="bg-fw-wash border-b border-fw-secondary">
                     <tr>
-                      <th className="px-4 py-3 text-left text-figma-base font-medium text-fw-heading">
+                      <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                         Application
                       </th>
-                      <th className="px-4 py-3 text-left text-figma-base font-medium text-fw-heading">
+                      <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                         Status
                       </th>
-                      <th className="px-4 py-3 text-left text-figma-base font-medium text-fw-heading">
+                      <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                         Bandwidth
                       </th>
-                      <th className="px-4 py-3 text-left text-figma-base font-medium text-fw-heading">
+                      <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                         Latency
                       </th>
-                      <th className="px-4 py-3 text-left text-figma-base font-medium text-fw-heading">
+                      <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                         QoS Priority
                       </th>
-                      <th className="px-4 py-3 text-right text-figma-base font-medium text-fw-heading">
+                      <th className="px-6 h-12 text-right text-[14px] font-medium text-fw-heading">
                         Actions
                       </th>
                     </tr>
@@ -519,7 +519,7 @@ export function AppsConfiguration() {
                           className="hover:bg-fw-wash transition-colors cursor-pointer"
                           onClick={() => setSelectedApp(app)}
                         >
-                          <td className="px-4 py-3">
+                          <td className="px-6 py-4">
                             <div className="flex items-center">
                               <div className="p-2 bg-fw-neutral rounded-lg mr-3">
                                 {getAppIcon(app.name)}
@@ -532,24 +532,24 @@ export function AppsConfiguration() {
                               </div>
                             </div>
                           </td>
-                          <td className="px-4 py-3 whitespace-nowrap">
+                          <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center space-x-2">
                               {getStatusIcon(app.status)}
-                              <span className="text-figma-base text-fw-heading capitalize">{app.status}</span>
+                              <span className="text-[14px] text-fw-heading capitalize">{app.status}</span>
                             </div>
                           </td>
-                          <td className="px-4 py-3 whitespace-nowrap">
-                            <div className="text-figma-base font-semibold text-fw-heading">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-[14px] font-semibold text-fw-heading">
                               {app.bandwidth.current.toFixed(1)} {app.bandwidth.unit}
                             </div>
                           </td>
-                          <td className="px-4 py-3 whitespace-nowrap">
+                          <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                               <Wifi className="h-4 w-4 text-fw-bodyLight mr-1" />
-                              <span className="text-figma-base text-fw-heading">{app.latency}ms</span>
+                              <span className="text-[14px] text-fw-heading">{app.latency}ms</span>
                             </div>
                           </td>
-                          <td className="px-4 py-3 whitespace-nowrap">
+                          <td className="px-6 py-4 whitespace-nowrap">
                             {app.qos ? (
                               <button
                                 onClick={(e) => {
@@ -573,7 +573,7 @@ export function AppsConfiguration() {
                               </button>
                             )}
                           </td>
-                          <td className="px-4 py-3 whitespace-nowrap text-right">
+                          <td className="px-6 py-4 whitespace-nowrap text-right">
                             <div className="flex items-center justify-end space-x-2">
                               <button
                                 onClick={(e) => {
