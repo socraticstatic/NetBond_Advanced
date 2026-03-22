@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Users, Building, Tag, Plus, Check } from 'lucide-react';
 import { Group, GroupAddress, GroupContact } from '../../../types/group';
 import { Connection, User } from '../../../types';
+import { Button } from '../../common/Button';
 
 interface AddGroupModalProps {
   isOpen: boolean;
@@ -96,8 +97,6 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
     onSave(newGroup);
   };
 
-  const inputClass = 'w-full h-9 px-3 text-[14px] border border-[#686e74] rounded-lg focus:ring-fw-active focus:border-fw-active';
-
   if (!isOpen) return null;
 
   return (
@@ -154,29 +153,29 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
           {step === 0 && (
             <div className="space-y-5">
               <div>
-                <label htmlFor="group-name" className="block text-[14px] font-medium text-fw-heading mb-1.5">
-                  Pool Name <span className="text-[#c70032]">*</span>
+                <label htmlFor="group-name" className="fw-label fw-label-required">
+                  Pool Name
                 </label>
                 <input
                   id="group-name"
                   type="text"
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value)}
-                  className={inputClass}
+                  className="fw-input"
                   placeholder="Enter pool name"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="group-type" className="block text-[14px] font-medium text-fw-heading mb-1.5">
-                  Pool Type <span className="text-[#c70032]">*</span>
+                <label htmlFor="group-type" className="fw-label fw-label-required">
+                  Pool Type
                 </label>
                 <select
                   id="group-type"
                   value={groupType}
                   onChange={(e) => setGroupType(e.target.value as Group['type'])}
-                  className={inputClass}
+                  className="fw-select"
                   required
                 >
                   <option value="business">Business</option>
@@ -188,14 +187,14 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
               </div>
 
               <div>
-                <label htmlFor="group-description" className="block text-[14px] font-medium text-fw-heading mb-1.5">
+                <label htmlFor="group-description" className="fw-label">
                   Description
                 </label>
                 <textarea
                   id="group-description"
                   value={groupDescription}
                   onChange={(e) => setGroupDescription(e.target.value)}
-                  className="w-full px-3 text-[14px] border border-[#686e74] rounded-lg focus:ring-fw-active focus:border-fw-active"
+                  className="fw-textarea"
                   style={{ height: '76px' }}
                   placeholder="Enter pool description"
                 />
@@ -381,7 +380,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={address.street}
                       onChange={(e) => setAddress({...address, street: e.target.value})}
-                      className={inputClass}
+                      className="fw-input"
                       placeholder="123 Main St"
                     />
                   </div>
@@ -394,7 +393,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={address.city}
                       onChange={(e) => setAddress({...address, city: e.target.value})}
-                      className={inputClass}
+                      className="fw-input"
                       placeholder="Anytown"
                     />
                   </div>
@@ -407,7 +406,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={address.state}
                       onChange={(e) => setAddress({...address, state: e.target.value})}
-                      className={inputClass}
+                      className="fw-input"
                       placeholder="CA"
                     />
                   </div>
@@ -420,7 +419,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={address.zipCode}
                       onChange={(e) => setAddress({...address, zipCode: e.target.value})}
-                      className={inputClass}
+                      className="fw-input"
                       placeholder="12345"
                     />
                   </div>
@@ -433,7 +432,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={address.country}
                       onChange={(e) => setAddress({...address, country: e.target.value})}
-                      className={inputClass}
+                      className="fw-input"
                       placeholder="United States"
                     />
                   </div>
@@ -455,7 +454,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={contact.name}
                       onChange={(e) => setContact({...contact, name: e.target.value})}
-                      className={inputClass}
+                      className="fw-input"
                       placeholder="John Doe"
                     />
                   </div>
@@ -468,7 +467,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="email"
                       value={contact.email}
                       onChange={(e) => setContact({...contact, email: e.target.value})}
-                      className={inputClass}
+                      className="fw-input"
                       placeholder="john.doe@example.com"
                     />
                   </div>
@@ -481,7 +480,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="tel"
                       value={contact.phone}
                       onChange={(e) => setContact({...contact, phone: e.target.value})}
-                      className={inputClass}
+                      className="fw-input"
                       placeholder="(123) 456-7890"
                     />
                   </div>
@@ -494,7 +493,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={contact.role}
                       onChange={(e) => setContact({...contact, role: e.target.value})}
-                      className={inputClass}
+                      className="fw-input"
                       placeholder="IT Manager"
                     />
                   </div>
@@ -516,7 +515,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={tagKey}
                       onChange={(e) => setTagKey(e.target.value)}
-                      className={inputClass}
+                      className="fw-input"
                       placeholder="e.g., department"
                     />
                   </div>
@@ -530,7 +529,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                         type="text"
                         value={tagValue}
                         onChange={(e) => setTagValue(e.target.value)}
-                        className="w-full h-9 px-3 text-[14px] border border-[#686e74] rounded-l-lg focus:ring-fw-active focus:border-fw-active"
+                        className="fw-input rounded-r-none"
                         placeholder="e.g., IT"
                       />
                       <button
@@ -667,37 +666,33 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
         {/* Footer */}
         <div className="px-8 py-6 flex justify-end gap-2">
           {step > 0 ? (
-            <button
-              onClick={handleBack}
-              className="h-9 px-5 text-[14px] font-medium rounded-[800px] border border-fw-link text-fw-link bg-transparent hover:bg-fw-wash"
-            >
+            <Button variant="outline" onClick={handleBack} size="md">
               Back
-            </button>
+            </Button>
           ) : (
-            <button
-              onClick={onClose}
-              className="h-9 px-5 text-[14px] font-medium rounded-[800px] border border-fw-link text-fw-link bg-transparent hover:bg-fw-wash"
-            >
+            <Button variant="outline" onClick={onClose} size="md">
               Cancel
-            </button>
+            </Button>
           )}
 
           {step < steps.length - 1 ? (
-            <button
+            <Button
+              variant="primary"
               onClick={handleNext}
               disabled={step === 0 && !groupName}
-              className="h-9 px-5 text-[14px] font-medium rounded-[800px] bg-fw-link text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+              size="md"
             >
               Continue
-            </button>
+            </Button>
           ) : (
-            <button
+            <Button
+              variant="primary"
               onClick={handleSave}
               disabled={!groupName}
-              className="h-9 px-5 text-[14px] font-medium rounded-[800px] bg-fw-link text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+              size="md"
             >
               Create Pool
-            </button>
+            </Button>
           )}
         </div>
       </div>

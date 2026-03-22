@@ -1,6 +1,7 @@
 @import './styles/fonts.css';
 @import './styles/tokens.css';
 @import './styles/buttons.css';
+@import './styles/forms.css';
 
 @tailwind base;
 @tailwind components;
@@ -34,8 +35,8 @@
     @apply text-gray-600;
   }
   
-  /* Ensure all buttons are rounded EXCEPT nav buttons */
-  button:not(nav button, .no-rounded, .mode-selection-card) {
+  /* Ensure all buttons are rounded EXCEPT nav buttons and tab buttons */
+  button:not(nav button, .no-rounded, .mode-selection-card, .tab-button) {
     @apply rounded-full;
   }
 }
