@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { FileText, Edit, Trash2, Copy, Download, Plus, Settings, Layout, Filter, Star, Clock, LayoutGrid, List } from 'lucide-react';
+import { FileText, Edit, Trash2, Copy, Download, Plus, Settings, Layout, Filter, Star, Clock, LayoutGrid, List, Search } from 'lucide-react';
 import { Button } from '../../common/Button';
+import { DataTable } from '../../common/DataTable';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { Modal } from '../../common/Modal';
 
 interface Template {
@@ -270,6 +272,17 @@ export function CustomTemplates() {
   const [selectedType, setSelectedType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+  const [sortField, setSortField] = useState('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
 
   const getTypeColor = (type: Template['type']) => {
     switch (type) {
@@ -412,57 +425,30 @@ export function CustomTemplates() {
         </div>
       </div>
 
-      {/* Filters & View Toggle */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1">
-          <input
-            type="text"
-            placeholder="Search templates..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 text-figma-base text-fw-body placeholder:text-fw-disabled border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-transparent"
-          />
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          {types.map(type => (
-            <button
-              key={type}
-              onClick={() => setSelectedType(type)}
-              className={`px-4 py-2 rounded-full text-figma-base font-medium transition-colors ${
-                selectedType === type
-                  ? 'bg-fw-primary text-white'
-                  : 'bg-fw-neutral text-fw-body hover:bg-fw-wash'
-              }`}
-            >
-              {type === 'all' ? 'All' : type}
-            </button>
-          ))}
-        </div>
-        <div className="flex items-center bg-fw-base rounded-lg border border-fw-secondary p-1">
-          <button
-            onClick={() => setViewMode('card')}
-            className={`p-2 rounded-md transition-colors ${
-              viewMode === 'card'
-                ? 'text-fw-link bg-fw-accent'
-                : 'text-fw-bodyLight hover:text-fw-body'
-            }`}
-            title="Card View"
-          >
-            <LayoutGrid className="h-4 w-4" />
-          </button>
-          <button
-            onClick={() => setViewMode('table')}
-            className={`p-2 rounded-md transition-colors ${
-              viewMode === 'table'
-                ? 'text-fw-link bg-fw-accent'
-                : 'text-fw-bodyLight hover:text-fw-body'
-            }`}
-            title="Table View"
-          >
-            <List className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
+      {/* Card-mode: same SearchFilterBar pattern, outside cards */}
+      {viewMode === 'card' && (
+        <SearchFilterBar
+          searchPlaceholder="Search templates ..."
+          searchValue={searchQuery}
+          onSearchChange={setSearchQuery}
+          onFilter={() => {
+            const idx = types.indexOf(selectedType);
+            setSelectedType(types[(idx + 1) % types.length]);
+          }}
+          onExport={() => {
+            window.addToast?.({ type: 'success', title: 'Exported', message: 'Templates exported', duration: 3000 });
+          }}
+          actions={
+            <>
+              <div className="h-6 w-px bg-fw-secondary" />
+              <div className="flex items-center bg-fw-base rounded-lg border border-fw-secondary p-1">
+                <button onClick={() => setViewMode('card')} className={`quick-action-btn p-2 transition-colors ${viewMode === 'card' ? 'text-white bg-fw-primary' : 'text-fw-disabled hover:text-fw-bodyLight'}`} title="Card View"><LayoutGrid className="h-4 w-4" /></button>
+                <button onClick={() => setViewMode('table')} className={`quick-action-btn p-2 transition-colors ${viewMode === 'table' ? 'text-white bg-fw-primary' : 'text-fw-disabled hover:text-fw-bodyLight'}`} title="Table View"><List className="h-4 w-4" /></button>
+              </div>
+            </>
+          }
+        />
+      )}
 
       {/* Templates View */}
       {viewMode === 'card' ? (
@@ -577,105 +563,97 @@ export function CustomTemplates() {
         ))}
       </div>
       ) : (
-        <div className="bg-fw-base rounded-2xl overflow-hidden">
-          <table className="min-w-full divide-y divide-fw-secondary">
-            <thead className="bg-fw-wash">
-              <tr>
-                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                  Template Name
-                </th>
-                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                  Type
-                </th>
-                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                  Usage
-                </th>
-                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                  Last Modified
-                </th>
-                <th className="px-6 h-12 text-right text-[14px] font-medium text-fw-heading">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-fw-base divide-y divide-fw-secondary">
-              {filteredTemplates.map((template) => (
-                <tr key={template.id} className="hover:bg-fw-wash transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-fw-neutral rounded-lg">
-                        <FileText className="h-4 w-4 text-fw-body" />
-                      </div>
-                      <div className="ml-3">
-                        <div className="flex items-center space-x-2">
-                          <div className="text-figma-base font-medium text-fw-heading">{template.name}</div>
-                          {template.isDefault && (
-                            <Star className="h-3.5 w-3.5 text-yellow-500 fill-current" />
-                          )}
-                        </div>
-                        <div className="text-figma-sm text-fw-bodyLight">
-                          {template.format} • {template.createdBy}
-                        </div>
-                      </div>
+        <DataTable
+          tableId="report-templates"
+          toolbar={
+            <SearchFilterBar
+              searchPlaceholder="Search templates ..."
+              searchValue={searchQuery}
+              onSearchChange={setSearchQuery}
+              onFilter={() => {
+                const idx = types.indexOf(selectedType);
+                setSelectedType(types[(idx + 1) % types.length]);
+              }}
+              onExport={() => {
+                window.addToast?.({ type: 'success', title: 'Templates Exported', message: 'Template data exported successfully', duration: 3000 });
+              }}
+              actions={
+                <>
+                  <div className="h-6 w-px bg-fw-secondary" />
+                  <div className="flex items-center bg-fw-base rounded-lg border border-fw-secondary p-1">
+                    <button onClick={() => setViewMode('card')} className={`quick-action-btn p-2 transition-colors ${viewMode === 'card' ? 'text-white bg-fw-primary' : 'text-fw-disabled hover:text-fw-bodyLight'}`} title="Card View"><LayoutGrid className="h-4 w-4" /></button>
+                    <button onClick={() => setViewMode('table')} className={`quick-action-btn p-2 transition-colors ${viewMode === 'table' ? 'text-white bg-fw-primary' : 'text-fw-disabled hover:text-fw-bodyLight'}`} title="Table View"><List className="h-4 w-4" /></button>
+                  </div>
+                </>
+              }
+            />
+          }
+          sortField={sortField}
+          sortDirection={sortDirection}
+          onSort={handleSort}
+          columns={[
+            {
+              id: 'name',
+              label: 'Template Name',
+              sortable: true,
+              render: (template: Template) => (
+                <div className="flex items-center">
+                  <div className="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-fw-neutral rounded-lg">
+                    <FileText className="h-4 w-4 text-fw-body" />
+                  </div>
+                  <div className="ml-3">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-[14px] font-medium text-fw-heading">{template.name}</span>
+                      {template.isDefault && <Star className="h-3.5 w-3.5 text-yellow-500 fill-current" />}
                     </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-figma-sm font-medium rounded-full ${getTypeColor(template.type)}`}>
-                      {template.type}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-body">
-                    {template.usageCount} uses
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-figma-base text-fw-body">
-                    {new Date(template.lastModified).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium">
-                    <div className="flex items-center justify-end space-x-2">
-                      <button
-                        onClick={() => {
-                          window.addToast?.({
-                            type: 'info',
-                            title: 'Edit Template',
-                            message: `Opening editor for "${template.name}"`,
-                            duration: 2000
-                          });
-                        }}
-                        className="text-fw-body hover:text-fw-heading p-1 transition-colors"
-                        title="Edit"
-                      >
-                        <Edit className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDuplicate(template)}
-                        className="text-fw-body hover:text-fw-heading p-1 transition-colors"
-                        title="Duplicate"
-                      >
-                        <Copy className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDownload(template)}
-                        className="text-fw-body hover:text-fw-heading p-1 transition-colors"
-                        title="Download"
-                      >
-                        <Download className="h-4 w-4" />
-                      </button>
-                      {!template.isDefault && (
-                        <button
-                          onClick={() => handleDelete(template.id)}
-                          className="text-fw-error hover:text-fw-error p-1"
-                          title="Delete"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    <div className="text-[12px] text-fw-bodyLight">{template.format} - {template.createdBy}</div>
+                  </div>
+                </div>
+              )
+            },
+            {
+              id: 'type',
+              label: 'Type',
+              sortable: true,
+              render: (template: Template) => (
+                <span className={`px-2 py-1 text-[12px] font-medium rounded-full ${getTypeColor(template.type)}`}>
+                  {template.type}
+                </span>
+              )
+            },
+            {
+              id: 'usage',
+              label: 'Usage',
+              sortable: true,
+              render: (template: Template) => <span>{template.usageCount} uses</span>
+            },
+            {
+              id: 'lastModified',
+              label: 'Last Modified',
+              sortable: true,
+              render: (template: Template) => <span>{new Date(template.lastModified).toLocaleDateString()}</span>
+            },
+          ]}
+          data={filteredTemplates}
+          keyField="id"
+          actions={(template) => {
+            const items = [
+              { id: 'edit', label: 'Edit', icon: <Edit className="h-4 w-4" />, onClick: () => window.addToast?.({ type: 'info', title: 'Edit Template', message: `Opening editor for "${template.name}"`, duration: 2000 }) },
+              { id: 'duplicate', label: 'Duplicate', icon: <Copy className="h-4 w-4" />, onClick: () => handleDuplicate(template) },
+              { id: 'download', label: 'Download', icon: <Download className="h-4 w-4" />, onClick: () => handleDownload(template) },
+            ];
+            if (!template.isDefault) {
+              items.push({ id: 'delete', label: 'Delete', icon: <Trash2 className="h-4 w-4" />, onClick: () => handleDelete(template.id), variant: 'danger' as const });
+            }
+            return items;
+          }}
+          emptyState={
+            <div className="py-8">
+              <FileText className="h-8 w-8 mx-auto text-fw-bodyLight mb-2" />
+              <p className="text-fw-bodyLight">No templates match filters</p>
+            </div>
+          }
+        />
       )}
 
       {filteredTemplates.length === 0 && (

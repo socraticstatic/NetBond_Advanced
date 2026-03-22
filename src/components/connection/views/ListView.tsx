@@ -184,19 +184,19 @@ export function ListView({ connections, groups }: ListViewProps) {
   const displayColumns = ALL_COLUMNS.filter(col => isVisible(col.id));
 
   return (
-    <div className="overflow-hidden">
-      <table className="w-full table-fixed divide-y divide-fw-secondary">
+    <div className="rounded-lg border border-fw-secondary overflow-hidden">
+      <table className="w-full table-fixed">
         <caption className="sr-only">
           List of network connections showing details like name, type, status, performance metrics,
           bandwidth, location, and provider. Click column headers to sort, and use row actions for management.
         </caption>
-        <thead className="bg-fw-wash">
+        <thead className="bg-fw-wash border-b border-fw-secondary">
           <tr>
             {displayColumns.map((column) => (
               <th
                 key={column.id}
                 scope="col"
-                className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis"
+                className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis align-middle"
                 role="columnheader"
                 aria-sort={sortField === column.id ? sortDirection : 'none'}
               >
@@ -205,7 +205,7 @@ export function ListView({ connections, groups }: ListViewProps) {
             ))}
             <th
               scope="col"
-              className="relative px-6 h-12 w-16"
+              className="relative px-6 h-12 w-16 align-middle"
               role="columnheader"
             >
               <div className="flex justify-end">
@@ -260,13 +260,13 @@ export function ListView({ connections, groups }: ListViewProps) {
                     {renderColumnContent(connection, column.id)}
                   </td>
                 ))}
-                <td 
-                  className="px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium w-16"
+                <td
+                  className="px-6 py-4 whitespace-nowrap w-16"
                   role="gridcell"
                 >
-                  <div 
+                  <div
                     onClick={e => e.stopPropagation()}
-                    className="inline-block"
+                    className="flex justify-end"
                   >
                     <ConnectionOverflowMenu
                       connection={connection}

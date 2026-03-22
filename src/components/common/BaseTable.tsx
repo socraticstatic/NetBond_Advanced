@@ -27,6 +27,7 @@ interface BaseTableProps<T> {
   title?: string;
   tableId?: string;
   showColumnManager?: boolean;
+  toolbar?: ReactNode;
 }
 
 export function BaseTable<T>({
@@ -42,7 +43,8 @@ export function BaseTable<T>({
   emptyState,
   title,
   tableId,
-  showColumnManager = true
+  showColumnManager = true,
+  toolbar
 }: BaseTableProps<T>) {
   const [showColumnPopover, setShowColumnPopover] = useState(false);
   const columnButtonRef = useRef<HTMLButtonElement>(null);
@@ -75,7 +77,12 @@ export function BaseTable<T>({
       )}
 
       {/* Table */}
-      <div className="bg-fw-base rounded-2xl overflow-hidden">
+      <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
+        {toolbar && (
+          <div className="px-6 py-4 border-b border-fw-secondary">
+            {toolbar}
+          </div>
+        )}
         <div className="min-w-full divide-y divide-fw-secondary">
         <div className="bg-fw-wash">
           <div className="min-w-full table">
@@ -85,7 +92,7 @@ export function BaseTable<T>({
                   <div
                     key={column.id}
                     scope="col"
-                    className="table-cell px-6 h-12 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] whitespace-nowrap"
+                    className="table-cell px-6 h-12 text-left text-[14px] font-medium text-fw-heading tracking-[-0.03em] whitespace-nowrap align-middle"
                     style={column.width ? { width: column.width } : undefined}
                     role="columnheader"
                     aria-sort={
@@ -124,7 +131,7 @@ export function BaseTable<T>({
                     )}
                   </div>
                 ))}
-                <div scope="col" className="table-cell relative px-6 py-3 w-16">
+                <div scope="col" className="table-cell relative px-6 h-12 w-16 align-middle">
                   {showColumnManager && tableId ? (
                     <div className="flex justify-end">
                       <button
@@ -170,15 +177,15 @@ export function BaseTable<T>({
                     {filteredColumns.map((column) => (
                       <div 
                         key={column.id} 
-                        className="table-cell px-6 h-12 text-figma-base font-medium text-fw-heading tracking-[-0.03em] whitespace-nowrap"
+                        className={`table-cell px-6 h-12 text-[14px] font-medium text-fw-heading tracking-[-0.03em] whitespace-nowrap ${rowIndex > 0 ? 'border-t border-fw-secondary' : ''}`}
                         role="gridcell"
                       >
                         {column.render(item)}
                       </div>
                     ))}
                     {actions && (
-                      <div 
-                        className="table-cell px-6 py-4 whitespace-nowrap text-right text-figma-base font-medium"
+                      <div
+                        className={`table-cell px-6 py-4 whitespace-nowrap text-right text-[14px] font-medium ${rowIndex > 0 ? 'border-t border-fw-secondary' : ''}`}
                         onClick={e => e.stopPropagation()}
                         role="gridcell"
                       >

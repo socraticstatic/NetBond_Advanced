@@ -1,18 +1,51 @@
-import { useState } from 'react';
-import { Filter, X, Activity, Shield, Settings, Globe, Calendar, Clock, Eye, Copy, Download } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Filter, X, Activity, Shield, Settings, Globe, Calendar, Clock, Eye, Copy, Download, ChevronUp, ChevronDown } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { OverflowMenu } from '../../common/OverflowMenu';
+import { ColumnVisibilityPopover, ColumnDefinition } from '../../common/ColumnVisibilityPopover';
+import { useColumnVisibility } from '../../../hooks/useColumnVisibility';
 
 interface LogsContentProps {
   selectedConnection: string;
   connections: any[];
 }
 
+const TABLE_ID = 'monitor-logs';
+
+const ALL_COLUMNS: ColumnDefinition[] = [
+  { id: 'time', label: 'Time' },
+  { id: 'type', label: 'Type' },
+  { id: 'severity', label: 'Severity' },
+  { id: 'message', label: 'Message' },
+  { id: 'source', label: 'Source' },
+  { id: 'user', label: 'User' },
+];
+
+const SORTABLE_COLUMNS = ['time', 'type', 'severity', 'source', 'user'];
+
 function LogsContent({ selectedConnection, connections }: LogsContentProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedSeverities, setSelectedSeverities] = useState<string[]>([]);
+  const [sortField, setSortField] = useState('time');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [showColumnPopover, setShowColumnPopover] = useState(false);
+  const columnButtonRef = useRef<HTMLButtonElement>(null);
+  const { isVisible, visibleColumns } = useColumnVisibility(TABLE_ID);
+
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const displayColumns = visibleColumns.length === 0
+    ? ALL_COLUMNS
+    : ALL_COLUMNS.filter(col => isVisible(col.id));
   const [timeRange, setTimeRange] = useState('24h');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -183,23 +216,7 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
   ];
 
   return (
-    <div className="bg-fw-base rounded-2xl overflow-hidden">
-      <div className="p-4 border-b border-fw-secondary min-w-[1000px]">
-        <SearchFilterBar
-          searchPlaceholder="Search logs..."
-          searchValue={searchQuery}
-          onSearchChange={setSearchQuery}
-          onFilter={() => setShowFilters(!showFilters)}
-          onExport={() => {
-            window.addToast({
-              type: 'success',
-              title: 'Logs Exported',
-              message: 'Log data has been exported successfully',
-              duration: 3000
-            });
-          }}
-        />
-      </div>
+    <div>
 
       {/* Filters Panel */}
       {showFilters && (
@@ -357,89 +374,130 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
       )}
 
       {/* Logs Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full divide-y divide-fw-secondary min-w-[1000px]">
-          <thead className="bg-fw-wash">
+      <div className="border border-fw-secondary rounded-lg overflow-hidden">
+        {/* Search/Filter bar inside table border */}
+        <div className="px-6 py-4 border-b border-fw-secondary">
+          <SearchFilterBar
+            searchPlaceholder="Search logs..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            onFilter={() => setShowFilters(!showFilters)}
+            onExport={() => {
+              window.addToast({
+                type: 'success',
+                title: 'Logs Exported',
+                message: 'Log data has been exported successfully',
+                duration: 3000
+              });
+            }}
+          />
+        </div>
+        <table className="w-full table-fixed">
+          <thead className="bg-fw-wash border-b border-fw-secondary">
             <tr>
-              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                Time
-              </th>
-              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                Type
-              </th>
-              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                Severity
-              </th>
-              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                Message
-              </th>
-              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                Source
-              </th>
-              <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                User
-              </th>
-              <th scope="col" className="w-12 px-4 h-12">
-                <span className="sr-only">Actions</span>
+              {displayColumns.map((col) => {
+                const isSortable = SORTABLE_COLUMNS.includes(col.id);
+                const isSorted = sortField === col.id;
+                return (
+                  <th key={col.id} scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis align-middle">
+                    {isSortable ? (
+                      <button onClick={() => handleSort(col.id)} className="group inline-flex items-center space-x-1">
+                        <span>{col.label}</span>
+                        <span className="flex flex-col">
+                          <ChevronUp className={`h-3 w-3 ${isSorted && sortDirection === 'asc' ? 'text-fw-body' : 'text-fw-bodyLight group-hover:text-fw-body'}`} />
+                          <ChevronDown className={`h-3 w-3 -mt-1 ${isSorted && sortDirection === 'desc' ? 'text-fw-body' : 'text-fw-bodyLight group-hover:text-fw-body'}`} />
+                        </span>
+                      </button>
+                    ) : (
+                      col.label
+                    )}
+                  </th>
+                );
+              })}
+              <th scope="col" className="w-16 px-6 h-12 align-middle">
+                <div className="flex justify-end">
+                  <button
+                    ref={columnButtonRef}
+                    onClick={() => setShowColumnPopover(!showColumnPopover)}
+                    className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral transition-colors"
+                    title="Manage Columns"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </button>
+                </div>
               </th>
             </tr>
           </thead>
           <tbody className="bg-fw-base divide-y divide-fw-secondary">
             {filteredLogs.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-6 py-4 text-center text-fw-bodyLight">
+                <td colSpan={displayColumns.length + 1} className="px-6 py-4 text-center text-fw-bodyLight">
                   No logs match the current filters
                 </td>
               </tr>
             ) : (
-              filteredLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-fw-wash transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-body">
+              filteredLogs.map((log) => {
+                const cellContent: Record<string, React.ReactNode> = {
+                  time: (
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 text-fw-bodyLight mr-2" />
                       <span className="font-mono">{log.timestamp}</span>
                     </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  ),
+                  type: (
                     <div className="flex items-center">
                       {getTypeIcon(log.type)}
-                      <span className="ml-2 text-[14px] text-fw-body capitalize">{log.type}</span>
+                      <span className="ml-2 capitalize">{log.type}</span>
                     </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-lg text-figma-sm font-medium ${
-                      getSeverityColor(log.severity)
-                    }`}>
+                  ),
+                  severity: (
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-lg text-figma-sm font-medium ${getSeverityColor(log.severity)}`}>
                       {log.severity}
                     </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-[14px] text-fw-heading">{log.message}</div>
-                    {log.metadata && (
-                      <div className="mt-1 text-figma-sm text-fw-bodyLight">
-                        {Object.entries(log.metadata).map(([key, value]) => (
-                          <span key={key} className="mr-3">
-                            {key}: {value}
-                          </span>
-                        ))}
+                  ),
+                  message: (
+                    <>
+                      <div className="text-fw-heading">{log.message}</div>
+                      {log.metadata && (
+                        <div className="mt-1 text-figma-sm text-fw-bodyLight">
+                          {Object.entries(log.metadata).map(([key, value]) => (
+                            <span key={key} className="mr-3">{key}: {value}</span>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ),
+                  source: log.source,
+                  user: log.user,
+                };
+                return (
+                  <tr key={log.id} className="hover:bg-fw-wash transition-colors">
+                    {displayColumns.map((col) => (
+                      <td key={col.id} className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
+                        {cellContent[col.id]}
+                      </td>
+                    ))}
+                    <td className="w-16 px-6 py-4">
+                      <div className="flex justify-end">
+                        <OverflowMenu items={getOverflowItems(log)} />
                       </div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-body">
-                    {log.source}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-body">
-                    {log.user}
-                  </td>
-                  <td className="px-4 py-4">
-                    <OverflowMenu items={getOverflowItems(log)} />
-                  </td>
-                </tr>
-              ))
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
       </div>
+
+      {showColumnPopover && (
+        <ColumnVisibilityPopover
+          tableId={TABLE_ID}
+          allColumns={ALL_COLUMNS}
+          onClose={() => setShowColumnPopover(false)}
+          anchorEl={columnButtonRef.current}
+        />
+      )}
     </div>
   );
 }

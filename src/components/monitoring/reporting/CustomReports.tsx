@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Plus, Download, Edit, Trash2, Play, Eye, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { Button } from '../../common/Button';
-import { BaseTable } from '../../common/BaseTable';
+import { DataTable } from '../../common/DataTable';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { Badge, StatusBadge } from '../../common/Badge';
 import { Modal } from '../../common/Modal';
 
@@ -286,6 +287,7 @@ export function CustomReports() {
   const [showCreate, setShowCreate] = useState(false);
   const [sortField, setSortField] = useState<keyof CustomReport>('createdDate');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSort = (field: keyof CustomReport) => {
     if (field === sortField) {
@@ -493,65 +495,86 @@ export function CustomReports() {
         })}
       </div>
 
-      {/* Table with expandable rows */}
-      {reports.length === 0 ? (
-        <div className="bg-fw-base rounded-2xl border border-fw-secondary p-12 text-center">
-          <p className="text-figma-base text-fw-secondary mb-4">No custom reports yet.</p>
-          <Button variant="primary" icon={<Plus className="h-4 w-4" />} onClick={() => setShowCreate(true)}>
-            Create your first report
-          </Button>
-        </div>
-      ) : (
-        <div className="overflow-x-auto">
-          {/* Custom table render to support expandable rows */}
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-fw-wash">
-                {columns.map((col) => (
-                  <th
-                    key={col.id}
-                    className={`px-6 h-12 text-[14px] font-medium text-fw-heading select-none ${col.width ?? ''} ${col.sortable ? 'cursor-pointer hover:bg-fw-neutral' : ''}`}
-                    onClick={() => col.sortable && col.sortKey && handleSort(col.sortKey)}
-                  >
-                    <div className="flex items-center gap-1">
-                      {col.label}
-                      {col.sortable && col.sortKey && sortField === col.sortKey && (
-                        sortDirection === 'asc'
-                          ? <ChevronUp className="h-3 w-3" />
-                          : <ChevronDown className="h-3 w-3" />
-                      )}
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {sortedReports.map((report) => (
-                <>
-                  <tr
-                    key={report.id}
-                    className="border-b border-fw-secondary hover:bg-fw-wash transition-colors cursor-pointer"
-                    onClick={() => setExpandedId(expandedId === report.id ? null : report.id)}
-                  >
-                    {columns.map((col) => (
-                      <td key={col.id} className={`px-6 py-4 text-[14px] ${col.width ?? ''}`}>
-                        {col.render(report)}
-                      </td>
-                    ))}
-                  </tr>
-                  {expandedId === report.id && (
-                    <ReportDetail
-                      key={`${report.id}-detail`}
-                      report={report}
-                      onClose={() => setExpandedId(null)}
-                    />
-                  )}
-                </>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      {/* Reports Table */}
+      <DataTable
+        tableId="custom-reports"
+        toolbar={
+          <SearchFilterBar
+            searchPlaceholder="Search reports ..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            onFilter={() => {}}
+            onExport={() => {
+              window.addToast?.({ type: 'success', title: 'Exported', message: 'Custom reports exported', duration: 3000 });
+            }}
+          />
+        }
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onSort={(field) => handleSort(field as keyof CustomReport)}
+        columns={[
+          {
+            id: 'name',
+            label: 'Report Name',
+            sortable: true,
+            render: (r: CustomReport) => (
+              <div>
+                <div className="text-[14px] font-medium text-fw-heading">{r.name}</div>
+                <div className="text-[12px] text-fw-bodyLight">{r.description.substring(0, 40)}...</div>
+              </div>
+            ),
+          },
+          {
+            id: 'created',
+            label: 'Created',
+            sortable: true,
+            render: (r: CustomReport) => <span>{formatDate(r.created)}</span>,
+          },
+          {
+            id: 'lastRun',
+            label: 'Last Run',
+            sortable: true,
+            render: (r: CustomReport) => <span>{formatDate(r.lastRun)}</span>,
+          },
+          {
+            id: 'schedule',
+            label: 'Schedule',
+            render: (r: CustomReport) => <span>{formatSchedule(r.schedule)}</span>,
+          },
+          {
+            id: 'format',
+            label: 'Format',
+            render: (r: CustomReport) => (
+              <Badge color="#0057b8" bg="rgba(0,87,184,0.12)" size="sm">{r.format}</Badge>
+            ),
+          },
+          {
+            id: 'status',
+            label: 'Status',
+            sortable: true,
+            render: (r: CustomReport) => {
+              const colors = reportStatusColors[r.status];
+              return <Badge color={colors.text} bg={colors.bg} size="sm" className="capitalize">{r.status}</Badge>;
+            },
+          },
+        ]}
+        data={sortedReports}
+        keyField="id"
+        actions={(report) => [
+          { id: 'run', label: 'Run Report', icon: <Play className="h-4 w-4" />, onClick: () => handleRun(report.id) },
+          { id: 'download', label: 'Download', icon: <Download className="h-4 w-4" />, onClick: () => window.addToast?.({ type: 'success', title: 'Downloaded', message: `${report.name} downloaded`, duration: 3000 }) },
+          { id: 'edit', label: 'Edit', icon: <Edit className="h-4 w-4" />, onClick: () => {} },
+          { id: 'delete', label: 'Delete', icon: <Trash2 className="h-4 w-4" />, onClick: () => handleDelete(report.id), variant: 'danger' as const },
+        ]}
+        emptyState={
+          <div className="py-8 text-center">
+            <p className="text-[14px] text-fw-bodyLight mb-4">No custom reports yet.</p>
+            <Button variant="primary" icon={<Plus className="h-4 w-4" />} onClick={() => setShowCreate(true)}>
+              Create your first report
+            </Button>
+          </div>
+        }
+      />
 
       {/* Create modal */}
       {showCreate && (

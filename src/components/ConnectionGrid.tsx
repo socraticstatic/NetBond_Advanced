@@ -99,9 +99,9 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
         {/* Divider */}
         <div className="h-6 w-px bg-fw-secondary" />
 
-        {/* Filter - Figma: flat icon + text, no border */}
+        {/* Filter */}
         <Button
-          variant="ghost"
+          variant="secondary"
           icon={Filter}
           onClick={() => setShowFilters(true)}
           size="md"
@@ -121,9 +121,9 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
           </Button>
         )}
 
-        {/* Export - Figma: flat icon + text, no border */}
+        {/* Export */}
         <Button
-          variant="ghost"
+          variant="secondary"
           icon={Download}
           onClick={() => {
             const csv = [

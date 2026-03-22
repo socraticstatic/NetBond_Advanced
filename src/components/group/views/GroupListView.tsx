@@ -103,6 +103,7 @@ export function GroupListView({ groups, onDelete, onSelect }: GroupListViewProps
           id: col.id,
           label: col.label,
           sortable: SORTABLE_COLUMNS.includes(col.id),
+          sortKey: col.id as keyof Group,
           render: (group: Group) => renderColumnContent(group, col.id)
         }))}
         data={sortedGroups}

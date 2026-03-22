@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FileText, Download, Calendar, TrendingUp, Activity, DollarSign, Shield, Eye, ChevronDown, Filter, Search, LayoutGrid, List, X } from 'lucide-react';
 import { Button } from '../../common/Button';
+import { DataTable } from '../../common/DataTable';
 import { Modal } from '../../common/Modal';
 import { useMonitoring } from '../context/MonitoringContext';
 
@@ -1453,104 +1454,79 @@ export function StandardReports() {
         })}
       </div>
       ) : (
-        <div className="bg-fw-base rounded-2xl overflow-hidden">
-          <table className="w-full divide-y divide-fw-secondary">
-            <thead className="bg-fw-wash">
-              <tr>
-                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                  Report Name
-                </th>
-                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                  Category
-                </th>
-                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                  Last Generated
-                </th>
-                <th className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
-                  Status
-                </th>
-                <th className="px-6 h-12 text-right text-[14px] font-medium text-fw-heading">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-fw-base divide-y divide-fw-secondary">
-              {filteredReports.map((report) => {
+        <DataTable
+          tableId="standard-reports"
+          columns={[
+            {
+              id: 'name',
+              label: 'Report Name',
+              sortable: true,
+              render: (report: typeof filteredReports[0]) => {
                 const Icon = getCategoryIcon(report.category);
-                const isGenerating = generatingReports.has(report.id);
-
                 return (
-                  <tr key={report.id} className="hover:bg-fw-wash transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-fw-neutral rounded-lg">
-                          <Icon className="h-4 w-4 text-fw-body" />
-                        </div>
-                        <div className="ml-3">
-                          <div className="text-figma-base font-medium text-fw-heading">{report.name}</div>
-                          <div className="text-figma-sm text-fw-bodyLight">
-                            {report.format} • {report.frequency}
-                            {report.size && ` • ${report.size}`}
-                          </div>
-                        </div>
+                  <div className="flex items-center">
+                    <div className="flex-shrink-0 h-8 w-8 flex items-center justify-center bg-fw-neutral rounded-lg">
+                      <Icon className="h-4 w-4 text-fw-body" />
+                    </div>
+                    <div className="ml-3">
+                      <div className="text-[14px] font-medium text-fw-heading">{report.name}</div>
+                      <div className="text-[12px] text-fw-bodyLight">
+                        {report.format} - {report.frequency}
+                        {report.size && ` - ${report.size}`}
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-figma-sm font-medium rounded-full ${getCategoryColor(report.category)}`}>
-                        {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-body">
-                      {report.lastGenerated ? (
-                        <div className="flex items-center">
-                          <Calendar className="h-3.5 w-3.5 mr-1.5 text-fw-bodyLight" />
-                          <span>
-                            {new Date(report.lastGenerated).toLocaleDateString()}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-fw-bodyLight">Never</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {getStatusBadge(isGenerating ? 'generating' : report.status)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-[14px] font-medium">
-                      <div className="flex items-center justify-end space-x-2">
-                        {report.lastGenerated && (
-                          <>
-                            <button
-                              onClick={() => setPreviewReport(report)}
-                              className="text-fw-body hover:text-fw-heading p-1"
-                              title="Preview"
-                            >
-                              <Eye className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDownloadReport(report)}
-                              className="text-fw-body hover:text-fw-heading p-1"
-                              title="Download"
-                            >
-                              <Download className="h-4 w-4" />
-                            </button>
-                          </>
-                        )}
-                        <button
-                          onClick={() => handleGenerateReport(report.id)}
-                          disabled={isGenerating}
-                          className="text-fw-link hover:text-fw-linkHover font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                          title="Generate"
-                        >
-                          <FileText className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 );
-              })}
-            </tbody>
-          </table>
-        </div>
+              }
+            },
+            {
+              id: 'category',
+              label: 'Category',
+              sortable: true,
+              render: (report: typeof filteredReports[0]) => (
+                <span className={`px-2 py-1 text-[12px] font-medium rounded-full ${getCategoryColor(report.category)}`}>
+                  {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
+                </span>
+              )
+            },
+            {
+              id: 'lastGenerated',
+              label: 'Last Generated',
+              sortable: true,
+              render: (report: typeof filteredReports[0]) => report.lastGenerated ? (
+                <div className="flex items-center">
+                  <Calendar className="h-3.5 w-3.5 mr-1.5 text-fw-bodyLight" />
+                  <span>{new Date(report.lastGenerated).toLocaleDateString()}</span>
+                </div>
+              ) : (
+                <span className="text-fw-bodyLight">Never</span>
+              )
+            },
+            {
+              id: 'status',
+              label: 'Status',
+              render: (report: typeof filteredReports[0]) => getStatusBadge(generatingReports.has(report.id) ? 'generating' : report.status)
+            },
+          ]}
+          data={filteredReports}
+          keyField="id"
+          onRowClick={(report) => setPreviewReport(report)}
+          actions={(report) => {
+            const items = [];
+            if (report.lastGenerated) {
+              items.push({ id: 'preview', label: 'Preview', icon: <Eye className="h-4 w-4" />, onClick: () => setPreviewReport(report) });
+              items.push({ id: 'download', label: 'Download', icon: <Download className="h-4 w-4" />, onClick: () => handleDownloadReport(report) });
+            }
+            items.push({ id: 'generate', label: 'Generate', icon: <FileText className="h-4 w-4" />, onClick: () => handleGenerateReport(report.id) });
+            return items;
+          }}
+          emptyState={
+            <div className="py-8">
+              <FileText className="h-8 w-8 mx-auto text-fw-bodyLight mb-2" />
+              <p className="text-fw-bodyLight">No reports match filters</p>
+            </div>
+          }
+        />
       )}
 
       {filteredReports.length === 0 && (

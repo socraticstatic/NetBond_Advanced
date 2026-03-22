@@ -264,9 +264,8 @@ export function DashboardFilters({
             <Button
               onClick={handleRefresh}
               disabled={isRefreshing}
-              variant="ghost"
+              variant="secondary"
               icon={RefreshCw}
-              className="w-full"
             >
               {isRefreshing ? 'Refreshing...' : 'Refresh'}
             </Button>
@@ -352,7 +351,7 @@ export function DashboardFilters({
           <Button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            variant="ghost"
+            variant="secondary"
             size="md"
             icon={RefreshCw}
           >

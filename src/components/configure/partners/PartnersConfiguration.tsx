@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Search, Filter, Download, Plus, MoreVertical, Edit2, Trash2, ExternalLink } from 'lucide-react';
 import { Button } from '../../common/Button';
-import { BaseTable } from '../../common/BaseTable';
-import { OverflowMenu } from '../../common/OverflowMenu';
+import { DataTable } from '../../common/DataTable';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
 
 interface Partner {
   id: string;
@@ -15,6 +15,17 @@ interface Partner {
 export function PartnersConfiguration() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [sortField, setSortField] = useState('companyName');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
 
@@ -130,135 +141,54 @@ export function PartnersConfiguration() {
   };
 
   return (
-    <div className="p-6">
-      {/* Search and Controls */}
-      <div className="bg-fw-base p-4 rounded-2xl border border-fw-secondary mb-6">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search partners..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg text-figma-base font-medium text-fw-heading tracking-[-0.03em] placeholder:text-fw-bodyLight focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-            />
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="primary"
-              icon={Plus}
-              onClick={handleAddPartner}
-            >
-              Add Partner
-            </Button>
-            <Button
-              variant="outline"
-              icon={Filter}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              Filters
-            </Button>
-            <Button
-              variant="outline"
-              icon={Download}
-              onClick={handleExport}
-            >
-              Export
-            </Button>
-          </div>
-        </div>
-
-        {/* Expanded Filters */}
-        {showFilters && (
-          <div className="mt-4 pt-4 border-t border-fw-secondary">
-            <div className="grid grid-cols-2 gap-6">
-              {/* Regions */}
-              <div>
-                <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">Regions</h4>
-                <div className="space-y-2">
-                  {['North America', 'Europe', 'Asia Pacific', 'South America'].map((region) => (
-                    <label key={region} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={selectedRegions.includes(region)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedRegions([...selectedRegions, region]);
-                          } else {
-                            setSelectedRegions(selectedRegions.filter(r => r !== region));
-                          }
-                        }}
-                        className="h-4 w-4 text-fw-cobalt-600 rounded border-fw-secondary"
-                      />
-                      <span className="ml-2 text-figma-base font-medium text-fw-body tracking-[-0.03em]">{region}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Countries */}
-              <div>
-                <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">Countries</h4>
-                <div className="space-y-2">
-                  {['United States', 'Germany', 'Singapore', 'Brazil'].map((country) => (
-                    <label key={country} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={selectedCountries.includes(country)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedCountries([...selectedCountries, country]);
-                          } else {
-                            setSelectedCountries(selectedCountries.filter(c => c !== country));
-                          }
-                        }}
-                        className="h-4 w-4 text-fw-cobalt-600 rounded border-fw-secondary"
-                      />
-                      <span className="ml-2 text-figma-base font-medium text-fw-body tracking-[-0.03em]">{country}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+    <div>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div />
+        <Button variant="primary" icon={Plus} onClick={handleAddPartner}>
+          Add Partner
+        </Button>
       </div>
 
       {/* Partners Table */}
-      <div className="card">
-        <BaseTable
-          columns={columns}
-          data={partners}
-          keyField="id"
-          tableId="partners"
-          showColumnManager={true}
-          actions={(partner) => (
-            <OverflowMenu
-              items={[
-                {
-                  id: 'edit',
-                  label: 'Edit Partner',
-                  icon: <Edit2 className="h-4 w-4" />,
-                  onClick: () => handleEditPartner(partner)
-                },
-                {
-                  id: 'delete',
-                  label: 'Delete Partner',
-                  icon: <Trash2 className="h-4 w-4" />,
-                  onClick: () => handleDeletePartner(partner),
-                  variant: 'danger'
-                }
-              ]}
-            />
-          )}
-          emptyState={
+      <DataTable
+        tableId="partners"
+        toolbar={
+          <SearchFilterBar
+            searchPlaceholder="Search partners ..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            onFilter={() => setShowFilters(!showFilters)}
+            onExport={handleExport}
+          />
+        }
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onSort={handleSort}
+        columns={columns}
+        data={partners}
+        keyField="id"
+        actions={(partner) => [
+          {
+            id: 'edit',
+            label: 'Edit Partner',
+            icon: <Edit2 className="h-4 w-4" />,
+            onClick: () => handleEditPartner(partner)
+          },
+          {
+            id: 'delete',
+            label: 'Delete Partner',
+            icon: <Trash2 className="h-4 w-4" />,
+            onClick: () => handleDeletePartner(partner),
+            variant: 'danger' as const
+          }
+        ]}
+        emptyState={
             <div className="text-center py-12">
               <p className="text-fw-bodyLight">No partners found</p>
             </div>
           }
-        />
-      </div>
+      />
     </div>
   );
 }
