@@ -4,9 +4,10 @@ import { StandardReports } from './StandardReports';
 import { CustomTemplates } from './CustomTemplates';
 import { ScheduledReports } from './ScheduledReports';
 import { ComplianceReports } from './ComplianceReports';
-import { FileText, Calendar, BookTemplate as Template, ShieldCheck, LayoutGrid } from 'lucide-react';
+import { CustomReports } from './CustomReports';
+import { FileText, Calendar, BookTemplate as Template, ShieldCheck, LayoutGrid, Sliders } from 'lucide-react';
 
-type ReportTab = 'overview' | 'standard' | 'templates' | 'scheduled' | 'compliance';
+type ReportTab = 'overview' | 'standard' | 'templates' | 'scheduled' | 'compliance' | 'custom';
 
 interface ReportingProps {
   selectedConnection: string;
@@ -27,14 +28,15 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
     }
   }, [location, defaultTab]);
 
-  // Figma tab order: History, Standard Reports, Compliance, Templates, Scheduled
+  // Figma tab order: History, Standard Reports, Compliance, Templates, Scheduled, Custom
   // Figma layout: vertical sidebar nav on left, content on right, separated by vertical line
   const tabs = [
     { id: 'overview' as const, label: 'History', icon: LayoutGrid },
     { id: 'standard' as const, label: 'Standard Reports', icon: FileText },
     { id: 'compliance' as const, label: 'Compliance', icon: ShieldCheck },
     { id: 'templates' as const, label: 'Templates', icon: Template },
-    { id: 'scheduled' as const, label: 'Scheduled', icon: Calendar }
+    { id: 'scheduled' as const, label: 'Scheduled', icon: Calendar },
+    { id: 'custom' as const, label: 'Custom', icon: Sliders }
   ];
 
   const renderContent = () => {
@@ -49,6 +51,8 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
         return <ScheduledReports />;
       case 'compliance':
         return <ComplianceReports />;
+      case 'custom':
+        return <CustomReports />;
       default:
         return null;
     }
