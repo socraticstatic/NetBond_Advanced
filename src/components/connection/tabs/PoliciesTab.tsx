@@ -449,11 +449,10 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                   </Button>
 
                   <Button
-                    variant="outline"
+                    variant="outline-danger"
                     size="sm"
                     icon={Trash2}
                     onClick={() => handleDeletePolicy(policy.id)}
-                    className="text-fw-error border-fw-error hover:bg-[var(--status-error-bg)]"
                   >
                     Delete
                   </Button>

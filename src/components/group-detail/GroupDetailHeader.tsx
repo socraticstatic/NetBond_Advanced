@@ -76,10 +76,9 @@ export function GroupDetailHeader({ group, onDeleteClick }: GroupDetailHeaderPro
             </Button>
 
             <Button
-              variant="outline"
+              variant="outline-danger"
               icon={Trash2}
               onClick={onDeleteClick}
-              className="text-fw-error border-fw-error/30 hover:bg-fw-error/10"
             >
               Delete
             </Button>

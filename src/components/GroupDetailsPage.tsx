@@ -247,10 +247,9 @@ export function GroupDetailsPage() {
 
             {/* Delete Button */}
             <Button
-              variant="outline"
+              variant="outline-danger"
               icon={Trash2}
               onClick={() => setShowDeleteConfirm(true)}
-              className="text-fw-error border-fw-error/30 hover:bg-fw-error/10"
             >
               Delete
             </Button>
