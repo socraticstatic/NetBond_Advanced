@@ -64,20 +64,9 @@ const newsItems: NewsItem[] = [
 
 export function NewsPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Page Header */}
-      <div className="flex items-start gap-4 mb-8">
-        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-fw-wash shrink-0 mt-0.5">
-          <Megaphone className="h-5 w-5 text-fw-link" />
-        </div>
-        <div>
-          <h1 className="text-[24px] font-bold text-fw-heading tracking-[-0.03em]">
-            News &amp; Announcements
-          </h1>
-          <p className="text-[14px] font-medium text-fw-body tracking-[-0.03em] mt-1">
-            Platform updates, maintenance windows, and service announcements
-          </p>
-        </div>
+    <div className="max-w-4xl mx-auto py-4">
+      {/* News content - header provided by SubNav wrapper */}
+      <div>
       </div>
 
       {/* News List */}
