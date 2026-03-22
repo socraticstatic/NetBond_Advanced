@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { X, Users, Building, Tag, Plus, Check } from 'lucide-react';
 import { Group, GroupAddress, GroupContact } from '../../../types/group';
 import { Connection, User } from '../../../types';
-import { Button } from '../../common/Button';
 
 interface AddGroupModalProps {
   isOpen: boolean;
@@ -97,15 +96,16 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
     onSave(newGroup);
   };
 
+  const inputClass = 'w-full h-9 px-3 text-[14px] border border-[#686e74] rounded-lg focus:ring-fw-active focus:border-fw-active';
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-fw-base rounded-xl shadow-xl max-w-4xl w-full mx-4 overflow-hidden">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-fw-secondary flex items-center justify-between">
-          <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em] flex items-center">
-            <Users className="h-5 w-5 text-fw-link mr-2" />
+    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: 'rgba(27,27,29,0.56)' }}>
+      <div className="bg-fw-base rounded-[24px] shadow-xl w-full mx-4 flex flex-col" style={{ maxWidth: '1056px', height: '636px' }}>
+        {/* Header - inline title with close button */}
+        <div className="px-8 pt-6 pb-4 flex items-center justify-between">
+          <h3 className="text-[24px] font-bold text-fw-heading tracking-[-0.03em]">
             Create New Pool
           </h3>
           <button
@@ -117,72 +117,66 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
         </div>
 
         {/* Step Indicator */}
-        <div className="px-6 py-4 bg-fw-wash border-b border-fw-secondary">
-          <div className="flex justify-between">
+        <div className="px-8 pb-6">
+          <div className="flex items-start">
             {steps.map((s, i) => (
-              <div key={i} className="flex flex-col items-center">
-                <div className={`
-                  flex items-center justify-center w-10 h-10 rounded-full mb-2
-                  ${step === i
-                    ? 'bg-fw-cobalt-600 text-white'
-                    : step > i
-                      ? 'bg-fw-success text-white'
-                      : 'bg-fw-neutral text-fw-body'
-                  }
-                `}>
-                  {step > i ? <Check className="h-5 w-5" /> : (i + 1)}
+              <React.Fragment key={i}>
+                <div className="flex flex-col items-center" style={{ minWidth: '80px' }}>
+                  <div className={`
+                    flex items-center justify-center w-7 h-7 rounded-full text-[13px] font-medium text-white
+                    ${step === i
+                      ? 'bg-[#0057b8]'
+                      : step > i
+                        ? 'bg-[#2d7e24]'
+                        : 'bg-[#d9d9d9]'
+                    }
+                  `}>
+                    {step > i ? <Check className="h-4 w-4" /> : (i + 1)}
+                  </div>
+                  <p className="text-[16px] font-medium text-[#1d2329] mt-1.5">{s.title}</p>
+                  <p className="text-[14px] font-medium text-[#454b52]">{s.description}</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-figma-base font-medium text-fw-heading">{s.title}</p>
-                  <p className="text-figma-sm text-fw-bodyLight">{s.description}</p>
-                </div>
-              </div>
+                {i < steps.length - 1 && (
+                  <div className="flex-1 mt-3.5 mx-2">
+                    <div
+                      className="h-0.5 w-full"
+                      style={{ backgroundColor: step > i ? '#2d7e24' : '#d9d9d9' }}
+                    />
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-6 max-h-[60vh] overflow-y-auto">
+        <div className="px-8 flex-1 overflow-y-auto">
           {step === 0 && (
-            <div className="space-y-6">
+            <div className="space-y-5">
               <div>
-                <label htmlFor="group-name" className="block text-figma-base font-medium text-fw-body mb-2">
-                  Pool Name <span className="text-fw-error">*</span>
+                <label htmlFor="group-name" className="block text-[14px] font-medium text-fw-heading mb-1.5">
+                  Pool Name <span className="text-[#c70032]">*</span>
                 </label>
                 <input
                   id="group-name"
                   type="text"
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value)}
-                  className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                  className={inputClass}
                   placeholder="Enter pool name"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="group-description" className="block text-figma-base font-medium text-fw-body mb-2">
-                  Description
-                </label>
-                <textarea
-                  id="group-description"
-                  value={groupDescription}
-                  onChange={(e) => setGroupDescription(e.target.value)}
-                  rows={3}
-                  className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
-                  placeholder="Enter pool description"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="group-type" className="block text-figma-base font-medium text-fw-body mb-2">
-                  Pool Type <span className="text-fw-error">*</span>
+                <label htmlFor="group-type" className="block text-[14px] font-medium text-fw-heading mb-1.5">
+                  Pool Type <span className="text-[#c70032]">*</span>
                 </label>
                 <select
                   id="group-type"
                   value={groupType}
                   onChange={(e) => setGroupType(e.target.value as Group['type'])}
-                  className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                  className={inputClass}
                   required
                 >
                   <option value="business">Business</option>
@@ -192,88 +186,103 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                   <option value="custom">Custom</option>
                 </select>
               </div>
+
+              <div>
+                <label htmlFor="group-description" className="block text-[14px] font-medium text-fw-heading mb-1.5">
+                  Description
+                </label>
+                <textarea
+                  id="group-description"
+                  value={groupDescription}
+                  onChange={(e) => setGroupDescription(e.target.value)}
+                  className="w-full px-3 text-[14px] border border-[#686e74] rounded-lg focus:ring-fw-active focus:border-fw-active"
+                  style={{ height: '76px' }}
+                  placeholder="Enter pool description"
+                />
+              </div>
             </div>
           )}
 
           {step === 1 && (
-            <div className="space-y-6">
-              <div>
-                <label className="block text-figma-base font-medium text-fw-body mb-2">
-                  Select Users
-                </label>
-                <div className="border border-fw-secondary rounded-lg overflow-hidden">
-                  <div className="max-h-60 overflow-y-auto">
-                    <table className="min-w-full divide-y divide-fw-secondary">
-                      <thead className="bg-fw-wash">
-                        <tr>
-                          <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <span className="text-[16px] font-bold text-fw-heading">Select Users</span>
+                <span
+                  className="text-[13px] font-medium text-[#0057b8] px-2.5 py-0.5 rounded-[800px]"
+                  style={{ backgroundColor: 'rgba(0,87,184,0.16)' }}
+                >
+                  {selectedUsers.length} users selected
+                </span>
+              </div>
+              <div className="border border-fw-secondary rounded-lg overflow-hidden">
+                <div className="max-h-60 overflow-y-auto">
+                  <table className="min-w-full divide-y divide-fw-secondary">
+                    <thead className="bg-fw-wash">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedUsers(users.map(user => user.id));
+                              } else {
+                                setSelectedUsers([]);
+                              }
+                            }}
+                            checked={selectedUsers.length === users.length && users.length > 0}
+                          />
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                          Name
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                          Role
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
+                          Email
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-fw-base divide-y divide-fw-secondary">
+                      {users.map((user) => (
+                        <tr key={user.id} className="hover:bg-fw-wash">
+                          <td className="px-6 py-4 whitespace-nowrap">
                             <input
                               type="checkbox"
                               className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  setSelectedUsers(users.map(user => user.id));
+                              onChange={() => {
+                                if (selectedUsers.includes(user.id)) {
+                                  setSelectedUsers(selectedUsers.filter(id => id !== user.id));
                                 } else {
-                                  setSelectedUsers([]);
+                                  setSelectedUsers([...selectedUsers, user.id]);
                                 }
                               }}
-                              checked={selectedUsers.length === users.length && users.length > 0}
+                              checked={selectedUsers.includes(user.id)}
                             />
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
-                            Name
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
-                            Role
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
-                            Email
-                          </th>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-[14px] font-bold text-[#454b52]">{user.name}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-[14px] text-fw-bodyLight">{user.role}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-[14px] text-fw-bodyLight">{user.email}</div>
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody className="bg-fw-base divide-y divide-fw-secondary">
-                        {users.map((user) => (
-                          <tr key={user.id} className="hover:bg-fw-wash">
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <input
-                                type="checkbox"
-                                className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
-                                onChange={() => {
-                                  if (selectedUsers.includes(user.id)) {
-                                    setSelectedUsers(selectedUsers.filter(id => id !== user.id));
-                                  } else {
-                                    setSelectedUsers([...selectedUsers, user.id]);
-                                  }
-                                }}
-                                checked={selectedUsers.includes(user.id)}
-                              />
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-figma-base font-medium text-fw-heading">{user.name}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-figma-base text-fw-bodyLight">{user.role}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-figma-base text-fw-bodyLight">{user.email}</div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-                <p className="mt-2 text-figma-base text-fw-bodyLight">
-                  {selectedUsers.length} users selected
-                </p>
               </div>
             </div>
           )}
 
           {step === 2 && (
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div>
-                <label className="block text-figma-base font-medium text-fw-body mb-2">
+                <label className="block text-[14px] font-medium text-fw-heading mb-2">
                   Select Connections
                 </label>
                 <div className="border border-fw-secondary rounded-lg overflow-hidden">
@@ -281,7 +290,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                     <table className="min-w-full divide-y divide-fw-secondary">
                       <thead className="bg-fw-wash">
                         <tr>
-                          <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                          <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
                             <input
                               type="checkbox"
                               className="h-4 w-4 text-fw-link focus:ring-fw-active border-fw-secondary rounded"
@@ -295,13 +304,13 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                               checked={selectedConnections.length === connections.length && connections.length > 0}
                             />
                           </th>
-                          <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                          <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
                             Name
                           </th>
-                          <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                          <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
                             Type
                           </th>
-                          <th scope="col" className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">
+                          <th scope="col" className="px-6 py-3 text-left text-[14px] font-medium text-[#1d2329]">
                             Status
                           </th>
                         </tr>
@@ -325,15 +334,20 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                               />
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-figma-base font-medium text-fw-heading">{connection.name}</div>
+                              <div className="text-[14px] font-bold text-[#454b52]">{connection.name}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-figma-base text-fw-bodyLight">{connection.type}</div>
+                              <div className="text-[14px] text-fw-bodyLight">{connection.type}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`px-2 py-1 inline-flex text-figma-sm leading-5 font-semibold rounded-full ${
-                                connection.status === 'Active' ? 'bg-green-50 text-fw-success' : 'bg-fw-neutral text-fw-body'
-                              }`}>
+                              <span
+                                className={`px-2 py-1 inline-flex text-[13px] leading-5 font-semibold rounded-[4px]`}
+                                style={
+                                  connection.status === 'Active'
+                                    ? { backgroundColor: 'rgba(45,126,36,0.16)', color: '#2d7e24' }
+                                    : { backgroundColor: 'rgba(104,110,116,0.16)', color: '#686e74' }
+                                }
+                              >
                                 {connection.status}
                               </span>
                             </td>
@@ -343,7 +357,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                     </table>
                   </div>
                 </div>
-                <p className="mt-2 text-figma-base text-fw-bodyLight">
+                <p className="mt-2 text-[14px] text-fw-bodyLight">
                   {selectedConnections.length} connections selected
                 </p>
               </div>
@@ -351,7 +365,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
           )}
 
           {step === 3 && (
-            <div className="space-y-6">
+            <div className="space-y-5">
               <div>
                 <h4 className="text-base font-medium text-fw-heading mb-4 flex items-center">
                   <Building className="h-5 w-5 text-fw-bodyLight mr-2" />
@@ -359,7 +373,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="street" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="street" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       Street Address
                     </label>
                     <input
@@ -367,12 +381,12 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={address.street}
                       onChange={(e) => setAddress({...address, street: e.target.value})}
-                      className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                      className={inputClass}
                       placeholder="123 Main St"
                     />
                   </div>
                   <div>
-                    <label htmlFor="city" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="city" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       City
                     </label>
                     <input
@@ -380,12 +394,12 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={address.city}
                       onChange={(e) => setAddress({...address, city: e.target.value})}
-                      className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                      className={inputClass}
                       placeholder="Anytown"
                     />
                   </div>
                   <div>
-                    <label htmlFor="state" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="state" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       State/Province
                     </label>
                     <input
@@ -393,12 +407,12 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={address.state}
                       onChange={(e) => setAddress({...address, state: e.target.value})}
-                      className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                      className={inputClass}
                       placeholder="CA"
                     />
                   </div>
                   <div>
-                    <label htmlFor="zipCode" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="zipCode" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       Zip/Postal Code
                     </label>
                     <input
@@ -406,12 +420,12 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={address.zipCode}
                       onChange={(e) => setAddress({...address, zipCode: e.target.value})}
-                      className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                      className={inputClass}
                       placeholder="12345"
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label htmlFor="country" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="country" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       Country
                     </label>
                     <input
@@ -419,21 +433,21 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={address.country}
                       onChange={(e) => setAddress({...address, country: e.target.value})}
-                      className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                      className={inputClass}
                       placeholder="United States"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="pt-6">
+              <div className="pt-4">
                 <h4 className="text-base font-medium text-fw-heading mb-4 flex items-center">
                   <Users className="h-5 w-5 text-fw-bodyLight mr-2" />
                   Contact Information
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="contactName" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="contactName" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       Contact Name
                     </label>
                     <input
@@ -441,12 +455,12 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={contact.name}
                       onChange={(e) => setContact({...contact, name: e.target.value})}
-                      className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                      className={inputClass}
                       placeholder="John Doe"
                     />
                   </div>
                   <div>
-                    <label htmlFor="contactEmail" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="contactEmail" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       Email
                     </label>
                     <input
@@ -454,12 +468,12 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="email"
                       value={contact.email}
                       onChange={(e) => setContact({...contact, email: e.target.value})}
-                      className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                      className={inputClass}
                       placeholder="john.doe@example.com"
                     />
                   </div>
                   <div>
-                    <label htmlFor="contactPhone" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="contactPhone" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       Phone
                     </label>
                     <input
@@ -467,12 +481,12 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="tel"
                       value={contact.phone}
                       onChange={(e) => setContact({...contact, phone: e.target.value})}
-                      className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                      className={inputClass}
                       placeholder="(123) 456-7890"
                     />
                   </div>
                   <div>
-                    <label htmlFor="contactRole" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="contactRole" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       Role
                     </label>
                     <input
@@ -480,21 +494,21 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={contact.role}
                       onChange={(e) => setContact({...contact, role: e.target.value})}
-                      className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                      className={inputClass}
                       placeholder="IT Manager"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="pt-6">
+              <div className="pt-4">
                 <h4 className="text-base font-medium text-fw-heading mb-4 flex items-center">
                   <Tag className="h-5 w-5 text-fw-bodyLight mr-2" />
                   Tags
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <label htmlFor="tagKey" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="tagKey" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       Tag Key
                     </label>
                     <input
@@ -502,12 +516,12 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                       type="text"
                       value={tagKey}
                       onChange={(e) => setTagKey(e.target.value)}
-                      className="w-full px-4 py-3 text-base border border-fw-secondary rounded-lg focus:ring-fw-active focus:border-fw-active"
+                      className={inputClass}
                       placeholder="e.g., department"
                     />
                   </div>
                   <div>
-                    <label htmlFor="tagValue" className="block text-figma-base font-medium text-fw-body mb-2">
+                    <label htmlFor="tagValue" className="block text-[14px] font-medium text-fw-heading mb-1.5">
                       Tag Value
                     </label>
                     <div className="flex">
@@ -516,16 +530,16 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                         type="text"
                         value={tagValue}
                         onChange={(e) => setTagValue(e.target.value)}
-                        className="w-full px-4 py-3 text-base border border-fw-secondary rounded-l-lg focus:ring-fw-active focus:border-fw-active"
+                        className="w-full h-9 px-3 text-[14px] border border-[#686e74] rounded-l-lg focus:ring-fw-active focus:border-fw-active"
                         placeholder="e.g., IT"
                       />
                       <button
                         type="button"
                         onClick={handleAddTag}
                         disabled={!tagKey || !tagValue}
-                        className="px-4 bg-fw-cobalt-600 text-white rounded-r-lg disabled:bg-fw-neutral disabled:cursor-not-allowed"
+                        className="px-3 h-9 bg-fw-cobalt-600 text-white rounded-r-lg disabled:bg-fw-neutral disabled:cursor-not-allowed"
                       >
-                        <Plus className="h-5 w-5" />
+                        <Plus className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -535,7 +549,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                 <div className="flex flex-wrap gap-2 mt-4">
                   {Object.entries(tags).map(([key, value]) => (
                     <div key={key} className="flex items-center bg-fw-neutral px-3 py-1 rounded-full">
-                      <span className="text-figma-base text-fw-body">
+                      <span className="text-[14px] text-fw-body">
                         <span className="font-medium">{key}:</span> {value}
                       </span>
                       <button
@@ -558,15 +572,15 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                 <h4 className="text-base font-medium text-fw-heading mb-4">Basic Information</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-figma-base text-fw-bodyLight">Name</p>
+                    <p className="text-[14px] text-fw-bodyLight">Name</p>
                     <p className="text-base font-medium text-fw-heading">{groupName}</p>
                   </div>
                   <div>
-                    <p className="text-figma-base text-fw-bodyLight">Type</p>
+                    <p className="text-[14px] text-fw-bodyLight">Type</p>
                     <p className="text-base font-medium text-fw-heading capitalize">{groupType}</p>
                   </div>
                   <div className="md:col-span-2">
-                    <p className="text-figma-base text-fw-bodyLight">Description</p>
+                    <p className="text-[14px] text-fw-bodyLight">Description</p>
                     <p className="text-base text-fw-heading">{groupDescription || 'No description provided'}</p>
                   </div>
                 </div>
@@ -582,7 +596,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                     {selectedUsers.map((userId) => {
                       const user = users.find(u => u.id === userId);
                       return user ? (
-                        <div key={userId} className="bg-fw-accent text-fw-link px-3 py-1 rounded-full text-figma-base">
+                        <div key={userId} className="bg-fw-accent text-fw-link px-3 py-1 rounded-full text-[14px]">
                           {user.name}
                         </div>
                       ) : null;
@@ -601,7 +615,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                     {selectedConnections.map((connId) => {
                       const connection = connections.find(c => c.id.toString() === connId);
                       return connection ? (
-                        <div key={connId} className="bg-fw-accent text-fw-link px-3 py-1 rounded-full text-figma-base">
+                        <div key={connId} className="bg-fw-accent text-fw-link px-3 py-1 rounded-full text-[14px]">
                           {connection.name}
                         </div>
                       ) : null;
@@ -616,8 +630,8 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
 
                   {address.street && (
                     <div className="mb-4">
-                      <p className="text-figma-base font-medium text-fw-body">Address</p>
-                      <p className="text-figma-base text-fw-heading">
+                      <p className="text-[14px] font-medium text-fw-body">Address</p>
+                      <p className="text-[14px] text-fw-heading">
                         {address.street}, {address.city}, {address.state} {address.zipCode}, {address.country}
                       </p>
                     </div>
@@ -625,8 +639,8 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
 
                   {contact.name && (
                     <div className="mb-4">
-                      <p className="text-figma-base font-medium text-fw-body">Contact</p>
-                      <p className="text-figma-base text-fw-heading">
+                      <p className="text-[14px] font-medium text-fw-body">Contact</p>
+                      <p className="text-[14px] text-fw-heading">
                         {contact.name} ({contact.role}) - {contact.email} - {contact.phone}
                       </p>
                     </div>
@@ -634,10 +648,10 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
 
                   {Object.keys(tags).length > 0 && (
                     <div>
-                      <p className="text-figma-base font-medium text-fw-body mb-2">Tags</p>
+                      <p className="text-[14px] font-medium text-fw-body mb-2">Tags</p>
                       <div className="flex flex-wrap gap-2">
                         {Object.entries(tags).map(([key, value]) => (
-                          <div key={key} className="bg-fw-neutral px-3 py-1 rounded-full text-figma-base text-fw-body">
+                          <div key={key} className="bg-fw-neutral px-3 py-1 rounded-full text-[14px] text-fw-body">
                             <span className="font-medium">{key}:</span> {value}
                           </div>
                         ))}
@@ -651,39 +665,39 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-fw-wash border-t border-fw-secondary flex justify-between">
+        <div className="px-8 py-6 flex justify-end gap-2">
           {step > 0 ? (
-            <Button
-              variant="outline"
+            <button
               onClick={handleBack}
+              className="h-9 px-5 text-[14px] font-medium rounded-[800px] border border-fw-link text-fw-link bg-transparent hover:bg-fw-wash"
             >
               Back
-            </Button>
+            </button>
           ) : (
-            <Button
-              variant="outline"
+            <button
               onClick={onClose}
+              className="h-9 px-5 text-[14px] font-medium rounded-[800px] border border-fw-link text-fw-link bg-transparent hover:bg-fw-wash"
             >
               Cancel
-            </Button>
+            </button>
           )}
 
           {step < steps.length - 1 ? (
-            <Button
-              variant="primary"
+            <button
               onClick={handleNext}
               disabled={step === 0 && !groupName}
+              className="h-9 px-5 text-[14px] font-medium rounded-[800px] bg-fw-link text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next
-            </Button>
+              Continue
+            </button>
           ) : (
-            <Button
-              variant="primary"
+            <button
               onClick={handleSave}
               disabled={!groupName}
+              className="h-9 px-5 text-[14px] font-medium rounded-[800px] bg-fw-link text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Create Pool
-            </Button>
+            </button>
           )}
         </div>
       </div>
