@@ -1,0 +1,136 @@
+import { Megaphone, ChevronRight, Calendar } from 'lucide-react';
+import { Badge } from '../common/Badge';
+
+type NewsCategory = 'maintenance' | 'feature' | 'upgrade' | 'security' | 'announcement';
+
+interface NewsItem {
+  id: string;
+  date: string;
+  title: string;
+  category: NewsCategory;
+  description: string;
+}
+
+const categoryConfig: Record<NewsCategory, { label: string; color: string; bg: string }> = {
+  maintenance: { label: 'Maintenance',   color: '#ea712f', bg: 'rgba(234,113,47,0.16)' },
+  feature:     { label: 'New Feature',   color: '#0057b8', bg: 'rgba(0,87,184,0.16)'  },
+  upgrade:     { label: 'Upgrade',       color: '#2d7e24', bg: 'rgba(45,126,36,0.16)' },
+  security:    { label: 'Security',      color: '#c70032', bg: 'rgba(199,0,50,0.16)'  },
+  announcement:{ label: 'Announcement',  color: '#af29bb', bg: 'rgba(175,41,187,0.16)'},
+};
+
+const newsItems: NewsItem[] = [
+  {
+    id: '1',
+    date: 'March 25, 2026',
+    title: 'Scheduled Infrastructure Maintenance — Central Region',
+    category: 'maintenance',
+    description:
+      'Planned maintenance on core routing infrastructure in the Central US region from 02:00–06:00 CT. Management portal and API gateway will be temporarily unavailable. All active connections remain unaffected during the window.',
+  },
+  {
+    id: '2',
+    title: 'Network Designer Now Generally Available',
+    date: 'March 18, 2026',
+    category: 'feature',
+    description:
+      'The Network Designer tool has graduated from beta and is now available to all accounts. Design, validate, and provision multi-cloud topologies with drag-and-drop templates, a live validation engine, and PDF export.',
+  },
+  {
+    id: '3',
+    title: 'BGP Route Table Capacity Increased to 1M Prefixes',
+    date: 'March 10, 2026',
+    category: 'upgrade',
+    description:
+      'All NetBond cloud router instances have been upgraded to support up to 1 million BGP prefixes per VRF. No configuration changes are required. Updated capacity limits are reflected in the Cloud Router detail pages.',
+  },
+  {
+    id: '4',
+    title: 'TLS 1.0 and 1.1 End-of-Support Notice',
+    date: 'February 28, 2026',
+    category: 'security',
+    description:
+      'Support for TLS 1.0 and TLS 1.1 on the NetBond management API and portal will end on April 30, 2026. All API integrations must migrate to TLS 1.2 or higher. Contact support if you need assistance auditing your integration stack.',
+  },
+  {
+    id: '5',
+    title: 'Azure ExpressRoute Locations Expanded — 8 New metros',
+    date: 'February 14, 2026',
+    category: 'announcement',
+    description:
+      'AT&T NetBond now supports direct connectivity to eight additional Azure ExpressRoute peering locations, including Seattle, Toronto, Amsterdam, and Singapore. New location options are immediately available in the connection wizard.',
+  },
+];
+
+export function NewsPage() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Page Header */}
+      <div className="flex items-start gap-4 mb-8">
+        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-fw-wash shrink-0 mt-0.5">
+          <Megaphone className="h-5 w-5 text-fw-link" />
+        </div>
+        <div>
+          <h1 className="text-[24px] font-bold text-fw-heading tracking-[-0.03em]">
+            News &amp; Announcements
+          </h1>
+          <p className="text-[14px] font-medium text-fw-body tracking-[-0.03em] mt-1">
+            Platform updates, maintenance windows, and service announcements
+          </p>
+        </div>
+      </div>
+
+      {/* News List */}
+      <div className="flex flex-col gap-4">
+        {newsItems.map((item) => {
+          const cat = categoryConfig[item.category];
+          return (
+            <article
+              key={item.id}
+              className="bg-fw-base rounded-2xl border border-fw-secondary p-6 flex flex-col sm:flex-row sm:items-start gap-4"
+            >
+              {/* Date column */}
+              <div className="flex items-center gap-1.5 text-[12px] font-medium text-fw-bodyLight whitespace-nowrap sm:min-w-[140px] shrink-0">
+                <Calendar className="h-3.5 w-3.5" />
+                {item.date}
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <Badge color={cat.color} bg={cat.bg} size="md">
+                    {cat.label}
+                  </Badge>
+                  <h2 className="text-[14px] font-semibold text-fw-heading tracking-[-0.03em]">
+                    {item.title}
+                  </h2>
+                </div>
+                <p className="text-[14px] font-medium text-fw-body tracking-[-0.03em] leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+
+              {/* Read More */}
+              <div className="shrink-0 sm:self-center">
+                <button
+                  className="inline-flex items-center text-[13px] font-medium text-fw-link hover:text-fw-linkHover transition-colors whitespace-nowrap"
+                  onClick={() => {
+                    window.addToast?.({
+                      type: 'info',
+                      title: 'Full article coming soon',
+                      message: item.title,
+                      duration: 3000,
+                    });
+                  }}
+                >
+                  Read More
+                  <ChevronRight className="h-4 w-4 ml-0.5" />
+                </button>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

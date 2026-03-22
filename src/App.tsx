@@ -154,6 +154,12 @@ const LazyTicketingIndex = lazy(() =>
   }))
 );
 
+const LazyCMSBannerEditor = lazy(() =>
+  import('./components/support/CMSBannerEditor').then(module => ({
+    default: module.CMSBannerEditor
+  }))
+);
+
 const LazyCreateTicket = lazy(() =>
   import('./components/ticketing/CreateTicket').then(module => ({
     default: module.CreateTicket
@@ -193,6 +199,12 @@ const LazyNoInternetPage = lazy(() =>
 const LazyMaintenancePage = lazy(() =>
   import('./components/pages/MaintenancePage').then(module => ({
     default: module.MaintenancePage
+  }))
+);
+
+const LazyNewsPage = lazy(() =>
+  import('./components/pages/NewsPage').then(module => ({
+    default: module.NewsPage
   }))
 );
 
@@ -489,6 +501,19 @@ function App() {
                   </AsyncBoundary>
                 } />
 
+                <Route path="/support/banners" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <SubNav
+                      title="Banner Management"
+                      description="Manage promotional and informational banners"
+                    >
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyCMSBannerEditor />
+                      </Suspense>
+                    </SubNav>
+                  </AsyncBoundary>
+                } />
+
                 <Route path="/glossary" element={
                   <AsyncBoundary fallback={<LoadingFallback />}>
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
@@ -496,6 +521,19 @@ function App() {
                         <LazyGlossaryPage />
                       </Suspense>
                     </div>
+                  </AsyncBoundary>
+                } />
+
+                <Route path="/news" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <SubNav
+                      title="News & Announcements"
+                      description="Platform updates, maintenance windows, and service announcements"
+                    >
+                      <Suspense fallback={<LoadingFallback />}>
+                        <LazyNewsPage />
+                      </Suspense>
+                    </SubNav>
                   </AsyncBoundary>
                 } />
 
