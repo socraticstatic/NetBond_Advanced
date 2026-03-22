@@ -9,6 +9,7 @@ import { useStore } from './store/useStore';
 import { ThemeProvider } from './components/ThemeProvider';
 import { MobileMenu } from './components/navigation/MobileMenu';
 import { SmartAssistant } from './components/SmartAssistant';
+import { FeedbackWidget } from './components/feedback/FeedbackWidget';
 import { NavigationStateProvider } from './components/common/layouts/NavigationStateProvider';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { GroupGrid } from './components/GroupGrid';
@@ -673,6 +674,7 @@ function App() {
               notifications={3}
             />
             <SmartAssistant />
+            <FeedbackWidget />
             <MaintenanceModal
               isOpen={showMaintenance}
               onClose={() => setShowMaintenance(false)}
