@@ -45,15 +45,15 @@ export function NodeConfigPanel({ node, onUpdate, onDelete, onClose }: NodeConfi
       onDelete={() => onDelete(node.id)}
     >
       {/* Tabs */}
-      <div className="flex border-b border-fw-secondary mb-4 -mx-4 px-4">
+      <div className="flex gap-1 mb-4">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-3 py-2 text-figma-sm font-medium transition-colors ${
+            className={`px-3 py-1.5 rounded-lg text-figma-sm font-medium transition-colors ${
               activeTab === tab.id
-                ? 'border-b-2 border-fw-active text-fw-heading'
-                : 'text-fw-bodyLight hover:text-fw-body'
+                ? 'bg-fw-wash text-fw-heading'
+                : 'text-fw-bodyLight hover:text-fw-body hover:bg-fw-wash/50'
             }`}
           >
             {tab.label}
@@ -77,14 +77,14 @@ export function NodeConfigPanel({ node, onUpdate, onDelete, onClose }: NodeConfi
           <div className="flex gap-2">
             <div className="flex-1">
               <label className={LABEL_CLASS}>Type</label>
-              <div className="inline-flex items-center px-2 py-1 rounded-md bg-fw-wash text-figma-sm text-fw-body border border-fw-secondary">
+              <div className="text-figma-sm text-fw-body">
                 {node.type}
               </div>
             </div>
             {node.subType && (
               <div className="flex-1">
                 <label className={LABEL_CLASS}>SubType</label>
-                <div className="inline-flex items-center px-2 py-1 rounded-md bg-fw-wash text-figma-sm text-fw-body border border-fw-secondary">
+                <div className="text-figma-sm text-fw-body">
                   {node.subType}
                 </div>
               </div>

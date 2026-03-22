@@ -14,9 +14,9 @@
   @apply rounded-full;
 }
 
-/* Quick Action buttons (view toggle icons) - subtle rounded corners */
+/* Quick Action buttons (view toggle icons) - square with subtle rounded corners, NOT pills */
 .quick-action-btn {
-  border-radius: 0.375rem;
+  border-radius: 0.375rem !important;
 }
 
 /* Network Designer Configuration Tabs */

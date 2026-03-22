@@ -15,12 +15,9 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, #a8ccec 0%, #c5dcf2 50%, #d6e7f7 100%)' }}>
-      {/* Top dark section */}
-      <div className="w-full" style={{ background: 'linear-gradient(180deg, #1a3a5c 0%, #2a5a8c 60%, #a8ccec 100%)', height: '320px' }} />
-
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#e8f0fe' }}>
       {/* Content */}
-      <div className="flex-1 flex items-start justify-center -mt-40 px-8">
+      <div className="flex-1 flex items-center justify-center px-8">
         <div className="w-full max-w-[596px]">
           {/* Trials badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg mb-4">

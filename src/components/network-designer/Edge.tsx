@@ -42,16 +42,10 @@ export const Edge = memo(function Edge({ edge, nodes, isSelected, onClick }: Edg
   const angle = Math.atan2(ty - sy, tx - sx);
   const angleDeg = angle * (180 / Math.PI);
 
-  // Label rotation (keep readable)
-  const labelAngle = (angleDeg > 90 || angleDeg < -90) ? angleDeg + 180 : angleDeg;
-
-  // Label offset perpendicular to line
-  const perpAngle = angle - Math.PI / 2;
-  const offsetDist = 14;
-  const labelX = mx + Math.cos(perpAngle) * offsetDist;
-  const labelY = my + Math.sin(perpAngle) * offsetDist;
-
-  const label = `${edge.type} - ${edge.bandwidth}`;
+  // Gear icon position - on the curve at midpoint (quadratic bezier at t=0.5)
+  const gearX = 0.25 * sx + 0.5 * cx + 0.25 * tx;
+  const gearY = 0.25 * sy + 0.5 * cy + 0.25 * ty;
+  const gearR = 10;
 
   return (
     <g style={{ pointerEvents: 'auto' }} onClick={() => onClick(edge.id)}>
@@ -82,40 +76,37 @@ export const Edge = memo(function Edge({ edge, nodes, isSelected, onClick }: Edg
         style={{ pointerEvents: 'none' }}
       />
 
-      {/* Status dot at midpoint */}
-      <circle
-        cx={mx}
-        cy={my}
-        r={4}
-        fill={edge.status === 'active' ? '#22c55e' : '#9ca3af'}
-        stroke="white"
-        strokeWidth={1.5}
-        style={{ pointerEvents: 'none' }}
-      />
-
-      {/* Label */}
-      <g transform={`translate(${labelX},${labelY}) rotate(${labelAngle})`}>
-        <rect
-          x={-label.length * 3}
-          y={-8}
-          width={label.length * 6}
-          height={14}
-          rx={3}
+      {/* Gear icon - click to configure */}
+      <g
+        transform={`translate(${gearX},${gearY})`}
+        style={{ cursor: 'pointer' }}
+        onClick={(e) => { e.stopPropagation(); onClick(edge.id); }}
+      >
+        <circle
+          r={gearR}
           fill="white"
-          fillOpacity={0.95}
           stroke={isSelected ? '#3b82f6' : serviceColor}
-          strokeWidth={0.5}
+          strokeWidth={1.5}
         />
-        <text
-          textAnchor="middle"
-          dominantBaseline="central"
-          fontSize={9}
-          fontFamily="system-ui, -apple-system, sans-serif"
-          fontWeight={500}
-          fill={isSelected ? '#3b82f6' : '#374151'}
-        >
-          {label}
-        </text>
+        {/* Gear SVG path (Lucide Settings icon scaled to fit) */}
+        <g transform="translate(-6,-6) scale(0.5)">
+          <path
+            d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+            fill="none"
+            stroke={isSelected ? '#3b82f6' : serviceColor}
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <circle
+            cx={12}
+            cy={12}
+            r={3}
+            fill="none"
+            stroke={isSelected ? '#3b82f6' : serviceColor}
+            strokeWidth={2}
+          />
+        </g>
       </g>
     </g>
   );

@@ -86,31 +86,25 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
 
         {/* Role Headers */}
         <div className="grid grid-cols-4 gap-4 pb-4 border-b border-fw-secondary">
-          <div className="font-semibold text-figma-base text-fw-body">Permission</div>
+          <div className="text-[14px] font-medium text-fw-heading">Permission</div>
           {roles.map((role) => {
-            const color = getRoleColor(role);
             const isCurrentRole = role === currentRole;
-            const isHighlighted = role === highlightRole;
 
             return (
               <div
                 key={role}
-                className={`text-center transition-all p-2 ${
-                  isCurrentRole
-                    ? 'bg-fw-accent border-b-2 border-fw-active'
-                    : isHighlighted
-                    ? 'bg-fw-accent border-b-2 border-fw-active'
-                    : ''
+                className={`text-center rounded-lg p-2 ${
+                  isCurrentRole ? 'bg-fw-wash border border-fw-secondary' : ''
                 }`}
               >
-                <div className={`inline-flex items-center gap-2 font-semibold text-figma-base tracking-[-0.03em] ${
-                  isCurrentRole ? 'text-fw-link' : isHighlighted ? 'text-fw-link' : 'text-fw-heading'
+                <div className={`inline-flex items-center gap-2 text-[14px] font-medium tracking-[-0.03em] ${
+                  isCurrentRole ? 'text-fw-link' : 'text-fw-heading'
                 }`}>
                   {getRoleIcon(role)}
                   <span className="capitalize">{role.replace('-', ' ')}</span>
                 </div>
                 {isCurrentRole && (
-                  <div className="text-figma-sm text-fw-success font-medium mt-1">Your Role</div>
+                  <div className="text-[12px] text-fw-link font-medium mt-1">Your Role</div>
                 )}
               </div>
             );
@@ -119,49 +113,43 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
 
         {/* Permission Categories */}
         {Object.entries(permissionsByCategory).map(([categoryKey, category]) => (
-          <div key={categoryKey} className="border border-fw-secondary rounded-lg overflow-hidden">
+          <div key={categoryKey} className="rounded-lg border border-fw-secondary overflow-hidden">
             <button
               onClick={() => toggleSection(categoryKey)}
-              className="w-full flex items-center justify-between p-4 bg-fw-wash hover:bg-fw-neutral transition-colors"
+              className="tab-button w-full flex items-center justify-between px-4 py-3 hover:bg-fw-wash transition-colors"
             >
               <div className="text-left">
-                <h3 className="text-figma-base font-semibold text-fw-heading">{category.label}</h3>
-                <p className="text-figma-sm text-fw-bodyLight mt-0.5">{category.description}</p>
+                <h3 className="text-[14px] font-medium text-fw-heading">{category.label}</h3>
+                <p className="text-[12px] text-fw-bodyLight mt-0.5">{category.description}</p>
               </div>
               {expandedSection === categoryKey ? (
-                <ChevronUp className="h-5 w-5 text-fw-bodyLight" />
+                <ChevronUp className="h-4 w-4 text-fw-bodyLight" />
               ) : (
-                <ChevronDown className="h-5 w-5 text-fw-bodyLight" />
+                <ChevronDown className="h-4 w-4 text-fw-bodyLight" />
               )}
             </button>
 
             {expandedSection === categoryKey && (
-              <div className="p-4 space-y-2">
+              <div className="divide-y divide-fw-secondary">
                 {category.permissions.map((permission) => (
-                  <div key={permission} className="grid grid-cols-4 gap-4 items-center py-2">
-                    <div className="text-figma-base text-fw-body font-medium">
+                  <div key={permission} className="grid grid-cols-4 gap-4 items-center px-4 py-3">
+                    <div className="text-[14px] text-fw-body font-medium">
                       {PERMISSION_LABELS[permission]}
                     </div>
                     {roles.map((role) => {
                       const hasPermission = ROLE_PERMISSIONS[role].includes(permission);
-                      const isCurrentRole = role === currentRole;
 
                       return (
-                        <div
-                          key={role}
-                          className={`flex items-center justify-center p-2 ${
-                            isCurrentRole ? 'bg-fw-accent' : ''
-                          }`}
-                        >
+                        <div key={role} className="flex items-center justify-center">
                           {hasPermission ? (
-                            <div className="flex items-center gap-1 text-fw-success">
-                              <Check className="h-5 w-5" />
-                              <span className="text-figma-sm font-medium">Yes</span>
+                            <div className="flex items-center gap-1.5 text-fw-success">
+                              <Check className="h-4 w-4" />
+                              <span className="text-[12px] font-medium">Yes</span>
                             </div>
                           ) : (
-                            <div className="flex items-center gap-1 text-fw-bodyLight">
-                              <X className="h-5 w-5" />
-                              <span className="text-figma-sm font-medium">No</span>
+                            <div className="flex items-center gap-1.5 text-fw-bodyLight">
+                              <X className="h-4 w-4" />
+                              <span className="text-[12px] font-medium">No</span>
                             </div>
                           )}
                         </div>
@@ -177,41 +165,42 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
         {/* Permission Inheritance Visualization */}
         <div className="bg-fw-wash border border-fw-secondary rounded-lg p-4">
           <h4 className="text-figma-base font-semibold text-fw-heading mb-3 tracking-[-0.03em]">Permission Inheritance</h4>
-          <div className="flex items-center justify-center gap-4">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-fw-accent rounded-full flex items-center justify-center mb-2">
+          <div className="flex items-center justify-center gap-0">
+            {/* User */}
+            <div className="flex flex-col items-center" style={{ width: '80px' }}>
+              <div className="w-14 h-14 bg-fw-accent rounded-full flex items-center justify-center">
                 <UserIcon size="lg" variant="primary" />
               </div>
-              <div className="text-figma-sm font-medium text-fw-body">User</div>
-              <div className="text-figma-sm text-fw-bodyLight">1 permission</div>
+              <div className="text-[12px] font-medium text-fw-body mt-2">User</div>
+              <div className="text-[11px] text-fw-bodyLight">1 permission</div>
             </div>
-
-            <div className="flex items-center">
-              <div className="h-0.5 w-8 bg-fw-secondary"></div>
-              <div className="text-fw-bodyLight">→</div>
-              <div className="h-0.5 w-8 bg-fw-secondary"></div>
+            {/* Arrow */}
+            <div className="flex items-center self-start" style={{ marginTop: '24px' }}>
+              <div className="h-0.5 w-4 bg-fw-secondary" />
+              <span className="text-fw-bodyLight text-xs mx-0.5">&#8594;</span>
+              <div className="h-0.5 w-4 bg-fw-secondary" />
             </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center mb-2">
-                <Shield className="h-8 w-8 text-fw-purple" />
+            {/* Admin */}
+            <div className="flex flex-col items-center" style={{ width: '80px' }}>
+              <div className="w-14 h-14 bg-purple-50 rounded-full flex items-center justify-center">
+                <Shield className="h-7 w-7 text-fw-purple" />
               </div>
-              <div className="text-figma-sm font-medium text-fw-body">Admin</div>
-              <div className="text-figma-sm text-fw-bodyLight">7 permissions</div>
+              <div className="text-[12px] font-medium text-fw-body mt-2">Admin</div>
+              <div className="text-[11px] text-fw-bodyLight">7 permissions</div>
             </div>
-
-            <div className="flex items-center">
-              <div className="h-0.5 w-8 bg-fw-secondary"></div>
-              <div className="text-fw-bodyLight">→</div>
-              <div className="h-0.5 w-8 bg-fw-secondary"></div>
+            {/* Arrow */}
+            <div className="flex items-center self-start" style={{ marginTop: '24px' }}>
+              <div className="h-0.5 w-4 bg-fw-secondary" />
+              <span className="text-fw-bodyLight text-xs mx-0.5">&#8594;</span>
+              <div className="h-0.5 w-4 bg-fw-secondary" />
             </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-2">
-                <Crown className="h-8 w-8 text-fw-error" />
+            {/* Super Admin */}
+            <div className="flex flex-col items-center" style={{ width: '80px' }}>
+              <div className="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center">
+                <Crown className="h-7 w-7 text-fw-error" />
               </div>
-              <div className="text-figma-sm font-medium text-fw-body">Super Admin</div>
-              <div className="text-figma-sm text-fw-bodyLight">11 permissions</div>
+              <div className="text-[12px] font-medium text-fw-body mt-2">Super Admin</div>
+              <div className="text-[11px] text-fw-bodyLight">11 permissions</div>
             </div>
           </div>
           <p className="text-figma-sm text-fw-bodyLight text-center mt-4">

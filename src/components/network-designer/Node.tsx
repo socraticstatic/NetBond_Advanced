@@ -33,43 +33,35 @@ export const Node = memo(function Node({
   const [isDragging, setIsDragging] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(node.name);
-  const dragStartPos = useRef({ x: 0, y: 0 });
   const hasDraggedRef = useRef(false);
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
-      if (isCreatingEdge || !nodeRef.current) return;
+      if (isCreatingEdge) return;
       e.stopPropagation();
 
-      const rect = nodeRef.current.getBoundingClientRect();
-      const offset = {
-        x: (e.clientX - rect.left) / zoomLevel,
-        y: (e.clientY - rect.top) / zoomLevel,
-      };
-      dragStartPos.current = { x: e.clientX, y: e.clientY };
-      hasDraggedRef.current = false;
+      // Pure delta approach: no DOM measurement during drag.
+      // Capture start positions once, compute deltas from mouse movement.
+      const startMouseX = e.clientX;
+      const startMouseY = e.clientY;
+      const startNodeX = node.x;
+      const startNodeY = node.y;
 
+      hasDraggedRef.current = false;
       let dragStarted = false;
 
       const handleMove = (me: MouseEvent) => {
-        const dx = Math.abs(me.clientX - dragStartPos.current.x);
-        const dy = Math.abs(me.clientY - dragStartPos.current.y);
+        const dx = me.clientX - startMouseX;
+        const dy = me.clientY - startMouseY;
 
-        if (dx > 5 || dy > 5) {
-          if (!dragStarted) {
-            dragStarted = true;
-            setIsDragging(true);
-          }
+        if (!dragStarted && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
+          dragStarted = true;
+          setIsDragging(true);
+        }
+
+        if (dragStarted) {
           hasDraggedRef.current = true;
-
-          const parentRect = nodeRef.current?.parentElement?.getBoundingClientRect();
-          if (parentRect) {
-            onDrag(
-              node.id,
-              (me.clientX - parentRect.left) / zoomLevel - offset.x,
-              (me.clientY - parentRect.top) / zoomLevel - offset.y
-            );
-          }
+          onDrag(node.id, startNodeX + dx / zoomLevel, startNodeY + dy / zoomLevel);
         }
       };
 
@@ -88,7 +80,7 @@ export const Node = memo(function Node({
       document.addEventListener('mousemove', handleMove);
       document.addEventListener('mouseup', handleUp);
     },
-    [node.id, zoomLevel, isCreatingEdge, onDrag, onDragEnd, onSelect]
+    [node.id, node.x, node.y, zoomLevel, isCreatingEdge, onDrag, onDragEnd, onSelect]
   );
 
   const handleClick = useCallback(
@@ -119,7 +111,6 @@ export const Node = memo(function Node({
   // Build class list for 6 states
   let borderClass = 'border-fw-secondary';
   let ringClass = '';
-  let scaleClass = '';
   let shadowClass = 'shadow-sm';
 
   if (hasValidationError) {
@@ -134,7 +125,6 @@ export const Node = memo(function Node({
     ringClass = 'ring-2 ring-blue-200';
   }
   if (isDragging) {
-    scaleClass = 'scale-105';
     shadowClass = 'shadow-2xl';
   }
 
@@ -145,12 +135,12 @@ export const Node = memo(function Node({
         absolute flex flex-col items-center justify-center
         w-16 h-16 rounded-xl border bg-fw-base
         transition-shadow duration-150
-        ${borderClass} ${ringClass} ${scaleClass} ${shadowClass}
+        ${borderClass} ${ringClass} ${shadowClass}
         ${isCreatingEdge ? 'cursor-crosshair' : isDragging ? 'cursor-grabbing' : 'cursor-grab'}
         hover:shadow-md
       `}
       style={{
-        transform: `translate(${node.x}px, ${node.y}px)`,
+        transform: `translate(${node.x}px, ${node.y}px)${isDragging ? ' scale(1.05)' : ''}`,
         zIndex: isDragging ? 50 : isSelected ? 10 : 1,
       }}
       onMouseDown={handleMouseDown}

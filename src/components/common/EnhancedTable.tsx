@@ -173,7 +173,7 @@ function EnhancedTableComponent<T>({
   };
 
   return (
-    <div className="flex flex-col rounded-2xl border border-fw-secondary overflow-hidden">
+    <div className="flex flex-col rounded-2xl overflow-hidden">
       {showExport && data.length > 0 && (
         <div className="flex justify-end items-center gap-2 mb-3">
           {showExport && (

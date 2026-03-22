@@ -240,15 +240,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
                 <div className="h-5 w-px bg-fw-secondary" />
                 <NotificationsButton count={notifications} />
                 <div className="h-5 w-px bg-fw-secondary" />
-                <TenantSelector />
-                <div className="h-5 w-px bg-fw-secondary" />
-                <UserMenu
-                  name={userInfo.name}
-                  role={userInfo.role}
-                  account={userInfo.account}
-                  avatar={userInfo.avatar}
-                  onClick={() => navigate('/profile')}
-                />
+                <TenantSelector onProfileClick={() => navigate('/profile')} />
               </>
             )}
           </div>

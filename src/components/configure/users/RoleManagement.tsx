@@ -111,41 +111,43 @@ export function RoleManagement() {
       {/* Role Hierarchy Visualization */}
       <div className="bg-fw-base rounded-xl border border-fw-secondary p-6">
         <h4 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em] mb-4">Permission Inheritance Hierarchy</h4>
-        <div className="flex items-center justify-center gap-6">
-          <div className="text-center">
-            <div className="w-20 h-20 bg-fw-accent rounded-full flex items-center justify-center mb-2 border-2 border-fw-active">
+        <div className="flex flex-col items-center gap-3">
+          {/* Circles and arrows row - all vertically centered */}
+          <div className="flex items-center justify-center gap-0">
+            <div className="w-20 h-20 bg-fw-accent rounded-full flex items-center justify-center border-2 border-fw-active">
               <UserIcon className="h-10 w-10 text-fw-link" />
             </div>
-            <div className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">User</div>
-            <div className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">1 permission</div>
-          </div>
-
-          <div className="flex items-center">
-            <div className="h-0.5 w-12 bg-fw-neutral"></div>
-            <div className="text-fw-bodyLight text-xl">→</div>
-            <div className="h-0.5 w-12 bg-fw-neutral"></div>
-          </div>
-
-          <div className="text-center">
-            <div className="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mb-2 border-2 border-purple-300">
+            <div className="flex items-center px-3">
+              <div className="h-0.5 w-8 bg-fw-neutral" />
+              <div className="text-fw-bodyLight text-lg mx-1">&#8594;</div>
+              <div className="h-0.5 w-8 bg-fw-neutral" />
+            </div>
+            <div className="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center border-2 border-purple-300">
               <Shield className="h-10 w-10 text-fw-purple" />
             </div>
-            <div className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">Admin</div>
-            <div className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">+6 permissions</div>
-          </div>
-
-          <div className="flex items-center">
-            <div className="h-0.5 w-12 bg-fw-neutral"></div>
-            <div className="text-fw-bodyLight text-xl">→</div>
-            <div className="h-0.5 w-12 bg-fw-neutral"></div>
-          </div>
-
-          <div className="text-center">
-            <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mb-2 border-2 border-red-300">
+            <div className="flex items-center px-3">
+              <div className="h-0.5 w-8 bg-fw-neutral" />
+              <div className="text-fw-bodyLight text-lg mx-1">&#8594;</div>
+              <div className="h-0.5 w-8 bg-fw-neutral" />
+            </div>
+            <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center border-2 border-red-300">
               <Crown className="h-10 w-10 text-fw-error" />
             </div>
-            <div className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">Super Admin</div>
-            <div className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">+4 permissions</div>
+          </div>
+          {/* Labels row */}
+          <div className="flex items-start justify-center" style={{ gap: '76px' }}>
+            <div className="text-center w-20">
+              <div className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">User</div>
+              <div className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">1 permission</div>
+            </div>
+            <div className="text-center w-20">
+              <div className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">Admin</div>
+              <div className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">+6 permissions</div>
+            </div>
+            <div className="text-center w-20">
+              <div className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">Super Admin</div>
+              <div className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em]">+4 permissions</div>
+            </div>
           </div>
         </div>
         <p className="text-figma-sm font-medium text-fw-body tracking-[-0.03em] text-center mt-4">

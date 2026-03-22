@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Search, Settings, Check } from 'lucide-react';
+import { ChevronDown, Search, Settings, Check, User } from 'lucide-react';
 
 interface Tenant {
   id: string;
@@ -19,6 +19,7 @@ const MOCK_TENANTS: Tenant[] = [
 
 interface TenantSelectorProps {
   className?: string;
+  onProfileClick?: () => void;
 }
 
 function getInitials(name: string): string {
@@ -39,7 +40,7 @@ function getAvatarColor(id: string): string {
   return colors[index];
 }
 
-export function TenantSelector({ className = '' }: TenantSelectorProps) {
+export function TenantSelector({ className = '', onProfileClick }: TenantSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTenant, setSelectedTenant] = useState<Tenant>(MOCK_TENANTS[0]);
@@ -82,14 +83,7 @@ export function TenantSelector({ className = '' }: TenantSelectorProps) {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-2 py-1.5 rounded-full hover:bg-fw-wash transition-colors"
       >
-        <div className={`w-7 h-7 rounded-full ${getAvatarColor(selectedTenant.id)} flex items-center justify-center`}>
-          <span className="text-[11px] font-bold text-white">
-            {getInitials(selectedTenant.name)}
-          </span>
-        </div>
-        <span className="text-figma-sm font-medium text-fw-heading tracking-[-0.03em] hidden xl:inline max-w-[120px] truncate">
-          {selectedTenant.name}
-        </span>
+        <User className="h-5 w-5 text-fw-heading" />
         <ChevronDown className={`w-4 h-4 text-fw-bodyLight transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
@@ -157,7 +151,7 @@ export function TenantSelector({ className = '' }: TenantSelectorProps) {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-fw-secondary px-4 py-3">
+          <div className="border-t border-fw-secondary px-4 py-3 flex items-center justify-between">
             <button
               onClick={() => {
                 setIsOpen(false);
@@ -168,6 +162,18 @@ export function TenantSelector({ className = '' }: TenantSelectorProps) {
               <Settings className="w-4 h-4" />
               Manage Accounts
             </button>
+            {onProfileClick && (
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  onProfileClick();
+                }}
+                className="flex items-center gap-2 text-figma-sm font-medium text-fw-link tracking-[-0.03em] hover:underline"
+              >
+                <User className="w-4 h-4" />
+                Profile
+              </button>
+            )}
           </div>
         </div>
       )}
