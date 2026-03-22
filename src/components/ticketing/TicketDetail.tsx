@@ -102,7 +102,7 @@ export function TicketDetail() {
           <Button variant="outline" size="sm" icon={ArrowLeft} onClick={() => navigate('/tickets')}>
             Back
           </Button>
-          <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => {}}>
+          <Button variant="ghost" size="md" icon={RefreshCw} onClick={() => {}}>
             Refresh
           </Button>
         </div>

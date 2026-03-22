@@ -264,11 +264,11 @@ export function DashboardFilters({
             <Button
               onClick={handleRefresh}
               disabled={isRefreshing}
-              variant="outline"
+              variant="ghost"
+              icon={RefreshCw}
               className="w-full"
             >
-              <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-              {isRefreshing ? 'Refreshing...' : 'Refresh Data'}
+              {isRefreshing ? 'Refreshing...' : 'Refresh'}
             </Button>
           </div>
 
@@ -352,11 +352,11 @@ export function DashboardFilters({
           <Button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            variant="secondary"
-            size="sm"
+            variant="ghost"
+            size="md"
             icon={RefreshCw}
           >
-            Refresh
+            {isRefreshing ? 'Refreshing...' : 'Refresh'}
           </Button>
         </div>
       </div>
