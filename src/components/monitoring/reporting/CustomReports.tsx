@@ -506,11 +506,11 @@ export function CustomReports() {
           {/* Custom table render to support expandable rows */}
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-fw-secondary">
+              <tr className="bg-fw-wash">
                 {columns.map((col) => (
                   <th
                     key={col.id}
-                    className={`px-3 py-2.5 text-[11px] font-semibold text-fw-secondary uppercase tracking-wider select-none ${col.width ?? ''} ${col.sortable ? 'cursor-pointer hover:text-fw-heading' : ''}`}
+                    className={`px-6 h-12 text-[14px] font-medium text-fw-heading select-none ${col.width ?? ''} ${col.sortable ? 'cursor-pointer hover:bg-fw-neutral' : ''}`}
                     onClick={() => col.sortable && col.sortKey && handleSort(col.sortKey)}
                   >
                     <div className="flex items-center gap-1">
@@ -530,11 +530,11 @@ export function CustomReports() {
                 <>
                   <tr
                     key={report.id}
-                    className="border-b border-fw-secondary hover:bg-fw-neutral transition-colors cursor-pointer"
+                    className="border-b border-fw-secondary hover:bg-fw-wash transition-colors cursor-pointer"
                     onClick={() => setExpandedId(expandedId === report.id ? null : report.id)}
                   >
                     {columns.map((col) => (
-                      <td key={col.id} className={`px-3 py-3 ${col.width ?? ''}`}>
+                      <td key={col.id} className={`px-6 py-4 text-[14px] ${col.width ?? ''}`}>
                         {col.render(report)}
                       </td>
                     ))}

@@ -896,23 +896,23 @@ export function VNFModal({
 
                       {/* Existing interfaces table */}
                       {interfaces.length > 0 && (
-                        <div className="overflow-x-auto mb-4 border border-fw-secondary rounded-lg">
+                        <div className="overflow-x-auto mb-4 rounded-2xl overflow-hidden">
                           <table className="min-w-full divide-y divide-fw-secondary">
                             <thead className="bg-fw-wash">
                               <tr>
-                                <th scope="col" className="px-4 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">Name</th>
-                                <th scope="col" className="px-4 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">Type</th>
-                                <th scope="col" className="px-4 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">IP Address</th>
-                                <th scope="col" className="px-4 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">Status</th>
-                                <th scope="col" className="px-4 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider">Actions</th>
+                                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">Name</th>
+                                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">Type</th>
+                                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">IP Address</th>
+                                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">Status</th>
+                                <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">Actions</th>
                               </tr>
                             </thead>
                             <tbody className="bg-fw-base divide-y divide-fw-secondary">
                               {interfaces.map((iface) => (
-                                <tr key={iface.id}>
-                                  <td className="px-4 py-3 whitespace-nowrap text-figma-base font-medium text-fw-heading">{iface.name}</td>
-                                  <td className="px-4 py-3 whitespace-nowrap text-figma-base text-fw-bodyLight">{iface.type.toUpperCase()}</td>
-                                  <td className="px-4 py-3 whitespace-nowrap text-figma-base text-fw-bodyLight">
+                                <tr key={iface.id} className="hover:bg-fw-wash transition-colors">
+                                  <td className="px-6 py-4 whitespace-nowrap text-[14px] font-medium text-fw-heading">{iface.name}</td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-bodyLight">{iface.type.toUpperCase()}</td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-bodyLight">
                                     {iface.ipAddress ? (
                                       <>
                                         {iface.ipAddress}
@@ -922,14 +922,14 @@ export function VNFModal({
                                       <span className="text-fw-bodyLight">Not configured</span>
                                     )}
                                   </td>
-                                  <td className="px-4 py-3 whitespace-nowrap">
+                                  <td className="px-6 py-4 whitespace-nowrap">
                                     <span className={`px-2 py-1 inline-flex text-figma-sm leading-5 font-semibold rounded-full ${
                                       iface.status === 'up' ? 'bg-green-50 text-fw-success' : 'bg-fw-neutral text-fw-heading'
                                     }`}>
                                       {iface.status.toUpperCase()}
                                     </span>
                                   </td>
-                                  <td className="px-4 py-3 whitespace-nowrap text-right text-figma-base font-medium">
+                                  <td className="px-6 py-4 whitespace-nowrap text-right text-[14px] font-medium">
                                     <button
                                       type="button"
                                       onClick={() => handleRemoveInterface(iface.id)}

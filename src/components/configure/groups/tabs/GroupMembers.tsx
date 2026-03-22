@@ -216,7 +216,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
       </div>
 
       {/* Members Table */}
-      <div className="bg-fw-base rounded-lg border border-fw-secondary overflow-hidden">
+      <div className="bg-fw-base rounded-2xl overflow-hidden">
         <BaseTable
           columns={columns}
           data={filteredUsers}

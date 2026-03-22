@@ -259,7 +259,7 @@ export function TicketDetail() {
               </thead>
               <tbody>
                 {ticket.activityLog.map((entry, index) => (
-                  <tr key={index} className="border-b border-fw-secondary last:border-b-0">
+                  <tr key={index} className="border-b border-fw-secondary last:border-b-0 hover:bg-fw-wash transition-colors">
                     <td className="px-6 py-3 text-figma-base font-medium text-fw-heading tracking-[-0.03em]">
                       {entry.date}
                     </td>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Search, Filter, Download, X, Activity, Shield, Settings, Globe, Calendar, Clock } from 'lucide-react';
+import { Button } from '../../common/Button';
 
 interface LogsContentProps {
   selectedConnection: string;
@@ -136,7 +137,7 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
   };
 
   return (
-    <div className="bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
+    <div className="bg-fw-base rounded-2xl overflow-hidden">
       <div className="p-4 border-b border-fw-secondary flex flex-wrap gap-4 items-center min-w-[1000px]">
         <div className="flex-1 relative min-w-[300px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
@@ -158,15 +159,17 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
         </div>
         
         <div className="flex space-x-3">
-          <button
+          <Button
+            variant="ghost"
+            icon={Filter}
             onClick={() => setShowFilters(!showFilters)}
-            className="px-4 py-2 border border-fw-secondary rounded-lg hover:bg-fw-wash text-fw-body flex items-center"
           >
-            <Filter className="h-4 w-4 mr-2" />
             Filters
-          </button>
-          
-          <button
+          </Button>
+
+          <Button
+            variant="ghost"
+            icon={Download}
             onClick={() => {
               // Export logic here
               window.addToast({
@@ -176,11 +179,9 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
                 duration: 3000
               });
             }}
-            className="px-4 py-2 border border-fw-secondary rounded-lg hover:bg-fw-wash text-fw-body flex items-center"
           >
-            <Download className="h-4 w-4 mr-2" />
             Export
-          </button>
+          </Button>
         </div>
       </div>
       

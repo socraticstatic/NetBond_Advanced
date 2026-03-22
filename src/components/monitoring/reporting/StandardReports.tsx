@@ -1599,7 +1599,7 @@ export function StandardReports() {
 
                   {/* Data Tables */}
                   {previewData.tables.map((table, tableIdx) => (
-                    <div key={tableIdx} className="bg-fw-base border border-fw-secondary rounded-lg overflow-hidden">
+                    <div key={tableIdx} className="bg-fw-base rounded-2xl overflow-hidden">
                       <div className="bg-fw-wash px-6 py-3 border-b border-fw-secondary">
                         <h4 className="text-figma-base font-medium text-fw-heading">{table.title}</h4>
                       </div>
@@ -1610,7 +1610,7 @@ export function StandardReports() {
                               {table.headers.map((header, headerIdx) => (
                                 <th
                                   key={headerIdx}
-                                  className="px-6 py-3 text-left text-figma-sm font-medium text-fw-bodyLight uppercase tracking-wider"
+                                  className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading"
                                 >
                                   {header}
                                 </th>
