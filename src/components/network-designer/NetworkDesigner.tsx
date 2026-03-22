@@ -13,6 +13,8 @@ import { Edge } from './Edge';
 import { ZoomControls } from './ZoomControls';
 import { Toolbar } from './Toolbar';
 import { StatusBar } from './StatusBar';
+import { NodeConfigPanel } from './panels/NodeConfigPanel';
+import { EdgeConfigPanel } from './panels/EdgeConfigPanel';
 
 // Preserve the props interface so LazyNetworkDesigner and ConnectionWizard still work
 interface NetworkDesignerProps {
@@ -69,7 +71,7 @@ export function NetworkDesigner({
   const saveToHistoryStore = useDesignerStore((s) => s.saveToHistory);
 
   // Hooks
-  const { addNode, moveNode, updateNode, deleteNode, deleteEdge, clearCanvas } = useNetworkManager();
+  const { addNode, moveNode, updateNode, deleteNode, updateEdge, deleteEdge, clearCanvas } = useNetworkManager();
   const { handleNodeSelection, handleEdgeSelection, clearSelection } = useSelectionManager();
   const { isCreatingEdge, edgeStartNodeId, toggleEdgeCreation, handleNodeClickForEdge, cancelEdgeCreation } = useEdgeCreator();
   const { undo, canUndo } = useNetworkHistory();
@@ -244,6 +246,34 @@ export function NetworkDesigner({
 
       {/* ZoomControls - bottom right */}
       <ZoomControls />
+
+      {/* Node config panel */}
+      {selectedNodeId && (() => {
+        const selectedNode = nodes.find((n) => n.id === selectedNodeId);
+        if (!selectedNode) return null;
+        return (
+          <NodeConfigPanel
+            node={selectedNode}
+            onUpdate={updateNode}
+            onDelete={(id) => { deleteNode(id); clearSelection(); }}
+            onClose={clearSelection}
+          />
+        );
+      })()}
+
+      {/* Edge config panel */}
+      {selectedEdgeId && (() => {
+        const selectedEdge = edges.find((e) => e.id === selectedEdgeId);
+        if (!selectedEdge) return null;
+        return (
+          <EdgeConfigPanel
+            edge={selectedEdge}
+            onUpdate={updateEdge}
+            onDelete={(id) => { deleteEdge(id); clearSelection(); }}
+            onClose={clearSelection}
+          />
+        );
+      })()}
 
       {/* Toolbar - bottom center */}
       <Toolbar
