@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Share2, Undo2, Trash2, Maximize2, Minimize2, Check, ChevronDown, LayoutTemplate } from 'lucide-react';
+import { Share2, Undo2, Trash2, Maximize2, Minimize2, Check, ChevronDown, LayoutTemplate, BookmarkPlus, Download } from 'lucide-react';
 import { NODE_CATEGORIES } from '../constants/nodeTypes';
 
 interface ToolbarProps {
@@ -13,6 +13,9 @@ interface ToolbarProps {
   isMaximized: boolean;
   onCreateConnections: () => void;
   hasConnections: boolean;
+  onOpenTemplates: () => void;
+  onOpenSaveTemplate: () => void;
+  onExportPDF: () => void;
 }
 
 export function Toolbar({
@@ -26,6 +29,9 @@ export function Toolbar({
   isMaximized,
   onCreateConnections,
   hasConnections,
+  onOpenTemplates,
+  onOpenSaveTemplate,
+  onExportPDF,
 }: ToolbarProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -116,7 +122,7 @@ export function Toolbar({
       <button
         onClick={onUndo}
         disabled={!canUndo}
-        title="Undo"
+        title="Undo (Cmd+Z)"
         className={`p-2 rounded-full transition-colors ${
           canUndo
             ? 'text-fw-heading hover:bg-fw-wash'
@@ -148,13 +154,31 @@ export function Toolbar({
         )}
       </button>
 
-      {/* Templates placeholder */}
+      {/* Templates */}
       <button
-        onClick={() => console.log('Templates: not yet implemented')}
-        title="Templates"
+        onClick={onOpenTemplates}
+        title="Load template"
         className="p-2 rounded-full text-fw-heading hover:bg-fw-wash transition-colors"
       >
         <LayoutTemplate className="h-4 w-4" />
+      </button>
+
+      {/* Save Template */}
+      <button
+        onClick={onOpenSaveTemplate}
+        title="Save as template"
+        className="p-2 rounded-full text-fw-heading hover:bg-fw-wash transition-colors"
+      >
+        <BookmarkPlus className="h-4 w-4" />
+      </button>
+
+      {/* Export PDF */}
+      <button
+        onClick={onExportPDF}
+        title="Export as PDF"
+        className="p-2 rounded-full text-fw-heading hover:bg-fw-wash transition-colors"
+      >
+        <Download className="h-4 w-4" />
       </button>
 
       <div className="w-px h-5 bg-fw-secondary mx-1" />

@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
 import { Minimize2 } from 'lucide-react';
 import type { Connection, NetworkNode as LegacyNetworkNode, NetworkEdge as LegacyNetworkEdge } from '../../types';
 import type { NetworkNode, NetworkEdge } from './types/designer';
@@ -7,6 +7,7 @@ import { useNetworkManager } from './hooks/useNetworkManager';
 import { useSelectionManager } from './hooks/useSelectionManager';
 import { useEdgeCreator } from './hooks/useEdgeCreator';
 import { useNetworkHistory } from './hooks/useNetworkHistory';
+import { validateTopology } from './engine/validationEngine';
 import { Canvas } from './Canvas';
 import { Node } from './Node';
 import { Edge } from './Edge';
@@ -15,6 +16,8 @@ import { Toolbar } from './Toolbar';
 import { StatusBar } from './StatusBar';
 import { NodeConfigPanel } from './panels/NodeConfigPanel';
 import { EdgeConfigPanel } from './panels/EdgeConfigPanel';
+import { TemplatesDrawer } from './TemplatesDrawer';
+import { SaveTemplateModal } from './templates/SaveTemplateModal';
 
 // Preserve the props interface so LazyNetworkDesigner and ConnectionWizard still work
 interface NetworkDesignerProps {
@@ -75,6 +78,25 @@ export function NetworkDesigner({
   const { handleNodeSelection, handleEdgeSelection, clearSelection } = useSelectionManager();
   const { isCreatingEdge, edgeStartNodeId, toggleEdgeCreation, handleNodeClickForEdge, cancelEdgeCreation } = useEdgeCreator();
   const { undo, canUndo } = useNetworkHistory();
+
+  // UI state
+  const [isTemplatesOpen, setIsTemplatesOpen] = useState(false);
+  const [isSaveTemplateOpen, setIsSaveTemplateOpen] = useState(false);
+
+  // Canvas ref for PDF export
+  const canvasRef = useRef<HTMLDivElement>(null);
+
+  // Validation - compute error node IDs
+  const errorNodeIds = useMemo(() => {
+    const issues = validateTopology(nodes, edges);
+    const ids = new Set<string>();
+    for (const issue of issues) {
+      if (issue.severity === 'error' && issue.nodeId) {
+        ids.add(issue.nodeId);
+      }
+    }
+    return ids;
+  }, [nodes, edges]);
 
   // Initialize store with initial nodes/edges on mount
   useEffect(() => {
@@ -151,6 +173,63 @@ export function NetworkDesigner({
     addNode(type, subType || type, meta);
   }, [addNode]);
 
+  // Load a template
+  const handleLoadTemplate = useCallback((templateNodes: NetworkNode[], templateEdges: NetworkEdge[]) => {
+    setNodes(templateNodes);
+    setEdges(templateEdges);
+    saveToHistoryStore();
+  }, [setNodes, setEdges, saveToHistoryStore]);
+
+  // Save template handler (logs for now - real storage would be persisted)
+  const handleSaveTemplate = useCallback((name: string, description: string) => {
+    window.addToast?.({
+      type: 'success',
+      title: 'Template Saved',
+      message: `"${name}" saved. (${description || 'No description'})`,
+      duration: 3000,
+    });
+  }, []);
+
+  // PDF export
+  const exportPDF = useCallback(async () => {
+    if (!canvasRef.current) return;
+    try {
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
+      ]);
+
+      const canvas = await html2canvas(canvasRef.current, {
+        backgroundColor: '#f8f9fa',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: 'a4' });
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('network-topology.pdf');
+
+      window.addToast?.({
+        type: 'success',
+        title: 'Export Complete',
+        message: 'Network topology exported as PDF.',
+        duration: 3000,
+      });
+    } catch (err) {
+      console.error('PDF export failed:', err);
+      window.addToast?.({
+        type: 'error',
+        title: 'Export Failed',
+        message: 'Could not export PDF. Please try again.',
+        duration: 3000,
+      });
+    }
+  }, []);
+
   // Build connections from edges and call onComplete
   const handleCreateConnections = useCallback(() => {
     if (edges.length === 0) {
@@ -209,7 +288,7 @@ export function NetworkDesigner({
           node={node}
           isSelected={node.id === selectedNodeId}
           isEdgeTarget={isCreatingEdge && node.id !== edgeStartNodeId}
-          hasValidationError={false}
+          hasValidationError={errorNodeIds.has(node.id)}
           isCreatingEdge={isCreatingEdge}
           onSelect={handleNodeSelect}
           onDrag={handleNodeDrag}
@@ -240,12 +319,28 @@ export function NetworkDesigner({
       </div>
 
       {/* Canvas - fills the container */}
-      <Canvas svgContent={svgContent}>
-        {nodeChildren}
-      </Canvas>
+      <div ref={canvasRef} className="absolute inset-0">
+        <Canvas svgContent={svgContent}>
+          {nodeChildren}
+        </Canvas>
+      </div>
 
       {/* ZoomControls - bottom right */}
       <ZoomControls />
+
+      {/* Templates drawer */}
+      <TemplatesDrawer
+        isOpen={isTemplatesOpen}
+        onClose={() => setIsTemplatesOpen(false)}
+        onLoadTemplate={handleLoadTemplate}
+      />
+
+      {/* Save template modal */}
+      <SaveTemplateModal
+        isOpen={isSaveTemplateOpen}
+        onClose={() => setIsSaveTemplateOpen(false)}
+        onSave={handleSaveTemplate}
+      />
 
       {/* Node config panel */}
       {selectedNodeId && (() => {
@@ -287,6 +382,9 @@ export function NetworkDesigner({
         isMaximized={isMaximized}
         onCreateConnections={handleCreateConnections}
         hasConnections={edges.length > 0}
+        onOpenTemplates={() => setIsTemplatesOpen(true)}
+        onOpenSaveTemplate={() => setIsSaveTemplateOpen(true)}
+        onExportPDF={exportPDF}
       />
     </div>
   );
