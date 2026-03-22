@@ -18,6 +18,9 @@ import { NodeConfigPanel } from './panels/NodeConfigPanel';
 import { EdgeConfigPanel } from './panels/EdgeConfigPanel';
 import { TemplatesDrawer } from './TemplatesDrawer';
 import { SaveTemplateModal } from './templates/SaveTemplateModal';
+import { SaveDraftModal } from './SaveDraftModal';
+import { DraftsDrawer } from './DraftsDrawer';
+import { WelcomeModal } from './WelcomeModal';
 
 // Preserve the props interface so LazyNetworkDesigner and ConnectionWizard still work
 interface NetworkDesignerProps {
@@ -82,6 +85,9 @@ export function NetworkDesigner({
   // UI state
   const [isTemplatesOpen, setIsTemplatesOpen] = useState(false);
   const [isSaveTemplateOpen, setIsSaveTemplateOpen] = useState(false);
+  const [isSaveDraftOpen, setIsSaveDraftOpen] = useState(false);
+  const [isDraftsOpen, setIsDraftsOpen] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(!editMode && initialNodes.length === 0);
 
   // Canvas ref for PDF export
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -342,6 +348,18 @@ export function NetworkDesigner({
         onSave={handleSaveTemplate}
       />
 
+      {/* Save draft modal */}
+      <SaveDraftModal
+        isOpen={isSaveDraftOpen}
+        onClose={() => setIsSaveDraftOpen(false)}
+      />
+
+      {/* Drafts drawer */}
+      <DraftsDrawer
+        isOpen={isDraftsOpen}
+        onClose={() => setIsDraftsOpen(false)}
+      />
+
       {/* Node config panel */}
       {selectedNodeId && (() => {
         const selectedNode = nodes.find((n) => n.id === selectedNodeId);
@@ -370,6 +388,21 @@ export function NetworkDesigner({
         );
       })()}
 
+      {/* Welcome modal - shown on first load */}
+      {showWelcome && (
+        <WelcomeModal
+          onClose={() => setShowWelcome(false)}
+          onCreate={() => {
+            handleAddNode('function', 'router', {});
+            setShowWelcome(false);
+          }}
+          onChooseTemplate={() => {
+            setIsTemplatesOpen(true);
+            setShowWelcome(false);
+          }}
+        />
+      )}
+
       {/* Toolbar - bottom center */}
       <Toolbar
         onAddNode={handleAddNode}
@@ -384,6 +417,8 @@ export function NetworkDesigner({
         hasConnections={edges.length > 0}
         onOpenTemplates={() => setIsTemplatesOpen(true)}
         onOpenSaveTemplate={() => setIsSaveTemplateOpen(true)}
+        onSaveDraft={() => setIsSaveDraftOpen(true)}
+        onOpenDrafts={() => setIsDraftsOpen(true)}
         onExportPDF={exportPDF}
       />
     </div>

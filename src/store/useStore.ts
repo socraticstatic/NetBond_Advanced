@@ -17,7 +17,7 @@ import { createColumnVisibilitySlice, ColumnVisibilitySlice } from './slices/col
 import { createDetachedWindowSlice, DetachedWindowSlice } from './slices/detachedWindowSlice';
 import { createKeyboardShortcutsSlice, KeyboardShortcutsSlice } from './slices/keyboardShortcutsSlice';
 import { createRoleSlice, RoleSlice } from './slices/roleSlice';
-import { sampleConnections, sampleUsers, sampleGroups } from '../data/sampleData';
+import { sampleConnections, sampleUsers, sampleGroups, sampleAlerts } from '../data/sampleData';
 import { safeJsonParse } from '../utils/errorHandling';
 
 // Load persisted state from localStorage with error handling
@@ -112,7 +112,7 @@ export const useStore = create<Store>((set, get) => {
     selectedConnection: null,
     selectedGroupId: null,
     activeTab: persistedState.activeTab || 'connections',
-    alerts: [],
+    alerts: [...sampleAlerts],
     widgets: []
   };
 
@@ -144,7 +144,7 @@ export const useStore = create<Store>((set, get) => {
         selectedConnection: null,
         selectedGroupId: null,
         activeTab: 'connections',
-        alerts: [],
+        alerts: [...sampleAlerts],
         widgets: [],
         rules: [],
         evaluationResults: [],
