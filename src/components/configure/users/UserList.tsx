@@ -6,6 +6,7 @@ import { AddUserDrawer } from './AddUserDrawer';
 import { UserType } from '../types';
 import { BaseTable } from '../../common/BaseTable';
 import { OverflowMenu } from '../../common/OverflowMenu';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { useStore } from '../../../store/useStore';
 import { Button } from '../../common/Button';
 import { PermissionBadge } from '../../common/PermissionBadge';
@@ -281,18 +282,27 @@ export function UserList({ searchQuery }: UserListProps) {
 
       {/* Search and Controls */}
       <div className="bg-fw-base p-4 rounded-2xl border border-fw-secondary mb-6 shadow-sm">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-disabled h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search by name, email, or role..."
-              value={localSearchQuery}
-              onChange={(e) => setLocalSearchQuery(e.target.value || '')}
-              className="w-full pl-10 pr-4 py-2.5 border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active text-figma-base text-fw-body bg-fw-base"
-            />
-          </div>
-          <div className="flex items-center space-x-3">
+        <SearchFilterBar
+          searchPlaceholder="Search by name, email, or role..."
+          searchValue={localSearchQuery}
+          onSearchChange={(value) => setLocalSearchQuery(value || '')}
+          onFilter={() => {
+            window.addToast({
+              type: 'info',
+              title: 'Filter Users',
+              message: 'Advanced filtering coming soon',
+              duration: 3000
+            });
+          }}
+          onExport={() => {
+            window.addToast({
+              type: 'success',
+              title: 'Export Users',
+              message: 'User list exported successfully',
+              duration: 3000
+            });
+          }}
+          actions={
             <Button
               variant="primary"
               icon={UserPlus}
@@ -301,36 +311,8 @@ export function UserList({ searchQuery }: UserListProps) {
             >
               Add User
             </Button>
-            <Button
-              variant="outline"
-              icon={Filter}
-              onClick={() => {
-                window.addToast({
-                  type: 'info',
-                  title: 'Filter Users',
-                  message: 'Advanced filtering coming soon',
-                  duration: 3000
-                });
-              }}
-            >
-              Filters
-            </Button>
-            <Button
-              variant="outline"
-              icon={Download}
-              onClick={() => {
-                window.addToast({
-                  type: 'success',
-                  title: 'Export Users',
-                  message: 'User list exported successfully',
-                  duration: 3000
-                });
-              }}
-            >
-              Export
-            </Button>
-          </div>
-        </div>
+          }
+        />
       </div>
 
       {/* Users Table */}

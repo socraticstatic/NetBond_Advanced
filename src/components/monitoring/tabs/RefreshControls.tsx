@@ -1,4 +1,4 @@
-import { Clock } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { useMonitoring } from '../context/MonitoringContext';
 
@@ -7,14 +7,14 @@ interface RefreshControlsProps {
 }
 
 export function RefreshControls({ className = '' }: RefreshControlsProps) {
-  const { 
+  const {
     refreshInterval,
     setRefreshInterval,
     isRefreshing,
     handleRefresh,
     lastRefreshed
   } = useMonitoring();
-  
+
   const refreshIntervals = [
     { value: 0, label: 'Off' },
     { value: 30, label: '30 seconds' },
@@ -37,19 +37,18 @@ export function RefreshControls({ className = '' }: RefreshControlsProps) {
           </option>
         ))}
       </select>
-      
+
       <Button
-        variant="outline"
+        variant="ghost"
+        icon={RefreshCw}
         onClick={handleRefresh}
         disabled={isRefreshing}
         aria-label="Refresh"
         title="Refresh Now"
-        className="flex items-center"
       >
-        <Clock className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-        {isRefreshing ? 'Refreshing...' : 'Refresh Now'}
+        {isRefreshing ? 'Refreshing...' : 'Refresh'}
       </Button>
-      
+
       {lastRefreshed && (
         <span className="ml-4 text-figma-sm text-fw-bodyLight">
           Last refreshed: {lastRefreshed.toLocaleTimeString()}

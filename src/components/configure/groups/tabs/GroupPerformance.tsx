@@ -57,7 +57,7 @@ export function GroupPerformance({ group, connections }: GroupPerformanceProps) 
             Connection Status
           </h3>
           <Button
-            variant="outline"
+            variant="ghost"
             icon={RefreshCw}
             onClick={() => {
               window.addToast({
@@ -68,7 +68,7 @@ export function GroupPerformance({ group, connections }: GroupPerformanceProps) 
               });
             }}
           >
-            Refresh Data
+            Refresh
           </Button>
         </div>
         

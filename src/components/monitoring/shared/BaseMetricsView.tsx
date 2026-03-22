@@ -1,5 +1,5 @@
 import { ReactNode, useState, useEffect, useRef } from 'react';
-import { Activity, ArrowUpDown, Clock, Signal, TrendingUp, BarChart2 } from 'lucide-react';
+import { Activity, ArrowUpDown, Clock, Signal, TrendingUp, BarChart2, RefreshCw } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { useTimeRange } from '../../../hooks/useTimeRange';
 import { useMonitoringData } from '../../../hooks/useMonitoringData';
@@ -105,13 +105,13 @@ export function BaseMetricsView({ connections, children, isMobile = false }: Bas
           </select>
 
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
-            icon={Clock}
+            icon={RefreshCw}
             onClick={handleMetricsRefresh}
-            className={isRefreshing ? 'animate-spin' : ''}
+            disabled={isRefreshing}
           >
-            {isRefreshing ? '' : 'Refresh'}
+            {isRefreshing ? 'Refreshing...' : 'Refresh'}
           </Button>
         </div>
 
@@ -134,10 +134,9 @@ export function BaseMetricsView({ connections, children, isMobile = false }: Bas
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-fw-heading tracking-[-0.03em]">Detailed Performance Metrics</h2>
           <Button
-            variant="outline"
-            icon={Clock}
+            variant="ghost"
+            icon={RefreshCw}
             onClick={handleMetricsRefresh}
-            className={isRefreshing ? 'animate-spin' : ''}
             disabled={isRefreshing}
           >
             {isRefreshing ? 'Refreshing...' : 'Refresh'}

@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Search, Filter, Download, X, Activity, Shield, Settings, Globe, Calendar, Clock } from 'lucide-react';
+import { Filter, X, Activity, Shield, Settings, Globe, Calendar, Clock, Eye, Copy, Download } from 'lucide-react';
 import { Button } from '../../common/Button';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { OverflowMenu } from '../../common/OverflowMenu';
 
 interface LogsContentProps {
   selectedConnection: string;
@@ -136,55 +138,69 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
     }
   };
 
+  const getOverflowItems = (log: typeof logs[0]) => [
+    {
+      id: 'view',
+      label: 'View Details',
+      icon: <Eye className="h-4 w-4" />,
+      onClick: () => {
+        window.addToast({
+          type: 'info',
+          title: 'Log Details',
+          message: `${log.message} - ${log.source} at ${log.timestamp}`,
+          duration: 5000
+        });
+      }
+    },
+    {
+      id: 'copy',
+      label: 'Copy Log',
+      icon: <Copy className="h-4 w-4" />,
+      onClick: () => {
+        const logText = `[${log.timestamp}] [${log.severity.toUpperCase()}] ${log.message} (${log.source})`;
+        navigator.clipboard.writeText(logText);
+        window.addToast({
+          type: 'success',
+          title: 'Copied',
+          message: 'Log entry copied to clipboard',
+          duration: 2000
+        });
+      }
+    },
+    {
+      id: 'export',
+      label: 'Export Entry',
+      icon: <Download className="h-4 w-4" />,
+      onClick: () => {
+        window.addToast({
+          type: 'success',
+          title: 'Exported',
+          message: 'Log entry exported successfully',
+          duration: 2000
+        });
+      }
+    }
+  ];
+
   return (
     <div className="bg-fw-base rounded-2xl overflow-hidden">
-      <div className="p-4 border-b border-fw-secondary flex flex-wrap gap-4 items-center min-w-[1000px]">
-        <div className="flex-1 relative min-w-[300px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
-          <input
-            type="text"
-            placeholder="Search logs..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-4 h-9 w-full border border-fw-secondary rounded-lg text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-fw-bodyLight hover:text-fw-body"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          )}
-        </div>
-        
-        <div className="flex space-x-3">
-          <Button
-            variant="ghost"
-            icon={Filter}
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            Filters
-          </Button>
-
-          <Button
-            variant="ghost"
-            icon={Download}
-            onClick={() => {
-              // Export logic here
-              window.addToast({
-                type: 'success',
-                title: 'Logs Exported',
-                message: 'Log data has been exported successfully',
-                duration: 3000
-              });
-            }}
-          >
-            Export
-          </Button>
-        </div>
+      <div className="p-4 border-b border-fw-secondary min-w-[1000px]">
+        <SearchFilterBar
+          searchPlaceholder="Search logs..."
+          searchValue={searchQuery}
+          onSearchChange={setSearchQuery}
+          onFilter={() => setShowFilters(!showFilters)}
+          onExport={() => {
+            window.addToast({
+              type: 'success',
+              title: 'Logs Exported',
+              message: 'Log data has been exported successfully',
+              duration: 3000
+            });
+          }}
+        />
       </div>
-      
+
       {/* Filters Panel */}
       {showFilters && (
         <div className="p-4 bg-fw-wash border-b border-fw-secondary overflow-x-auto">
@@ -195,7 +211,7 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
               <div className="space-y-2">
                 {['system', 'security', 'user', 'performance'].map(type => (
                   <label key={type} className="flex items-center">
-                    <input 
+                    <input
                       type="checkbox"
                       checked={selectedTypes.includes(type)}
                       onChange={() => {
@@ -212,13 +228,13 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
                 ))}
               </div>
             </div>
-            
+
             <div>
               <h3 className="text-figma-base font-medium text-fw-body mb-2">Severity</h3>
               <div className="space-y-2">
                 {['info', 'warning', 'error'].map(severity => (
                   <label key={severity} className="flex items-center">
-                    <input 
+                    <input
                       type="checkbox"
                       checked={selectedSeverities.includes(severity)}
                       onChange={() => {
@@ -235,7 +251,7 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
                 ))}
               </div>
             </div>
-            
+
             <div>
               <h3 className="text-figma-base font-medium text-fw-body mb-2">Time Range</h3>
               <select
@@ -250,7 +266,7 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
                 <option value="30d">Last 30 Days</option>
               </select>
             </div>
-            
+
             <div>
               <h3 className="text-figma-base font-medium text-fw-body mb-2">Actions</h3>
               <div className="space-y-2">
@@ -278,7 +294,7 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
           </div>
         </div>
       )}
-      
+
       {/* Active Filters */}
       {(selectedTypes.length > 0 || selectedSeverities.length > 0 || searchQuery) && (
         <div className="p-3 border-b border-fw-secondary bg-fw-wash overflow-x-auto">
@@ -363,12 +379,15 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
               <th scope="col" className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading">
                 User
               </th>
+              <th scope="col" className="w-12 px-4 h-12">
+                <span className="sr-only">Actions</span>
+              </th>
             </tr>
           </thead>
           <tbody className="bg-fw-base divide-y divide-fw-secondary">
             {filteredLogs.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-4 text-center text-fw-bodyLight">
+                <td colSpan={7} className="px-6 py-4 text-center text-fw-bodyLight">
                   No logs match the current filters
                 </td>
               </tr>
@@ -411,6 +430,9 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-[14px] text-fw-body">
                     {log.user}
+                  </td>
+                  <td className="px-4 py-4">
+                    <OverflowMenu items={getOverflowItems(log)} />
                   </td>
                 </tr>
               ))

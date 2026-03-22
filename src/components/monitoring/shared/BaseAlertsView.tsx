@@ -4,6 +4,7 @@ import { useAlerts } from '../../../hooks/useAlerts';
 import { Connection } from '../../../types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../../common/Button';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
 
 interface BaseAlertsViewProps {
   connections: Connection[];
@@ -232,19 +233,22 @@ export function BaseAlertsView({
     <div className="space-y-6">
       {/* Filters and Search */}
       <div className="bg-fw-base rounded-lg border border-fw-secondary p-4">
-        <div className="flex items-center justify-between">
-          <div className="relative w-64">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight" />
-            <input
-              type="text"
-              value={activeFilters.search}
-              onChange={(e) => updateFilters({ search: e.target.value })}
-              placeholder="Search alerts..."
-              className="pl-10 pr-4 h-9 w-full border border-fw-secondary rounded-lg text-figma-base focus:outline-none focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-            />
-          </div>
-          
-          <div className="flex items-center space-x-4">
+        <SearchFilterBar
+          searchPlaceholder="Search alerts..."
+          searchValue={activeFilters.search}
+          onSearchChange={(value) => updateFilters({ search: value })}
+          onExport={() => {
+            window.addToast({
+              type: 'success',
+              title: 'Alerts Exported',
+              message: 'Alert data has been exported successfully',
+              duration: 3000
+            });
+          }}
+          onRefresh={handleRefresh}
+          isRefreshing={isRefreshing}
+          showFilter={false}
+          actions={
             <div className="flex items-center space-x-2">
               {['critical', 'warning', 'info'].map((type) => (
                 <Button
@@ -271,34 +275,9 @@ export function BaseAlertsView({
                 </Button>
               ))}
             </div>
-            
-            <Button
-              variant="ghost"
-              icon={Download}
-              onClick={() => {
-                window.addToast({
-                  type: 'success',
-                  title: 'Alerts Exported',
-                  message: 'Alert data has been exported successfully',
-                  duration: 3000
-                });
-              }}
-            >
-              Export
-            </Button>
+          }
+        />
 
-            <Button
-              variant="ghost"
-              icon={RefreshCw}
-              onClick={handleRefresh}
-              disabled={isRefreshing}
-              className={isRefreshing ? 'cursor-not-allowed' : ''}
-            >
-              {isRefreshing ? 'Refreshing...' : 'Refresh'}
-            </Button>
-          </div>
-        </div>
-        
         {/* Active Filters */}
         {(activeFilters.types.length > 0 || activeFilters.search) && (
           <div className="flex flex-wrap gap-2 mt-4">

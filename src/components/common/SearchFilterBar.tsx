@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Search, Filter, Download } from 'lucide-react';
+import { Search, Filter, Download, RefreshCw } from 'lucide-react';
 import { Button } from './Button';
 
 interface SearchFilterBarProps {
@@ -8,10 +8,12 @@ interface SearchFilterBarProps {
   onSearchChange: (value: string) => void;
   onFilter?: () => void;
   onExport?: () => void;
+  onRefresh?: () => void;
   filterContent?: ReactNode;
   actions?: ReactNode;
   showFilter?: boolean;
   showExport?: boolean;
+  isRefreshing?: boolean;
 }
 
 export function SearchFilterBar({
@@ -20,10 +22,12 @@ export function SearchFilterBar({
   onSearchChange,
   onFilter,
   onExport,
+  onRefresh,
   filterContent,
   actions,
   showFilter = true,
   showExport = true,
+  isRefreshing = false,
 }: SearchFilterBarProps) {
   return (
     <div className="flex items-center gap-4">
@@ -55,6 +59,20 @@ export function SearchFilterBar({
       {showExport && onExport && (
         <Button variant="ghost" icon={Download} onClick={onExport} size="md">
           Export
+        </Button>
+      )}
+
+      {/* Refresh */}
+      {onRefresh && (
+        <Button
+          variant="ghost"
+          icon={RefreshCw}
+          onClick={onRefresh}
+          size="md"
+          disabled={isRefreshing}
+          className={isRefreshing ? 'cursor-not-allowed' : ''}
+        >
+          {isRefreshing ? 'Refreshing...' : 'Refresh'}
         </Button>
       )}
 

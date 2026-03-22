@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal, ArrowUpDown, Ticket } from 'lucide-react';
 import { Button } from '../common/Button';
+import { SearchFilterBar } from '../common/SearchFilterBar';
 
 type TicketStatus = 'active' | 'queued' | 'deferred' | 'ready to close' | 'device down';
 type TicketPriority = 'device down' | 'partially impacting' | 'minor problems' | 'info tickets';
@@ -91,59 +92,53 @@ export function TicketingIndex() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="space-y-6">
       {/* Toolbar */}
-      <div className="flex items-center justify-between mb-6">
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-fw-link" />
-          <input
-            type="text"
-            placeholder="Search tickets ..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="h-9 w-[429px] pl-9 pr-4 rounded-full border border-fw-secondary bg-fw-base text-figma-base text-fw-heading placeholder:text-fw-bodyLight focus:outline-none focus:ring-1 focus:ring-fw-active tracking-[-0.03em]"
-          />
-        </div>
+      <div>
+        <SearchFilterBar
+          searchPlaceholder="Search tickets ..."
+          searchValue={searchQuery}
+          onSearchChange={setSearchQuery}
+          showFilter={false}
+          showExport={false}
+          filterContent={
+            <div className="flex items-center gap-2">
+              <select
+                value={statusFilter}
+                onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+                className="h-9 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading tracking-[-0.03em] focus:outline-none focus:ring-1 focus:ring-fw-active"
+              >
+                <option value="all">All stages</option>
+                <option value="active">Active</option>
+                <option value="queued">Queued</option>
+                <option value="deferred">Deferred</option>
+                <option value="ready to close">Ready to Close</option>
+                <option value="device down">Device Down</option>
+              </select>
 
-        <div className="flex items-center gap-2">
-          {/* Status filter */}
-          <select
-            value={statusFilter}
-            onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-            className="h-9 px-3 rounded-full border border-fw-secondary bg-fw-base text-figma-base text-fw-heading tracking-[-0.03em] focus:outline-none focus:ring-1 focus:ring-fw-active appearance-none cursor-pointer"
-          >
-            <option value="all">All stages</option>
-            <option value="active">Active</option>
-            <option value="queued">Queued</option>
-            <option value="deferred">Deferred</option>
-            <option value="ready to close">Ready to Close</option>
-            <option value="device down">Device Down</option>
-          </select>
-
-          {/* Priority filter */}
-          <select
-            value={priorityFilter}
-            onChange={e => { setPriorityFilter(e.target.value); setCurrentPage(1); }}
-            className="h-9 px-3 rounded-full border border-fw-secondary bg-fw-base text-figma-base text-fw-heading tracking-[-0.03em] focus:outline-none focus:ring-1 focus:ring-fw-active appearance-none cursor-pointer"
-          >
-            <option value="all">All priorities</option>
-            <option value="device down">Device Down</option>
-            <option value="partially impacting">Partially Impacting</option>
-            <option value="minor problems">Minor Problems</option>
-            <option value="info tickets">Info Tickets</option>
-          </select>
-
-          <div className="w-px h-9 bg-fw-secondary" />
-
-          <Button
-            variant="primary"
-            icon={Plus}
-            onClick={() => navigate('/tickets/create')}
-          >
-            Create
-          </Button>
-        </div>
+              <select
+                value={priorityFilter}
+                onChange={e => { setPriorityFilter(e.target.value); setCurrentPage(1); }}
+                className="h-9 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading tracking-[-0.03em] focus:outline-none focus:ring-1 focus:ring-fw-active"
+              >
+                <option value="all">All priorities</option>
+                <option value="device down">Device Down</option>
+                <option value="partially impacting">Partially Impacting</option>
+                <option value="minor problems">Minor Problems</option>
+                <option value="info tickets">Info Tickets</option>
+              </select>
+            </div>
+          }
+          actions={
+            <Button
+              variant="primary"
+              icon={Plus}
+              onClick={() => navigate('/tickets/create')}
+            >
+              Create
+            </Button>
+          }
+        />
       </div>
 
       {/* Table Card */}
