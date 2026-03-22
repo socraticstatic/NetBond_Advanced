@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal, ArrowUpDown, Ticket } from 'lucide-react';
+import { Plus, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, ChevronDown, Ticket, Eye, Edit, Trash2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { SearchFilterBar } from '../common/SearchFilterBar';
+import { OverflowMenu } from '../common/OverflowMenu';
 
 type TicketStatus = 'active' | 'queued' | 'deferred' | 'ready to close' | 'device down';
 type TicketPriority = 'device down' | 'partially impacting' | 'minor problems' | 'info tickets';
@@ -93,138 +94,120 @@ export function TicketingIndex() {
 
   return (
     <div className="space-y-6">
-      {/* Toolbar */}
-      <div>
-        <SearchFilterBar
-          searchPlaceholder="Search tickets ..."
-          searchValue={searchQuery}
-          onSearchChange={setSearchQuery}
-          showFilter={false}
-          showExport={false}
-          filterContent={
-            <div className="flex items-center gap-2">
-              <select
-                value={statusFilter}
-                onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                className="h-9 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading tracking-[-0.03em] focus:outline-none focus:ring-1 focus:ring-fw-active"
-              >
-                <option value="all">All stages</option>
-                <option value="active">Active</option>
-                <option value="queued">Queued</option>
-                <option value="deferred">Deferred</option>
-                <option value="ready to close">Ready to Close</option>
-                <option value="device down">Device Down</option>
-              </select>
+      {/* Table */}
+      <div className="rounded-lg border border-fw-secondary overflow-hidden">
+        {/* SearchFilterBar inside border */}
+        <div className="px-6 py-4 border-b border-fw-secondary">
+          <SearchFilterBar
+            searchPlaceholder="Search tickets ..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            onFilter={() => {}}
+            onExport={() => window.addToast?.({ type: 'success', title: 'Exported', message: 'Tickets exported', duration: 3000 })}
+            filterContent={
+              <div className="flex items-center gap-2">
+                <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: 'auto', paddingRight: '2.5rem' }}>
+                  <option value="all">All stages</option>
+                  <option value="active">Active</option>
+                  <option value="queued">Queued</option>
+                  <option value="deferred">Deferred</option>
+                  <option value="ready to close">Ready to Close</option>
+                </select>
+                <select value={priorityFilter} onChange={e => { setPriorityFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: 'auto', paddingRight: '2.5rem' }}>
+                  <option value="all">All priorities</option>
+                  <option value="device down">Device Down</option>
+                  <option value="partially impacting">Partially Impacting</option>
+                  <option value="minor problems">Minor Problems</option>
+                  <option value="info tickets">Info Tickets</option>
+                </select>
+              </div>
+            }
+            actions={
+              <Button variant="primary" icon={Plus} onClick={() => navigate('/tickets/create')}>
+                Create
+              </Button>
+            }
+          />
+        </div>
 
-              <select
-                value={priorityFilter}
-                onChange={e => { setPriorityFilter(e.target.value); setCurrentPage(1); }}
-                className="h-9 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading tracking-[-0.03em] focus:outline-none focus:ring-1 focus:ring-fw-active"
-              >
-                <option value="all">All priorities</option>
-                <option value="device down">Device Down</option>
-                <option value="partially impacting">Partially Impacting</option>
-                <option value="minor problems">Minor Problems</option>
-                <option value="info tickets">Info Tickets</option>
-              </select>
-            </div>
-          }
-          actions={
-            <Button
-              variant="primary"
-              icon={Plus}
-              onClick={() => navigate('/tickets/create')}
-            >
-              Create
-            </Button>
-          }
-        />
-      </div>
-
-      {/* Table Card */}
-      <div className="bg-fw-base rounded-2xl overflow-hidden">
-        <table className="w-full divide-y divide-fw-secondary">
-          <thead>
-            <tr className="bg-fw-wash">
-              <th className="w-10 px-4 h-12">
-                <input type="checkbox" className="h-5 w-5 rounded border-fw-secondary" />
+        <table className="w-full table-fixed">
+          <thead className="bg-fw-wash border-b border-fw-secondary">
+            <tr>
+              <th className="w-10 px-4 h-12 align-middle">
+                <input type="checkbox" className="h-4 w-4 rounded border-fw-secondary" />
               </th>
               {columns.map(col => (
                 <th
                   key={col.key}
-                  className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading tracking-[-0.03em] cursor-pointer select-none"
-                  onClick={() => handleSort(col.key)}
+                  className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis align-middle"
                 >
-                  <span className="inline-flex items-center gap-1">
-                    {col.label}
-                    <ArrowUpDown className="h-3.5 w-3.5 text-fw-bodyLight" />
-                  </span>
+                  <button onClick={() => handleSort(col.key)} className="group inline-flex items-center space-x-1">
+                    <span>{col.label}</span>
+                    <span className="flex flex-col">
+                      <ChevronUp className={`h-3 w-3 ${sortColumn === col.key && sortDirection === 'asc' ? 'text-fw-body' : 'text-fw-bodyLight group-hover:text-fw-body'}`} />
+                      <ChevronDown className={`h-3 w-3 -mt-1 ${sortColumn === col.key && sortDirection === 'desc' ? 'text-fw-body' : 'text-fw-bodyLight group-hover:text-fw-body'}`} />
+                    </span>
+                  </button>
                 </th>
               ))}
-              <th className="w-10 px-4 h-12" />
+              <th className="w-16 px-6 h-12 align-middle" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-fw-secondary">
+          <tbody className="bg-fw-base divide-y divide-fw-secondary">
             {paginatedTickets.map(ticket => (
-              <tr
-                key={ticket.id}
-                className="hover:bg-fw-wash transition-colors"
-              >
-                <td className="px-6 py-4">
-                  <input type="checkbox" className="h-5 w-5 rounded border-fw-secondary" />
+              <tr key={ticket.id} className="hover:bg-fw-wash transition-colors cursor-pointer" onClick={() => navigate(`/tickets/${ticket.id}`)}>
+                <td className="px-4 py-4 align-middle" onClick={e => e.stopPropagation()}>
+                  <input type="checkbox" className="h-4 w-4 rounded border-fw-secondary" />
                 </td>
-                <td className="px-6 py-4">
-                  <button
-                    onClick={() => navigate(`/tickets/${ticket.id}`)}
-                    className="text-figma-base font-medium text-fw-link tracking-[-0.03em] hover:underline"
-                  >
-                    {ticket.ticketNumber}
-                  </button>
+                <td className="px-6 py-4 text-[14px] text-fw-link font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+                  {ticket.ticketNumber}
                 </td>
-                <td className="px-6 py-4 text-[14px] text-fw-body tracking-[-0.03em]">
+                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
                   {ticket.description}
                 </td>
-                <td className="px-6 py-4">
-                  <span className="inline-flex items-center gap-1 text-figma-base font-medium text-fw-heading tracking-[-0.03em]">
-                    <span className="h-3.5 w-3.5 rounded-full border-2 border-fw-active" />
+                <td className="px-6 py-4 text-[14px] text-fw-heading whitespace-nowrap">
+                  <span className="inline-flex items-center gap-1">
+                    <span className="h-3 w-3 rounded-full border-2 border-fw-active" />
                     {ticket.state}
                   </span>
                 </td>
-                <td className="px-6 py-4">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${PRIORITY_STYLES[ticket.priority]}`}>
+                <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-[12px] font-medium ${PRIORITY_STYLES[ticket.priority]}`}>
                     {ticket.priority}
                   </span>
                 </td>
-                <td className="px-6 py-4">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${STATUS_STYLES[ticket.stage]}`}>
+                <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-[12px] font-medium ${STATUS_STYLES[ticket.stage]}`}>
                     {ticket.stage}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-[14px] text-fw-body tracking-[-0.03em]">
+                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
                   {ticket.asset}
                 </td>
-                <td className="px-6 py-4">
-                  <button className="p-1 rounded hover:bg-fw-wash">
-                    <MoreHorizontal className="h-5 w-5 text-fw-body" />
-                  </button>
+                <td className="w-16 px-6 py-4" onClick={e => e.stopPropagation()}>
+                  <div className="flex justify-end">
+                    <OverflowMenu items={[
+                      { id: 'view', label: 'View Details', icon: <Eye className="h-4 w-4" />, onClick: () => navigate(`/tickets/${ticket.id}`) },
+                      { id: 'edit', label: 'Edit Ticket', icon: <Edit className="h-4 w-4" />, onClick: () => navigate(`/tickets/${ticket.id}`) },
+                      { id: 'delete', label: 'Delete', icon: <Trash2 className="h-4 w-4" />, onClick: () => {}, variant: 'danger' as const },
+                    ]} />
+                  </div>
                 </td>
               </tr>
             ))}
             {paginatedTickets.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-6 py-16 text-center">
-                  <div className="flex flex-col items-center">
-                    <Ticket className="h-12 w-12 text-fw-bodyLight mb-4" />
-                    <h3 className="text-figma-lg font-bold text-fw-heading mb-2">No tickets found</h3>
-                    <p className="text-figma-base text-fw-bodyLight max-w-md mx-auto mb-6 tracking-[-0.03em]">
-                      {searchQuery || statusFilter !== 'all' || priorityFilter !== 'all'
-                        ? 'Try adjusting your search or filter criteria.'
-                        : 'No support tickets have been created yet.'}
-                    </p>
-                    <Button variant="primary" icon={Plus} onClick={() => navigate('/tickets/create')}>
-                      Create Ticket
-                    </Button>
-                  </div>
+                <td colSpan={columns.length + 2} className="px-6 py-16 text-center">
+                  <Ticket className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
+                  <h3 className="text-[16px] font-bold text-fw-heading mb-2">No tickets found</h3>
+                  <p className="text-[14px] text-fw-bodyLight max-w-md mx-auto mb-6">
+                    {searchQuery || statusFilter !== 'all' || priorityFilter !== 'all'
+                      ? 'Try adjusting your search or filter criteria.'
+                      : 'No support tickets have been created yet.'}
+                  </p>
+                  <Button variant="primary" icon={Plus} onClick={() => navigate('/tickets/create')}>
+                    Create Ticket
+                  </Button>
                 </td>
               </tr>
             )}
@@ -278,7 +261,7 @@ export function TicketingIndex() {
             </button>
             <div className="w-px h-5 bg-fw-secondary mx-1" />
             <span className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">20</span>
-            <ArrowUpDown className="h-4 w-4 text-fw-heading" />
+            <ChevronDown className="h-4 w-4 text-fw-heading" />
           </div>
         </div>
       </div>
