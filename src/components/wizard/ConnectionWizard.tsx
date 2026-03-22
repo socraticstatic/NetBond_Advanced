@@ -67,10 +67,10 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   // Check if there's a template from the application solution zone
   const template = locationState?.template;
 
-  // If in edit mode or if mode is specified in location state, use that mode
-  const initialMode = editMode || (locationState?.editMode) ? 'visual' :
+  // Show mode selection screen on Create, skip to visual on edit
+  const initialMode: WizardMode | null = editMode || (locationState?.editMode) ? 'visual' :
                      locationState?.mode ? locationState.mode as WizardMode :
-                     template ? 'step-by-step' : // If there's a template, go to wizard mode
+                     template ? 'step-by-step' :
                      null;
 
   // Get initialConnection from props or location state

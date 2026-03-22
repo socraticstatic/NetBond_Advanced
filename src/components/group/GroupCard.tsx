@@ -39,8 +39,8 @@ export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardPro
 
   return (
     <motion.div
-      className="relative bg-fw-base rounded-[16px] border border-fw-secondary shadow-sm hover:shadow-md transition-all duration-300 ease-in-out transform hover:translate-y-[-2px] cursor-pointer"
-      style={{ width: '368px', minHeight: isMinimized ? 'auto' : '562px' }}
+      className="relative bg-fw-base rounded-[16px] border border-fw-secondary shadow-sm hover:shadow-md transition-all duration-300 ease-in-out transform hover:translate-y-[-2px] cursor-pointer flex flex-col"
+      style={{ minHeight: isMinimized ? 'auto' : '562px' }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -100,10 +100,8 @@ export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardPro
             {/* Pool Metrics (stat boxes + utilization row) */}
             <GroupCardMetrics group={group} />
 
-            {/* Tags */}
-            {group.tags && Object.keys(group.tags).length > 0 && (
-              <GroupCardInfo group={group} />
-            )}
+            {/* Info rows (Uptime, Location, Latency, Created) + Tags */}
+            <GroupCardInfo group={group} />
           </div>
 
           {/* Separator */}
@@ -112,10 +110,7 @@ export function GroupCard({ group, onDelete, isMinimized = false }: GroupCardPro
           {/* Status */}
           <GroupCardStatus group={group} />
 
-          {/* Separator */}
-          <div className="mx-6 border-t border-fw-secondary" />
-
-          {/* Action */}
+          {/* Action - no separator per Figma, button pushed to bottom via mt-auto */}
           <GroupCardFooter onManageClick={handleManageClick} />
         </>
       )}

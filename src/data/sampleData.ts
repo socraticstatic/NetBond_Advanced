@@ -54,7 +54,7 @@ const createBillingData = (
 export const sampleConnections: Connection[] = [
   {
     id: 'conn-aws-pending-1',
-    name: 'AT&T NetBond for Cloud - AWS Direct Connect',
+    name: 'NetBond Cloud -AWS Direct Connect',
     type: 'Internet to Cloud',
     status: 'Pending',
     bandwidth: '1 Gbps',
@@ -100,7 +100,7 @@ export const sampleConnections: Connection[] = [
   },
   {
     id: 'conn-1',
-    name: 'AT&T NetBond for Cloud - AWS East Production',
+    name: 'NetBond Cloud -AWS East Production',
     type: 'Internet to Cloud',
     status: 'Active',
     bandwidth: '10 Gbps',
@@ -123,7 +123,7 @@ export const sampleConnections: Connection[] = [
   },
   {
     id: 'conn-2',
-    name: 'AT&T NetBond for Cloud - Azure ExpressRoute Central',
+    name: 'NetBond Cloud -Azure ExpressRoute Central',
     type: 'Cloud to Cloud',
     status: 'Active',
     bandwidth: '10 Gbps',
@@ -146,7 +146,7 @@ export const sampleConnections: Connection[] = [
   },
   {
     id: 'conn-3',
-    name: 'AT&T Dedicated Internet - Multi-Cloud Backbone',
+    name: 'Dedicated Internet -Multi-Cloud Backbone',
     type: 'DataCenter/CoLocation to Cloud',
     status: 'Active',
     bandwidth: '100 Gbps',
@@ -169,7 +169,7 @@ export const sampleConnections: Connection[] = [
   },
   {
     id: 'conn-4',
-    name: 'AT&T MPLS VPN - Google Cloud Interconnect West',
+    name: 'MPLS VPN -Google Cloud Interconnect West',
     type: 'Internet to Cloud',
     status: 'Active',
     bandwidth: '10 Gbps',
@@ -191,7 +191,7 @@ export const sampleConnections: Connection[] = [
   },
   {
     id: 'conn-5',
-    name: 'AT&T NetBond for Cloud - Oracle Cloud Chicago',
+    name: 'NetBond Cloud -Oracle Cloud Chicago',
     type: 'DataCenter/CoLocation to Cloud',
     status: 'Inactive',
     bandwidth: '1 Gbps',
@@ -228,7 +228,7 @@ const awsUsers: User[] = [
     role: 'Network Administrator',
     status: 'active',
     lastActive: new Date().toISOString(),
-    connectionAccess: [createConnectionAccess('conn-1', 'AT&T NetBond for Cloud - AWS East Production', ['view', 'manage', 'monitor', 'configure'])],
+    connectionAccess: [createConnectionAccess('conn-1', 'NetBond Cloud -AWS East Production', ['view', 'manage', 'monitor', 'configure'])],
   },
   {
     id: 'user-2',
@@ -237,7 +237,7 @@ const awsUsers: User[] = [
     role: 'Cloud Architect',
     status: 'active',
     lastActive: new Date().toISOString(),
-    connectionAccess: [createConnectionAccess('conn-1', 'AT&T NetBond for Cloud - AWS East Production', ['view', 'monitor', 'configure'])],
+    connectionAccess: [createConnectionAccess('conn-1', 'NetBond Cloud -AWS East Production', ['view', 'monitor', 'configure'])],
   },
 ];
 
@@ -250,7 +250,7 @@ const azureUsers: User[] = [
     role: 'Security Engineer',
     status: 'active',
     lastActive: new Date().toISOString(),
-    connectionAccess: [createConnectionAccess('conn-2', 'AT&T NetBond for Cloud - Azure ExpressRoute Central', ['view', 'manage', 'monitor', 'configure'])],
+    connectionAccess: [createConnectionAccess('conn-2', 'NetBond Cloud -Azure ExpressRoute Central', ['view', 'manage', 'monitor', 'configure'])],
   },
   {
     id: 'user-4',
@@ -259,7 +259,7 @@ const azureUsers: User[] = [
     role: 'Operations Manager',
     status: 'active',
     lastActive: new Date().toISOString(),
-    connectionAccess: [createConnectionAccess('conn-2', 'AT&T NetBond for Cloud - Azure ExpressRoute Central', ['view', 'monitor', 'configure'])],
+    connectionAccess: [createConnectionAccess('conn-2', 'NetBond Cloud -Azure ExpressRoute Central', ['view', 'monitor', 'configure'])],
   },
 ];
 
@@ -272,7 +272,7 @@ const googleUsers: User[] = [
     role: 'Platform Engineer',
     status: 'active',
     lastActive: new Date().toISOString(),
-    connectionAccess: [createConnectionAccess('conn-3', 'AT&T Dedicated Internet - Multi-Cloud Backbone', ['view', 'manage', 'monitor', 'configure'])],
+    connectionAccess: [createConnectionAccess('conn-3', 'Dedicated Internet -Multi-Cloud Backbone', ['view', 'manage', 'monitor', 'configure'])],
   },
   {
     id: 'user-6',
@@ -281,7 +281,7 @@ const googleUsers: User[] = [
     role: 'DevOps Lead',
     status: 'active',
     lastActive: new Date().toISOString(),
-    connectionAccess: [createConnectionAccess('conn-3', 'AT&T Dedicated Internet - Multi-Cloud Backbone', ['view', 'monitor', 'configure'])],
+    connectionAccess: [createConnectionAccess('conn-3', 'Dedicated Internet -Multi-Cloud Backbone', ['view', 'monitor', 'configure'])],
   },
 ];
 
@@ -474,7 +474,7 @@ export const sampleAlerts: Alert[] = [
     id: 'alert-3',
     type: 'warning',
     title: 'Bandwidth Utilization Near Threshold',
-    message: 'conn-1 (AT&T NetBond for Cloud - AWS East Production) bandwidth utilization reached 89% of 10 Gbps capacity. Consider upgrading to 100 Gbps.',
+    message: 'conn-1 (NetBond Cloud -AWS East Production) bandwidth utilization reached 89% of 10 Gbps capacity. Consider upgrading to 100 Gbps.',
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     connectionId: 'conn-1'
   },

@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { Layers, Pencil, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Group } from '../../../types/group';
+import { TypeBadge } from '../../common/Badge';
 
 interface GroupCardHeaderProps {
   group: Group;
@@ -16,26 +17,6 @@ const typeLabels: Record<Group['type'], string> = {
   team: 'Team',
   custom: 'Custom',
 };
-
-const typeColors: Record<string, { text: string; bg: string }> = {
-  department: { text: '#af29bb', bg: 'rgba(175,41,187,0.12)' },
-  team:       { text: '#ff8500', bg: 'rgba(255,133,0,0.12)' },
-  project:    { text: '#2d7e24', bg: 'rgba(45,126,36,0.12)' },
-  business:   { text: '#0057b8', bg: 'rgba(0,87,184,0.12)' },
-  custom:     { text: '#686e74', bg: 'rgba(104,110,116,0.12)' },
-};
-
-function TypeBadge({ type, label }: { type: string; label: string }) {
-  const colors = typeColors[type] || typeColors.custom;
-  return (
-    <span
-      className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] leading-4 font-medium"
-      style={{ color: colors.text, backgroundColor: colors.bg }}
-    >
-      {label}
-    </span>
-  );
-}
 
 export function GroupCardHeader({ group, onDelete, children }: GroupCardHeaderProps) {
   const navigate = useNavigate();

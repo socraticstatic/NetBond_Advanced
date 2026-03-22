@@ -1,4 +1,4 @@
-import { Plus, Minus, Maximize2 } from 'lucide-react';
+import { Plus, Minus, RotateCcw } from 'lucide-react';
 import { useDesignerStore } from './store/useDesignerStore';
 
 export function ZoomControls() {
@@ -14,7 +14,7 @@ export function ZoomControls() {
   };
 
   return (
-    <div className="absolute bottom-20 right-4 flex flex-col gap-1 z-20">
+    <div className="absolute top-1/2 -translate-y-1/2 right-4 flex flex-col gap-1 z-20">
       <button
         onClick={zoomIn}
         className="w-8 h-8 flex items-center justify-center rounded-lg bg-fw-base border border-fw-secondary shadow-sm hover:bg-fw-wash transition-colors"
@@ -35,9 +35,9 @@ export function ZoomControls() {
       <button
         onClick={resetZoom}
         className="w-8 h-8 flex items-center justify-center rounded-lg bg-fw-base border border-fw-secondary shadow-sm hover:bg-fw-wash transition-colors mt-1"
-        title="Reset zoom"
+        title="Reset zoom & pan"
       >
-        <Maximize2 className="w-3.5 h-3.5 text-fw-heading" />
+        <RotateCcw className="w-3.5 h-3.5 text-fw-heading" />
       </button>
     </div>
   );

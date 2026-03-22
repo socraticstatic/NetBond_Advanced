@@ -75,7 +75,7 @@ export function BaseTable<T>({
       )}
 
       {/* Table */}
-      <div className="bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
+      <div className="bg-fw-base rounded-2xl overflow-hidden">
         <div className="min-w-full divide-y divide-fw-secondary">
         <div className="bg-fw-wash">
           <div className="min-w-full table">

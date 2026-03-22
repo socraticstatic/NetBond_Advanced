@@ -44,22 +44,22 @@ export function StatusBar({ nodes, edges }: StatusBarProps) {
             <span className="text-fw-bodyLight">·</span>
 
             {errors.length > 0 && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-50 text-red-600 text-figma-sm font-medium border border-red-200">
-                <AlertCircle className="h-3 w-3" />
+              <span className="inline-flex items-center gap-1 text-red-600 text-figma-sm font-medium">
+                <AlertCircle className="h-3.5 w-3.5" />
                 {errors.length}
               </span>
             )}
 
             {warnings.length > 0 && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-700 text-figma-sm font-medium border border-yellow-200">
-                <AlertTriangle className="h-3 w-3" />
+              <span className="inline-flex items-center gap-1 text-yellow-700 text-figma-sm font-medium">
+                <AlertTriangle className="h-3.5 w-3.5" />
                 {warnings.length}
               </span>
             )}
 
             {infos.length > 0 && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-figma-sm font-medium border border-blue-200">
-                <Info className="h-3 w-3" />
+              <span className="inline-flex items-center gap-1 text-blue-600 text-figma-sm font-medium">
+                <Info className="h-3.5 w-3.5" />
                 {infos.length}
               </span>
             )}

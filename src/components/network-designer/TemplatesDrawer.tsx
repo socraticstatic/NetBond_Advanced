@@ -18,7 +18,7 @@ export function TemplatesDrawer({ isOpen, onClose, onLoadTemplate }: TemplatesDr
   }
 
   return (
-    <div className="absolute left-4 top-16 w-80 z-30 bg-fw-base rounded-2xl border border-fw-secondary shadow-xl overflow-hidden">
+    <div className="absolute left-4 top-1/2 -translate-y-1/2 w-80 z-30 bg-fw-base rounded-2xl border border-fw-secondary shadow-xl overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-fw-secondary">
         <h2 className="text-figma-base font-semibold text-fw-heading">Templates</h2>
@@ -31,7 +31,7 @@ export function TemplatesDrawer({ isOpen, onClose, onLoadTemplate }: TemplatesDr
       </div>
 
       {/* Template grid */}
-      <div className="p-3 space-y-2 max-h-[480px] overflow-y-auto">
+      <div className="max-h-[480px] overflow-y-auto divide-y divide-fw-secondary/50">
         {DESIGNER_TEMPLATES.map((template) => (
           <TemplateCard
             key={template.id}

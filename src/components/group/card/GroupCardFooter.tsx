@@ -6,13 +6,13 @@ interface GroupCardFooterProps {
 
 export function GroupCardFooter({ onManageClick }: GroupCardFooterProps) {
   return (
-    <div className="px-4 pb-4 pt-2">
+    <div className="px-6 pb-6 pt-2 mt-auto flex items-center justify-center">
       <button
         onClick={onManageClick}
-        className="w-full flex items-center justify-center gap-2 rounded-[800px] text-figma-base font-medium text-fw-link hover:bg-fw-accent border border-fw-secondary transition-colors"
-        style={{ height: '36px', maxWidth: '320px', margin: '0 auto' }}
+        className="w-full flex items-center justify-center h-9 px-4 rounded-full text-figma-base font-medium text-fw-link hover:text-fw-linkHover hover:bg-fw-wash transition-colors"
+        style={{ maxWidth: '320px' }}
       >
-        <ChevronRight className="h-5 w-5" />
+        <ChevronRight className="mr-1.5 h-5 w-5" />
         Manage Pool
       </button>
     </div>

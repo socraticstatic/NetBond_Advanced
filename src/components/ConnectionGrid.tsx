@@ -83,9 +83,9 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
 
   return (
     <div className="space-y-6 min-h-[calc(100vh-16rem)] pb-12">
-      <div className="flex items-center space-x-4">
-        {/* Search - Figma: search input with icon */}
-        <div className="relative" style={{ width: '372px' }}>
+      <div className="flex items-center space-x-4 max-w-full">
+        {/* Search */}
+        <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fw-link h-5 w-5" />
           <input
             type="text"
