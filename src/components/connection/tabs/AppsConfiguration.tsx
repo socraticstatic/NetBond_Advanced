@@ -486,7 +486,7 @@ export function AppsConfiguration() {
               </div>
 
               {/* Applications Table */}
-              <div className="overflow-x-auto bg-fw-base rounded-2xl border border-fw-secondary">
+              <div className="overflow-x-auto bg-fw-base rounded-2xl overflow-hidden">
                 <table className="w-full">
                   <thead className="bg-fw-wash border-b border-fw-secondary">
                     <tr>

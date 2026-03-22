@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Share2, Link2, Box } from 'lucide-react';
 import { Connection } from '../../../types';
-import { ConnectionVisualization } from '../ConnectionVisualization';
+
 import { IPEInfoTooltip } from '../../common/IPEInfoTooltip';
 import { BandwidthAdjuster } from '../BandwidthAdjuster';
 
@@ -73,7 +73,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
       </div>
 
       {/* Network Visualization */}
-      <div className="bg-fw-wash rounded-lg overflow-hidden">
+      <div className="bg-fw-wash rounded-2xl overflow-hidden" style={{ minHeight: '300px' }}>
         <div className="px-6 py-4 border-b border-fw-secondary">
           <div className="flex items-center gap-2">
             <Network className="h-6 w-6 text-fw-heading" />
@@ -81,8 +81,12 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
           </div>
           <p className="text-figma-base text-fw-bodyLight mt-1">Interactive visualization of your network connection</p>
         </div>
-        <div className="h-[400px] relative">
-          <ConnectionVisualization connection={connection} />
+        <div className="p-8 flex flex-col items-center justify-center" style={{ minHeight: '240px' }}>
+          <Network className="h-12 w-12 text-fw-bodyLight mb-4" />
+          <h3 className="text-figma-lg font-bold text-fw-heading mb-2">Network Topology</h3>
+          <p className="text-figma-base text-fw-bodyLight text-center max-w-md">
+            Interactive visualization of your network connection topology. Click "Edit Topology" to configure.
+          </p>
         </div>
       </div>
 

@@ -334,7 +334,7 @@ export function UserList({ searchQuery }: UserListProps) {
       </div>
 
       {/* Users Table */}
-      <div className="bg-fw-base rounded-2xl border border-fw-secondary shadow-sm">
+      <div className="bg-fw-base rounded-2xl overflow-hidden shadow-sm">
         <BaseTable
           columns={columns}
           data={filteredUsers}

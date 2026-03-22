@@ -52,7 +52,7 @@ export function RoutingTab() {
   return (
     <div className="p-6 space-y-6">
       {sections.map((section, sectionIndex) => (
-        <div key={sectionIndex} className="bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
+        <div key={sectionIndex} className="bg-fw-base rounded-2xl overflow-hidden">
           <div className="px-6 py-4 border-b border-fw-secondary bg-fw-wash">
             <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] flex items-center">
               <Share2 className="h-5 w-5 text-fw-link mr-2" />

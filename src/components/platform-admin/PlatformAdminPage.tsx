@@ -291,7 +291,7 @@ export function PlatformAdminPage() {
       </div>
 
       {/* Tenants Table */}
-      <div className="bg-fw-base rounded-2xl border border-fw-secondary">
+      <div className="bg-fw-base rounded-2xl overflow-hidden">
         <BaseTable
           columns={columns}
           data={filteredTenants}

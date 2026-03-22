@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, GitBranch } from 'lucide-react';
 import { Button } from '../../common/Button';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { CloudRouterTable } from './CloudRouterTable';
 import { VNF } from '../../../types/vnf';
@@ -126,38 +127,14 @@ export function CloudRouterSection({
       </div>
 
       {/* Table Card */}
-      <div className="bg-fw-base rounded-lg border border-fw-secondary">
-        <div className="px-6 py-4 border-b border-fw-secondary">
-          <div className="flex items-center justify-between gap-4">
-            <div className="relative flex-1 max-w-md">
-              <input
-                type="text"
-                placeholder="Search routers..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active text-figma-base w-full"
-              />
-              <svg
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-            <button className="inline-flex items-center px-4 py-2 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active">
-              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              Filters
-            </button>
-          </div>
+      <div className="bg-fw-base rounded-2xl overflow-hidden">
+        <div className="px-6 py-4">
+          <SearchFilterBar
+            searchPlaceholder="Search routers ..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            showExport={false}
+          />
         </div>
 
         {filteredCloudRouters.length === 0 ? (

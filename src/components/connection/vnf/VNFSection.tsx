@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, Shield } from 'lucide-react';
 import { Button } from '../../common/Button';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { VNF, VNFType } from '../../../types/vnf';
 import { VNFTable } from './VNFTable';
 import { CloudRouter } from '../../../types/cloudrouter';
@@ -131,36 +132,18 @@ export function VNFSection({
       </div>
 
       {/* Table Card */}
-      <div className="bg-fw-base rounded-lg border border-fw-secondary">
-        <div className="px-6 py-4 border-b border-fw-secondary">
-          <div className="flex items-center justify-between gap-4">
-            <div className="relative flex-1 max-w-md">
-              <input
-                type="text"
-                placeholder="Search VNFs..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active text-figma-base w-full"
-              />
-              <svg
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-            <div className="flex items-center gap-3">
+      <div className="bg-fw-base rounded-2xl overflow-hidden">
+        <div className="px-6 py-4">
+          <SearchFilterBar
+            searchPlaceholder="Search VNFs ..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            filterContent={
               <select
                 value={vnfTypeFilter}
                 onChange={(e) => setVnfTypeFilter(e.target.value as VNFType | 'all')}
-                className="px-4 py-2 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
+                className="fw-select"
+                style={{ width: 'auto', paddingRight: '2.5rem' }}
               >
                 <option value="all">All Types</option>
                 <option value="firewall">Firewall</option>
@@ -169,40 +152,32 @@ export function VNFSection({
                 <option value="vnat">NAT</option>
                 <option value="custom">Custom</option>
               </select>
-              <button
-                onClick={() => {
-                  const getTypeName = (type: VNFType) => {
-                    switch(type) {
-                      case 'firewall': return 'Firewall';
-                      case 'sdwan': return 'SD-WAN';
-                      case 'router': return 'Router';
-                      case 'vnat': return 'NAT';
-                      case 'custom': return 'Custom';
-                      default: return type.toUpperCase();
-                    }
-                  };
-                  const headers = ['Name', 'Type', 'Status'].join(',');
-                  const rows = filteredVNFs.map(vnf =>
-                    `"${vnf.name}","${getTypeName(vnf.type)}","${vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)}"`
-                  );
-                  const csv = [headers, ...rows].join('\n');
-                  const blob = new Blob([csv], { type: 'text/csv' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = 'network-functions.csv';
-                  a.click();
-                  URL.revokeObjectURL(url);
-                }}
-                className="inline-flex items-center px-4 py-2 text-figma-base font-medium text-fw-body bg-fw-base border border-fw-secondary rounded-lg hover:bg-fw-wash focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
-              >
-                <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                Export
-              </button>
-            </div>
-          </div>
+            }
+            onExport={() => {
+              const getTypeName = (type: VNFType) => {
+                switch(type) {
+                  case 'firewall': return 'Firewall';
+                  case 'sdwan': return 'SD-WAN';
+                  case 'router': return 'Router';
+                  case 'vnat': return 'NAT';
+                  case 'custom': return 'Custom';
+                  default: return type.toUpperCase();
+                }
+              };
+              const headers = ['Name', 'Type', 'Status'].join(',');
+              const rows = filteredVNFs.map(vnf =>
+                `"${vnf.name}","${getTypeName(vnf.type)}","${vnf.status.charAt(0).toUpperCase() + vnf.status.slice(1)}"`
+              );
+              const csv = [headers, ...rows].join('\n');
+              const blob = new Blob([csv], { type: 'text/csv' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'network-functions.csv';
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+          />
         </div>
 
         {filteredVNFs.length === 0 ? (
