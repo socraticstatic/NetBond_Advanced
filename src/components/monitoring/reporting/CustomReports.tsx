@@ -502,7 +502,7 @@ export function CustomReports() {
           </Button>
         </div>
       ) : (
-        <div className="overflow-hidden">
+        <div className="overflow-x-auto">
           {/* Custom table render to support expandable rows */}
           <table className="w-full text-left border-collapse">
             <thead>

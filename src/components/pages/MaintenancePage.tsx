@@ -6,7 +6,7 @@ export function MaintenancePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6" style={{ background: '#f8fafb' }}>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-8 py-6" style={{ background: '#f8fafb' }}>
       <div className="flex flex-col items-center text-center max-w-[480px] w-full">
 
         {/* Branding */}

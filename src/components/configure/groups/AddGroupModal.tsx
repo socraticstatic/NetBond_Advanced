@@ -101,7 +101,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: 'rgba(27,27,29,0.56)' }}>
-      <div className="bg-fw-base rounded-[24px] shadow-xl w-full mx-4 flex flex-col" style={{ maxWidth: '1056px', height: '636px' }}>
+      <div className="bg-fw-base shadow-xl w-full h-full flex flex-col sm:max-w-[1056px] sm:h-[636px] sm:rounded-[24px] rounded-none mx-auto">
         {/* Header - inline title with close button */}
         <div className="px-8 pt-6 pb-4 flex items-center justify-between">
           <h3 className="text-[24px] font-bold text-fw-heading tracking-[-0.03em]">

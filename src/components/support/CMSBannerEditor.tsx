@@ -175,6 +175,7 @@ export function CMSBannerEditor() {
       </div>
 
       {/* Table */}
+      <div className="overflow-x-auto">
       <BaseTable<Banner>
         columns={columns}
         data={banners}
@@ -209,6 +210,7 @@ export function CMSBannerEditor() {
           </div>
         )}
       />
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Check,
   X,
@@ -14,7 +15,9 @@ import {
   Settings,
   Network,
   ArrowRight,
+  SkipForward,
 } from 'lucide-react';
+import { Button } from '../common/Button';
 
 type ThemeOption = 'light' | 'dark' | 'system';
 
@@ -25,7 +28,7 @@ interface OnboardingState {
   customer: string;
 }
 
-const TOTAL_STEPS = 9;
+const TOTAL_STEPS = 8;
 
 const TIMEZONES = [
   'UTC-12:00', 'UTC-11:00', 'UTC-10:00', 'UTC-09:00', 'UTC-08:00',
@@ -122,15 +125,51 @@ const SECTION_WALKTHROUGHS = [
   },
 ];
 
+// Right-panel wireframe illustrations exported from Figma groups
+const STEP_IMAGES: Record<number, string> = {
+  1: '/images/onboarding/panel-terms.png',
+  2: '/images/onboarding/panel-create.png',
+  3: '/images/onboarding/panel-clients.png',
+  4: '/images/onboarding/panel-create.png',
+  5: '/images/onboarding/panel-manage.png',
+  6: '/images/onboarding/panel-monitor.png',
+  7: '/images/onboarding/panel-configure.png',
+  8: '/images/onboarding/panel-completion.png',
+};
+
+// Animation variants
+const stepVariants = {
+  enter: { opacity: 0, x: 40 },
+  center: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -40 },
+};
+
+const panelVariants = {
+  enter: { opacity: 0, scale: 0.95 },
+  center: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.95 },
+};
+
+const staggerContainer = {
+  center: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+};
+
+const staggerItem = {
+  enter: { opacity: 0, scale: 0.8, y: 10 },
+  center: { opacity: 1, scale: 1, y: 0 },
+};
+
 // Shared layout wrapper for all onboarding steps
 function OnboardingLayout({
   currentStep,
   children,
   actions,
+  onSkip,
 }: {
   currentStep: number;
   children: React.ReactNode;
   actions: React.ReactNode;
+  onSkip?: () => void;
 }) {
   const progressWidth = (currentStep / TOTAL_STEPS) * 100;
 
@@ -138,27 +177,48 @@ function OnboardingLayout({
     <div className="min-h-screen bg-fw-base flex flex-col">
       {/* Header */}
       <header className="flex items-center justify-between px-8 py-4">
-        <div className="flex items-center gap-2">
-          {/* AT&T logo placeholder */}
-          <svg width="54" height="16" viewBox="0 0 54 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="8" cy="8" r="8" fill="#009fdb" />
-            <circle cx="8" cy="8" r="5" fill="white" />
-            <circle cx="8" cy="8" r="3" fill="#009fdb" />
-          </svg>
-          <span className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">NetBond</span>
+        <div className="flex items-center">
+          <span className="text-base font-bold text-brand-accent tracking-[-0.03em]">AT&T</span>
+          <span className="ml-2 text-base font-bold text-black tracking-[-0.03em]">NetBond<sup className="text-[10px]">®</sup> Advanced</span>
         </div>
       </header>
 
       {/* Content area */}
       <div className="flex-1 flex">
         {/* Left content */}
-        <div className="flex-1 flex flex-col justify-center px-16 max-w-[600px]">
-          {children}
+        <div className="flex-1 flex flex-col justify-center px-4 sm:px-16 max-w-[600px]">
+          <motion.div
+            key={currentStep}
+            variants={stepVariants}
+            initial="enter"
+            animate="center"
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+          >
+            {children}
+          </motion.div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-3 mt-8">
+          {/* Actions with Skip button */}
+          <motion.div
+            className="flex items-center gap-3 mt-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {onSkip && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 2, duration: 0.3 }}
+                className="mr-auto"
+              >
+                <Button variant="ghost" onClick={onSkip} size="md">
+                  <SkipForward className="w-4 h-4 mr-1.5" />
+                  Skip
+                </Button>
+              </motion.div>
+            )}
             {actions}
-          </div>
+          </motion.div>
 
           {/* Progress indicator */}
           <div className="flex items-center gap-3 mt-8">
@@ -166,9 +226,11 @@ function OnboardingLayout({
               {currentStep}
             </span>
             <div className="w-36 h-1 rounded-full bg-fw-secondary overflow-hidden">
-              <div
-                className="h-full rounded-full bg-fw-active transition-all duration-300"
-                style={{ width: `${progressWidth}%` }}
+              <motion.div
+                className="h-full rounded-full bg-fw-active"
+                initial={{ width: 0 }}
+                animate={{ width: `${progressWidth}%` }}
+                transition={{ type: 'spring', stiffness: 100, damping: 15 }}
               />
             </div>
             <span className="text-figma-sm font-medium text-fw-disabled tracking-[-0.03em]">
@@ -177,42 +239,19 @@ function OnboardingLayout({
           </div>
         </div>
 
-        {/* Right decorative panel - app wireframe skeleton */}
+        {/* Right panel with animated image swap */}
         <div className="hidden lg:block flex-1 p-4">
-          <div className="w-full h-full rounded-3xl bg-fw-wash flex items-center justify-center p-8">
-            {/* Wireframe skeleton of the app */}
-            <div className="w-full max-w-[480px] bg-fw-base rounded-2xl shadow-sm border border-fw-secondary p-5 space-y-4">
-              {/* Nav bar skeleton */}
-              <div className="flex items-center gap-3 mb-2">
-                <div className="h-3 w-3 rounded-full bg-fw-secondary" />
-                <div className="h-2.5 w-20 rounded bg-fw-secondary" />
-                <div className="flex-1" />
-                <div className="h-2.5 w-12 rounded bg-fw-secondary" />
-                <div className="h-2.5 w-12 rounded bg-fw-secondary" />
-              </div>
-              {/* Content rows */}
-              <div className="space-y-3">
-                <div className="h-2 w-[70%] rounded bg-fw-secondary" />
-                <div className="h-2 w-full rounded bg-fw-secondary" />
-                <div className="h-2 w-[85%] rounded bg-fw-secondary" />
-              </div>
-              {/* Card area */}
-              <div className="rounded-lg bg-fw-wash p-4 space-y-3">
-                <div className="flex gap-3">
-                  <div className="h-2.5 w-16 rounded bg-fw-secondary" />
-                  <div className="h-2.5 w-24 rounded bg-fw-secondary" />
-                </div>
-                <div className="h-2 w-full rounded bg-fw-secondary" />
-                <div className="h-2 w-[60%] rounded bg-fw-secondary" />
-              </div>
-              {/* Bottom row */}
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-fw-secondary" />
-                <div className="h-2.5 w-28 rounded bg-fw-secondary" />
-                <div className="flex-1" />
-                <div className="h-6 w-16 rounded-full bg-fw-secondary" />
-              </div>
-            </div>
+          <div className="w-full h-full rounded-[24px] bg-fw-wash flex items-center justify-center p-8 overflow-hidden">
+            <motion.img
+              key={currentStep}
+              src={STEP_IMAGES[currentStep] || STEP_IMAGES[1]}
+              alt={`Onboarding step ${currentStep}`}
+              className="max-w-full max-h-full object-contain"
+              variants={panelVariants}
+              initial="enter"
+              animate="center"
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            />
           </div>
         </div>
       </div>
@@ -224,13 +263,16 @@ function OnboardingLayout({
 function TermsStep({
   onAgree,
   onDisagree,
+  onSkip,
 }: {
   onAgree: () => void;
   onDisagree: () => void;
+  onSkip?: () => void;
 }) {
   return (
     <OnboardingLayout
       currentStep={1}
+      onSkip={onSkip}
       actions={
         <>
           <button
@@ -346,6 +388,7 @@ function ThemeStep({
   return (
     <OnboardingLayout
       currentStep={2}
+      onSkip={onSkip}
       actions={
         <button
           onClick={onContinue}
@@ -440,21 +483,24 @@ function ThemeStep({
   );
 }
 
-// Step 3: Timezone
+// Step 2: Timezone
 function TimezoneStep({
   timezone,
   onSelect,
   onContinue,
+  onSkip,
 }: {
   timezone: string;
   onSelect: (tz: string) => void;
   onContinue: () => void;
+  onSkip?: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <OnboardingLayout
-      currentStep={3}
+      currentStep={2}
+      onSkip={onSkip}
       actions={
         <button
           onClick={onContinue}
@@ -502,9 +548,13 @@ function TimezoneStep({
         )}
       </div>
 
-      {/* World map placeholder */}
-      <div className="mt-8 w-full max-w-[504px] h-[285px] rounded-2xl bg-fw-wash border border-fw-secondary flex items-center justify-center">
-        <span className="text-figma-sm text-fw-bodyLight tracking-[-0.03em]">World Map</span>
+      {/* World map - exported from Figma */}
+      <div className="mt-8 w-full max-w-[504px] h-[285px] rounded-2xl overflow-hidden bg-fw-wash">
+        <img
+          src="/images/onboarding/worldmap.png"
+          alt="World timezone map"
+          className="w-full h-full object-contain"
+        />
       </div>
     </OnboardingLayout>
   );
@@ -515,10 +565,12 @@ function CustomerStep({
   customer,
   onSelect,
   onContinue,
+  onSkip,
 }: {
   customer: string;
   onSelect: (c: string) => void;
   onContinue: () => void;
+  onSkip?: () => void;
 }) {
   const [search, setSearch] = useState('');
   const filtered = CUSTOMERS.filter((c) =>
@@ -527,7 +579,8 @@ function CustomerStep({
 
   return (
     <OnboardingLayout
-      currentStep={4}
+      currentStep={3}
+      onSkip={onSkip}
       actions={
         <button
           onClick={onContinue}
@@ -594,22 +647,26 @@ function WalkthroughStep({
   stepNumber,
   section,
   onContinue,
+  onSkip,
 }: {
   stepNumber: number;
   section: (typeof SECTION_WALKTHROUGHS)[number];
   onContinue: () => void;
+  onSkip?: () => void;
 }) {
-  const sectionIcons: Record<string, typeof Plus> = {
-    'Create.': Plus,
-    'Manage.': Network,
-    'Monitor.': BarChart3,
-    'Configure.': Settings,
+  // Map section titles to thumbnail image prefixes
+  const sectionThumbPrefix: Record<string, string> = {
+    'Create.': 'create',
+    'Manage.': 'manage',
+    'Monitor.': 'monitor',
+    'Configure.': 'configure',
   };
-  const Icon = sectionIcons[section.title] || Plus;
+  const thumbPrefix = sectionThumbPrefix[section.title] || 'create';
 
   return (
     <OnboardingLayout
       currentStep={stepNumber}
+      onSkip={onSkip}
       actions={
         <button
           onClick={onContinue}
@@ -627,16 +684,28 @@ function WalkthroughStep({
         {section.subtitle}
       </p>
 
-      {/* Feature cards */}
-      <div className="flex gap-4">
+      {/* Feature cards - staggered reveal */}
+      <motion.div
+        className="flex gap-4"
+        variants={staggerContainer}
+        initial="enter"
+        animate="center"
+      >
         {section.features.map((feature, i) => (
-          <div
+          <motion.div
             key={i}
             className="w-[136px] flex flex-col"
+            variants={staggerItem}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            whileHover={{ y: -4, transition: { duration: 0.15 } }}
           >
-            {/* Preview thumbnail */}
-            <div className="w-[136px] h-[136px] rounded-2xl bg-fw-wash mb-3 flex items-center justify-center">
-              <Icon className="w-8 h-8 text-fw-bodyLight" />
+            {/* Preview thumbnail - exported from Figma */}
+            <div className="w-[136px] h-[136px] rounded-2xl bg-fw-wash mb-3 overflow-hidden">
+              <img
+                src={`/images/onboarding/thumb-${thumbPrefix}-${i + 1}.png`}
+                alt={feature.name}
+                className="w-full h-full object-cover"
+              />
             </div>
             <h4 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-1">
               {feature.name}
@@ -644,9 +713,9 @@ function WalkthroughStep({
             <p className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">
               {feature.description}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </OnboardingLayout>
   );
 }
@@ -657,7 +726,7 @@ function CompletionStep() {
 
   return (
     <OnboardingLayout
-      currentStep={9}
+      currentStep={8}
       actions={
         <button
           onClick={() => navigate('/manage')}
@@ -668,14 +737,30 @@ function CompletionStep() {
         </button>
       }
     >
-      {/* Success icon */}
-      <div className="w-12 h-12 rounded-full bg-fw-success flex items-center justify-center mb-6">
-        <Check className="w-6 h-6 text-white" />
-      </div>
+      {/* Success icon with draw-in animation */}
+      <motion.div
+        className="w-12 h-12 rounded-full bg-fw-success flex items-center justify-center mb-6"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: 'spring', stiffness: 200, damping: 12, delay: 0.2 }}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 0.3 }}
+        >
+          <Check className="w-6 h-6 text-white" />
+        </motion.div>
+      </motion.div>
 
-      <h2 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mb-2">
+      <motion.h2
+        className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mb-2"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.3 }}
+      >
         Everything is set!
-      </h2>
+      </motion.h2>
 
       <p className="text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-8">
         Your setup is finished. Now you're ready<br />
@@ -743,6 +828,7 @@ function CompletionStep() {
 
 // Main Wizard
 export function OnboardingWizard() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [showDeniedModal, setShowDeniedModal] = useState(false);
   const [state, setState] = useState<OnboardingState>({
@@ -752,12 +838,14 @@ export function OnboardingWizard() {
     customer: '',
   });
 
-  const next = useCallback(() => setStep((s) => Math.min(s + 1, TOTAL_STEPS)), []);
+  const next = useCallback(() => {
+    setStep((s) => Math.min(s + 1, TOTAL_STEPS));
+  }, []);
 
   const handleTermsAgree = useCallback(() => {
     setState((s) => ({ ...s, termsAccepted: true }));
-    next();
-  }, [next]);
+    setStep(2);
+  }, []);
 
   const handleTermsDisagree = useCallback(() => {
     setState((s) => ({ ...s, termsAccepted: false }));
@@ -776,49 +864,46 @@ export function OnboardingWizard() {
     setState((s) => ({ ...s, customer }));
   }, []);
 
+  const handleSkip = useCallback(() => navigate('/manage'), [navigate]);
+
   if (showDeniedModal) {
     return <TermsDeniedModal onClose={() => setShowDeniedModal(false)} />;
   }
 
   switch (step) {
     case 1:
-      return <TermsStep onAgree={handleTermsAgree} onDisagree={handleTermsDisagree} />;
+      return <TermsStep onAgree={handleTermsAgree} onDisagree={handleTermsDisagree} onSkip={handleSkip} />;
     case 2:
-      return (
-        <ThemeStep
-          selected={state.theme}
-          onSelect={handleThemeSelect}
-          onContinue={next}
-        />
-      );
-    case 3:
       return (
         <TimezoneStep
           timezone={state.timezone}
           onSelect={handleTimezoneSelect}
           onContinue={next}
+          onSkip={handleSkip}
         />
       );
-    case 4:
+    case 3:
       return (
         <CustomerStep
           customer={state.customer}
           onSelect={handleCustomerSelect}
           onContinue={next}
+          onSkip={handleSkip}
         />
       );
+    case 4:
     case 5:
     case 6:
     case 7:
-    case 8:
       return (
         <WalkthroughStep
           stepNumber={step}
-          section={SECTION_WALKTHROUGHS[step - 5]}
+          section={SECTION_WALKTHROUGHS[step - 4]}
           onContinue={next}
+          onSkip={handleSkip}
         />
       );
-    case 9:
+    case 8:
       return <CompletionStep />;
     default:
       return <CompletionStep />;

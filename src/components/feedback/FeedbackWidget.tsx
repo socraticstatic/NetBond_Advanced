@@ -153,7 +153,7 @@ export function FeedbackWidget() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed right-0 top-0 h-full w-[380px] bg-fw-base border-l border-fw-secondary shadow-xl z-40 rounded-l-2xl flex flex-col overflow-hidden"
+            className="fixed right-0 top-0 h-full w-full sm:w-[380px] bg-fw-base border-l border-fw-secondary shadow-xl z-40 rounded-l-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-fw-secondary shrink-0">
