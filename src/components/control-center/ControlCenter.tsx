@@ -11,9 +11,36 @@ interface ControlCenterProps {
   connections: Connection[];
 }
 
+const INSIGHTS_INIT_KEY = 'insights-initialized';
+
+const DEFAULT_WIDGET_IDS: Array<{ id: string; w: number; h: number }> = [
+  { id: 'network-status', w: 2, h: 1 },
+  { id: 'quick-actions', w: 1, h: 1 },
+  { id: 'security-overview', w: 2, h: 1 },
+  { id: 'billing-overview', w: 2, h: 1 }
+];
+
 export function ControlCenter({ connections }: ControlCenterProps) {
   const { widgets, addWidget, updateWidget, removeWidget, reorderWidgets } = useStore();
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const alreadyInitialized = localStorage.getItem(INSIGHTS_INIT_KEY);
+    if (!alreadyInitialized && widgets.length === 0) {
+      localStorage.setItem(INSIGHTS_INIT_KEY, 'true');
+      let yOffset = 0;
+      DEFAULT_WIDGET_IDS.forEach(({ id, w, h }) => {
+        const instance: WidgetInstance = {
+          id: `${id}-default`,
+          widgetId: id,
+          position: { x: 0, y: yOffset },
+          size: { w, h }
+        };
+        addWidget(instance);
+        yOffset += h;
+      });
+    }
+  }, []);
 
   const handleAddWidget = (widget: WidgetDefinition) => {
     const newWidget: WidgetInstance = {
