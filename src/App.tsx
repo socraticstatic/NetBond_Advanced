@@ -190,6 +190,12 @@ const LazyNoInternetPage = lazy(() =>
   }))
 );
 
+const LazyMaintenancePage = lazy(() =>
+  import('./components/pages/MaintenancePage').then(module => ({
+    default: module.MaintenancePage
+  }))
+);
+
 // Optimized loading fallback
 const LoadingFallback = memo(() => (
   <div className="min-h-[400px] flex items-center justify-center">
@@ -220,7 +226,7 @@ function App() {
 
   // Check if current route is a detached window or standalone page
   const isDetachedWindow = location.pathname.startsWith('/detached/');
-  const isStandalonePage = location.pathname === '/login' || location.pathname === '/onboarding' || location.pathname === '/offboarding' || location.pathname === '/no-internet';
+  const isStandalonePage = location.pathname === '/login' || location.pathname === '/onboarding' || location.pathname === '/offboarding' || location.pathname === '/no-internet' || location.pathname === '/maintenance';
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -300,6 +306,13 @@ function App() {
             <Route path="/no-internet" element={
               <Suspense fallback={<LoadingFallback />}>
                 <LazyNoInternetPage />
+              </Suspense>
+            } />
+
+            {/* Maintenance - standalone, no layout */}
+            <Route path="/maintenance" element={
+              <Suspense fallback={<LoadingFallback />}>
+                <LazyMaintenancePage />
               </Suspense>
             } />
 
@@ -588,7 +601,7 @@ function App() {
                   </AsyncBoundary>
                 } />
 
-                <Route path="/" element={<Navigate to="/manage" />} />
+                <Route path="/" element={<Navigate to="/onboarding" />} />
                 
                 <Route path="*" element={
                   <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-fw-wash">
