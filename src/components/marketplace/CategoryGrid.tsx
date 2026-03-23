@@ -55,13 +55,6 @@ export function CategoryGrid({
                 </div>
                 <span className="flex-1 text-figma-base font-medium truncate text-left">{category.name}</span>
                 <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
-                  {category.count > 0 && (
-                    <span className={`text-[12px] font-medium min-w-[20px] text-center ${
-                      isSelected ? 'text-fw-link' : 'text-fw-bodyLight'
-                    }`}>
-                      {category.count}
-                    </span>
-                  )}
                   <span
                     onClick={(e) => {
                       e.stopPropagation();

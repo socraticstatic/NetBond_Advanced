@@ -83,17 +83,17 @@ export function ApplicationSolutionZone() {
 
   return (
     <div className="space-y-8" style={{ isolation: 'auto' }}>
-      <div className="bg-fw-neutral rounded-2xl p-8 text-fw-heading shadow-xl">
+      <div className="bg-fw-primary rounded-2xl p-8 text-white shadow-xl">
         <div className="flex items-start gap-4">
-          <div className="p-3 bg-fw-base bg-opacity-20 rounded-xl backdrop-blur-sm">
-            <Sparkles className="h-8 w-8" />
+          <div className="p-3 bg-white/20 rounded-xl">
+            <Sparkles className="h-8 w-8 text-white" />
           </div>
           <div className="flex-1">
             <h2 className="text-3xl font-bold mb-2">Solution Builder</h2>
-            <p className="text-fw-body text-lg mb-4">
+            <p className="text-white/80 text-lg mb-4">
               Build optimized network connections for your business applications
             </p>
-            <p className="text-white text-opacity-90 leading-relaxed">
+            <p className="text-white/70 leading-relaxed">
               Select the application you want to connect, and we'll configure the ideal network infrastructure with the right bandwidth, security, and redundancy for your specific use case.
             </p>
           </div>

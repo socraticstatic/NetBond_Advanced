@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, CheckCircle, Clock, User, Paperclip, FileText, Search, Edit2, Save, X, MessageSquare } from 'lucide-react';
+import { ArrowLeft, RefreshCw, CheckCircle, Clock, User, Paperclip, FileText, Search, Edit2, Save, X, MessageSquare, ArrowUpDown } from 'lucide-react';
 import { Button } from '../common/Button';
 
 type StageStep = {
