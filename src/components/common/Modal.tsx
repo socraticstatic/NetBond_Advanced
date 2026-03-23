@@ -40,14 +40,14 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
             : 'max-h-[calc(100vh-4rem)] px-6 pt-6 pb-6 rounded-3xl'
         } ${sizeClasses[size]}`}>
           {/* Close button */}
-          <div className="absolute top-0 right-0 pt-4 pr-4 z-10">
-            <Button
+          <div className="absolute top-4 right-4 z-20">
+            <button
               onClick={onClose}
-              variant="outline"
-              className="!p-1 border-0 text-fw-bodyLight hover:text-fw-body"
+              className="tab-button p-2 rounded-lg text-fw-bodyLight hover:text-fw-heading hover:bg-fw-wash transition-colors"
+              aria-label="Close"
             >
-              <X className="w-6 h-6" />
-            </Button>
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
           {/* Title */}
