@@ -33,3 +33,8 @@
 .widget-card {
   border-radius: 0.5rem;
 }
+
+/* Tab buttons - flat underlined, no rounding */
+button.tab-button {
+  border-radius: 0 !important;
+}
