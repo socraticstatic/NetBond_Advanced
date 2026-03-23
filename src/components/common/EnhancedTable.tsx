@@ -188,40 +188,39 @@ function EnhancedTableComponent<T>({
         </div>
       )}
       <div className="w-full overflow-visible">
-        <table className="w-full divide-y divide-fw-secondary">
-          <thead className={`bg-fw-wash ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
+        <table className="w-full table-fixed">
+          <thead className={`bg-fw-wash border-b border-fw-secondary ${stickyHeader ? 'sticky top-0 z-10' : ''}`}>
             <tr>
               {filteredColumns.map((column) => (
                 <th
                   key={column.id}
                   scope="col"
-                  className={`px-6 h-12 text-left text-figma-base font-medium text-fw-heading tracking-[-0.03em] ${
-                    column.sortable ? 'cursor-pointer select-none hover:bg-fw-neutral' : ''
+                  className={`px-6 h-12 text-left text-[14px] font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis align-middle ${
+                    column.sortable ? 'cursor-pointer select-none' : ''
                   }`}
                   onClick={() => handleSort(column)}
                   style={column.width ? { width: column.width } : undefined}
                 >
-                  <div className="flex items-center">
-                    {column.label}
+                  <div className="group inline-flex items-center space-x-1">
+                    <span>{column.label}</span>
                     {column.sortable && (
-                      <span className="ml-1">
-                        {sortField === column.sortKey ? (
-                          sortDirection === 'asc' ? (
-                            <ChevronUp className="h-4 w-4" />
-                          ) : (
-                            <ChevronDown className="h-4 w-4" />
-                          )
-                        ) : (
-                          <div className="h-4 w-4 opacity-0 group-hover:opacity-50">
-                            <ChevronUp className="h-4 w-4" />
-                          </div>
-                        )}
+                      <span className="flex flex-col">
+                        <ChevronUp className={`h-3 w-3 ${
+                          sortField === column.sortKey && sortDirection === 'asc'
+                            ? 'text-fw-body'
+                            : 'text-fw-bodyLight group-hover:text-fw-body'
+                        }`} />
+                        <ChevronDown className={`h-3 w-3 -mt-1 ${
+                          sortField === column.sortKey && sortDirection === 'desc'
+                            ? 'text-fw-body'
+                            : 'text-fw-bodyLight group-hover:text-fw-body'
+                        }`} />
                       </span>
                     )}
                   </div>
                 </th>
               ))}
-              <th scope="col" className="relative px-6 py-3 w-16">
+              <th scope="col" className="w-16 px-6 h-12 align-middle">
                 {(showColumnManager && tableId) || headerActions ? (
                   <div className="flex items-center justify-end gap-1">
                     {headerActions}
@@ -262,13 +261,13 @@ function EnhancedTableComponent<T>({
                   onClick={() => onRowClick?.(item)}
                 >
                   {filteredColumns.map((column) => (
-                    <td key={column.id} className="px-6 h-12 text-figma-base font-medium text-fw-heading tracking-[-0.03em] truncate">
+                    <td key={column.id} className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
                       {column.render(item)}
                     </td>
                   ))}
                   {rowActions && (
-                    <td className="px-3 py-2 text-right text-figma-base font-medium whitespace-nowrap">
-                      <div onClick={(e) => e.stopPropagation()}>
+                    <td className="w-16 px-6 py-4">
+                      <div className="flex justify-end" onClick={(e) => e.stopPropagation()}>
                         {rowActions(item)}
                       </div>
                     </td>
