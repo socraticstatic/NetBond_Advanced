@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import { Plus, Pencil, Trash2, Megaphone } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { Plus, Megaphone, Eye, Pencil, Trash2 } from 'lucide-react';
 import { BaseTable } from '../common/BaseTable';
 import { Badge, StatusBadge } from '../common/Badge';
 import { Button } from '../common/Button';
+import { SearchFilterBar } from '../common/SearchFilterBar';
+import { OverflowMenu } from '../common/OverflowMenu';
 
 type BannerStatus = 'active' | 'scheduled' | 'inactive';
 type BannerPosition = 'top' | 'hero' | 'inline';
@@ -56,9 +58,27 @@ function formatDate(iso: string): string {
 
 export function CMSBannerEditor() {
   const [banners, setBanners] = useState<Banner[]>(SAMPLE_BANNERS);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortField, setSortField] = useState<keyof Banner>('title');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const handleSort = useCallback((field: keyof Banner) => {
+    if (sortField === field) {
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  }, [sortField]);
 
   const handleDelete = (id: string) => {
     setBanners(prev => prev.filter(b => b.id !== id));
+    window.addToast?.({
+      type: 'success',
+      title: 'Banner Deleted',
+      message: 'Banner has been removed.',
+      duration: 3000,
+    });
   };
 
   const handleEdit = (banner: Banner) => {
@@ -79,17 +99,36 @@ export function CMSBannerEditor() {
     });
   };
 
+  const filteredBanners = banners
+    .filter(b => {
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase();
+      return b.title.toLowerCase().includes(q) ||
+        b.status.toLowerCase().includes(q) ||
+        b.position.toLowerCase().includes(q);
+    })
+    .sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const mod = sortDirection === 'asc' ? 1 : -1;
+      return String(aVal).localeCompare(String(bVal)) * mod;
+    });
+
   const columns = [
     {
       id: 'title',
       label: 'Title',
+      sortable: true,
+      sortKey: 'title' as keyof Banner,
       render: (b: Banner) => (
-        <span className="text-fw-heading font-medium tracking-[-0.03em]">{b.title}</span>
+        <span className="text-fw-heading font-medium">{b.title}</span>
       ),
     },
     {
       id: 'status',
       label: 'Status',
+      sortable: true,
+      sortKey: 'status' as keyof Banner,
       render: (b: Banner) => (
         <StatusBadge status={b.status} size="sm" />
       ),
@@ -97,6 +136,8 @@ export function CMSBannerEditor() {
     {
       id: 'position',
       label: 'Position',
+      sortable: true,
+      sortKey: 'position' as keyof Banner,
       render: (b: Banner) => {
         const colors = positionColors[b.position];
         return (
@@ -109,19 +150,19 @@ export function CMSBannerEditor() {
     {
       id: 'startDate',
       label: 'Start Date',
+      sortable: true,
+      sortKey: 'startDate' as keyof Banner,
       render: (b: Banner) => (
-        <span className="text-fw-body text-figma-base font-medium tracking-[-0.03em]">
-          {formatDate(b.startDate)}
-        </span>
+        <span className="text-fw-body">{formatDate(b.startDate)}</span>
       ),
     },
     {
       id: 'endDate',
       label: 'End Date',
+      sortable: true,
+      sortKey: 'endDate' as keyof Banner,
       render: (b: Banner) => (
-        <span className="text-fw-body text-figma-base font-medium tracking-[-0.03em]">
-          {formatDate(b.endDate)}
-        </span>
+        <span className="text-fw-body">{formatDate(b.endDate)}</span>
       ),
     },
   ];
@@ -143,14 +184,6 @@ export function CMSBannerEditor() {
             </p>
           </div>
         </div>
-
-        <Button
-          variant="primary"
-          icon={Plus}
-          onClick={handleCreate}
-        >
-          Create Banner
-        </Button>
       </div>
 
       {/* Stats row */}
@@ -175,42 +208,44 @@ export function CMSBannerEditor() {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
       <BaseTable<Banner>
+        tableId="cms-banners"
         columns={columns}
-        data={banners}
+        data={filteredBanners}
         keyField="id"
-        showColumnManager={false}
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onSort={handleSort}
+        showColumnManager={true}
+        toolbar={
+          <SearchFilterBar
+            searchPlaceholder="Search banners..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            onExport={() => window.addToast?.({ type: 'success', title: 'Exported', message: 'Banners exported', duration: 3000 })}
+            actions={
+              <Button variant="primary" icon={Plus} onClick={handleCreate}>
+                Create Banner
+              </Button>
+            }
+          />
+        }
+        actions={(banner: Banner) => (
+          <OverflowMenu items={[
+            { id: 'view', label: 'View Banner', icon: <Eye className="h-4 w-4" />, onClick: () => handleEdit(banner) },
+            { id: 'edit', label: 'Edit Banner', icon: <Pencil className="h-4 w-4" />, onClick: () => handleEdit(banner) },
+            { id: 'delete', label: 'Delete', icon: <Trash2 className="h-4 w-4" />, onClick: () => handleDelete(banner.id), variant: 'danger' as const },
+          ]} />
+        )}
         emptyState={
           <div className="flex flex-col items-center gap-2 py-8">
             <Megaphone className="h-8 w-8 text-fw-disabled" />
-            <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">
+            <p className="text-[14px] text-fw-bodyLight">
               No banners yet. Create your first banner.
             </p>
           </div>
         }
-        actions={(banner: Banner) => (
-          <div className="flex items-center justify-end gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              icon={Pencil}
-              onClick={() => handleEdit(banner)}
-            >
-              Edit
-            </Button>
-            <Button
-              variant="outline-danger"
-              size="sm"
-              icon={Trash2}
-              onClick={() => handleDelete(banner.id)}
-            >
-              Delete
-            </Button>
-          </div>
-        )}
       />
-      </div>
     </div>
   );
 }

@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { UserPlus, Trash2, ShieldCheck, Edit2, X, Search, Filter, Download } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { UserPlus, Trash2, ShieldCheck, Edit2, Search } from 'lucide-react';
 import { UserIcon } from '../../../common/UserIcon';
 import { Group } from '../../../../types/group';
 import { User as UserType } from '../../../../types';
 import { BaseTable } from '../../../common/BaseTable';
 import { Button } from '../../../common/Button';
+import { SearchFilterBar } from '../../../common/SearchFilterBar';
 import { OverflowMenu } from '../../../common/OverflowMenu';
 import { ConfirmDialog } from '../../../common/ConfirmDialog';
 import { useStore } from '../../../../store/useStore';
@@ -20,20 +21,34 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
   const addUserToGroup = useStore(state => state.addUserToGroup);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
   const [userToRemove, setUserToRemove] = useState<string | null>(null);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
-  
-  // Filter users based on search query
-  const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.role.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  
-  // Get available users (not already in the group)
+  const [sortField, setSortField] = useState<keyof UserType>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const handleSort = useCallback((field: keyof UserType) => {
+    if (sortField === field) {
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  }, [sortField]);
+
+  const filteredUsers = users
+    .filter(user =>
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.role.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      const aVal = String(a[sortField]);
+      const bVal = String(b[sortField]);
+      return aVal.localeCompare(bVal) * (sortDirection === 'asc' ? 1 : -1);
+    });
+
   const availableUsers = allUsers.filter(user => !group.userIds.includes(user.id));
-  
+
   const handleRemoveUser = async () => {
     if (userToRemove) {
       try {
@@ -44,7 +59,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
       }
     }
   };
-  
+
   const handleAddUser = async (userId: string) => {
     try {
       await addUserToGroup(group.id, userId);
@@ -54,30 +69,18 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
     }
   };
 
-  // Determine user's roles
-  const getUserRoles = (userId: string) => {
-    const roles = [];
-    if (group.ownerId === userId) roles.push('Owner');
-    if (group.permissions.admin.includes(userId)) roles.push('Admin');
-    else if (group.permissions.write.includes(userId)) roles.push('Editor');
-    else if (group.permissions.read.includes(userId)) roles.push('Viewer');
-    return roles;
-  };
-
   const columns = [
     {
       id: 'user',
       label: 'User',
+      sortable: true,
+      sortKey: 'name' as keyof UserType,
       width: '45%',
       render: (user: UserType) => (
         <div className="flex items-center max-w-xs">
           <div className="flex-shrink-0 h-10 w-10">
             {user.avatar ? (
-              <img 
-                className="h-10 w-10 rounded-full"
-                src={user.avatar}
-                alt={user.name}
-              />
+              <img className="h-10 w-10 rounded-full" src={user.avatar} alt={user.name} />
             ) : (
               <div className="h-10 w-10 rounded-full bg-fw-blue-light flex items-center justify-center border border-fw-secondary">
                 <UserIcon size="md" variant="primary" />
@@ -85,8 +88,8 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
             )}
           </div>
           <div className="ml-4 max-w-[calc(100%-44px)]">
-            <div className="text-figma-base font-medium text-fw-heading truncate">{user.name}</div>
-            <div className="text-figma-base text-fw-bodyLight truncate">{user.email}</div>
+            <div className="text-[14px] font-medium text-fw-heading truncate">{user.name}</div>
+            <div className="text-[14px] text-fw-bodyLight truncate">{user.email}</div>
           </div>
         </div>
       )
@@ -94,17 +97,21 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
     {
       id: 'role',
       label: 'User Role',
+      sortable: true,
+      sortKey: 'role' as keyof UserType,
       width: '35%',
       render: (user: UserType) => (
-        <div className="text-figma-base text-fw-bodyLight truncate max-w-[120px]">{user.role}</div>
+        <div className="text-fw-bodyLight truncate max-w-[120px]">{user.role}</div>
       )
     },
     {
       id: 'status',
       label: 'Status',
+      sortable: true,
+      sortKey: 'status' as keyof UserType,
       width: '20%',
       render: (user: UserType) => (
-        <span className={`px-2 py-1 inline-flex text-figma-sm leading-5 font-semibold rounded-full ${
+        <span className={`px-2.5 py-0.5 inline-flex text-[12px] font-medium rounded-full ${
           user.status === 'active'
             ? 'bg-green-50 text-fw-success'
             : 'bg-fw-neutral text-fw-body'
@@ -117,179 +124,81 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
 
   return (
     <div className="p-6 space-y-6">
-      {/* Search and Controls */}
-      <div className="bg-fw-base p-4 rounded-lg border border-fw-secondary">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search members..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-fw-secondary rounded-full focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-            />
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="primary"
-              icon={UserPlus}
-              onClick={() => setShowAddUserModal(true)}
-            >
-              Add User
-            </Button>
-            <Button
-              variant="outline"
-              icon={Filter}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              Filters
-            </Button>
-            <Button
-              variant="outline"
-              icon={Download}
-              onClick={() => {
-                window.addToast({
-                  type: 'success',
-                  title: 'Export Complete',
-                  message: 'Group members exported successfully',
-                  duration: 3000
-                });
-              }}
-            >
-              Export
-            </Button>
-          </div>
-        </div>
-
-        {/* Expanded Filters */}
-        {showFilters && (
-          <div className="mt-4 pt-4 border-t border-fw-secondary">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <h4 className="text-figma-base font-medium text-fw-heading mb-2">User Role</h4>
-                <div className="space-y-2">
-                  {['Network Administrator', 'Security Engineer', 'Security Analyst'].map((role) => (
-                    <label key={role} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        className="rounded border-fw-secondary text-fw-cobalt-600 focus:ring-fw-active h-4 w-4"
-                      />
-                      <span className="ml-2 text-figma-base text-fw-body">{role}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <h4 className="text-figma-base font-medium text-fw-heading mb-2">Group Permissions</h4>
-                <div className="space-y-2">
-                  {['Owner', 'Admin', 'Editor', 'Viewer'].map((permission) => (
-                    <label key={permission} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        className="rounded border-fw-secondary text-fw-cobalt-600 focus:ring-fw-active h-4 w-4"
-                      />
-                      <span className="ml-2 text-figma-base text-fw-body">{permission}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-figma-base font-medium text-fw-heading mb-2">Status</h4>
-                <div className="space-y-2">
-                  {['Active', 'Inactive'].map((status) => (
-                    <label key={status} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        className="rounded border-fw-secondary text-fw-cobalt-600 focus:ring-fw-active h-4 w-4"
-                      />
-                      <span className="ml-2 text-figma-base text-fw-body">{status}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Members Table */}
-      <div className="bg-fw-base rounded-2xl overflow-hidden">
-        <BaseTable
-          columns={columns}
-          data={filteredUsers}
-          keyField="id"
-          tableId="group-members"
-          showColumnManager={true}
-          actions={(user) => (
-            <OverflowMenu
-              items={[
-                {
-                  id: 'edit',
-                  label: 'Edit Permissions',
-                  icon: <Edit2 className="h-4 w-4" />,
-                  onClick: () => {
-                    window.addToast({
-                      type: 'info',
-                      title: 'Edit Permissions',
-                      message: 'Permissions management coming soon',
-                      duration: 3000
-                    });
-                  }
-                },
-                {
-                  id: 'make-admin',
-                  label: 'Make Admin',
-                  icon: <ShieldCheck className="h-4 w-4" />,
-                  onClick: () => {
-                    window.addToast({
-                      type: 'info',
-                      title: 'Make Admin',
-                      message: 'Admin promotion coming soon',
-                      duration: 3000
-                    });
-                  }
-                },
-                {
-                  id: 'remove',
-                  label: 'Remove from Group',
-                  icon: <Trash2 className="h-4 w-4" />,
-                  onClick: () => setUserToRemove(user.id),
-                  variant: 'danger'
+      <BaseTable<UserType>
+        tableId="group-members"
+        columns={columns}
+        data={filteredUsers}
+        keyField="id"
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onSort={handleSort}
+        showColumnManager={true}
+        toolbar={
+          <SearchFilterBar
+            searchPlaceholder="Search members..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            onExport={() => {
+              window.addToast({ type: 'success', title: 'Exported', message: 'Members exported', duration: 3000 });
+            }}
+            actions={
+              <Button variant="primary" icon={UserPlus} onClick={() => setShowAddUserModal(true)}>
+                Add User
+              </Button>
+            }
+          />
+        }
+        actions={(user) => (
+          <OverflowMenu
+            items={[
+              {
+                id: 'edit',
+                label: 'Edit Permissions',
+                icon: <Edit2 className="h-4 w-4" />,
+                onClick: () => {
+                  window.addToast({ type: 'info', title: 'Edit Permissions', message: 'Permissions management coming soon', duration: 3000 });
                 }
-              ]}
-            />
-          )}
-          emptyState={
-            <div className="text-center py-12">
-              <UserIcon size="xl" variant="muted" className="mx-auto mb-4" />
-              <p className="text-fw-bodyLight">No members found in this group</p>
-            </div>
-          }
-        />
-      </div>
+              },
+              {
+                id: 'make-admin',
+                label: 'Make Admin',
+                icon: <ShieldCheck className="h-4 w-4" />,
+                onClick: () => {
+                  window.addToast({ type: 'info', title: 'Make Admin', message: 'Admin promotion coming soon', duration: 3000 });
+                }
+              },
+              {
+                id: 'remove',
+                label: 'Remove from Pool',
+                icon: <Trash2 className="h-4 w-4" />,
+                onClick: () => setUserToRemove(user.id),
+                variant: 'danger'
+              }
+            ]}
+          />
+        )}
+        emptyState={
+          <div className="text-center py-12">
+            <UserIcon size="xl" variant="muted" className="mx-auto mb-4" />
+            <p className="text-fw-bodyLight">No members found in this pool</p>
+          </div>
+        }
+      />
 
-      {/* Remove User Confirmation Dialog */}
       <ConfirmDialog
         isOpen={!!userToRemove}
         onClose={() => setUserToRemove(null)}
         onConfirm={handleRemoveUser}
         title="Remove User"
-        message="Are you sure you want to remove this user from the group? They will lose all group-related permissions."
+        message="Are you sure you want to remove this user from the pool? They will lose all pool-related permissions."
         confirmText="Remove"
         confirmVariant="danger"
       />
 
-      {/* Add User Modal */}
       {showAddUserModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            {/* Background overlay */}
             <div className="fixed inset-0 transition-opacity bg-fw-neutral bg-opacity-75" onClick={() => setShowAddUserModal(false)} />
-
-            {/* Modal panel */}
             <div className="inline-block overflow-hidden text-left align-bottom transition-all transform bg-fw-base rounded-xl shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="px-4 pt-5 pb-4 bg-fw-base sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
@@ -297,28 +206,20 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
                     <UserPlus className="w-6 h-6 text-fw-link" />
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3 className="text-lg font-medium leading-6 text-fw-heading">
-                      Add User to Group
-                    </h3>
-                    <div className="mt-2">
-                      <p className="text-figma-base text-fw-bodyLight">
-                        Select a user to add to this group. They will automatically receive read access to group resources.
-                      </p>
-                    </div>
+                    <h3 className="text-lg font-medium leading-6 text-fw-heading">Add User to Pool</h3>
+                    <p className="mt-2 text-[14px] text-fw-bodyLight">
+                      Select a user to add. They will receive read access to pool resources.
+                    </p>
                   </div>
                 </div>
-
-                {/* Search for users */}
                 <div className="relative mt-6">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
                   <input
                     type="text"
                     placeholder="Search users..."
-                    className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+                    className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg text-[14px] focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   />
                 </div>
-
-                {/* User list */}
                 <div className="mt-4 max-h-60 overflow-y-auto">
                   {availableUsers.length > 0 ? (
                     <ul className="divide-y divide-fw-secondary">
@@ -326,11 +227,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
                         <li key={user.id} className="py-3 flex items-center hover:bg-fw-wash px-2 rounded-lg">
                           <div className="flex-shrink-0 h-10 w-10">
                             {user.avatar ? (
-                              <img 
-                                className="h-10 w-10 rounded-full"
-                                src={user.avatar}
-                                alt={user.name}
-                              />
+                              <img className="h-10 w-10 rounded-full" src={user.avatar} alt={user.name} />
                             ) : (
                               <div className="h-10 w-10 rounded-full bg-fw-neutral flex items-center justify-center">
                                 <UserIcon size="md" variant="muted" />
@@ -338,12 +235,12 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
                             )}
                           </div>
                           <div className="ml-3 flex-1">
-                            <div className="text-figma-base font-medium text-fw-heading">{user.name}</div>
-                            <div className="text-figma-base text-fw-bodyLight">{user.email}</div>
+                            <div className="text-[14px] font-medium text-fw-heading">{user.name}</div>
+                            <div className="text-[14px] text-fw-bodyLight">{user.email}</div>
                           </div>
                           <button
                             onClick={() => handleAddUser(user.id)}
-                            className="ml-2 inline-flex items-center px-3 py-1 border border-transparent text-figma-base leading-4 font-medium rounded-full shadow-sm text-white bg-fw-cobalt-600 hover:bg-fw-cobalt-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
+                            className="ml-2 inline-flex items-center px-3 py-1 border border-transparent text-[14px] font-medium rounded-full text-white bg-fw-cobalt-600 hover:bg-fw-cobalt-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active"
                           >
                             Add
                           </button>
@@ -352,7 +249,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
                     </ul>
                   ) : (
                     <div className="py-4 text-center">
-                      <p className="text-figma-base text-fw-bodyLight">No available users to add</p>
+                      <p className="text-[14px] text-fw-bodyLight">No available users to add</p>
                     </div>
                   )}
                 </div>
@@ -360,7 +257,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
               <div className="px-4 py-3 bg-fw-wash sm:px-6 sm:flex sm:flex-row-reverse">
                 <button
                   type="button"
-                  className="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white bg-fw-cobalt-600 border border-transparent rounded-full shadow-sm hover:bg-fw-cobalt-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active sm:ml-3 sm:w-auto sm:text-figma-base"
+                  className="inline-flex justify-center w-full px-4 py-2 text-[14px] font-medium text-white bg-fw-cobalt-600 border border-transparent rounded-full hover:bg-fw-cobalt-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fw-active sm:ml-3 sm:w-auto"
                   onClick={() => setShowAddUserModal(false)}
                 >
                   Close
@@ -373,4 +270,3 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
     </div>
   );
 }
-
