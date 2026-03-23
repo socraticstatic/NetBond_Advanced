@@ -125,10 +125,10 @@ export function FeedbackWidget() {
             width: '72px',
             height: '72px',
             borderRadius: '50%',
-            backgroundColor: '#0057b8',
+            backgroundColor: 'rgba(0, 87, 184, 0.6)',
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#00388f'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0057b8'; }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(0, 56, 143, 0.85)'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(0, 87, 184, 0.6)'; }}
           aria-label="Open feedback panel"
         >
           <MessageSquare className="h-4 w-4" style={{ marginRight: '24px' }} />
