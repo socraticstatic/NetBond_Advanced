@@ -91,22 +91,7 @@ export default defineConfig(({ mode }) => ({
           
           // Lucide Icons - split by usage frequency
           if (id.includes('node_modules/lucide-react')) {
-            // Common icons used everywhere
-            if (id.includes('activity') || id.includes('settings') || 
-                id.includes('chevron') || id.includes('x')) {
-              return 'icons-common';
-            }
-            // Monitoring specific icons
-            if (id.includes('bar-chart') || id.includes('trending') || 
-                id.includes('alert') || id.includes('clock')) {
-              return 'icons-monitoring';
-            }
-            // Network specific icons
-            if (id.includes('network') || id.includes('router') || 
-                id.includes('cloud') || id.includes('server')) {
-              return 'icons-network';
-            }
-            return 'icons-other';
+            return 'icons';
           }
           
           // Zustand - small, can be with main bundle
