@@ -26,8 +26,6 @@ interface GeneralFormData {
   rating: number;
 }
 
-type FormData = BugFormData | FeatureFormData | GeneralFormData;
-
 const defaultBugData: BugFormData = { title: '', description: '', severity: '', screenshot: false };
 const defaultFeatureData: FeatureFormData = { title: '', description: '', priority: '', useCase: '' };
 const defaultGeneralData: GeneralFormData = { title: '', description: '', rating: 0 };
@@ -117,17 +115,17 @@ export function FeedbackWidget() {
     <>
       {/* Trigger tab - right edge */}
       {!isOpen && (
-      <button
-        onClick={(e) => { e.stopPropagation(); setIsOpen(true); }}
-        className="fixed right-0 z-[60] flex items-center gap-1.5 text-white pl-3 pr-2 py-2 rounded-l-lg text-figma-base font-medium shadow-lg hover:shadow-xl transition-all"
-        style={{ top: '50%', transform: 'translateY(-50%)', backgroundColor: '#0057b8' }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#00388f'; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0057b8'; }}
-        aria-label="Open feedback panel"
-      >
-        <MessageSquare className="h-4 w-4" />
-        <span className="hidden sm:inline">Feedback</span>
-      </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); setIsOpen(true); }}
+          className="fixed right-0 z-[60] flex items-center gap-1.5 text-white pl-3 pr-2 py-2 rounded-l-lg text-figma-base font-medium shadow-lg hover:shadow-xl transition-all"
+          style={{ top: '50%', transform: 'translateY(-50%)', backgroundColor: '#0057b8' }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#00388f'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0057b8'; }}
+          aria-label="Open feedback panel"
+        >
+          <MessageSquare className="h-4 w-4" />
+          <span className="hidden sm:inline">Feedback</span>
+        </button>
       )}
 
       {/* Overlay */}
@@ -144,7 +142,7 @@ export function FeedbackWidget() {
         )}
       </AnimatePresence>
 
-      {/* Panel */}
+      {/* Side drawer panel */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -168,7 +166,7 @@ export function FeedbackWidget() {
                 {step === 'form' && (
                   <button
                     onClick={() => setStep('select')}
-                    className="text-[12px] text-fw-link hover:underline mt-0.5"
+                    className="tab-button text-[12px] text-fw-link hover:underline mt-0.5"
                   >
                     Back to options
                   </button>
@@ -176,7 +174,7 @@ export function FeedbackWidget() {
               </div>
               <button
                 onClick={handleClose}
-                className="text-fw-secondary hover:text-fw-heading transition-colors p-1 rounded-md hover:bg-fw-wash"
+                className="tab-button p-1 rounded-md text-fw-bodyLight hover:text-fw-heading hover:bg-fw-wash transition-colors"
                 aria-label="Close feedback panel"
               >
                 <X className="h-5 w-5" />
@@ -204,7 +202,7 @@ export function FeedbackWidget() {
                         <button
                           key={type.id}
                           onClick={() => handleTypeSelect(type.id)}
-                          className={`w-full text-left flex items-start gap-3 p-4 rounded-xl border transition-colors ${type.bg}`}
+                          className={`tab-button w-full text-left flex items-start gap-3 p-4 rounded-xl border transition-colors ${type.bg}`}
                         >
                           <Icon className={`h-5 w-5 mt-0.5 shrink-0 ${type.color}`} />
                           <div>
@@ -368,7 +366,7 @@ export function FeedbackWidget() {
                             key={star}
                             type="button"
                             onClick={() => setGeneralData({ ...generalData, rating: star })}
-                            className="p-0.5 transition-transform hover:scale-110"
+                            className="tab-button p-0.5 transition-transform hover:scale-110"
                             aria-label={`Rate ${star} out of 5`}
                           >
                             <Star
