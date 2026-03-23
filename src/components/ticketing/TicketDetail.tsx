@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, CheckCircle, Clock, User, Paperclip, FileText, Search, ArrowUpDown, MessageSquare } from 'lucide-react';
+import { ArrowLeft, RefreshCw, CheckCircle, Clock, User, Paperclip, FileText, Search, Edit2, Save, X, MessageSquare } from 'lucide-react';
 import { Button } from '../common/Button';
 
 type StageStep = {
@@ -91,8 +91,23 @@ export function TicketDetail() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'communication' | 'activity'>('communication');
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({
+    description: MOCK_TICKET.description,
+    priority: MOCK_TICKET.priority,
+    stage: MOCK_TICKET.stage,
+    requestorName: MOCK_TICKET.requestorName,
+    phone: MOCK_TICKET.phone,
+    startDate: MOCK_TICKET.startDate,
+    endDate: MOCK_TICKET.endDate,
+  });
 
   const ticket = MOCK_TICKET;
+
+  const handleSave = () => {
+    setIsEditing(false);
+    window.addToast?.({ type: 'success', title: 'Ticket Updated', message: 'Changes saved successfully', duration: 3000 });
+  };
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -107,15 +122,31 @@ export function TicketDetail() {
           </Button>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => {}}>
-            Accept
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => {}}>
-            Return to customer
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => {}}>
-            Cancel
-          </Button>
+          {isEditing ? (
+            <>
+              <Button variant="primary" size="sm" icon={Save} onClick={handleSave}>
+                Save
+              </Button>
+              <Button variant="outline" size="sm" icon={X} onClick={() => setIsEditing(false)}>
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="secondary" size="sm" icon={Edit2} onClick={() => setIsEditing(true)}>
+                Edit
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => {}}>
+                Accept
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => {}}>
+                Return to customer
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => {}}>
+                Cancel
+              </Button>
+            </>
+          )}
         </div>
       </div>
 
@@ -184,9 +215,18 @@ export function TicketDetail() {
             <h3 className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-3">
               Description
             </h3>
-            <p className="text-figma-lg font-medium text-fw-heading tracking-[-0.03em] whitespace-pre-line">
-              {ticket.description}
-            </p>
+            {isEditing ? (
+              <textarea
+                value={editData.description}
+                onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+                className="fw-textarea"
+                style={{ height: '120px' }}
+              />
+            ) : (
+              <p className="text-figma-lg font-medium text-fw-heading tracking-[-0.03em] whitespace-pre-line">
+                {editData.description}
+              </p>
+            )}
           </div>
 
           {/* Activity / Communication tabs */}
@@ -289,20 +329,28 @@ export function TicketDetail() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">Opened</p>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Opened</p>
                 <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.opened}</p>
               </div>
               <div>
-                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">Last update</p>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Last update</p>
                 <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.lastUpdate}</p>
               </div>
               <div>
-                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">Start date</p>
-                <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.startDate}</p>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Start date</p>
+                {isEditing ? (
+                  <input type="text" value={editData.startDate} onChange={(e) => setEditData({ ...editData, startDate: e.target.value })} className="fw-input" />
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{editData.startDate}</p>
+                )}
               </div>
               <div>
-                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">End date</p>
-                <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.endDate}</p>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">End date</p>
+                {isEditing ? (
+                  <input type="text" value={editData.endDate} onChange={(e) => setEditData({ ...editData, endDate: e.target.value })} className="fw-input" />
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{editData.endDate}</p>
+                )}
               </div>
             </div>
           </div>
@@ -315,12 +363,20 @@ export function TicketDetail() {
             </div>
             <div className="space-y-3">
               <div>
-                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">Name</p>
-                <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.requestorName}</p>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Name</p>
+                {isEditing ? (
+                  <input type="text" value={editData.requestorName} onChange={(e) => setEditData({ ...editData, requestorName: e.target.value })} className="fw-input" />
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{editData.requestorName}</p>
+                )}
               </div>
               <div>
-                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">Phone</p>
-                <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.phone}</p>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Phone</p>
+                {isEditing ? (
+                  <input type="text" value={editData.phone} onChange={(e) => setEditData({ ...editData, phone: e.target.value })} className="fw-input" />
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{editData.phone}</p>
+                )}
               </div>
             </div>
           </div>
@@ -329,9 +385,18 @@ export function TicketDetail() {
           <div className="bg-fw-base rounded-2xl border border-fw-secondary p-5">
             <div className="flex items-center justify-between">
               <span className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">Status</span>
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium bg-fw-active/10 text-fw-link">
-                {ticket.stage}
-              </span>
+              {isEditing ? (
+                <select value={editData.stage} onChange={(e) => setEditData({ ...editData, stage: e.target.value })} className="fw-select" style={{ width: 'auto', paddingRight: '2.5rem' }}>
+                  <option value="active">Active</option>
+                  <option value="queued">Queued</option>
+                  <option value="deferred">Deferred</option>
+                  <option value="ready to close">Ready to Close</option>
+                </select>
+              ) : (
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium bg-fw-active/10 text-fw-link">
+                  {editData.stage}
+                </span>
+              )}
             </div>
           </div>
 
