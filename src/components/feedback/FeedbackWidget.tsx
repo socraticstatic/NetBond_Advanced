@@ -120,10 +120,10 @@ export function FeedbackWidget() {
           className="fixed z-[60] flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-all"
           style={{
             top: '50%',
-            right: '-20px',
+            right: '-28px',
             transform: 'translateY(-50%)',
-            width: '40px',
-            height: '40px',
+            width: '56px',
+            height: '56px',
             borderRadius: '50%',
             backgroundColor: '#0057b8',
           }}
@@ -131,7 +131,7 @@ export function FeedbackWidget() {
           onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0057b8'; }}
           aria-label="Open feedback panel"
         >
-          <MessageSquare className="h-4 w-4" style={{ marginRight: '8px' }} />
+          <MessageSquare className="h-5 w-5" style={{ marginRight: '12px' }} />
         </button>
       )}
 
