@@ -26,6 +26,7 @@ export function CloudRouterSection({
   connection
 }: CloudRouterSectionProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
 
   // Calculate bandwidth usage
   const calculateTotalUsedBandwidth = () => {
@@ -74,12 +75,7 @@ export function CloudRouterSection({
             Manage cloud routers and their network configurations
           </p>
         </div>
-        <Button
-          variant="primary"
-          size="sm"
-          icon={<Plus className="h-4 w-4" />}
-          onClick={onAdd}
-        >
+        <Button variant="primary" icon={Plus} onClick={onAdd}>
           Add Cloud Router
         </Button>
       </div>
@@ -127,13 +123,14 @@ export function CloudRouterSection({
       </div>
 
       {/* Table Card */}
-      <div className="bg-fw-base rounded-2xl overflow-hidden">
-        <div className="px-6 py-4">
+      <div className="rounded-lg border border-fw-secondary overflow-hidden">
+        <div className="px-6 py-4 border-b border-fw-secondary">
           <SearchFilterBar
             searchPlaceholder="Search routers ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            showExport={false}
+            onFilter={() => setShowFilters(!showFilters)}
+            onExport={() => window.addToast?.({ type: 'success', title: 'Exported', message: 'Cloud routers exported', duration: 3000 })}
           />
         </div>
 
@@ -147,7 +144,7 @@ export function CloudRouterSection({
               {searchQuery ? 'Try adjusting your search terms' : 'Get started by adding your first cloud router'}
             </p>
             {!searchQuery && (
-              <Button variant="primary" icon={<Plus className="h-4 w-4" />} onClick={onAdd}>
+              <Button variant="primary" icon={Plus} onClick={onAdd}>
                 Add Cloud Router
               </Button>
             )}

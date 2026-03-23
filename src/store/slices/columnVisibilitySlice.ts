@@ -22,14 +22,20 @@ export interface ColumnVisibilitySlice {
  * Default column sets for each table
  */
 const DEFAULT_COLUMNS: ColumnConfig = {
-  connections: ['name', 'status', 'bandwidth', 'location', 'provider', 'performance'],
-  'connections-list': ['name', 'groups', 'type', 'status', 'bandwidth', 'location', 'provider'],
-  groups: ['name', 'connections', 'bandwidth', 'status', 'created'],
-  'groups-list': ['name', 'type', 'connections', 'members', 'status'],
-  users: ['user', 'role', 'permissions', 'department', 'status'],
-  vnf: ['name', 'type', 'status', 'connection', 'actions'],
-  cloudrouter: ['name', 'status', 'location', 'connections', 'actions'],
-  links: ['name', 'status', 'bandwidth', 'latency', 'actions']
+  'connections-list': ['name', 'groups', 'type', 'status', 'performance', 'bandwidth', 'location', 'provider'],
+  'groups-list': ['name', 'description', 'type', 'connections', 'members', 'status'],
+  users: ['user', 'role', 'permissions', 'scope', 'department', 'status'],
+  vnf: ['name', 'type', 'vendor', 'model', 'version', 'throughput', 'status', 'cloudRouter'],
+  cloudrouter: ['name', 'status', 'resources'],
+  links: ['vlanId', 'name', 'status', 'cloudRouter'],
+  vlans: ['vlanId', 'name', 'cloudRouter', 'bandwidth', 'status'],
+  'configure-connections': ['select', 'name', 'type', 'status', 'bandwidth', 'location'],
+  'connection-logs': ['logId', 'timestamp', 'type', 'category', 'message', 'source'],
+  'cms-banners': ['title', 'status', 'position', 'startDate', 'endDate'],
+  'group-connections': ['name', 'status', 'bandwidth', 'location'],
+  'group-members': ['user', 'role', 'status'],
+  tickets: ['ticketNumber', 'description', 'state', 'priority', 'stage', 'asset'],
+  'monitor-logs': ['time', 'type', 'severity', 'message', 'source', 'user'],
 };
 
 const STORAGE_KEY_PREFIX = 'columns_';
