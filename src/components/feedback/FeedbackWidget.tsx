@@ -113,18 +113,25 @@ export function FeedbackWidget() {
 
   return (
     <>
-      {/* Trigger tab - right edge */}
+      {/* Trigger - half-circle embedded in right edge */}
       {!isOpen && (
         <button
           onClick={(e) => { e.stopPropagation(); setIsOpen(true); }}
-          className="fixed right-0 z-[60] flex items-center gap-1.5 text-white pl-3 pr-2 py-2 rounded-l-lg text-figma-base font-medium shadow-lg hover:shadow-xl transition-all"
-          style={{ top: '50%', transform: 'translateY(-50%)', backgroundColor: '#0057b8' }}
+          className="fixed z-[60] flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-all"
+          style={{
+            top: '50%',
+            right: '-20px',
+            transform: 'translateY(-50%)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            backgroundColor: '#0057b8',
+          }}
           onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#00388f'; }}
           onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0057b8'; }}
           aria-label="Open feedback panel"
         >
-          <MessageSquare className="h-4 w-4" />
-          <span className="hidden sm:inline">Feedback</span>
+          <MessageSquare className="h-4 w-4" style={{ marginRight: '8px' }} />
         </button>
       )}
 
