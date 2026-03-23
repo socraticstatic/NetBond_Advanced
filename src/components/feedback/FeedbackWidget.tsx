@@ -131,7 +131,7 @@ export function FeedbackWidget() {
           onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#0057b8'; }}
           aria-label="Open feedback panel"
         >
-          <MessageSquare className="h-6 w-6" style={{ marginRight: '20px' }} />
+          <MessageSquare className="h-4 w-4" style={{ marginRight: '24px' }} />
         </button>
       )}
 
