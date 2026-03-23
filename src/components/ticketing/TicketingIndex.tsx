@@ -1,9 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, ChevronDown, Ticket, Eye, Edit, Trash2 } from 'lucide-react';
+import { Plus, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, ChevronDown, Settings, Ticket, Eye, Edit, Trash2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { SearchFilterBar } from '../common/SearchFilterBar';
 import { OverflowMenu } from '../common/OverflowMenu';
+import { ColumnVisibilityPopover, ColumnDefinition } from '../common/ColumnVisibilityPopover';
+import { useColumnVisibility } from '../../hooks/useColumnVisibility';
 
 type TicketStatus = 'active' | 'queued' | 'deferred' | 'ready to close' | 'device down';
 type TicketPriority = 'device down' | 'partially impacting' | 'minor problems' | 'info tickets';
@@ -56,6 +58,10 @@ export function TicketingIndex() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortColumn, setSortColumn] = useState<string>('ticketNumber');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [showFilters, setShowFilters] = useState(false);
+  const [showColumnPopover, setShowColumnPopover] = useState(false);
+  const columnButtonRef = useRef<HTMLButtonElement>(null);
+  const { isVisible, visibleColumns } = useColumnVisibility('tickets');
 
   const filteredTickets = useMemo(() => {
     return MOCK_TICKETS.filter(ticket => {
@@ -83,7 +89,7 @@ export function TicketingIndex() {
     }
   };
 
-  const columns = [
+  const allColumns: Array<{ key: string; label: string }> = [
     { key: 'ticketNumber', label: 'Ticket number' },
     { key: 'description', label: 'Description' },
     { key: 'state', label: 'State' },
@@ -91,6 +97,12 @@ export function TicketingIndex() {
     { key: 'stage', label: 'Stage' },
     { key: 'asset', label: 'Asset' },
   ];
+
+  const columns = visibleColumns.length === 0
+    ? allColumns
+    : allColumns.filter(c => isVisible(c.key));
+
+  const columnDefs: ColumnDefinition[] = allColumns.map(c => ({ id: c.key, label: c.label }));
 
   return (
     <div className="space-y-6">
@@ -102,18 +114,29 @@ export function TicketingIndex() {
             searchPlaceholder="Search tickets ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            onFilter={() => {}}
+            onFilter={() => setShowFilters(!showFilters)}
             onExport={() => window.addToast?.({ type: 'success', title: 'Exported', message: 'Tickets exported', duration: 3000 })}
-            filterContent={
-              <div className="flex items-center gap-2">
-                <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: 'auto', paddingRight: '2.5rem' }}>
+            actions={
+              <Button variant="primary" icon={Plus} onClick={() => navigate('/tickets/create')}>
+                Create
+              </Button>
+            }
+          />
+          {showFilters && (
+            <div className="flex items-center gap-4 mt-4 pt-4 border-t border-fw-secondary">
+              <div>
+                <label className="fw-label">Stage</label>
+                <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: '180px' }}>
                   <option value="all">All stages</option>
                   <option value="active">Active</option>
                   <option value="queued">Queued</option>
                   <option value="deferred">Deferred</option>
                   <option value="ready to close">Ready to Close</option>
                 </select>
-                <select value={priorityFilter} onChange={e => { setPriorityFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: 'auto', paddingRight: '2.5rem' }}>
+              </div>
+              <div>
+                <label className="fw-label">Priority</label>
+                <select value={priorityFilter} onChange={e => { setPriorityFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: '200px' }}>
                   <option value="all">All priorities</option>
                   <option value="device down">Device Down</option>
                   <option value="partially impacting">Partially Impacting</option>
@@ -121,13 +144,8 @@ export function TicketingIndex() {
                   <option value="info tickets">Info Tickets</option>
                 </select>
               </div>
-            }
-            actions={
-              <Button variant="primary" icon={Plus} onClick={() => navigate('/tickets/create')}>
-                Create
-              </Button>
-            }
-          />
+            </div>
+          )}
         </div>
 
         <table className="w-full table-fixed">
@@ -150,7 +168,18 @@ export function TicketingIndex() {
                   </button>
                 </th>
               ))}
-              <th className="w-16 px-6 h-12 align-middle" />
+              <th className="w-16 px-6 h-12 align-middle">
+                <div className="flex justify-end">
+                  <button
+                    ref={columnButtonRef}
+                    onClick={() => setShowColumnPopover(!showColumnPopover)}
+                    className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral transition-colors"
+                    title="Manage Columns"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </button>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody className="bg-fw-base divide-y divide-fw-secondary">
@@ -265,6 +294,15 @@ export function TicketingIndex() {
           </div>
         </div>
       </div>
+
+      {showColumnPopover && (
+        <ColumnVisibilityPopover
+          tableId="tickets"
+          allColumns={columnDefs}
+          onClose={() => setShowColumnPopover(false)}
+          anchorEl={columnButtonRef.current}
+        />
+      )}
     </div>
   );
 }

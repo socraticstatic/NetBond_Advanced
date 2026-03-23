@@ -144,12 +144,18 @@ export function NotificationsButton() {
               })}
             </div>
 
-            <div className="p-4 border-t border-fw-secondary bg-fw-wash">
+            <div className="p-3 border-t border-fw-secondary bg-fw-wash flex items-center justify-between">
               <button
-                className="w-full text-center text-figma-base text-brand-accent hover:text-fw-linkHover font-medium transition-colors"
+                className="text-[14px] text-fw-link hover:text-fw-linkHover font-medium transition-colors"
                 onClick={handleViewAll}
               >
                 View All Notifications
+              </button>
+              <button
+                className="text-[14px] text-fw-link hover:text-fw-linkHover font-medium transition-colors"
+                onClick={() => { setIsOpen(false); navigate('/news'); }}
+              >
+                News & Announcements
               </button>
             </div>
           </div>
