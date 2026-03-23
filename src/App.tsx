@@ -8,7 +8,7 @@ import { ConnectionTabs } from './components/connection/ConnectionTabs';
 import { useStore } from './store/useStore';
 import { ThemeProvider } from './components/ThemeProvider';
 import { MobileMenu } from './components/navigation/MobileMenu';
-import { SmartAssistant } from './components/SmartAssistant';
+// SmartAssistant removed per user request
 import { FeedbackWidget } from './components/feedback/FeedbackWidget';
 import { NavigationStateProvider } from './components/common/layouts/NavigationStateProvider';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
@@ -673,7 +673,7 @@ function App() {
               userInfo={userInfo}
               notifications={3}
             />
-            <SmartAssistant />
+            {/* SmartAssistant removed */}
             <FeedbackWidget />
             <MaintenanceModal
               isOpen={showMaintenance}
