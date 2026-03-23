@@ -41,8 +41,8 @@ function ColumnVisibilityPopoverComponent({
     col.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Count visible
-  const visibleCount = visibleColumns.length;
+  // Count visible - empty array means all visible
+  const visibleCount = visibleColumns.length === 0 ? allColumns.length : visibleColumns.length;
   const totalCount = allColumns.length;
 
   // Handle click outside to close
@@ -176,7 +176,7 @@ function ColumnVisibilityPopoverComponent({
                   <input
                     type="checkbox"
                     checked={isVisible}
-                    onChange={() => !isRequired && toggleColumn(tableId, column.id)}
+                    onChange={() => !isRequired && toggleColumn(tableId, column.id, allColumnIds)}
                     disabled={isRequired}
                     className="h-4 w-4 text-brand-blue border-fw-secondary rounded focus:ring-brand-blue"
                   />
