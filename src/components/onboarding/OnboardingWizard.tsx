@@ -126,15 +126,16 @@ const SECTION_WALKTHROUGHS = [
 ];
 
 // Right-panel wireframe illustrations exported from Figma groups
+const base = import.meta.env.BASE_URL;
 const STEP_IMAGES: Record<number, string> = {
-  1: '/images/onboarding/panel-terms.png',
-  2: '/images/onboarding/panel-create.png',
-  3: '/images/onboarding/panel-clients.png',
-  4: '/images/onboarding/panel-create.png',
-  5: '/images/onboarding/panel-manage.png',
-  6: '/images/onboarding/panel-monitor.png',
-  7: '/images/onboarding/panel-configure.png',
-  8: '/images/onboarding/panel-completion.png',
+  1: `${base}images/onboarding/panel-terms.png`,
+  2: `${base}images/onboarding/panel-create.png`,
+  3: `${base}images/onboarding/panel-clients.png`,
+  4: `${base}images/onboarding/panel-create.png`,
+  5: `${base}images/onboarding/panel-manage.png`,
+  6: `${base}images/onboarding/panel-monitor.png`,
+  7: `${base}images/onboarding/panel-configure.png`,
+  8: `${base}images/onboarding/panel-completion.png`,
 };
 
 // Animation variants
@@ -551,7 +552,7 @@ function TimezoneStep({
       {/* World map - exported from Figma */}
       <div className="mt-8 w-full max-w-[504px] h-[285px] rounded-2xl overflow-hidden bg-fw-wash">
         <img
-          src="/images/onboarding/worldmap.png"
+          src={`${import.meta.env.BASE_URL}images/onboarding/worldmap.png`}
           alt="World timezone map"
           className="w-full h-full object-contain"
         />
@@ -702,7 +703,7 @@ function WalkthroughStep({
             {/* Preview thumbnail - exported from Figma */}
             <div className="w-[136px] h-[136px] rounded-2xl bg-fw-wash mb-3 overflow-hidden">
               <img
-                src={`/images/onboarding/thumb-${thumbPrefix}-${i + 1}.png`}
+                src={`${import.meta.env.BASE_URL}images/onboarding/thumb-${thumbPrefix}-${i + 1}.png`}
                 alt={feature.name}
                 className="w-full h-full object-cover"
               />
