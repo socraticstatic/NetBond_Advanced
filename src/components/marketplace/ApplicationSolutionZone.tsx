@@ -123,11 +123,12 @@ export function ApplicationSolutionZone() {
                 <div className="p-6 border-b border-fw-secondary bg-gradient-to-b from-fw-wash to-fw-base">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      {solution.logo && (
-                        <div className="p-2 bg-fw-base rounded-lg shadow-sm border border-fw-secondary">
-                          <img src={solution.logo} alt={`${solution.name} logo`} className="h-8 w-8 object-contain" />
-                        </div>
-                      )}
+                      <div className="p-2 bg-fw-base rounded-lg shadow-sm border border-fw-secondary">
+                        {solution.logo ? (
+                          <img src={solution.logo} alt={`${solution.name} logo`} className="h-8 w-8 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden'); }} />
+                        ) : null}
+                        <Sparkles className={`h-8 w-8 text-fw-link ${solution.logo ? 'hidden' : ''}`} />
+                      </div>
                       <div>
                         <h4 className="text-figma-base font-medium text-fw-heading">{solution.name}</h4>
                         <p className="text-figma-sm text-fw-bodyLight">{solution.category}</p>
@@ -208,11 +209,12 @@ export function ApplicationSolutionZone() {
             <div className="bg-gradient-to-b from-fw-wash to-fw-base p-6 border-b border-fw-secondary">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  {selectedSolution.logo && (
-                    <div className="p-3 bg-fw-base rounded-xl shadow-sm border border-fw-secondary">
-                      <img src={selectedSolution.logo} alt={`${selectedSolution.name} logo`} className="h-10 w-10 object-contain" />
-                    </div>
-                  )}
+                  <div className="p-3 bg-fw-base rounded-xl shadow-sm border border-fw-secondary">
+                    {selectedSolution.logo ? (
+                      <img src={selectedSolution.logo} alt={`${selectedSolution.name} logo`} className="h-10 w-10 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden'); }} />
+                    ) : null}
+                    <Sparkles className={`h-10 w-10 text-fw-link ${selectedSolution.logo ? 'hidden' : ''}`} />
+                  </div>
                   <div>
                     <h3 className="text-2xl font-bold text-fw-heading tracking-[-0.03em]">{selectedSolution.name} Network</h3>
                     <p className="text-fw-bodyLight">Pre-configured network solution</p>

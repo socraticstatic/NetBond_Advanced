@@ -53,13 +53,11 @@ export function CategoryGrid({
                 }`}>
                   <Icon className="h-4 w-4" />
                 </div>
-                <div className="flex-1 text-left min-w-0">
-                  <h3 className="text-figma-base font-medium truncate">{category.name}</h3>
-                </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
+                <span className="flex-1 text-figma-base font-medium truncate text-left">{category.name}</span>
+                <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
                   {category.count > 0 && (
-                    <span className={`text-figma-sm font-medium rounded-full px-2 py-0.5 ${
-                      isSelected ? 'bg-fw-link text-white' : 'bg-fw-neutral text-fw-bodyLight'
+                    <span className={`text-[12px] font-medium min-w-[20px] text-center ${
+                      isSelected ? 'text-fw-link' : 'text-fw-bodyLight'
                     }`}>
                       {category.count}
                     </span>
