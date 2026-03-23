@@ -266,10 +266,36 @@ export function NetworkDesigner({
     onComplete(connections);
   }, [edges, nodes, editMode, connectionId, onComplete]);
 
+  // Edge preview line: track mouse position when creating an edge
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    if (!isCreatingEdge || !edgeStartNodeId) {
+      setMousePos(null);
+      return;
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      setMousePos({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [isCreatingEdge, edgeStartNodeId]);
+
   // Layout
   const containerClass = isMaximized
     ? 'fixed inset-0 z-50 bg-fw-wash'
     : 'relative w-full h-[600px] bg-fw-wash rounded-2xl border border-fw-secondary overflow-hidden';
+
+  // Find source node position for edge preview
+  const edgeSourceNode = edgeStartNodeId ? nodes.find(n => n.id === edgeStartNodeId) : null;
 
   // Render edges as SVG content, nodes as children
   const svgContent = (
@@ -283,6 +309,20 @@ export function NetworkDesigner({
           onClick={handleEdgeClick}
         />
       ))}
+      {/* Preview line from source node to cursor while creating edge */}
+      {edgeSourceNode && mousePos && (
+        <line
+          x1={edgeSourceNode.x + 40}
+          y1={edgeSourceNode.y + 30}
+          x2={mousePos.x}
+          y2={mousePos.y}
+          stroke="#0057b8"
+          strokeWidth={2}
+          strokeDasharray="6 4"
+          opacity={0.6}
+          pointerEvents="none"
+        />
+      )}
     </>
   );
 
