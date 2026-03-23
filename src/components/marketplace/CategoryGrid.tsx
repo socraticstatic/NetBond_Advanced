@@ -54,7 +54,7 @@ export function CategoryGrid({
                   <Icon className="h-4 w-4" />
                 </div>
                 <div className="flex-1 text-left min-w-0">
-                  <h3 className="text-figma-base font-medium">{category.name}</h3>
+                  <h3 className="text-figma-base font-medium truncate">{category.name}</h3>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   {category.count > 0 && (
