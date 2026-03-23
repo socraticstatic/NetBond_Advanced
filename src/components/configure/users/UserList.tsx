@@ -280,44 +280,41 @@ export function UserList({ searchQuery }: UserListProps) {
         </div>
       </div>
 
-      {/* Search and Controls */}
-      <div className="bg-fw-base p-4 rounded-2xl border border-fw-secondary mb-6 shadow-sm">
-        <SearchFilterBar
-          searchPlaceholder="Search by name, email, or role..."
-          searchValue={localSearchQuery}
-          onSearchChange={(value) => setLocalSearchQuery(value || '')}
-          onFilter={() => {
-            window.addToast({
-              type: 'info',
-              title: 'Filter Users',
-              message: 'Advanced filtering coming soon',
-              duration: 3000
-            });
-          }}
-          onExport={() => {
-            window.addToast({
-              type: 'success',
-              title: 'Export Users',
-              message: 'User list exported successfully',
-              duration: 3000
-            });
-          }}
-          actions={
-            <Button
-              variant="primary"
-              icon={UserPlus}
-              onClick={() => setShowAddModal(true)}
-              disabled={!canManageUsers.allowed}
-            >
-              Add User
-            </Button>
-          }
-        />
-      </div>
-
       {/* Users Table */}
-      <div className="bg-fw-base rounded-2xl overflow-hidden shadow-sm">
         <BaseTable
+          toolbar={
+            <SearchFilterBar
+              searchPlaceholder="Search by name, email, or role..."
+              searchValue={localSearchQuery}
+              onSearchChange={(value) => setLocalSearchQuery(value || '')}
+              onFilter={() => {
+                window.addToast({
+                  type: 'info',
+                  title: 'Filter Users',
+                  message: 'Advanced filtering coming soon',
+                  duration: 3000
+                });
+              }}
+              onExport={() => {
+                window.addToast({
+                  type: 'success',
+                  title: 'Export Users',
+                  message: 'User list exported successfully',
+                  duration: 3000
+                });
+              }}
+              actions={
+                <Button
+                  variant="primary"
+                  icon={UserPlus}
+                  onClick={() => setShowAddModal(true)}
+                  disabled={!canManageUsers.allowed}
+                >
+                  Add User
+                </Button>
+              }
+            />
+          }
           columns={columns}
           data={filteredUsers}
           keyField="id"
@@ -378,7 +375,6 @@ export function UserList({ searchQuery }: UserListProps) {
             </div>
           }
         />
-      </div>
 
       {/* Drawers */}
       {selectedUser && (

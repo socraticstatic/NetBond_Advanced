@@ -115,9 +115,10 @@ export function FeedbackWidget() {
 
   return (
     <>
-      {/* Trigger tab - right edge, mid-height */}
+      {/* Trigger tab - right edge, mid-height, hidden on small screens */}
+      {!isOpen && (
       <div
-        className="fixed right-0 z-40"
+        className="fixed right-0 z-40 hidden sm:block"
         style={{ top: '50%', transform: 'translateY(-50%)' }}
       >
         <button
@@ -129,6 +130,7 @@ export function FeedbackWidget() {
           Feedback
         </button>
       </div>
+      )}
 
       {/* Overlay */}
       <AnimatePresence>
