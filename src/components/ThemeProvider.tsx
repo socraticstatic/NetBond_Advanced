@@ -16,7 +16,7 @@ interface ThemeProviderProps {
   defaultMode?: ThemeMode;
 }
 
-export function ThemeProvider({ children, defaultMode = 'system' }: ThemeProviderProps) {
+export function ThemeProvider({ children, defaultMode = 'light' }: ThemeProviderProps) {
   const [mode, setMode] = useState<ThemeMode>(() => {
     // Try to get the mode from localStorage
     const savedMode = localStorage.getItem('theme-mode');
