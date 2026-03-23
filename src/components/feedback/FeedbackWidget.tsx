@@ -115,19 +115,28 @@ export function FeedbackWidget() {
 
   return (
     <>
-      {/* Trigger tab - right edge, mid-height, hidden on small screens */}
+      {/* Trigger tab - right edge, mid-height */}
       {!isOpen && (
       <div
-        className="fixed right-0 z-40 hidden sm:block"
+        className="fixed right-0 z-[60]"
         style={{ top: '50%', transform: 'translateY(-50%)' }}
       >
+        {/* Desktop: vertical text tab */}
         <button
-          onClick={() => setIsOpen(true)}
-          className="bg-fw-link text-white px-3 py-2 rounded-l-lg text-[13px] font-medium tracking-[-0.02em] shadow-md hover:bg-fw-linkHover transition-colors"
+          onClick={(e) => { e.stopPropagation(); setIsOpen(true); }}
+          className="hidden sm:block bg-fw-link text-white px-3 py-2 rounded-l-lg text-[13px] font-medium tracking-[-0.02em] shadow-md hover:bg-fw-linkHover transition-colors"
           style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
           aria-label="Open feedback panel"
         >
           Feedback
+        </button>
+        {/* Mobile: small icon button */}
+        <button
+          onClick={(e) => { e.stopPropagation(); setIsOpen(true); }}
+          className="sm:hidden bg-fw-link text-white p-2.5 rounded-l-lg shadow-md hover:bg-fw-linkHover transition-colors"
+          aria-label="Open feedback panel"
+        >
+          <MessageSquare className="h-4 w-4" />
         </button>
       </div>
       )}
@@ -140,7 +149,7 @@ export function FeedbackWidget() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/20"
+            className="fixed inset-0 z-[60] bg-black/20"
             onClick={handleClose}
           />
         )}
@@ -155,7 +164,7 @@ export function FeedbackWidget() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed right-0 top-0 h-full w-full sm:w-[380px] bg-fw-base border-l border-fw-secondary shadow-xl z-40 rounded-l-2xl flex flex-col overflow-hidden"
+            className="fixed right-0 top-0 h-full w-full sm:w-[380px] bg-fw-base border-l border-fw-secondary shadow-xl z-[61] rounded-l-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-fw-secondary shrink-0">
