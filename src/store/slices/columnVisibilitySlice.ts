@@ -11,7 +11,7 @@ export interface ColumnVisibilitySlice {
   columnConfig: ColumnConfig;
   getVisibleColumns: (tableId: string) => string[];
   setVisibleColumns: (tableId: string, columns: string[]) => void;
-  toggleColumn: (tableId: string, columnId: string) => void;
+  toggleColumn: (tableId: string, columnId: string, allColumnIds?: string[]) => void;
   showAllColumns: (tableId: string, allColumnIds: string[]) => void;
   hideAllColumns: (tableId: string, allColumnIds: string[]) => void;
   resetToDefaults: (tableId: string) => void;
@@ -177,9 +177,14 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
       console.log(`[ColumnVisibility] Updated ${tableId}: ${columns.length} visible columns`);
     },
 
-    toggleColumn: (tableId: string, columnId: string) => {
+    toggleColumn: (tableId: string, columnId: string, allColumnIds?: string[]) => {
       const { getVisibleColumns, setVisibleColumns } = get();
-      const current = getVisibleColumns(tableId);
+      let current = getVisibleColumns(tableId);
+
+      // If no config yet (empty = all visible), initialize with all columns
+      if (current.length === 0 && allColumnIds) {
+        current = [...allColumnIds];
+      }
 
       if (current.includes(columnId)) {
         // Removing column
@@ -263,6 +268,8 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
     isColumnVisible: (tableId: string, columnId: string) => {
       const { getVisibleColumns } = get();
       const visible = getVisibleColumns(tableId);
+      // Empty array means no config - all columns visible
+      if (visible.length === 0) return true;
       return visible.includes(columnId);
     }
   };
