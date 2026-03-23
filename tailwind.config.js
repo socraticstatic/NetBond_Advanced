@@ -3,6 +3,14 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   important: true,
   theme: {
+    screens: {
+      'xs': '320px',     // Mobile
+      'sm': '640px',     // Mobile landscape
+      'md': '768px',     // Tablet
+      'lg': '1024px',    // Desktop
+      'xl': '1440px',    // Ultra-Wide
+      '2xl': '1920px',   // 4k+
+    },
     extend: {
       fontFamily: {
         sans: ['ATT Aleck Sans', 'Inter var', 'system-ui', 'sans-serif'],
