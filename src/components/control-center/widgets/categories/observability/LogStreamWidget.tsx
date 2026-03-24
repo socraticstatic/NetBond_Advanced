@@ -74,7 +74,7 @@ export function LogStreamWidget() {
           <div
             key={log.id}
             className={`p-2 rounded-lg font-mono text-figma-sm ${
-              log.level === 'error' ? 'bg-red-50 text-fw-error' :
+              log.level === 'error' ? 'bg-fw-errorLight text-fw-error' :
               log.level === 'warning' ? 'bg-fw-warn/10 text-fw-warn' :
               'bg-fw-wash text-fw-body'
             }`}
@@ -84,7 +84,7 @@ export function LogStreamWidget() {
                 {new Date(log.timestamp).toLocaleTimeString()}
               </span>
               <span className={`px-1.5 py-0.5 rounded-full text-figma-sm font-medium ${
-                log.level === 'error' ? 'bg-red-50 text-fw-error' :
+                log.level === 'error' ? 'bg-fw-errorLight text-fw-error' :
                 log.level === 'warning' ? 'bg-fw-warn/10 text-fw-warn' :
                 'bg-fw-accent text-fw-linkHover'
               }`}>

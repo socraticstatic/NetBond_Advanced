@@ -115,11 +115,11 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
 
   const getBillingInfo = () => {
     const planLabels = {
-      'trial': { label: '22 days left', color: 'green', bgColor: 'bg-green-50', textColor: 'text-fw-success' },
+      'trial': { label: '22 days left', color: 'green', bgColor: 'bg-fw-successLight', textColor: 'text-fw-success' },
       'pay-as-you-go': { label: 'Pay as you go', color: 'blue', bgColor: 'bg-brand-lightBlue', textColor: 'text-fw-link' },
       '12-months': { label: '12 Months', color: 'blue', bgColor: 'bg-brand-lightBlue', textColor: 'text-fw-link' },
       '24-months': { label: '24 Months', color: 'blue', bgColor: 'bg-brand-lightBlue', textColor: 'text-fw-link' },
-      '36-months': { label: '36 Months', color: 'purple', bgColor: 'bg-purple-50', textColor: 'text-fw-link' }
+      '36-months': { label: '36 Months', color: 'purple', bgColor: 'bg-fw-purpleLight', textColor: 'text-fw-link' }
     };
 
     const planId = connection.billing?.planId || 'pay-as-you-go';
@@ -178,7 +178,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
 
     const utilization = connection.performance?.bandwidthUtilization || 0;
     if (utilization > 90) {
-      return { label: 'CRITICAL', color: 'bg-red-50 text-fw-error' };
+      return { label: 'CRITICAL', color: 'bg-fw-errorLight text-fw-error' };
     } else if (utilization > 80) {
       return { label: 'WARNING', color: 'bg-fw-warn/10 text-fw-warn' };
     } else {
@@ -189,7 +189,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   const getStatusDotColor = () => {
     if (connection.status !== 'Active') return 'bg-fw-neutral';
     const utilization = connection.performance?.bandwidthUtilization || 0;
-    if (utilization > 90) return 'bg-red-500';
+    if (utilization > 90) return 'bg-fw-errorLight0';
     if (utilization > 80) return 'bg-complementary-amber';
     if (utilization > 60) return 'bg-brand-blue';
     return 'bg-complementary-green';

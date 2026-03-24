@@ -2,6 +2,7 @@ import { Activity, TrendingUp, Signal, Clock, ArrowUpDown, RefreshCw, Network } 
 import { Group } from '../../../../types/group';
 import { Connection } from '../../../../types';
 import { Button } from '../../../common/Button';
+import { chartColors } from '../../../../utils/chartColors';
 
 interface GroupPerformanceProps {
   group: Group;
@@ -42,7 +43,7 @@ export function GroupPerformance({ group, connections }: GroupPerformanceProps) 
     datasets: [{
       label: 'Monthly Billing',
       data: [2700, 2850, 2750, 2900, 3100, 2950],
-      borderColor: '#10b981',
+      borderColor: chartColors.success,
       fill: false
     }]
   };
@@ -88,7 +89,7 @@ export function GroupPerformance({ group, connections }: GroupPerformanceProps) 
             </div>
           </div>
           
-          <div className="p-4 bg-green-50 rounded-lg">
+          <div className="p-4 bg-fw-successLight rounded-lg">
             <div className="flex items-center justify-between">
               <h4 className="text-figma-base font-medium text-fw-body">Success Rate</h4>
               <Activity className="h-5 w-5 text-fw-success" />
@@ -103,7 +104,7 @@ export function GroupPerformance({ group, connections }: GroupPerformanceProps) 
             </div>
           </div>
           
-          <div className="p-4 bg-purple-50 rounded-lg">
+          <div className="p-4 bg-fw-purpleLight rounded-lg">
             <div className="flex items-center justify-between">
               <h4 className="text-figma-base font-medium text-fw-body">Last Updated</h4>
               <Clock className="h-5 w-5 text-fw-purple" />
@@ -152,7 +153,7 @@ export function GroupPerformance({ group, connections }: GroupPerformanceProps) 
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-semibold ${
                         conn.status === 'Active'
-                          ? 'bg-green-50 text-fw-success'
+                          ? 'bg-fw-successLight text-fw-success'
                           : 'bg-fw-neutral text-fw-body'
                       }`}>
                         {conn.status}

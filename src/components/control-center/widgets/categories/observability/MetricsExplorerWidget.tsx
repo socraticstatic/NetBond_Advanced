@@ -1,6 +1,7 @@
 import { Activity, TrendingUp, ArrowUpDown } from 'lucide-react';
 import { Connection } from '../../../../../types';
 import { LineChart } from '../../../../monitoring/charts/LineChart';
+import { chartColors } from '../../../../../utils/chartColors';
 
 interface MetricsExplorerWidgetProps {
   connections: Connection[];
@@ -31,13 +32,13 @@ export function MetricsExplorerWidget({ connections }: MetricsExplorerWidgetProp
       {
         label: 'Latency',
         data: metrics.latency.trend,
-        borderColor: '#3b82f6',
+        borderColor: chartColors.primary,
         fill: false
       },
       {
         label: 'Bandwidth',
         data: metrics.bandwidth.trend,
-        borderColor: '#10b981',
+        borderColor: chartColors.success,
         fill: false
       }
     ]
@@ -57,7 +58,7 @@ export function MetricsExplorerWidget({ connections }: MetricsExplorerWidgetProp
           </div>
         </div>
 
-        <div className="bg-green-50 rounded-lg p-3">
+        <div className="bg-fw-successLight rounded-lg p-3">
           <div className="flex items-center justify-between mb-1">
             <TrendingUp className="h-4 w-4 text-fw-success" />
             <span className="text-figma-sm text-fw-success">Bandwidth</span>
@@ -67,7 +68,7 @@ export function MetricsExplorerWidget({ connections }: MetricsExplorerWidgetProp
           </div>
         </div>
 
-        <div className="bg-purple-50 rounded-lg p-3">
+        <div className="bg-fw-purpleLight rounded-lg p-3">
           <div className="flex items-center justify-between mb-1">
             <ArrowUpDown className="h-4 w-4 text-fw-purple" />
             <span className="text-figma-sm text-fw-purple">Packet Loss</span>

@@ -55,9 +55,9 @@ export function AgenticAssistantModal({
   const getSeverityColor = () => {
     switch (issue.severity) {
       case 'critical':
-        return 'text-fw-error bg-red-50';
+        return 'text-fw-error bg-fw-errorLight';
       case 'warning':
-        return 'text-orange-600 bg-orange-50';
+        return 'text-fw-warn bg-fw-warnLight';
       case 'info':
         return 'text-fw-link bg-fw-accent';
     }

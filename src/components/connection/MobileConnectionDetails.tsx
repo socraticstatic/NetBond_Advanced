@@ -150,7 +150,7 @@ export function MobileConnectionDetails({ connection }: MobileConnectionDetailsP
                   setShowDeleteConfirm(true);
                   setIsMenuOpen(false);
                 }}
-                className="w-full flex items-center p-3 text-left text-red-600 hover:bg-red-50 rounded-lg"
+                className="w-full flex items-center p-3 text-left text-fw-error hover:bg-fw-errorLight rounded-lg"
               >
                 <Trash2 className="h-5 w-5 mr-3" />
                 <span>Delete Connection</span>
@@ -369,7 +369,7 @@ export function MobileConnectionDetails({ connection }: MobileConnectionDetailsP
               </button>
               <button
                 onClick={handleDelete}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700"
+                className="flex-1 px-4 py-2 bg-fw-error text-white rounded-lg font-medium hover:bg-fw-error"
               >
                 Delete
               </button>

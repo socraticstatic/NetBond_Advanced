@@ -141,9 +141,9 @@ export function AccessControlPolicy() {
             const Icon = feature.icon;
             const colorClasses = {
               blue: 'bg-fw-accent text-fw-link border-fw-active',
-              green: 'bg-green-50 text-fw-success border-green-200',
-              red: 'bg-red-50 text-fw-error border-red-200',
-              purple: 'bg-purple-50 text-fw-purple border-purple-200'
+              green: 'bg-fw-successLight text-fw-success border-fw-success',
+              red: 'bg-fw-errorLight text-fw-error border-fw-error',
+              purple: 'bg-fw-purpleLight text-fw-purple border-fw-purpleLight'
             }[feature.color];
 
             return (
@@ -168,8 +168,8 @@ export function AccessControlPolicy() {
             const isCurrentRole = currentRole === roleDef.role;
             const colorClasses = {
               blue: 'border-fw-active bg-fw-accent',
-              purple: 'border-purple-500 bg-purple-50',
-              red: 'border-red-500 bg-red-50'
+              purple: 'border-fw-purple bg-fw-purpleLight',
+              red: 'border-fw-error bg-fw-errorLight'
             }[roleDef.color];
 
             return (

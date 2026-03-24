@@ -80,10 +80,10 @@ export function CloudRouterTable({
       sortKey: 'status',
       render: (router) => (
         <span className={`px-2.5 py-0.5 inline-flex text-figma-sm leading-5 font-medium rounded-lg ${
-          router.status === 'active' ? 'bg-green-50 text-fw-success' :
+          router.status === 'active' ? 'bg-fw-successLight text-fw-success' :
           router.status === 'inactive' ? 'bg-fw-neutral text-fw-body' :
           router.status === 'provisioning' ? 'bg-fw-accent text-fw-linkHover' :
-          'bg-red-50 text-fw-error'
+          'bg-fw-errorLight text-fw-error'
         }`}>
           {router.status.charAt(0).toUpperCase() + router.status.slice(1)}
         </span>

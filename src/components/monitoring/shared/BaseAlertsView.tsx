@@ -138,9 +138,9 @@ export function BaseAlertsView({
                           block w-full text-left px-3 py-2 rounded-md text-figma-base
                           ${activeFilters.types.includes(type as any)
                             ? type === 'critical'
-                              ? 'bg-red-50 text-red-700'
+                              ? 'bg-fw-errorLight text-fw-error'
                               : type === 'warning'
-                                ? 'bg-amber-50 text-amber-700'
+                                ? 'bg-fw-warnLight text-fw-warn'
                                 : 'bg-brand-lightBlue text-brand-blue'
                             : 'text-fw-body hover:bg-fw-wash'
                           }
@@ -179,9 +179,9 @@ export function BaseAlertsView({
                 key={type}
                 className={`inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium ${
                   type === 'critical'
-                    ? 'bg-red-50 text-red-700'
+                    ? 'bg-fw-errorLight text-fw-error'
                     : type === 'warning'
-                      ? 'bg-amber-50 text-amber-700'
+                      ? 'bg-fw-warnLight text-fw-warn'
                       : 'bg-brand-lightBlue text-brand-blue'
                 }`}
               >
@@ -258,9 +258,9 @@ export function BaseAlertsView({
                   className={
                     activeFilters.types.includes(type as any)
                       ? type === 'critical'
-                        ? 'bg-red-600'
+                        ? 'bg-fw-error'
                         : type === 'warning'
-                          ? 'bg-amber-500'
+                          ? 'bg-fw-warnLight0'
                           : undefined
                       : undefined
                   }
@@ -286,9 +286,9 @@ export function BaseAlertsView({
                 key={type}
                 className={`inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium ${
                   type === 'critical'
-                    ? 'bg-red-50 text-red-700'
+                    ? 'bg-fw-errorLight text-fw-error'
                     : type === 'warning'
-                      ? 'bg-amber-50 text-amber-700'
+                      ? 'bg-fw-warnLight text-fw-warn'
                       : 'bg-brand-lightBlue text-brand-blue'
                 }`}
               >

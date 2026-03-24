@@ -45,7 +45,7 @@ export function PricingPlanModal({ isOpen, onClose, currentPlan = 'Pay as you go
       cta: 'Start Free Trial',
       color: {
         primary: 'bg-fw-success',
-        secondary: 'bg-green-50',
+        secondary: 'bg-fw-successLight',
         accent: 'text-fw-success'
       }
     },
@@ -138,7 +138,7 @@ export function PricingPlanModal({ isOpen, onClose, currentPlan = 'Pay as you go
       cta: 'Upgrade to 36 Months',
       color: {
         primary: 'bg-fw-purple',
-        secondary: 'bg-purple-50',
+        secondary: 'bg-fw-purpleLight',
         accent: 'text-fw-purple'
       }
     }

@@ -244,7 +244,7 @@ export function CreateAlertRuleModal({ onClose, editRule }: CreateAlertRuleModal
                     <button
                       type="button"
                       onClick={() => handleRemoveCondition(index)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                      className="p-2 text-fw-error hover:bg-fw-errorLight rounded-lg"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

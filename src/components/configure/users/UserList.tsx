@@ -199,7 +199,7 @@ export function UserList({ searchQuery }: UserListProps) {
         <div className="flex flex-col gap-1">
           <span className={`px-2 py-0.5 inline-flex text-[10px] leading-5 font-medium uppercase tracking-wide rounded-lg w-fit ${
             user.status === 'active'
-              ? 'bg-green-50 text-fw-success'
+              ? 'bg-fw-successLight text-fw-success'
               : 'bg-fw-neutral text-fw-disabled'
           }`}>
             {user.status === 'active' ? 'ACTIVE' : 'INACTIVE'}
@@ -216,7 +216,7 @@ export function UserList({ searchQuery }: UserListProps) {
     <>
       {/* Permission Status Banner */}
       {!canManageUsers.allowed && (
-        <div className="bg-orange-50 border-2 border-fw-warn rounded-2xl p-4 mb-6">
+        <div className="bg-fw-warnLight border-2 border-fw-warn rounded-2xl p-4 mb-6">
           <div className="flex items-start gap-3">
             <Lock className="h-5 w-5 text-fw-warn mt-0.5 flex-shrink-0" />
             <div className="flex-1">

@@ -89,8 +89,8 @@ export function ConnectionTest({ connectionId }: ConnectionTestProps) {
             key={index}
             className={`
               p-4 rounded-xl border
-              ${result.status === 'success' ? 'border-fw-success bg-green-50' :
-                result.status === 'error' ? 'border-fw-error bg-red-50' :
+              ${result.status === 'success' ? 'border-fw-success bg-fw-successLight' :
+                result.status === 'error' ? 'border-fw-error bg-fw-errorLight' :
                 result.status === 'running' ? 'border-fw-active bg-fw-accent' :
                 'border-fw-secondary bg-fw-wash'}
             `}

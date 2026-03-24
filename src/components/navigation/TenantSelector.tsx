@@ -33,8 +33,8 @@ function getInitials(name: string): string {
 
 function getAvatarColor(id: string): string {
   const colors = [
-    'bg-blue-500', 'bg-emerald-500', 'bg-violet-500',
-    'bg-amber-500', 'bg-rose-500', 'bg-cyan-500',
+    'bg-fw-link', 'bg-fw-success', 'bg-fw-purple',
+    'bg-fw-warn', 'bg-fw-error', 'bg-fw-info',
   ];
   const index = parseInt(id, 10) % colors.length;
   return colors[index];

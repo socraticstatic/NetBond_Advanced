@@ -19,13 +19,13 @@ export function VNFCard({ vnf, cloudRouter, onEdit, onDelete }: VNFCardProps) {
   const getIcon = () => {
     switch(vnf.type) {
       case 'firewall':
-        return <Shield className="h-8 w-8 text-red-500" />;
+        return <Shield className="h-8 w-8 text-fw-error" />;
       case 'sdwan':
         return <Globe className="h-8 w-8 text-fw-bodyLight" />;
       case 'router':
         return <RouterIcon className="h-8 w-8 text-fw-bodyLight" />;
       case 'vnat':
-        return <Network className="h-8 w-8 text-emerald-600" />;
+        return <Network className="h-8 w-8 text-fw-success" />;
       case 'custom':
       default:
         return <ServerCog className="h-8 w-8 text-fw-body" />;
@@ -36,13 +36,13 @@ export function VNFCard({ vnf, cloudRouter, onEdit, onDelete }: VNFCardProps) {
   const getCardColor = () => {
     switch(vnf.type) {
       case 'firewall':
-        return 'border-red-200 bg-red-50';
+        return 'border-fw-error bg-fw-errorLight';
       case 'sdwan':
-        return 'border-purple-200 bg-purple-50';
+        return 'border-fw-purpleLight bg-fw-purpleLight';
       case 'router':
-        return 'border-blue-200 bg-blue-50';
+        return 'border-fw-active bg-fw-infoLight';
       case 'vnat':
-        return 'border-green-200 bg-green-50';
+        return 'border-fw-success bg-fw-successLight';
       case 'custom':
       default:
         return 'border-fw-secondary bg-fw-wash';
@@ -53,13 +53,13 @@ export function VNFCard({ vnf, cloudRouter, onEdit, onDelete }: VNFCardProps) {
   const getStatusColor = () => {
     switch(vnf.status) {
       case 'active':
-        return { bg: 'bg-green-50', text: 'text-fw-success', icon: <CheckCircle className="h-4 w-4 mr-1" /> };
+        return { bg: 'bg-fw-successLight', text: 'text-fw-success', icon: <CheckCircle className="h-4 w-4 mr-1" /> };
       case 'inactive':
         return { bg: 'bg-fw-neutral', text: 'text-fw-heading', icon: <XCircle className="h-4 w-4 mr-1" /> };
       case 'provisioning':
         return { bg: 'bg-fw-accent', text: 'text-fw-linkHover', icon: <Activity className="h-4 w-4 mr-1" /> };
       case 'error':
-        return { bg: 'bg-red-50', text: 'text-fw-error', icon: <XCircle className="h-4 w-4 mr-1" /> };
+        return { bg: 'bg-fw-errorLight', text: 'text-fw-error', icon: <XCircle className="h-4 w-4 mr-1" /> };
       default:
         return { bg: 'bg-fw-neutral', text: 'text-fw-heading', icon: <Info className="h-4 w-4 mr-1" /> };
     }
@@ -126,10 +126,10 @@ export function VNFCard({ vnf, cloudRouter, onEdit, onDelete }: VNFCardProps) {
       <div className="p-4 border-b border-fw-secondary bg-fw-base flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className={`p-2 rounded-lg ${
-            vnf.type === 'firewall' ? 'bg-red-50' :
+            vnf.type === 'firewall' ? 'bg-fw-errorLight' :
             vnf.type === 'sdwan' ? 'bg-fw-neutral' :
             vnf.type === 'router' ? 'bg-fw-accent' :
-            vnf.type === 'vnat' ? 'bg-green-50' :
+            vnf.type === 'vnat' ? 'bg-fw-successLight' :
             'bg-fw-neutral'
           }`}>
             {getIcon()}

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Activity, TrendingUp, ArrowUpDown } from '../../../utils/iconImports';
 import { MetricCard } from './MetricCard';
 import { PerformanceChart } from './PerformanceChart';
+import { chartColors } from '../../../utils/chartColors';
 
 interface NetworkMetricsProps {
   metrics: {
@@ -31,7 +32,7 @@ export function NetworkMetrics({ metrics }: NetworkMetricsProps) {
       chart: {
         data: bandwidthData.history,
         labels: timeLabels,
-        color: '#0057b8'
+        color: chartColors.primary
       }
     },
     {
@@ -43,7 +44,7 @@ export function NetworkMetrics({ metrics }: NetworkMetricsProps) {
       chart: {
         data: [70, 72, 75, 73, 75, 74, 75],
         labels: timeLabels,
-        color: '#2d7e24'
+        color: chartColors.success
       }
     },
     {
@@ -55,7 +56,7 @@ export function NetworkMetrics({ metrics }: NetworkMetricsProps) {
       chart: {
         data: [100, 100, 100, 98, 100, 100, 100],
         labels: timeLabels,
-        color: '#af29bb'
+        color: chartColors.purple
       }
     }
   ];

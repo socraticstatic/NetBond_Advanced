@@ -261,7 +261,7 @@ export function ConnectionAccessDrawer({ isOpen, onClose, user, onSave }: Connec
 
         {/* Summary */}
         {getActiveConnectionsCount() > 0 && (
-          <div className="bg-green-50 border border-fw-success rounded-lg p-4">
+          <div className="bg-fw-successLight border border-fw-success rounded-lg p-4">
             <div className="flex items-start gap-3">
               <Shield className="h-5 w-5 text-fw-success mt-0.5 flex-shrink-0" />
               <div>

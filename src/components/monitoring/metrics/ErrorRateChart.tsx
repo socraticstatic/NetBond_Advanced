@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Card } from '../../common/Card';
 import { LineChart } from '../../charts/LazyCharts';
 import { ShieldAlert, AlertTriangle, Clock, Zap, Network } from 'lucide-react';
+import { chartColors } from '../../../utils/chartColors';
 
 interface ErrorRateChartProps {
   data: Array<{
@@ -39,24 +40,24 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
         {
           label: 'TCP Errors',
           data: tcpErrors,
-          borderColor: '#ef4444', // red
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          borderColor: chartColors.error,
+          backgroundColor: chartColors.errorLight,
           fill: true,
           tension: 0.4
         },
         {
           label: 'Protocol Errors',
           data: protocolErrors,
-          borderColor: '#f59e0b', // amber
-          backgroundColor: 'rgba(245, 158, 11, 0.1)',
+          borderColor: chartColors.warn,
+          backgroundColor: chartColors.warnLight,
           fill: true,
           tension: 0.4
         },
         {
           label: 'Timeout Errors',
           data: timeoutErrors,
-          borderColor: '#6366f1', // indigo
-          backgroundColor: 'rgba(99, 102, 241, 0.1)',
+          borderColor: chartColors.purple,
+          backgroundColor: chartColors.purpleLight,
           fill: true,
           tension: 0.4
         }
@@ -160,26 +161,26 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
               <div>
                 <div className="flex justify-between text-figma-sm mb-1">
                   <span className="flex items-center">
-                    <div className="h-2 w-2 rounded-full bg-amber-500 mr-1"></div>
+                    <div className="h-2 w-2 rounded-full bg-fw-warnLight0 mr-1"></div>
                     <span>Protocol Errors</span>
                   </span>
                   <span>{Math.round(stats.byType.protocol / stats.total * 100)}%</span>
                 </div>
                 <div className="h-1.5 bg-fw-neutral rounded-full">
-                  <div className="h-1.5 rounded-full bg-amber-500" style={{ width: `${stats.byType.protocol / stats.total * 100}%` }}></div>
+                  <div className="h-1.5 rounded-full bg-fw-warnLight0" style={{ width: `${stats.byType.protocol / stats.total * 100}%` }}></div>
                 </div>
               </div>
               
               <div>
                 <div className="flex justify-between text-figma-sm mb-1">
                   <span className="flex items-center">
-                    <div className="h-2 w-2 rounded-full bg-indigo-500 mr-1"></div>
+                    <div className="h-2 w-2 rounded-full bg-fw-link mr-1"></div>
                     <span>Timeout Errors</span>
                   </span>
                   <span>{Math.round(stats.byType.timeout / stats.total * 100)}%</span>
                 </div>
                 <div className="h-1.5 bg-fw-neutral rounded-full">
-                  <div className="h-1.5 rounded-full bg-indigo-500" style={{ width: `${stats.byType.timeout / stats.total * 100}%` }}></div>
+                  <div className="h-1.5 rounded-full bg-fw-link" style={{ width: `${stats.byType.timeout / stats.total * 100}%` }}></div>
                 </div>
               </div>
             </div>
@@ -196,10 +197,10 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
                 <span className="text-figma-sm text-fw-bodyLight">Peak Hour: {stats.peakHour}:00</span>
               </div>
               <div className={`px-2 py-1 rounded text-figma-sm font-medium ${
-                stats.avg < 0.01 ? 'bg-green-50 text-fw-success' :
+                stats.avg < 0.01 ? 'bg-fw-successLight text-fw-success' :
                 stats.avg < 0.05 ? 'bg-fw-accent text-fw-linkHover' :
-                stats.avg < 0.1 ? 'bg-yellow-100 text-yellow-800' :
-                'bg-red-50 text-fw-error'
+                stats.avg < 0.1 ? 'bg-fw-warnLight text-fw-warn' :
+                'bg-fw-errorLight text-fw-error'
               }`}>
                 {stats.avg < 0.01 ? 'Excellent' :
                 stats.avg < 0.05 ? 'Good' :
@@ -224,7 +225,7 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
                 </>
               ) : (
                 <>
-                  <AlertTriangle className="h-5 w-5 text-yellow-500 mr-2 mt-0.5" />
+                  <AlertTriangle className="h-5 w-5 text-fw-warn mr-2 mt-0.5" />
                   <div>
                     <h5 className="text-figma-base font-medium text-fw-heading">Elevated Error Rate Detected</h5>
                     <p className="mt-1 text-figma-base text-fw-bodyLight">
@@ -248,7 +249,7 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
                 {stats.peak < 0.1 ? (
                   <span className="text-fw-success">All diagnostic tests passing</span>
                 ) : stats.peak < 0.5 ? (
-                  <span className="text-yellow-600">Minor issues detected</span>
+                  <span className="text-fw-warn">Minor issues detected</span>
                 ) : (
                   <span className="text-fw-error">Performance degradation likely</span>
                 )}
@@ -264,7 +265,7 @@ export function ErrorRateChart({ data, timeRange }: ErrorRateChartProps) {
                 {stats.peak < 0.1 ? (
                   <span className="text-fw-success">No action needed</span>
                 ) : stats.peak < 0.5 ? (
-                  <span className="text-yellow-600">Monitor for changes</span>
+                  <span className="text-fw-warn">Monitor for changes</span>
                 ) : (
                   <span className="text-fw-error">Investigate network issues</span>
                 )}

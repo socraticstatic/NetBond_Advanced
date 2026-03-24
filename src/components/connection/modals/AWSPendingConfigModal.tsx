@@ -68,7 +68,7 @@ export function AWSPendingConfigModal({ connection, isOpen, onClose, onActivate 
   const renderTypeSelection = () => (
     <div className="space-y-6">
       {/* AWS Connection Info Bar - Figma: 714x80, fill=#0057B8 @4%, r=8, stroke=cobalt inside 1px */}
-      <div className="rounded-lg p-4 border border-fw-active/20" style={{ backgroundColor: 'rgba(0, 87, 184, 0.04)' }}>
+      <div className="rounded-lg p-4 border border-fw-active/20 bg-fw-active/[0.04]">
         <div className="flex items-center gap-3">
           {/* AWS logo - Figma: 64x48, r=6, white fill, 1px border */}
           <div className="flex items-center justify-center bg-white border border-fw-secondary flex-shrink-0" style={{ width: 64, height: 48, borderRadius: 6 }}>
@@ -97,7 +97,7 @@ export function AWSPendingConfigModal({ connection, isOpen, onClose, onActivate 
             className="mode-selection-card group bg-fw-base border border-fw-secondary hover:border-fw-active hover:shadow-lg transition-all flex flex-col items-start text-left px-6 pt-6 pb-14 relative rounded-lg"
             style={{ minHeight: 220 }}
           >
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-5">
+            <div className="w-10 h-10 bg-fw-infoLight rounded-lg flex items-center justify-center mb-5">
               <Shield className="h-5 w-5 text-fw-active" />
             </div>
             <h4 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em] mb-1">Internet to Cloud</h4>
@@ -115,8 +115,8 @@ export function AWSPendingConfigModal({ connection, isOpen, onClose, onActivate 
             className="mode-selection-card group bg-fw-base border border-fw-secondary hover:border-fw-active hover:shadow-lg transition-all flex flex-col items-start text-left px-6 pt-6 pb-14 relative rounded-lg"
             style={{ minHeight: 220 }}
           >
-            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-5">
-              <Shield className="h-5 w-5 text-emerald-600" />
+            <div className="w-10 h-10 bg-fw-successLight rounded-lg flex items-center justify-center mb-5">
+              <Shield className="h-5 w-5 text-fw-success" />
             </div>
             <h4 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em] mb-1">VPN to Cloud</h4>
             <p className="text-figma-sm text-fw-bodyLight tracking-[-0.03em]">
@@ -312,7 +312,7 @@ export function AWSPendingConfigModal({ connection, isOpen, onClose, onActivate 
   const renderConfiguration = () => (
     <div className="space-y-5">
       {/* AWS Connection Info - Figma: 714x80, fill=#0057B8 @4%, r=8, stroke=cobalt inside 1px */}
-      <div className="rounded-lg p-4 border border-fw-active/20" style={{ backgroundColor: 'rgba(0, 87, 184, 0.04)' }}>
+      <div className="rounded-lg p-4 border border-fw-active/20 bg-fw-active/[0.04]">
         <div className="flex items-center gap-3">
           {/* AWS logo - Figma: 64x48, r=6, white fill, 1px border */}
           <div className="flex items-center justify-center bg-white border border-fw-secondary flex-shrink-0" style={{ width: 64, height: 48, borderRadius: 6 }}>
@@ -322,7 +322,7 @@ export function AWSPendingConfigModal({ connection, isOpen, onClose, onActivate 
             <div className="flex items-center gap-2 mb-0.5">
               <span className="text-figma-xs font-semibold text-fw-heading uppercase tracking-wider">AWS Direct Connect</span>
               {/* Figma: badge fill rgba(0,87,184,0.16) */}
-              <span className="px-2 py-0.5 text-figma-xs font-medium text-fw-active rounded" style={{ backgroundColor: 'rgba(0, 87, 184, 0.16)' }}>
+              <span className="px-2 py-0.5 text-figma-xs font-medium text-fw-active rounded bg-fw-active/[0.16]" >
                 {selectedType === 'internet-to-cloud' ? 'Internet to Cloud' : 'VPN to Cloud'}
               </span>
             </div>

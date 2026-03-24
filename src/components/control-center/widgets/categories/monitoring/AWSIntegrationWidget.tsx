@@ -71,7 +71,7 @@ export default function AWSIntegrationWidget() {
       case 'in-progress':
         return 'bg-fw-accent text-fw-linkHover border-fw-active';
       case 'completed':
-        return 'bg-green-50 text-fw-success border-green-200';
+        return 'bg-fw-successLight text-fw-success border-fw-success';
     }
   };
 
@@ -100,7 +100,7 @@ export default function AWSIntegrationWidget() {
           <div className="text-figma-sm text-fw-linkHover font-medium">In Progress</div>
           <div className="text-figma-lg font-bold text-fw-linkHover">{stats.inProgress}</div>
         </div>
-        <div className="bg-green-50 border border-green-200 rounded-lg p-2">
+        <div className="bg-fw-successLight border border-fw-success rounded-lg p-2">
           <div className="text-figma-sm text-fw-success font-medium">Completed</div>
           <div className="text-figma-lg font-bold text-fw-success">{stats.completed}</div>
         </div>

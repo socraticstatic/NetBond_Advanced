@@ -215,19 +215,19 @@ export function BillingPreview({
   const getPlanColorClasses = (plan: typeof selectedPlan) => {
     if (plan.id === 'trial') {
       return {
-        bg: 'bg-green-50',
-        border: 'border-green-200',
+        bg: 'bg-fw-successLight',
+        border: 'border-fw-success',
         text: 'text-fw-success',
-        badgeBg: 'bg-green-50',
+        badgeBg: 'bg-fw-successLight',
         badgeText: 'text-fw-success'
       };
     } else if (plan.id === '36-months') {
       return {
-        bg: 'bg-purple-50',
-        border: 'border-purple-200',
-        text: 'text-purple-800',
-        badgeBg: 'bg-purple-100',
-        badgeText: 'text-purple-800'
+        bg: 'bg-fw-purpleLight',
+        border: 'border-fw-purpleLight',
+        text: 'text-fw-purple',
+        badgeBg: 'bg-fw-purpleLight',
+        badgeText: 'text-fw-purple'
       };
     } else {
       return {

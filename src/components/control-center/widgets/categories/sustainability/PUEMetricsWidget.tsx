@@ -76,7 +76,7 @@ export function PUEMetricsWidget({ connections }: PUEMetricsWidgetProps) {
       </div>
 
       {/* Carbon Impact */}
-      <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+      <div className="flex items-center justify-between p-3 bg-fw-successLight rounded-lg">
         <div className="flex items-center">
           <TrendingDown className="h-4 w-4 text-fw-success mr-2" />
           <span className="text-figma-base text-fw-success">CO2 Saved (vs avg)</span>
@@ -88,10 +88,10 @@ export function PUEMetricsWidget({ connections }: PUEMetricsWidgetProps) {
 
       {/* Quick Actions */}
       <div className="flex space-x-2">
-        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-green-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-fw-successLight rounded-lg transition-colors">
           View Trends
         </button>
-        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-green-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-fw-successLight rounded-lg transition-colors">
           Set Goals
         </button>
       </div>

@@ -68,7 +68,13 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
     });
   }, [connections, searchQuery, filters, groups]);
 
-
+  // Log information about the filtered connections for debugging
+  console.log('ConnectionGrid: filtered connections', {
+    total: connections.length,
+    filtered: filteredConnections.length,
+    searchQuery,
+    filters
+  });
 
   // Use mobile view if on mobile device
   if (isMobile) {

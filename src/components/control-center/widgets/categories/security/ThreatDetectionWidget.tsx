@@ -1,6 +1,7 @@
 import { Activity, Shield, AlertTriangle } from 'lucide-react';
 import { Connection } from '../../../../../types';
 import { LineChart } from '../../../../monitoring/charts/LineChart';
+import { chartColors } from '../../../../../utils/chartColors';
 
 interface ThreatDetectionWidgetProps {
   connections: Connection[];
@@ -13,7 +14,7 @@ export function ThreatDetectionWidget({ connections }: ThreatDetectionWidgetProp
       {
         label: 'Threat Level',
         data: [2, 3, 4, 2, 1, 2],
-        borderColor: '#ef4444',
+        borderColor: chartColors.error,
         fill: false
       }
     ]
@@ -58,14 +59,14 @@ export function ThreatDetectionWidget({ connections }: ThreatDetectionWidgetProp
         <h4 className="text-figma-base font-medium text-fw-heading mb-3 tracking-[-0.03em]">Active Threats</h4>
         <div className="space-y-3">
           {activeThreats.map((threat) => (
-            <div key={threat.id} className="p-3 bg-red-50 rounded-lg">
+            <div key={threat.id} className="p-3 bg-fw-errorLight rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center">
                   <AlertTriangle className="h-4 w-4 text-fw-error mr-2" />
                   <span className="text-figma-base font-medium text-fw-error">{threat.type} Attack</span>
                 </div>
                 <span className={`px-2 py-1 text-figma-sm font-medium rounded-full ${
-                  threat.severity === 'high' ? 'bg-red-50 text-fw-error' : 'bg-fw-warn/10 text-fw-warn'
+                  threat.severity === 'high' ? 'bg-fw-errorLight text-fw-error' : 'bg-fw-warn/10 text-fw-warn'
                 }`}>
                   {threat.severity.toUpperCase()}
                 </span>

@@ -1,4 +1,5 @@
 import { Group } from '../../../types/group';
+import { StatusBadge, Badge, healthColors } from '../../common/Badge';
 
 interface GroupCardStatusProps {
   group: Group;
@@ -19,42 +20,26 @@ export function GroupCardStatus({ group }: GroupCardStatusProps) {
     return 75;
   };
 
-  const getHealthStatus = () => {
-    if (group.status !== 'active') return { label: 'Inactive', color: 'bg-fw-wash text-fw-body' };
-
+  const getHealthKey = (): string => {
+    if (group.status !== 'active') return 'inactive';
     const score = getPerformanceScore();
-    if (score > 95) {
-      return { label: 'Optimal', color: 'bg-fw-wash text-fw-success border border-fw-success/20' };
-    } else if (score > 90) {
-      return { label: 'Good', color: 'bg-fw-wash text-fw-body border border-fw-secondary' };
-    } else if (score > 80) {
-      return { label: 'Warning', color: 'bg-fw-wash text-fw-warn border border-fw-warn/20' };
-    } else {
-      return { label: 'Critical', color: 'bg-fw-wash text-fw-error border border-fw-error/20' };
-    }
+    if (score > 95) return 'optimal';
+    if (score > 90) return 'good';
+    if (score > 80) return 'warning';
+    return 'critical';
   };
 
-  const healthStatus = getHealthStatus();
+  const healthKey = getHealthKey();
+  const healthLabel = healthKey.charAt(0).toUpperCase() + healthKey.slice(1);
+  const hc = healthColors[healthKey] || healthColors.inactive;
 
   return (
-    <div className="p-4 border-t border-fw-secondary">
-      <div className="flex items-center justify-between mt-4">
-        <button
-          className={`
-            inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium
-            transition-all duration-200 border
-            ${group.status === 'active'
-              ? 'bg-fw-base text-fw-success border-fw-success/20'
-              : 'bg-fw-base text-fw-body border-fw-secondary'
-            }
-          `}
-        >
-          {group.status === 'active' ? 'Active' : 'Inactive'}
-        </button>
-
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${healthStatus.color}`}>
-          {healthStatus.label}
-        </span>
+    <div className="px-6 py-3">
+      <div className="flex items-center justify-between">
+        <StatusBadge status={group.status} size="md" />
+        <Badge color={hc.text} bg={hc.bg} size="md">
+          {healthLabel}
+        </Badge>
       </div>
     </div>
   );

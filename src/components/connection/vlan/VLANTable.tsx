@@ -34,10 +34,10 @@ export function VLANTable({
   const getStatusBadge = (status: string) => {
     const statusLower = status?.toLowerCase() || 'unknown';
     const colorMap: Record<string, string> = {
-      active: 'bg-green-50 text-fw-success',
+      active: 'bg-fw-successLight text-fw-success',
       inactive: 'bg-fw-neutral text-fw-heading',
       provisioning: 'bg-fw-accent text-fw-linkHover',
-      error: 'bg-red-50 text-fw-error',
+      error: 'bg-fw-errorLight text-fw-error',
       pending: 'bg-fw-warn/10 text-fw-warn'
     };
     return colorMap[statusLower] || 'bg-fw-neutral text-fw-heading';

@@ -3,6 +3,7 @@ import { Link as LinkIcon, Gauge, TrendingUp, TrendingDown, AlertTriangle, Activ
 import { RealTimeMetricCard } from './RealTimeMetricCard';
 import { RealTimeChart } from './RealTimeChart';
 import { useMonitoring } from '../context/MonitoringContext';
+import { chartColors } from '../../../utils/chartColors';
 
 interface LinkMetricData {
   timestamp: Date;
@@ -227,7 +228,7 @@ export function LinkMetricsView() {
         data={metricsData.map(d => ({ timestamp: d.timestamp, value: d.utilizationPercentage }))}
         title="Bandwidth Utilization Over Time"
         unit="%"
-        color="#f59e0b"
+        color={chartColors.warn}
         thresholds={{ warning: 75, critical: 90 }}
         height={300}
       />
@@ -237,7 +238,7 @@ export function LinkMetricsView() {
           data={metricsData.map(d => ({ timestamp: d.timestamp, value: d.inboundRate }))}
           title="Inbound Traffic Rate"
           unit="Mbps"
-          color="#10b981"
+          color={chartColors.success}
           height={250}
         />
 
@@ -245,7 +246,7 @@ export function LinkMetricsView() {
           data={metricsData.map(d => ({ timestamp: d.timestamp, value: d.outboundRate }))}
           title="Outbound Traffic Rate"
           unit="Mbps"
-          color="#3b82f6"
+          color={chartColors.primary}
           height={250}
         />
       </div>

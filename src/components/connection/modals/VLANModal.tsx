@@ -708,8 +708,8 @@ export function VLANModal({
                                       <span className="text-figma-base font-mono text-fw-body">{filter.prefix}</span>
                                       <span className={`px-2 py-0.5 text-figma-sm font-medium rounded ${
                                         filter.action === 'permit'
-                                          ? 'bg-green-50 text-fw-success'
-                                          : 'bg-red-50 text-fw-error'
+                                          ? 'bg-fw-successLight text-fw-success'
+                                          : 'bg-fw-errorLight text-fw-error'
                                       }`}>
                                         {filter.action}
                                       </span>
@@ -717,7 +717,7 @@ export function VLANModal({
                                     <button
                                       type="button"
                                       onClick={() => handleRemoveRouteFilter(index)}
-                                      className="text-fw-bodyLight hover:text-red-600"
+                                      className="text-fw-bodyLight hover:text-fw-error"
                                     >
                                       <X className="h-4 w-4" />
                                     </button>
@@ -784,7 +784,7 @@ export function VLANModal({
                                   <button
                                     type="button"
                                     onClick={() => handleRemoveStaticRoute(index)}
-                                    className="text-fw-bodyLight hover:text-red-600"
+                                    className="text-fw-bodyLight hover:text-fw-error"
                                   >
                                     <X className="h-4 w-4" />
                                   </button>

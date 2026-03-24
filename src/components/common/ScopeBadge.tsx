@@ -48,10 +48,10 @@ export function ScopeBadge({ scope, label, showIcon = true, variant = 'default' 
 
   const colorClasses = {
     blue: 'bg-fw-blue-light text-fw-link border-fw-active',
-    green: 'bg-green-50 text-fw-success border-fw-success',
+    green: 'bg-fw-successLight text-fw-success border-fw-success',
     purple: 'bg-fw-accent text-fw-cobalt-700 border-fw-active',
-    orange: 'bg-orange-50 text-fw-warn border-fw-warn',
-    red: 'bg-red-50 text-fw-error border-fw-error',
+    orange: 'bg-fw-warnLight text-fw-warn border-fw-warn',
+    red: 'bg-fw-errorLight text-fw-error border-fw-error',
   }[config.color];
 
   return (

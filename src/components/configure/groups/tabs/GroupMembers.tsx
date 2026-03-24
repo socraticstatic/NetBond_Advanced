@@ -113,7 +113,7 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
       render: (user: UserType) => (
         <span className={`px-2.5 py-0.5 inline-flex text-[12px] font-medium rounded-full ${
           user.status === 'active'
-            ? 'bg-green-50 text-fw-success'
+            ? 'bg-fw-successLight text-fw-success'
             : 'bg-fw-neutral text-fw-body'
         }`}>
           {user.status.charAt(0).toUpperCase() + user.status.slice(1)}

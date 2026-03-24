@@ -50,9 +50,9 @@ export function MetricsConfiguration() {
   const getStatusBadge = (status: Metric['status']) => {
     switch (status) {
       case 'active':
-        return <span className="px-2 py-0.5 rounded-lg text-figma-sm font-medium bg-green-50 text-fw-success">Active</span>;
+        return <span className="px-2 py-0.5 rounded-lg text-figma-sm font-medium bg-fw-successLight text-fw-success">Active</span>;
       case 'critical':
-        return <span className="px-2 py-0.5 rounded-lg text-figma-sm font-medium bg-red-50 text-fw-error">Critical</span>;
+        return <span className="px-2 py-0.5 rounded-lg text-figma-sm font-medium bg-fw-errorLight text-fw-error">Critical</span>;
       default:
         return <span className="px-2 py-0.5 rounded-lg text-figma-sm font-medium bg-fw-neutral text-fw-bodyLight">Normal</span>;
     }
@@ -63,9 +63,9 @@ export function MetricsConfiguration() {
       case 'performance':
         return 'bg-fw-accent text-fw-link';
       case 'security':
-        return 'bg-green-50 text-fw-success';
+        return 'bg-fw-successLight text-fw-success';
       case 'usage':
-        return 'bg-green-50 text-fw-success';
+        return 'bg-fw-successLight text-fw-success';
       default:
         return 'bg-fw-neutral text-fw-body';
     }
@@ -122,7 +122,7 @@ export function MetricsConfiguration() {
                 <button className="p-2 text-fw-bodyLight hover:text-fw-link rounded-lg hover:bg-fw-accent transition-colors">
                   <Settings className="h-5 w-5" />
                 </button>
-                <button className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-red-50 transition-colors">
+                <button className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-fw-errorLight transition-colors">
                   <Trash2 className="h-5 w-5" />
                 </button>
               </div>

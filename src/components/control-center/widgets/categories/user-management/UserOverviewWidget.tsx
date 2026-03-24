@@ -26,7 +26,7 @@ export function UserOverviewWidget() {
           <div className="text-figma-sm text-fw-link">Users</div>
         </div>
 
-        <div className="bg-green-50 rounded-lg p-3">
+        <div className="bg-fw-successLight rounded-lg p-3">
           <div className="flex items-center justify-between mb-1">
             <UserCheck className="h-4 w-4 text-fw-success" />
             <span className="text-figma-sm text-fw-success">Active</span>

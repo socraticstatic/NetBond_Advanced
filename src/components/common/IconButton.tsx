@@ -22,8 +22,8 @@ export function IconButton({
   const variantClasses = {
     primary: 'bg-fw-ctaPrimary text-fw-linkPrimary hover:bg-fw-ctaPrimaryHover',
     secondary: 'bg-fw-base text-fw-body hover:bg-fw-wash border border-fw-secondary',
-    success: 'bg-green-50 text-fw-success hover:bg-green-100',
-    danger: 'bg-red-50 text-fw-error hover:bg-red-100',
+    success: 'bg-fw-successLight text-fw-success hover:bg-fw-successLight',
+    danger: 'bg-fw-errorLight text-fw-error hover:bg-fw-errorLight',
     ghost: 'text-fw-bodyLight hover:text-fw-body hover:bg-fw-wash'
   };
 

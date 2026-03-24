@@ -213,7 +213,7 @@ export function AutomationRules({ selectedConnection }: AutomationRulesProps) {
                     <span className="text-fw-bodyLight">Success Rate:</span>
                     <span className={`ml-1 font-medium ${
                       rule.successRate >= 90 ? 'text-fw-success' :
-                      rule.successRate >= 70 ? 'text-yellow-600' :
+                      rule.successRate >= 70 ? 'text-fw-warn' :
                       'text-fw-error'
                     }`}>
                       {rule.successRate}%
@@ -263,7 +263,7 @@ export function AutomationRules({ selectedConnection }: AutomationRulesProps) {
 
                 <button
                   onClick={() => deleteRule(rule.id)}
-                  className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-red-50"
+                  className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-fw-errorLight"
                 >
                   <Trash2 className="h-5 w-5" />
                 </button>

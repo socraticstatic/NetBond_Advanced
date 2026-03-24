@@ -114,7 +114,7 @@ export function PermissionRequestModal({ isOpen, onClose, requirement, resourceN
                   <div className="flex flex-col items-center">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       step.status === 'current' ? 'bg-fw-accent' :
-                      step.status === 'approved' ? 'bg-green-100' :
+                      step.status === 'approved' ? 'bg-fw-successLight' :
                       'bg-fw-neutral'
                     }`}>
                       <step.icon className={`h-5 w-5 ${
@@ -143,10 +143,10 @@ export function PermissionRequestModal({ isOpen, onClose, requirement, resourceN
           </div>
 
           {/* Info */}
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+          <div className="bg-fw-warnLight border border-fw-warn rounded-lg p-3">
             <div className="flex items-start gap-2">
-              <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
-              <p className="text-figma-sm text-yellow-800">
+              <AlertCircle className="h-4 w-4 text-fw-warn mt-0.5 flex-shrink-0" />
+              <p className="text-figma-sm text-fw-warn">
                 Your manager will be notified immediately. Most requests are reviewed within 2 business hours.
                 {requirement.requiresMFA && ' This permission also requires MFA verification.'}
               </p>
@@ -171,7 +171,7 @@ export function PermissionRequestModal({ isOpen, onClose, requirement, resourceN
         </div>
       ) : (
         <div className="py-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-fw-successLight rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="h-8 w-8 text-fw-success" />
           </div>
           <h3 className="text-lg font-semibold text-fw-heading mb-2 tracking-[-0.03em]">Request Submitted</h3>
@@ -221,7 +221,7 @@ export function PendingAccessRequest({
             </p>
           </div>
         </div>
-        <span className="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-800 text-figma-sm font-medium rounded">
+        <span className="inline-flex items-center gap-1 px-2 py-1 bg-fw-warnLight text-fw-warn text-figma-sm font-medium rounded">
           <Clock className="h-3 w-3" />
           Pending
         </span>
@@ -250,14 +250,14 @@ export function PendingAccessRequest({
       <div className="flex gap-2">
         <button
           onClick={onDeny}
-          className="flex-1 px-3 py-2 border border-red-300 text-fw-error hover:bg-red-50 rounded-lg text-figma-base font-medium transition-colors"
+          className="flex-1 px-3 py-2 border border-fw-error text-fw-error hover:bg-fw-errorLight rounded-lg text-figma-base font-medium transition-colors"
         >
           <XCircle className="h-4 w-4 inline mr-1" />
           Deny
         </button>
         <button
           onClick={onApprove}
-          className="flex-1 px-3 py-2 bg-fw-success hover:bg-green-700 text-white rounded-lg text-figma-base font-medium transition-colors"
+          className="flex-1 px-3 py-2 bg-fw-success hover:bg-fw-success text-white rounded-lg text-figma-base font-medium transition-colors"
         >
           <CheckCircle className="h-4 w-4 inline mr-1" />
           Approve

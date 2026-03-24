@@ -5,6 +5,7 @@ import { Badge, StatusBadge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { SearchFilterBar } from '../common/SearchFilterBar';
 import { OverflowMenu } from '../common/OverflowMenu';
+import { chartColors } from '../../utils/chartColors';
 
 type BannerStatus = 'active' | 'scheduled' | 'inactive';
 type BannerPosition = 'top' | 'hero' | 'inline';
@@ -19,9 +20,9 @@ interface Banner {
 }
 
 const positionColors: Record<BannerPosition, { text: string; bg: string }> = {
-  top:    { text: '#0057b8', bg: 'rgba(0,87,184,0.12)' },
-  hero:   { text: '#af29bb', bg: 'rgba(175,41,187,0.12)' },
-  inline: { text: '#ff8500', bg: 'rgba(255,133,0,0.12)' },
+  top:    { text: chartColors.primary, bg: chartColors.primaryLight },
+  hero:   { text: chartColors.purple, bg: chartColors.purpleLight },
+  inline: { text: chartColors.warn, bg: chartColors.warnLight },
 };
 
 const SAMPLE_BANNERS: Banner[] = [
@@ -189,9 +190,9 @@ export function CMSBannerEditor() {
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         {[
-          { label: 'Active', value: banners.filter(b => b.status === 'active').length, color: '#2d7e24' },
-          { label: 'Scheduled', value: banners.filter(b => b.status === 'scheduled').length, color: '#ff8500' },
-          { label: 'Inactive', value: banners.filter(b => b.status === 'inactive').length, color: '#686e74' },
+          { label: 'Active', value: banners.filter(b => b.status === 'active').length, color: chartColors.success },
+          { label: 'Scheduled', value: banners.filter(b => b.status === 'scheduled').length, color: chartColors.warn },
+          { label: 'Inactive', value: banners.filter(b => b.status === 'inactive').length, color: chartColors.bodyLight },
         ].map(stat => (
           <div
             key={stat.label}
