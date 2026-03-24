@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Search, Settings, Check } from 'lucide-react';
-import { AttIcon } from '../icons/AttIcon';
+import { ChevronDown, Search, Settings, Check, User } from 'lucide-react';
 
 interface Tenant {
   id: string;
@@ -84,7 +83,7 @@ export function TenantSelector({ className = '', onProfileClick }: TenantSelecto
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-2 py-1.5 rounded-full hover:bg-fw-wash transition-colors"
       >
-        <AttIcon name="person" className="h-6 w-6 text-fw-heading" />
+        <User className="h-5 w-5 text-fw-heading" />
         <ChevronDown className={`w-4 h-4 text-fw-bodyLight transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
@@ -171,7 +170,7 @@ export function TenantSelector({ className = '', onProfileClick }: TenantSelecto
                 }}
                 className="flex items-center gap-2 text-figma-sm font-medium text-fw-link tracking-[-0.03em] hover:underline"
               >
-                <AttIcon name="person" className="w-4 h-4" />
+                <User className="w-4 h-4" />
                 Profile
               </button>
             )}
