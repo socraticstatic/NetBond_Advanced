@@ -42,7 +42,7 @@ export function AlertHistoryWidget() {
           <div
             key={alert.id}
             className={`p-2 rounded-lg ${
-              alert.type === 'error' ? 'bg-red-50' :
+              alert.type === 'error' ? 'bg-fw-errorLight' :
               alert.type === 'warning' ? 'bg-fw-warn/10' :
               'bg-fw-accent'
             }`}

@@ -47,7 +47,7 @@ export function WizardStep({
             <span className="text-figma-base font-medium leading-none">{number}</span>
           )}
         </div>
-        {/* Connector line: h-0.5 (2px), bg-gray-300, rounded-full */}
+        {/* Connector line: h-0.5 (2px), bg-fw-neutral, rounded-full */}
         {!isLast && (
           <div className="flex-1 h-0.5 mx-2 bg-fw-secondary rounded-full overflow-hidden">
             <div className={`

@@ -79,9 +79,9 @@ export function GroupConnectionSummaryWidget({ group, connections }: GroupConnec
   const getProviderLogo = (provider: string) => {
     // Just return a color based on the provider to simplify
     switch(provider) {
-      case 'AWS': return 'text-amber-500';
-      case 'Azure': return 'text-blue-500';
-      case 'Google': return 'text-blue-600';
+      case 'AWS': return 'text-fw-warn';
+      case 'Azure': return 'text-fw-info';
+      case 'Google': return 'text-fw-link';
       default: return 'text-fw-bodyLight';
     }
   };
@@ -109,7 +109,7 @@ export function GroupConnectionSummaryWidget({ group, connections }: GroupConnec
               <div className="text-figma-sm text-fw-bodyLight mb-1">Active</div>
               <div className="text-xl font-semibold text-fw-success">{connectionStats.active}</div>
             </div>
-            <Activity className="h-8 w-8 text-fw-success bg-green-50 p-1.5 rounded-full" />
+            <Activity className="h-8 w-8 text-fw-success bg-fw-successLight p-1.5 rounded-full" />
           </div>
           
           <div className="bg-fw-wash rounded-lg p-4 flex items-center justify-between">

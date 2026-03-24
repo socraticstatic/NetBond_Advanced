@@ -44,9 +44,9 @@ export function ApplicationSolutionZone() {
       gradient: 'from-fw-secondary to-fw-secondary'
     },
     green: {
-      bg: 'bg-green-50',
+      bg: 'bg-fw-successLight',
       text: 'text-fw-success',
-      border: 'border-green-200',
+      border: 'border-fw-success',
       gradient: 'from-fw-success to-fw-success'
     },
     cyan: {
@@ -74,9 +74,9 @@ export function ApplicationSolutionZone() {
       gradient: 'from-fw-secondary to-fw-secondary'
     },
     red: {
-      bg: 'bg-red-50',
+      bg: 'bg-fw-errorLight',
       text: 'text-fw-error',
-      border: 'border-red-200',
+      border: 'border-fw-error',
       gradient: 'from-[#ef4444] to-[#dc2626]'
     }
   };

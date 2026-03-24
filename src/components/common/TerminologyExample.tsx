@@ -17,7 +17,7 @@ export function TerminologyExample() {
           </TerminologyTooltip>
           , you establish a dedicated network path to cloud providers. Each connection can have multiple{' '}
           <TerminologyTooltip termId="cloud-router">
-            <span className="font-medium text-fw-success border-b border-green-300 border-dotted cursor-help">
+            <span className="font-medium text-fw-success border-b border-fw-success border-dotted cursor-help">
               Cloud Routers
             </span>
           </TerminologyTooltip>
@@ -27,7 +27,7 @@ export function TerminologyExample() {
         <p>
           Within each Cloud Router, you can create{' '}
           <TerminologyTooltip termId="link">
-            <span className="font-medium text-fw-purple border-b border-purple-300 border-dotted cursor-help">
+            <span className="font-medium text-fw-purple border-b border-fw-purple border-dotted cursor-help">
               Links (VLANs)
             </span>
           </TerminologyTooltip>
@@ -39,7 +39,7 @@ export function TerminologyExample() {
           </TerminologyTooltip>
           {' '}and attached{' '}
           <TerminologyTooltip termId="vnf">
-            <span className="font-medium text-orange-700 border-b border-orange-300 border-dotted cursor-help">
+            <span className="font-medium text-fw-warn border-b border-fw-warn border-dotted cursor-help">
               VNFs
             </span>
           </TerminologyTooltip>
@@ -61,7 +61,7 @@ export function TerminologyExample() {
           </TerminologyTooltip>
           {' '}capacity and connectivity to{' '}
           <TerminologyTooltip termId="cloud-provider">
-            <span className="font-medium text-cyan-700 border-b border-cyan-300 border-dotted cursor-help">
+            <span className="font-medium text-fw-info border-b border-fw-infoLight border-dotted cursor-help">
               cloud providers
             </span>
           </TerminologyTooltip>

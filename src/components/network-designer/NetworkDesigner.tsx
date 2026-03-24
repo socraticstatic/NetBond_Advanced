@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
 import { Minimize2 } from 'lucide-react';
+import { chartColors } from '../../utils/chartColors';
 import type { Connection, NetworkNode as LegacyNetworkNode, NetworkEdge as LegacyNetworkEdge } from '../../types';
 import type { NetworkNode, NetworkEdge } from './types/designer';
 import { useDesignerStore } from './store/useDesignerStore';
@@ -206,7 +207,7 @@ export function NetworkDesigner({
       ]);
 
       const canvas = await html2canvas(canvasRef.current, {
-        backgroundColor: '#f8f9fa',
+        backgroundColor: chartColors.wash,
         scale: 2,
         useCORS: true,
         logging: false,

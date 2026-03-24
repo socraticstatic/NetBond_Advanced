@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { BarChart2, Activity, TrendingDown, TrendingUp } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { BarChart } from '../../charts/LazyCharts';
+import { chartColors } from '../../../utils/chartColors';
 
 interface PerformanceDistributionProps {
   data: Array<{
@@ -48,18 +49,18 @@ export function PerformanceDistribution({ data }: PerformanceDistributionProps) 
           label: 'Latency Distribution',
           data: latencyRanges.map(bucket => bucket.count),
           backgroundColor: [
-            'rgba(34, 197, 94, 0.8)',  // Green (good)
-            'rgba(59, 130, 246, 0.8)', // Blue (okay)
-            'rgba(250, 204, 21, 0.8)', // Yellow (warning)
-            'rgba(249, 115, 22, 0.8)', // Orange (concern)
-            'rgba(239, 68, 68, 0.8)'   // Red (critical)
+            chartColors.success,       // Green (good)
+            chartColors.primary,       // Blue (okay)
+            chartColors.warn,          // Yellow (warning)
+            chartColors.warn,          // Orange (concern)
+            chartColors.error          // Red (critical)
           ],
           borderColor: [
-            'rgba(34, 197, 94, 1)',
-            'rgba(59, 130, 246, 1)',
-            'rgba(250, 204, 21, 1)',
-            'rgba(249, 115, 22, 1)',
-            'rgba(239, 68, 68, 1)'
+            chartColors.success,
+            chartColors.primary,
+            chartColors.warn,
+            chartColors.warn,
+            chartColors.error
           ],
           borderWidth: 1
         }

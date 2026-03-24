@@ -87,9 +87,9 @@ export function APIConfiguration() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'monitoring': return 'bg-fw-accent text-fw-linkHover';
-      case 'automation': return 'bg-green-50 text-fw-success';
-      case 'analytics': return 'bg-purple-50 text-fw-purple';
-      case 'security': return 'bg-red-50 text-fw-error';
+      case 'automation': return 'bg-fw-successLight text-fw-success';
+      case 'analytics': return 'bg-fw-purpleLight text-fw-purple';
+      case 'security': return 'bg-fw-errorLight text-fw-error';
       case 'management': return 'bg-fw-warn/10 text-fw-warn';
       default: return 'bg-fw-neutral text-fw-heading';
     }
@@ -97,7 +97,7 @@ export function APIConfiguration() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-50 text-fw-success';
+      case 'active': return 'bg-fw-successLight text-fw-success';
       case 'configured': return 'bg-fw-warn/10 text-fw-warn';
       case 'inactive': return 'bg-fw-neutral text-fw-heading';
       default: return 'bg-fw-neutral text-fw-heading';
@@ -299,7 +299,7 @@ export function APIConfiguration() {
             <p className="text-figma-xl font-bold text-fw-linkHover mt-1">847,293</p>
             <p className="text-figma-sm text-fw-link mt-1">↑ 12% from last week</p>
           </div>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="bg-fw-successLight border border-fw-success rounded-lg p-4">
             <p className="text-figma-sm text-fw-success font-medium">Success Rate</p>
             <p className="text-figma-xl font-bold text-fw-success mt-1">99.8%</p>
             <p className="text-figma-sm text-fw-success mt-1">↑ 0.3% from last week</p>
@@ -309,7 +309,7 @@ export function APIConfiguration() {
             <p className="text-figma-xl font-bold text-fw-heading mt-1">142ms</p>
             <p className="text-figma-sm text-fw-warn mt-1">↓ 8ms from last week</p>
           </div>
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+          <div className="bg-fw-purpleLight border border-fw-purpleLight rounded-lg p-4">
             <p className="text-figma-sm text-fw-purple font-medium">Active Integrations</p>
             <p className="text-figma-xl font-bold text-fw-purple mt-1">3</p>
             <p className="text-figma-sm text-fw-purple mt-1">of 6 configured</p>

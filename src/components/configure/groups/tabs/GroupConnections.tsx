@@ -84,7 +84,7 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
 
   const getStatusDisplay = (status: string) => {
     const statusColor = status === 'Active'
-      ? 'bg-green-50 text-fw-success'
+      ? 'bg-fw-successLight text-fw-success'
       : 'bg-fw-neutral text-fw-body';
     return (
       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[12px] font-medium ${statusColor}`}>

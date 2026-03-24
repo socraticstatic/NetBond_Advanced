@@ -128,9 +128,9 @@ export function MobileLogsTab({ selectedConnection, connections }: MobileLogsTab
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'error':
-        return 'text-fw-error bg-red-50';
+        return 'text-fw-error bg-fw-errorLight';
       case 'warning':
-        return 'text-yellow-600 bg-yellow-50';
+        return 'text-fw-warn bg-fw-warnLight';
       case 'info':
         return 'text-brand-blue bg-brand-lightBlue';
       default:

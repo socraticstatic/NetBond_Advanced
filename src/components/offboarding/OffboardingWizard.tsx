@@ -101,7 +101,7 @@ export function OffboardingWizard() {
     return (
       <div className="min-h-screen bg-fw-wash flex items-center justify-center p-4">
         <div className="bg-fw-base rounded-3xl border border-fw-secondary max-w-[612px] w-full p-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-6">
+          <div className="w-16 h-16 rounded-full bg-fw-successLight flex items-center justify-center mx-auto mb-6">
             <RefreshCw className="w-8 h-8 text-fw-success" />
           </div>
           <h2 className="text-figma-xl font-bold text-fw-heading tracking-[-0.04em] mb-3">
@@ -414,7 +414,7 @@ export function OffboardingWizard() {
                       className="p-1 transition-colors"
                     >
                       <Star
-                        className={`w-8 h-8 ${n <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-fw-secondary'}`}
+                        className={`w-8 h-8 ${n <= rating ? 'text-fw-warn fill-fw-warn' : 'text-fw-secondary'}`}
                       />
                     </button>
                   ))}
@@ -439,7 +439,7 @@ export function OffboardingWizard() {
           {/* THANK YOU */}
           {currentStep === 'thankyou' && (
             <div className="bg-fw-base rounded-3xl border border-fw-secondary p-8 text-center space-y-6">
-              <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 rounded-full bg-fw-successLight flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-8 h-8 text-fw-success" />
               </div>
 

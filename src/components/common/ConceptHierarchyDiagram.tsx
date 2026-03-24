@@ -76,31 +76,31 @@ export function ConceptHierarchyDiagram() {
             const colorClasses = {
               blue: {
                 bg: 'from-blue-500 to-blue-600',
-                border: 'border-blue-300',
+                border: 'border-fw-active',
                 text: 'text-fw-linkHover',
                 bgLight: 'bg-fw-accent',
-                dot: 'bg-blue-500'
+                dot: 'bg-fw-link'
               },
               green: {
                 bg: 'from-green-500 to-green-600',
-                border: 'border-green-300',
+                border: 'border-fw-success',
                 text: 'text-fw-success',
-                bgLight: 'bg-green-50',
-                dot: 'bg-green-500'
+                bgLight: 'bg-fw-successLight',
+                dot: 'bg-fw-successLight0'
               },
               purple: {
                 bg: 'from-purple-500 to-purple-600',
-                border: 'border-purple-300',
+                border: 'border-fw-purple',
                 text: 'text-fw-purple',
-                bgLight: 'bg-purple-50',
-                dot: 'bg-purple-500'
+                bgLight: 'bg-fw-purpleLight',
+                dot: 'bg-fw-purpleLight0'
               },
               orange: {
                 bg: 'from-orange-500 to-orange-600',
-                border: 'border-orange-300',
-                text: 'text-orange-700',
-                bgLight: 'bg-orange-50',
-                dot: 'bg-orange-500'
+                border: 'border-fw-warn',
+                text: 'text-fw-warn',
+                bgLight: 'bg-fw-warnLight',
+                dot: 'bg-fw-warnLight0'
               }
             };
 
@@ -199,7 +199,7 @@ export function ConceptHierarchyDiagram() {
           </p>
         </div>
 
-        <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+        <div className="p-4 bg-fw-purpleLight rounded-lg border border-fw-purpleLight">
           <h4 className="text-figma-base font-semibold text-fw-purple mb-2 tracking-[-0.03em]">Traffic Flow</h4>
           <p className="text-figma-sm text-fw-body leading-relaxed">
             Data flows from top to bottom through each layer. A packet entering your Connection is routed by a Cloud Router, sent through a specific Link (VLAN), and potentially processed by VNFs before reaching its destination.

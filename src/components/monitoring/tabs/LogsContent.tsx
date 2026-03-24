@@ -161,9 +161,9 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case 'error':
-        return 'bg-red-50 text-fw-error';
+        return 'bg-fw-errorLight text-fw-error';
       case 'warning':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-fw-warnLight text-fw-warn';
       case 'info':
         return 'bg-fw-accent text-fw-link';
       default:
@@ -334,8 +334,8 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
             <span
               key={severity}
               className={`inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium ${
-                severity === 'error' ? 'bg-red-50 text-fw-error' :
-                severity === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                severity === 'error' ? 'bg-fw-errorLight text-fw-error' :
+                severity === 'warning' ? 'bg-fw-warnLight text-fw-warn' :
                 'bg-fw-accent text-fw-link'
               }`}
             >

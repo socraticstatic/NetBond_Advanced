@@ -94,7 +94,7 @@ export function GroupOverflowMenu({ group, onDelete }: GroupOverflowMenuProps) {
           <div className="border-t border-fw-secondary my-1" />
           <button
             onClick={handleDelete}
-            className="w-full px-4 py-2 text-left text-figma-base text-fw-error hover:bg-red-50 flex items-center"
+            className="w-full px-4 py-2 text-left text-figma-base text-fw-error hover:bg-fw-errorLight flex items-center"
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Delete Pool

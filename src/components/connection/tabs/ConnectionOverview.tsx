@@ -105,7 +105,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
               </div>
               {/* Cloud Routers */}
               <div className="flex flex-col items-center" style={{ width: '120px' }}>
-                <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center border border-green-300">
+                <div className="w-12 h-12 rounded-xl bg-fw-successLight flex items-center justify-center border border-fw-success">
                   <Server className="h-6 w-6 text-fw-success" />
                 </div>
                 <div className="text-[12px] font-medium text-fw-heading mt-2">Cloud Routers</div>
@@ -118,8 +118,8 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
               </div>
               {/* Links */}
               <div className="flex flex-col items-center" style={{ width: '120px' }}>
-                <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center border border-purple-300">
-                  <Link2 className="h-6 w-6 text-purple-600" />
+                <div className="w-12 h-12 rounded-xl bg-fw-purpleLight flex items-center justify-center border border-fw-purple">
+                  <Link2 className="h-6 w-6 text-fw-purple" />
                 </div>
                 <div className="text-[12px] font-medium text-fw-heading mt-2">Links (VLANs)</div>
                 <div className="text-[11px] text-fw-bodyLight">{linksCount} segments</div>
@@ -131,7 +131,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
               </div>
               {/* VNFs */}
               <div className="flex flex-col items-center" style={{ width: '120px' }}>
-                <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center border border-orange-300">
+                <div className="w-12 h-12 rounded-xl bg-fw-warnLight flex items-center justify-center border border-fw-warn">
                   <Shield className="h-6 w-6 text-fw-warn" />
                 </div>
                 <div className="text-[12px] font-medium text-fw-heading mt-2">VNFs</div>
@@ -144,7 +144,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
               </div>
               {/* Cloud destination */}
               <div className="flex flex-col items-center" style={{ width: '120px' }}>
-                <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-300">
+                <div className="w-12 h-12 rounded-xl bg-fw-infoLight flex items-center justify-center border border-fw-active">
                   <Box className="h-6 w-6 text-fw-link" />
                 </div>
                 <div className="text-[12px] font-medium text-fw-heading mt-2">{connection.vendor || 'Cloud'}</div>
@@ -168,7 +168,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
             <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
               <span className="text-figma-base text-fw-body">Status</span>
               <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium ${
-                connection.status === 'Active' ? 'bg-green-50 text-fw-success' : 'bg-fw-neutral text-fw-heading'
+                connection.status === 'Active' ? 'bg-fw-successLight text-fw-success' : 'bg-fw-neutral text-fw-heading'
               }`}>
                 {connection.status}
               </span>
@@ -204,7 +204,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
                   <span className="text-figma-base font-medium text-fw-heading">{connection.primaryIPE}</span>
                 </div>
                 {connection.secondaryIPE && (
-                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-center justify-between p-3 bg-fw-successLight rounded-lg border border-fw-success">
                     <div className="flex items-center">
                       <Server className="h-4 w-4 text-fw-success mr-2" />
                       <span className="text-figma-base text-fw-body">Secondary IPE (Redundant)</span>
@@ -254,7 +254,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
               <div className="text-fw-bodyLight">↓</div>
             </div>
 
-            <div className="p-4 bg-green-50 rounded-lg border border-green-100">
+            <div className="p-4 bg-fw-successLight rounded-lg border border-fw-successLight">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 rounded-full bg-fw-success flex items-center justify-center">
@@ -312,7 +312,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
                   {key.replace(/([A-Z])/g, ' $1').trim()}
                 </span>
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium ${
-                  value === true ? 'bg-green-50 text-fw-success' : 'bg-fw-accent text-fw-linkHover'
+                  value === true ? 'bg-fw-successLight text-fw-success' : 'bg-fw-accent text-fw-linkHover'
                 }`}>
                   {typeof value === 'boolean' ? (value ? 'Enabled' : 'Disabled') : value}
                 </span>

@@ -67,7 +67,7 @@ export function CarbonFootprintWidget({ connections }: CarbonFootprintWidgetProp
       </div>
 
       {/* Tree Equivalent */}
-      <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+      <div className="flex items-center justify-between p-3 bg-fw-successLight rounded-lg">
         <div className="flex items-center">
           <TreePine className="h-4 w-4 text-fw-success mr-2" />
           <span className="text-figma-base text-fw-success">Trees to Offset</span>
@@ -78,17 +78,17 @@ export function CarbonFootprintWidget({ connections }: CarbonFootprintWidgetProp
       </div>
 
       {/* Annual Impact */}
-      <div className="p-3 border border-green-200 rounded-lg">
+      <div className="p-3 border border-fw-success rounded-lg">
         <div className="text-figma-sm text-fw-bodyLight mb-1">Annual CO2 Emissions</div>
         <div className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">{annualEmissions.toFixed(2)} tonnes</div>
       </div>
 
       {/* Quick Actions */}
       <div className="flex space-x-2">
-        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-green-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-fw-successLight rounded-lg transition-colors">
           Offset More
         </button>
-        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-green-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-fw-successLight rounded-lg transition-colors">
           View Details
         </button>
       </div>

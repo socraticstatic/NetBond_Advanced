@@ -125,8 +125,8 @@ export function MobileNetworkAnalyzerTab({ selectedConnection, connections }: Mo
                 <div className="mt-4 space-y-2">
                   {[
                     { protocol: 'TCP', percentage: 65, color: 'bg-brand-blue' },
-                    { protocol: 'UDP', percentage: 25, color: 'bg-green-500' },
-                    { protocol: 'ICMP', percentage: 8, color: 'bg-purple-500' },
+                    { protocol: 'UDP', percentage: 25, color: 'bg-fw-successLight0' },
+                    { protocol: 'ICMP', percentage: 8, color: 'bg-fw-purpleLight0' },
                     { protocol: 'Other', percentage: 2, color: 'bg-fw-bodyLight' }
                   ].map((item) => (
                     <div key={item.protocol}>
@@ -183,7 +183,7 @@ export function MobileNetworkAnalyzerTab({ selectedConnection, connections }: Mo
                   ].map((hop, index) => (
                     <div key={index} className="flex items-center p-3 bg-fw-wash rounded-lg">
                       <div className={`w-2 h-2 rounded-full ${
-                        hop.status === 'healthy' ? 'bg-fw-success' : 'bg-yellow-500'
+                        hop.status === 'healthy' ? 'bg-fw-success' : 'bg-fw-warnLight0'
                       }`} />
                       <div className="ml-3 flex-1">
                         <div className="text-figma-base text-fw-heading">{hop.name}</div>
@@ -235,8 +235,8 @@ export function MobileNetworkAnalyzerTab({ selectedConnection, connections }: Mo
                         <span className="text-figma-base font-medium text-fw-heading">{item.name}</span>
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-figma-sm font-medium ${
                           item.status === 'compliant'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-yellow-100 text-yellow-800'
+                            ? 'bg-fw-successLight text-fw-success'
+                            : 'bg-fw-warnLight text-fw-warn'
                         }`}>
                           {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                         </span>
@@ -290,8 +290,8 @@ export function MobileNetworkAnalyzerTab({ selectedConnection, connections }: Mo
                 key={test}
                 className={`
                   p-3 rounded-lg border
-                  ${status === 'success' ? 'border-green-200 bg-green-50' :
-                    status === 'error' ? 'border-red-200 bg-red-50' :
+                  ${status === 'success' ? 'border-fw-success bg-fw-successLight' :
+                    status === 'error' ? 'border-fw-error bg-fw-errorLight' :
                     status === 'running' ? 'border-brand-blue/20 bg-brand-lightBlue' :
                     'border-fw-secondary bg-fw-wash'}
                 `}
@@ -311,7 +311,7 @@ export function MobileNetworkAnalyzerTab({ selectedConnection, connections }: Mo
                   )}
                 </div>
                 {status === 'error' && (
-                  <p className="mt-1 text-figma-sm text-red-600 ml-7">
+                  <p className="mt-1 text-figma-sm text-fw-error ml-7">
                     Failed to complete test. Please try again.
                   </p>
                 )}

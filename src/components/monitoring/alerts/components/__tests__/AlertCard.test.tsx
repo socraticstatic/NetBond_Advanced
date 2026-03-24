@@ -34,7 +34,7 @@ describe('AlertCard', () => {
     const { container } = render(<AlertCard alert={mockAlert} />);
     
     // Critical alert should have red styling
-    expect(container.firstChild).toHaveClass('bg-red-50', 'border-red-200');
+    expect(container.firstChild).toHaveClass('bg-fw-errorLight', 'border-fw-error');
   });
 
   it('calls onDismiss when dismiss button is clicked', () => {
@@ -51,7 +51,7 @@ describe('AlertCard', () => {
     const warningAlert = { ...mockAlert, type: 'warning' as const };
     const { container } = render(<AlertCard alert={warningAlert} />);
     
-    expect(container.firstChild).toHaveClass('bg-amber-50', 'border-amber-200');
+    expect(container.firstChild).toHaveClass('bg-fw-warnLight', 'border-fw-warn');
   });
 
   it('renders with info styles', () => {

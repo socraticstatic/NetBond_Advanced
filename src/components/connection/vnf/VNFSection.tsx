@@ -100,7 +100,7 @@ export function VNFSection({
           </div>
         </div>
 
-        <div className="bg-red-50 rounded-lg p-4 border border-red-200">
+        <div className="bg-fw-errorLight rounded-lg p-4 border border-fw-error">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-figma-sm font-medium text-fw-heading">Firewalls</p>
@@ -110,7 +110,7 @@ export function VNFSection({
           </div>
         </div>
 
-        <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+        <div className="bg-fw-successLight rounded-lg p-4 border border-fw-success">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-figma-sm font-medium text-fw-heading">SD-WAN</p>

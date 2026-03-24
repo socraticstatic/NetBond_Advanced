@@ -467,7 +467,7 @@ export function AdvancedSettings({
               />
 
               {bulkImportError && (
-                <div className="mt-4 p-3 bg-red-50 rounded-lg flex items-start">
+                <div className="mt-4 p-3 bg-fw-errorLight rounded-lg flex items-start">
                   <AlertTriangle className="h-5 w-5 text-fw-error mr-2 flex-shrink-0 mt-0.5" />
                   <p className="text-figma-base text-fw-error">{bulkImportError}</p>
                 </div>

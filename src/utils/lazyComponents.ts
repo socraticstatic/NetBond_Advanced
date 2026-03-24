@@ -16,16 +16,16 @@ const createLazyComponent = <T = any>(
       // Return a fallback component that shows an error
       return {
         default: (() => (
-          <div className="p-8 text-center bg-red-50 border border-red-200 rounded-lg">
-            <h3 className="text-lg font-medium text-red-800 mb-2">
+          <div className="p-8 text-center bg-fw-errorLight border border-fw-error rounded-lg">
+            <h3 className="text-lg font-medium text-fw-error mb-2">
               Failed to load {componentName}
             </h3>
-            <p className="text-figma-base text-red-600 mb-4">
+            <p className="text-figma-base text-fw-error mb-4">
               Please refresh the page or try again later.
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+              className="px-4 py-2 bg-fw-error text-white rounded-full hover:bg-fw-error"
             >
               Refresh Page
             </button>

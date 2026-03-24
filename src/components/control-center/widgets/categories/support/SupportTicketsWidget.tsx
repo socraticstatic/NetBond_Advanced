@@ -43,9 +43,9 @@ export function SupportTicketsWidget() {
             <div className="flex items-center justify-between mb-1">
               <span className="text-figma-base font-medium text-fw-heading">{ticket.title}</span>
               <span className={`px-2 py-0.5 text-figma-sm font-medium rounded-full ${
-                ticket.status === 'open' ? 'bg-red-50 text-fw-error' :
+                ticket.status === 'open' ? 'bg-fw-errorLight text-fw-error' :
                 ticket.status === 'in-progress' ? 'bg-fw-warn/10 text-fw-warn' :
-                'bg-green-50 text-fw-success'
+                'bg-fw-successLight text-fw-success'
               }`}>
                 {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
               </span>
@@ -58,7 +58,7 @@ export function SupportTicketsWidget() {
         ))}
       </div>
 
-      <div className="flex items-center justify-between p-2 bg-green-50 rounded-lg">
+      <div className="flex items-center justify-between p-2 bg-fw-successLight rounded-lg">
         <div className="flex items-center">
           <CheckCircle className="h-4 w-4 text-fw-success mr-2" />
           <span className="text-figma-base text-fw-success">All caught up!</span>

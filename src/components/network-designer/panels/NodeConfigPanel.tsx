@@ -109,7 +109,7 @@ export function NodeConfigPanel({ node, onUpdate, onDelete, onClose }: NodeConfi
                 onUpdate(node.id, { status: node.status === 'active' ? 'inactive' : 'active' })
               }
               className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-                node.status === 'active' ? 'bg-green-500' : 'bg-fw-secondary'
+                node.status === 'active' ? 'bg-fw-successLight0' : 'bg-fw-secondary'
               }`}
             >
               <span
@@ -163,7 +163,7 @@ export function NodeConfigPanel({ node, onUpdate, onDelete, onClose }: NodeConfi
             <button
               onClick={() => updateConfig('bfd', !node.config?.bfd)}
               className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-                node.config?.bfd ? 'bg-green-500' : 'bg-fw-secondary'
+                node.config?.bfd ? 'bg-fw-successLight0' : 'bg-fw-secondary'
               }`}
             >
               <span
@@ -184,7 +184,7 @@ export function NodeConfigPanel({ node, onUpdate, onDelete, onClose }: NodeConfi
             <button
               onClick={() => updateConfig('encrypted', !node.config?.encrypted)}
               className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-                node.config?.encrypted ? 'bg-green-500' : 'bg-fw-secondary'
+                node.config?.encrypted ? 'bg-fw-successLight0' : 'bg-fw-secondary'
               }`}
             >
               <span
@@ -200,7 +200,7 @@ export function NodeConfigPanel({ node, onUpdate, onDelete, onClose }: NodeConfi
             <button
               onClick={() => updateConfig('ddosProtection', !node.config?.ddosProtection)}
               className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-                node.config?.ddosProtection ? 'bg-green-500' : 'bg-fw-secondary'
+                node.config?.ddosProtection ? 'bg-fw-successLight0' : 'bg-fw-secondary'
               }`}
             >
               <span

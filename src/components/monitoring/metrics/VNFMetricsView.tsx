@@ -3,6 +3,7 @@ import { Box, Zap, Users, Shield, Cpu, Database, Globe, Scale, AlertTriangle } f
 import { RealTimeMetricCard } from './RealTimeMetricCard';
 import { RealTimeChart } from './RealTimeChart';
 import { useMonitoring } from '../context/MonitoringContext';
+import { chartColors } from '../../../utils/chartColors';
 import { getVNFTypeInfo, getVNFTypeIcon } from '../../../utils/vnfTypes';
 
 interface VNFMetricData {
@@ -251,7 +252,7 @@ export function VNFMetricsView() {
         data={metricsData.map(d => ({ timestamp: d.timestamp, value: d.throughput }))}
         title="VNF Throughput Over Time"
         unit="Mbps"
-        color="#8b5cf6"
+        color={chartColors.purple}
         thresholds={{ warning: 500, critical: 300 }}
         height={300}
       />
@@ -261,7 +262,7 @@ export function VNFMetricsView() {
           data={metricsData.map(d => ({ timestamp: d.timestamp, value: d.activeSessions }))}
           title="Active Sessions"
           unit="sessions"
-          color="#10b981"
+          color={chartColors.success}
           height={250}
         />
 
@@ -269,7 +270,7 @@ export function VNFMetricsView() {
           data={metricsData.map(d => ({ timestamp: d.timestamp, value: d.policyHitRate }))}
           title="Policy Hit Rate"
           unit="%"
-          color="#f59e0b"
+          color={chartColors.warn}
           height={250}
         />
       </div>
@@ -373,7 +374,7 @@ export function VNFMetricsView() {
               <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-figma-base font-medium text-fw-body">Threats Detected</span>
-                  <AlertTriangle className="h-5 w-5 text-orange-500" />
+                  <AlertTriangle className="h-5 w-5 text-fw-warn" />
                 </div>
                 <p className="text-2xl font-bold text-fw-heading">{Math.floor(Math.random() * 100 + 50)}</p>
                 <p className="text-figma-sm text-fw-bodyLight mt-1">Last hour</p>
@@ -389,7 +390,7 @@ export function VNFMetricsView() {
               <div className="bg-fw-base rounded-lg p-4 border border-fw-secondary">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-figma-base font-medium text-fw-body">False Positives</span>
-                  <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                  <AlertTriangle className="h-5 w-5 text-fw-warn" />
                 </div>
                 <p className="text-2xl font-bold text-fw-heading">{(Math.random() * 5).toFixed(1)}%</p>
                 <p className="text-figma-sm text-fw-bodyLight mt-1">Detection rate</p>

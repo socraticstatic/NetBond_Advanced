@@ -2,6 +2,7 @@ import { TrendingUp, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { Connection } from '../../../../../types';
 import { formatCurrency } from '../../../../../utils/connections';
 import { LineChart } from '../../../../monitoring/charts/LineChart';
+import { chartColors } from '../../../../../utils/chartColors';
 
 interface CostAnalyticsWidgetProps {
   connections: Connection[];
@@ -14,13 +15,13 @@ export function CostAnalyticsWidget({ connections }: CostAnalyticsWidgetProps) {
       {
         label: 'Total Cost',
         data: [12500, 13200, 14100, 13800, 14500, 15200],
-        borderColor: '#10b981',
+        borderColor: chartColors.success,
         fill: false
       },
       {
         label: 'Projected Cost',
         data: [15200, 15800, 16400, 17000, 17600, 18200],
-        borderColor: '#6366f1',
+        borderColor: chartColors.purple,
         borderDash: [5, 5],
         fill: false
       }
@@ -92,7 +93,7 @@ export function CostAnalyticsWidget({ connections }: CostAnalyticsWidgetProps) {
                 </div>
                 <div className="h-2 bg-fw-neutral rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-purple-500 rounded-full"
+                    className="h-full bg-fw-purpleLight0 rounded-full"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
@@ -104,7 +105,7 @@ export function CostAnalyticsWidget({ connections }: CostAnalyticsWidgetProps) {
 
       {/* Cost Insights */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="p-3 bg-green-50 rounded-lg">
+        <div className="p-3 bg-fw-successLight rounded-lg">
           <div className="flex items-center text-fw-success mb-1">
             <ArrowDownRight className="h-4 w-4 mr-1" />
             <span className="text-figma-sm font-medium">Cost Optimization</span>

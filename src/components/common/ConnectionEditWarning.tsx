@@ -16,7 +16,7 @@ export function ConnectionEditWarning({ connection, className = '' }: Connection
   }
 
   return (
-    <div className={`flex items-start space-x-3 p-4 bg-orange-50 border border-orange-200 rounded-lg ${className}`}>
+    <div className={`flex items-start space-x-3 p-4 bg-fw-warnLight border border-fw-warn rounded-lg ${className}`}>
       <AlertCircle className="h-5 w-5 text-fw-warn flex-shrink-0 mt-0.5" />
       <div>
         <h4 className="text-figma-base font-semibold text-fw-heading mb-1">Configuration Locked</h4>

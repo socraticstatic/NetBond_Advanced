@@ -54,11 +54,11 @@ export function ScheduleSettings() {
   const getFrequencyColor = (frequency: Schedule['frequency']) => {
     switch (frequency) {
       case 'Daily':
-        return 'bg-green-50 text-fw-success';
+        return 'bg-fw-successLight text-fw-success';
       case 'Weekly':
         return 'bg-fw-accent text-fw-link';
       case 'Monthly':
-        return 'bg-purple-50 text-fw-purple';
+        return 'bg-fw-purpleLight text-fw-purple';
       default:
         return 'bg-fw-neutral text-fw-body';
     }

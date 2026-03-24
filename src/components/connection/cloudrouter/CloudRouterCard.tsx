@@ -53,7 +53,7 @@ export function CloudRouterCard({
   // Get VNF type icon
   const getVnfIcon = (type: string) => {
     switch(type) {
-      case 'firewall': return <Shield className="h-4 w-4 text-indigo-500" />;
+      case 'firewall': return <Shield className="h-4 w-4 text-fw-link" />;
       case 'sdwan': return <Network className="h-4 w-4 text-fw-purple" />;
       case 'router': return <Router className="h-4 w-4 text-fw-link" />;
       case 'vnat': return <Network className="h-4 w-4 text-fw-success" />;
@@ -170,10 +170,10 @@ export function CloudRouterCard({
         {/* Status Badge */}
         <div className="mt-3 flex items-center justify-between">
           <span className={`inline-flex items-center px-2 py-1 rounded-lg text-figma-sm font-medium uppercase ${
-            cloudRouter.status === 'active' ? 'bg-green-50 text-fw-success' :
+            cloudRouter.status === 'active' ? 'bg-fw-successLight text-fw-success' :
             cloudRouter.status === 'inactive' ? 'bg-fw-secondary text-fw-disabled' :
             cloudRouter.status === 'provisioning' ? 'bg-fw-accent text-fw-link' :
-            'bg-red-50 text-fw-error'
+            'bg-fw-errorLight text-fw-error'
           }`}>
             {cloudRouter.status.charAt(0).toUpperCase() + cloudRouter.status.slice(1)}
           </span>
@@ -210,7 +210,7 @@ export function CloudRouterCard({
                       </div>
                     </div>
                     <span className={`px-2 py-0.5 text-figma-sm rounded-lg ${
-                      vnf.status === 'active' ? 'bg-green-50 text-fw-success' :
+                      vnf.status === 'active' ? 'bg-fw-successLight text-fw-success' :
                       vnf.status === 'inactive' ? 'bg-fw-neutral text-fw-body' :
                       'bg-fw-accent text-fw-linkHover'
                     }`}>

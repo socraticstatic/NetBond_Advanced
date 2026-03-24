@@ -40,8 +40,8 @@ export function SubscriptionDetails() {
             </div>
             <span className={`px-3 py-1 rounded-full text-figma-base font-medium ${
               subscription.status === 'Active'
-                ? 'bg-green-50 text-fw-success'
-                : 'bg-yellow-100 text-yellow-800'
+                ? 'bg-fw-successLight text-fw-success'
+                : 'bg-fw-warnLight text-fw-warn'
             }`}>
               {subscription.status}
             </span>
@@ -63,13 +63,13 @@ export function SubscriptionDetails() {
                   <div className="h-2 bg-fw-neutral rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
-                        isWarning ? 'bg-yellow-500' : 'bg-fw-cobalt-600'
+                        isWarning ? 'bg-fw-warnLight0' : 'bg-fw-cobalt-600'
                       }`}
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
                   {isWarning && (
-                    <p className="flex items-center text-figma-sm text-yellow-600">
+                    <p className="flex items-center text-figma-sm text-fw-warn">
                       <AlertTriangle className="h-4 w-4 mr-1" />
                       Approaching limit
                     </p>

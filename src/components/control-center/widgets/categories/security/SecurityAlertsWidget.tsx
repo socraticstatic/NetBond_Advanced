@@ -45,7 +45,7 @@ export function SecurityAlertsWidget({ connections }: SecurityAlertsWidgetProps)
           <div
             key={alert.id}
             className={`p-3 rounded-lg ${
-              alert.severity === 'high' ? 'bg-red-50' :
+              alert.severity === 'high' ? 'bg-fw-errorLight' :
               alert.severity === 'medium' ? 'bg-fw-warn/10' :
               'bg-fw-accent'
             }`}

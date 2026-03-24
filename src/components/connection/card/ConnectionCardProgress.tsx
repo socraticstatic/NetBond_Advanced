@@ -26,7 +26,7 @@ export function ConnectionCardProgress({
       <div className="h-2 bg-fw-wash rounded-full overflow-hidden relative">
         <div
           className={`h-full rounded-full transition-all duration-300 ${
-            bandwidthUtil > 90 ? 'bg-red-500' :
+            bandwidthUtil > 90 ? 'bg-fw-errorLight0' :
             bandwidthUtil > 80 ? 'bg-complementary-amber' :
             bandwidthUtil > 60 ? 'bg-brand-blue' :
             'bg-fw-success'

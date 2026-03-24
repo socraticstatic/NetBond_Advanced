@@ -49,27 +49,27 @@ export function RealTimeMetricCard({
     switch (status) {
       case 'healthy':
         return {
-          border: 'border-green-200',
-          bg: 'bg-green-50',
-          iconBg: 'bg-green-100',
-          iconColor: 'text-green-600',
-          badge: 'bg-green-100 text-green-800'
+          border: 'border-fw-success',
+          bg: 'bg-fw-successLight',
+          iconBg: 'bg-fw-successLight',
+          iconColor: 'text-fw-success',
+          badge: 'bg-fw-successLight text-fw-success'
         };
       case 'warning':
         return {
-          border: 'border-yellow-200',
-          bg: 'bg-yellow-50',
-          iconBg: 'bg-yellow-100',
-          iconColor: 'text-yellow-600',
-          badge: 'bg-yellow-100 text-yellow-800'
+          border: 'border-fw-warn',
+          bg: 'bg-fw-warnLight',
+          iconBg: 'bg-fw-warnLight',
+          iconColor: 'text-fw-warn',
+          badge: 'bg-fw-warnLight text-fw-warn'
         };
       case 'critical':
         return {
-          border: 'border-red-200',
-          bg: 'bg-red-50',
-          iconBg: 'bg-red-100',
-          iconColor: 'text-red-600',
-          badge: 'bg-red-100 text-red-800'
+          border: 'border-fw-error',
+          bg: 'bg-fw-errorLight',
+          iconBg: 'bg-fw-errorLight',
+          iconColor: 'text-fw-error',
+          badge: 'bg-fw-errorLight text-fw-error'
         };
       default:
         return {
@@ -123,7 +123,7 @@ export function RealTimeMetricCard({
           stroke="currentColor"
           strokeWidth="2"
           className={status === 'healthy' ? 'text-fw-success' :
-                     status === 'warning' ? 'text-yellow-500' :
+                     status === 'warning' ? 'text-fw-warn' :
                      status === 'critical' ? 'text-fw-error' : 'text-fw-bodyLight'}
           vectorEffect="non-scaling-stroke"
         />
@@ -133,7 +133,7 @@ export function RealTimeMetricCard({
           fillOpacity="0.1"
           stroke="none"
           className={status === 'healthy' ? 'text-fw-success' :
-                     status === 'warning' ? 'text-yellow-500' :
+                     status === 'warning' ? 'text-fw-warn' :
                      status === 'critical' ? 'text-fw-error' : 'text-fw-bodyLight'}
         />
       </svg>
@@ -212,7 +212,7 @@ export function RealTimeMetricCard({
               <div
                 className={`h-full rounded-full transition-all duration-500 ${
                   status === 'healthy' ? 'bg-fw-success' :
-                  status === 'warning' ? 'bg-yellow-500' :
+                  status === 'warning' ? 'bg-fw-warnLight0' :
                   status === 'critical' ? 'bg-fw-error' : 'bg-fw-bodyLight'
                 }`}
                 style={{ width: `${Math.min(target.value, 100)}%` }}

@@ -538,14 +538,14 @@ export function VNFModal({
                     >
                       <div className="flex items-center space-x-3 mb-2">
                         <div className={`p-2 rounded-lg ${
-                          template.type === 'firewall' ? 'bg-indigo-100' :
+                          template.type === 'firewall' ? 'bg-fw-infoLight' :
                           template.type === 'sdwan' ? 'bg-fw-wash' :
                           template.type === 'router' ? 'bg-fw-accent' :
-                          template.type === 'vnat' ? 'bg-green-50' :
+                          template.type === 'vnat' ? 'bg-fw-successLight' :
                           'bg-fw-neutral'
                         }`}>
                           <Icon className={`h-6 w-6 ${
-                            template.type === 'firewall' ? 'text-indigo-500' :
+                            template.type === 'firewall' ? 'text-fw-link' :
                             template.type === 'sdwan' ? 'text-fw-purple' :
                             template.type === 'router' ? 'text-fw-link' :
                             template.type === 'vnat' ? 'text-fw-success' :
@@ -752,7 +752,7 @@ export function VNFModal({
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <span className={`text-figma-sm px-2 py-0.5 rounded-full ${
-                                    conn.status === 'Active' ? 'bg-green-50 text-fw-success' : 'bg-fw-neutral text-fw-bodyLight'
+                                    conn.status === 'Active' ? 'bg-fw-successLight text-fw-success' : 'bg-fw-neutral text-fw-bodyLight'
                                   }`}>
                                     {conn.status}
                                   </span>
@@ -784,7 +784,7 @@ export function VNFModal({
                     )}
 
                     {hasMultipleConnections && (
-                      <div className="mt-2 bg-green-50 border border-green-200 rounded-lg p-3 flex items-start">
+                      <div className="mt-2 bg-fw-successLight border border-fw-success rounded-lg p-3 flex items-start">
                         <Network className="h-4 w-4 text-fw-success mt-0.5 mr-2 flex-shrink-0" />
                         <div>
                           <p className="text-figma-base text-fw-success font-medium">
@@ -924,7 +924,7 @@ export function VNFModal({
                                   </td>
                                   <td className="px-6 py-4 whitespace-nowrap">
                                     <span className={`px-2 py-1 inline-flex text-figma-sm leading-5 font-semibold rounded-full ${
-                                      iface.status === 'up' ? 'bg-green-50 text-fw-success' : 'bg-fw-neutral text-fw-heading'
+                                      iface.status === 'up' ? 'bg-fw-successLight text-fw-success' : 'bg-fw-neutral text-fw-heading'
                                     }`}>
                                       {iface.status.toUpperCase()}
                                     </span>

@@ -49,7 +49,7 @@ export function GroupCardHeader({ group, onDelete, children }: GroupCardHeaderPr
           </button>
           <button
             onClick={handleDelete}
-            className="flex items-center justify-center w-6 h-6 rounded-full text-fw-bodyLight hover:text-fw-error hover:bg-red-50 transition-colors opacity-0 group-hover/header:opacity-100"
+            className="flex items-center justify-center w-6 h-6 rounded-full text-fw-bodyLight hover:text-fw-error hover:bg-fw-errorLight transition-colors opacity-0 group-hover/header:opacity-100"
             aria-label="Delete pool"
           >
             <Trash2 className="h-5 w-5" />

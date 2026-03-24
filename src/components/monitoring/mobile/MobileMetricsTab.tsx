@@ -3,6 +3,7 @@ import { BaseMetricsView } from '../shared/BaseMetricsView';
 import { MetricsSummary } from '../shared/MetricsSummary';
 import { Activity, TrendingUp, ArrowUpDown } from 'lucide-react';
 import { PerformanceCard } from '../shared/PerformanceCard';
+import { chartColors } from '../../../utils/chartColors';
 
 // Import the mobile-specific performance chart
 import { MobilePerformanceChart } from './MobilePerformanceChart';
@@ -40,13 +41,13 @@ export function MobileMetricsTab({ metrics }: MobileMetricsTabProps) {
     packetLoss: {
       title: 'Packet Loss',
       icon: TrendingUp,
-      color: 'text-red-500',
+      color: 'text-fw-error',
       value: metrics.packetLoss,
       description: 'Data transmission reliability',
       chart: {
         data: [0.01, 0.015, 0.008, 0.012, 0.01, 0.014, 0.01],
         labels: ['6h ago', '5h ago', '4h ago', '3h ago', '2h ago', '1h ago', 'Now'],
-        color: '#ef4444'
+        color: chartColors.error
       },
       stats: {
         average: '0.01%',
@@ -57,13 +58,13 @@ export function MobileMetricsTab({ metrics }: MobileMetricsTabProps) {
     bandwidth: {
       title: 'Bandwidth Usage',
       icon: ArrowUpDown,
-      color: 'text-green-500',
+      color: 'text-fw-success',
       value: '78%',
       description: 'Network capacity utilization',
       chart: {
         data: [65, 70, 75, 82, 78, 80, 78],
         labels: ['6h ago', '5h ago', '4h ago', '3h ago', '2h ago', '1h ago', 'Now'],
-        color: '#10b981'
+        color: chartColors.success
       },
       stats: {
         average: '75%',

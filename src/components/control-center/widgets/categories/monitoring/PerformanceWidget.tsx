@@ -1,6 +1,7 @@
 import { Activity, TrendingUp, ArrowUpDown } from 'lucide-react';
 import { Connection } from '../../../../../types';
 import { LineChart } from '../../../../monitoring/charts/LineChart';
+import { chartColors } from '../../../../../utils/chartColors';
 
 interface PerformanceWidgetProps {
   connections: Connection[];
@@ -24,7 +25,7 @@ export function PerformanceWidget({ connections }: PerformanceWidgetProps) {
     datasets: [{
       label: 'Average Latency (ms)',
       data: [4.2, 4.5, 4.1, 4.3],
-      borderColor: '#3b82f6',
+      borderColor: chartColors.primary,
       fill: false
     }]
   };
@@ -42,7 +43,7 @@ export function PerformanceWidget({ connections }: PerformanceWidgetProps) {
           </div>
         </div>
 
-        <div className="bg-green-50 rounded-lg p-3">
+        <div className="bg-fw-successLight rounded-lg p-3">
           <div className="flex items-center justify-between mb-1">
             <TrendingUp className="h-4 w-4 text-fw-success" />
             <span className="text-figma-sm text-fw-success">Bandwidth</span>

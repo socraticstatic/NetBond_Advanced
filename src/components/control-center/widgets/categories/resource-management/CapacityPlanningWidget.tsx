@@ -1,5 +1,6 @@
 import { TrendingUp, AlertTriangle, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { LineChart } from '../../../../monitoring/charts/LineChart';
+import { chartColors } from '../../../../../utils/chartColors';
 
 export function CapacityPlanningWidget() {
   const capacityData = {
@@ -8,13 +9,13 @@ export function CapacityPlanningWidget() {
       {
         label: 'Current Usage',
         data: [65, 72, 78, 82, 85, 88],
-        borderColor: '#3b82f6',
+        borderColor: chartColors.primary,
         fill: false
       },
       {
         label: 'Projected Usage',
         data: [65, 72, 78, 82, 85, 92],
-        borderColor: '#6366f1',
+        borderColor: chartColors.purple,
         borderDash: [5, 5],
         fill: false
       }
@@ -87,7 +88,7 @@ export function CapacityPlanningWidget() {
                 style={{ width: resource.current }}
               />
               <div
-                className="absolute h-full border-r-2 border-purple-500"
+                className="absolute h-full border-r-2 border-fw-purple"
                 style={{ left: resource.projected }}
               />
             </div>

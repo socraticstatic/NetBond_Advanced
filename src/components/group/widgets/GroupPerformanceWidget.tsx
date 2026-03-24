@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Activity, Shield, Network, CheckCircle, AlertTriangle, BarChart2 } from 'lucide-react';
+import { chartColors } from '../../../utils/chartColors';
 import { Group } from '../../../types/group';
 import { Connection } from '../../../types';
 import { Card } from '../../common/Card';
@@ -33,7 +34,7 @@ export function GroupPerformanceWidget({ group, connections }: GroupPerformanceW
           datasets: [{
             label: 'Avg Latency',
             data: Array(7).fill(0),
-            borderColor: '#3b82f6',
+            borderColor: chartColors.primary,
             tension: 0.4,
             fill: false
           }]
@@ -120,8 +121,8 @@ export function GroupPerformanceWidget({ group, connections }: GroupPerformanceW
         {
           label: 'Avg Latency (ms)',
           data: latencyTrend,
-          borderColor: '#3b82f6',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: chartColors.primary,
+          backgroundColor: chartColors.primaryLight,
           tension: 0.4,
           fill: true
         }
@@ -142,14 +143,14 @@ export function GroupPerformanceWidget({ group, connections }: GroupPerformanceW
   // Get health color based on score
   const getHealthColor = (score: number) => {
     if (score >= 90) return 'text-fw-success';
-    if (score >= 70) return 'text-amber-500';
+    if (score >= 70) return 'text-fw-warn';
     return 'text-fw-error';
   };
 
   const getHealthBgColor = (score: number) => {
-    if (score >= 90) return 'bg-green-50';
-    if (score >= 70) return 'bg-amber-100';
-    return 'bg-red-50';
+    if (score >= 90) return 'bg-fw-successLight';
+    if (score >= 70) return 'bg-fw-warnLight';
+    return 'bg-fw-errorLight';
   };
 
   return (
@@ -195,7 +196,7 @@ export function GroupPerformanceWidget({ group, connections }: GroupPerformanceW
               <div className="text-figma-sm text-fw-bodyLight mb-1">Avg Uptime</div>
               <div className="text-xl font-semibold text-fw-success">{performanceData.avgUptime}</div>
             </div>
-            <Shield className="h-8 w-8 text-fw-success bg-green-50 p-1.5 rounded-full" />
+            <Shield className="h-8 w-8 text-fw-success bg-fw-successLight p-1.5 rounded-full" />
           </div>
           
           <div className="bg-fw-wash rounded-lg p-4 flex items-center justify-between">
@@ -221,36 +222,36 @@ export function GroupPerformanceWidget({ group, connections }: GroupPerformanceW
              performanceData.connectionHealth.critical > 0 ? (
               <div className="space-y-4">
                 {performanceData.connectionHealth.healthy > 0 && (
-                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-100">
+                  <div className="flex items-center justify-between p-3 bg-fw-successLight rounded-lg border border-fw-successLight">
                     <div className="flex items-center">
-                      <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                      <span className="text-figma-base font-medium text-green-700">Healthy</span>
+                      <CheckCircle className="h-5 w-5 text-fw-success mr-2" />
+                      <span className="text-figma-base font-medium text-fw-success">Healthy</span>
                     </div>
-                    <span className="text-figma-base font-semibold text-green-700">
+                    <span className="text-figma-base font-semibold text-fw-success">
                       {performanceData.connectionHealth.healthy}
                     </span>
                   </div>
                 )}
                 
                 {performanceData.connectionHealth.warning > 0 && (
-                  <div className="flex items-center justify-between p-3 bg-amber-50 rounded-lg border border-amber-100">
+                  <div className="flex items-center justify-between p-3 bg-fw-warnLight rounded-lg border border-fw-warnLight">
                     <div className="flex items-center">
-                      <AlertTriangle className="h-5 w-5 text-amber-500 mr-2" />
-                      <span className="text-figma-base font-medium text-amber-700">Warning</span>
+                      <AlertTriangle className="h-5 w-5 text-fw-warn mr-2" />
+                      <span className="text-figma-base font-medium text-fw-warn">Warning</span>
                     </div>
-                    <span className="text-figma-base font-semibold text-amber-700">
+                    <span className="text-figma-base font-semibold text-fw-warn">
                       {performanceData.connectionHealth.warning}
                     </span>
                   </div>
                 )}
                 
                 {performanceData.connectionHealth.critical > 0 && (
-                  <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
+                  <div className="flex items-center justify-between p-3 bg-fw-errorLight rounded-lg border border-fw-errorLight">
                     <div className="flex items-center">
-                      <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
-                      <span className="text-figma-base font-medium text-red-700">Critical</span>
+                      <AlertTriangle className="h-5 w-5 text-fw-error mr-2" />
+                      <span className="text-figma-base font-medium text-fw-error">Critical</span>
                     </div>
-                    <span className="text-figma-base font-semibold text-red-700">
+                    <span className="text-figma-base font-semibold text-fw-error">
                       {performanceData.connectionHealth.critical}
                     </span>
                   </div>
@@ -276,18 +277,18 @@ export function GroupPerformanceWidget({ group, connections }: GroupPerformanceW
         {performanceData.hasIssues && (
           <div className="mt-6 border-t border-fw-secondary pt-4">
             <h4 className="text-figma-base font-medium text-fw-body mb-3">Performance Insights</h4>
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div className="bg-fw-warnLight border border-fw-warn rounded-lg p-4">
               <div className="flex">
-                <AlertTriangle className="h-5 w-5 text-amber-500 mr-2 flex-shrink-0 mt-0.5" />
+                <AlertTriangle className="h-5 w-5 text-fw-warn mr-2 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-figma-base text-amber-800 font-medium">Performance Issues Detected</p>
-                  <p className="text-figma-base text-amber-700 mt-1">
+                  <p className="text-figma-base text-fw-warn font-medium">Performance Issues Detected</p>
+                  <p className="text-figma-base text-fw-warn mt-1">
                     {performanceData.connectionHealth.critical > 0 ? 
                       `${performanceData.connectionHealth.critical} connection${performanceData.connectionHealth.critical > 1 ? 's' : ''} with critical issues. ` : ''}
                     {performanceData.connectionHealth.warning > 0 ? 
                       `${performanceData.connectionHealth.warning} connection${performanceData.connectionHealth.warning > 1 ? 's' : ''} with performance warnings.` : ''}
                   </p>
-                  <button className="mt-2 text-figma-base text-amber-800 font-medium hover:text-amber-900">
+                  <button className="mt-2 text-figma-base text-fw-warn font-medium hover:text-fw-warn">
                     View Details →
                   </button>
                 </div>

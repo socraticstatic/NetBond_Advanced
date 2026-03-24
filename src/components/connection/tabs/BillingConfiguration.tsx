@@ -119,7 +119,7 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
           <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em]">Current Plan</h3>
           <span className={`px-2 py-1 text-figma-sm rounded-lg ${
             config.plan.status === 'active'
-              ? 'bg-green-50 text-fw-success'
+              ? 'bg-fw-successLight text-fw-success'
               : 'bg-fw-warn/10 text-fw-warn'
           }`}>
             {config.plan.status.toUpperCase()}
@@ -220,7 +220,7 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
               <div className="flex items-center justify-between">
                 <span className={`px-2 py-1 text-figma-sm rounded-lg ${
                   addon.status === 'active'
-                    ? 'bg-green-50 text-fw-success'
+                    ? 'bg-fw-successLight text-fw-success'
                     : 'bg-fw-neutral text-fw-heading'
                 }`}>
                   {addon.status.toUpperCase()}
@@ -263,7 +263,7 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
               <span className="text-figma-base font-medium text-fw-heading">Auto-Pay</span>
               <span className={`px-2 py-1 text-figma-sm rounded-lg ${
                 config.payment.autopay
-                  ? 'bg-green-50 text-fw-success'
+                  ? 'bg-fw-successLight text-fw-success'
                   : 'bg-fw-neutral text-fw-heading'
               }`}>
                 {config.payment.autopay ? 'ENABLED' : 'DISABLED'}
@@ -327,7 +327,7 @@ export function BillingConfiguration({ isEditing }: BillingConfigurationProps) {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 inline-flex text-figma-sm leading-5 font-semibold rounded-lg ${
                       invoice.status === 'paid'
-                        ? 'bg-green-50 text-fw-success'
+                        ? 'bg-fw-successLight text-fw-success'
                         : 'bg-fw-warn/10 text-fw-warn'
                     }`}>
                       {invoice.status.toUpperCase()}

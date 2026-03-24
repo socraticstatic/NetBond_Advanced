@@ -550,7 +550,7 @@ export function ConnectionDetails() {
             <div className="flex flex-wrap gap-1">
               {connection.providers && connection.providers.length > 0 ? (
                 connection.providers.slice(0, 2).map((vendor, i) => (
-                  <span key={i} className="text-figma-sm px-2 py-0.5 bg-green-50 text-fw-success rounded font-medium">
+                  <span key={i} className="text-figma-sm px-2 py-0.5 bg-fw-successLight text-fw-success rounded font-medium">
                     {vendor}
                   </span>
                 ))
@@ -577,7 +577,7 @@ export function ConnectionDetails() {
               onClick={handleToggleStatus}
               className={`inline-flex items-center justify-center h-9 px-4 rounded-full text-figma-base font-medium gap-2 transition-colors ${
                 connection.status === 'Active'
-                  ? 'border border-fw-success text-fw-success hover:bg-green-50'
+                  ? 'border border-fw-success text-fw-success hover:bg-fw-successLight'
                   : 'border border-fw-secondary text-fw-body hover:bg-fw-wash'
               }`}
             >

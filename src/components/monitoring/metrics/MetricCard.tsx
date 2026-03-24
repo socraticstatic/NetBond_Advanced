@@ -12,9 +12,9 @@ interface MetricCardProps {
 export function MetricCard({ title, value, icon, status, description, chart }: MetricCardProps) {
   const getStatusColor = (status: 'success' | 'warning' | 'error') => {
     switch (status) {
-      case 'success': return 'bg-green-50 text-fw-success';
-      case 'warning': return 'bg-yellow-100 text-yellow-800';
-      case 'error': return 'bg-red-50 text-fw-error';
+      case 'success': return 'bg-fw-successLight text-fw-success';
+      case 'warning': return 'bg-fw-warnLight text-fw-warn';
+      case 'error': return 'bg-fw-errorLight text-fw-error';
     }
   };
 
@@ -26,9 +26,9 @@ export function MetricCard({ title, value, icon, status, description, chart }: M
           <p className="text-figma-sm text-fw-bodyLight mt-1">{description}</p>
         </div>
         <div className={`p-2 rounded-lg ${
-          status === 'success' ? 'bg-green-50' : 
-          status === 'warning' ? 'bg-yellow-50' : 
-          'bg-red-50'
+          status === 'success' ? 'bg-fw-successLight' : 
+          status === 'warning' ? 'bg-fw-warnLight' : 
+          'bg-fw-errorLight'
         }`}>
           {icon}
         </div>

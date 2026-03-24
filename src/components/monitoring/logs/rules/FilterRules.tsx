@@ -164,12 +164,12 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
         </Button>
       </div>
 
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+      <div className="bg-fw-successLight border border-fw-success rounded-lg p-4 mb-6">
         <div className="flex">
           <Filter className="h-5 w-5 text-fw-success mr-3 flex-shrink-0 mt-0.5" />
           <div>
-            <h4 className="text-figma-base font-medium text-green-900">Filter Tips</h4>
-            <p className="text-figma-base text-green-700 mt-1">
+            <h4 className="text-figma-base font-medium text-fw-success">Filter Tips</h4>
+            <p className="text-figma-base text-fw-success mt-1">
               Save frequently used filter combinations as rules for quick access. Set a default filter to automatically
               apply when viewing logs. Combine severity, types, and keywords for precise filtering.
             </p>
@@ -211,8 +211,8 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
                       <div className="flex flex-wrap gap-1">
                         {rule.filters.severity.map(sev => (
                           <span key={sev} className={`px-2 py-0.5 rounded-full text-figma-sm font-medium ${
-                            sev === 'error' ? 'bg-red-50 text-fw-error' :
-                            sev === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                            sev === 'error' ? 'bg-fw-errorLight text-fw-error' :
+                            sev === 'warning' ? 'bg-fw-warnLight text-fw-warn' :
                             'bg-fw-accent text-fw-linkHover'
                           }`}>
                             {sev}
@@ -327,7 +327,7 @@ export function FilterRules({ selectedConnection }: FilterRulesProps) {
 
                   <button
                     onClick={() => deleteRule(rule.id)}
-                    className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-red-50"
+                    className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-fw-errorLight"
                     disabled={rule.isDefault}
                   >
                     <Trash2 className="h-5 w-5" />
