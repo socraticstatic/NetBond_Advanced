@@ -199,11 +199,10 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   }, [selectedProvider, selectedType, selectedBandwidth, selectedLocation]);
 
   const handleCancel = () => {
-    if (isEditMode && connectionToEdit) {
-      // If editing, return to connection details
-      navigate(`/connections/${connectionToEdit.id}`);
+    const connId = connectionToEdit?.id || locationState?.connectionId;
+    if (isEditMode && connId) {
+      navigate(`/connections/${connId}`);
     } else {
-      // Otherwise return to connections list
       navigate('/manage');
     }
   };
@@ -460,7 +459,8 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   initialNodes={initialNodes}
                   initialEdges={initialEdges}
                   editMode={isEditMode}
-                  connectionId={connectionToEdit?.id}
+                  connectionId={connectionToEdit?.id || locationState?.connectionId}
+                  connectionStatus={connectionToEdit?.status || locationState?.connectionStatus}
                 />
               </Suspense>
             </AsyncBoundary>

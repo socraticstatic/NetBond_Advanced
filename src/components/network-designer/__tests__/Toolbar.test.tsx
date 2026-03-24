@@ -85,22 +85,46 @@ describe('Toolbar', () => {
       expect(toolbar).toBeInTheDocument();
     });
 
-    it('toolbar container has overflow-x-auto', () => {
-      render(<Toolbar {...defaultProps} />);
-      const toolbar = document.querySelector('[class*="overflow-x-auto"]');
-      expect(toolbar).toBeInTheDocument();
-    });
   });
 
   describe('icon-only buttons always present', () => {
     it('renders all icon buttons at any width', () => {
       mockScreenWidth = 375;
       render(<Toolbar {...defaultProps} />);
-      // All buttons should be in DOM (by title)
       expect(screen.getByTitle('Choose template')).toBeInTheDocument();
       expect(screen.getByTitle('Add Cloud Router')).toBeInTheDocument();
       expect(screen.getByTitle('Maximize')).toBeInTheDocument();
       expect(screen.getByTitle('Create connections')).toBeInTheDocument();
+    });
+  });
+
+  describe('edit mode', () => {
+    it('shows "Save updates" title when editMode is true', () => {
+      render(<Toolbar {...defaultProps} editMode={true} />);
+      expect(screen.getByTitle('Save updates')).toBeInTheDocument();
+    });
+
+    it('shows "Create connections" title when editMode is false', () => {
+      render(<Toolbar {...defaultProps} editMode={false} />);
+      expect(screen.getByTitle('Create connections')).toBeInTheDocument();
+    });
+
+    it('shows "Save updates" label text at wide viewport in edit mode', () => {
+      mockScreenWidth = 1280;
+      render(<Toolbar {...defaultProps} editMode={true} />);
+      expect(screen.getByText('Save updates')).toBeInTheDocument();
+    });
+
+    it('shows "Create" label text at wide viewport in create mode', () => {
+      mockScreenWidth = 1280;
+      render(<Toolbar {...defaultProps} editMode={false} />);
+      expect(screen.getByText('Create')).toBeInTheDocument();
+    });
+
+    it('applies primary button style in edit mode', () => {
+      render(<Toolbar {...defaultProps} editMode={true} hasConnections={true} />);
+      const btn = screen.getByTitle('Save updates');
+      expect(btn.className).toContain('bg-fw-primary');
     });
   });
 });

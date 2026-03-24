@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
-import { Minimize2 } from 'lucide-react';
+import { Minimize2, ArrowLeft, AlertTriangle, X } from 'lucide-react';
 import { chartColors } from '../../utils/chartColors';
 import type { Connection, NetworkNode as LegacyNetworkNode, NetworkEdge as LegacyNetworkEdge } from '../../types';
 import type { NetworkNode, NetworkEdge } from './types/designer';
@@ -31,6 +31,7 @@ interface NetworkDesignerProps {
   initialEdges?: LegacyNetworkEdge[];
   editMode?: boolean;
   connectionId?: string;
+  connectionStatus?: string;
 }
 
 function legacyNodeToNew(n: LegacyNetworkNode): NetworkNode {
@@ -65,7 +66,10 @@ export function NetworkDesigner({
   initialEdges = [],
   editMode = false,
   connectionId,
+  connectionStatus,
 }: NetworkDesignerProps) {
+  const [showEditWarning, setShowEditWarning] = useState(editMode && connectionStatus === 'Active');
+
   // Store state
   const nodes = useDesignerStore((s) => s.nodes);
   const edges = useDesignerStore((s) => s.edges);
@@ -349,6 +353,32 @@ export function NetworkDesigner({
 
   return (
     <div className={containerClass}>
+      {/* Edit mode: back nav + warning */}
+      {editMode && (
+        <div className="absolute top-0 left-0 right-0 z-30">
+          <div className="flex items-center justify-between px-4 py-2 bg-fw-base border-b border-fw-secondary">
+            <button
+              onClick={onCancel}
+              className="flex items-center gap-1.5 text-figma-base font-medium text-fw-link hover:text-fw-linkHover transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Connection detail
+            </button>
+          </div>
+          {showEditWarning && (
+            <div className="flex items-center justify-between px-4 py-2 bg-amber-50 border-b border-amber-200">
+              <div className="flex items-center gap-2 text-figma-sm text-amber-800">
+                <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+                Disconnecting an active connection may cause service interruption
+              </div>
+              <button onClick={() => setShowEditWarning(false)} className="text-amber-600 hover:text-amber-800">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Floating minimize button when maximized */}
       {isMaximized && (
         <button
@@ -461,6 +491,7 @@ export function NetworkDesigner({
         onSaveDraft={() => setIsSaveDraftOpen(true)}
         onOpenDrafts={() => setIsDraftsOpen(true)}
         onExportPDF={exportPDF}
+        editMode={editMode}
       />
     </div>
   );

@@ -20,15 +20,17 @@ interface LazyNetworkDesignerProps {
   initialEdges?: NetworkEdge[];
   editMode?: boolean;
   connectionId?: string;
+  connectionStatus?: string;
 }
 
-function LazyNetworkDesigner({ 
-  onComplete, 
+function LazyNetworkDesigner({
+  onComplete,
   onCancel,
   initialNodes = [],
   initialEdges = [],
   editMode = false,
-  connectionId
+  connectionId,
+  connectionStatus
 }: LazyNetworkDesignerProps) {
   const [hasError, setHasError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
@@ -107,6 +109,7 @@ function LazyNetworkDesigner({
           initialEdges={initialEdges}
           editMode={editMode}
           connectionId={connectionId}
+          connectionStatus={connectionStatus}
         />
       </Suspense>
     </ErrorBoundary>
