@@ -50,13 +50,11 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
   const renderIcon = () => {
     if (!icon) return null;
 
-    // Already a React element: <Icon className="..." />
     if (isValidElement(icon)) {
       return <span className="shrink-0">{icon}</span>;
     }
 
-    // Component reference (function, forwardRef, or memo-wrapped)
-    if (typeof icon === 'function' || (typeof icon === 'object' && icon !== null && '$$typeof' in icon)) {
+    if (typeof icon === 'function') {
       const IconComponent = icon as ComponentType<any>;
       return <IconComponent className={`${iconSizeClass} shrink-0`} />;
     }
