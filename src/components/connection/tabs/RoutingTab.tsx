@@ -1,4 +1,5 @@
-import { Share2, ArrowRight, Network, Lock, Globe } from 'lucide-react';
+import { ArrowRight, Network, Lock, Globe } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 
 export function RoutingTab() {
   const sections = [
@@ -55,7 +56,7 @@ export function RoutingTab() {
         <div key={sectionIndex} className="bg-fw-base rounded-2xl overflow-hidden">
           <div className="px-6 py-4 border-b border-fw-secondary bg-fw-wash">
             <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] flex items-center">
-              <Share2 className="h-5 w-5 text-fw-link mr-2" />
+              <AttIcon name="cloudRouter" className="h-6 w-6 text-fw-link mr-2" />
               {section.title}
             </h3>
           </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Tag, AlertTriangle, Plus, CheckCircle, HelpCircle, Info, X, GitBranch, Route, Network } from 'lucide-react';
+import { Tag, AlertTriangle, Plus, CheckCircle, HelpCircle, Info, X, Route, Network } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 import { Button } from '../../common/Button';
 import { FormField } from '../../form/FormField';
 import { SideDrawer } from '../../common/SideDrawer';
@@ -547,7 +548,7 @@ export function VLANModal({
               {/* Routing Configuration Section */}
               <div className="pt-6 border-t-2 border-fw-secondary">
                 <div className="flex items-center mb-4">
-                  <GitBranch className="h-5 w-5 text-fw-link mr-2" />
+                  <AttIcon name="cloudRouter" className="h-6 w-6 text-fw-link mr-2" />
                   <h3 className="text-lg font-semibold text-fw-heading">Routing Configuration</h3>
                 </div>
 

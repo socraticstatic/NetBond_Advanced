@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Search, BookOpen, Network, Share2, Cable, Shield, Layers, Eye } from 'lucide-react';
+import { Search, BookOpen, Network, Cable, Shield, Layers, Eye } from 'lucide-react';
+import { AttIcon } from '../icons/AttIcon';
 import { glossaryTerms, glossaryCategories, searchTerms, getTermsByCategory, getTermById } from '../../data/glossary';
 import { Button } from '../common/Button';
 import { ConceptHierarchyDiagram } from '../common/ConceptHierarchyDiagram';
@@ -238,7 +239,7 @@ export function GlossaryPage() {
                             </div>
 
                             <div className="ml-8 flex items-center gap-3 p-4 bg-fw-base rounded-lg border-2 border-fw-success shadow-sm">
-                              <Share2 className="h-6 w-6 text-fw-success flex-shrink-0" />
+                              <AttIcon name="cloudRouter" className="h-6 w-6 text-fw-success flex-shrink-0" />
                               <div>
                                 <div className="font-semibold text-figma-base text-fw-heading tracking-[-0.03em]">Cloud Router</div>
                                 <div className="text-figma-sm text-fw-bodyLight tracking-[-0.03em]">Virtual routing node</div>
