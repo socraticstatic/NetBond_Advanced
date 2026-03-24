@@ -93,9 +93,9 @@ export function useConnectionStatus(
 
     const utilization = connection.performance?.bandwidthUtilization || 0;
     if (utilization > 90) {
-      return { label: 'Critical', color: 'bg-red-50 text-red-700' };
+      return { label: 'Critical', color: 'bg-fw-errorLight text-fw-error' };
     } else if (utilization > 80) {
-      return { label: 'Warning', color: 'bg-amber-50 text-amber-700' };
+      return { label: 'Warning', color: 'bg-fw-warnLight text-fw-warn' };
     } else if (utilization > 60) {
       return { label: 'Good', color: 'bg-brand-lightBlue text-brand-blue' };
     } else {
@@ -106,7 +106,7 @@ export function useConnectionStatus(
   const getStatusDotColor = () => {
     if (connection.status !== 'Active') return 'bg-fw-bodyLight';
     const utilization = connection.performance?.bandwidthUtilization || 0;
-    if (utilization > 90) return 'bg-red-500';
+    if (utilization > 90) return 'bg-fw-errorLight0';
     if (utilization > 80) return 'bg-complementary-amber';
     if (utilization > 60) return 'bg-brand-blue';
     return 'bg-complementary-green';
