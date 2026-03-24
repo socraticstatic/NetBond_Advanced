@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Globe, Cloud, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+import { AttIcon } from '../icons/AttIcon';
 import { Connection } from '../../types';
 import { Group } from '../../types/group';
 import { useStore } from '../../store/useStore';
@@ -136,17 +137,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   
   // Provider logo mapping
   const getCardIcon = () => {
-    const provider = connection.provider;
-    switch(provider) {
-      case 'AWS':
-      case 'Azure':
-      case 'Google':
-        return <Cloud className="h-5 w-5 text-fw-link" />;
-      default:
-        return connection.type === 'GCP Connection for AT&T' ?
-          <Globe className="h-5 w-5 text-fw-link" /> :
-          <Cloud className="h-5 w-5 text-fw-link" />;
-    }
+    return <AttIcon name="cloud" className="h-5 w-5 text-fw-link" />;
   };
 
   const handleToggleStatus = (e: React.MouseEvent) => {
