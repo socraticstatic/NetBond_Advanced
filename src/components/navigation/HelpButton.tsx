@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HelpCircle, Book, FileText, ExternalLink, Mail, PlayCircle } from 'lucide-react';
+import { Book, FileText, ExternalLink, Mail, PlayCircle } from 'lucide-react';
+import { AttIcon } from '../icons/AttIcon';
 
 export function HelpButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +54,7 @@ export function HelpButton() {
         className="flex items-center justify-center h-9 w-9 text-fw-heading hover:text-fw-body transition-colors duration-200"
         aria-label="Help"
       >
-        <HelpCircle className="h-5 w-5" />
+        <AttIcon name="question-circle" className="h-5 w-5" />
       </button>
 
       {isOpen && (

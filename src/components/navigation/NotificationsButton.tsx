@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, Activity, Shield, Clock } from 'lucide-react';
+import { Activity, Shield, Clock } from 'lucide-react';
+import { AttIcon } from '../icons/AttIcon';
 
 interface Notification {
   id: string;
@@ -94,7 +95,7 @@ export function NotificationsButton() {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-center h-9 w-9 text-fw-heading hover:text-fw-body transition-colors duration-200 relative"
       >
-        <Bell className="h-5 w-5" />
+        <AttIcon name="bell" className="h-5 w-5" />
         {notifications.length > 0 && (
           <span className="absolute -top-1 -right-1 h-4 w-4 text-figma-sm flex items-center justify-center bg-fw-error text-white rounded-full">
             {notifications.length}
