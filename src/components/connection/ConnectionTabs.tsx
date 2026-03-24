@@ -11,7 +11,7 @@ export function ConnectionTabs({ activeTab, onTabChange, connectionCount, groupC
   // Ensure Marketplace is first, followed by Connections, Pools, and Control Center
   const orderedTabs = [
     { id: 'marketplace', label: 'Marketplace', icon: <AttIcon name="shopping-bag" className="h-6 w-6 mr-2" /> },
-    { id: 'connections', label: 'Connections', icon: <AttIcon name="cable" className="h-6 w-6 mr-2" />, count: connectionCount },
+    { id: 'connections', label: 'Connections', icon: <AttIcon name="cloud" className="h-6 w-6 mr-2" />, count: connectionCount },
     { id: 'groups', label: 'Pools', icon: <AttIcon name="person-group" className="h-6 w-6 mr-2" />, count: groupCount },
     { id: 'control-center', label: 'Insights', icon: <AttIcon name="smart-meter" className="h-6 w-6 mr-2" /> }
   ];
