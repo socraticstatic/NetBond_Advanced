@@ -47,11 +47,6 @@ export function VerticalTabGroup({ tabs, activeTab, onChange, className = '' }: 
                       }
                     `}
                   >
-                    {tab.icon && (
-                      <span className={`mr-3 ${activeTab === tab.id ? 'text-fw-link' : 'text-fw-heading'}`}>
-                        {tab.icon}
-                      </span>
-                    )}
                     {tab.label}
                     {tab.count !== undefined && (
                       <span className={`ml-auto rounded-full px-2.5 py-0.5 text-figma-sm font-medium ${
