@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { OverflowMenu } from '../../common/OverflowMenu';
 import { Toggle } from '../../common/Toggle';
 import { RoutingPolicy, PolicyAppliesTo, PolicyAction, PolicyProtocol } from '../../../types/routingPolicy';
 import { Connection } from '../../../types';
@@ -26,6 +27,7 @@ interface PoliciesTabProps {
 export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: PoliciesTabProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [activeOverflow, setActiveOverflow] = useState<string | null>(null);
   const [selectedAppliesTo, setSelectedAppliesTo] = useState<PolicyAppliesTo>('all');
   const [selectedTargetIds, setSelectedTargetIds] = useState<string[]>([]);
   const [selectedAction, setSelectedAction] = useState<PolicyAction>('allow');
@@ -407,37 +409,34 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    icon={expandedPolicy === policy.id ? ChevronUp : ChevronDown}
-                    onClick={() => setExpandedPolicy(expandedPolicy === policy.id ? null : policy.id)}
-                  >
-                    {expandedPolicy === policy.id ? 'Hide' : 'Details'}
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    icon={Edit2}
-                    onClick={() => {
-                      setEditingPolicy(policy);
-                      setShowAddModal(true);
-                    }}
-                  >
-                    Edit
-                  </Button>
-
-                  <Button
-                    variant="outline-danger"
-                    size="sm"
-                    icon={Trash2}
-                    onClick={() => handleDeletePolicy(policy.id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
+                <OverflowMenu
+                  items={[
+                    {
+                      id: 'details',
+                      label: expandedPolicy === policy.id ? 'Hide Details' : 'View Details',
+                      icon: <ChevronDown className="h-4 w-4" />,
+                      onClick: () => setExpandedPolicy(expandedPolicy === policy.id ? null : policy.id)
+                    },
+                    {
+                      id: 'edit',
+                      label: 'Edit Policy',
+                      icon: <Edit2 className="h-4 w-4" />,
+                      onClick: () => {
+                        setEditingPolicy(policy);
+                        setShowAddModal(true);
+                      }
+                    },
+                    {
+                      id: 'delete',
+                      label: 'Delete Policy',
+                      icon: <Trash2 className="h-4 w-4" />,
+                      onClick: () => handleDeletePolicy(policy.id),
+                      variant: 'danger'
+                    }
+                  ]}
+                  isOpen={activeOverflow === policy.id}
+                  onOpenChange={(isOpen) => setActiveOverflow(isOpen ? policy.id : null)}
+                />
               </div>
 
               {/* Expanded Details */}
