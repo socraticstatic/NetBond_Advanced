@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import { Layers, Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 import { useNavigate } from 'react-router-dom';
 import { Group } from '../../../types/group';
 import { TypeBadge } from '../../common/Badge';
@@ -68,7 +69,7 @@ export function GroupCardHeader({ group, onDelete, children }: GroupCardHeaderPr
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3 min-w-0">
           <div className="w-10 h-10 flex items-center justify-center bg-fw-wash rounded-lg flex-shrink-0">
-            <Layers className="h-5 w-5 text-fw-link" />
+            <AttIcon name="person-group" className="h-5 w-5 text-fw-link" />
           </div>
           <div className="min-w-0">
             <h3 className="text-figma-lg font-medium text-fw-heading truncate">
