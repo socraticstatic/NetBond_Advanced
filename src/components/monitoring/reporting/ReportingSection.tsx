@@ -64,7 +64,6 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
       <div className="w-[186px] shrink-0 border-r border-fw-secondary pr-4">
         <nav className="space-y-1" aria-label="Report Types">
           {tabs.map((tab) => {
-            const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
               <button
@@ -79,9 +78,6 @@ export function ReportingSection({ selectedConnection, timeRange, defaultTab = '
                   }
                 `}
               >
-                <Icon className={`h-5 w-5 ${
-                  isActive ? 'text-fw-link' : 'text-fw-heading'
-                }`} />
                 {tab.label}
               </button>
             );
