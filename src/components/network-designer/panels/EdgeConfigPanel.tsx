@@ -5,12 +5,13 @@ import { FloatingPanel } from './FloatingPanel';
 interface EdgeConfigPanelProps {
   edge: NetworkEdge;
   onUpdate: (id: string, updates: Partial<NetworkEdge>) => void;
-  onDelete: (id: string) => void;
+  onDelete?: (id: string) => void;
   onClose: () => void;
+  readOnly?: boolean;
 }
 
-const FIELD_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link';
-const SELECT_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link';
+const FIELD_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link disabled:opacity-60 disabled:cursor-not-allowed';
+const SELECT_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link disabled:opacity-60 disabled:cursor-not-allowed';
 const LABEL_CLASS = 'block text-figma-sm text-fw-bodyLight mb-1';
 
 const RESILIENCE_OPTIONS = [
@@ -26,7 +27,7 @@ const RTO_OPTIONS = [
   { value: 'immediate', label: 'Immediate (Subsecond)' },
 ] as const;
 
-export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfigPanelProps) {
+export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose, readOnly = false }: EdgeConfigPanelProps) {
   const updateConfig = (key: string, value: unknown) => {
     onUpdate(edge.id, { config: { ...edge.config, [key]: value } });
   };
@@ -36,7 +37,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
       isOpen={true}
       onClose={onClose}
       title="Connection Configuration"
-      onDelete={() => onDelete(edge.id)}
+      onDelete={onDelete ? () => onDelete(edge.id) : undefined}
       deleteLabel="Delete connection"
     >
       <div className="space-y-4">
@@ -46,6 +47,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
           <select
             className={SELECT_CLASS}
             value={edge.type}
+            disabled={readOnly}
             onChange={(e) => onUpdate(edge.id, { type: e.target.value })}
           >
             {EDGE_TYPE_OPTIONS.map((opt) => (
@@ -60,6 +62,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
           <select
             className={SELECT_CLASS}
             value={edge.bandwidth}
+            disabled={readOnly}
             onChange={(e) => onUpdate(edge.id, { bandwidth: e.target.value })}
           >
             {BANDWIDTH_OPTIONS.map((bw) => (
@@ -74,6 +77,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
           <select
             className={SELECT_CLASS}
             value={edge.config?.resilience || 'single'}
+            disabled={readOnly}
             onChange={(e) =>
               updateConfig('resilience', e.target.value as 'single' | 'redundant' | 'ha' | 'dual-diverse')
             }
@@ -90,6 +94,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
           <select
             className={SELECT_CLASS}
             value={edge.config?.rto || 'standard'}
+            disabled={readOnly}
             onChange={(e) => updateConfig('rto', e.target.value)}
           >
             {RTO_OPTIONS.map((opt) => (
@@ -107,6 +112,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
             className={FIELD_CLASS}
             placeholder="1-4094"
             value={edge.vlan ?? ''}
+            disabled={readOnly}
             onChange={(e) =>
               onUpdate(edge.id, { vlan: e.target.value ? parseInt(e.target.value, 10) : undefined })
             }
@@ -118,9 +124,10 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
           <span className="text-figma-sm text-fw-body">Enable Encryption</span>
           <button
             onClick={() => updateConfig('encrypted', !edge.config?.encrypted)}
+            disabled={readOnly}
             className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
               edge.config?.encrypted ? 'bg-fw-link' : 'bg-fw-secondary'
-            }`}
+            } ${readOnly ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span
               className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${
@@ -135,9 +142,10 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
           <span className="text-figma-sm text-fw-body">Enable BFD (Fast Failure Detection)</span>
           <button
             onClick={() => updateConfig('bfd', !edge.config?.bfd)}
+            disabled={readOnly}
             className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
               edge.config?.bfd ? 'bg-fw-link' : 'bg-fw-secondary'
-            }`}
+            } ${readOnly ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span
               className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${
@@ -153,6 +161,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
           <select
             className={SELECT_CLASS}
             value={edge.config?.qosProfile || 'best-effort'}
+            disabled={readOnly}
             onChange={(e) => updateConfig('qosProfile', e.target.value)}
           >
             <option value="best-effort">Best Effort</option>
@@ -170,9 +179,10 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
             onClick={() =>
               onUpdate(edge.id, { status: edge.status === 'active' ? 'inactive' : 'active' })
             }
+            disabled={readOnly}
             className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
               edge.status === 'active' ? 'bg-fw-successLight0' : 'bg-fw-secondary'
-            }`}
+            } ${readOnly ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span
               className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${

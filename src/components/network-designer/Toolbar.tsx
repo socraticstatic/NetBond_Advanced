@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { LayoutGrid, Server, Cloud, Database, Network, Plus, Play, Save, Undo2, Trash2, Check, Maximize2, Minimize2, FileDown, FolderOpen } from 'lucide-react';
+import { LayoutGrid, Server, Cloud, Database, Network, Plus, Play, Save, Undo2, Trash2, Check, Maximize2, Minimize2, FileDown, FolderOpen, Pencil } from 'lucide-react';
 import { AttIcon } from '../icons/AttIcon';
 import { NODE_CATEGORIES } from './constants/nodeTypes';
 import { useMobileDetection } from '../../hooks/useMobileDetection';
@@ -21,6 +21,8 @@ interface ToolbarProps {
   onSaveDraft?: () => void;
   onOpenDrafts?: () => void;
   editMode?: boolean;
+  readOnly?: boolean;
+  onSwitchToEdit?: () => void;
 }
 
 type MenuKey = 'function' | 'cloud' | 'datacenter' | 'network' | null;
@@ -42,6 +44,8 @@ export function Toolbar({
   onToggleMaximize,
   isMaximized,
   editMode = false,
+  readOnly = false,
+  onSwitchToEdit,
 }: ToolbarProps) {
   const [openMenu, setOpenMenu] = useState<MenuKey>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -83,6 +87,46 @@ export function Toolbar({
 
   // Cloud_Designer toolbar layout:
   // Choose | Cloud Router | Function ▾ | Cloud ▾ | Datacenter ▾ | Network ▾ | + Connection | Play | Save | Undo | Clear | Create
+
+  // Read-only mode: simplified toolbar
+  if (readOnly) {
+    return (
+      <div ref={menuRef} className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-3 py-2 rounded-full shadow-lg border border-fw-secondary bg-fw-base">
+        {/* Export PDF */}
+        <button
+          onClick={onExportPDF}
+          disabled={!hasConnections}
+          title="Export PDF"
+          className={`p-2 rounded-full transition-colors ${
+            hasConnections ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
+          }`}
+        >
+          <FileDown className="h-4 w-4" />
+        </button>
+
+        {/* Maximize / Minimize */}
+        <button
+          onClick={onToggleMaximize}
+          title={isMaximized ? 'Minimize' : 'Maximize'}
+          className="p-2 rounded-full transition-colors text-fw-heading hover:bg-fw-wash"
+        >
+          {isMaximized ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+        </button>
+
+        <div className="w-px h-5 bg-fw-secondary mx-1 flex-shrink-0" />
+
+        {/* Edit button */}
+        <button
+          onClick={onSwitchToEdit}
+          title="Switch to edit mode"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors font-medium text-figma-base text-fw-heading hover:bg-fw-wash"
+        >
+          <Pencil className="h-4 w-4 flex-shrink-0" />
+          {showLabels && <span>Edit</span>}
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div ref={menuRef} className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-3 py-2 rounded-full shadow-lg border border-fw-secondary bg-fw-base max-w-[calc(100%-2rem)]">

@@ -26,6 +26,7 @@ interface DesignerState {
   isCreatingEdge: boolean;
   edgeStartNodeId: string | null;
   isMaximized: boolean;
+  viewMode: 'read' | 'edit';
   history: HistoryEntry[];
   historyIndex: number;
   drafts: Draft[];
@@ -51,6 +52,7 @@ interface DesignerState {
   undo: () => void;
   clearCanvas: () => void;
   toggleMaximize: () => void;
+  setViewMode: (mode: 'read' | 'edit') => void;
   loadTemplate: (nodes: NetworkNode[], edges: NetworkEdge[]) => void;
   saveDraft: (name: string, description: string) => void;
   loadDraft: (id: string) => void;
@@ -67,6 +69,7 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
   isCreatingEdge: false,
   edgeStartNodeId: null,
   isMaximized: false,
+  viewMode: 'edit',
   history: [],
   historyIndex: -1,
   currentDraftId: null,
@@ -191,6 +194,7 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
     });
   },
   toggleMaximize: () => set((s) => ({ isMaximized: !s.isMaximized })),
+  setViewMode: (mode) => set({ viewMode: mode, isCreatingEdge: false, edgeStartNodeId: null }),
 
   saveDraft: (name, description) => {
     const { nodes, edges } = get();

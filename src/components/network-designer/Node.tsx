@@ -12,6 +12,7 @@ interface NodeProps {
   isEdgeTarget: boolean;
   hasValidationError: boolean;
   isCreatingEdge: boolean;
+  readOnly?: boolean;
   onSelect: (id: string) => void;
   onDrag: (id: string, x: number, y: number) => void;
   onDragEnd: () => void;
@@ -25,6 +26,7 @@ export const Node = memo(function Node({
   isEdgeTarget,
   hasValidationError,
   isCreatingEdge,
+  readOnly = false,
   onSelect,
   onDrag,
   onDragEnd,
@@ -40,7 +42,14 @@ export const Node = memo(function Node({
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
-      if (isCreatingEdge) return;
+      if (isCreatingEdge || readOnly) {
+        // In read-only mode, just select on click
+        if (readOnly) {
+          e.stopPropagation();
+          onSelect(node.id);
+        }
+        return;
+      }
       e.stopPropagation();
 
       // Pure delta approach: no DOM measurement during drag.
@@ -83,7 +92,7 @@ export const Node = memo(function Node({
       document.addEventListener('mousemove', handleMove);
       document.addEventListener('mouseup', handleUp);
     },
-    [node.id, node.x, node.y, zoomLevel, isCreatingEdge, onDrag, onDragEnd, onSelect]
+    [node.id, node.x, node.y, zoomLevel, isCreatingEdge, readOnly, onDrag, onDragEnd, onSelect]
   );
 
   const handleClick = useCallback(
@@ -97,9 +106,10 @@ export const Node = memo(function Node({
   );
 
   const handleDoubleClick = useCallback(() => {
+    if (readOnly) return;
     setIsEditing(true);
     setEditName(node.name);
-  }, [node.name]);
+  }, [node.name, readOnly]);
 
   const handleRenameSubmit = useCallback(() => {
     if (editName.trim()) {
@@ -155,7 +165,7 @@ export const Node = memo(function Node({
         w-16 h-16 rounded-xl
         transition-shadow duration-150
         ${ringClass} ${shadowClass}
-        ${isCreatingEdge ? 'cursor-crosshair' : isDragging ? 'cursor-grabbing' : 'cursor-grab'}
+        ${readOnly ? 'cursor-default' : isCreatingEdge ? 'cursor-crosshair' : isDragging ? 'cursor-grabbing' : 'cursor-grab'}
         hover:shadow-md
       `}
       style={{

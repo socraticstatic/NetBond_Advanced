@@ -127,4 +127,32 @@ describe('Toolbar', () => {
       expect(btn.className).toContain('bg-fw-primary');
     });
   });
+
+  describe('read-only mode', () => {
+    const switchToEdit = vi.fn();
+
+    it('hides add-node buttons in read-only mode', () => {
+      render(<Toolbar {...defaultProps} readOnly={true} onSwitchToEdit={switchToEdit} />);
+      expect(screen.queryByTitle('Add Cloud Router')).not.toBeInTheDocument();
+      expect(screen.queryByTitle('Add network function')).not.toBeInTheDocument();
+      expect(screen.queryByTitle('Add cloud destination')).not.toBeInTheDocument();
+      expect(screen.queryByTitle('Connect nodes')).not.toBeInTheDocument();
+    });
+
+    it('shows Edit button in read-only mode', () => {
+      render(<Toolbar {...defaultProps} readOnly={true} onSwitchToEdit={switchToEdit} />);
+      expect(screen.getByTitle('Switch to edit mode')).toBeInTheDocument();
+    });
+
+    it('keeps Export PDF in read-only mode', () => {
+      render(<Toolbar {...defaultProps} readOnly={true} onSwitchToEdit={switchToEdit} />);
+      expect(screen.getByTitle('Export PDF')).toBeInTheDocument();
+    });
+
+    it('shows full toolbar when not read-only', () => {
+      render(<Toolbar {...defaultProps} readOnly={false} />);
+      expect(screen.getByTitle('Add Cloud Router')).toBeInTheDocument();
+      expect(screen.queryByTitle('Switch to edit mode')).not.toBeInTheDocument();
+    });
+  });
 });

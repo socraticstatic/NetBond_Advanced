@@ -5,14 +5,15 @@ import { FloatingPanel } from './FloatingPanel';
 interface NodeConfigPanelProps {
   node: NetworkNode;
   onUpdate: (id: string, updates: Partial<NetworkNode>) => void;
-  onDelete: (id: string) => void;
+  onDelete?: (id: string) => void;
   onClose: () => void;
+  readOnly?: boolean;
 }
 
 type Tab = 'overview' | 'routing' | 'security' | 'performance';
 
-const FIELD_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link';
-const SELECT_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link';
+const FIELD_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link disabled:opacity-60 disabled:cursor-not-allowed';
+const SELECT_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link disabled:opacity-60 disabled:cursor-not-allowed';
 const LABEL_CLASS = 'block text-figma-sm text-fw-bodyLight mb-1';
 
 function showRoutingTab(node: NetworkNode) {
@@ -23,7 +24,7 @@ function showSecurityTab(node: NetworkNode) {
   return ['firewall', 'vnf'].includes(node.functionType);
 }
 
-export function NodeConfigPanel({ node, onUpdate, onDelete, onClose }: NodeConfigPanelProps) {
+export function NodeConfigPanel({ node, onUpdate, onDelete, onClose, readOnly = false }: NodeConfigPanelProps) {
   const [activeTab, setActiveTab] = useState<Tab>('overview');
 
   const updateConfig = (key: string, value: unknown) => {
@@ -42,10 +43,11 @@ export function NodeConfigPanel({ node, onUpdate, onDelete, onClose }: NodeConfi
       isOpen={true}
       onClose={onClose}
       title={node.name}
-      onDelete={() => onDelete(node.id)}
+      onDelete={onDelete ? () => onDelete(node.id) : undefined}
       deleteLabel="Delete node"
     >
       {/* Tabs */}
+      <fieldset disabled={readOnly} className={readOnly ? 'opacity-80' : ''}>
       <div className="flex gap-1 mb-4">
         {tabs.map((tab) => (
           <button
@@ -265,6 +267,7 @@ export function NodeConfigPanel({ node, onUpdate, onDelete, onClose }: NodeConfi
           </div>
         </div>
       )}
+      </fieldset>
     </FloatingPanel>
   );
 }
