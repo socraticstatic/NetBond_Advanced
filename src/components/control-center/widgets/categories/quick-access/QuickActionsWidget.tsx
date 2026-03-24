@@ -37,8 +37,8 @@ export function QuickActionsWidget() {
             className={`
               quick-action-btn p-3 text-left transition-colors
               ${action.color === 'blue' ? 'bg-fw-accent hover:bg-fw-accent' :
-                action.color === 'green' ? 'bg-green-50 hover:bg-green-50' :
-                action.color === 'purple' ? 'bg-purple-50 hover:bg-purple-50' :
+                action.color === 'green' ? 'bg-fw-successLight hover:bg-fw-successLight' :
+                action.color === 'purple' ? 'bg-fw-purpleLight hover:bg-fw-purpleLight' :
                 'bg-fw-warn/10 hover:bg-fw-warn/15'}
             `}
           >

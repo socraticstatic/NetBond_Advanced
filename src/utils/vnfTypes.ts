@@ -158,13 +158,13 @@ export function getVNFTypeIcon(type: VNFType) {
 export function getVNFTypeColor(type: VNFType): string {
   const info = getVNFTypeInfo(type);
   const colorMap: Record<string, string> = {
-    red: 'text-red-500 bg-red-100',
-    purple: 'text-purple-500 bg-purple-100',
-    blue: 'text-blue-500 bg-blue-100',
-    green: 'text-green-500 bg-green-100',
-    indigo: 'text-indigo-500 bg-indigo-100',
-    orange: 'text-orange-500 bg-orange-100',
-    yellow: 'text-yellow-600 bg-yellow-100',
+    red: 'text-fw-error bg-fw-errorLight',
+    purple: 'text-fw-purple bg-fw-purpleLight',
+    blue: 'text-fw-info bg-fw-infoLight',
+    green: 'text-fw-success bg-fw-successLight',
+    indigo: 'text-fw-link bg-fw-accent',
+    orange: 'text-fw-warn bg-fw-warnLight',
+    yellow: 'text-fw-warn bg-fw-warnLight',
     gray: 'text-fw-bodyLight bg-fw-wash'
   };
   return colorMap[info.color] || colorMap.gray;

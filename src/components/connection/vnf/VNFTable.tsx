@@ -56,13 +56,13 @@ export function VNFTable({
   const getStatusColor = (status: VNF['status']) => {
     switch(status) {
       case 'active':
-        return 'bg-green-50 text-fw-success';
+        return 'bg-fw-successLight text-fw-success';
       case 'inactive':
         return 'bg-fw-neutral text-fw-heading';
       case 'provisioning':
         return 'bg-fw-accent text-fw-linkHover';
       case 'error':
-        return 'bg-red-50 text-fw-error';
+        return 'bg-fw-errorLight text-fw-error';
       default:
         return 'bg-fw-neutral text-fw-heading';
     }
@@ -84,10 +84,10 @@ export function VNFTable({
         <div className="flex items-center">
           <div className="flex-shrink-0">
             <div className={`p-2 rounded-lg ${
-              vnf.type === 'firewall' ? 'bg-red-50' :
+              vnf.type === 'firewall' ? 'bg-fw-errorLight' :
               vnf.type === 'sdwan' ? 'bg-fw-neutral' :
               vnf.type === 'router' ? 'bg-fw-accent' :
-              vnf.type === 'vnat' ? 'bg-green-50' :
+              vnf.type === 'vnat' ? 'bg-fw-successLight' :
               'bg-fw-neutral'
             }`}>
               {getTypeIcon(vnf.type)}

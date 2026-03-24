@@ -31,9 +31,9 @@ const ToastItem = memo(({
   }, [toast.duration, toast.id, onRemove]);
 
   const styles = {
-    success: 'bg-green-50 border-green-200 text-green-800',
-    error: 'bg-red-50 border-red-200 text-red-800',
-    warning: 'bg-amber-50 border-amber-200 text-amber-800',
+    success: 'bg-fw-successLight border-fw-success text-fw-success',
+    error: 'bg-fw-errorLight border-fw-error text-fw-error',
+    warning: 'bg-fw-warnLight border-fw-warn text-fw-warn',
     info: 'bg-brand-lightBlue border-brand-blue/20 text-brand-blue'
   }[toast.type];
 

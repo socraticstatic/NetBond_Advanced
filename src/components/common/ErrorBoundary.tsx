@@ -57,7 +57,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       return (
         <div className="min-h-[400px] flex items-center justify-center bg-fw-wash">
           <div className="max-w-md w-full p-8 bg-fw-base rounded-2xl shadow-lg text-center">
-            <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-red-50">
+            <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-fw-errorLight">
               <AlertTriangle className="h-8 w-8 text-fw-error" />
             </div>
             <h2 className="text-2xl font-bold text-fw-heading mb-2">Something went wrong</h2>

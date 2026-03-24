@@ -29,7 +29,7 @@ export function DataCenterWidget() {
                 <Server className="h-5 w-5 text-fw-link mr-2" />
                 <h3 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{dc.name}</h3>
               </div>
-              <span className="px-2 py-1 text-figma-sm font-medium rounded-full bg-green-50 text-fw-success">
+              <span className="px-2 py-1 text-figma-sm font-medium rounded-full bg-fw-successLight text-fw-success">
                 {dc.status}
               </span>
             </div>

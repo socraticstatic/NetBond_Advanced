@@ -56,7 +56,7 @@ export function MobileOverviewTab({ selectedConnection, connections, metrics }: 
           <div className="flex flex-col">
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-figma-sm font-medium text-fw-bodyLight">Avg. Utilization</h3>
-              <TrendingUp className="h-4 w-4 text-green-500" />
+              <TrendingUp className="h-4 w-4 text-fw-success" />
             </div>
             <div className="text-xl font-semibold text-fw-heading">{metrics.averageUtilization.toFixed(1)}%</div>
             <div className="mt-1 text-figma-sm text-fw-bodyLight">

@@ -66,7 +66,7 @@ export function AssetLifecycleWidget() {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-2 gap-2">
-        <div className="p-3 bg-green-50 rounded-lg">
+        <div className="p-3 bg-fw-successLight rounded-lg">
           <div className="text-figma-sm text-fw-success mb-1">Healthy Assets</div>
           <div className="text-figma-lg font-semibold text-fw-success">85%</div>
         </div>

@@ -125,7 +125,7 @@ export function OverflowMenu({
                   className={`
                     flex items-center w-full px-4 py-2 text-figma-base
                     ${item.variant === 'danger'
-                      ? 'text-fw-error hover:bg-red-50'
+                      ? 'text-fw-error hover:bg-fw-errorLight'
                       : 'text-fw-body hover:bg-fw-wash'
                     }
                   `}

@@ -36,16 +36,16 @@ const feedbackTypes = [
     label: 'Report a Bug',
     description: 'Something isn\'t working as expected',
     icon: Bug,
-    color: 'text-red-500',
-    bg: 'bg-red-50 hover:bg-red-100 border-red-200',
+    color: 'text-fw-error',
+    bg: 'bg-fw-errorLight hover:bg-fw-errorLight border-fw-error',
   },
   {
     id: 'feature' as FeedbackType,
     label: 'Suggest a Feature',
     description: 'Share an idea to improve the platform',
     icon: Lightbulb,
-    color: 'text-amber-500',
-    bg: 'bg-amber-50 hover:bg-amber-100 border-amber-200',
+    color: 'text-fw-warn',
+    bg: 'bg-fw-warnLight hover:bg-fw-warnLight border-fw-warn',
   },
   {
     id: 'general' as FeedbackType,
@@ -53,7 +53,7 @@ const feedbackTypes = [
     description: 'Share your thoughts or experience',
     icon: MessageSquare,
     color: 'text-fw-link',
-    bg: 'bg-blue-50 hover:bg-blue-100 border-blue-200',
+    bg: 'bg-fw-infoLight hover:bg-fw-infoLight border-fw-active',
   },
 ];
 
@@ -380,7 +380,7 @@ export function FeedbackWidget() {
                             <Star
                               className={`h-6 w-6 transition-colors ${
                                 star <= generalData.rating
-                                  ? 'text-amber-400 fill-amber-400'
+                                  ? 'text-fw-warn fill-fw-warn'
                                   : 'text-fw-disabled'
                               }`}
                             />
@@ -410,7 +410,7 @@ export function FeedbackWidget() {
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ type: 'spring', damping: 16, stiffness: 200, delay: 0.1 }}
                     >
-                      <CheckCircle className="h-16 w-16 text-green-500 mb-4" />
+                      <CheckCircle className="h-16 w-16 text-fw-success mb-4" />
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, y: 8 }}

@@ -214,7 +214,7 @@ export function AWSPartnerZone() {
             </p>
           </div>
           <div className="bg-fw-base border border-fw-secondary rounded-lg p-4">
-            <div className="w-10 h-10 rounded-lg bg-green-50 border border-green-200 flex items-center justify-center mb-3">
+            <div className="w-10 h-10 rounded-lg bg-fw-successLight border border-fw-success flex items-center justify-center mb-3">
               <CheckCircle2 className="w-5 h-5 text-fw-success" />
             </div>
             <h4 className="font-semibold text-fw-heading mb-2">Unified Billing</h4>

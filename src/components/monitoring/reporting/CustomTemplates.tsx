@@ -396,7 +396,7 @@ export function CustomTemplates() {
                 {templates.filter(t => t.isDefault).length}
               </p>
             </div>
-            <Star className="h-8 w-8 text-yellow-500" />
+            <Star className="h-8 w-8 text-fw-warn" />
           </div>
         </div>
 
@@ -468,7 +468,7 @@ export function CustomTemplates() {
                     {template.name}
                   </h4>
                   {template.isDefault && (
-                    <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                    <Star className="h-4 w-4 text-fw-warn fill-current" />
                   )}
                 </div>
                 <p className="text-figma-base font-medium text-fw-body leading-relaxed">
@@ -545,7 +545,7 @@ export function CustomTemplates() {
               {!template.isDefault && (
                 <button
                   onClick={() => handleDelete(template.id)}
-                  className="p-2 text-fw-error hover:text-fw-error hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-2 text-fw-error hover:text-fw-error hover:bg-fw-errorLight rounded-lg transition-colors"
                   title="Delete template"
                 >
                   <Trash2 className="h-5 w-5" />
@@ -604,7 +604,7 @@ export function CustomTemplates() {
                   <div className="ml-3">
                     <div className="flex items-center space-x-2">
                       <span className="text-[14px] font-medium text-fw-heading">{template.name}</span>
-                      {template.isDefault && <Star className="h-3.5 w-3.5 text-yellow-500 fill-current" />}
+                      {template.isDefault && <Star className="h-3.5 w-3.5 text-fw-warn fill-current" />}
                     </div>
                     <div className="text-[12px] text-fw-bodyLight">{template.format} - {template.createdBy}</div>
                   </div>

@@ -25,13 +25,13 @@ describe('Button', () => {
 
   it('applies correct variant styles', () => {
     const { rerender } = render(<Button variant="primary">Primary</Button>);
-    expect(screen.getByText('Primary')).toHaveClass('bg-blue-600');
+    expect(screen.getByText('Primary')).toHaveClass('bg-fw-primary');
 
     rerender(<Button variant="secondary">Secondary</Button>);
     expect(screen.getByText('Secondary')).toHaveClass('bg-white');
 
     rerender(<Button variant="outline">Outline</Button>);
-    expect(screen.getByText('Outline')).toHaveClass('border-gray-300');
+    expect(screen.getByText('Outline')).toHaveClass('border-fw-secondary');
   });
 
   it('applies disabled state correctly', () => {

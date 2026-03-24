@@ -136,6 +136,7 @@ export default {
         'fw-warnLight': 'rgb(249 124 0 / 0.15)',
         'fw-infoLight': 'rgb(0 132 255 / 0.15)',
         'fw-purpleLight': 'rgb(175 41 187 / 0.15)',
+        'fw-errorLight': 'rgb(199 0 50 / 0.15)',
       },
       borderColor: {
         // Flywheel Border Tokens - Figma-matched
@@ -150,6 +151,11 @@ export default {
         'fw-error': '#c70032',
         'fw-ctaPrimary': '#0057b8',
         'fw-purple': '#af29bb',
+        'fw-successLight': 'rgb(98 208 45 / 0.3)',
+        'fw-warnLight': 'rgb(249 124 0 / 0.3)',
+        'fw-errorLight': 'rgb(199 0 50 / 0.3)',
+        'fw-infoLight': 'rgb(0 132 255 / 0.3)',
+        'fw-purpleLight': 'rgb(175 41 187 / 0.3)',
       },
       ringColor: {
         'fw-active': '#0074b3',    // Functional Blue

@@ -3,6 +3,7 @@ import { Group } from '../../../../types/group';
 import { Connection } from '../../../../types';
 import { Button } from '../../../common/Button';
 import { LineChart } from '../../../monitoring/charts/LineChart';
+import { chartColors } from '../../../../utils/chartColors';
 
 interface GroupBillingProps {
   group: Group;
@@ -28,7 +29,7 @@ export function GroupBilling({ group, connections }: GroupBillingProps) {
     datasets: [{
       label: 'Monthly Billing',
       data: [2700, 2850, 2750, 2900, 3100, 2950],
-      borderColor: '#10b981',
+      borderColor: chartColors.success,
       fill: false
     }]
   };
@@ -50,7 +51,7 @@ export function GroupBilling({ group, connections }: GroupBillingProps) {
                 <span className="text-fw-bodyLight ml-1">vs. last month</span>
               </div>
             </div>
-            <div className="p-2 bg-green-50 rounded-lg">
+            <div className="p-2 bg-fw-successLight rounded-lg">
               <DollarSign className="h-5 w-5 text-fw-success" />
             </div>
           </div>
@@ -90,7 +91,7 @@ export function GroupBilling({ group, connections }: GroupBillingProps) {
                 {group.billing.billingCycle.charAt(0).toUpperCase() + group.billing.billingCycle.slice(1)} billing cycle
               </div>
             </div>
-            <div className="p-2 bg-purple-50 rounded-lg">
+            <div className="p-2 bg-fw-purpleLight rounded-lg">
               <Receipt className="h-5 w-5 text-fw-purple" />
             </div>
           </div>
@@ -109,8 +110,8 @@ export function GroupBilling({ group, connections }: GroupBillingProps) {
                 {group.billing.paymentMethod === 'credit_card' ? 'Card ending in •••• 4242' : 'Net 30 terms'}
               </div>
             </div>
-            <div className="p-2 bg-indigo-50 rounded-lg">
-              <CreditCard className="h-5 w-5 text-indigo-600" />
+            <div className="p-2 bg-fw-infoLight rounded-lg">
+              <CreditCard className="h-5 w-5 text-fw-link" />
             </div>
           </div>
         </div>
@@ -194,11 +195,11 @@ export function GroupBilling({ group, connections }: GroupBillingProps) {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 inline-flex text-figma-sm leading-5 font-semibold rounded-full ${
                         invoice.status === 'paid'
-                          ? 'bg-green-50 text-fw-success'
+                          ? 'bg-fw-successLight text-fw-success'
                           : invoice.status === 'unpaid'
-                            ? 'bg-yellow-100 text-yellow-800'
+                            ? 'bg-fw-warnLight text-fw-warn'
                             : invoice.status === 'overdue'
-                              ? 'bg-red-50 text-fw-error'
+                              ? 'bg-fw-errorLight text-fw-error'
                               : 'bg-fw-accent text-fw-link'
                       }`}>
                         {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}

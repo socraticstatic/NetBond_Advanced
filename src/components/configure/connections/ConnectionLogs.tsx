@@ -160,7 +160,7 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'error': return <AlertTriangle className="h-4 w-4 text-fw-error" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      case 'warning': return <AlertTriangle className="h-4 w-4 text-fw-warn" />;
       case 'success': return <CheckCircle className="h-4 w-4 text-fw-success" />;
       default: return <Info className="h-4 w-4 text-fw-link" />;
     }
@@ -168,9 +168,9 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
 
   const getTypeStyles = (type: string) => {
     switch (type) {
-      case 'error': return 'bg-red-50 text-fw-error';
-      case 'warning': return 'bg-yellow-100 text-yellow-800';
-      case 'success': return 'bg-green-50 text-fw-success';
+      case 'error': return 'bg-fw-errorLight text-fw-error';
+      case 'warning': return 'bg-fw-warnLight text-fw-warn';
+      case 'success': return 'bg-fw-successLight text-fw-success';
       default: return 'bg-fw-accent text-fw-link';
     }
   };

@@ -20,28 +20,28 @@ const variantStyles = {
     hoverBg: 'hover:bg-fw-wash/30'
   },
   success: {
-    bg: 'bg-green-50',
-    border: 'border-green-100',
-    iconBg: 'bg-green-100',
+    bg: 'bg-fw-successLight',
+    border: 'border-fw-successLight',
+    iconBg: 'bg-fw-successLight',
     iconColor: 'text-fw-success',
-    hoverBorder: 'hover:border-green-200',
-    hoverBg: 'hover:bg-green-50/30'
+    hoverBorder: 'hover:border-fw-success',
+    hoverBg: 'hover:bg-fw-successLight/30'
   },
   warning: {
-    bg: 'bg-amber-50',
-    border: 'border-amber-100',
-    iconBg: 'bg-amber-100',
-    iconColor: 'text-amber-600',
-    hoverBorder: 'hover:border-amber-200',
-    hoverBg: 'hover:bg-amber-50/30'
+    bg: 'bg-fw-warnLight',
+    border: 'border-fw-warnLight',
+    iconBg: 'bg-fw-warnLight',
+    iconColor: 'text-fw-warn',
+    hoverBorder: 'hover:border-fw-warn',
+    hoverBg: 'hover:bg-fw-warnLight/30'
   },
   error: {
-    bg: 'bg-red-50',
-    border: 'border-red-100',
-    iconBg: 'bg-red-100',
+    bg: 'bg-fw-errorLight',
+    border: 'border-fw-errorLight',
+    iconBg: 'bg-fw-errorLight',
     iconColor: 'text-fw-error',
-    hoverBorder: 'hover:border-red-200',
-    hoverBg: 'hover:bg-red-50/30'
+    hoverBorder: 'hover:border-fw-error',
+    hoverBg: 'hover:bg-fw-errorLight/30'
   },
   info: {
     bg: 'bg-fw-accent',

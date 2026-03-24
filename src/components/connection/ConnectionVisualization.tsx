@@ -297,7 +297,7 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
           </div>
 
           {connection.performance?.latency && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 rounded-full">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-fw-successLight rounded-full">
               <Clock className="h-3.5 w-3.5 text-fw-success" />
               <span className="text-figma-sm font-semibold text-fw-success">{connection.performance.latency}</span>
             </div>

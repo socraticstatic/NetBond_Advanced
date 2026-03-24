@@ -23,7 +23,7 @@ export function FloatingPanel({ isOpen, onClose, title, children, onDelete }: Fl
           {onDelete && (
             <button
               onClick={onDelete}
-              className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
+              className="p-1.5 rounded-lg text-fw-error hover:bg-fw-errorLight transition-colors"
               title="Delete"
             >
               <Trash2 className="h-4 w-4" />

@@ -114,7 +114,7 @@ export const Node = memo(function Node({
   let shadowClass = 'shadow-sm';
 
   if (hasValidationError) {
-    borderClass = 'border-red-500';
+    borderClass = 'border-fw-error';
     ringClass = 'ring-2 ring-red-200';
   }
   if (isEdgeTarget) {
@@ -172,7 +172,7 @@ export const Node = memo(function Node({
       {/* Status dot */}
       <span
         className={`absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border border-white ${
-          node.status === 'active' ? 'bg-emerald-400' : 'bg-gray-300'
+          node.status === 'active' ? 'bg-fw-success' : 'bg-fw-neutral'
         }`}
       />
     </div>

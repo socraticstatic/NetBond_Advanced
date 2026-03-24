@@ -3,6 +3,7 @@ import { Radio, Cpu, Database, Activity, TrendingUp, Network } from 'lucide-reac
 import { RealTimeMetricCard } from './RealTimeMetricCard';
 import { RealTimeChart } from './RealTimeChart';
 import { useMonitoring } from '../context/MonitoringContext';
+import { chartColors } from '../../../utils/chartColors';
 
 interface RouterMetricData {
   timestamp: Date;
@@ -227,7 +228,7 @@ export function RouterMetricsView() {
         data={metricsData.map(d => ({ timestamp: d.timestamp, value: d.cpuUsage }))}
         title="CPU Usage Over Time"
         unit="%"
-        color="#3b82f6"
+        color={chartColors.primary}
         thresholds={{ warning: 70, critical: 85 }}
         height={300}
       />
@@ -236,7 +237,7 @@ export function RouterMetricsView() {
         data={metricsData.map(d => ({ timestamp: d.timestamp, value: d.packetForwardingRate }))}
         title="Packet Forwarding Rate"
         unit="Kpps"
-        color="#10b981"
+        color={chartColors.success}
         height={300}
       />
     </div>

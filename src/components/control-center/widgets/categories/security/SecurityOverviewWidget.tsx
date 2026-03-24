@@ -36,7 +36,7 @@ export function SecurityOverviewWidget({ connections }: SecurityOverviewWidgetPr
 
       {/* Quick Stats */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="p-3 bg-red-50 rounded-lg">
+        <div className="p-3 bg-fw-errorLight rounded-lg">
           <div className="flex items-center justify-between mb-1">
             <AlertTriangle className="h-4 w-4 text-fw-error" />
             <span className="text-figma-sm text-fw-error">Threats</span>
@@ -52,7 +52,7 @@ export function SecurityOverviewWidget({ connections }: SecurityOverviewWidgetPr
           <div className="text-xl font-bold text-fw-warn">{vulnerabilities}</div>
         </div>
 
-        <div className="p-3 bg-green-50 rounded-lg">
+        <div className="p-3 bg-fw-successLight rounded-lg">
           <div className="flex items-center justify-between mb-1">
             <Lock className="h-4 w-4 text-fw-success" />
             <span className="text-figma-sm text-fw-success">Compliance</span>

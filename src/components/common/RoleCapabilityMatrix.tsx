@@ -182,7 +182,7 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
             </div>
             {/* Admin */}
             <div className="flex flex-col items-center" style={{ width: '80px' }}>
-              <div className="w-14 h-14 bg-purple-50 rounded-full flex items-center justify-center">
+              <div className="w-14 h-14 bg-fw-purpleLight rounded-full flex items-center justify-center">
                 <Shield className="h-7 w-7 text-fw-purple" />
               </div>
               <div className="text-[12px] font-medium text-fw-body mt-2">Admin</div>
@@ -196,7 +196,7 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
             </div>
             {/* Super Admin */}
             <div className="flex flex-col items-center" style={{ width: '80px' }}>
-              <div className="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center">
+              <div className="w-14 h-14 bg-fw-errorLight rounded-full flex items-center justify-center">
                 <Crown className="h-7 w-7 text-fw-error" />
               </div>
               <div className="text-[12px] font-medium text-fw-body mt-2">Super Admin</div>
@@ -209,7 +209,7 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
         </div>
 
         {/* Resource Filter Scope by Role */}
-        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+        <div className="bg-fw-purpleLight border border-fw-purpleLight rounded-lg p-4">
           <div className="flex items-start gap-3 mb-4">
             <Layers className="h-5 w-5 text-fw-purple mt-0.5 flex-shrink-0" />
             <div>
@@ -231,8 +231,8 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
                   key={role}
                   className={`bg-fw-base border-2 rounded-lg p-3 ${
                     isCurrentRole
-                      ? 'border-green-500 shadow-sm'
-                      : 'border-purple-200'
+                      ? 'border-fw-success shadow-sm'
+                      : 'border-fw-purpleLight'
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-3">
@@ -241,7 +241,7 @@ export function RoleCapabilityMatrix({ isOpen, onClose, currentRole, highlightRo
                       {role.replace('-', ' ')}
                     </span>
                     {isCurrentRole && (
-                      <span className="ml-auto text-figma-sm font-medium text-fw-success bg-green-100 px-2 py-0.5 rounded">You</span>
+                      <span className="ml-auto text-figma-sm font-medium text-fw-success bg-fw-successLight px-2 py-0.5 rounded">You</span>
                     )}
                   </div>
 

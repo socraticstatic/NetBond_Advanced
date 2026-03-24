@@ -40,8 +40,8 @@ const ButtonComponent = forwardRef<HTMLButtonElement, ButtonProps>(({
     secondary: 'bg-transparent text-fw-link hover:bg-fw-neutral border border-fw-active transition-all',
     outline: 'bg-fw-base border border-fw-active text-fw-link hover:bg-fw-active/5 transition-all',
     ghost: 'bg-transparent text-fw-heading hover:bg-fw-wash border border-transparent transition-all',
-    danger: 'bg-fw-error text-white hover:bg-red-800 focus:ring-2 focus:ring-fw-error border border-transparent transition-all',
-    'outline-danger': 'bg-transparent text-fw-error hover:bg-red-50 border border-fw-error transition-all',
+    danger: 'bg-fw-error text-white hover:bg-fw-error focus:ring-2 focus:ring-fw-error border border-transparent transition-all',
+    'outline-danger': 'bg-transparent text-fw-error hover:bg-fw-errorLight border border-fw-error transition-all',
   };
 
   // Figma icon size: 20px for md, 16px for sm

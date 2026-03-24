@@ -182,7 +182,7 @@ export function MobileReportingTab({ selectedConnection, timeRange }: MobileRepo
                         <h4 className="text-figma-base font-medium text-fw-heading">{schedule.name}</h4>
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-figma-sm font-medium ${
                           schedule.status === 'active'
-                            ? 'bg-green-100 text-green-800'
+                            ? 'bg-fw-successLight text-fw-success'
                             : 'bg-fw-neutral text-fw-body'
                         }`}>
                           {schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}

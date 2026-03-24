@@ -82,9 +82,9 @@ export function AlertHistory({ selectedConnection }: AlertHistoryProps) {
   const getTypeColor = (type: HistoricalAlert['type']) => {
     switch (type) {
       case 'critical':
-        return 'bg-red-50 text-fw-error border-red-200';
+        return 'bg-fw-errorLight text-fw-error border-fw-error';
       case 'warning':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-fw-warnLight text-fw-warn border-fw-warn';
       case 'info':
         return 'bg-fw-accent text-fw-linkHover border-fw-active';
       default:

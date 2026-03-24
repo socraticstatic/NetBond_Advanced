@@ -69,7 +69,7 @@ export function InvoiceHistoryWidget({ connections }: InvoiceHistoryWidgetProps)
             <div className="flex items-center justify-between mt-2 pt-2 border-t border-fw-secondary">
               <span className={`px-2 py-1 text-figma-sm font-medium rounded-full ${
                 invoice.status === 'paid'
-                  ? 'bg-green-50 text-fw-success'
+                  ? 'bg-fw-successLight text-fw-success'
                   : 'bg-fw-warn/10 text-fw-warn'
               }`}>
                 {invoice.status.toUpperCase()}

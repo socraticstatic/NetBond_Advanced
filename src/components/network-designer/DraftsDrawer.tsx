@@ -103,7 +103,7 @@ export function DraftsDrawer({ isOpen, onClose }: DraftsDrawerProps) {
                   <button
                     onClick={(e) => handleDelete(draft, e)}
                     title="Delete draft"
-                    className="p-1.5 rounded-full text-fw-bodyLight hover:bg-red-50 hover:text-red-600 transition-colors"
+                    className="p-1.5 rounded-full text-fw-bodyLight hover:bg-fw-errorLight hover:text-fw-error transition-colors"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>

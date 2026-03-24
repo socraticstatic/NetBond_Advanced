@@ -41,12 +41,12 @@ export function AsyncBoundary({
   );
 
   const defaultErrorFallback = (
-    <div className="flex flex-col items-center justify-center p-8 min-h-[300px] bg-red-50 rounded-lg border border-red-100">
-      <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-      <h3 className="text-lg font-medium text-red-800 mb-2">
+    <div className="flex flex-col items-center justify-center p-8 min-h-[300px] bg-fw-errorLight rounded-lg border border-fw-errorLight">
+      <AlertCircle className="h-12 w-12 text-fw-error mb-4" />
+      <h3 className="text-lg font-medium text-fw-error mb-2">
         Unable to load content
       </h3>
-      <p className="text-figma-base text-red-600 text-center max-w-md mb-4">
+      <p className="text-figma-base text-fw-error text-center max-w-md mb-4">
         We encountered a problem loading this content. Please try again later.
       </p>
     </div>

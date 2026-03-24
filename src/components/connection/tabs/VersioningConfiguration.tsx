@@ -146,24 +146,24 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
   const getStatusColor = (status: Version['status']) => {
     switch (status) {
       case 'deployed':
-        return 'bg-green-50 text-fw-success';
+        return 'bg-fw-successLight text-fw-success';
       case 'pending':
         return 'bg-fw-warn/10 text-fw-warn';
       case 'rollback':
         return 'bg-fw-accent text-fw-linkHover';
       case 'failed':
-        return 'bg-red-50 text-fw-error';
+        return 'bg-fw-errorLight text-fw-error';
     }
   };
 
   const getTypeColor = (type: Version['type']) => {
     switch (type) {
       case 'major':
-        return 'bg-purple-50 text-fw-purple';
+        return 'bg-fw-purpleLight text-fw-purple';
       case 'minor':
         return 'bg-fw-accent text-fw-linkHover';
       case 'patch':
-        return 'bg-green-50 text-fw-success';
+        return 'bg-fw-successLight text-fw-success';
       case 'config':
         return 'bg-fw-neutral text-fw-heading';
     }
@@ -228,7 +228,7 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
             </Button>
           </div>
 
-          <div className="p-4 bg-green-50 rounded-lg">
+          <div className="p-4 bg-fw-successLight rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <span className="text-figma-base font-medium text-fw-success">Backup Configuration</span>
               <Download className="h-5 w-5 text-fw-success" />
@@ -239,13 +239,13 @@ export function VersioningConfiguration({ connectionId, currentVersion }: Versio
             </Button>
           </div>
 
-          <div className="p-4 bg-purple-50 rounded-lg">
+          <div className="p-4 bg-fw-purpleLight rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <span className="text-figma-base font-medium text-fw-purple">Restore Version</span>
               <Upload className="h-5 w-5 text-fw-purple" />
             </div>
             <p className="text-figma-sm text-fw-purple mb-3">Restore configuration from backup</p>
-            <Button variant="primary" className="w-full bg-purple-600 hover:bg-purple-700">
+            <Button variant="primary" className="w-full bg-fw-purple hover:bg-fw-purple">
               Restore Config
             </Button>
           </div>

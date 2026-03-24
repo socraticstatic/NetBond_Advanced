@@ -596,7 +596,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
 
             {/* Error message */}
             {error && (
-              <div className="mt-6 p-4 bg-red-50 border border-fw-error rounded-xl">
+              <div className="mt-6 p-4 bg-fw-errorLight border border-fw-error rounded-xl">
                 <p className="text-figma-base text-fw-error">{error}</p>
               </div>
             )}

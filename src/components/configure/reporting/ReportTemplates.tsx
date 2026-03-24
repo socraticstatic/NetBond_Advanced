@@ -48,9 +48,9 @@ export function ReportTemplates() {
       case 'Performance':
         return 'bg-fw-accent text-fw-link';
       case 'Security':
-        return 'bg-red-50 text-fw-error';
+        return 'bg-fw-errorLight text-fw-error';
       case 'Usage':
-        return 'bg-green-50 text-fw-success';
+        return 'bg-fw-successLight text-fw-success';
       default:
         return 'bg-fw-neutral text-fw-body';
     }
@@ -59,9 +59,9 @@ export function ReportTemplates() {
   const getStatusBadge = (status: Template['status']) => {
     switch (status) {
       case 'active':
-        return <span className="px-2 py-0.5 rounded-lg text-[10px] font-medium uppercase tracking-wide bg-green-50 text-fw-success">Active</span>;
+        return <span className="px-2 py-0.5 rounded-lg text-[10px] font-medium uppercase tracking-wide bg-fw-successLight text-fw-success">Active</span>;
       case 'inactive':
-        return <span className="px-2 py-0.5 rounded-lg text-[10px] font-medium uppercase tracking-wide bg-red-50 text-fw-error">Inactive</span>;
+        return <span className="px-2 py-0.5 rounded-lg text-[10px] font-medium uppercase tracking-wide bg-fw-errorLight text-fw-error">Inactive</span>;
       default:
         return <span className="px-2 py-0.5 rounded-lg text-[10px] font-medium uppercase tracking-wide bg-fw-neutral text-fw-bodyLight">Draft</span>;
     }
@@ -115,7 +115,7 @@ export function ReportTemplates() {
                 <button className="p-2 text-fw-bodyLight hover:text-fw-body rounded-lg hover:bg-fw-neutral transition-colors">
                   <Download className="h-5 w-5" />
                 </button>
-                <button className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-red-50 transition-colors">
+                <button className="p-2 text-fw-bodyLight hover:text-fw-error rounded-lg hover:bg-fw-errorLight transition-colors">
                   <Trash2 className="h-5 w-5" />
                 </button>
               </div>

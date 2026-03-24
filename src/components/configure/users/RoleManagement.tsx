@@ -49,18 +49,18 @@ export function RoleManagement() {
   const getColorClasses = (color: string) => {
     const classes = {
       red: {
-        bg: 'bg-red-50',
-        border: 'border-red-300',
+        bg: 'bg-fw-errorLight',
+        border: 'border-fw-error',
         text: 'text-fw-error',
         icon: 'text-fw-error',
-        badge: 'bg-red-50 text-fw-error'
+        badge: 'bg-fw-errorLight text-fw-error'
       },
       purple: {
-        bg: 'bg-purple-50',
-        border: 'border-purple-300',
+        bg: 'bg-fw-purpleLight',
+        border: 'border-fw-purple',
         text: 'text-fw-purple',
         icon: 'text-fw-purple',
-        badge: 'bg-purple-50 text-fw-purple'
+        badge: 'bg-fw-purpleLight text-fw-purple'
       },
       blue: {
         bg: 'bg-fw-accent',
@@ -122,7 +122,7 @@ export function RoleManagement() {
               <div className="text-fw-bodyLight text-lg mx-1">&#8594;</div>
               <div className="h-0.5 w-8 bg-fw-neutral" />
             </div>
-            <div className="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center border-2 border-purple-300">
+            <div className="w-20 h-20 bg-fw-purpleLight rounded-full flex items-center justify-center border-2 border-fw-purple">
               <Shield className="h-10 w-10 text-fw-purple" />
             </div>
             <div className="flex items-center px-3">
@@ -130,7 +130,7 @@ export function RoleManagement() {
               <div className="text-fw-bodyLight text-lg mx-1">&#8594;</div>
               <div className="h-0.5 w-8 bg-fw-neutral" />
             </div>
-            <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center border-2 border-red-300">
+            <div className="w-20 h-20 bg-fw-errorLight rounded-full flex items-center justify-center border-2 border-fw-error">
               <Crown className="h-10 w-10 text-fw-error" />
             </div>
           </div>
@@ -179,7 +179,7 @@ export function RoleManagement() {
                     <div className="flex items-center gap-3 mb-1">
                       <h4 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">{roleDef.name}</h4>
                       {isCurrentRole && (
-                        <span className="px-3 py-0.5 bg-green-50 text-fw-success text-tag-sm font-medium tracking-[0.04em] rounded-full border border-fw-success">
+                        <span className="px-3 py-0.5 bg-fw-successLight text-fw-success text-tag-sm font-medium tracking-[0.04em] rounded-full border border-fw-success">
                           Your Role
                         </span>
                       )}

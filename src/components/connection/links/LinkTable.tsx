@@ -61,7 +61,7 @@ export function LinkTable({
       sortKey: 'status',
       render: (link) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-lg text-figma-sm font-medium ${
-          link.status === 'active' ? 'bg-green-50 text-fw-success' : 'bg-fw-neutral text-fw-heading'
+          link.status === 'active' ? 'bg-fw-successLight text-fw-success' : 'bg-fw-neutral text-fw-heading'
         }`}>
           {link.status.charAt(0).toUpperCase() + link.status.slice(1)}
         </span>

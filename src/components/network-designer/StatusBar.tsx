@@ -44,21 +44,21 @@ export function StatusBar({ nodes, edges }: StatusBarProps) {
             <span className="text-fw-bodyLight">·</span>
 
             {errors.length > 0 && (
-              <span className="inline-flex items-center gap-1 text-red-600 text-figma-sm font-medium">
+              <span className="inline-flex items-center gap-1 text-fw-error text-figma-sm font-medium">
                 <AlertCircle className="h-3.5 w-3.5" />
                 {errors.length}
               </span>
             )}
 
             {warnings.length > 0 && (
-              <span className="inline-flex items-center gap-1 text-yellow-700 text-figma-sm font-medium">
+              <span className="inline-flex items-center gap-1 text-fw-warn text-figma-sm font-medium">
                 <AlertTriangle className="h-3.5 w-3.5" />
                 {warnings.length}
               </span>
             )}
 
             {infos.length > 0 && (
-              <span className="inline-flex items-center gap-1 text-blue-600 text-figma-sm font-medium">
+              <span className="inline-flex items-center gap-1 text-fw-link text-figma-sm font-medium">
                 <Info className="h-3.5 w-3.5" />
                 {infos.length}
               </span>
@@ -88,10 +88,10 @@ export function StatusBar({ nodes, edges }: StatusBarProps) {
         <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-80 bg-fw-base border border-fw-secondary rounded-xl shadow-lg p-3 space-y-1 z-40">
           {errors.length > 0 && (
             <div className="mb-2">
-              <span className="text-figma-sm font-semibold text-red-600 block mb-1">Errors</span>
+              <span className="text-figma-sm font-semibold text-fw-error block mb-1">Errors</span>
               {errors.map((issue) => (
                 <div key={issue.id} className="flex items-start gap-2 py-1 text-figma-sm text-fw-body">
-                  <AlertCircle className="h-3.5 w-3.5 text-red-500 mt-0.5 shrink-0" />
+                  <AlertCircle className="h-3.5 w-3.5 text-fw-error mt-0.5 shrink-0" />
                   {issue.message}
                 </div>
               ))}
@@ -100,10 +100,10 @@ export function StatusBar({ nodes, edges }: StatusBarProps) {
 
           {warnings.length > 0 && (
             <div className="mb-2">
-              <span className="text-figma-sm font-semibold text-yellow-700 block mb-1">Warnings</span>
+              <span className="text-figma-sm font-semibold text-fw-warn block mb-1">Warnings</span>
               {warnings.map((issue) => (
                 <div key={issue.id} className="flex items-start gap-2 py-1 text-figma-sm text-fw-body">
-                  <AlertTriangle className="h-3.5 w-3.5 text-yellow-500 mt-0.5 shrink-0" />
+                  <AlertTriangle className="h-3.5 w-3.5 text-fw-warn mt-0.5 shrink-0" />
                   {issue.message}
                 </div>
               ))}
@@ -112,10 +112,10 @@ export function StatusBar({ nodes, edges }: StatusBarProps) {
 
           {infos.length > 0 && (
             <div>
-              <span className="text-figma-sm font-semibold text-blue-600 block mb-1">Info</span>
+              <span className="text-figma-sm font-semibold text-fw-link block mb-1">Info</span>
               {infos.map((issue) => (
                 <div key={issue.id} className="flex items-start gap-2 py-1 text-figma-sm text-fw-body">
-                  <Info className="h-3.5 w-3.5 text-blue-500 mt-0.5 shrink-0" />
+                  <Info className="h-3.5 w-3.5 text-fw-info mt-0.5 shrink-0" />
                   {issue.message}
                 </div>
               ))}

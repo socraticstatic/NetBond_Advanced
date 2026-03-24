@@ -146,10 +146,10 @@ export function InvoiceHistory() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-figma-sm leading-5 font-semibold rounded-full ${
                       invoice.paymentStatus === 'Paid'
-                        ? 'bg-green-50 text-fw-success'
+                        ? 'bg-fw-successLight text-fw-success'
                         : invoice.paymentStatus === 'Due'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-red-50 text-fw-error'
+                        ? 'bg-fw-warnLight text-fw-warn'
+                        : 'bg-fw-errorLight text-fw-error'
                     }`}>
                       {invoice.paymentStatus}
                     </span>
