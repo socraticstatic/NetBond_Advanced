@@ -213,7 +213,7 @@ export const createDetachedWindowSlice: StateCreator<DetachedWindowSlice> = (set
           }
         }, 1000);
 
-        console.log(`[DetachedWindows] Opened window ${id} for table ${tableId}`);
+
         return id;
 
       } catch (error) {
@@ -253,7 +253,7 @@ export const createDetachedWindowSlice: StateCreator<DetachedWindowSlice> = (set
       set({ detachedWindows: updatedWindows });
       saveDetachedWindows(updatedWindows);
 
-      console.log(`[DetachedWindows] Closed window ${id}`);
+
     },
 
     updateWindowState: (id: string, updates: Partial<DetachedWindow>) => {

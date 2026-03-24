@@ -1,11 +1,11 @@
 import { useState, useMemo } from 'react';
 import {
-  Layers, Search, Filter, Download, Plus, LayoutGrid, List, Minimize2, Maximize2, Group as GroupIcon, X, PlusCircle
+  Layers, Search, Filter, Download, Plus, LayoutGrid, List, Minimize2, Maximize2, Group as GroupIcon, X
 } from 'lucide-react';
 import { Group } from '../types/group';
 import { useNavigate } from 'react-router-dom';
 import { Button } from './common/Button';
-import { SearchFilterBar } from './common/SearchFilterBar';
+import { FilterButton } from './common/FilterButton';
 import { useStore } from '../store/useStore';
 import { AddGroupModal } from './configure/groups/AddGroupModal';
 import { GroupCardView, GroupListView } from './group/views';
@@ -31,7 +31,10 @@ export function GroupGrid({ groups }: GroupGridProps) {
   const [areAllMinimized, setAreAllMinimized] = useState(false);
   const [filters, setFilters] = useState({
     type: [] as Array<Group['type']>,
-    status: [] as Array<Group['status']>
+    status: [] as Array<Group['status']>,
+    hasConnections: false,
+    hasMembers: false,
+    hasAddresses: false,
   });
 
   // Filter groups based on search and filters
@@ -46,10 +49,15 @@ export function GroupGrid({ groups }: GroupGridProps) {
 
       // Type filter
       const matchesType = !filters.type.length || filters.type.includes(group.type);
-      
+
       // Status filter
       const matchesStatus = !filters.status.length || filters.status.includes(group.status);
-      
+
+      // Advanced filters
+      if (filters.hasConnections && (group.connectionIds?.length || 0) === 0) return false;
+      if (filters.hasMembers && (group.userIds?.length || 0) === 0) return false;
+      if (filters.hasAddresses && (group.addresses?.length || 0) === 0) return false;
+
       return matchesType && matchesStatus;
     });
   }, [groups, searchQuery, filters]);
@@ -133,206 +141,208 @@ export function GroupGrid({ groups }: GroupGridProps) {
   return (
     <div className="space-y-6 min-h-[calc(100vh-16rem)] pb-12">
       {/* Search and Controls */}
-      <div className="flex items-center space-x-4">
-        {/* Search */}
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
-          <input
-            type="text"
-            placeholder="Search pools ..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="fw-input pl-10"
-          />
-        </div>
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
+        <div className="p-4 flex items-center space-x-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <input
+              type="text"
+              placeholder="Search pools..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-brand-blue focus:border-brand-blue"
+            />
+          </div>
 
-        {/* Divider */}
-        <div className="h-6 w-px bg-fw-secondary" />
+          {/* View Mode Toggle */}
+          <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`p-2 rounded-full transition-colors ${
+                viewMode === 'grid' 
+                  ? 'text-brand-blue bg-brand-lightBlue' 
+                  : 'text-gray-400 hover:text-gray-500'
+              }`}
+              title="Grid View"
+            >
+              <LayoutGrid className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`p-2 rounded-full transition-colors ${
+                viewMode === 'list' 
+                  ? 'text-brand-blue bg-brand-lightBlue' 
+                  : 'text-gray-400 hover:text-gray-500'
+              }`}
+              title="List View"
+            >
+              <List className="h-5 w-5" />
+            </button>
+          </div>
 
-        {/* Filter */}
-        <Button
-          variant="secondary"
-          icon={Filter}
-          onClick={() => setShowFilters(!showFilters)}
-          size="md"
-        >
-          Filter
-        </Button>
-
-        {/* Minimize All - grid only */}
-        {viewMode === 'grid' && (
+          {viewMode === 'grid' && (
+            <Button 
+              variant="outline"
+              icon={areAllMinimized ? Maximize2 : Minimize2}
+              onClick={() => setAreAllMinimized(!areAllMinimized)}
+              size="md"
+            >
+              {areAllMinimized ? 'Expand All' : 'Minimize All'}
+            </Button>
+          )}
+          
           <Button
-            variant="ghost"
-            icon={areAllMinimized ? Maximize2 : Minimize2}
-            onClick={() => setAreAllMinimized(!areAllMinimized)}
-            size="md"
+            variant="outline"
+            icon={Plus}
+            onClick={() => setShowAddModal(true)}
           >
-            {areAllMinimized ? 'Expand All' : 'Minimize All'}
+            Create Pool
           </Button>
-        )}
-
-        {/* Export */}
-        <Button
-          variant="secondary"
-          icon={Download}
-          onClick={exportGroups}
-          size="md"
-        >
-          Export
-        </Button>
-
-        {/* Divider */}
-        <div className="h-6 w-px bg-fw-secondary" />
-
-        {/* View toggles */}
-        <div className="flex items-center bg-fw-base rounded-lg border border-fw-secondary p-1">
-          <button
-            onClick={() => setViewMode('grid')}
-            className={`quick-action-btn p-2 transition-colors ${
-              viewMode === 'grid'
-                ? 'text-white bg-fw-primary'
-                : 'text-fw-disabled hover:text-fw-bodyLight'
-            }`}
-            title="Grid View"
+          <FilterButton
+            onClick={() => setShowFilters(!showFilters)}
+          />
+          <Button
+            variant="outline"
+            icon={Download}
+            onClick={exportGroups}
           >
-            <LayoutGrid className="h-4 w-4" />
-          </button>
-          <button
-            onClick={() => setViewMode('list')}
-            className={`quick-action-btn p-2 transition-colors ${
-              viewMode === 'list'
-                ? 'text-white bg-fw-primary'
-                : 'text-fw-disabled hover:text-fw-bodyLight'
-            }`}
-            title="List View"
-          >
-            <List className="h-4 w-4" />
-          </button>
+            Export
+          </Button>
         </div>
 
-        {/* Divider */}
-        <div className="h-6 w-px bg-fw-secondary" />
+        {/* Expanded Filters */}
+        {showFilters && (
+          <div className="mt-4 pt-4 border-t border-gray-200 p-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <h4 className="text-sm font-medium text-gray-900 mb-2">Pool Type</h4>
+                <div className="space-y-2">
+                  {['business', 'department', 'project', 'team', 'custom'].map((type) => (
+                    <label key={type} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={filters.type.includes(type as Group['type'])}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFilters({...filters, type: [...filters.type, type as Group['type']]});
+                          } else {
+                            setFilters({...filters, type: filters.type.filter(t => t !== type)});
+                          }
+                        }}
+                        className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                      />
+                      <span className="ml-2 text-sm text-gray-700 capitalize">{type}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="text-sm font-medium text-gray-900 mb-2">Status</h4>
+                <div className="space-y-2">
+                  {['active', 'inactive', 'suspended'].map((status) => (
+                    <label key={status} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={filters.status.includes(status as Group['status'])}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFilters({...filters, status: [...filters.status, status as Group['status']]});
+                          } else {
+                            setFilters({...filters, status: filters.status.filter(s => s !== status)});
+                          }
+                        }}
+                        className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                      />
+                      <span className="ml-2 text-sm text-gray-700 capitalize">{status}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
-        {/* Create Pool */}
-        <Button
-          variant="primary"
-          icon={PlusCircle}
-          onClick={() => setShowAddModal(true)}
-          size="md"
-          className="px-6"
-        >
-          Create Pool
-        </Button>
-      </div>
-
-      {/* Expanded Filters */}
-      {showFilters && (
-        <div className="bg-fw-base rounded-2xl border border-fw-secondary shadow-sm p-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <h4 className="text-figma-base font-medium text-fw-heading mb-2">Pool Type</h4>
-              <div className="space-y-2">
-                {['business', 'department', 'project', 'team', 'custom'].map((type) => (
-                  <label key={type} className="flex items-center">
+              <div>
+                <h4 className="text-sm font-medium text-gray-900 mb-2">Advanced Filters</h4>
+                <div className="space-y-2">
+                  <label className="flex items-center">
                     <input
                       type="checkbox"
-                      checked={filters.type.includes(type as Group['type'])}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setFilters({...filters, type: [...filters.type, type as Group['type']]});
-                        } else {
-                          setFilters({...filters, type: filters.type.filter(t => t !== type)});
-                        }
-                      }}
-                      className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      checked={filters.hasConnections}
+                      onChange={(e) => setFilters(prev => ({ ...prev, hasConnections: e.target.checked }))}
+                      className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
                     />
-                    <span className="ml-2 text-figma-base text-fw-body capitalize">{type}</span>
+                    <span className="ml-2 text-sm text-gray-700">Has Connections</span>
                   </label>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-figma-base font-medium text-fw-heading mb-2">Status</h4>
-              <div className="space-y-2">
-                {['active', 'inactive', 'suspended'].map((status) => (
-                  <label key={status} className="flex items-center">
+                  <label className="flex items-center">
                     <input
                       type="checkbox"
-                      checked={filters.status.includes(status as Group['status'])}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setFilters({...filters, status: [...filters.status, status as Group['status']]});
-                        } else {
-                          setFilters({...filters, status: filters.status.filter(s => s !== status)});
-                        }
-                      }}
-                      className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
+                      checked={filters.hasMembers}
+                      onChange={(e) => setFilters(prev => ({ ...prev, hasMembers: e.target.checked }))}
+                      className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
                     />
-                    <span className="ml-2 text-figma-base text-fw-body capitalize">{status}</span>
+                    <span className="ml-2 text-sm text-gray-700">Has Members</span>
                   </label>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-figma-base font-medium text-fw-heading mb-2">Advanced Filters</h4>
-              <div className="space-y-2">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                  />
-                  <span className="ml-2 text-figma-base text-fw-body">Has Connections</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                  />
-                  <span className="ml-2 text-figma-base text-fw-body">Has Members</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                  />
-                  <span className="ml-2 text-figma-base text-fw-body">Has Addresses</span>
-                </label>
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={filters.hasAddresses}
+                      onChange={(e) => setFilters(prev => ({ ...prev, hasAddresses: e.target.checked }))}
+                      className="rounded border-gray-300 text-brand-blue focus:ring-brand-blue h-4 w-4"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">Has Addresses</span>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Active Filters */}
-      {(Object.values(filters).some(arr => arr.length > 0) || searchQuery) && (
+      {(filters.type.length > 0 || filters.status.length > 0 || filters.hasConnections || filters.hasMembers || filters.hasAddresses || searchQuery) && (
         <div className="flex flex-wrap gap-2">
-          {Object.entries(filters).map(([category, values]) =>
-            values.map((value) => (
+          {(['type', 'status'] as const).map((category) =>
+            filters[category].map((value) => (
               <span
                 key={`${category}-${value}`}
-                className="inline-flex items-center px-3 py-1 rounded-full text-figma-base bg-fw-accent text-fw-link"
+                className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-brand-lightBlue text-brand-blue"
               >
                 {value.charAt(0).toUpperCase() + value.slice(1)}
                 <button
                   onClick={() => setFilters(prev => ({
                     ...prev,
-                    [category]: prev[category as keyof typeof prev].filter(v => v !== value)
+                    [category]: prev[category].filter(v => v !== value)
                   }))}
-                  className="ml-2 hover:text-fw-linkHover"
+                  className="ml-2 hover:text-brand-darkBlue"
                 >
                   ×
                 </button>
               </span>
             ))
           )}
+          {filters.hasConnections && (
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-brand-lightBlue text-brand-blue">
+              Has Connections
+              <button onClick={() => setFilters(prev => ({ ...prev, hasConnections: false }))} className="ml-2 hover:text-brand-darkBlue">×</button>
+            </span>
+          )}
+          {filters.hasMembers && (
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-brand-lightBlue text-brand-blue">
+              Has Members
+              <button onClick={() => setFilters(prev => ({ ...prev, hasMembers: false }))} className="ml-2 hover:text-brand-darkBlue">×</button>
+            </span>
+          )}
+          {filters.hasAddresses && (
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-brand-lightBlue text-brand-blue">
+              Has Addresses
+              <button onClick={() => setFilters(prev => ({ ...prev, hasAddresses: false }))} className="ml-2 hover:text-brand-darkBlue">×</button>
+            </span>
+          )}
           {searchQuery && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-figma-base bg-fw-neutral text-fw-body">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
               "{searchQuery}"
               <button
                 onClick={() => setSearchQuery('')}
-                className="ml-2 hover:text-fw-heading"
+                className="ml-2 hover:text-gray-900"
               >
                 ×
               </button>
@@ -340,21 +350,21 @@ export function GroupGrid({ groups }: GroupGridProps) {
           )}
           <button
             onClick={() => {
-              setFilters({ type: [], status: [] });
+              setFilters({ type: [], status: [], hasConnections: false, hasMembers: false, hasAddresses: false });
               setSearchQuery('');
             }}
-            className="text-figma-base text-fw-bodyLight hover:text-fw-body"
+            className="text-sm text-gray-500 hover:text-gray-700"
           >
             Clear all
           </button>
         </div>
       )}
 
-      <div>
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
         {filteredGroups.length === 0 ? (
           <div className="text-center py-12">
-            <Layers className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
-            <p className="text-fw-bodyLight">No pools match your search criteria</p>
+            <Layers className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-500">No pools match your search criteria</p>
           </div>
         ) : viewMode === 'list' ? (
           <GroupListView 

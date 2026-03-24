@@ -10,7 +10,7 @@ const AlertHistory = lazy(() => import('../alerts/AlertHistory').then(module => 
 const AlertRuleMaking = lazy(() => import('../alerts/AlertRuleMaking').then(module => ({ default: module.AlertRuleMaking })));
 
 export function AlertsTab() {
-  const { selectedConnection, timeRange } = useMonitoring();
+  const { selectedConnection, connections, timeRange } = useMonitoring();
   const [activeSubTab, setActiveSubTab] = useState<'alerts' | 'rules'>('alerts');
 
   const tabs = [
@@ -54,7 +54,7 @@ export function AlertsTab() {
                 className="w-full"
               >
                 <Suspense fallback={<SkeletonCard lines={4} />}>
-                  <AlertCards selectedConnection={selectedConnection} />
+                  <AlertCards selectedConnection={selectedConnection} connections={connections} />
                 </Suspense>
               </LazyLoadSection>
 

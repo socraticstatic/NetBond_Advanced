@@ -1,44 +1,87 @@
-import { Plus, Minus, RotateCcw } from 'lucide-react';
-import { useDesignerStore } from './store/useDesignerStore';
+import { useState, useRef } from 'react';
+import { ZoomIn, ZoomOut, Rotate3d as RotateLeft, Maximize2 } from 'lucide-react';
+import { Z_INDEX } from '../../utils/designer-constants';
 
-export function ZoomControls() {
-  const zoomLevel = useDesignerStore((s) => s.zoomLevel);
-  const setZoomLevel = useDesignerStore((s) => s.setZoomLevel);
-  const setPanOffset = useDesignerStore((s) => s.setPanOffset);
+interface ZoomControlsProps {
+  onZoomIn: () => void;
+  onZoomOut: () => void;
+  onReset: () => void;
+  onFitToScreen?: () => void;
+  min?: number;
+  max?: number;
+  step?: number;
+}
 
-  const zoomIn = () => setZoomLevel(Math.min(zoomLevel + 0.25, 3.0));
-  const zoomOut = () => setZoomLevel(Math.max(zoomLevel - 0.25, 0.5));
-  const resetZoom = () => {
-    setZoomLevel(1);
-    setPanOffset({ x: 0, y: 0 });
-  };
-
+export function ZoomControls({
+  onZoomIn,
+  onZoomOut,
+  onReset,
+  onFitToScreen,
+  min = 0.5,
+  max = 2,
+  step = 0.1
+}: ZoomControlsProps) {
   return (
-    <div className="absolute top-1/2 -translate-y-1/2 right-4 flex flex-col gap-1 z-20">
-      <button
-        onClick={zoomIn}
-        className="w-8 h-8 flex items-center justify-center rounded-lg bg-fw-base border border-fw-secondary shadow-sm hover:bg-fw-wash transition-colors"
-        title="Zoom in"
+    <div
+      className="absolute top-20 right-4 bg-white/80 backdrop-blur-sm rounded-lg shadow-md flex flex-col"
+      style={{ zIndex: Z_INDEX.UI_CONTROLS }}
+    >
+      <button 
+        onClick={(e) => {
+          e.stopPropagation();
+          onZoomIn();
+        }}
+        className="p-2 hover:bg-gray-100 rounded-t-lg"
+        title="Zoom In"
+        type="button"
       >
-        <Plus className="w-4 h-4 text-fw-heading" />
+        <ZoomIn className="h-5 w-5 text-gray-600" />
       </button>
-      <div className="text-center text-figma-xs text-fw-bodyLight font-medium">
-        {Math.round(zoomLevel * 100)}%
-      </div>
-      <button
-        onClick={zoomOut}
-        className="w-8 h-8 flex items-center justify-center rounded-lg bg-fw-base border border-fw-secondary shadow-sm hover:bg-fw-wash transition-colors"
-        title="Zoom out"
+      
+      <div className="h-px bg-gray-200 mx-1"></div>
+      
+      <button 
+        onClick={(e) => {
+          e.stopPropagation();
+          onZoomOut();
+        }}
+        className="p-2 hover:bg-gray-100"
+        title="Zoom Out"
+        type="button"
       >
-        <Minus className="w-4 h-4 text-fw-heading" />
+        <ZoomOut className="h-5 w-5 text-gray-600" />
       </button>
-      <button
-        onClick={resetZoom}
-        className="w-8 h-8 flex items-center justify-center rounded-lg bg-fw-base border border-fw-secondary shadow-sm hover:bg-fw-wash transition-colors mt-1"
-        title="Reset zoom & pan"
+      
+      <div className="h-px bg-gray-200 mx-1"></div>
+      
+      <button 
+        onClick={(e) => {
+          e.stopPropagation();
+          onReset();
+        }}
+        className="p-2 hover:bg-gray-100"
+        title="Reset Zoom"
+        type="button"
       >
-        <RotateCcw className="w-3.5 h-3.5 text-fw-heading" />
+        <RotateLeft className="h-5 w-5 text-gray-600" />
       </button>
+      
+      {onFitToScreen && (
+        <>
+          <div className="h-px bg-gray-200 mx-1"></div>
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              onFitToScreen();
+            }}
+            className="p-2 hover:bg-gray-100 rounded-b-lg"
+            title="Fit to Screen"
+            type="button"
+          >
+            <Maximize2 className="h-5 w-5 text-gray-600" />
+          </button>
+        </>
+      )}
     </div>
   );
 }

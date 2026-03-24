@@ -1,318 +1,444 @@
-import { useEffect, useRef, useState } from 'react';
-import { LayoutGrid, Share2, Server, Cloud, Database, Network, Plus, Play, Save, Undo2, Trash2, Check, Maximize2, Minimize2, FileDown, FolderOpen } from 'lucide-react';
-import { NODE_CATEGORIES } from './constants/nodeTypes';
+import { Server, Cloud, Network, Plus, Undo, Play, Check, Save, Trash2, Shield, Activity, PanelRight, Menu, Database, Globe, Lock, Feather as Ethernet, Wifi, LayoutGrid as Layout, Router, Share2 } from 'lucide-react';
+import { NetworkNode } from '../types';
+import { useState, useEffect, useRef } from 'react';
+import {
+  CLOUD_PROVIDERS,
+  DATACENTER_PROVIDERS,
+  FUNCTION_TYPES,
+  NETWORK_TYPES,
+  Z_INDEX
+} from '../../utils/designer-constants';
 
 interface ToolbarProps {
-  onAddNode: (type: string, subType?: string, meta?: Record<string, string>) => void;
+  onAddNode: (type: NetworkNode['type'], functionType?: string, networkType?: string, provider?: string) => void;
   onToggleEdgeCreation: () => void;
   isCreatingEdge: boolean;
-  onUndo: () => void;
-  canUndo: boolean;
-  onClearCanvas: () => void;
-  onToggleMaximize: () => void;
-  isMaximized: boolean;
-  onCreateConnections: () => void;
+  onCancel: () => void;
   hasConnections: boolean;
-  onOpenTemplates: () => void;
-  onOpenSaveTemplate: () => void;
-  onExportPDF: () => void;
-  onSaveDraft?: () => void;
-  onOpenDrafts?: () => void;
+  canUndo: boolean;
+  onRunScenario?: () => void;
+  isRunningScenario?: boolean;
+  onCreateConnections?: () => void;
+  onSaveTemplate?: () => void;
+  onClearCanvas?: () => void;
+  onOpenTemplates?: () => void;
 }
-
-type MenuKey = 'function' | 'cloud' | 'datacenter' | 'network' | null;
 
 export function Toolbar({
   onAddNode,
   onToggleEdgeCreation,
   isCreatingEdge,
-  onUndo,
-  canUndo,
-  onClearCanvas,
-  onCreateConnections,
+  onCancel,
   hasConnections,
-  onOpenTemplates,
-  onOpenSaveTemplate,
-  onExportPDF,
-  onSaveDraft,
-  onOpenDrafts,
-  onToggleMaximize,
-  isMaximized,
+  canUndo,
+  onRunScenario,
+  isRunningScenario = false,
+  onCreateConnections,
+  onSaveTemplate,
+  onClearCanvas,
+  onOpenTemplates
 }: ToolbarProps) {
-  const [openMenu, setOpenMenu] = useState<MenuKey>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  // State to track which dropdown is open
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
 
+  // Menu items with icons
+  const functionTypesWithIcons = FUNCTION_TYPES.map(type => ({
+    ...type,
+    icon: type.id === 'SDWAN' ? PanelRight :
+          type.id === 'Firewall' ? Shield :
+          type.id === 'VNF' ? Activity :
+          type.id === 'VNAT' ? Menu : Activity
+  }));
+
+  const networkTypesWithIcons = NETWORK_TYPES.map(type => ({
+    ...type,
+    icon: type.id === 'Internet' ? Network :
+          type.id === 'VPN' ? Lock :
+          type.id === 'Ethernet' ? Ethernet :
+          type.id === 'IoT' ? Wifi :
+          type.id === 'AT&T Core' ? Globe : Network
+  }));
+
+  // Close dropdown when clicking outside
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setOpenMenu(null);
+    function handleClickOutside(event: MouseEvent) {
+      if (toolbarRef.current && !toolbarRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null);
       }
     }
-    if (openMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
+    
+    if (openDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
     }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [openMenu]);
+    
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openDropdown]);
 
-  function toggleMenu(key: MenuKey) {
-    setOpenMenu(prev => prev === key ? null : key);
-  }
-
-  function handleSelect(categoryKey: string, item: { type?: string; provider?: string }) {
-    setOpenMenu(null);
-    if (categoryKey === 'cloud' && item.provider) {
-      onAddNode('destination', item.provider, { cloudProvider: item.provider });
-    } else if (categoryKey === 'datacenter' && item.provider) {
-      onAddNode('datacenter', item.provider, { dcProvider: item.provider });
-    } else if (categoryKey === 'network' && item.type) {
-      onAddNode('network', item.type);
-    } else if (categoryKey === 'function' && item.type) {
-      onAddNode('function', item.type);
+  // Handle toggling dropdown visibility
+  const toggleDropdown = (dropdown: string) => {
+    if (openDropdown === dropdown) {
+      setOpenDropdown(null);
+    } else {
+      setOpenDropdown(dropdown);
     }
-  }
-
-  const hasNodes = hasConnections; // edges exist means nodes exist
-
-  // Cloud_Designer toolbar layout:
-  // Choose | Cloud Router | Function ▾ | Cloud ▾ | Datacenter ▾ | Network ▾ | + Connection | Play | Save | Undo | Clear | Create
-
+  };
+  
+  // Handle node selection and close dropdown
+  const handleNodeSelect = (type: NetworkNode['type'], functionType?: string, networkType?: string, provider?: string) => {
+    onAddNode(type, functionType, networkType, provider);
+    setOpenDropdown(null);
+  };
+  
   return (
-    <div ref={menuRef} className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-3 py-2 rounded-full shadow-lg border border-fw-secondary bg-fw-base">
-
-      {/* Choose (Templates) */}
+    <div
+      ref={toolbarRef}
+      className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-sm border border-gray-200 p-2 flex items-center space-x-1 min-w-max"
+      style={{ zIndex: Z_INDEX.TOOLBAR }}
+    >
+      {/* Choose Button - Added before Function */}
       <button
         onClick={onOpenTemplates}
-        title="Choose template"
-        className="flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium text-fw-heading hover:bg-fw-wash rounded-full transition-colors"
+        className="px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg flex items-center space-x-2 transition-colors"
+        title="Choose Template"
+        type="button"
       >
-        <LayoutGrid className="h-4 w-4" />
-        <span>Choose</span>
+        <Layout className="h-5 w-5" />
+        <span className="text-sm">Choose</span>
       </button>
-
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
-
-      {/* Cloud Router - direct add */}
+      
+      {/* Small separator line */}
+      <div className="h-8 w-px bg-gray-200"></div>
+      
+      {/* Cloud Router Button */}
       <button
-        onClick={() => onAddNode('function', 'router', {})}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleNodeSelect('function', 'Cloud Router');
+        }}
+        className="px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg flex items-center space-x-2 transition-colors whitespace-nowrap"
         title="Add Cloud Router"
-        className="flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium text-fw-heading hover:bg-fw-wash rounded-full transition-colors whitespace-nowrap"
+        type="button"
       >
-        <Share2 className="h-4 w-4 flex-shrink-0" />
-        <span>Cloud Router</span>
+        <Share2 className="h-5 w-5" />
+        <span className="text-sm">Cloud Router</span>
       </button>
-
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
-
-      {/* Function dropdown */}
-      <div className="relative">
-        <button
-          onClick={() => toggleMenu('function')}
-          title="Add network function"
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium rounded-full transition-colors ${
-            openMenu === 'function' ? 'text-fw-link bg-fw-accent' : 'text-fw-heading hover:bg-fw-wash'
-          }`}
-        >
-          <Server className="h-4 w-4" />
-          <span>Function</span>
-        </button>
-        {openMenu === 'function' && (
-          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-fw-base rounded-xl shadow-lg border border-fw-secondary z-30 overflow-hidden py-1">
-            {NODE_CATEGORIES.function.items.map((item) => (
-              <button
-                key={item.type}
-                onClick={() => handleSelect('function', item)}
-                className="w-full text-left px-3 py-1.5 text-figma-sm text-fw-heading hover:bg-fw-wash transition-colors"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        )}
+      
+      {/* Small separator line */}
+      <div className="h-8 w-px bg-gray-200"></div>
+      
+      {/* Node Tools */}
+      <div className="flex items-center space-x-1">
+        {/* Function nodes dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => toggleDropdown('function')}
+            className={`px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg flex items-center space-x-2 transition-colors ${openDropdown === 'function' ? 'bg-gray-50' : ''}`}
+            title="Add Function"
+            type="button"
+          >
+            <Server className="h-5 w-5" />
+            <span className="text-sm">Function</span>
+          </button>
+          
+          {openDropdown === 'function' && (
+            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200" style={{ zIndex: Z_INDEX.OVERLAY }}>
+              {functionTypesWithIcons.map(type => (
+                <button
+                  key={type.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNodeSelect('function', type.id);
+                  }}
+                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  type="button"
+                >
+                  <type.icon className="h-4 w-4 mr-2" />
+                  {type.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        {/* Cloud providers dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => toggleDropdown('cloud')}
+            className={`px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg flex items-center space-x-2 transition-colors ${openDropdown === 'cloud' ? 'bg-gray-50' : ''}`}
+            title="Add Cloud Provider"
+            type="button"
+          >
+            <Cloud className="h-5 w-5" />
+            <span className="text-sm">Cloud</span>
+          </button>
+          
+          {openDropdown === 'cloud' && (
+            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200" style={{ zIndex: Z_INDEX.OVERLAY }}>
+              {CLOUD_PROVIDERS.map(provider => (
+                <button
+                  key={provider.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNodeSelect('destination', undefined, undefined, provider.id);
+                  }}
+                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  type="button"
+                >
+                  <Cloud className="h-4 w-4 mr-2" />
+                  {provider.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        {/* Datacenter providers dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => toggleDropdown('datacenter')}
+            className={`px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg flex items-center space-x-2 transition-colors ${openDropdown === 'datacenter' ? 'bg-gray-50' : ''}`}
+            title="Add Datacenter"
+            type="button"
+          >
+            <Database className="h-5 w-5" />
+            <span className="text-sm">Datacenter</span>
+          </button>
+          
+          {openDropdown === 'datacenter' && (
+            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200" style={{ zIndex: Z_INDEX.OVERLAY }}>
+              {DATACENTER_PROVIDERS.map(provider => (
+                <button
+                  key={provider.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNodeSelect('datacenter', undefined, undefined, provider.id);
+                  }}
+                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  type="button"
+                >
+                  <Database className="h-4 w-4 mr-2" />
+                  {provider.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        {/* Network types dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => toggleDropdown('network')}
+            className={`px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg flex items-center space-x-2 transition-colors ${openDropdown === 'network' ? 'bg-gray-50' : ''}`}
+            title="Add Network Device"
+            type="button"
+          >
+            <Network className="h-5 w-5" />
+            <span className="text-sm">Network</span>
+          </button>
+          
+          {openDropdown === 'network' && (
+            <div className="absolute bottom-full left-0 mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200" style={{ zIndex: Z_INDEX.OVERLAY }}>
+              {networkTypesWithIcons.map(type => (
+                <button
+                  key={type.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNodeSelect('network', undefined, type.id.toLowerCase());
+                  }}
+                  className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  type="button"
+                >
+                  <type.icon className="h-4 w-4 mr-2" />
+                  {type.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Cloud dropdown */}
-      <div className="relative">
+      {/* Small separator line */}
+      <div className="h-8 w-px bg-gray-200"></div>
+      {/* Connection Tool */}
+      <div className="relative group">
         <button
-          onClick={() => toggleMenu('cloud')}
-          title="Add cloud destination"
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium rounded-full transition-colors ${
-            openMenu === 'cloud' ? 'text-fw-link bg-fw-accent' : 'text-fw-heading hover:bg-fw-wash'
-          }`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleEdgeCreation();
+          }}
+          className={`p-2 rounded-lg ${
+            isCreatingEdge
+              ? 'text-blue-600 bg-blue-50'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+          } transition-colors`}
+          title="Add Connection"
+          type="button"
         >
-          <Cloud className="h-4 w-4" />
-          <span>Cloud</span>
+          <Plus className="h-5 w-5" />
         </button>
-        {openMenu === 'cloud' && (
-          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-52 bg-fw-base rounded-xl shadow-lg border border-fw-secondary z-30 overflow-hidden py-1">
-            {NODE_CATEGORIES.cloud.items.map((item) => (
-              <button
-                key={item.provider}
-                onClick={() => handleSelect('cloud', item)}
-                className="w-full text-left px-3 py-1.5 text-figma-sm text-fw-heading hover:bg-fw-wash transition-colors"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        )}
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-900 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          Click on the nodes you wish to connect. Toggle when you're done.
+        </div>
       </div>
 
-      {/* Datacenter dropdown */}
-      <div className="relative">
-        <button
-          onClick={() => toggleMenu('datacenter')}
-          title="Add datacenter"
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium rounded-full transition-colors ${
-            openMenu === 'datacenter' ? 'text-fw-link bg-fw-accent' : 'text-fw-heading hover:bg-fw-wash'
-          }`}
-        >
-          <Database className="h-4 w-4" />
-          <span>Datacenter</span>
-        </button>
-        {openMenu === 'datacenter' && (
-          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-fw-base rounded-xl shadow-lg border border-fw-secondary z-30 overflow-hidden py-1">
-            {NODE_CATEGORIES.datacenter.items.map((item) => (
-              <button
-                key={item.provider}
-                onClick={() => handleSelect('datacenter', item)}
-                className="w-full text-left px-3 py-1.5 text-figma-sm text-fw-heading hover:bg-fw-wash transition-colors"
-              >
-                {item.label}
-              </button>
-            ))}
+      {/* Scenario Runner */}
+      {onRunScenario && (
+        <>
+          {/* Small separator line */}
+          <div className="h-8 w-px bg-gray-200"></div>
+          
+          <div className="relative group">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!(!hasConnections || isRunningScenario)) {
+                  onRunScenario();
+                }
+              }}
+              disabled={!hasConnections || isRunningScenario}
+              className={`
+                p-2 rounded-lg transition-colors
+                ${!hasConnections
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : isRunningScenario
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }
+              `}
+              title="Run Scenario"
+              type="button"
+            >
+              <Play className={`h-5 w-5 ${isRunningScenario ? 'animate-spin' : ''}`} />
+            </button>
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-900 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              Run scenario
+            </div>
           </div>
-        )}
-      </div>
-
-      {/* Network dropdown */}
-      <div className="relative">
-        <button
-          onClick={() => toggleMenu('network')}
-          title="Add network type"
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium rounded-full transition-colors ${
-            openMenu === 'network' ? 'text-fw-link bg-fw-accent' : 'text-fw-heading hover:bg-fw-wash'
-          }`}
-        >
-          <Network className="h-4 w-4" />
-          <span>Network</span>
-        </button>
-        {openMenu === 'network' && (
-          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-56 bg-fw-base rounded-xl shadow-lg border border-fw-secondary z-30 overflow-hidden py-1">
-            {NODE_CATEGORIES.network.items.map((item) => (
-              <button
-                key={item.type}
-                onClick={() => handleSelect('network', item)}
-                className="w-full text-left px-3 py-1.5 text-figma-sm text-fw-heading hover:bg-fw-wash transition-colors"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
-
-      {/* Connection toggle */}
-      <button
-        onClick={onToggleEdgeCreation}
-        title={isCreatingEdge ? 'Click nodes to connect. Toggle when done.' : 'Connect nodes'}
-        className={`p-2 rounded-full transition-colors ${
-          isCreatingEdge
-            ? 'text-fw-link bg-fw-accent'
-            : 'text-fw-heading hover:bg-fw-wash'
-        }`}
-      >
-        <Plus className="h-4 w-4" />
-      </button>
-
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
-
-      {/* Run Scenario (Play) */}
-      <button
-        disabled={!hasConnections}
-        title="Run scenario"
-        className={`p-2 rounded-full transition-colors ${
-          hasConnections ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
-        }`}
-      >
-        <Play className="h-4 w-4" />
-      </button>
+        </>
+      )}
 
       {/* Save Template */}
-      <button
-        onClick={onOpenSaveTemplate}
-        disabled={!hasConnections}
-        title="Save template"
-        className={`p-2 rounded-full transition-colors ${
-          hasConnections ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
-        }`}
-      >
-        <Save className="h-4 w-4" />
-      </button>
+      {onSaveTemplate && (
+          <div className="relative group">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (hasConnections && onSaveTemplate) {
+                  onSaveTemplate();
+                }
+              }}
+              disabled={!hasConnections}
+              className={`
+                p-2 rounded-lg transition-colors
+                ${!hasConnections
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }
+              `}
+              title="Save Template"
+              type="button"
+            >
+              <Save className="h-5 w-5" />
+            </button>
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-900 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              Save as template
+            </div>
+          </div>
+      )}
 
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
-
-      {/* Undo */}
-      <button
-        onClick={onUndo}
-        disabled={!canUndo}
-        title="Undo"
-        className={`p-2 rounded-full transition-colors ${
-          canUndo ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
-        }`}
-      >
-        <Undo2 className="h-4 w-4" />
-      </button>
+      {/* History Controls */}
+      <>
+        {/* Small separator line */}
+        <div className="h-8 w-px bg-gray-200"></div>
+        
+        <div className="relative group">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (canUndo) {
+                onCancel();
+              }
+            }}
+            disabled={!canUndo}
+            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            title="Undo"
+            type="button"
+          >
+            <Undo className="h-5 w-5" />
+          </button>
+          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-900 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            Undo
+          </div>
+        </div>
+      </>
 
       {/* Clear Canvas */}
-      <button
-        onClick={onClearCanvas}
-        disabled={!hasConnections}
-        title="Clear canvas"
-        className={`p-2 rounded-full transition-colors ${
-          hasConnections ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
-        }`}
-      >
-        <Trash2 className="h-4 w-4" />
-      </button>
-
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
-
-      {/* Export PDF */}
-      <button
-        onClick={onExportPDF}
-        disabled={!hasConnections}
-        title="Export PDF"
-        className={`p-2 rounded-full transition-colors ${
-          hasConnections ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
-        }`}
-      >
-        <FileDown className="h-4 w-4" />
-      </button>
-
-      {/* Maximize / Minimize */}
-      <button
-        onClick={onToggleMaximize}
-        title={isMaximized ? 'Minimize' : 'Maximize'}
-        className="p-2 rounded-full transition-colors text-fw-heading hover:bg-fw-wash"
-      >
-        {isMaximized ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-      </button>
-
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
+      {onClearCanvas && (
+          <div className="relative group">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (hasConnections && onClearCanvas) {
+                  onClearCanvas();
+                }
+              }}
+              disabled={!hasConnections}
+              className={`
+                p-2 rounded-lg transition-colors
+                ${!hasConnections
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }
+              `}
+              title="Clear Canvas"
+              type="button"
+            >
+              <Trash2 className="h-5 w-5" />
+            </button>
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-900 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              Clear canvas
+            </div>
+          </div>
+      )}
 
       {/* Create Connections */}
-      <button
-        onClick={onCreateConnections}
-        disabled={!hasConnections}
-        title="Create connections"
-        className={`p-2 rounded-full transition-colors ${
-          hasConnections ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
-        }`}
-      >
-        <Check className="h-4 w-4" />
-      </button>
+      {onCreateConnections && (
+        <>
+          {/* Small separator line */}
+          <div className="h-8 w-px bg-gray-200"></div>
+          
+          <div className="relative group">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (hasConnections && onCreateConnections) {
+                  onCreateConnections();
+                }
+              }}
+              disabled={!hasConnections}
+              className={`
+                p-2 rounded-lg transition-colors
+                ${!hasConnections
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }
+              `}
+              title="Create Connections"
+              type="button"
+            >
+              <Check className="h-5 w-5" />
+            </button>
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs text-white bg-gray-900 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              Create connections
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

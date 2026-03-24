@@ -1,465 +1,725 @@
-import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
-import { Minimize2 } from 'lucide-react';
-import type { Connection, NetworkNode as LegacyNetworkNode, NetworkEdge as LegacyNetworkEdge } from '../../types';
-import type { NetworkNode, NetworkEdge } from './types/designer';
-import { useDesignerStore } from './store/useDesignerStore';
-import { useNetworkManager } from './hooks/useNetworkManager';
-import { useSelectionManager } from './hooks/useSelectionManager';
-import { useEdgeCreator } from './hooks/useEdgeCreator';
-import { useNetworkHistory } from './hooks/useNetworkHistory';
-import { validateTopology } from './engine/validationEngine';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { safeGetItem, safeSetItem } from '../../utils/localStorageUtils';
+import { ConnectionConfig } from './types';
 import { Canvas } from './Canvas';
-import { Node } from './Node';
-import { Edge } from './Edge';
-import { ZoomControls } from './ZoomControls';
 import { Toolbar } from './Toolbar';
 import { StatusBar } from './StatusBar';
-import { NodeConfigPanel } from './panels/NodeConfigPanel';
-import { EdgeConfigPanel } from './panels/EdgeConfigPanel';
-import { TemplatesDrawer } from './TemplatesDrawer';
-import { SaveTemplateModal } from './templates/SaveTemplateModal';
-import { SaveDraftModal } from './SaveDraftModal';
-import { DraftsDrawer } from './DraftsDrawer';
-import { WelcomeModal } from './WelcomeModal';
+import { NodeConfigPanel } from './NodeConfigPanel';
+import { EdgeConfigPanel } from './EdgeConfigPanel';
+import { AbstractionLevelSelector } from './AbstractionLevelSelector';
+import { GlobalView } from './global-view/GlobalView';
+import { CircuitView } from './circuit-view/CircuitView';
+import { TemplatesManager } from './panels/TemplatesManager';
+import { SaveTemplateModal } from './SaveTemplateModal';
+import { HistoryDrawer } from './HistoryDrawer';
+import { NetworkSimulation } from './simulation/NetworkSimulation';
+import {
+  useNetworkHistory,
+  useNetworkManager,
+  useSelectionManager,
+  useEdgeCreator,
+  useTemplatesManager
+} from '../../hooks';
+import {
+  runSimulation,
+  pauseSimulation,
+  resumeSimulation,
+  cancelSimulation,
+  injectLatency,
+  injectPacketLoss,
+  injectBandwidthLimit
+} from './simulation/runSimulation';
+import { getNodeIcon } from '../../utils/nodeUtils';
+import { Z_INDEX, DEFAULT_NETWORK_CONFIG, CANVAS_BOUNDS } from '../../utils/designer-constants';
+import { NetworkNode, NetworkEdge } from './types';
 
-// Preserve the props interface so LazyNetworkDesigner and ConnectionWizard still work
 interface NetworkDesignerProps {
-  onComplete: (config: Connection[]) => void;
+  onComplete: (config: ConnectionConfig) => void;
   onCancel: () => void;
-  initialNodes?: LegacyNetworkNode[];
-  initialEdges?: LegacyNetworkEdge[];
-  editMode?: boolean;
-  connectionId?: string;
 }
 
-function legacyNodeToNew(n: LegacyNetworkNode): NetworkNode {
-  return {
-    id: n.id,
-    type: n.type === 'source' || n.type === 'router' ? 'function' : (n.type as NetworkNode['type']),
-    functionType: n.type,
-    x: n.x,
-    y: n.y,
-    name: n.name,
-    icon: 'Box',
-    status: n.status === 'active' ? 'active' : 'inactive',
-    config: n.config || {},
-  };
+type AbstractionLevel = 'global' | 'network' | 'circuit';
+
+interface CustomTemplate {
+  id: string;
+  name: string;
+  description: string;
+  nodes: NetworkNode[];
+  edges: NetworkEdge[];
+  isCustom?: boolean;
 }
 
-function legacyEdgeToNew(e: LegacyNetworkEdge): NetworkEdge {
-  return {
-    id: e.id,
-    source: e.source,
-    target: e.target,
-    type: e.type || 'Ethernet',
-    bandwidth: e.bandwidth || '1 Gbps',
-    status: e.status === 'active' ? 'active' : 'inactive',
-  };
-}
-
-export function NetworkDesigner({
-  onComplete,
-  onCancel,
-  initialNodes = [],
-  initialEdges = [],
-  editMode = false,
-  connectionId,
-}: NetworkDesignerProps) {
-  // Store state
-  const nodes = useDesignerStore((s) => s.nodes);
-  const edges = useDesignerStore((s) => s.edges);
-  const isMaximized = useDesignerStore((s) => s.isMaximized);
-  const selectedNodeId = useDesignerStore((s) => s.selectedNodeId);
-  const selectedEdgeId = useDesignerStore((s) => s.selectedEdgeId);
-  const setNodes = useDesignerStore((s) => s.setNodes);
-  const setEdges = useDesignerStore((s) => s.setEdges);
-  const toggleMaximize = useDesignerStore((s) => s.toggleMaximize);
-  const saveToHistoryStore = useDesignerStore((s) => s.saveToHistory);
-
-  // Hooks
-  const { addNode, moveNode, updateNode, deleteNode, updateEdge, deleteEdge, clearCanvas } = useNetworkManager();
-  const { handleNodeSelection, handleEdgeSelection, clearSelection } = useSelectionManager();
-  const { isCreatingEdge, edgeStartNodeId, toggleEdgeCreation, handleNodeClickForEdge, cancelEdgeCreation } = useEdgeCreator();
-  const { undo, canUndo } = useNetworkHistory();
-
-  // UI state
-  const [isTemplatesOpen, setIsTemplatesOpen] = useState(false);
-  const [isSaveTemplateOpen, setIsSaveTemplateOpen] = useState(false);
-  const [isSaveDraftOpen, setIsSaveDraftOpen] = useState(false);
-  const [isDraftsOpen, setIsDraftsOpen] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(!editMode && initialNodes.length === 0);
-
-  // Canvas ref for PDF export
+export function NetworkDesigner({ onComplete, onCancel }: NetworkDesignerProps) {
+  // Refs
   const canvasRef = useRef<HTMLDivElement>(null);
-
-  // Validation - compute error node IDs
-  const errorNodeIds = useMemo(() => {
-    const issues = validateTopology(nodes, edges);
-    const ids = new Set<string>();
-    for (const issue of issues) {
-      if (issue.severity === 'error' && issue.nodeId) {
-        ids.add(issue.nodeId);
+  
+  // Abstraction level state
+  const [abstractionLevel, setAbstractionLevel] = useState<AbstractionLevel>('network');
+  
+  // Custom templates state - persisted to localStorage
+  const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>(() => {
+    const saved = safeGetItem<string>('custom_templates');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return [];
       }
     }
-    return ids;
-  }, [nodes, edges]);
+    return [];
+  });
+  const [showSaveTemplateModal, setShowSaveTemplateModal] = useState(false);
 
-  // Initialize store with initial nodes/edges on mount
+  // Persist custom templates to localStorage
   useEffect(() => {
-    if (initialNodes.length > 0 || initialEdges.length > 0) {
-      const converted = initialNodes.map(legacyNodeToNew);
-      const convertedEdges = initialEdges.map(legacyEdgeToNew);
-      setNodes(converted);
-      setEdges(convertedEdges);
-      saveToHistoryStore();
-    }
-    // Only run on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    safeSetItem('custom_templates', JSON.stringify(customTemplates));
+  }, [customTemplates]);
 
-  // Keyboard shortcuts
+  // History drawer state
+  const [showHistoryDrawer, setShowHistoryDrawer] = useState(false);
+  
+  // Network history management
+  const { saveToHistory, undo, redo, canUndo, canRedo, history: networkHistory } = useNetworkHistory();
+  
+  // Network state management
+  const {
+    nodes,
+    edges,
+    networkScores,
+    setNodes,
+    setEdges,
+    addNode,
+    updateNode,
+    deleteNode,
+    updateEdge,
+    deleteEdge,
+    clearNetwork,
+    applyTemplate
+  } = useNetworkManager(saveToHistory);
+  
+  // Selection management
+  const {
+    selectedNode,
+    selectedEdge,
+    selectedNodeObject,
+    selectedEdgeObject,
+    showNodeConfig,
+    showEdgeConfig,
+    handleNodeSelection,
+    handleEdgeSelection,
+    clearSelection,
+    setShowNodeConfig,
+    setShowEdgeConfig
+  } = useSelectionManager(nodes, edges);
+  
+  // Templates management
+  const {
+    showTemplatesDrawer,
+    openTemplatesDrawer,
+    closeTemplatesDrawer
+  } = useTemplatesManager();
+  
+  // Edge creation
+  const {
+    isCreatingEdge,
+    edgeStart,
+    toggleEdgeCreation,
+    handleNodeClickForEdge,
+    cancelEdgeCreation
+  } = useEdgeCreator(edges, setEdges, (edge) => {
+    handleEdgeSelection(edge);
+  });
+  
+  // UI state
+  const [isRunningScenario, setIsRunningScenario] = useState(false);
+  
+  // Simulation data
+  const [simulationData, setSimulationData] = useState({
+    progress: 0,
+    metrics: {
+      bandwidth: { current: 0, max: 100 },
+      latency: { current: 0, max: 100 },
+      packets: { sent: 0, received: 0, errors: 0 }
+    },
+    phase: 'idle' as 'idle' | 'initializing' | 'running' | 'completed' | 'error' | 'paused',
+    networkScores
+  });
+  
+  // Cancel simulation on unmount to prevent stale state updates
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const tag = (e.target as HTMLElement)?.tagName;
-      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-
-      if (e.key === 'Delete' || e.key === 'Backspace') {
-        if (selectedNodeId) deleteNode(selectedNodeId);
-        else if (selectedEdgeId) deleteEdge(selectedEdgeId);
-      }
-
-      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-        e.preventDefault();
-        undo();
-      }
-
-      if (e.key === 'Escape') {
-        if (isCreatingEdge) {
-          cancelEdgeCreation();
-        } else {
-          clearSelection();
-        }
-      }
+    return () => {
+      cancelSimulation();
     };
+  }, []);
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedNodeId, selectedEdgeId, isCreatingEdge, deleteNode, deleteEdge, undo, cancelEdgeCreation, clearSelection]);
-
-  // Node handlers
-  const handleNodeSelect = useCallback((id: string) => {
-    if (!isCreatingEdge) {
-      handleNodeSelection(id);
+  // Update simulation network scores when networkScores change
+  useEffect(() => {
+    setSimulationData(prev => ({
+      ...prev,
+      networkScores
+    }));
+  }, [networkScores]);
+  
+  // Handle node click in canvas
+  const handleNodeClick = (node: NetworkNode | null) => {
+    if (!node) {
+      clearSelection();
+      if (isCreatingEdge) {
+        cancelEdgeCreation();
+      }
+      return;
     }
-  }, [isCreatingEdge, handleNodeSelection]);
 
-  const handleNodeDrag = useCallback((id: string, x: number, y: number) => {
-    moveNode(id, x, y);
-  }, [moveNode]);
+    // If we're creating an edge, handle edge creation
+    if (isCreatingEdge) {
+      const handled = handleNodeClickForEdge(node.id, node.id);
+      if (handled) return;
+    }
 
-  const handleNodeDragEnd = useCallback(() => {
-    saveToHistoryStore();
-  }, [saveToHistoryStore]);
+    // Otherwise, handle node selection
+    handleNodeSelection(node);
+  };
 
-  const handleNodeEdgeClick = useCallback((id: string) => {
-    handleNodeClickForEdge(id);
-  }, [handleNodeClickForEdge]);
+  // Handle node selection without opening config (for single-click)
+  const handleNodeSelect = (node: NetworkNode | null) => {
+    if (!node) {
+      clearSelection();
+      return;
+    }
 
-  const handleNodeRename = useCallback((id: string, name: string) => {
-    updateNode(id, { name });
-  }, [updateNode]);
+    // If we're creating an edge, handle edge creation
+    if (isCreatingEdge) {
+      const handled = handleNodeClickForEdge(node.id, node.id);
+      return;
+    }
 
-  // Edge handler
-  const handleEdgeClick = useCallback((id: string) => {
-    handleEdgeSelection(id);
-  }, [handleEdgeSelection]);
+    // Select the node visually but don't open config
+    handleNodeSelection(node);
+    setShowNodeConfig(false);
+  };
 
-  // Add a node from the categorized dropdown
-  const handleAddNode = useCallback((type: string, subType?: string, meta?: Record<string, string>) => {
-    addNode(type, subType || type, meta);
-  }, [addNode]);
+  // Handle node double-click to open config
+  const handleNodeDoubleClick = (node: NetworkNode | null) => {
+    if (!node || isCreatingEdge) return;
 
-  // Load a template
-  const handleLoadTemplate = useCallback((templateNodes: NetworkNode[], templateEdges: NetworkEdge[]) => {
-    setNodes(templateNodes);
-    setEdges(templateEdges);
-    saveToHistoryStore();
-  }, [setNodes, setEdges, saveToHistoryStore]);
+    // Select and open config panel
+    handleNodeSelection(node);
+    setShowNodeConfig(true);
+  };
+  
+  // Handle node drag
+  const handleNodeDrag = (nodeId: string, x: number, y: number) => {
+    const node = nodes.find(n => n.id === nodeId);
+    if (!node) return;
+    
+    // Update node position
+    setNodes(prev => 
+      prev.map(n => n.id === nodeId ? { ...n, x, y: Math.min(y, CANVAS_BOUNDS.MAX_Y - CANVAS_BOUNDS.NODE_SIZE) } : n)
+    );
+  };
+  
+  // Handle node drag end
+  const handleNodeDragEnd = () => {
+    // Apply snap-to-grid at the END of dragging, not during
+    // This prevents the jumping issue while still maintaining grid alignment
+    const gridSize = CANVAS_BOUNDS.GRID_SIZE;
+    const snappedNodes = nodes.map(node => ({
+      ...node,
+      x: Math.round(node.x / gridSize) * gridSize,
+      y: Math.round(node.y / gridSize) * gridSize
+    }));
 
-  // Save template handler (logs for now - real storage would be persisted)
-  const handleSaveTemplate = useCallback((name: string, description: string) => {
-    window.addToast?.({
-      type: 'success',
-      title: 'Template Saved',
-      message: `"${name}" saved. (${description || 'No description'})`,
-      duration: 3000,
+    setNodes(snappedNodes);
+    saveToHistory(snappedNodes, edges);
+  };
+  
+  // Handle undo
+  const handleUndo = () => {
+    const restored = undo();
+    if (restored) {
+      setNodes(restored.nodes);
+      setEdges(restored.edges);
+      clearSelection();
+    }
+  };
+
+  // Handle redo
+  const handleRedo = () => {
+    const restored = redo();
+    if (restored) {
+      setNodes(restored.nodes);
+      setEdges(restored.edges);
+      clearSelection();
+    }
+  };
+
+  // Handle running simulation
+  const handleRunSimulation = async () => {
+    await runSimulation(
+      nodes,
+      edges,
+      setNodes,
+      setEdges,
+      setSimulationData as any,
+      setIsRunningScenario
+    );
+  };
+
+  // Handle pausing simulation
+  const handlePauseSimulation = () => {
+    pauseSimulation();
+  };
+
+  // Handle resuming simulation
+  const handleResumeSimulation = () => {
+    resumeSimulation();
+  };
+
+  // Handle injecting latency
+  const handleInjectLatency = (amount: number) => {
+    injectLatency(amount);
+    window.addToast({
+      type: 'info',
+      title: 'Latency Injection',
+      message: `Added ${amount}ms of latency to the network`,
+      duration: 3000
     });
-  }, []);
+  };
 
-  // PDF export
-  const exportPDF = useCallback(async () => {
-    if (!canvasRef.current) return;
-    try {
-      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
-        import('html2canvas'),
-        import('jspdf'),
-      ]);
+  // Handle injecting packet loss
+  const handleInjectPacketLoss = (amount: number) => {
+    injectPacketLoss(amount);
+    window.addToast({
+      type: 'info',
+      title: 'Packet Loss Injection',
+      message: `Added ${amount}% packet loss to the network`,
+      duration: 3000
+    });
+  };
 
-      const canvas = await html2canvas(canvasRef.current, {
-        backgroundColor: '#f8f9fa',
-        scale: 2,
-        useCORS: true,
-        logging: false,
-      });
-
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: 'a4' });
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('network-topology.pdf');
-
-      window.addToast?.({
-        type: 'success',
-        title: 'Export Complete',
-        message: 'Network topology exported as PDF.',
-        duration: 3000,
-      });
-    } catch (err) {
-      console.error('PDF export failed:', err);
-      window.addToast?.({
+  // Handle limiting bandwidth
+  const handleInjectBandwidthLimit = (amount: number) => {
+    injectBandwidthLimit(amount);
+    window.addToast({
+      type: 'info',
+      title: 'Bandwidth Limit',
+      message: `Limited bandwidth to ${amount}% of maximum`,
+      duration: 3000
+    });
+  };
+  
+  // Handle creating connections
+  const handleCreateConnections = () => {
+    if (!edges.length) {
+      window.addToast({
         type: 'error',
-        title: 'Export Failed',
-        message: 'Could not export PDF. Please try again.',
-        duration: 3000,
-      });
-    }
-  }, []);
-
-  // Build connections from edges and call onComplete
-  const handleCreateConnections = useCallback(() => {
-    if (edges.length === 0) {
-      window.addToast?.({
-        type: 'warning',
         title: 'No Connections',
-        message: 'Please create at least one connection before proceeding',
-        duration: 3000,
+        message: 'Please create at least one connection first',
+        duration: 3000
       });
       return;
     }
 
-    const connections: Connection[] = edges.map((edge) => {
-      const sourceNode = nodes.find((n) => n.id === edge.source);
-      const targetNode = nodes.find((n) => n.id === edge.target);
+    // Convert edges to Connection objects
+    const connections = edges.map((edge, index) => {
+      const sourceNode = nodes.find(n => n.id === edge.source);
+      const targetNode = nodes.find(n => n.id === edge.target);
+
+      if (!sourceNode || !targetNode) {
+        return null;
+      }
+
+      const connectionName = `${sourceNode.label} to ${targetNode.label}`;
+      const connectionType = determineConnectionType(sourceNode, targetNode);
 
       return {
-        id: editMode && connectionId ? connectionId : `conn-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-        name: `${sourceNode?.name || 'Source'} to ${targetNode?.name || 'Target'}`,
-        type: (edge.type as Connection['type']) || 'Internet to Cloud',
-        status: 'Inactive',
-        bandwidth: edge.bandwidth,
-        location: sourceNode?.config?.region || targetNode?.config?.region || 'US East',
-        provider: targetNode?.config?.provider,
+        id: edge.id,
+        name: connectionName,
+        type: connectionType,
+        status: 'Inactive' as const,
+        bandwidth: edge.bandwidth || '1 Gbps',
+        location: targetNode.location || 'Custom',
+        provider: targetNode.provider as any,
+        features: {
+          dedicatedConnection: true,
+          redundantPath: false,
+          autoScaling: false,
+          loadBalancing: false
+        },
+        security: {
+          encryption: 'AES-256',
+          firewall: true,
+          ddosProtection: true,
+          ipSecEnabled: true
+        },
+        performance: {
+          latency: edge.latency || '<10ms',
+          packetLoss: '<0.1%',
+          uptime: '99.9%',
+          throughput: '0%',
+          tunnels: 'Inactive',
+          bandwidthUtilization: 0,
+          currentUsage: '0 Gbps',
+          utilizationTrend: [0, 0, 0, 0, 0, 0, 0]
+        },
+        billing: {
+          baseFee: 999.99,
+          usage: 0,
+          total: 999.99,
+          currency: 'USD'
+        },
+        createdAt: new Date().toISOString(),
+        configuration: {
+          sourceNode: sourceNode.id,
+          targetNode: targetNode.id,
+          visualDesign: { nodes, edges }
+        }
       };
-    });
+    }).filter(Boolean);
 
-    onComplete(connections);
-  }, [edges, nodes, editMode, connectionId, onComplete]);
-
-  // Edge preview line: track mouse position when creating an edge
-  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
-
-  useEffect(() => {
-    if (!isCreatingEdge || !edgeStartNodeId) {
-      setMousePos(null);
+    if (connections.length === 0) {
+      window.addToast({
+        type: 'error',
+        title: 'Invalid Network',
+        message: 'Could not create connections from the network design',
+        duration: 3000
+      });
       return;
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      setMousePos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
+    // Return connections array to wizard
+    onComplete(connections as any);
+  };
+
+  // Helper to determine connection type based on node types
+  const determineConnectionType = (sourceNode: NetworkNode, targetNode: NetworkNode): string => {
+    const sourceType = sourceNode.type.toLowerCase();
+    const targetType = targetNode.type.toLowerCase();
+
+    if (sourceType.includes('internet') && targetType.includes('cloud')) {
+      return 'Internet to Cloud';
+    }
+    if (sourceType.includes('cloud') && targetType.includes('cloud')) {
+      return 'Cloud to Cloud';
+    }
+    if (sourceType.includes('datacenter') && targetType.includes('cloud')) {
+      return 'DataCenter/CoLocation to Cloud';
+    }
+    if (sourceType.includes('site') && targetType.includes('cloud')) {
+      return 'Site to Cloud';
+    }
+
+    return 'Internet to Cloud';
+  };
+  
+  // Handle saving the current network as a template
+  const handleSaveTemplate = () => {
+    setShowSaveTemplateModal(true);
+  };
+  
+  // Handle save template submission
+  const handleSaveTemplateSubmit = (name: string, description: string) => {
+    const newTemplate: CustomTemplate = {
+      id: `custom-${Date.now()}`,
+      name,
+      description,
+      nodes: [...nodes],
+      edges: [...edges],
+      isCustom: true
     };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [isCreatingEdge, edgeStartNodeId]);
-
-  // Layout
-  const containerClass = isMaximized
-    ? 'fixed inset-0 z-50 bg-fw-wash'
-    : 'relative w-full h-[600px] bg-fw-wash rounded-2xl border border-fw-secondary overflow-hidden';
-
-  // Find source node position for edge preview
-  const edgeSourceNode = edgeStartNodeId ? nodes.find(n => n.id === edgeStartNodeId) : null;
-
-  // Render edges as SVG content, nodes as children
-  const svgContent = (
-    <>
-      {edges.map((edge) => (
-        <Edge
-          key={edge.id}
-          edge={edge}
-          nodes={nodes}
-          isSelected={edge.id === selectedEdgeId}
-          onClick={handleEdgeClick}
-        />
-      ))}
-      {/* Preview line from source node to cursor while creating edge */}
-      {edgeSourceNode && mousePos && (
-        <line
-          x1={edgeSourceNode.x + 40}
-          y1={edgeSourceNode.y + 30}
-          x2={mousePos.x}
-          y2={mousePos.y}
-          stroke="#0057b8"
-          strokeWidth={2}
-          strokeDasharray="6 4"
-          opacity={0.6}
-          pointerEvents="none"
-        />
-      )}
-    </>
-  );
-
-  const nodeChildren = (
-    <>
-      {nodes.map((node) => (
-        <Node
-          key={node.id}
-          node={node}
-          isSelected={node.id === selectedNodeId}
-          isEdgeTarget={isCreatingEdge && node.id !== edgeStartNodeId}
-          hasValidationError={errorNodeIds.has(node.id)}
-          isCreatingEdge={isCreatingEdge}
-          onSelect={handleNodeSelect}
-          onDrag={handleNodeDrag}
-          onDragEnd={handleNodeDragEnd}
-          onEdgeClick={handleNodeEdgeClick}
-          onRename={handleNodeRename}
-        />
-      ))}
-    </>
-  );
+    
+    setCustomTemplates([...customTemplates, newTemplate]);
+    setShowSaveTemplateModal(false);
+    
+    window.addToast({
+      type: 'success',
+      title: 'Template Saved',
+      message: `Your network has been saved as template "${name}"`,
+      duration: 3000
+    });
+  };
+  
+  // Handle deleting a custom template
+  const handleDeleteCustomTemplate = (id: string) => {
+    setCustomTemplates(customTemplates.filter(template => template.id !== id));
+    
+    window.addToast({
+      type: 'success',
+      title: 'Template Deleted',
+      message: 'Custom template has been deleted',
+      duration: 3000
+    });
+  };
+  
+  // Handle applying pattern from outcome selector
+  const handleApplyOutcomePattern = (patternNodes: NetworkNode[], patternEdges: NetworkEdge[]) => {
+    // If we already have nodes, position new ones appropriately
+    if (nodes.length > 0) {
+      // Calculate average position of existing nodes
+      const existingXs = nodes.map(n => n.x);
+      const existingYs = nodes.map(n => n.y);
+      const avgX = existingXs.reduce((sum, x) => sum + x, 0) / existingXs.length;
+      const avgY = existingYs.reduce((sum, y) => sum + y, 0) / existingYs.length;
+      
+      // Map to keep track of old IDs to new IDs
+      const idMap = new Map<string, string>();
+      
+      // Create nodes with new IDs and adjusted positions
+      const newNodes = patternNodes.map(node => {
+        const newId = `node-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
+        idMap.set(node.id, newId);
+        
+        // Position new nodes to the side of existing ones
+        const adjustedX = avgX > 400 ? node.x - 200 : node.x + 200;
+        
+        return {
+          ...node,
+          id: newId,
+          x: adjustedX,
+          y: node.y
+        };
+      });
+      
+      // Create edges with updated node references
+      const newEdges = patternEdges.map(edge => {
+        const newSource = idMap.get(edge.source) || edge.source;
+        const newTarget = idMap.get(edge.target) || edge.target;
+        
+        return {
+          ...edge,
+          id: `edge-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+          source: newSource,
+          target: newTarget
+        };
+      });
+      
+      // Add new nodes and edges to existing ones
+      setNodes([...nodes, ...newNodes]);
+      setEdges([...edges, ...newEdges]);
+      saveToHistory([...nodes, ...newNodes], [...edges, ...newEdges]);
+    } else {
+      // If no existing nodes, just use the pattern nodes and edges
+      setNodes(patternNodes);
+      setEdges(patternEdges);
+      saveToHistory(patternNodes, patternEdges);
+    }
+    
+    window.addToast({
+      type: 'success',
+      title: 'Pattern Applied',
+      message: 'Network pattern has been applied',
+      duration: 3000
+    });
+  };
+  
+  // Handle parameter change
+  const handleParameterChange = (parameter: string, value: number) => {
+    setSimulationData(prev => ({
+      ...prev,
+      networkScores: {
+        ...prev.networkScores,
+        [parameter]: value
+      }
+    }));
+  };
+  
+  // Handle zoom to specific node in circuit view
+  const handleZoomToNode = (nodeId: string) => {
+    handleNodeSelection(nodes.find(n => n.id === nodeId) || null);
+    setAbstractionLevel('network');
+  };
+  
+  // Helper to render the current abstraction level view
+  const renderAbstractionLevelView = () => {
+    switch (abstractionLevel) {
+      case 'global':
+        return (
+          <GlobalView
+            nodes={nodes}
+            edges={edges}
+            onNodeSelect={handleZoomToNode}
+            onZoomIn={(datacenterId) => {
+              handleNodeSelection(nodes.find(n => n.id === datacenterId) || null);
+              setAbstractionLevel('network');
+            }}
+          />
+        );
+        
+      case 'network':
+        return (
+          <Canvas
+            nodes={nodes}
+            edges={edges}
+            selectedNode={selectedNode}
+            selectedEdge={selectedEdge}
+            isCreatingEdge={isCreatingEdge}
+            edgeStart={edgeStart}
+            onNodeClick={handleNodeClick}
+            onNodeSelect={handleNodeSelect}
+            onNodeDoubleClick={handleNodeDoubleClick}
+            onNodeDrag={handleNodeDrag}
+            onNodeDragEnd={handleNodeDragEnd}
+            onEdgeClick={handleEdgeSelection}
+            maxY={800}
+            ref={canvasRef}
+          />
+        );
+        
+      case 'circuit':
+        return (
+          <CircuitView
+            nodes={nodes}
+            edges={edges}
+            selectedNode={selectedNode}
+            onNodeSelect={handleNodeSelection}
+            onZoomOut={() => setAbstractionLevel('network')}
+          />
+        );
+        
+      default:
+        return null;
+    }
+  };
 
   return (
-    <div className={containerClass}>
-      {/* Floating minimize button when maximized */}
-      {isMaximized && (
-        <button
-          onClick={toggleMaximize}
-          className="fixed top-4 right-4 z-[60] inline-flex items-center gap-2 h-9 px-4 text-figma-base font-medium text-fw-heading bg-fw-base border border-fw-secondary rounded-full shadow-lg hover:bg-fw-wash transition-colors"
-        >
-          <Minimize2 className="h-4 w-4" />
-          Minimize
-        </button>
-      )}
-
-      {/* StatusBar - top center */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20">
-        <StatusBar nodes={nodes} edges={edges} />
-      </div>
-
-      {/* Canvas - fills the container */}
-      <div ref={canvasRef} className="absolute inset-0">
-        <Canvas svgContent={svgContent}>
-          {nodeChildren}
-        </Canvas>
-      </div>
-
-      {/* ZoomControls - bottom right */}
-      <ZoomControls />
-
-      {/* Templates drawer */}
-      <TemplatesDrawer
-        isOpen={isTemplatesOpen}
-        onClose={() => setIsTemplatesOpen(false)}
-        onLoadTemplate={handleLoadTemplate}
-      />
-
-      {/* Save template modal */}
-      <SaveTemplateModal
-        isOpen={isSaveTemplateOpen}
-        onClose={() => setIsSaveTemplateOpen(false)}
-        onSave={handleSaveTemplate}
-      />
-
-      {/* Save draft modal */}
-      <SaveDraftModal
-        isOpen={isSaveDraftOpen}
-        onClose={() => setIsSaveDraftOpen(false)}
-      />
-
-      {/* Drafts drawer */}
-      <DraftsDrawer
-        isOpen={isDraftsOpen}
-        onClose={() => setIsDraftsOpen(false)}
-      />
-
-      {/* Node config panel */}
-      {selectedNodeId && (() => {
-        const selectedNode = nodes.find((n) => n.id === selectedNodeId);
-        if (!selectedNode) return null;
-        return (
-          <NodeConfigPanel
-            node={selectedNode}
-            onUpdate={updateNode}
-            onDelete={(id) => { deleteNode(id); clearSelection(); }}
-            onClose={clearSelection}
+    <div className="flex flex-col bg-gray-50 rounded-xl border-2 border-gray-200 relative overflow-hidden">
+      {/* Main Content Area */}
+      <div className="relative h-[600px] md:h-[700px] lg:h-[800px]">
+        {/* Abstraction Level Selector - Positioned on left side, vertically centered */}
+        <div style={{ zIndex: Z_INDEX.UI_CONTROLS }}>
+          <AbstractionLevelSelector
+            currentLevel={abstractionLevel}
+            onLevelChange={setAbstractionLevel}
+            onHistoryClick={() => setShowHistoryDrawer(true)}
           />
-        );
-      })()}
+        </div>
 
-      {/* Edge config panel */}
-      {selectedEdgeId && (() => {
-        const selectedEdge = edges.find((e) => e.id === selectedEdgeId);
-        if (!selectedEdge) return null;
-        return (
-          <EdgeConfigPanel
-            edge={selectedEdge}
-            onUpdate={updateEdge}
-            onDelete={(id) => { deleteEdge(id); clearSelection(); }}
-            onClose={clearSelection}
+        {/* Status Bar - Positioned at top center with high z-index */}
+        <div style={{ zIndex: Z_INDEX.UI_CONTROLS }}>
+          <StatusBar
+            nodes={nodes}
+            edges={edges}
+            canvasRef={canvasRef}
+            onRefresh={() => {
+              window.addToast({
+                type: 'info',
+                title: 'Refreshing Network',
+                message: 'Updating network status and metrics...',
+                duration: 2000
+              });
+            }}
           />
-        );
-      })()}
+        </div>
 
-      {/* Welcome modal - shown on first load */}
-      {showWelcome && (
-        <WelcomeModal
-          onClose={() => setShowWelcome(false)}
-          onCreate={() => {
-            handleAddNode('function', 'router', {});
-            setShowWelcome(false);
-          }}
-          onChooseTemplate={() => {
-            setIsTemplatesOpen(true);
-            setShowWelcome(false);
-          }}
+        {/* Render the current abstraction level view */}
+        <div className="absolute inset-0" style={{ zIndex: Z_INDEX.CANVAS }}>
+          {renderAbstractionLevelView()}
+        </div>
+
+        {/* Toolbar - Only show in network view with highest z-index */}
+        {abstractionLevel === 'network' && (
+          <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ zIndex: Z_INDEX.TOOLBAR }}>
+            <div className="pointer-events-auto">
+              <Toolbar
+                onAddNode={addNode}
+                onToggleEdgeCreation={toggleEdgeCreation}
+                isCreatingEdge={isCreatingEdge}
+                onCancel={handleUndo}
+                hasConnections={edges.length > 0}
+                canUndo={canUndo}
+                onRunScenario={handleRunSimulation}
+                isRunningScenario={isRunningScenario}
+                onCreateConnections={handleCreateConnections}
+                onSaveTemplate={handleSaveTemplate}
+                onClearCanvas={clearNetwork}
+                onOpenTemplates={openTemplatesDrawer}
+              />
+            </div>
+          </div>
+        )}
+        
+        {/* Node Configuration Panel - Only in network view */}
+        {abstractionLevel === 'network' && selectedNodeObject && showNodeConfig && (
+          <div style={{ zIndex: Z_INDEX.MODAL }}>
+            <NodeConfigPanel
+              node={selectedNodeObject}
+              isVisible={showNodeConfig}
+              onClose={() => setShowNodeConfig(false)}
+              onUpdate={(updates) => updateNode(selectedNodeObject.id, updates)}
+              onDelete={deleteNode}
+              containerRef={canvasRef}
+            />
+          </div>
+        )}
+
+        {/* Edge Configuration Panel - Only in network view */}
+        {abstractionLevel === 'network' && selectedEdgeObject && showEdgeConfig && (
+          <div style={{ zIndex: Z_INDEX.MODAL }}>
+            <EdgeConfigPanel
+              edge={selectedEdgeObject}
+              nodes={nodes}
+              isVisible={showEdgeConfig}
+              onClose={() => setShowEdgeConfig(false)}
+              onUpdate={(updates) => updateEdge(selectedEdgeObject.id, updates)}
+              onDelete={() => deleteEdge(selectedEdgeObject.id)}
+              containerRef={canvasRef}
+            />
+          </div>
+        )}
+
+        {/* Simulation Overlay */}
+        <div style={{ zIndex: Z_INDEX.OVERLAY }}>
+          <NetworkSimulation
+            isRunning={isRunningScenario}
+            simulationData={simulationData as any}
+            onPause={handlePauseSimulation}
+            onResume={handleResumeSimulation}
+            onInjectLatency={handleInjectLatency}
+            onInjectPacketLoss={handleInjectPacketLoss}
+            onInjectBandwidthLimit={handleInjectBandwidthLimit}
+          />
+        </div>
+        
+        {/* Save Template Modal */}
+        <SaveTemplateModal
+          isOpen={showSaveTemplateModal}
+          onClose={() => setShowSaveTemplateModal(false)}
+          onSave={handleSaveTemplateSubmit}
         />
-      )}
+      </div>
 
-      {/* Toolbar - bottom center */}
-      <Toolbar
-        onAddNode={handleAddNode}
-        onToggleEdgeCreation={toggleEdgeCreation}
-        isCreatingEdge={isCreatingEdge}
-        onUndo={undo}
-        canUndo={canUndo}
-        onClearCanvas={clearCanvas}
-        onToggleMaximize={toggleMaximize}
-        isMaximized={isMaximized}
-        onCreateConnections={handleCreateConnections}
-        hasConnections={edges.length > 0}
-        onOpenTemplates={() => setIsTemplatesOpen(true)}
-        onOpenSaveTemplate={() => setIsSaveTemplateOpen(true)}
-        onSaveDraft={() => setIsSaveDraftOpen(true)}
-        onOpenDrafts={() => setIsDraftsOpen(true)}
-        onExportPDF={exportPDF}
+
+      {/* Templates Manager */}
+      <TemplatesManager
+        isOpen={showTemplatesDrawer}
+        onClose={closeTemplatesDrawer}
+        onApplyTemplate={applyTemplate}
+        customTemplates={customTemplates}
+        onDeleteCustomTemplate={handleDeleteCustomTemplate}
+      />
+
+      {/* History Drawer */}
+      <HistoryDrawer
+        isOpen={showHistoryDrawer}
+        onClose={() => setShowHistoryDrawer(false)}
+        history={networkHistory.nodes.map((nodeSet, index) => ({
+          id: `history-${index}`,
+          timestamp: Date.now() - (networkHistory.nodes.length - 1 - index) * 1000,
+          nodes: nodeSet,
+          edges: networkHistory.edges[index] || [],
+          preview: `${nodeSet.length} node${nodeSet.length !== 1 ? 's' : ''}, ${(networkHistory.edges[index] || []).length} edge${(networkHistory.edges[index] || []).length !== 1 ? 's' : ''}`
+        })).reverse()}
+        onRestoreTopology={(nodes, edges) => {
+          setNodes(nodes);
+          setEdges(edges);
+          saveToHistory(nodes, edges);
+          window.addToast({
+            type: 'success',
+            title: 'Topology Restored',
+            message: 'Previous topology has been restored',
+            duration: 3000
+          });
+        }}
       />
     </div>
   );

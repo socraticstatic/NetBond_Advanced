@@ -195,7 +195,7 @@ export async function evictLRUEntries(targetBytes: number): Promise<number> {
       localStorage.removeItem(entry.key);
       freedBytes += entry.size;
 
-      console.log(`[QuotaManager] Evicted ${entry.key} (${entry.size} bytes)`);
+
     }
 
     return freedBytes;
@@ -240,7 +240,7 @@ export function pruneEntriesOlderThan(days: number = 30): number {
     keysToRemove.forEach(key => localStorage.removeItem(key));
 
     if (keysToRemove.length > 0) {
-      console.log(`[QuotaManager] Pruned ${keysToRemove.length} entries older than ${days} days`);
+
     }
 
     return keysToRemove.length;

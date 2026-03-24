@@ -1,126 +1,76 @@
-import { useMemo, useState } from 'react';
-import { Activity, AlertCircle, AlertTriangle, Info, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
-import type { NetworkNode, NetworkEdge } from './types/designer';
-import { validateTopology } from './engine/validationEngine';
+import { Activity, Shield, RefreshCw, Network } from 'lucide-react';
+import { NetworkNode, NetworkEdge } from '../types';
+import { ExportButton } from './components/ExportButton';
+import { calculateTotalBandwidth } from '../../utils/calculations';
+import { Z_INDEX } from '../../utils/designer-constants';
 
 interface StatusBarProps {
   nodes: NetworkNode[];
   edges: NetworkEdge[];
+  onRefresh: () => void;
+  canvasRef?: React.RefObject<HTMLElement>;
 }
 
-export function StatusBar({ nodes, edges }: StatusBarProps) {
-  const [expanded, setExpanded] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
+export function StatusBar({ nodes, edges, onRefresh, canvasRef }: StatusBarProps) {
+  // Calculate active elements
+  const activeNodes = nodes.filter(node => node.status === 'active').length;
+  const activeEdges = edges.filter(edge => edge.status === 'active').length;
 
-  const issues = useMemo(
-    () => validateTopology(nodes, edges),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [nodes, edges, refreshKey]
-  );
-
-  const errors = issues.filter((i) => i.severity === 'error');
-  const warnings = issues.filter((i) => i.severity === 'warning');
-  const infos = issues.filter((i) => i.severity === 'info');
-
-  const hasIssues = issues.length > 0;
+  // Calculate bandwidth total
+  const bandwidthTotal = calculateTotalBandwidth(edges);
 
   return (
-    <div className="relative">
-      <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full shadow-sm border border-fw-secondary bg-fw-base whitespace-nowrap">
-        <Activity className="h-4 w-4 text-fw-link" />
-
-        <span className="text-figma-base text-fw-body font-medium">
-          {nodes.length} {nodes.length === 1 ? 'node' : 'nodes'}
-        </span>
-
-        <span className="text-fw-bodyLight">·</span>
-
-        <span className="text-figma-base text-fw-body font-medium">
-          {edges.length} {edges.length === 1 ? 'edge' : 'edges'}
-        </span>
-
-        {hasIssues && (
-          <>
-            <span className="text-fw-bodyLight">·</span>
-
-            {errors.length > 0 && (
-              <span className="inline-flex items-center gap-1 text-red-600 text-figma-sm font-medium">
-                <AlertCircle className="h-3.5 w-3.5" />
-                {errors.length}
-              </span>
-            )}
-
-            {warnings.length > 0 && (
-              <span className="inline-flex items-center gap-1 text-yellow-700 text-figma-sm font-medium">
-                <AlertTriangle className="h-3.5 w-3.5" />
-                {warnings.length}
-              </span>
-            )}
-
-            {infos.length > 0 && (
-              <span className="inline-flex items-center gap-1 text-blue-600 text-figma-sm font-medium">
-                <Info className="h-3.5 w-3.5" />
-                {infos.length}
-              </span>
-            )}
-
-            <button
-              onClick={() => setExpanded((v) => !v)}
-              className="text-fw-bodyLight hover:text-fw-body transition-colors"
-              title={expanded ? 'Hide issues' : 'Show issues'}
-            >
-              {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
-            </button>
-          </>
-        )}
-
-        <button
-          onClick={() => setRefreshKey((k) => k + 1)}
-          className="text-fw-bodyLight hover:text-fw-body transition-colors"
-          title="Refresh validation"
-        >
-          <RefreshCw className="h-3.5 w-3.5" />
-        </button>
+    <div
+      className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-sm border border-gray-200 py-2 px-3 flex items-center space-x-6 whitespace-nowrap"
+      style={{ zIndex: Z_INDEX.UI_CONTROLS, minWidth: '700px' }}
+    >
+      {/* Total Bandwidth */}
+      <div className="flex items-center">
+        <Network className="h-4 w-4 text-blue-500 mr-1 flex-shrink-0" />
+        <span className="text-sm font-medium text-gray-900">{bandwidthTotal}</span>
       </div>
 
-      {/* Expanded issue list */}
-      {expanded && hasIssues && (
-        <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-80 bg-fw-base border border-fw-secondary rounded-xl shadow-lg p-3 space-y-1 z-40">
-          {errors.length > 0 && (
-            <div className="mb-2">
-              <span className="text-figma-sm font-semibold text-red-600 block mb-1">Errors</span>
-              {errors.map((issue) => (
-                <div key={issue.id} className="flex items-start gap-2 py-1 text-figma-sm text-fw-body">
-                  <AlertCircle className="h-3.5 w-3.5 text-red-500 mt-0.5 shrink-0" />
-                  {issue.message}
-                </div>
-              ))}
-            </div>
-          )}
+      {/* Nodes Info */}
+      <div className="flex items-center">
+        <Activity className="h-4 w-4 text-gray-400 mr-1 flex-shrink-0" />
+        <span className="text-sm text-gray-600">{nodes.length} Nodes</span>
+      </div>
+      
+      {/* Connections Info */}
+      <div className="flex items-center">
+        <Shield className="h-4 w-4 text-gray-400 mr-1 flex-shrink-0" />
+        <span className="text-sm text-gray-600">{edges.length} Connections</span>
+      </div>
 
-          {warnings.length > 0 && (
-            <div className="mb-2">
-              <span className="text-figma-sm font-semibold text-yellow-700 block mb-1">Warnings</span>
-              {warnings.map((issue) => (
-                <div key={issue.id} className="flex items-start gap-2 py-1 text-figma-sm text-fw-body">
-                  <AlertTriangle className="h-3.5 w-3.5 text-yellow-500 mt-0.5 shrink-0" />
-                  {issue.message}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {infos.length > 0 && (
-            <div>
-              <span className="text-figma-sm font-semibold text-blue-600 block mb-1">Info</span>
-              {infos.map((issue) => (
-                <div key={issue.id} className="flex items-start gap-2 py-1 text-figma-sm text-fw-body">
-                  <Info className="h-3.5 w-3.5 text-blue-500 mt-0.5 shrink-0" />
-                  {issue.message}
-                </div>
-              ))}
-            </div>
-          )}
+      {/* Active Info */}
+      <div className="flex items-center">
+        <span className="inline-flex h-2 w-2 bg-green-500 rounded-full mr-1.5"></span>
+        <span className="text-sm text-gray-600">{activeNodes} Active Nodes</span>
+      </div>
+      
+      <div className="flex items-center">
+        <span className="inline-flex h-2 w-2 bg-blue-500 rounded-full mr-1.5"></span>
+        <span className="text-sm text-gray-600">{activeEdges} Active Connections</span>
+      </div>
+      
+      {/* Refresh Button */}
+      <button
+        onClick={onRefresh}
+        className="p-1 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
+      >
+        <RefreshCw className="h-4 w-4" />
+      </button>
+      
+      {/* Export Button */}
+      {canvasRef && (
+        <div className="flex items-center">
+          {/* Small separator line */}
+          <div className="h-6 w-px bg-gray-200 mr-3"></div>
+          <ExportButton 
+            nodes={nodes}
+            edges={edges}
+            canvasRef={canvasRef}
+          />
         </div>
       )}
     </div>

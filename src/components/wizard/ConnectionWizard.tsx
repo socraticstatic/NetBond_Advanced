@@ -111,9 +111,6 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   // Initialize from existing connection if provided
   useEffect(() => {
     if (connectionToEdit) {
-      // Log initialization information
-      console.log("Initializing connection wizard with connection:", connectionToEdit);
-      
       // Set basic config values safely
       tryCatch(() => {
         setSelectedProvider(connectionToEdit.provider as CloudProvider);
@@ -131,11 +128,8 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
         
         // For visual mode, set up initial nodes and edges
         if (mode === 'visual') {
-          console.log("Setting up visual editor with connection data:", connectionToEdit);
-          
           // Use initialNodes/initialEdges from location state if available
           if (locationState?.initialNodes && locationState?.initialEdges) {
-            console.log("Using provided initial nodes and edges from location state");
             setInitialNodes(locationState.initialNodes);
             setInitialEdges(locationState.initialEdges);
           } else {
@@ -177,7 +171,6 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               status: connectionToEdit.status === 'Active' ? 'active' : 'inactive'
             };
             
-            console.log("Created default nodes and edges:", [sourceNode, targetNode], [edge]);
             setInitialNodes([sourceNode, targetNode]);
             setInitialEdges([edge]);
           }
@@ -297,7 +290,14 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
         for (const connection of config) {
           await addConnection(connection);
         }
-        
+
+        window.addToast?.({
+          type: 'success',
+          title: 'Connections Created',
+          message: `Successfully created ${config.length} connection${config.length > 1 ? 's' : ''} from your network design`,
+          duration: 3000
+        });
+
         navigate('/manage');
         return;
       }
