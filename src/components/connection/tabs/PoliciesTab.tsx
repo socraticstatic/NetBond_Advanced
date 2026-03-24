@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react';
 import {
   Plus, Play, Pause, Edit2, Trash2,
-  Shield, AlertTriangle, Check, Network, GitBranch, Layers,
+  Shield, AlertTriangle, Check, Network, Layers,
   ChevronDown, ChevronUp
 } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 import { Button } from '../../common/Button';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { OverflowMenu } from '../../common/OverflowMenu';
@@ -219,7 +220,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
       case 'links':
         return <Network className="h-4 w-4" />;
       case 'cloudrouters':
-        return <GitBranch className="h-4 w-4" />;
+        return <AttIcon name="cloudRouter" className="h-5 w-5" />;
       case 'vnfs':
         return <Shield className="h-4 w-4" />;
       default:

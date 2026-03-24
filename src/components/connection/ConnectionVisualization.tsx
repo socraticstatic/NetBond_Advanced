@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Cloud, Server, Network, Activity, Shield, Globe, Clock, Share2, Edit2 } from 'lucide-react';
+import { Cloud, Server, Network, Activity, Shield, Globe, Clock, Edit2 } from 'lucide-react';
 import { Connection, NetworkNode, NetworkEdge } from '../../types';
 import { Canvas } from '../network-designer/Canvas';
 import { Button } from '../common/Button';
