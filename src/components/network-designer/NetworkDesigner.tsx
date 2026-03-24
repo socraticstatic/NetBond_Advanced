@@ -408,7 +408,7 @@ export function NetworkDesigner({
         <button
           onClick={() => setViewMode('read')}
           className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-sm font-medium transition-colors ${
-            isReadOnly ? 'bg-fw-link text-white' : 'text-fw-body hover:bg-fw-wash'
+            isReadOnly ? 'bg-fw-primary text-white' : 'text-fw-body hover:bg-fw-wash'
           }`}
         >
           <Eye className="h-3.5 w-3.5" />
@@ -417,7 +417,7 @@ export function NetworkDesigner({
         <button
           onClick={() => setViewMode('edit')}
           className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-sm font-medium transition-colors ${
-            !isReadOnly ? 'bg-fw-link text-white' : 'text-fw-body hover:bg-fw-wash'
+            !isReadOnly ? 'bg-fw-primary text-white' : 'text-fw-body hover:bg-fw-wash'
           }`}
         >
           <Pencil className="h-3.5 w-3.5" />
