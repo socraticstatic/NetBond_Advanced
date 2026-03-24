@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Share2 as RouterIcon, Network, Settings, Shield, Globe, CreditCard as Edit2, Trash2, Eye, ExternalLink, Scale, AlertTriangle, Zap, MapPin, Gauge } from 'lucide-react';
 import { VNF } from '../../../types/vnf';
@@ -15,6 +15,7 @@ interface VNFTableProps {
   connectionId?: string;
   onDetach?: () => void;
   isDetached?: boolean;
+  toolbar?: React.ReactNode;
 }
 
 export function VNFTable({
@@ -24,7 +25,8 @@ export function VNFTable({
   onDelete,
   connectionId,
   onDetach,
-  isDetached = false
+  isDetached = false,
+  toolbar
 }: VNFTableProps) {
   const navigate = useNavigate();
   const [activeOverflow, setActiveOverflow] = useState<string | null>(null);
@@ -189,7 +191,7 @@ export function VNFTable({
       showExport={false}
       tableId="vnf"
       showColumnManager={true}
-      showFilter={true}
+      toolbar={toolbar}
       headerActions={
         onDetach && (
           <button
