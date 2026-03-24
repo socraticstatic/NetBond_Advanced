@@ -126,7 +126,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose, readOnly = 
             onClick={() => updateConfig('encrypted', !edge.config?.encrypted)}
             disabled={readOnly}
             className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-              edge.config?.encrypted ? 'bg-fw-link' : 'bg-fw-secondary'
+              edge.config?.encrypted ? 'bg-fw-primary' : 'bg-fw-secondary'
             } ${readOnly ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span
@@ -144,7 +144,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose, readOnly = 
             onClick={() => updateConfig('bfd', !edge.config?.bfd)}
             disabled={readOnly}
             className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-              edge.config?.bfd ? 'bg-fw-link' : 'bg-fw-secondary'
+              edge.config?.bfd ? 'bg-fw-primary' : 'bg-fw-secondary'
             } ${readOnly ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span
