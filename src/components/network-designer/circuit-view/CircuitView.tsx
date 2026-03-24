@@ -92,7 +92,7 @@ export function CircuitView({
         name: `Port ${portNumber}/${slotNumber}`,
         type: isFront ? 'copper' : 'fiber',
         speed: isFront ? '1 Gbps' : '10 Gbps',
-        status: 'inactive',
+        status: 'unconfigured',
         position: isFront ? 'front' : 'back',
         slot: slotNumber,
         module: isFront ? 'RJ45' : 'SFP+'

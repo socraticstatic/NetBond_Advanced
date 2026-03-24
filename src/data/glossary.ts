@@ -1,4 +1,10 @@
-import { Network, Share2, Shield, Server, Layers, Cable, Cpu, Cloud } from 'lucide-react';
+import { createElement } from 'react';
+import { Network, Shield, Server, Layers, Cable, Cpu, Cloud } from 'lucide-react';
+import { AttIcon } from '../components/icons/AttIcon';
+
+function CloudRouterIcon({ className }: { className?: string }) {
+  return createElement(AttIcon, { name: 'cloudRouter', className });
+}
 
 export interface GlossaryTerm {
   id: string;
@@ -32,7 +38,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     detailedDefinition: 'Connection Types define how your network connects to cloud services. Options include: Internet to Cloud (public internet), Cloud to Cloud (direct cloud-to-cloud), CoLocation to Cloud (from data center), VPN to Cloud (encrypted tunnel), and Site to Cloud (from office location). Each type has different performance, security, and cost characteristics.',
     example: 'An "Internet to Cloud" connection is like taking public roads to reach your destination, while a "CoLocation to Cloud" connection is like having a private dedicated lane.',
     relatedTerms: ['connection', 'bandwidth', 'security'],
-    icon: Share2
+    icon: CloudRouterIcon
   },
   {
     id: 'cloud-router',
@@ -42,7 +48,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     detailedDefinition: 'A Cloud Router (also known as a Cloud Node in AT&T engineering terminology) is a virtual routing instance that serves as a connection hub within your Connection. It handles BGP routing, traffic management, and can have multiple Links (VLANs) attached to it. A single Connection can contain one, some, or many Cloud Routers depending on the Connection Type (Cloud to Cloud, Site to Cloud, VPN to Cloud, CoLocation/Datacenter to Cloud, or Internet to Cloud). Cloud Routers provide the logical separation and routing intelligence needed to manage complex network topologies.',
     example: 'If a Connection is a highway system, a Cloud Router is like a smart interchange hub that decides which exit (Link/VLAN) your traffic should take based on destination and routing rules. For a Cloud to Cloud connection spanning multiple regions, you might have several Cloud Routers acting as regional hubs.',
     relatedTerms: ['connection', 'link', 'vlan', 'routing', 'connection-type'],
-    icon: Share2,
+    icon: CloudRouterIcon,
     visualAid: 'hierarchy'
   },
   {
@@ -95,7 +101,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     detailedDefinition: 'Routing Settings control how network traffic flows through your infrastructure. This includes BGP configuration, route filters, AS numbers, MTU settings, and Quality of Service (QoS) parameters. Each Link (VLAN) can have its own routing configuration, allowing fine-grained control over traffic behavior.',
     example: 'Routing settings are like traffic rules and signs - they tell data packets which path to take, how fast they can go, and which destinations they can reach.',
     relatedTerms: ['link', 'cloud-router', 'bgp', 'qos'],
-    icon: Share2
+    icon: CloudRouterIcon
   },
   {
     id: 'bandwidth',
@@ -115,7 +121,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     detailedDefinition: 'BGP (Border Gateway Protocol) is the standard protocol for routing traffic between different networks (autonomous systems). It\'s used to dynamically exchange routing information between your network and cloud providers. BGP enables automatic failover, load balancing, and optimal path selection.',
     example: 'BGP is like a GPS navigation system that constantly updates to find the best route, automatically rerouting around traffic jams (network issues).',
     relatedTerms: ['routing', 'cloud-router', 'asn'],
-    icon: Share2
+    icon: CloudRouterIcon
   },
   {
     id: 'redundancy',
@@ -170,7 +176,7 @@ export const glossaryCategories = {
     name: 'Networking',
     description: 'Network protocols and configurations',
     color: 'green',
-    icon: Share2
+    icon: CloudRouterIcon
   },
   infrastructure: {
     name: 'Infrastructure',

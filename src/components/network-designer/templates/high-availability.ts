@@ -26,7 +26,7 @@ export const highAvailabilityTemplate: Template = {
       y: 225,
       name: 'AT&T Core',
       icon: 'Globe',
-      status: 'inactive',
+      status: 'unconfigured',
       config: {
         networkType: 'at&t core',
         provider: 'AT&T'
@@ -40,7 +40,7 @@ export const highAvailabilityTemplate: Template = {
       y: 150,
       name: 'Primary Cloud Router',
       icon: 'Router',
-      status: 'inactive',
+      status: 'unconfigured',
       config: {
         routerType: 'cloud',
         asn: 65000,
@@ -56,7 +56,7 @@ export const highAvailabilityTemplate: Template = {
       y: 300,
       name: 'Secondary Cloud Router',
       icon: 'Router',
-      status: 'inactive',
+      status: 'unconfigured',
       config: {
         routerType: 'cloud',
         asn: 65001,
@@ -71,7 +71,7 @@ export const highAvailabilityTemplate: Template = {
       y: 225,
       name: 'AWS Cloud',
       icon: 'Cloud',
-      status: 'inactive',
+      status: 'unconfigured',
       config: {
         provider: 'AWS',
         region: 'us-east-1'

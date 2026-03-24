@@ -26,7 +26,7 @@ export const cloudToCloudLocalTemplate: Template = {
       y: 200,
       name: 'AT&T Core',
       icon: 'Globe',
-      status: 'inactive',
+      status: 'unconfigured',
       config: {
         networkType: 'at&t core',
         provider: 'AT&T'
@@ -40,7 +40,7 @@ export const cloudToCloudLocalTemplate: Template = {
       y: 200,
       name: 'Cloud Router',
       icon: 'Router',
-      status: 'inactive',
+      status: 'unconfigured',
       config: {
         routerType: 'cloud',
         asn: 65000,
@@ -54,7 +54,7 @@ export const cloudToCloudLocalTemplate: Template = {
       y: 150,
       name: 'AWS Cloud',
       icon: 'Cloud',
-      status: 'inactive',
+      status: 'unconfigured',
       config: {
         provider: 'AWS',
         region: 'us-east-1'
@@ -67,7 +67,7 @@ export const cloudToCloudLocalTemplate: Template = {
       y: 250,
       name: 'Azure Cloud',
       icon: 'Cloud',
-      status: 'inactive',
+      status: 'unconfigured',
       config: {
         provider: 'Azure',
         region: 'eastus'

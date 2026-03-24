@@ -124,7 +124,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
               y: 350,
               name: 'AT&T Core',
               icon: 'Globe',
-              status: 'inactive',
+              status: 'unconfigured',
               config: { networkType: 'at&t core', provider: 'AT&T' }
             },
             {
@@ -135,7 +135,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
               y: 350,
               name: 'Dev Router',
               icon: 'Cloud',
-              status: 'inactive',
+              status: 'unconfigured',
               config: { routerType: 'virtual', asn: 65200 }
             }
           ],
@@ -267,7 +267,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 350,
           name: 'AT&T Core',
           icon: 'Globe',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             networkType: 'at&t core',
             provider: 'AT&T'
@@ -281,7 +281,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 350,
           name: 'Cloud Router',
           icon: 'Cloud',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             routerType: 'cloud',
             asn: 65000
@@ -294,7 +294,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 350,
           name: 'AWS Cloud',
           icon: 'Cloud',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             provider: 'AWS',
             region: 'us-east-1'
@@ -339,7 +339,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 350,
           name: 'AT&T Core',
           icon: 'Globe',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             networkType: 'at&t core',
             provider: 'AT&T'
@@ -353,7 +353,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 350,
           name: 'Cloud Router',
           icon: 'Cloud',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             routerType: 'cloud',
             asn: 65000
@@ -366,7 +366,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 300,
           name: 'AWS Cloud',
           icon: 'Cloud',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             provider: 'AWS',
             region: 'us-east-1'
@@ -379,7 +379,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 400,
           name: 'Azure Cloud',
           icon: 'Cloud',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             provider: 'Azure',
             region: 'eastus'
@@ -432,7 +432,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 350,
           name: 'AT&T Core',
           icon: 'Globe',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             networkType: 'at&t core',
             provider: 'AT&T'
@@ -446,7 +446,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 300,
           name: 'Primary Router',
           icon: 'Cloud',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             routerType: 'cloud',
             asn: 65000,
@@ -462,7 +462,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 400,
           name: 'Secondary Router',
           icon: 'Cloud',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             routerType: 'cloud',
             asn: 65001,
@@ -477,7 +477,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
           y: 350,
           name: 'AWS Cloud',
           icon: 'Cloud',
-          status: 'inactive',
+          status: 'unconfigured',
           config: {
             provider: 'AWS',
             region: 'us-east-1'
@@ -620,7 +620,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
         y: 350,
         name: 'AT&T Core',
         icon: getNodeIcon('network', undefined, 'at&t core'),
-        status: 'inactive',
+        status: 'unconfigured',
         config: {
           networkType: 'at&t core',
           provider: 'AT&T'
@@ -635,7 +635,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
         y: 350,
         name: cloudRouterName.trim(),
         icon: getNodeIcon('function', 'Router', undefined, { routerType: 'cloud' }),
-        status: 'inactive',
+        status: 'unconfigured',
         config: {
           routerType: 'cloud',
           provider: 'Cloud Provider'
@@ -649,7 +649,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
         y: 300,
         name: 'Datacenter',
         icon: getNodeIcon('datacenter'),
-        status: 'inactive',
+        status: 'unconfigured',
         config: {
           location: 'US-East',
           tier: 'Tier 3'
@@ -663,7 +663,7 @@ export function DefaultNetworkSetup({ isOpen, onComplete, onApplyTemplate }: Def
         y: 400,
         name: 'AWS',
         icon: getNodeIcon('destination'),
-        status: 'inactive',
+        status: 'unconfigured',
         config: {
           provider: 'AWS',
           region: 'us-east-1'

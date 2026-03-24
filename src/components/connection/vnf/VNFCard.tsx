@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Shield, ServerCog, Network, Share2 as RouterIcon, Globe, Clock, Info, MoreVertical, Activity, CheckCircle, XCircle, Edit2, Trash2 } from 'lucide-react';
+import { Shield, ServerCog, Network, Globe, Clock, Info, MoreVertical, Activity, CheckCircle, XCircle, Edit2, Trash2 } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 import { VNF } from '../../../types/vnf';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { CloudRouter } from '../../../types/cloudrouter';
@@ -23,7 +24,7 @@ export function VNFCard({ vnf, cloudRouter, onEdit, onDelete }: VNFCardProps) {
       case 'sdwan':
         return <Globe className="h-8 w-8 text-fw-bodyLight" />;
       case 'router':
-        return <RouterIcon className="h-8 w-8 text-fw-bodyLight" />;
+        return <AttIcon name="cloudRouter" className="h-8 w-8 text-fw-bodyLight" />;
       case 'vnat':
         return <Network className="h-8 w-8 text-fw-success" />;
       case 'custom':
@@ -163,7 +164,7 @@ export function VNFCard({ vnf, cloudRouter, onEdit, onDelete }: VNFCardProps) {
         {/* Cloud Router Association */}
         <div className="mb-4 p-2 bg-brand-lightBlue rounded-lg">
           <div className="flex items-center">
-            <RouterIcon className="h-4 w-4 text-brand-blue mr-1.5" />
+            <AttIcon name="cloudRouter" className="h-4 w-4 text-brand-blue mr-1.5" />
             <span className="text-figma-sm text-brand-blue">
               {cloudRouter ? `Attached to: ${cloudRouter.name}` : 'Not attached to any Cloud Router'}
             </span>

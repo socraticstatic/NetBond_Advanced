@@ -10,13 +10,16 @@ function AttIconComponent({ name, className = 'h-5 w-5' }: AttIconProps) {
   const icon = attIcons[name];
   if (!icon) return null;
 
+  const sw = icon.strokeWidth ?? 4;
+  const fillValue = icon.fill ?? 'currentColor';
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox={icon.viewBox}
-      fill="currentColor"
+      fill={fillValue}
       stroke="currentColor"
-      strokeWidth="4"
+      strokeWidth={sw}
       strokeLinejoin="round"
       className={className}
       aria-hidden="true"

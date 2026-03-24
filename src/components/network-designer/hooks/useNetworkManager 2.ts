@@ -53,7 +53,7 @@ export function useNetworkManager() {
         y: position.y,
         name: getDefaultNodeName(nodeType, functionType, options?.subType),
         icon: getIconName(nodeType, functionType),
-        status: 'inactive',
+        status: 'unconfigured',
         config: {},
       };
 

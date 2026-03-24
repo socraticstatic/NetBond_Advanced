@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import {
   Activity, Shield, History, Terminal,
-  Network, GitBranch, Layers, Users, DollarSign, Code, FileText
+  Network, Layers, Users, DollarSign, Code, FileText
 } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 
 export type ConnectionTabType =
   | 'overview'
@@ -31,7 +32,7 @@ interface ConnectionTabsProps {
 
 const TABS: Tab[] = [
   { id: 'overview', label: 'Overview', icon: <Activity className="h-5 w-5" /> },
-  { id: 'cloudrouters', label: 'Cloud Routers', icon: <GitBranch className="h-5 w-5" /> },
+  { id: 'cloudrouters', label: 'Cloud Routers', icon: <AttIcon name="cloudRouter" className="h-6 w-6" /> },
   { id: 'links', label: 'Links', icon: <Network className="h-5 w-5" /> },
   { id: 'vnfs', label: 'VNFs', icon: <Shield className="h-5 w-5" /> },
   { id: 'policies', label: 'Policies', icon: <FileText className="h-5 w-5" /> },

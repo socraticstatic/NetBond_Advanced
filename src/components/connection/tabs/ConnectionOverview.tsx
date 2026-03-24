@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Share2, Link2, Box } from 'lucide-react';
+import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Link2, Box } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 import { Connection } from '../../../types';
 
 import { IPEInfoTooltip } from '../../common/IPEInfoTooltip';
@@ -36,7 +37,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center mb-2">
-                <Share2 className="h-5 w-5 text-fw-bodyLight mr-2" />
+                <AttIcon name="cloudRouter" className="h-6 w-6 text-fw-bodyLight mr-2" />
                 <p className="text-figma-lg font-bold text-fw-heading">Cloud Routers</p>
               </div>
               <p className="text-figma-xl font-bold text-fw-heading">{connection.cloudRouterCount || cloudRoutersCount}</p>
@@ -238,7 +239,7 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
               <div className="flex items-start">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 rounded-full bg-fw-bodyLight flex items-center justify-center">
-                    <Share2 className="h-4 w-4 text-white" />
+                    <AttIcon name="cloudRouter" className="h-4 w-4 text-white" />
                   </div>
                 </div>
                 <div className="ml-3">

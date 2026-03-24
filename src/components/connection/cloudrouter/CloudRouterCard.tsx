@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { GitBranch, Network, Settings, ChevronDown, ChevronUp, MoreVertical, Edit2, Trash2, Plus, Shield, ServerCog } from 'lucide-react';
+import { Network, Settings, ChevronDown, ChevronUp, MoreVertical, Edit2, Trash2, Plus, Shield, ServerCog } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { Link } from '../../../types/connection';
@@ -133,7 +134,7 @@ export function CloudRouterCard({
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="w-10 h-10 flex items-center justify-center bg-fw-link rounded-lg mr-3">
-              <GitBranch className="h-5 w-5 text-white" />
+              <AttIcon name="cloudRouter" className="h-6 w-6 text-white" />
             </div>
             <div>
               <h3 className="text-figma-lg font-medium text-fw-heading">{cloudRouter.name}</h3>

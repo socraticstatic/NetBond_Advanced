@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { LayoutGrid, Share2, Server, Cloud, Database, Network, Plus, Play, Save, Undo2, Trash2, Check, Maximize2, Minimize2, FileDown, FolderOpen } from 'lucide-react';
+import { LayoutGrid, Server, Cloud, Database, Network, Plus, Play, Save, Undo2, Trash2, Check, Maximize2, Minimize2, FileDown, FolderOpen } from 'lucide-react';
+import { AttIcon } from '../icons/AttIcon';
 import { NODE_CATEGORIES } from './constants/nodeTypes';
+import { useMobileDetection } from '../../hooks/useMobileDetection';
 
 interface ToolbarProps {
   onAddNode: (type: string, subType?: string, meta?: Record<string, string>) => void;
@@ -41,6 +43,10 @@ export function Toolbar({
 }: ToolbarProps) {
   const [openMenu, setOpenMenu] = useState<MenuKey>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { screenWidth } = useMobileDetection();
+  // Labels need ~1040px of toolbar width. Canvas has ~60px page padding.
+  // Show labels only when viewport is wide enough to fit everything.
+  const showLabels = screenWidth >= 1200;
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -77,7 +83,7 @@ export function Toolbar({
   // Choose | Cloud Router | Function ▾ | Cloud ▾ | Datacenter ▾ | Network ▾ | + Connection | Play | Save | Undo | Clear | Create
 
   return (
-    <div ref={menuRef} className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-3 py-2 rounded-full shadow-lg border border-fw-secondary bg-fw-base">
+    <div ref={menuRef} className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-3 py-2 rounded-full shadow-lg border border-fw-secondary bg-fw-base max-w-[calc(100%-2rem)] overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
 
       {/* Choose (Templates) */}
       <button
@@ -85,11 +91,11 @@ export function Toolbar({
         title="Choose template"
         className="flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium text-fw-heading hover:bg-fw-wash rounded-full transition-colors"
       >
-        <LayoutGrid className="h-4 w-4" />
-        <span>Choose</span>
+        <LayoutGrid className="h-4 w-4 flex-shrink-0" />
+        {showLabels && <span>Choose</span>}
       </button>
 
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
+      <div className="w-px h-5 bg-fw-secondary mx-1 flex-shrink-0" />
 
       {/* Cloud Router - direct add */}
       <button
@@ -97,11 +103,11 @@ export function Toolbar({
         title="Add Cloud Router"
         className="flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium text-fw-heading hover:bg-fw-wash rounded-full transition-colors whitespace-nowrap"
       >
-        <Share2 className="h-4 w-4 flex-shrink-0" />
-        <span>Cloud Router</span>
+        <AttIcon name="cloudRouter" className="h-4 w-4 flex-shrink-0" />
+        {showLabels && <span>Cloud Router</span>}
       </button>
 
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
+      <div className="w-px h-5 bg-fw-secondary mx-1 flex-shrink-0" />
 
       {/* Function dropdown */}
       <div className="relative">
@@ -112,8 +118,8 @@ export function Toolbar({
             openMenu === 'function' ? 'text-fw-link bg-fw-accent' : 'text-fw-heading hover:bg-fw-wash'
           }`}
         >
-          <Server className="h-4 w-4" />
-          <span>Function</span>
+          <Server className="h-4 w-4 flex-shrink-0" />
+          {showLabels && <span>Function</span>}
         </button>
         {openMenu === 'function' && (
           <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-fw-base rounded-xl shadow-lg border border-fw-secondary z-30 overflow-hidden py-1">
@@ -139,8 +145,8 @@ export function Toolbar({
             openMenu === 'cloud' ? 'text-fw-link bg-fw-accent' : 'text-fw-heading hover:bg-fw-wash'
           }`}
         >
-          <Cloud className="h-4 w-4" />
-          <span>Cloud</span>
+          <Cloud className="h-4 w-4 flex-shrink-0" />
+          {showLabels && <span>Cloud</span>}
         </button>
         {openMenu === 'cloud' && (
           <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-52 bg-fw-base rounded-xl shadow-lg border border-fw-secondary z-30 overflow-hidden py-1">
@@ -166,8 +172,8 @@ export function Toolbar({
             openMenu === 'datacenter' ? 'text-fw-link bg-fw-accent' : 'text-fw-heading hover:bg-fw-wash'
           }`}
         >
-          <Database className="h-4 w-4" />
-          <span>Datacenter</span>
+          <Database className="h-4 w-4 flex-shrink-0" />
+          {showLabels && <span>Datacenter</span>}
         </button>
         {openMenu === 'datacenter' && (
           <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-fw-base rounded-xl shadow-lg border border-fw-secondary z-30 overflow-hidden py-1">
@@ -193,8 +199,8 @@ export function Toolbar({
             openMenu === 'network' ? 'text-fw-link bg-fw-accent' : 'text-fw-heading hover:bg-fw-wash'
           }`}
         >
-          <Network className="h-4 w-4" />
-          <span>Network</span>
+          <Network className="h-4 w-4 flex-shrink-0" />
+          {showLabels && <span>Network</span>}
         </button>
         {openMenu === 'network' && (
           <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-56 bg-fw-base rounded-xl shadow-lg border border-fw-secondary z-30 overflow-hidden py-1">
@@ -211,7 +217,7 @@ export function Toolbar({
         )}
       </div>
 
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
+      <div className="w-px h-5 bg-fw-secondary mx-1 flex-shrink-0" />
 
       {/* Connection toggle */}
       <button
@@ -226,7 +232,7 @@ export function Toolbar({
         <Plus className="h-4 w-4" />
       </button>
 
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
+      <div className="w-px h-5 bg-fw-secondary mx-1 flex-shrink-0" />
 
       {/* Run Scenario (Play) */}
       <button
@@ -251,7 +257,7 @@ export function Toolbar({
         <Save className="h-4 w-4" />
       </button>
 
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
+      <div className="w-px h-5 bg-fw-secondary mx-1 flex-shrink-0" />
 
       {/* Undo */}
       <button
@@ -277,7 +283,7 @@ export function Toolbar({
         <Trash2 className="h-4 w-4" />
       </button>
 
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
+      <div className="w-px h-5 bg-fw-secondary mx-1 flex-shrink-0" />
 
       {/* Export PDF */}
       <button
@@ -300,7 +306,7 @@ export function Toolbar({
         {isMaximized ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
       </button>
 
-      <div className="w-px h-5 bg-fw-secondary mx-1" />
+      <div className="w-px h-5 bg-fw-secondary mx-1 flex-shrink-0" />
 
       {/* Create Connections */}
       <button

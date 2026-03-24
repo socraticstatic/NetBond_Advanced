@@ -1,6 +1,9 @@
 import { useRef, useState, useCallback, memo } from 'react';
 import * as LucideIcons from 'lucide-react';
+import { attIcons } from '../icons/att-icons';
+import { AttIcon } from '../icons/AttIcon';
 import { useDesignerStore } from './store/useDesignerStore';
+import { getNodeColors, STATUS_DOT_COLORS } from './constants/nodeColors';
 import type { NetworkNode } from './types/designer';
 
 interface NodeProps {
@@ -105,49 +108,72 @@ export const Node = memo(function Node({
     setIsEditing(false);
   }, [node.id, editName, onRename]);
 
-  // Resolve Lucide icon by name string
-  const IconComponent = (LucideIcons as Record<string, any>)[node.icon] || LucideIcons.Box;
+  // Resolve icon: check AT&T registry first, then Lucide
+  const isAttIcon = node.icon in attIcons;
+  const IconComponent = isAttIcon ? null : ((LucideIcons as Record<string, any>)[node.icon] || LucideIcons.Box);
 
-  // Build class list for 6 states
-  let borderClass = 'border-fw-secondary';
+  // Node type colors from Figma spec
+  const colors = getNodeColors(node.type, node.functionType);
+  const isUnconfigured = node.status === 'unconfigured';
+  const isActiveState = node.status === 'active' || node.status === 'active-down';
+
+  // Border and background based on status
+  const borderStyle = isUnconfigured ? 'dashed' : 'solid';
+  const borderColor = isUnconfigured ? '#d1d5db' : colors.border;
+  const bgColor = isActiveState ? colors.bg : '#ffffff';
+
+  // Interaction state overrides
   let ringClass = '';
   let shadowClass = 'shadow-sm';
+  let borderOverride: string | undefined;
 
   if (hasValidationError) {
-    borderClass = 'border-fw-error';
+    borderOverride = '#ef4444';
     ringClass = 'ring-2 ring-red-200';
   }
   if (isEdgeTarget) {
     ringClass = 'ring-2 ring-blue-300 animate-pulse';
   }
   if (isSelected) {
-    borderClass = 'border-fw-active';
+    borderOverride = '#3b82f6';
     ringClass = 'ring-2 ring-blue-200';
   }
   if (isDragging) {
     shadowClass = 'shadow-2xl';
   }
 
+  // Status dot color
+  const dotColor = STATUS_DOT_COLORS[node.status] || '#d1d5db';
+
   return (
     <div
       ref={nodeRef}
+      data-status={node.status}
+      data-node-type={node.functionType}
       className={`
         absolute flex flex-col items-center justify-center
-        w-16 h-16 rounded-xl border bg-fw-base
+        w-16 h-16 rounded-xl
         transition-shadow duration-150
-        ${borderClass} ${ringClass} ${shadowClass}
+        ${ringClass} ${shadowClass}
         ${isCreatingEdge ? 'cursor-crosshair' : isDragging ? 'cursor-grabbing' : 'cursor-grab'}
         hover:shadow-md
       `}
       style={{
         transform: `translate(${node.x}px, ${node.y}px)${isDragging ? ' scale(1.05)' : ''}`,
         zIndex: isDragging ? 50 : isSelected ? 10 : 1,
+        borderWidth: '2px',
+        borderStyle,
+        borderColor: borderOverride || borderColor,
+        backgroundColor: bgColor,
       }}
       onMouseDown={handleMouseDown}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
     >
-      <IconComponent className="w-6 h-6 text-fw-heading" />
+      {isAttIcon
+        ? <AttIcon name={node.icon as any} className="w-8 h-8 text-fw-heading" />
+        : <IconComponent className="w-6 h-6 text-fw-heading" />
+      }
 
       {/* Node label */}
       {isEditing ? (
@@ -171,9 +197,9 @@ export const Node = memo(function Node({
 
       {/* Status dot */}
       <span
-        className={`absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border border-white ${
-          node.status === 'active' ? 'bg-fw-success' : 'bg-fw-neutral'
-        }`}
+        data-testid="status-dot"
+        className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white"
+        style={{ backgroundColor: dotColor }}
       />
     </div>
   );

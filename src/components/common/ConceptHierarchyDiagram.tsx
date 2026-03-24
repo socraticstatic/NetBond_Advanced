@@ -1,4 +1,9 @@
-import { Network, Share2, Cable, Shield, Server, ArrowDown } from 'lucide-react';
+import { Network, Cable, Shield, Server, ArrowDown } from 'lucide-react';
+import { AttIcon } from '../icons/AttIcon';
+
+function CloudRouterIcon({ className }: { className?: string }) {
+  return <AttIcon name="cloudRouter" className={className} />;
+}
 
 interface ConceptNode {
   id: string;
@@ -22,7 +27,7 @@ const conceptHierarchy: ConceptNode[] = [
     id: 'cloud-router',
     title: 'Cloud Router',
     description: 'Virtual routing node that manages traffic and routing',
-    icon: Share2,
+    icon: CloudRouterIcon,
     color: 'green',
     examples: ['BGP routing', 'Traffic management', 'Multiple links']
   },

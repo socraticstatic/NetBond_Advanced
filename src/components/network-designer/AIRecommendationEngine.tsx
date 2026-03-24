@@ -170,7 +170,7 @@ export function AIRecommendationEngine({
             y: cloudNode.y + 100,
             name: 'Backup Router',
             icon: 'Router',
-            status: 'inactive',
+            status: 'unconfigured',
             config: { routerType: 'virtual' }
           };
 
@@ -183,7 +183,7 @@ export function AIRecommendationEngine({
             y: newRouter.y,
             name: 'Backup Connection',
             icon: 'Server',
-            status: 'inactive',
+            status: 'unconfigured',
             config: {}
           };
           
@@ -267,7 +267,7 @@ export function AIRecommendationEngine({
             y: primaryCloud.y + 100,
             name: 'DR Region',
             icon: 'Cloud',
-            status: 'inactive',
+            status: 'unconfigured',
             config: {
               provider: primaryCloud.config.provider,
               region: drRegion
@@ -283,7 +283,7 @@ export function AIRecommendationEngine({
             y: drCloud.y,
             name: 'DR Router',
             icon: 'Router',
-            status: 'inactive',
+            status: 'unconfigured',
             config: {
               routerType: 'virtual'
             }
@@ -352,7 +352,7 @@ export function AIRecommendationEngine({
               y: midY,
               name: 'Security Firewall',
               icon: 'Shield',
-              status: 'inactive',
+              status: 'unconfigured',
               config: { firewallType: 'ngfw' }
             };
             
@@ -394,7 +394,7 @@ export function AIRecommendationEngine({
           y: 150,
           name: 'SD-WAN Controller',
           icon: 'PanelRight',
-          status: 'inactive',
+          status: 'unconfigured',
           config: { sdwanType: 'controller' }
         };
         
@@ -441,7 +441,7 @@ export function AIRecommendationEngine({
           y: 300,
           name: 'Virtual Network Functions',
           icon: 'BarChart2',
-          status: 'inactive',
+          status: 'unconfigured',
           config: { 
             vnfType: 'multifunction',
             resources: 'medium'

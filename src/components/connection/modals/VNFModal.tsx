@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
-import { X, AlertTriangle, Plus, Info, Network, Shield, Settings, Globe, Share2 as RouterIcon, ServerCog, Cloud, ExternalLink } from 'lucide-react';
+import { X, AlertTriangle, Plus, Info, Network, Shield, Settings, Globe, ServerCog, Cloud, ExternalLink } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
+
+function CloudRouterIcon({ className }: { className?: string }) {
+  return <AttIcon name="cloudRouter" className={className} />;
+}
 import { Button } from '../../common/Button';
 import { FormField } from '../../form/FormField';
 import { VNF, VNFType, VNFInterface, VNFTemplate } from '../../../types/vnf';
@@ -67,7 +72,7 @@ const VNF_TEMPLATES: VNFTemplate[] = [
       ],
       routingProtocols: ['BGP', 'OSPF', 'EIGRP']
     },
-    icon: RouterIcon,
+    icon: CloudRouterIcon,
     recommendedUseCase: 'Enterprise routing, branch connectivity',
     licenseRequired: true,
     pricing: {

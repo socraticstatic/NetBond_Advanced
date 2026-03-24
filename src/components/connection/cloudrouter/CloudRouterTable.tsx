@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GitBranch, Network, Shield, Edit2, Trash2, Eye, MapPin } from 'lucide-react';
+import { Network, Shield, Edit2, Trash2, Eye, MapPin } from 'lucide-react';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { VNF } from '../../../types/vnf';
