@@ -29,7 +29,7 @@ const ToggleComponent = ({
         className="sr-only toggle-switch"
       />
       <div className={`relative inline-block ${dimensions.width} ${dimensions.height} transition-colors duration-200 ease-in-out rounded-full ${
-        checked ? 'bg-fw-primary' : 'bg-fw-bodyLight'
+        checked ? 'bg-fw-primary' : 'bg-gray-300'
       } ${disabled ? 'opacity-50' : ''}`}>
         <div className={`absolute inset-y-0 left-0 ${dimensions.dot} transition duration-200 ease-in-out transform bg-white rounded-full ${
           checked ? dimensions.translate : 'translate-x-0'
