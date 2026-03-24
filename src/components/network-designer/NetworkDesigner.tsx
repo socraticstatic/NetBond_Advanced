@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
-import { Minimize2, ArrowLeft, AlertTriangle, X } from 'lucide-react';
+import { Minimize2, ArrowLeft, AlertTriangle, X, Eye, Pencil } from 'lucide-react';
 import { chartColors } from '../../utils/chartColors';
 import type { Connection, NetworkNode as LegacyNetworkNode, NetworkEdge as LegacyNetworkEdge } from '../../types';
 import type { NetworkNode, NetworkEdge } from './types/designer';
@@ -79,7 +79,11 @@ export function NetworkDesigner({
   const setNodes = useDesignerStore((s) => s.setNodes);
   const setEdges = useDesignerStore((s) => s.setEdges);
   const toggleMaximize = useDesignerStore((s) => s.toggleMaximize);
+  const viewMode = useDesignerStore((s) => s.viewMode);
+  const setViewMode = useDesignerStore((s) => s.setViewMode);
   const saveToHistoryStore = useDesignerStore((s) => s.saveToHistory);
+
+  const isReadOnly = viewMode === 'read';
 
   // Hooks
   const { addNode, moveNode, updateNode, deleteNode, updateEdge, deleteEdge, clearCanvas } = useNetworkManager();
@@ -118,6 +122,9 @@ export function NetworkDesigner({
       setEdges(convertedEdges);
       saveToHistoryStore();
     }
+    if (editMode) {
+      setViewMode('read');
+    }
     // Only run on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -128,12 +135,12 @@ export function NetworkDesigner({
       const tag = (e.target as HTMLElement)?.tagName;
       if (tag === 'INPUT' || tag === 'TEXTAREA') return;
 
-      if (e.key === 'Delete' || e.key === 'Backspace') {
+      if (!isReadOnly && (e.key === 'Delete' || e.key === 'Backspace')) {
         if (selectedNodeId) deleteNode(selectedNodeId);
         else if (selectedEdgeId) deleteEdge(selectedEdgeId);
       }
 
-      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+      if (!isReadOnly && (e.ctrlKey || e.metaKey) && e.key === 'z') {
         e.preventDefault();
         undo();
       }
@@ -149,7 +156,7 @@ export function NetworkDesigner({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedNodeId, selectedEdgeId, isCreatingEdge, deleteNode, deleteEdge, undo, cancelEdgeCreation, clearSelection]);
+  }, [selectedNodeId, selectedEdgeId, isCreatingEdge, isReadOnly, deleteNode, deleteEdge, undo, cancelEdgeCreation, clearSelection]);
 
   // Node handlers
   const handleNodeSelect = useCallback((id: string) => {
@@ -341,6 +348,7 @@ export function NetworkDesigner({
           isEdgeTarget={isCreatingEdge && node.id !== edgeStartNodeId}
           hasValidationError={errorNodeIds.has(node.id)}
           isCreatingEdge={isCreatingEdge}
+          readOnly={isReadOnly}
           onSelect={handleNodeSelect}
           onDrag={handleNodeDrag}
           onDragEnd={handleNodeDragEnd}
@@ -395,6 +403,28 @@ export function NetworkDesigner({
         <StatusBar nodes={nodes} edges={edges} />
       </div>
 
+      {/* Read/Edit mode toggle - top right */}
+      <div className={`absolute ${editMode ? 'top-14' : 'top-4'} right-4 z-20 flex rounded-lg border border-fw-secondary bg-fw-base shadow-sm overflow-hidden`}>
+        <button
+          onClick={() => setViewMode('read')}
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-sm font-medium transition-colors ${
+            isReadOnly ? 'bg-fw-link text-white' : 'text-fw-body hover:bg-fw-wash'
+          }`}
+        >
+          <Eye className="h-3.5 w-3.5" />
+          Read
+        </button>
+        <button
+          onClick={() => setViewMode('edit')}
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-sm font-medium transition-colors ${
+            !isReadOnly ? 'bg-fw-link text-white' : 'text-fw-body hover:bg-fw-wash'
+          }`}
+        >
+          <Pencil className="h-3.5 w-3.5" />
+          Edit
+        </button>
+      </div>
+
       {/* Canvas - fills the container */}
       <div ref={canvasRef} className="absolute inset-0">
         <Canvas svgContent={svgContent}>
@@ -439,8 +469,9 @@ export function NetworkDesigner({
           <NodeConfigPanel
             node={selectedNode}
             onUpdate={updateNode}
-            onDelete={(id) => { deleteNode(id); clearSelection(); }}
+            onDelete={isReadOnly ? undefined : (id) => { deleteNode(id); clearSelection(); }}
             onClose={clearSelection}
+            readOnly={isReadOnly}
           />
         );
       })()}
@@ -453,8 +484,9 @@ export function NetworkDesigner({
           <EdgeConfigPanel
             edge={selectedEdge}
             onUpdate={updateEdge}
-            onDelete={(id) => { deleteEdge(id); clearSelection(); }}
+            onDelete={isReadOnly ? undefined : (id) => { deleteEdge(id); clearSelection(); }}
             onClose={clearSelection}
+            readOnly={isReadOnly}
           />
         );
       })()}
@@ -492,6 +524,8 @@ export function NetworkDesigner({
         onOpenDrafts={() => setIsDraftsOpen(true)}
         onExportPDF={exportPDF}
         editMode={editMode}
+        readOnly={isReadOnly}
+        onSwitchToEdit={() => setViewMode('edit')}
       />
     </div>
   );
