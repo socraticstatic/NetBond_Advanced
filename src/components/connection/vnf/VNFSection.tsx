@@ -131,9 +131,16 @@ export function VNFSection({
         </div>
       </div>
 
-      {/* Table Card */}
-      <div className="bg-fw-base rounded-2xl overflow-hidden">
-        <div className="px-6 py-4">
+      {/* Table */}
+      <VNFTable
+        vnfs={filteredVNFs}
+        cloudRouters={cloudRouters}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        connectionId={connectionId}
+        onDetach={handleDetach}
+        isDetached={isDetached}
+        toolbar={
           <SearchFilterBar
             searchPlaceholder="Search VNFs ..."
             searchValue={searchQuery}
@@ -178,37 +185,8 @@ export function VNFSection({
               URL.revokeObjectURL(url);
             }}
           />
-        </div>
-
-        {filteredVNFs.length === 0 ? (
-          <div className="text-center py-16">
-            <Shield className="h-12 w-12 mx-auto text-fw-bodyLight mb-4" />
-            <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] mb-2">
-              {searchQuery || vnfTypeFilter !== 'all' ? 'No VNFs found' : 'No network functions'}
-            </h3>
-            <p className="text-fw-bodyLight mb-6">
-              {searchQuery || vnfTypeFilter !== 'all'
-                ? 'Try adjusting your filters'
-                : 'Get started by adding your first network function'}
-            </p>
-            {!searchQuery && vnfTypeFilter === 'all' && (
-              <Button variant="primary" icon={<Plus className="h-4 w-4" />} onClick={onAdd}>
-                Add Network Function
-              </Button>
-            )}
-          </div>
-        ) : (
-          <VNFTable
-            vnfs={filteredVNFs}
-            cloudRouters={cloudRouters}
-            onEdit={onEdit}
-            onDelete={onDelete}
-            connectionId={connectionId}
-            onDetach={handleDetach}
-            isDetached={isDetached}
-          />
-        )}
-      </div>
+        }
+      />
     </div>
   );
 }

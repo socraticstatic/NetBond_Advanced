@@ -154,7 +154,7 @@ function ColumnVisibilityPopoverComponent({
       </div>
 
       {/* Column List */}
-      <div className="max-h-64 overflow-y-auto">
+      <div className="max-h-80 overflow-y-auto">
         {filteredColumns.length === 0 ? (
           <div className="px-4 py-8 text-center text-figma-base text-fw-bodyLight">
             No columns match your search

@@ -30,6 +30,8 @@ interface EnhancedTableProps<T> {
   tableId?: string;
   showColumnManager?: boolean;
   headerActions?: ReactNode;
+  toolbar?: ReactNode;
+  showFilter?: boolean;
 }
 
 function EnhancedTableComponent<T>({
@@ -47,6 +49,7 @@ function EnhancedTableComponent<T>({
   tableId,
   showColumnManager = true,
   headerActions,
+  toolbar,
 }: EnhancedTableProps<T>) {
   const standardColumns: StandardColumn<T>[] = columns.map(col => ({
     id: col.id,
@@ -74,6 +77,7 @@ function EnhancedTableComponent<T>({
       showExport={showExport}
       showColumnManager={showColumnManager}
       headerActions={headerActions}
+      toolbar={toolbar}
     />
   );
 }
