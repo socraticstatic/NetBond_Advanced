@@ -76,12 +76,6 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
   // Listen for storage changes from other windows
   if (typeof window !== 'undefined') {
     const handleStorageChange = (event: StorageEvent) => {
-      console.log('[ColumnVisibility] Storage event received:', {
-        key: event.key,
-        newValue: event.newValue,
-        oldValue: event.oldValue,
-        url: event.url
-      });
 
       if (event.key && event.key.startsWith(STORAGE_KEY_PREFIX)) {
         const tableId = event.key.substring(STORAGE_KEY_PREFIX.length);
@@ -89,8 +83,6 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
         if (event.newValue) {
           try {
             const columns = JSON.parse(event.newValue);
-            console.log(`[ColumnVisibility] Updating columnConfig for ${tableId}:`, columns);
-
             // Update the store with new column config
             set((state) => {
               const newState = {
@@ -99,7 +91,6 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
                   [tableId]: columns
                 }
               };
-              console.log('[ColumnVisibility] New state:', newState);
               return newState;
             });
           } catch (error) {
@@ -110,7 +101,6 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
     };
 
     window.addEventListener('storage', handleStorageChange);
-    console.log('[ColumnVisibility] Storage event listener registered');
   }
 
   return {
@@ -180,7 +170,7 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
       // Save to localStorage (will trigger storage event in other windows)
       saveColumnConfig(tableId, columns);
 
-      console.log(`[ColumnVisibility] Updated ${tableId}: ${columns.length} visible columns`);
+
     },
 
     toggleColumn: (tableId: string, columnId: string, allColumnIds?: string[]) => {
@@ -268,7 +258,7 @@ export const createColumnVisibilitySlice: StateCreator<ColumnVisibilitySlice> = 
         });
       }
 
-      console.log(`[ColumnVisibility] Reset ${tableId} to defaults:`, defaults);
+
     },
 
     isColumnVisible: (tableId: string, columnId: string) => {

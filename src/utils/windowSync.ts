@@ -54,12 +54,12 @@ export class WindowSyncManager {
       if (typeof BroadcastChannel !== 'undefined') {
         this.channel = new BroadcastChannel(CHANNEL_NAME);
         this.channel.onmessage = (event) => this.handleMessage(event.data);
-        console.log('[WindowSync] Initialized with BroadcastChannel');
+
       } else {
         // Fallback to storage events
         this.useFallback = true;
         window.addEventListener('storage', this.handleStorageEvent.bind(this));
-        console.log('[WindowSync] Initialized with storage events (fallback)');
+
       }
 
       // Reset throttle counts every second
@@ -244,7 +244,7 @@ export class WindowSyncManager {
     this.messageQueue = [];
     this.messageCounts.clear();
 
-    console.log('[WindowSync] Destroyed');
+
   }
 
   /**

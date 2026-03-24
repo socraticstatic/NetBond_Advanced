@@ -1,10 +1,8 @@
 import { useMemo } from 'react';
 import { ConnectionCard } from './ConnectionCard';
 import { Connection } from '../../types';
-import { Group } from '../../types/group';
 import { useStore } from '../../store/useStore';
 import { getGroupsForConnection } from '../../utils/groups';
-import { useConnectionStatus } from '../../hooks/useConnectionStatus';
 
 interface ConnectionCardContainerProps {
   connection: Connection;
@@ -22,20 +20,11 @@ export function ConnectionCardContainer({
 }: ConnectionCardContainerProps) {
   // Get groups from store
   const groups = useStore(state => state.groups);
-  
+
   // Get groups for this connection
   const connectionGroups = useMemo(() => {
     return getGroupsForConnection(groups, connection.id);
   }, [groups, connection.id]);
-  
-  // Get status management logic from hook
-  const {
-    isPending,
-    progress,
-    handleToggleStatus,
-    getHealthStatus,
-    getStatusDotColor
-  } = useConnectionStatus(connection);
 
   return (
     <ConnectionCard
@@ -43,11 +32,6 @@ export function ConnectionCardContainer({
       groups={connectionGroups}
       isMinimized={isMinimized}
       onClick={onClick}
-      isPending={isPending}
-      progress={progress}
-      handleToggleStatus={handleToggleStatus}
-      getHealthStatus={getHealthStatus}
-      getStatusDotColor={getStatusDotColor}
     />
   );
 }

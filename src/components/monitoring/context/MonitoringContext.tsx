@@ -154,26 +154,53 @@ export function MonitoringProvider({
   
   // Generate hourly data for charts
   const generateHourlyData = useCallback(() => {
-    const hours = 24;
+    let points: number;
+    let intervalMinutes: number;
+
+    switch (timeRange) {
+      case '1h':
+        points = 12;
+        intervalMinutes = 5;
+        break;
+      case '6h':
+        points = 24;
+        intervalMinutes = 15;
+        break;
+      case '24h':
+        points = 24;
+        intervalMinutes = 60;
+        break;
+      case '7d':
+        points = 28;
+        intervalMinutes = 360; // 6 hours
+        break;
+      case '30d':
+        points = 30;
+        intervalMinutes = 1440; // 1 day
+        break;
+      default:
+        points = 12;
+        intervalMinutes = 5;
+    }
+
     const data = [];
     const now = new Date();
-    
-    for (let i = 0; i < hours; i++) {
-      const date = new Date(now);
-      date.setHours(now.getHours() - (hours - i));
-      
+
+    for (let i = 0; i < points; i++) {
+      const date = new Date(now.getTime() - (points - i) * intervalMinutes * 60 * 1000);
+
       data.push({
         timestamp: date.toISOString(),
-        latency: 3 + Math.random() * 4, // 3-7ms 
+        latency: 3 + Math.random() * 4, // 3-7ms
         packetLoss: Math.random() * 0.05, // 0-0.05%
         jitter: Math.random() * 1.5, // 0-1.5ms
         bandwidth: 65 + Math.random() * 25, // 65-90%
         errorRate: Math.random() * 0.01 // 0-0.01%
       });
     }
-    
+
     return data;
-  }, []);
+  }, [timeRange]);
 
   const value = {
     selectedConnection,

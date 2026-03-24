@@ -1,9 +1,25 @@
-import { DivideIcon as LucideIcon } from 'lucide-react';
+import { Divide as LucideIcon } from 'lucide-react';
 
 export type CloudProvider = 'AWS' | 'Azure' | 'Google' | 'Oracle' | 'IBM' | 'Equinix' | 'Digital Realty' | 'Centersquare' | 'CoreSite' | 'DataBank';
 export type ConnectionType = 'Internet to Cloud' | 'Cloud to Cloud' | 'DataCenter/CoLocation to Cloud' | 'Site to Cloud' | 'Internet Direct' | 'Cloud Router Test';
 export type BandwidthOption = '100 Mbps' | '500 Mbps' | '1 Gbps' | '10 Gbps' | '100 Gbps';
 export type LocationOption = 'US East' | 'US West' | 'EU West' | 'Asia Pacific';
+
+export type AlertSeverity = 'critical' | 'warning' | 'info';
+export type AlertCategory = 'throughput' | 'configuration' | 'security' | 'performance' | 'billing' | 'maintenance';
+
+export interface ConnectionAlert {
+  id: string;
+  severity: AlertSeverity;
+  category: AlertCategory;
+  title: string;
+  message: string;
+  timestamp: string;
+  acknowledged?: boolean;
+  affectedComponents?: string[]; // IDs of affected routers, links, VNFs
+  recommendedAction?: string;
+  metadata?: Record<string, any>;
+}
 
 export interface Connection {
   id: string;
@@ -24,6 +40,13 @@ export interface Connection {
   secondaryIPE?: string;
   ipeRedundancy?: boolean;
   createdAt?: string;
+  alerts?: ConnectionAlert[];
+  health?: {
+    overall: 'healthy' | 'degraded' | 'critical' | 'unknown';
+    throughputStatus: 'optimal' | 'degraded' | 'critical';
+    configurationStatus: 'valid' | 'warning' | 'error';
+    lastChecked: string;
+  };
   performance?: {
     latency: string;
     packetLoss: string;

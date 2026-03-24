@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Cog, Play, Pause, Trash2, Edit2, Activity, Network, Users, Globe, Cloud } from 'lucide-react';
+import { ArrowLeft, Cog, Play, Pause, Trash2, CreditCard as Edit2, Activity, Network, Users, Globe, Cloud } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { SubNav } from '../navigation/SubNav';
 import { ConnectionTabs, ConnectionTabType } from './tabs/ConnectionTabs';
@@ -16,6 +16,7 @@ import { VNFTab } from './tabs/VNFTab';
 import { PoliciesTab } from './tabs/PoliciesTab';
 import { APIConfiguration } from './tabs/APIConfiguration';
 import { AppsConfiguration } from './tabs/AppsConfiguration';
+import { AlertsTab } from './tabs/AlertsTab';
 import { IconButton } from '../common/IconButton';
 import { Button } from '../common/Button';
 import { ConfirmDialog } from '../common/ConfirmDialog';
@@ -35,7 +36,8 @@ import { ConnectionEditWarning } from '../common/ConnectionEditWarning';
 export function ConnectionDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const connection = useStore(state => state.connections.find(c => c.id === id));
+  const connections = useStore(state => state.connections);
+  const connection = connections.find(c => c.id === id);
   const updateConnection = useStore(state => state.updateConnection);
   const removeConnection = useStore(state => state.removeConnection);
   const isMobile = useIsMobile();
@@ -361,6 +363,39 @@ export function ConnectionDetails() {
     }
   };
 
+  // Alert handlers
+  const handleAcknowledgeAlert = (alertId: string) => {
+    if (!connection.alerts) return;
+
+    const updatedAlerts = connection.alerts.map(alert =>
+      alert.id === alertId ? { ...alert, acknowledged: true } : alert
+    );
+
+    updateConnection(connection.id, { alerts: updatedAlerts });
+
+    window.addToast({
+      type: 'success',
+      title: 'Alert Acknowledged',
+      message: 'The alert has been acknowledged.',
+      duration: 3000
+    });
+  };
+
+  const handleDismissAlert = (alertId: string) => {
+    if (!connection.alerts) return;
+
+    const updatedAlerts = connection.alerts.filter(alert => alert.id !== alertId);
+
+    updateConnection(connection.id, { alerts: updatedAlerts });
+
+    window.addToast({
+      type: 'success',
+      title: 'Alert Dismissed',
+      message: 'The alert has been dismissed.',
+      duration: 3000
+    });
+  };
+
   const renderContent = () => {
     const cloudRoutersCount = cloudRouters.length;
     const linksCount = getAllLinks().length;
@@ -369,6 +404,14 @@ export function ConnectionDetails() {
     switch (activeTab) {
       case 'overview':
         return <ConnectionOverview connection={connection} cloudRoutersCount={cloudRoutersCount} linksCount={linksCount} vnfsCount={vnfsCount} />;
+      case 'alerts':
+        return (
+          <AlertsTab
+            connection={connection}
+            onAcknowledge={handleAcknowledgeAlert}
+            onDismiss={handleDismissAlert}
+          />
+        );
       case 'cloudrouters':
         return (
           <NetworkTab
@@ -415,7 +458,7 @@ export function ConnectionDetails() {
       case 'versions':
         return <VersioningConfiguration connectionId={connection.id.toString()} currentVersion="1.0.0" />;
       case 'billing':
-        return <BillingConfiguration isEditing={isEditing} />;
+        return <BillingConfiguration isEditing={isEditing} connectionId={connection.id.toString()} />;
       case 'logs':
         return <ConnectionLogs connectionId={connection.id.toString()} />;
       case 'api':

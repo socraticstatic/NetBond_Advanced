@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import { Edit2, Minimize2, Cloud } from 'lucide-react';
+import { CreditCard as Edit2, Minimize2, Cloud, AlertTriangle, AlertCircle } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { IconButton } from '../../common/IconButton';
 import { ConnectionOverflowMenu } from '../ConnectionOverflowMenu';
+import { Connection, AlertSeverity } from '../../../types/connection';
 
 interface ConnectionCardHeaderProps {
   name: string;
@@ -16,7 +17,8 @@ interface ConnectionCardHeaderProps {
   onNameKeyDown: (e: React.KeyboardEvent) => void;
   onEditNameClick: () => void;
   onMinimize: () => void;
-  connection: any;
+  connection: Connection;
+  onAlertClick?: (e: React.MouseEvent) => void;
 }
 
 /**
@@ -35,15 +37,31 @@ export function ConnectionCardHeader({
   onNameKeyDown,
   onEditNameClick,
   onMinimize,
-  connection
+  connection,
+  onAlertClick
 }: ConnectionCardHeaderProps) {
   const nameInputRef = useRef<HTMLInputElement>(null);
 
+  const alerts = connection.alerts || [];
+  const activeAlerts = alerts.filter(a => !a.acknowledged && (a.severity === 'critical' || a.severity === 'warning'));
+  const criticalAlerts = activeAlerts.filter(a => a.severity === 'critical');
+  const warningAlerts = activeAlerts.filter(a => a.severity === 'warning');
+
+  const getSeverityColor = (): string => {
+    if (criticalAlerts.length > 0) return 'bg-red-500';
+    return 'bg-amber-500';
+  };
+
+  const getSeverityIcon = () => {
+    if (criticalAlerts.length > 0) return <AlertCircle className="h-4 w-4 text-fw-bodyLight" />;
+    return <AlertTriangle className="h-4 w-4 text-fw-bodyLight" />;
+  };
+
   return (
-    <div className="p-6 border-b border-fw-secondary">
+    <div className="p-4 border-b border-fw-secondary">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 flex items-center justify-center bg-fw-wash rounded-lg">
+          <div className="p-2 bg-fw-wash rounded-lg">
             {icon}
           </div>
           <div>
@@ -56,49 +74,41 @@ export function ConnectionCardHeader({
                   onChange={onNameChange}
                   onBlur={onNameSubmit}
                   onKeyDown={onNameKeyDown}
-                  className={`w-full px-2 py-1 text-figma-lg font-medium bg-fw-base border ${nameError ? 'border-fw-error' : 'border-fw-active'} rounded focus:outline-none focus:ring-2 focus:ring-fw-active`}
+                  className={`w-full px-2 py-1 text-sm font-medium bg-fw-base border ${nameError ? 'border-fw-error' : 'border-fw-active'} rounded focus:outline-none focus:ring-2 focus:ring-fw-active`}
                   placeholder="Enter connection name"
                   onClick={(e) => e.stopPropagation()}
                 />
                 {nameError && (
-                  <p className="text-figma-sm text-fw-error mt-1">{nameError}</p>
+                  <p className="text-xs text-fw-error mt-1">{nameError}</p>
                 )}
               </div>
             ) : (
-              <div>
-                <h3
-                  className="text-figma-lg font-medium text-fw-heading cursor-text"
-                  onClick={onEditNameClick}
-                >
-                  {name}
-                </h3>
-                {connection?.origin?.source === 'aws-marketplace' && (
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-fw-accent border border-fw-warn/30 rounded text-figma-sm font-semibold text-fw-warn">
-                      <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg"
-                        alt="AWS"
-                        className="w-6 h-3 object-contain"
-                      />
-                      Direct Connect
-                    </span>
-                    {connection?.status === 'Pending' && (
-                      <span className="inline-flex items-center px-2 py-0.5 bg-fw-warn/10 border border-fw-warn/30 rounded text-figma-sm font-semibold text-fw-warn">
-                        Needs Configuration
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
+              <h3
+                className="text-sm font-medium text-fw-heading cursor-text"
+                onClick={onEditNameClick}
+              >
+                {name}
+              </h3>
             )}
-            <p className="text-figma-sm font-medium text-fw-body">
-              {type}
-              {connection?.cloudRouterName && <> | {connection.cloudRouterName}</>}
-            </p>
+            <p className="text-xs text-fw-bodyLight">{type}</p>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
+          {/* Alert Indicator */}
+          {activeAlerts.length > 0 && (
+            <button
+              onClick={onAlertClick}
+              className="relative flex items-center justify-center h-8 w-8 rounded-lg hover:bg-fw-wash transition-colors"
+              title={`${activeAlerts.length} active alert${activeAlerts.length > 1 ? 's' : ''}`}
+            >
+              {getSeverityIcon()}
+              <span className={`absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full ${getSeverityColor()} text-white text-[10px] font-semibold shadow-sm`}>
+                {activeAlerts.length}
+              </span>
+            </button>
+          )}
+
           <IconButton
             icon={<Minimize2 className="h-4 w-4" />}
             onClick={onMinimize}

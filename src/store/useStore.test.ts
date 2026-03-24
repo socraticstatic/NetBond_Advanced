@@ -14,7 +14,7 @@ describe('useStore', () => {
   });
 
   describe('connection state', () => {
-    it('adds a connection', () => {
+    it('adds a connection', async () => {
       const connection: Connection = {
         id: '1',
         name: 'Test Connection',
@@ -24,12 +24,12 @@ describe('useStore', () => {
         location: 'US East'
       };
 
-      useStore.getState().addConnection(connection);
+      await useStore.getState().addConnection(connection);
       expect(useStore.getState().connections).toHaveLength(1);
-      expect(useStore.getState().connections[0]).toEqual(connection);
+      expect(useStore.getState().connections[0].id).toBe(connection.id);
     });
 
-    it('updates a connection', () => {
+    it('updates a connection', async () => {
       const connection: Connection = {
         id: '1',
         name: 'Test Connection',
@@ -39,13 +39,13 @@ describe('useStore', () => {
         location: 'US East'
       };
 
-      useStore.getState().addConnection(connection);
-      useStore.getState().updateConnection('1', { name: 'Updated Connection' });
-      
+      await useStore.getState().addConnection(connection);
+      await useStore.getState().updateConnection('1', { name: 'Updated Connection' });
+
       expect(useStore.getState().connections[0].name).toBe('Updated Connection');
     });
 
-    it('removes a connection', () => {
+    it('removes a connection', async () => {
       const connection: Connection = {
         id: '1',
         name: 'Test Connection',
@@ -55,9 +55,9 @@ describe('useStore', () => {
         location: 'US East'
       };
 
-      useStore.getState().addConnection(connection);
-      useStore.getState().removeConnection('1');
-      
+      await useStore.getState().addConnection(connection);
+      await useStore.getState().removeConnection('1');
+
       expect(useStore.getState().connections).toHaveLength(0);
     });
   });

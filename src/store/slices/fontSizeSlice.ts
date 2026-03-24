@@ -136,7 +136,7 @@ export const createFontSizeSlice: StateCreator<FontSizeSlice> = (set, get) => {
         });
       }
 
-      console.log(`[FontSize] Set to ${size}% (${getFontSizeLabel(size)})`);
+
     },
 
     resetFontSize: () => {
@@ -171,7 +171,7 @@ if (typeof window !== 'undefined') {
 
         if (typeof newSize === 'number' && newSize >= MIN_FONT_SIZE && newSize <= MAX_FONT_SIZE) {
           applyFontSize(newSize);
-          console.log(`[FontSize] Synced from another tab: ${newSize}%`);
+
         }
       } catch (error) {
         console.error('[FontSize] Error syncing from storage event:', error);

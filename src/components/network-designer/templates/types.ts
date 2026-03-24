@@ -1,12 +1,12 @@
-import { DivideIcon as LucideIcon } from 'lucide-react';
+import { Divide as LucideIcon } from 'lucide-react';
 import { NetworkNode, NetworkEdge } from '../../../types';
 
 interface PreviewIcon {
-  icon: typeof LucideIcon;
+  icon: LucideIcon;
   color: string;
 }
 
-export interface PreviewColumn {
+interface PreviewColumn {
   type: 'col';
   icons: PreviewIcon[];
 }
@@ -19,10 +19,4 @@ export interface Template {
   };
   nodes: NetworkNode[];
   edges: NetworkEdge[];
-}
-
-interface TemplateGroup {
-  name: string;
-  description: string;
-  templates: Template[];
 }

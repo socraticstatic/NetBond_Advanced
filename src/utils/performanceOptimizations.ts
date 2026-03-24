@@ -87,10 +87,10 @@ export const monitorBundleSize = () => {
     const observer = new PerformanceObserver((list) => {
       list.getEntries().forEach((entry) => {
         if (entry.entryType === 'navigation') {
-          console.log('Page load time:', entry.duration);
+
         }
         if (entry.entryType === 'resource' && entry.name.includes('.js')) {
-          console.log('Script load time:', entry.name, entry.duration);
+
         }
       });
     });
