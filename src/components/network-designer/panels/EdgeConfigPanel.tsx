@@ -14,10 +14,16 @@ const SELECT_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-
 const LABEL_CLASS = 'block text-figma-sm text-fw-bodyLight mb-1';
 
 const RESILIENCE_OPTIONS = [
-  { value: 'single', label: 'Single' },
+  { value: 'single', label: 'Single Connection' },
   { value: 'redundant', label: 'Redundant' },
-  { value: 'ha', label: 'HA' },
+  { value: 'ha', label: 'High Availability' },
   { value: 'dual-diverse', label: 'Dual-Diverse' },
+] as const;
+
+const RTO_OPTIONS = [
+  { value: 'standard', label: 'Standard (Minutes)' },
+  { value: 'fast', label: 'Fast (Seconds)' },
+  { value: 'immediate', label: 'Immediate (Subsecond)' },
 ] as const;
 
 export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfigPanelProps) {
@@ -29,8 +35,9 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
     <FloatingPanel
       isOpen={true}
       onClose={onClose}
-      title="Link Configuration"
+      title="Connection Configuration"
       onDelete={() => onDelete(edge.id)}
+      deleteLabel="Delete connection"
     >
       <div className="space-y-4">
         {/* Connection Type */}
@@ -77,9 +84,88 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
           </select>
         </div>
 
-        {/* Status Toggle */}
+        {/* Recovery Time Objective */}
+        <div>
+          <label className={LABEL_CLASS}>Recovery Time Objective</label>
+          <select
+            className={SELECT_CLASS}
+            value={edge.config?.rto || 'standard'}
+            onChange={(e) => updateConfig('rto', e.target.value)}
+          >
+            {RTO_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+          <p className="text-figma-xs text-fw-bodyLight mt-1">How quickly service should be restored after a failure</p>
+        </div>
+
+        {/* VLAN ID */}
+        <div>
+          <label className={LABEL_CLASS}>VLAN ID</label>
+          <input
+            type="number"
+            className={FIELD_CLASS}
+            placeholder="1-4094"
+            value={edge.vlan ?? ''}
+            onChange={(e) =>
+              onUpdate(edge.id, { vlan: e.target.value ? parseInt(e.target.value, 10) : undefined })
+            }
+          />
+        </div>
+
+        {/* Encryption Toggle */}
         <div className="flex items-center justify-between">
-          <span className="text-figma-sm text-fw-bodyLight">Status</span>
+          <span className="text-figma-sm text-fw-body">Enable Encryption</span>
+          <button
+            onClick={() => updateConfig('encrypted', !edge.config?.encrypted)}
+            className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
+              edge.config?.encrypted ? 'bg-fw-link' : 'bg-fw-secondary'
+            }`}
+          >
+            <span
+              className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${
+                edge.config?.encrypted ? 'translate-x-4' : 'translate-x-0.5'
+              }`}
+            />
+          </button>
+        </div>
+
+        {/* BFD Toggle */}
+        <div className="flex items-center justify-between">
+          <span className="text-figma-sm text-fw-body">Enable BFD (Fast Failure Detection)</span>
+          <button
+            onClick={() => updateConfig('bfd', !edge.config?.bfd)}
+            className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
+              edge.config?.bfd ? 'bg-fw-link' : 'bg-fw-secondary'
+            }`}
+          >
+            <span
+              className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${
+                edge.config?.bfd ? 'translate-x-4' : 'translate-x-0.5'
+              }`}
+            />
+          </button>
+        </div>
+
+        {/* QoS Profile */}
+        <div>
+          <label className={LABEL_CLASS}>QoS Profile</label>
+          <select
+            className={SELECT_CLASS}
+            value={edge.config?.qosProfile || 'best-effort'}
+            onChange={(e) => updateConfig('qosProfile', e.target.value)}
+          >
+            <option value="best-effort">Best Effort</option>
+            <option value="voice">Voice</option>
+            <option value="video">Video</option>
+            <option value="critical">Critical</option>
+            <option value="bulk">Bulk</option>
+          </select>
+        </div>
+
+        {/* Connection Active Toggle */}
+        <div className="flex items-center justify-between">
+          <span className="text-figma-sm text-fw-body">Connection Active</span>
           <button
             onClick={() =>
               onUpdate(edge.id, { status: edge.status === 'active' ? 'inactive' : 'active' })
@@ -94,19 +180,6 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
               }`}
             />
           </button>
-        </div>
-
-        {/* VLAN ID */}
-        <div>
-          <label className={LABEL_CLASS}>VLAN ID</label>
-          <input
-            type="number"
-            className={FIELD_CLASS}
-            value={edge.vlan ?? ''}
-            onChange={(e) =>
-              onUpdate(edge.id, { vlan: e.target.value ? parseInt(e.target.value, 10) : undefined })
-            }
-          />
         </div>
 
         {/* Metrics (read-only, mock) */}
