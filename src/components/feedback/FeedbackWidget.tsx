@@ -66,7 +66,7 @@ const feedbackTypes = [
 ];
 
 // Maze.co study URL - replace with your maze test link when you create a study
-const MAZE_STUDY_URL = 'https://t.maze.co/REPLACE-WITH-YOUR-MAZE-TEST-ID';
+const MAZE_STUDY_URL = 'https://t.maze.co/515163142';
 
 export function FeedbackWidget() {
   const [isOpen, setIsOpen] = useState(false);
