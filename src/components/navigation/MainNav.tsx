@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { PlusCircle, SlidersHorizontal, Users } from 'lucide-react';
-import {
-  Settings, BarChart2, Menu, Bell, HelpCircle, Search
-} from '../../utils/iconImports';
+import { PlusCircle, SlidersHorizontal, Users, Menu, Bell, HelpCircle } from 'lucide-react';
+import { Settings, BarChart2 } from '../../utils/iconImports';
+import { AttIcon } from '../icons/AttIcon';
 import { SearchBar } from './SearchBar';
 import { NotificationsButton } from './NotificationsButton';
 import { HelpButton } from './HelpButton';
@@ -16,7 +15,7 @@ import { Button } from '../common/Button';
 
 interface NavItem {
   label: string;
-  icon: typeof PlusCircle;
+  icon: typeof PlusCircle | ((props: { className?: string }) => ReactNode);
   href: string;
   description: string;
   active?: boolean;
@@ -61,25 +60,25 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
   const defaultItems: NavItem[] = [
     {
       label: 'Create',
-      icon: PlusCircle,
+      icon: ({ className }: { className?: string }) => <AttIcon name="plus" className={className} />,
       href: '/create',
       description: 'Create a New Connection Here'
     },
     {
       label: 'Manage',
-      icon: Settings,
+      icon: ({ className }: { className?: string }) => <AttIcon name="cloud" className={className} />,
       href: '/manage',
       description: 'Manage Your Individual Connections Here'
     },
     {
       label: 'Monitor',
-      icon: BarChart2,
+      icon: ({ className }: { className?: string }) => <AttIcon name="high-meter" className={className} />,
       href: '/monitor',
       description: 'Monitor and Report on Your Connections Here'
     },
     {
       label: 'Configure',
-      icon: SlidersHorizontal,
+      icon: ({ className }: { className?: string }) => <AttIcon name="gear" className={className} />,
       href: '/configure',
       description: 'Configure your Global Settings Here'
     }
