@@ -40,24 +40,21 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 
-    <!-- ============================================================
-         UserTesting.com Integration
-         ============================================================
-         To activate:
-         1. Log into usertesting.com and create a study
-         2. Go to Setup > Site Intercept or Feedback Tab
-         3. Copy the generated snippet and paste it below
-         4. Uncomment the script tags
-
-         SITE INTERCEPT (triggers study on page load or user action):
-    <script type="text/javascript">
-      // Paste your UserTesting Site Intercept code here
+    <!-- Maze.co User Testing -->
+    <script>
+    (function (m, a, z, e) {
+      var s, t, u, v;
+      try { t = m.sessionStorage.getItem('maze-us'); } catch (err) {}
+      if (!t) { t = new Date().getTime(); try { m.sessionStorage.setItem('maze-us', t); } catch (err) {} }
+      u = document.currentScript || (function () { var w = document.getElementsByTagName('script'); return w[w.length - 1]; })();
+      v = u && u.nonce;
+      s = a.createElement('script');
+      s.src = z + '?apiKey=' + e;
+      s.async = true;
+      if (v) s.setAttribute('nonce', v);
+      a.getElementsByTagName('head')[0].appendChild(s);
+      m.mazeUniversalSnippetApiKey = e;
+    })(window, document, 'https://snippet.maze.co/maze-universal-loader.js', 'd6c6826a-ad97-4c4a-9e64-746a7042ff5b');
     </script>
-
-         FEEDBACK TAB (persistent tab on page edge):
-    <script type="text/javascript">
-      // Paste your UserTesting Feedback Tab code here
-    </script>
-         ============================================================ -->
   </body>
 </html>
