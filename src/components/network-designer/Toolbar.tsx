@@ -20,6 +20,7 @@ interface ToolbarProps {
   onExportPDF: () => void;
   onSaveDraft?: () => void;
   onOpenDrafts?: () => void;
+  editMode?: boolean;
 }
 
 type MenuKey = 'function' | 'cloud' | 'datacenter' | 'network' | null;
@@ -40,6 +41,7 @@ export function Toolbar({
   onOpenDrafts,
   onToggleMaximize,
   isMaximized,
+  editMode = false,
 }: ToolbarProps) {
   const [openMenu, setOpenMenu] = useState<MenuKey>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -308,16 +310,21 @@ export function Toolbar({
 
       <div className="w-px h-5 bg-fw-secondary mx-1 flex-shrink-0" />
 
-      {/* Create Connections */}
+      {/* Create / Save */}
       <button
         onClick={onCreateConnections}
         disabled={!hasConnections}
-        title="Create connections"
-        className={`p-2 rounded-full transition-colors ${
-          hasConnections ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
+        title={editMode ? 'Save updates' : 'Create connections'}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors font-medium text-figma-base ${
+          hasConnections
+            ? editMode
+              ? 'bg-fw-primary text-white hover:bg-fw-primaryHover'
+              : 'text-fw-heading hover:bg-fw-wash'
+            : 'text-fw-disabled cursor-not-allowed'
         }`}
       >
-        <Check className="h-4 w-4" />
+        <Check className="h-4 w-4 flex-shrink-0" />
+        {showLabels && <span>{editMode ? 'Save updates' : 'Create'}</span>}
       </button>
     </div>
   );

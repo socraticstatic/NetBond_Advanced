@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Link2, Box } from 'lucide-react';
 import { AttIcon } from '../../icons/AttIcon';
 import { Connection } from '../../../types';
@@ -14,6 +15,7 @@ interface ConnectionOverviewProps {
 }
 
 export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCount = 0, vnfsCount = 0 }: ConnectionOverviewProps) {
+  const navigate = useNavigate();
   const [currentBandwidth, setCurrentBandwidth] = useState(connection.bandwidth);
 
   const handleBandwidthChange = (newBandwidth: string) => {
@@ -83,7 +85,10 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
             </div>
             <p className="text-[12px] text-fw-bodyLight mt-0.5">Interactive visualization of your network connection</p>
           </div>
-          <button className="tab-button text-[14px] font-medium text-fw-link hover:text-fw-linkHover transition-colors">
+          <button
+            onClick={() => navigate('/create', { state: { editMode: true, connectionId: connection.id, connectionName: connection.name, connectionStatus: connection.status } })}
+            className="tab-button text-[14px] font-medium text-fw-link hover:text-fw-linkHover transition-colors"
+          >
             Edit Topology
           </button>
         </div>
