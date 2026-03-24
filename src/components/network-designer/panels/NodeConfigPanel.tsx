@@ -43,6 +43,7 @@ export function NodeConfigPanel({ node, onUpdate, onDelete, onClose }: NodeConfi
       onClose={onClose}
       title={node.name}
       onDelete={() => onDelete(node.id)}
+      deleteLabel="Delete node"
     >
       {/* Tabs */}
       <div className="flex gap-1 mb-4">

@@ -31,7 +31,9 @@ export interface NetworkEdge {
   };
   config?: {
     resilience?: 'single' | 'redundant' | 'ha' | 'dual-diverse';
+    rto?: 'standard' | 'fast' | 'immediate';
     encrypted?: boolean;
+    bfd?: boolean;
     qosProfile?: string;
   };
 }
