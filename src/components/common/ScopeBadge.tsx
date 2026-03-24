@@ -43,7 +43,7 @@ export function ScopeBadge({ scope, label, showIcon = true, variant = 'default' 
     }
   };
 
-  const config = scopeConfig[scope];
+  const config = scopeConfig[scope] || scopeConfig['own'];
   const Icon = config.icon;
 
   const colorClasses = {
