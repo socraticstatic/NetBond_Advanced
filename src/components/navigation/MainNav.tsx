@@ -194,7 +194,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
                     `}
                   >
                     <Icon className={`
-                      h-5 w-5 mr-2 transition-transform duration-200
+                      h-6 w-6 mr-2 transition-transform duration-200
                       ${hoveredItem === item.href ? 'scale-110' : ''}
                       ${isActive ? 'text-fw-link' : 'text-fw-heading'}
                     `} 
