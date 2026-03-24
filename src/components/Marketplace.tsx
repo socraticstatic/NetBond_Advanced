@@ -5,6 +5,7 @@ import {
   Server, MessageSquare, Send, ArrowRight, X, Building, Zap, Star, Search, Filter, Lock, Activity, BarChart3, Layers, Plug, Code, Wrench, ShieldCheck
 } from 'lucide-react';
 import { MarketplaceItem, MarketplaceFilter, MarketplaceCategory } from '../types/connection';
+import { AttIcon } from './icons/AttIcon';
 import { Button } from './common/Button';
 import { CategoryGrid } from './marketplace/CategoryGrid';
 import { CollectionGrid } from './marketplace/CollectionGrid';
@@ -790,13 +791,13 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
           </div>
           <div className="hidden lg:flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
-              <Network className="h-8 w-8 text-white/80" />
+              <AttIcon name="router" className="h-8 w-8 text-white/80" />
             </div>
             <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
-              <Shield className="h-8 w-8 text-white/80" />
+              <AttIcon name="check-shield" className="h-8 w-8 text-white/80" />
             </div>
             <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
-              <Zap className="h-8 w-8 text-white/80" />
+              <AttIcon name="cloud" className="h-8 w-8 text-white/80" />
             </div>
           </div>
         </div>
