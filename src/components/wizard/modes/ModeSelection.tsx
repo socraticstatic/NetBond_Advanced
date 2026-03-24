@@ -1,4 +1,5 @@
-import { Code, Layers, ListChecks, ChevronRight, X, Info } from 'lucide-react';
+import { ChevronRight, X, Info } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 
 interface ModeSelectionProps {
   onModeSelect: (mode: 'step-by-step' | 'visual' | 'api') => void;
@@ -11,30 +12,27 @@ export function ModeSelection({ onModeSelect, onCancel }: ModeSelectionProps) {
       id: 'step-by-step' as const,
       name: 'Step-by-Step Wizard',
       description: 'Guided connection setup with detailed configuration options',
-      icon: ListChecks,
-      iconBg: 'bg-fw-primary',
-      iconColor: 'text-white',
-      ctaColor: 'text-fw-link',
+      attIcon: 'checklist' as const,
+      iconBg: 'bg-[#0057B8]',
+      ctaColor: 'text-[#0057B8]',
       disabled: false
     },
     {
       id: 'visual' as const,
       name: 'Visual Designer',
       description: 'Design your network topology using an interactive canvas',
-      icon: Layers,
-      iconBg: 'bg-fw-purple',
-      iconColor: 'text-white',
-      ctaColor: 'text-fw-purple',
+      attIcon: 'router' as const,
+      iconBg: 'bg-[#009FDB]',
+      ctaColor: 'text-[#009FDB]',
       disabled: false
     },
     {
       id: 'api' as const,
       name: 'API Configuration',
       description: 'Configure your connection using JSON and API endpoints',
-      icon: Code,
-      iconBg: 'bg-fw-success',
-      iconColor: 'text-white',
-      ctaColor: 'text-fw-success',
+      attIcon: 'apis' as const,
+      iconBg: 'bg-[#003D82]',
+      ctaColor: 'text-[#003D82]',
       disabled: false
     }
   ];
@@ -51,7 +49,6 @@ export function ModeSelection({ onModeSelect, onCancel }: ModeSelectionProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {modes.map((mode) => {
-            const Icon = mode.icon;
             return (
               <button
                 key={mode.id}
@@ -66,10 +63,10 @@ export function ModeSelection({ onModeSelect, onCancel }: ModeSelectionProps) {
                 <div className="flex flex-col items-center">
                   <div className={`
                     inline-flex items-center justify-center w-12 h-12 rounded-lg
-                    ${mode.disabled ? 'bg-fw-neutral text-fw-disabled' : `${mode.iconBg} ${mode.iconColor}`}
+                    ${mode.disabled ? 'bg-fw-neutral text-fw-disabled' : mode.iconBg}
                     mb-4 ${!mode.disabled && 'group-hover:scale-110 transition-transform duration-300'}
                   `}>
-                    <Icon className="w-6 h-6" />
+                    <AttIcon name={mode.attIcon} className="w-6 h-6 text-white" />
                   </div>
 
                   <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mb-2">
