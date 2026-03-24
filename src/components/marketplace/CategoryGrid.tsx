@@ -40,7 +40,7 @@ export function CategoryGrid({
             <div key={category.id}>
               <button
                 className={`
-                  w-full flex items-center text-left gap-3 px-3 py-2 no-rounded border-l-2 transition-all duration-200
+                  w-full flex items-center text-left gap-2 px-3 py-2.5 no-rounded border-l-2 transition-all duration-200
                   ${isSelected
                     ? 'border-fw-active text-fw-link'
                     : 'border-transparent text-fw-heading hover:text-fw-body hover:border-fw-secondary'
@@ -48,26 +48,19 @@ export function CategoryGrid({
                 `}
                 onClick={() => onCategoryToggle(category.id)}
               >
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                  isSelected ? 'bg-fw-link text-white' : 'bg-fw-wash text-fw-bodyLight'
-                }`}>
-                  <Icon className="h-4 w-4" />
-                </div>
-                <span className="flex-1 text-figma-base font-medium truncate text-left">{category.name}</span>
-                <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
-                  <span
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleExpand(category.id);
-                    }}
-                    className="p-0.5 cursor-pointer hover:bg-fw-wash transition-colors"
-                  >
-                    {isExpanded
-                      ? <ChevronDown className="h-4 w-4" />
-                      : <ChevronRight className="h-4 w-4" />
-                    }
-                  </span>
-                </div>
+                <span className="flex-1 text-figma-base font-medium leading-snug text-left">{category.name}</span>
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleExpand(category.id);
+                  }}
+                  className="p-0.5 cursor-pointer hover:bg-fw-wash transition-colors flex-shrink-0"
+                >
+                  {isExpanded
+                    ? <ChevronDown className="h-4 w-4" />
+                    : <ChevronRight className="h-4 w-4" />
+                  }
+                </span>
               </button>
             </div>
           );
