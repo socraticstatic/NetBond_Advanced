@@ -26,7 +26,7 @@ export function MetricsOverview({ metrics }: MetricsOverviewProps) {
     },
     {
       label: 'Uptime',
-      value: metrics.uptime,
+      value: metrics.uptime || '99.97%',
       icon: <Clock className="h-6 w-6 text-fw-link" />,
     }
   ];

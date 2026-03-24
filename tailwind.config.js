@@ -38,7 +38,7 @@ export default {
             '400': '#3374cc',
             '600': '#0057b8',   // PRIMARY - buttons, links, active nav
             '700': '#00388f',   // Pressed/hover states
-            '800': '#00235a',   // Dark mode
+            '800': '#00235a',   // Deep pressed states
           },
 
           // Flywheel Gray Scale (Figma-matched)
