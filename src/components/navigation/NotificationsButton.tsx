@@ -95,7 +95,7 @@ export function NotificationsButton() {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-center h-9 w-9 text-fw-heading hover:text-fw-body transition-colors duration-200 relative"
       >
-        <AttIcon name="bell" className="h-5 w-5" />
+        <AttIcon name="bell" className="h-6 w-6" />
         {notifications.length > 0 && (
           <span className="absolute -top-1 -right-1 h-4 w-4 text-figma-sm flex items-center justify-center bg-fw-error text-white rounded-full">
             {notifications.length}
