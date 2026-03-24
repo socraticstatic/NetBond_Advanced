@@ -83,7 +83,7 @@ export function Toolbar({
   // Choose | Cloud Router | Function ▾ | Cloud ▾ | Datacenter ▾ | Network ▾ | + Connection | Play | Save | Undo | Clear | Create
 
   return (
-    <div ref={menuRef} className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-3 py-2 rounded-full shadow-lg border border-fw-secondary bg-fw-base max-w-[calc(100%-2rem)] overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+    <div ref={menuRef} className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-3 py-2 rounded-full shadow-lg border border-fw-secondary bg-fw-base max-w-[calc(100%-2rem)]">
 
       {/* Choose (Templates) */}
       <button
