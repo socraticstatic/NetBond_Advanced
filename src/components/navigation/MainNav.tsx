@@ -66,7 +66,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
     },
     {
       label: 'Manage',
-      icon: ({ className }: { className?: string }) => <AttIcon name="router" className={className} />,
+      icon: ({ className }: { className?: string }) => <AttIcon name="grid" className={className} />,
       href: '/manage',
       description: 'Manage Your Individual Connections Here'
     },
