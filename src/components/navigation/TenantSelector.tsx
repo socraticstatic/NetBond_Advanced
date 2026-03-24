@@ -84,7 +84,7 @@ export function TenantSelector({ className = '', onProfileClick }: TenantSelecto
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-2 py-1.5 rounded-full hover:bg-fw-wash transition-colors"
       >
-        <AttIcon name="person" className="h-5 w-5 text-fw-heading" />
+        <AttIcon name="person" className="h-6 w-6 text-fw-heading" />
         <ChevronDown className={`w-4 h-4 text-fw-bodyLight transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 

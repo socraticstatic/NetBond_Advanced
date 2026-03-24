@@ -52,7 +52,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
           onClick={() => setShowSearch(true)}
           className="p-2 text-fw-heading hover:text-fw-body hover:bg-fw-wash rounded-lg transition-colors duration-200"
         >
-          <AttIcon name="search" className="h-5 w-5" />
+          <AttIcon name="search" className="h-6 w-6" />
         </button>
       )}
     </div>
