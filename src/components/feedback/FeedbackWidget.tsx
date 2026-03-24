@@ -57,16 +57,16 @@ const feedbackTypes = [
   },
   {
     id: 'usertesting' as FeedbackType,
-    label: 'User Testing Session',
-    description: 'Take a guided usability test (5-10 min)',
+    label: 'Usability Test',
+    description: 'Take a guided usability test via Maze (5-10 min)',
     icon: UserCheck,
     color: 'text-fw-success',
     bg: 'bg-fw-successLight hover:bg-fw-successLight border-fw-success',
   },
 ];
 
-// UserTesting.com study URL - replace with your actual study link
-const USERTESTING_URL = 'https://app.usertesting.com/v/REPLACE-WITH-YOUR-STUDY-ID/live';
+// Maze.co study URL - replace with your maze test link when you create a study
+const MAZE_STUDY_URL = 'https://t.maze.co/REPLACE-WITH-YOUR-MAZE-TEST-ID';
 
 export function FeedbackWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -91,7 +91,7 @@ export function FeedbackWidget() {
 
   const handleTypeSelect = (type: FeedbackType) => {
     if (type === 'usertesting') {
-      window.open(USERTESTING_URL, '_blank', 'noopener,noreferrer');
+      window.open(MAZE_STUDY_URL, '_blank', 'noopener,noreferrer');
       handleClose();
       return;
     }
