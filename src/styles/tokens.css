@@ -1,4 +1,7 @@
 :root {
+  /* Force light mode - ignore system preference */
+  color-scheme: light;
+
   /* Font Family */
   --font-family-base: 'ATT Aleck Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-family-heading: 'ATT Aleck Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -241,40 +244,7 @@
   --fw-border-error: var(--color-error);
 }
 
-/* AT&T Flywheel Design System - Dark Mode Semantic Tokens */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Text Colors - Dark Mode */
-    --fw-text-heading: rgb(255 255 255);
-    --fw-text-body: rgb(255 255 255);
-    --fw-text-bodyLight: var(--color-gray-400);
-    --fw-text-link: var(--color-att-blue-000);
-    --fw-text-linkHover: var(--color-att-blue-100);
-    --fw-text-linkPrimary: rgb(255 255 255);
-    --fw-text-disabled: var(--color-gray-500);
-    --fw-text-error: var(--color-error-light);
-    --fw-text-success: var(--color-success-light);
-    --fw-text-warning: var(--color-warning-light);
-    --fw-text-info: var(--color-att-blue);
-
-    /* Background Colors - Dark Mode */
-    --fw-bg-base: rgb(0 0 0);
-    --fw-bg-wash: var(--color-gray-900);
-    --fw-bg-neutral: var(--color-gray-800);
-    --fw-bg-accent: var(--color-cobalt-800);
-    --fw-bg-primary: var(--color-att-blue-100);
-    --fw-bg-ctaPrimary: var(--color-att-blue-000);
-    --fw-bg-ctaPrimaryHover: var(--color-att-blue-100);
-    --fw-bg-disabled: var(--color-gray-300);
-
-    /* Border Colors - Dark Mode */
-    --fw-border-primary: var(--color-gray-400);
-    --fw-border-secondary: var(--color-gray-700);
-    --fw-border-active: var(--color-att-blue-000);
-    --fw-border-focus: var(--color-gray-200);
-    --fw-border-error: var(--color-error-light);
-  }
-}
+/* Dark mode removed - always use light mode */
 
 /* Component-specific tokens */
 :root {
@@ -338,13 +308,7 @@
   --status-error-text: var(--color-error-700);
 }
 
-/* Dark mode tokens - for future use */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* These would be your dark mode tokens */
-    /* Currently not implemented but prepared for future use */
-  }
-}
+/* Dark mode removed - light only */
 
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
