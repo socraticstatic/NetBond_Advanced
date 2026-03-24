@@ -192,19 +192,6 @@ export function VNFTable({
       tableId="vnf"
       showColumnManager={true}
       toolbar={toolbar}
-      headerActions={
-        onDetach && (
-          <button
-            onClick={onDetach}
-            disabled={isDetached}
-            className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            title={isDetached ? 'Table Detached' : 'Detach Table'}
-            aria-label={isDetached ? 'Table Detached' : 'Detach Table'}
-          >
-            <ExternalLink className="h-5 w-5" />
-          </button>
-        )
-      }
       rowActions={(vnf) => (
         <OverflowMenu
           items={[

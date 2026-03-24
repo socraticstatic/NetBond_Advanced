@@ -145,25 +145,7 @@ export function VNFSection({
             searchPlaceholder="Search VNFs ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            filterContent={
-              <select
-                value={vnfTypeFilter}
-                onChange={(e) => setVnfTypeFilter(e.target.value as VNFType | 'all')}
-                className="inline-flex items-center h-9 pl-4 pr-8 text-[14px] font-medium text-fw-link bg-transparent border border-fw-active rounded-full hover:bg-fw-neutral transition-colors tracking-[-0.03em] appearance-none cursor-pointer"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230057B8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 0.75rem center',
-                }}
-              >
-                <option value="all">All Types</option>
-                <option value="firewall">Firewall</option>
-                <option value="sdwan">SD-WAN</option>
-                <option value="router">Router</option>
-                <option value="vnat">NAT</option>
-                <option value="custom">Custom</option>
-              </select>
-            }
+            onFilter={() => {}}
             onExport={() => {
               const getTypeName = (type: VNFType) => {
                 switch(type) {
