@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Search, Filter, Download, RefreshCw } from 'lucide-react';
+import { Search, RefreshCw } from 'lucide-react';
 import { Button } from './Button';
 
 interface SearchFilterBarProps {
@@ -49,7 +49,7 @@ export function SearchFilterBar({
       {/* Filter */}
       {showFilter && (onFilter || filterContent) && (
         filterContent || (
-          <Button variant="secondary" icon={Filter} onClick={onFilter} size="md">
+          <Button variant="secondary" onClick={onFilter} size="md">
             Filter
           </Button>
         )
@@ -57,7 +57,7 @@ export function SearchFilterBar({
 
       {/* Export */}
       {showExport && onExport && (
-        <Button variant="secondary" icon={Download} onClick={onExport} size="md">
+        <Button variant="secondary" onClick={onExport} size="md">
           Export
         </Button>
       )}
