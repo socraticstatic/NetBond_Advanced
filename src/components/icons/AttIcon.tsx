@@ -15,14 +15,17 @@ function AttIconComponent({ name, className = 'h-5 w-5' }: AttIconProps) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox={icon.viewBox}
       fill="currentColor"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
       className={className}
       aria-hidden="true"
     >
       {icon.paths.map((d, i) => (
-        <path key={i} fillRule="evenodd" clipRule="evenodd" d={d} fill="currentColor" />
+        <path key={i} fillRule="evenodd" clipRule="evenodd" d={d} />
       ))}
       {icon.rects?.map((r, i) => (
-        <rect key={`r${i}`} x={r.x} y={r.y} width={r.width} height={r.height} fill="currentColor" />
+        <rect key={`r${i}`} x={r.x} y={r.y} width={r.width} height={r.height} />
       ))}
     </svg>
   );
