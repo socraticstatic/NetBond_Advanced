@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Search, X } from 'lucide-react';
+import { X } from 'lucide-react';
+import { AttIcon } from '../icons/AttIcon';
 
 interface SearchBarProps {
   onSearch?: (query: string) => void;
@@ -35,7 +36,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
               onBlur={() => !searchQuery && setShowSearch(false)}
               autoFocus
             />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-fw-link" />
+            <AttIcon name="search" className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-fw-link" />
             {searchQuery && (
               <button
                 onClick={clearSearch}
@@ -51,7 +52,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
           onClick={() => setShowSearch(true)}
           className="p-2 text-fw-heading hover:text-fw-body hover:bg-fw-wash rounded-lg transition-colors duration-200"
         >
-          <Search className="h-5 w-5" />
+          <AttIcon name="search" className="h-5 w-5" />
         </button>
       )}
     </div>
