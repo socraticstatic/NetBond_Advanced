@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { X, Bug, Lightbulb, MessageSquare, Star, CheckCircle } from 'lucide-react';
+import { X, Bug, Lightbulb, MessageSquare, Star, CheckCircle, UserCheck } from 'lucide-react';
 import { Button } from '../common/Button';
 
-type FeedbackType = 'bug' | 'feature' | 'general';
+type FeedbackType = 'bug' | 'feature' | 'general' | 'usertesting';
 type Step = 'select' | 'form' | 'confirm';
 
 interface BugFormData {
@@ -55,7 +55,18 @@ const feedbackTypes = [
     color: 'text-fw-link',
     bg: 'bg-fw-infoLight hover:bg-fw-infoLight border-fw-active',
   },
+  {
+    id: 'usertesting' as FeedbackType,
+    label: 'User Testing Session',
+    description: 'Take a guided usability test (5-10 min)',
+    icon: UserCheck,
+    color: 'text-fw-success',
+    bg: 'bg-fw-successLight hover:bg-fw-successLight border-fw-success',
+  },
 ];
+
+// UserTesting.com study URL - replace with your actual study link
+const USERTESTING_URL = 'https://app.usertesting.com/v/REPLACE-WITH-YOUR-STUDY-ID/live';
 
 export function FeedbackWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,6 +90,11 @@ export function FeedbackWidget() {
   };
 
   const handleTypeSelect = (type: FeedbackType) => {
+    if (type === 'usertesting') {
+      window.open(USERTESTING_URL, '_blank', 'noopener,noreferrer');
+      handleClose();
+      return;
+    }
     setFeedbackType(type);
     setStep('form');
   };
