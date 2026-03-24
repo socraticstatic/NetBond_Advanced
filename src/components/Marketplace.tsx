@@ -817,7 +817,6 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                 : 'border-transparent text-fw-heading hover:text-fw-link hover:border-fw-secondary'
             }`}
           >
-            <Cloud className={`h-5 w-5 mr-3 ${activeTab === 'aws' ? 'text-fw-link' : 'text-fw-heading'}`} />
             AWS Partner
           </button>
           <button
@@ -828,7 +827,6 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                 : 'border-transparent text-fw-heading hover:text-fw-link hover:border-fw-secondary'
             }`}
           >
-            <Network className={`h-5 w-5 mr-3 ${activeTab === 'all' ? 'text-fw-link' : 'text-fw-heading'}`} />
             Browse Products
           </button>
           <button
@@ -839,7 +837,6 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                 : 'border-transparent text-fw-heading hover:text-fw-link hover:border-fw-secondary'
             }`}
           >
-            <Sparkles className={`h-5 w-5 mr-3 ${activeTab === 'solutions' ? 'text-fw-link' : 'text-fw-heading'}`} />
             Browse Solutions
           </button>
         </nav>
