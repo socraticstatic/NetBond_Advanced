@@ -1,10 +1,11 @@
 import { useState, useMemo } from 'react';
 import {
-  Plus, Search, Filter, Download, Play, Pause, Edit2, Trash2,
+  Plus, Play, Pause, Edit2, Trash2,
   Shield, AlertTriangle, Check, Network, GitBranch, Layers,
   ChevronDown, ChevronUp
 } from 'lucide-react';
 import { Button } from '../../common/Button';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { Toggle } from '../../common/Toggle';
 import { RoutingPolicy, PolicyAppliesTo, PolicyAction, PolicyProtocol } from '../../../types/routingPolicy';
 import { Connection } from '../../../types';
@@ -247,39 +248,20 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
       </div>
 
       {/* Search and Controls */}
-      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-4">
-        <div className="flex items-center space-x-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fw-disabled h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search policies..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 h-10 border border-fw-bodyLight rounded-lg focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-            />
-          </div>
-
-          <Button
-            variant="outline"
-            icon={Filter}
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            Filters
-          </Button>
-
-          <Button
-            variant="outline"
-            icon={Download}
-            onClick={exportPolicies}
-          >
-            Export
-          </Button>
+      <div className="rounded-lg border border-fw-secondary overflow-hidden">
+        <div className="px-6 py-4 border-b border-fw-secondary">
+          <SearchFilterBar
+            searchPlaceholder="Search policies..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            onFilter={() => setShowFilters(!showFilters)}
+            onExport={exportPolicies}
+          />
         </div>
 
         {/* Filters Panel */}
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-fw-secondary">
+          <div className="px-6 py-4 border-b border-fw-secondary bg-fw-wash">
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <h4 className="text-figma-sm font-medium text-fw-body mb-2">Action</h4>
@@ -347,12 +329,10 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
             </div>
           </div>
         )}
-      </div>
 
       {/* Policies List */}
-      <div className="space-y-3">
         {filteredPolicies.length === 0 ? (
-          <div className="text-center py-12 bg-fw-wash rounded-2xl border border-fw-secondary">
+          <div className="px-6 py-12 text-center">
             <Shield className="h-12 w-12 text-fw-disabled mx-auto mb-3" />
             <p className="text-fw-body">No routing policies found</p>
             <p className="text-figma-sm text-fw-bodyLight mt-1">
@@ -363,10 +343,11 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
             </p>
           </div>
         ) : (
-          filteredPolicies.map((policy) => (
+          <div className="divide-y divide-fw-secondary">
+          {filteredPolicies.map((policy) => (
             <div
               key={policy.id}
-              className="bg-fw-base rounded-2xl border border-fw-secondary hover:shadow-md transition-shadow"
+              className="bg-fw-base hover:bg-fw-wash transition-colors"
             >
               {/* Policy Header */}
               <div className="p-4 flex items-center justify-between">
@@ -509,7 +490,8 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                 </div>
               )}
             </div>
-          ))
+          ))}
+          </div>
         )}
       </div>
 
