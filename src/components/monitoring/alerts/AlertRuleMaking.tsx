@@ -49,9 +49,7 @@ export function AlertRuleMaking({ selectedConnection, timeRange, defaultTab = 'a
       {/* Vertical Tabs */}
       <div className="w-[186px] shrink-0 border-r border-fw-secondary pr-4">
         <nav className="space-y-1" aria-label="Rule Types">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            return (
+          {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
@@ -64,13 +62,9 @@ export function AlertRuleMaking({ selectedConnection, timeRange, defaultTab = 'a
                   }
                 `}
               >
-                <Icon className={`h-5 w-5 mr-3 ${
-                  activeTab === tab.id ? 'text-fw-link' : 'text-fw-heading'
-                }`} />
                 {tab.label}
               </button>
-            );
-          })}
+          ))}
         </nav>
 
         <div className="mt-6 p-4 bg-fw-wash rounded-lg border border-fw-secondary">

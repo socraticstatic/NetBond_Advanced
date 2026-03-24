@@ -25,7 +25,6 @@ export function AlertsTab() {
         <div className="w-[186px] shrink-0 border-r border-fw-secondary pr-4">
           <nav className="space-y-1" aria-label="Alerts Navigation">
             {tabs.map((tab) => {
-              const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
@@ -39,9 +38,6 @@ export function AlertsTab() {
                     }
                   `}
                 >
-                  <Icon className={`h-5 w-5 mr-3 ${
-                    activeSubTab === tab.id ? 'text-fw-link' : 'text-fw-heading'
-                  }`} />
                   {tab.label}
                 </button>
               );
