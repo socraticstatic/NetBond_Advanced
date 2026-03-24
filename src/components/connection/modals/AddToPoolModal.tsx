@@ -101,8 +101,8 @@ export function AddToPoolModal({
                       <div className="flex items-center space-x-2">
                         <span className={`text-figma-sm px-2 py-1 rounded-full ${
                           pool.type === 'business' ? 'bg-fw-accent text-fw-linkHover' :
-                          pool.type === 'department' ? 'bg-purple-50 text-fw-purple' :
-                          pool.type === 'project' ? 'bg-green-50 text-fw-success' :
+                          pool.type === 'department' ? 'bg-fw-purpleLight text-fw-purple' :
+                          pool.type === 'project' ? 'bg-fw-successLight text-fw-success' :
                           pool.type === 'team' ? 'bg-fw-warn/10 text-fw-warn' :
                           'bg-fw-neutral text-fw-heading'
                         }`}>

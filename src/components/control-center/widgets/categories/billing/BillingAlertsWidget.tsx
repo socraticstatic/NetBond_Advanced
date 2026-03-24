@@ -47,7 +47,7 @@ export function BillingAlertsWidget({ connections }: BillingAlertsWidgetProps) {
             className={`p-2 rounded-lg ${
               alert.type === 'warning' ? 'bg-fw-warn/10' :
               alert.type === 'info' ? 'bg-fw-accent' :
-              'bg-green-50'
+              'bg-fw-successLight'
             }`}
           >
             <div className="flex items-start">

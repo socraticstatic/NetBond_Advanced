@@ -106,7 +106,7 @@ export function ComplianceReports() {
     switch (status) {
       case 'compliant': return 'text-fw-success bg-fw-successLight';
       case 'at-risk': return 'text-fw-warn bg-fw-warnLight';
-      case 'non-compliant': return 'text-fw-error bg-red-50';
+      case 'non-compliant': return 'text-fw-error bg-fw-errorLight';
     }
   };
 
@@ -220,11 +220,11 @@ export function ComplianceReports() {
               <p className="text-2xl font-semibold text-fw-heading mt-1">
                 {totalIssues}
               </p>
-              <p className="text-figma-sm text-yellow-600 mt-1">
+              <p className="text-figma-sm text-fw-warn mt-1">
                 Requires attention
               </p>
             </div>
-            <AlertTriangle className="h-8 w-8 text-yellow-500" />
+            <AlertTriangle className="h-8 w-8 text-fw-warn" />
           </div>
         </div>
       </div>
@@ -285,11 +285,11 @@ export function ComplianceReports() {
                     {framework.requirements.met} Met
                   </span>
                   <span className="flex items-center">
-                    <span className="w-2 h-2 bg-yellow-500 rounded-full mr-1"></span>
+                    <span className="w-2 h-2 bg-fw-warnLight0 rounded-full mr-1"></span>
                     {framework.requirements.partial} Partial
                   </span>
                   <span className="flex items-center">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mr-1"></span>
+                    <span className="w-2 h-2 bg-fw-errorLight0 rounded-full mr-1"></span>
                     {framework.requirements.failed} Failed
                   </span>
                 </div>
@@ -402,7 +402,7 @@ export function ComplianceReports() {
                         <div
                           className={`h-2 rounded-full transition-all ${
                             category.status === 'pass' ? 'bg-fw-success' :
-                            category.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
+                            category.status === 'warning' ? 'bg-fw-warnLight0' : 'bg-fw-errorLight0'
                           }`}
                           style={{ width: `${category.score}%` }}
                         />

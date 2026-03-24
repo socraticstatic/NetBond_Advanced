@@ -11,7 +11,7 @@ export function QuickStatCard({ title, value, icon: Icon, variant = 'default' }:
   const variantColors = {
     default: 'text-fw-bodyLight',
     success: 'text-fw-success',
-    warning: 'text-amber-500',
+    warning: 'text-fw-warn',
     error: 'text-fw-error',
     info: 'text-fw-link'
   };

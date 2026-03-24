@@ -15,7 +15,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#e8f0fe' }}>
+    <div className="min-h-screen flex flex-col" className="bg-fw-accent">
       {/* Content */}
       <div className="flex-1 flex items-center justify-center px-8">
         <div className="w-full max-w-[596px]">

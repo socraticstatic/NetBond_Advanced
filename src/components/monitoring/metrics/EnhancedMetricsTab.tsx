@@ -3,6 +3,7 @@ import { Activity, Zap, Network, TrendingUp, AlertTriangle, Clock, Database, Cpu
 import { RealTimeMetricCard } from './RealTimeMetricCard';
 import { RealTimeChart } from './RealTimeChart';
 import { useMonitoring } from '../context/MonitoringContext';
+import { chartColors } from '../../../utils/chartColors';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
 
 const RouterMetricsView = lazy(() => import('./RouterMetricsView').then(m => ({ default: m.RouterMetricsView })));
@@ -357,7 +358,7 @@ export function EnhancedMetricsTab() {
             data={latencyChartData}
             title="Network Latency"
             unit="ms"
-            color="#3b82f6"
+            color={chartColors.primary}
             thresholds={{ warning: 10, critical: 20 }}
             height={300}
           />
@@ -365,7 +366,7 @@ export function EnhancedMetricsTab() {
             data={throughputChartData}
             title="Network Throughput"
             unit="Mbps"
-            color="#10b981"
+            color={chartColors.success}
             thresholds={{ warning: 500, critical: 300 }}
             height={300}
           />
@@ -373,7 +374,7 @@ export function EnhancedMetricsTab() {
             data={packetLossChartData}
             title="Packet Loss Rate"
             unit="%"
-            color="#ef4444"
+            color={chartColors.error}
             thresholds={{ warning: 0.1, critical: 0.5 }}
             height={300}
           />
@@ -385,7 +386,7 @@ export function EnhancedMetricsTab() {
           data={latencyChartData}
           title="Network Latency - Detailed View"
           unit="ms"
-          color="#3b82f6"
+          color={chartColors.primary}
           thresholds={{ warning: 10, critical: 20 }}
           height={400}
         />
@@ -396,7 +397,7 @@ export function EnhancedMetricsTab() {
           data={throughputChartData}
           title="Network Throughput - Detailed View"
           unit="Mbps"
-          color="#10b981"
+          color={chartColors.success}
           thresholds={{ warning: 500, critical: 300 }}
           height={400}
         />
@@ -407,7 +408,7 @@ export function EnhancedMetricsTab() {
           data={packetLossChartData}
           title="Packet Loss Rate - Detailed View"
           unit="%"
-          color="#ef4444"
+          color={chartColors.error}
           thresholds={{ warning: 0.1, critical: 0.5 }}
           height={400}
         />

@@ -1083,17 +1083,17 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     {item.addon && (
-                      <span className="px-2 py-0.5 text-figma-sm font-medium rounded-full bg-emerald-100 text-emerald-700">
+                      <span className="px-2 py-0.5 text-figma-sm font-medium rounded-full bg-fw-successLight text-fw-success">
                         Add-on
                       </span>
                     )}
                     {item.vnf && (
-                      <span className="px-2 py-0.5 text-figma-sm font-medium rounded-full bg-purple-100 text-purple-700">
+                      <span className="px-2 py-0.5 text-figma-sm font-medium rounded-full bg-fw-purpleLight text-fw-purple">
                         VNF
                       </span>
                     )}
                     {item.api && (
-                      <span className="px-2 py-0.5 text-figma-sm font-medium rounded-full bg-blue-100 text-blue-700">
+                      <span className="px-2 py-0.5 text-figma-sm font-medium rounded-full bg-fw-infoLight text-fw-link">
                         API
                       </span>
                     )}
@@ -1107,7 +1107,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                     <Star
                       key={star}
                       className={`h-3.5 w-3.5 ${
-                        star <= item.rating.score ? 'text-yellow-400 fill-current' : 'text-fw-bodyLight'
+                        star <= item.rating.score ? 'text-fw-warn fill-current' : 'text-fw-bodyLight'
                       }`}
                     />
                   ))}
@@ -1173,7 +1173,7 @@ export function Marketplace({ onSelectItem }: MarketplaceProps) {
                     </div>
                   </div>
                   {item.popularity >= 90 && (
-                    <div className="flex items-center px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-figma-sm font-bold">
+                    <div className="flex items-center px-2.5 py-1 rounded-full bg-fw-successLight text-fw-success text-figma-sm font-bold">
                       <Zap className="h-3.5 w-3.5 mr-1 fill-current" />
                       Popular
                     </div>

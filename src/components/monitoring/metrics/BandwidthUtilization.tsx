@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Card } from '../../common/Card';
 import { LineChart } from '../../charts/LazyCharts';
 import { ArrowUpDown, TrendingUp, Info, Share2, Zap } from 'lucide-react';
+import { chartColors } from '../../../utils/chartColors';
 
 interface BandwidthUtilizationProps {
   data: Array<{
@@ -34,16 +35,16 @@ export function BandwidthUtilization({ data, timeRange }: BandwidthUtilizationPr
         {
           label: 'Download (Mbps)',
           data: downloadData,
-          borderColor: '#10b981', // green
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderColor: chartColors.success,
+          backgroundColor: chartColors.successLight,
           fill: true,
           tension: 0.4
         },
         {
           label: 'Upload (Mbps)',
           data: uploadData,
-          borderColor: '#6366f1', // indigo
-          backgroundColor: 'rgba(99, 102, 241, 0.1)',
+          borderColor: chartColors.purple,
+          backgroundColor: chartColors.purpleLight,
           fill: true,
           tension: 0.4
         }
@@ -155,9 +156,9 @@ export function BandwidthUtilization({ data, timeRange }: BandwidthUtilizationPr
             
             <div className="flex items-center">
               <div className={`px-2 py-1 rounded text-figma-sm font-medium ${
-                usageStats.avg < 20 ? 'bg-red-50 text-fw-error' :
-                usageStats.avg < 40 ? 'bg-yellow-100 text-yellow-800' :
-                usageStats.avg < 70 ? 'bg-green-50 text-fw-success' :
+                usageStats.avg < 20 ? 'bg-fw-errorLight text-fw-error' :
+                usageStats.avg < 40 ? 'bg-fw-warnLight text-fw-warn' :
+                usageStats.avg < 70 ? 'bg-fw-successLight text-fw-success' :
                 'bg-fw-accent text-fw-linkHover'
               }`}>
                 {usageStats.avg < 20 ? 'Underutilized' :
@@ -188,7 +189,7 @@ export function BandwidthUtilization({ data, timeRange }: BandwidthUtilizationPr
                 <div 
                   className={`h-2.5 rounded-full ${
                     usageStats.peak > thresholds.critical ? 'bg-fw-error' :
-                    usageStats.peak > thresholds.warning ? 'bg-yellow-500' :
+                    usageStats.peak > thresholds.warning ? 'bg-fw-warnLight0' :
                     'bg-fw-success'
                   }`} 
                   style={{ width: `${usageStats.peak}%` }}
@@ -205,7 +206,7 @@ export function BandwidthUtilization({ data, timeRange }: BandwidthUtilizationPr
                 <div 
                   className={`h-2.5 rounded-full ${
                     usageStats.avg > thresholds.critical ? 'bg-fw-error' :
-                    usageStats.avg > thresholds.warning ? 'bg-yellow-500' :
+                    usageStats.avg > thresholds.warning ? 'bg-fw-warnLight0' :
                     'bg-fw-success'
                   }`} 
                   style={{ width: `${usageStats.avg}%` }}
@@ -232,7 +233,7 @@ export function BandwidthUtilization({ data, timeRange }: BandwidthUtilizationPr
               {usageStats.avg < 40 ? (
                 <span className="text-fw-success">Potential monthly savings: $250 with a lower tier</span>
               ) : usageStats.avg > 80 ? (
-                <span className="text-amber-600">Risk of over-limit charges if peak usage continues</span>
+                <span className="text-fw-warn">Risk of over-limit charges if peak usage continues</span>
               ) : (
                 <span className="text-brand-blue">Current plan provides optimal cost efficiency</span>
               )}

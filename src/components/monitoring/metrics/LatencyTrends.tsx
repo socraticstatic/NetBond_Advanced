@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Card } from '../../common/Card';
 import { LineChart } from '../../charts/LazyCharts';
 import { Clock, TrendingUp, TrendingDown, MapPin } from 'lucide-react';
+import { chartColors } from '../../../utils/chartColors';
 
 interface LatencyTrendsProps {
   data: Array<{
@@ -29,16 +30,16 @@ export function LatencyTrends({ data, timeRange }: LatencyTrendsProps) {
         {
           label: 'Latency (ms)',
           data: data.map(d => d.latency),
-          borderColor: '#3b82f6', // blue
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: chartColors.primary,
+          backgroundColor: chartColors.primaryLight,
           fill: true,
           tension: 0.4
         },
         {
           label: 'Jitter (ms)',
           data: data.map(d => d.jitter),
-          borderColor: '#8b5cf6', // purple
-          backgroundColor: 'rgba(139, 92, 246, 0.1)',
+          borderColor: chartColors.purple,
+          backgroundColor: chartColors.purpleLight,
           fill: true,
           tension: 0.4
         }

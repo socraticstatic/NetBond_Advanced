@@ -252,7 +252,7 @@ export function NotificationRules({ selectedConnection }: NotificationRulesProps
                     </label>
                     <button
                       onClick={() => deleteRule(rule.id)}
-                      className="p-2 text-red-400 hover:text-red-600 rounded-lg hover:bg-red-50"
+                      className="p-2 text-fw-error hover:text-fw-error rounded-lg hover:bg-fw-errorLight"
                     >
                       <Trash2 className="h-5 w-5" />
                     </button>

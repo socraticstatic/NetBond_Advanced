@@ -16,7 +16,7 @@ export function RenewableEnergyWidget({ connections }: RenewableEnergyWidgetProp
   const energySources = [
     { name: 'Solar', percentage: 42, icon: Sun, color: 'text-fw-warn' },
     { name: 'Wind', percentage: 28, icon: Wind, color: 'text-fw-link' },
-    { name: 'Hydro', percentage: 3, icon: Battery, color: 'text-cyan-500' }
+    { name: 'Hydro', percentage: 3, icon: Battery, color: 'text-fw-info' }
   ];
 
   return (
@@ -79,7 +79,7 @@ export function RenewableEnergyWidget({ connections }: RenewableEnergyWidgetProp
 
       {/* Energy Breakdown */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="p-3 bg-green-50 rounded-lg">
+        <div className="p-3 bg-fw-successLight rounded-lg">
           <div className="flex items-center justify-between mb-1">
             <span className="text-figma-sm text-fw-success">Renewable</span>
             <Zap className="h-4 w-4 text-fw-success" />
@@ -101,10 +101,10 @@ export function RenewableEnergyWidget({ connections }: RenewableEnergyWidgetProp
 
       {/* Quick Actions */}
       <div className="flex space-x-2">
-        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-green-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-fw-successLight rounded-lg transition-colors">
           Energy Report
         </button>
-        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-green-50 rounded-lg transition-colors">
+        <button className="flex-1 px-3 py-2 text-figma-base text-fw-success hover:bg-fw-successLight rounded-lg transition-colors">
           Add Sources
         </button>
       </div>

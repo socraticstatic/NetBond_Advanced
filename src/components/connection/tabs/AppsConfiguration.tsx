@@ -242,11 +242,11 @@ export function AppsConfiguration() {
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
       productivity: 'bg-fw-accent text-fw-linkHover',
-      communication: 'bg-green-50 text-fw-success',
+      communication: 'bg-fw-successLight text-fw-success',
       'cloud-storage': 'bg-fw-wash text-fw-purple',
-      streaming: 'bg-red-50 text-fw-error',
+      streaming: 'bg-fw-errorLight text-fw-error',
       security: 'bg-fw-warn/10 text-fw-warn',
-      development: 'bg-teal-100 text-teal-800'
+      development: 'bg-fw-successLight text-fw-success'
     };
     return colors[category] || 'bg-fw-neutral text-fw-heading';
   };
@@ -262,7 +262,7 @@ export function AppsConfiguration() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'high': return 'bg-red-50 text-fw-error border-red-200';
+      case 'high': return 'bg-fw-errorLight text-fw-error border-fw-error';
       case 'medium': return 'bg-fw-warn/10 text-fw-warn border-fw-warn/30';
       case 'low': return 'bg-fw-warn/10 text-fw-warn border-fw-warn/30';
       default: return 'bg-fw-neutral text-fw-heading border-fw-secondary';
@@ -297,7 +297,7 @@ export function AppsConfiguration() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-red-50 text-fw-error border-red-200';
+      case 'critical': return 'bg-fw-errorLight text-fw-error border-fw-error';
       case 'high': return 'bg-fw-warn/10 text-fw-warn border-fw-warn/30';
       case 'medium': return 'bg-fw-accent text-fw-linkHover border-fw-active';
       case 'low': return 'bg-fw-neutral text-fw-heading border-fw-secondary';
@@ -362,7 +362,7 @@ export function AppsConfiguration() {
           </div>
         </div>
 
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-4">
+        <div className="bg-fw-successLight border border-fw-success rounded-2xl p-4">
           <div className="flex items-center justify-between mb-2">
             <p className="text-figma-sm font-medium text-fw-success">Active Apps</p>
             <Layers className="h-5 w-5 text-fw-success" />
@@ -1094,7 +1094,7 @@ function PerformanceView({ apps, getAppIcon, getCategoryColor }: PerformanceView
                     )}
                   </div>
 
-                  <div className={`rounded-lg p-3 ${latencyStatus === 'good' ? 'bg-green-50 border border-green-200' : latencyStatus === 'warning' ? 'bg-fw-warn/10 border border-fw-warn/30' : 'bg-fw-wash'}`}>
+                  <div className={`rounded-lg p-3 ${latencyStatus === 'good' ? 'bg-fw-successLight border border-fw-success' : latencyStatus === 'warning' ? 'bg-fw-warn/10 border border-fw-warn/30' : 'bg-fw-wash'}`}>
                     <div className="text-figma-sm text-fw-bodyLight mb-1">Latency</div>
                     <div className="flex items-baseline space-x-1">
                       <span className="text-lg font-bold text-fw-heading">{app.latency}</span>
@@ -1110,7 +1110,7 @@ function PerformanceView({ apps, getAppIcon, getCategoryColor }: PerformanceView
                     )}
                   </div>
 
-                  <div className={`rounded-lg p-3 ${packetLossStatus === 'good' ? 'bg-green-50 border border-green-200' : packetLossStatus === 'warning' ? 'bg-fw-warn/10 border border-fw-warn/30' : 'bg-fw-wash'}`}>
+                  <div className={`rounded-lg p-3 ${packetLossStatus === 'good' ? 'bg-fw-successLight border border-fw-success' : packetLossStatus === 'warning' ? 'bg-fw-warn/10 border border-fw-warn/30' : 'bg-fw-wash'}`}>
                     <div className="text-figma-sm text-fw-bodyLight mb-1">Packet Loss</div>
                     <div className="flex items-baseline space-x-1">
                       <span className="text-lg font-bold text-fw-heading">{packetLossPercent.toFixed(3)}</span>
@@ -1273,7 +1273,7 @@ function QoSModal({ app, onClose, onSave }: QoSModalProps) {
                 className={`px-4 py-3 text-figma-base font-medium rounded-lg border-2 transition-all ${
                   priority === level
                     ? level === 'critical'
-                      ? 'border-fw-error bg-red-50 text-fw-error'
+                      ? 'border-fw-error bg-fw-errorLight text-fw-error'
                       : level === 'high'
                       ? 'border-fw-warn bg-fw-warn/10 text-fw-warn'
                       : level === 'medium'

@@ -3,6 +3,7 @@ import { DollarSign, TrendingUp, Calendar, CreditCard } from 'lucide-react';
 import { Connection } from '../../types';
 import { Card } from '../common/Card';
 import { LineChart } from '../charts/LazyCharts';
+import { chartColors } from '../../utils/chartColors';
 import { formatCurrency } from '../../utils/connections';
 import { Button } from '../common/Button';
 
@@ -38,7 +39,7 @@ export function BillingMetrics({ connections }: BillingMetricsProps) {
     datasets: [{
       label: 'Monthly Billing',
       data: [12500, 13200, 14100, 13800, 14500, 15200],
-      borderColor: '#2d7e24',
+      borderColor: chartColors.success,
       fill: false
     }]
   };

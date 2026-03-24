@@ -85,7 +85,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose }: EdgeConfi
               onUpdate(edge.id, { status: edge.status === 'active' ? 'inactive' : 'active' })
             }
             className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-              edge.status === 'active' ? 'bg-green-500' : 'bg-fw-secondary'
+              edge.status === 'active' ? 'bg-fw-successLight0' : 'bg-fw-secondary'
             }`}
           >
             <span

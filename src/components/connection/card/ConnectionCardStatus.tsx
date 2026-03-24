@@ -44,7 +44,7 @@ export function ConnectionCardStatus({
             ${isPending
               ? 'bg-fw-blue-light text-fw-link border-fw-active/20 cursor-wait'
               : status === 'Active'
-                ? 'bg-fw-base text-fw-success border-fw-success hover:bg-green-50'
+                ? 'bg-fw-base text-fw-success border-fw-success hover:bg-fw-successLight'
                 : 'bg-fw-base text-fw-body border-fw-secondary hover:bg-fw-wash'
             }
           `}

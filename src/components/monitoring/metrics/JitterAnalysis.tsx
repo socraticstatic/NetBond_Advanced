@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Card } from '../../common/Card';
 import { LineChart } from '../../charts/LazyCharts';
 import { Radio, Settings, Zap, Info } from 'lucide-react';
+import { chartColors } from '../../../utils/chartColors';
 
 interface JitterAnalysisProps {
   data: Array<{
@@ -53,15 +54,15 @@ export function JitterAnalysis({ data, timeRange }: JitterAnalysisProps) {
         {
           label: 'Jitter (ms)',
           data: jitterData,
-          borderColor: '#8b5cf6', // purple
-          backgroundColor: 'rgba(139, 92, 246, 0.1)',
+          borderColor: chartColors.purple,
+          backgroundColor: chartColors.purpleLight,
           fill: true,
           tension: 0.4
         },
         {
           label: 'Moving Average',
           data: movingAverage,
-          borderColor: '#ef4444', // red
+          borderColor: chartColors.error,
           fill: false,
           tension: 0.4,
           borderDash: [5, 5],
@@ -95,10 +96,10 @@ export function JitterAnalysis({ data, timeRange }: JitterAnalysisProps) {
 
   // Get quality assessment
   const getQualityAssessment = () => {
-    if (stats.avgJitter < 1) return { text: 'Excellent', color: 'text-fw-success', bg: 'bg-green-50', border: 'border-green-200' };
+    if (stats.avgJitter < 1) return { text: 'Excellent', color: 'text-fw-success', bg: 'bg-fw-successLight', border: 'border-fw-success' };
     if (stats.avgJitter < 2) return { text: 'Good', color: 'text-brand-blue', bg: 'bg-brand-lightBlue', border: 'border-brand-blue/20' };
-    if (stats.avgJitter < 3) return { text: 'Fair', color: 'text-yellow-600', bg: 'bg-yellow-50', border: 'border-yellow-200' };
-    return { text: 'Poor', color: 'text-fw-error', bg: 'bg-red-50', border: 'border-fw-error' };
+    if (stats.avgJitter < 3) return { text: 'Fair', color: 'text-fw-warn', bg: 'bg-fw-warnLight', border: 'border-fw-warn' };
+    return { text: 'Poor', color: 'text-fw-error', bg: 'bg-fw-errorLight', border: 'border-fw-error' };
   };
   
   const quality = getQualityAssessment();
@@ -209,8 +210,8 @@ export function JitterAnalysis({ data, timeRange }: JitterAnalysisProps) {
                       <div className="flex items-center">
                         <div className={`p-1 rounded-full ${
                           stats.avgJitter < app.threshold 
-                          ? 'bg-green-50 text-fw-success'
-                          : 'bg-red-50 text-fw-error'
+                          ? 'bg-fw-successLight text-fw-success'
+                          : 'bg-fw-errorLight text-fw-error'
                         }`}>
                           {app.icon}
                         </div>
@@ -241,8 +242,8 @@ export function JitterAnalysis({ data, timeRange }: JitterAnalysisProps) {
                       <div className="flex items-center">
                         <div className={`p-1 rounded-full ${
                           stats.avgJitter < app.threshold 
-                          ? 'bg-green-50 text-fw-success'
-                          : 'bg-red-50 text-fw-error'
+                          ? 'bg-fw-successLight text-fw-success'
+                          : 'bg-fw-errorLight text-fw-error'
                         }`}>
                           {app.icon}
                         </div>

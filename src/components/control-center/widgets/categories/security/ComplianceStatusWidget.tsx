@@ -46,7 +46,7 @@ export function ComplianceStatusWidget({ connections }: ComplianceStatusWidgetPr
               <span className="text-figma-base font-medium text-fw-heading">{framework.name}</span>
               <span className={`px-2 py-1 text-figma-sm font-medium rounded-full ${
                 framework.status === 'compliant'
-                  ? 'bg-green-50 text-fw-success'
+                  ? 'bg-fw-successLight text-fw-success'
                   : 'bg-fw-warn/10 text-fw-warn'
               }`}>
                 {framework.status === 'compliant' ? (

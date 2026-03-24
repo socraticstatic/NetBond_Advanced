@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pause, Play, RefreshCw } from 'lucide-react';
+import { chartColors } from '../../../utils/chartColors';
 
 interface DataPoint {
   timestamp: Date;
@@ -27,7 +28,7 @@ export function RealTimeChart({
   data,
   title,
   unit,
-  color = '#3b82f6',
+  color = chartColors.primary,
   thresholds,
   height = 300,
   showGrid = true,
@@ -105,7 +106,7 @@ export function RealTimeChart({
     // Draw threshold lines
     if (thresholds) {
       if (thresholds.warning) {
-        ctx.strokeStyle = '#f59e0b';
+        ctx.strokeStyle = chartColors.warn;
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 5]);
         const warningY = yScale(thresholds.warning);
@@ -115,14 +116,14 @@ export function RealTimeChart({
         ctx.stroke();
         ctx.setLineDash([]);
 
-        ctx.fillStyle = '#f59e0b';
+        ctx.fillStyle = chartColors.warn;
         ctx.font = '10px system-ui';
         ctx.textAlign = 'left';
         ctx.fillText(`Warning: ${thresholds.warning}${unit}`, padding.left + chartWidth + 5, warningY + 4);
       }
 
       if (thresholds.critical) {
-        ctx.strokeStyle = '#ef4444';
+        ctx.strokeStyle = chartColors.error;
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 5]);
         const criticalY = yScale(thresholds.critical);
@@ -132,7 +133,7 @@ export function RealTimeChart({
         ctx.stroke();
         ctx.setLineDash([]);
 
-        ctx.fillStyle = '#ef4444';
+        ctx.fillStyle = chartColors.error;
         ctx.font = '10px system-ui';
         ctx.textAlign = 'left';
         ctx.fillText(`Critical: ${thresholds.critical}${unit}`, padding.left + chartWidth + 5, criticalY + 4);
@@ -248,7 +249,7 @@ export function RealTimeChart({
         </div>
         <div className="flex items-center space-x-4 text-figma-sm text-fw-body">
           {isPaused && (
-            <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full font-medium">
+            <span className="px-2 py-1 bg-fw-warnLight text-fw-warn rounded-full font-medium">
               Paused
             </span>
           )}
@@ -256,8 +257,8 @@ export function RealTimeChart({
           {!isPaused && (
             <span className="flex items-center space-x-1">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fw-success opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-fw-successLight0"></span>
               </span>
               <span>Live</span>
             </span>

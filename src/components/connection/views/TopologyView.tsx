@@ -87,16 +87,16 @@ export function TopologyView({ connections, groups }: TopologyViewProps) {
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="flex items-center space-x-2 p-3 bg-fw-wash rounded-lg">
                   <div className={`h-2.5 w-2.5 rounded-full ${
-                    connection.status === 'Active' ? 'bg-green-500' : 'bg-fw-bodyLight'
+                    connection.status === 'Active' ? 'bg-fw-successLight0' : 'bg-fw-bodyLight'
                   }`} />
                   <span className="text-figma-base font-medium text-fw-body">{connection.status}</span>
                 </div>
                 <div className="flex items-center space-x-2 p-3 bg-fw-wash rounded-lg">
                   <div className={`h-2.5 w-2.5 rounded-full ${
                     connection.performance?.latency ?
-                      parseFloat(connection.performance.latency) < 10 ? 'bg-green-500' :
+                      parseFloat(connection.performance.latency) < 10 ? 'bg-fw-successLight0' :
                       parseFloat(connection.performance.latency) < 20 ? 'bg-fw-warn' :
-                      'bg-red-500' : 'bg-fw-bodyLight'
+                      'bg-fw-errorLight0' : 'bg-fw-bodyLight'
                   }`} />
                   <span className="text-figma-base font-medium text-fw-body">
                     {connection.performance?.latency || 'No Data'}

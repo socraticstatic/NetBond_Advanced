@@ -63,7 +63,7 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
         </div>
 
         {/* Total Connections */}
-        <div className="bg-green-50 rounded-lg p-6 border border-green-200">
+        <div className="bg-fw-successLight rounded-lg p-6 border border-fw-success">
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 bg-fw-success rounded-lg">
               <Network className="h-5 w-5 text-white" />
@@ -75,19 +75,19 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
         </div>
 
         {/* Health Score */}
-        <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-6 border border-amber-200">
+        <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-6 border border-fw-warn">
           <div className="flex items-center justify-between mb-3">
-            <div className="p-2 bg-amber-500 rounded-lg">
+            <div className="p-2 bg-fw-warnLight0 rounded-lg">
               <Activity className="h-5 w-5 text-white" />
             </div>
-            <span className="text-figma-sm font-medium text-amber-700 uppercase tracking-wide">Health</span>
+            <span className="text-figma-sm font-medium text-fw-warn uppercase tracking-wide">Health</span>
           </div>
           <div className="text-3xl font-bold text-fw-heading mb-1">{healthScore}%</div>
-          <p className="text-figma-base text-amber-700">Overall pool health</p>
+          <p className="text-figma-base text-fw-warn">Overall pool health</p>
         </div>
 
         {/* Monthly Cost */}
-        <div className="bg-purple-50 rounded-lg p-6 border border-purple-200">
+        <div className="bg-fw-purpleLight rounded-lg p-6 border border-fw-purpleLight">
           <div className="flex items-center justify-between mb-3">
             <div className="p-2 bg-fw-purple rounded-lg">
               <CreditCard className="h-5 w-5 text-white" />
@@ -159,7 +159,7 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
 
               {warningConnections > 0 && (
                 <div className="flex items-center">
-                  <AlertCircle className="h-5 w-5 text-amber-500 mr-2" />
+                  <AlertCircle className="h-5 w-5 text-fw-warn mr-2" />
                   <div>
                     <div className="text-2xl font-bold text-fw-heading">{warningConnections}</div>
                     <div className="text-figma-base text-fw-bodyLight">Warning</div>
@@ -180,7 +180,7 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
               <div className="text-figma-base text-fw-bodyLight">Overall Health Score</div>
               <div className={`text-3xl font-bold ${
                 healthScore >= 90 ? 'text-fw-success' :
-                healthScore >= 70 ? 'text-amber-600' : 'text-fw-error'
+                healthScore >= 70 ? 'text-fw-warn' : 'text-fw-error'
               }`}>
                 {healthScore}%
               </div>
@@ -198,7 +198,7 @@ export function GroupOverview({ group, connections, users }: GroupOverviewProps)
               )}
               {warningConnections > 0 && (
                 <div
-                  className="bg-amber-500"
+                  className="bg-fw-warnLight0"
                   style={{ width: `${(warningConnections / connections.length) * 100}%` }}
                 />
               )}

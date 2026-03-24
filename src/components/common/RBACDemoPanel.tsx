@@ -152,7 +152,7 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
             <div className="flex items-start justify-between">
               <div>
                 <h2 className="text-2xl font-bold mb-2 tracking-[-0.03em]">RBAC Demo Control Panel</h2>
-                <p className="text-blue-100 text-figma-base">
+                <p className="text-white text-figma-base">
                   Interactive demonstrations of role-based access control best practices
                 </p>
               </div>
@@ -259,9 +259,9 @@ export function RBACDemoPanel({ isOpen, onClose }: RBACDemoPanelProps) {
                   const isActive = selectedDemo === scenario.id;
                   const colorClasses = {
                     blue: 'bg-fw-accent border-fw-active text-fw-link',
-                    green: 'bg-green-50 border-green-300 text-fw-success',
-                    red: 'bg-red-50 border-red-300 text-fw-error',
-                    purple: 'bg-purple-50 border-purple-300 text-fw-purple'
+                    green: 'bg-fw-successLight border-fw-success text-fw-success',
+                    red: 'bg-fw-errorLight border-fw-error text-fw-error',
+                    purple: 'bg-fw-purpleLight border-fw-purple text-fw-purple'
                   }[scenario.color];
 
                   return (

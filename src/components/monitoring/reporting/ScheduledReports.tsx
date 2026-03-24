@@ -484,7 +484,7 @@ export function ScheduledReports() {
                 </button>
                 <button
                   onClick={() => setReportToDelete(report)}
-                  className="p-2 text-fw-error hover:text-fw-error hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-2 text-fw-error hover:text-fw-error hover:bg-fw-errorLight rounded-lg transition-colors"
                   title="Delete schedule"
                 >
                   <Trash2 className="h-5 w-5" />

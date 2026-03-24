@@ -13,12 +13,12 @@ export function PermissionBadge({ requirement, variant = 'default', showTooltip 
 
   const colorClasses = {
     blue: 'bg-fw-blue-light text-fw-link border-fw-active',
-    green: 'bg-green-50 text-fw-success border-fw-success',
-    yellow: 'bg-orange-50 text-fw-warn border-fw-warn',
-    red: 'bg-red-50 text-fw-error border-fw-error',
+    green: 'bg-fw-successLight text-fw-success border-fw-success',
+    yellow: 'bg-fw-warnLight text-fw-warn border-fw-warn',
+    red: 'bg-fw-errorLight text-fw-error border-fw-error',
     purple: 'bg-fw-accent text-fw-cobalt-700 border-fw-active',
-    orange: 'bg-orange-50 text-fw-warn border-fw-warn',
-    pink: 'bg-red-50 text-fw-error border-fw-error',
+    orange: 'bg-fw-warnLight text-fw-warn border-fw-warn',
+    pink: 'bg-fw-errorLight text-fw-error border-fw-error',
     gray: 'bg-fw-neutral text-fw-disabled border-fw-secondary',
   }[color];
 
@@ -154,7 +154,7 @@ export function PermissionLockOverlay({ requirement, reason, onRequestAccess, ch
       <div className="absolute inset-0 flex items-center justify-center bg-fw-gray-900 bg-opacity-5 backdrop-blur-[1px]">
         <div className="bg-fw-base rounded-lg shadow-lg p-6 max-w-sm mx-4 border-2 border-fw-secondary">
           <div className="flex items-start gap-3 mb-4">
-            <div className="flex-shrink-0 w-10 h-10 bg-red-50 rounded-full flex items-center justify-center">
+            <div className="flex-shrink-0 w-10 h-10 bg-fw-errorLight rounded-full flex items-center justify-center">
               <Lock className="h-5 w-5 text-fw-error" />
             </div>
             <div className="flex-1">

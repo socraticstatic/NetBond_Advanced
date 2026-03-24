@@ -42,7 +42,7 @@ export function DeleteVLANModal({
         {/* Content */}
         <div className="p-6">
           <div className="flex items-start mb-5">
-            <div className="flex-shrink-0 bg-red-50 rounded-full p-2">
+            <div className="flex-shrink-0 bg-fw-errorLight rounded-full p-2">
               <Trash2 className="h-6 w-6 text-fw-error" />
             </div>
             <div className="ml-4">
@@ -55,7 +55,7 @@ export function DeleteVLANModal({
           </div>
 
           {/* Warning */}
-          <div className="bg-red-50 border border-fw-error rounded-lg p-4 mb-5">
+          <div className="bg-fw-errorLight border border-fw-error rounded-lg p-4 mb-5">
             <div className="flex items-start">
               <AlertTriangle className="h-5 w-5 text-fw-error mt-0.5 mr-3 flex-shrink-0" />
               <div className="flex-1">

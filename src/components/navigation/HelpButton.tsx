@@ -20,21 +20,21 @@ export function HelpButton() {
       title: 'Video Tutorials',
       description: 'Learn through step-by-step videos',
       link: '/support',
-      color: 'bg-purple-50 text-fw-purple'
+      color: 'bg-fw-purpleLight text-fw-purple'
     },
     {
       icon: FileText,
       title: 'Knowledge Base',
       description: 'Browse articles and FAQs',
       link: '/support',
-      color: 'bg-green-50 text-fw-success'
+      color: 'bg-fw-successLight text-fw-success'
     },
     {
       icon: Mail,
       title: 'Email Support',
       description: 'Get help from our support team',
       link: 'mailto:support@example.com',
-      color: 'bg-amber-50 text-amber-600'
+      color: 'bg-fw-warnLight text-fw-warn'
     }
   ];
 

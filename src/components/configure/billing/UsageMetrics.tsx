@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Activity, Network, History } from 'lucide-react';
 import { LineChart } from '../../monitoring/charts/LineChart';
+import { chartColors } from '../../../utils/chartColors';
 
 export function UsageMetrics() {
   const [timeRange, setTimeRange] = useState('30d');
@@ -11,7 +12,7 @@ export function UsageMetrics() {
       {
         label: 'Usage (GB)',
         data: [1250, 850, 2100],
-        borderColor: '#3b82f6',
+        borderColor: chartColors.primary,
         fill: false,
       }
     ]
@@ -23,7 +24,7 @@ export function UsageMetrics() {
       {
         label: 'Provisioned Hours',
         data: [672, 672, 672],
-        borderColor: '#10b981',
+        borderColor: chartColors.success,
         fill: false,
       }
     ]

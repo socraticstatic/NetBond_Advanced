@@ -129,7 +129,7 @@ export function ConnectionList({
                   e.stopPropagation();
                   handleSaveEdit(connection);
                 }}
-                className="p-2 text-fw-success hover:text-fw-success rounded-full hover:bg-green-50"
+                className="p-2 text-fw-success hover:text-fw-success rounded-full hover:bg-fw-successLight"
               >
                 <Edit2 className="h-5 w-5" />
               </button>
@@ -291,7 +291,7 @@ export function ConnectionList({
             <div className="fixed inset-0 transition-opacity bg-fw-neutral bg-opacity-75" onClick={() => setShowDeleteConfirm(null)} />
             <div className="relative inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-fw-base rounded-2xl shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div className="sm:flex sm:items-start">
-                <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-red-50 rounded-full sm:mx-0 sm:h-10 sm:w-10">
+                <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-fw-errorLight rounded-full sm:mx-0 sm:h-10 sm:w-10">
                   <Trash2 className="w-6 h-6 text-fw-error" />
                 </div>
                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
@@ -309,7 +309,7 @@ export function ConnectionList({
                 <Button
                   variant="primary"
                   onClick={() => handleDelete(showDeleteConfirm)}
-                  className="bg-red-600 hover:bg-red-700 focus:ring-red-500 sm:ml-3"
+                  className="bg-fw-error hover:bg-fw-error focus:ring-red-500 sm:ml-3"
                 >
                   Delete
                 </Button>

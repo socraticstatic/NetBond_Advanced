@@ -3,6 +3,7 @@ import { X, Users, Building, Tag, Plus, Check } from 'lucide-react';
 import { Group, GroupAddress, GroupContact } from '../../../types/group';
 import { Connection, User } from '../../../types';
 import { Button } from '../../common/Button';
+import { chartColors } from '../../../utils/chartColors';
 
 interface AddGroupModalProps {
   isOpen: boolean;
@@ -139,7 +140,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                   <div className="flex-1 mt-3.5 mx-2">
                     <div
                       className="h-0.5 w-full"
-                      style={{ backgroundColor: step > i ? '#2d7e24' : '#d9d9d9' }}
+                      className={step > i ? 'bg-fw-success' : 'bg-fw-neutral'}
                     />
                   </div>
                 )}
@@ -208,7 +209,7 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                 <span className="text-[16px] font-bold text-fw-heading">Select Users</span>
                 <span
                   className="text-[13px] font-medium text-[#0057b8] px-2.5 py-0.5 rounded-[800px]"
-                  style={{ backgroundColor: 'rgba(0,87,184,0.16)' }}
+                  className="bg-fw-active/[0.16]"
                 >
                   {selectedUsers.length} users selected
                 </span>
@@ -343,8 +344,8 @@ export function AddGroupModal({ isOpen, onClose, onSave, users, connections }: A
                                 className={`px-2 py-1 inline-flex text-[13px] leading-5 font-semibold rounded-[4px]`}
                                 style={
                                   connection.status === 'Active'
-                                    ? { backgroundColor: 'rgba(45,126,36,0.16)', color: '#2d7e24' }
-                                    : { backgroundColor: 'rgba(104,110,116,0.16)', color: '#686e74' }
+                                    ? { backgroundColor: chartColors.successLight, color: chartColors.success }
+                                    : { backgroundColor: chartColors.bodyLightAlpha, color: chartColors.bodyLight }
                                 }
                               >
                                 {connection.status}

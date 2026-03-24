@@ -19,11 +19,11 @@ export function AlertRules({ selectedConnection }: AlertRulesProps) {
   const getPriorityColor = (priority: AlertRule['priority']) => {
     switch (priority) {
       case 'critical':
-        return 'bg-red-50 text-fw-error border-red-200';
+        return 'bg-fw-errorLight text-fw-error border-fw-error';
       case 'high':
-        return 'bg-orange-100 text-orange-800 border-orange-200';
+        return 'bg-fw-warnLight text-fw-warn border-fw-warn';
       case 'medium':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-fw-warnLight text-fw-warn border-fw-warn';
       case 'low':
         return 'bg-fw-accent text-fw-linkHover border-fw-active';
       default:
@@ -134,7 +134,7 @@ export function AlertRules({ selectedConnection }: AlertRulesProps) {
 
                   <button
                     onClick={() => deleteRule(rule.id)}
-                    className="p-2 text-red-400 hover:text-red-600 rounded-lg hover:bg-red-50"
+                    className="p-2 text-fw-error hover:text-fw-error rounded-lg hover:bg-fw-errorLight"
                   >
                     <Trash2 className="h-5 w-5" />
                   </button>

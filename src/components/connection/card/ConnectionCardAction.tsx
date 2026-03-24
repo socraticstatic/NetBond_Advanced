@@ -13,20 +13,18 @@ export function ConnectionCardAction({
   connectionId
 }: ConnectionCardActionProps) {
   const navigate = useNavigate();
-
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigate(`/connections/${connectionId}`);
-  };
-
+  
   return (
-    <div className="p-4 border-t border-gray-100">
+    <div className="p-6 border-t border-fw-secondary">
       <button
-        onClick={handleClick}
-        className="w-full flex items-center justify-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate(`/connections/${connectionId}`);
+        }}
+        className="w-full flex items-center justify-center h-9 px-4 rounded-full text-figma-base font-medium text-fw-link hover:text-fw-linkHover hover:bg-fw-wash transition-colors"
       >
+        <ChevronRight className="mr-1.5 h-5 w-5" />
         Manage Connection
-        <ChevronRight className="ml-2 h-4 w-4" />
       </button>
     </div>
   );

@@ -195,12 +195,12 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
           onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
           onBlur={() => handleBlur('name')}
           className={`w-full px-3 h-9 border rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-transparent ${
-            touched.name && errors.name ? 'border-red-300' : 'border-fw-secondary'
+            touched.name && errors.name ? 'border-fw-error' : 'border-fw-secondary'
           }`}
           placeholder="e.g., Daily Performance Summary"
         />
         {touched.name && errors.name && (
-          <p className="mt-1 text-figma-base text-red-600 flex items-center">
+          <p className="mt-1 text-figma-base text-fw-error flex items-center">
             <AlertCircle className="h-4 w-4 mr-1" />
             {errors.name}
           </p>
@@ -217,7 +217,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
           onChange={(e) => setFormData(prev => ({ ...prev, reportType: e.target.value }))}
           onBlur={() => handleBlur('reportType')}
           className={`w-full px-3 h-9 border rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-transparent ${
-            touched.reportType && errors.reportType ? 'border-red-300' : 'border-fw-secondary'
+            touched.reportType && errors.reportType ? 'border-fw-error' : 'border-fw-secondary'
           }`}
         >
           <option value="">Select a report type</option>
@@ -228,7 +228,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
           ))}
         </select>
         {touched.reportType && errors.reportType && (
-          <p className="mt-1 text-figma-base text-red-600 flex items-center">
+          <p className="mt-1 text-figma-base text-fw-error flex items-center">
             <AlertCircle className="h-4 w-4 mr-1" />
             {errors.reportType}
           </p>
@@ -289,11 +289,11 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
             }))}
             onBlur={() => handleBlur('time')}
             className={`w-full px-3 h-9 border rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-transparent ${
-              touched.time && errors.time ? 'border-red-300' : 'border-fw-secondary'
+              touched.time && errors.time ? 'border-fw-error' : 'border-fw-secondary'
             }`}
           />
           {touched.time && errors.time && (
-            <p className="mt-1 text-figma-base text-red-600 flex items-center">
+            <p className="mt-1 text-figma-base text-fw-error flex items-center">
               <AlertCircle className="h-4 w-4 mr-1" />
               {errors.time}
             </p>
@@ -313,7 +313,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
                 schedule: { ...prev.schedule, dayOfWeek: parseInt(e.target.value) }
               }))}
               className={`w-full px-3 h-9 border rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-transparent ${
-                errors.dayOfWeek ? 'border-red-300' : 'border-fw-secondary'
+                errors.dayOfWeek ? 'border-fw-error' : 'border-fw-secondary'
               }`}
             >
               <option value="">Select a day</option>
@@ -322,7 +322,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
               ))}
             </select>
             {errors.dayOfWeek && (
-              <p className="mt-1 text-figma-base text-red-600 flex items-center">
+              <p className="mt-1 text-figma-base text-fw-error flex items-center">
                 <AlertCircle className="h-4 w-4 mr-1" />
                 {errors.dayOfWeek}
               </p>
@@ -346,12 +346,12 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
                 schedule: { ...prev.schedule, dayOfMonth: parseInt(e.target.value) }
               }))}
               className={`w-full px-3 h-9 border rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-transparent ${
-                errors.dayOfMonth ? 'border-red-300' : 'border-fw-secondary'
+                errors.dayOfMonth ? 'border-fw-error' : 'border-fw-secondary'
               }`}
               placeholder="1-31"
             />
             {errors.dayOfMonth && (
-              <p className="mt-1 text-figma-base text-red-600 flex items-center">
+              <p className="mt-1 text-figma-base text-fw-error flex items-center">
                 <AlertCircle className="h-4 w-4 mr-1" />
                 {errors.dayOfMonth}
               </p>
@@ -409,7 +409,7 @@ export function ScheduleForm({ onSubmit, onCancel, initialData, availableReports
         )}
 
         {touched.recipients && errors.recipients && (
-          <p className="mt-1 text-figma-base text-red-600 flex items-center">
+          <p className="mt-1 text-figma-base text-fw-error flex items-center">
             <AlertCircle className="h-4 w-4 mr-1" />
             {errors.recipients}
           </p>

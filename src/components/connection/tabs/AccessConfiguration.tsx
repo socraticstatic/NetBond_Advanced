@@ -117,8 +117,8 @@ export function AccessConfiguration() {
               <h4 className="text-figma-base font-medium text-fw-heading">Network Engineer</h4>
             </div>
             <div className="flex flex-wrap gap-2">
-              <span className="px-2 py-1 text-figma-sm font-medium bg-green-50 text-fw-success rounded-lg">View</span>
-              <span className="px-2 py-1 text-figma-sm font-medium bg-green-50 text-fw-success rounded-lg">Edit</span>
+              <span className="px-2 py-1 text-figma-sm font-medium bg-fw-successLight text-fw-success rounded-lg">View</span>
+              <span className="px-2 py-1 text-figma-sm font-medium bg-fw-successLight text-fw-success rounded-lg">Edit</span>
             </div>
           </div>
           <div className="p-4 bg-fw-wash rounded-lg">

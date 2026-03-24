@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Building2, DollarSign, Users, Settings, Shield, Lock, Eye, FileText, Percent } from 'lucide-react';
+import { Building2, DollarSign, Users, Settings, Shield, Lock, Eye, FileText } from 'lucide-react';
 import { VerticalTabGroup } from '../navigation/VerticalTabGroup';
 import { TabItem } from '../../types/navigation';
 import { Button } from '../common/Button';
@@ -8,14 +8,13 @@ import { useStore } from '../../store/useStore';
 import { PermissionRequestModal } from '../common/PermissionRequestModal';
 import { AuditLogPanel } from '../common/AuditLogPanel';
 import { permissionChecker } from '../../utils/permissionChecker';
-import { TermDiscountsManager } from './billing/TermDiscountsManager';
 
 interface BillingConfigurationProps {
-  defaultTab?: 'hierarchy' | 'allocation' | 'integration' | 'policies' | 'terms';
+  defaultTab?: 'hierarchy' | 'allocation' | 'integration' | 'policies';
 }
 
 export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfigurationProps) {
-  const [activeView, setActiveView] = useState<'hierarchy' | 'allocation' | 'integration' | 'policies' | 'terms'>(defaultTab);
+  const [activeView, setActiveView] = useState<'hierarchy' | 'allocation' | 'integration' | 'policies'>(defaultTab);
   const { currentRole } = useStore();
   const [showPermissionRequest, setShowPermissionRequest] = useState(false);
   const [showAuditLog, setShowAuditLog] = useState(false);
@@ -75,8 +74,7 @@ export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfig
     { id: 'hierarchy', label: 'Tenant Hierarchy', icon: <Building2 className="h-5 w-5 mr-2" /> },
     { id: 'allocation', label: 'Cost Allocation', icon: <DollarSign className="h-5 w-5 mr-2" /> },
     { id: 'integration', label: 'External Integration', icon: <Users className="h-5 w-5 mr-2" /> },
-    { id: 'policies', label: 'Billing Policies', icon: <Settings className="h-5 w-5 mr-2" /> },
-    { id: 'terms', label: 'Terms & Discounts', icon: <Percent className="h-5 w-5 mr-2" /> }
+    { id: 'policies', label: 'Billing Policies', icon: <Settings className="h-5 w-5 mr-2" /> }
   ];
 
   const handleRequestAccess = (feature: string) => {
@@ -692,9 +690,6 @@ export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfig
               </div>
             </div>
           )}
-
-          {/* Terms & Discounts */}
-          {activeView === 'terms' && <TermDiscountsManager />}
         </div>
       </div>
 

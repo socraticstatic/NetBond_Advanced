@@ -124,7 +124,7 @@ export function BandwidthScalingPolicy() {
 
   const handleSave = () => {
     if (validateConfiguration()) {
-
+      console.log('Saving bandwidth scaling configuration...');
     }
   };
 

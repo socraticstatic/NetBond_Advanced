@@ -110,11 +110,11 @@ export function AuditLogPanel({ isOpen, onClose, filterByResource, filterByUser 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'success':
-        return 'text-fw-success bg-green-50 border-green-200';
+        return 'text-fw-success bg-fw-successLight border-fw-success';
       case 'denied':
-        return 'text-fw-error bg-red-50 border-red-200';
+        return 'text-fw-error bg-fw-errorLight border-fw-error';
       case 'warning':
-        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+        return 'text-fw-warn bg-fw-warnLight border-fw-warn';
       default:
         return 'text-fw-bodyLight bg-fw-wash border-fw-secondary';
     }
@@ -184,9 +184,9 @@ export function AuditLogPanel({ isOpen, onClose, filterByResource, filterByUser 
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      log.resourceType === 'billing' ? 'bg-orange-100 text-orange-600' :
-                      log.resourceType === 'security' ? 'bg-red-50 text-fw-error' :
-                      log.resourceType === 'system' ? 'bg-purple-50 text-fw-purple' :
+                      log.resourceType === 'billing' ? 'bg-fw-warnLight text-fw-warn' :
+                      log.resourceType === 'security' ? 'bg-fw-errorLight text-fw-error' :
+                      log.resourceType === 'system' ? 'bg-fw-purpleLight text-fw-purple' :
                       'bg-fw-accent text-fw-link'
                     }`}>
                       {getResourceIcon(log.resourceType)}

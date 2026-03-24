@@ -148,7 +148,7 @@ export function ListView({ connections, groups }: ListViewProps) {
           <span
             className={`inline-flex items-center px-2.5 py-1 rounded-lg text-figma-sm font-medium ${
               connection.status === 'Active'
-                ? 'bg-green-50 text-fw-success'
+                ? 'bg-fw-successLight text-fw-success'
                 : 'bg-fw-secondary text-fw-disabled'
             }`}
             role="status"
