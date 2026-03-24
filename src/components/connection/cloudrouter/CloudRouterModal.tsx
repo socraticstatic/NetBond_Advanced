@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { X, GitBranch, Network, Settings, Info, Plus, AlertTriangle, ExternalLink } from 'lucide-react';
+import { X, Network, Settings, Info, Plus, AlertTriangle, ExternalLink } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 import { Button } from '../../common/Button';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { FormField } from '../../form/FormField';
@@ -175,7 +176,7 @@ export function CloudRouterModal({
 
   const drawerTitle = (
     <div className="flex items-center">
-      <GitBranch className="h-5 w-5 text-brand-blue mr-2" />
+      <AttIcon name="cloudRouter" className="h-6 w-6 text-brand-blue mr-2" />
       {isEditMode ? 'Edit Cloud Router' : 'Add New Cloud Router'}
     </div>
   );
@@ -227,7 +228,7 @@ export function CloudRouterModal({
               {/* Basic Information */}
               <div className="md:col-span-2">
                 <h4 className="text-base font-medium text-fw-heading tracking-[-0.03em] mb-4 flex items-center">
-                  <GitBranch className="h-4 w-4 text-fw-bodyLight mr-2" />
+                  <AttIcon name="cloudRouter" className="h-4 w-4 text-fw-bodyLight mr-2" />
                   Basic Information
                 </h4>
 

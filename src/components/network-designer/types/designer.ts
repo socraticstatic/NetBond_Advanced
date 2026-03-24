@@ -1,3 +1,6 @@
+export type NodeStatus = 'unconfigured' | 'configured-inactive' | 'active' | 'active-down';
+export type EdgeStatus = 'active' | 'inactive' | 'down';
+
 export interface NetworkNode {
   id: string;
   type: 'function' | 'destination' | 'network' | 'datacenter';
@@ -9,7 +12,7 @@ export interface NetworkNode {
   y: number;
   name: string;
   icon: string;
-  status: 'active' | 'inactive';
+  status: NodeStatus;
   config: Record<string, any>;
 }
 
@@ -19,7 +22,7 @@ export interface NetworkEdge {
   target: string;
   type: string;
   bandwidth: string;
-  status: 'active' | 'inactive';
+  status: EdgeStatus;
   vlan?: number;
   metrics?: {
     latency?: string;

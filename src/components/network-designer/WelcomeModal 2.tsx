@@ -1,4 +1,5 @@
-import { Share2, Upload, LayoutGrid, FolderOpen } from 'lucide-react';
+import { Upload, LayoutGrid, FolderOpen } from 'lucide-react';
+import { AttIcon } from '../icons/AttIcon';
 
 interface WelcomeModalProps {
   onClose: () => void;
@@ -6,10 +7,14 @@ interface WelcomeModalProps {
   onChooseTemplate: () => void;
 }
 
+function CloudRouterIcon({ className }: { className?: string }) {
+  return <AttIcon name="cloudRouter" className={className} />;
+}
+
 const OPTIONS = [
   {
     id: 'create',
-    icon: Share2,
+    icon: CloudRouterIcon,
     title: 'Create',
     description: 'Start with AT&T Core and customize your cloud router.',
     action: 'create' as const,
@@ -60,7 +65,7 @@ export function WelcomeModal({ onClose, onCreate, onChooseTemplate }: WelcomeMod
         {/* Header */}
         <div className="px-8 pt-8 pb-6 text-center" style={{ background: 'linear-gradient(180deg, #4a6a8a 0%, #3a5a7a 100%)' }}>
           <div className="mx-auto mb-3 w-10 h-10 rounded-full bg-white/15 flex items-center justify-center">
-            <Share2 className="w-5 h-5 text-white" />
+            <AttIcon name="cloudRouter" className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-figma-lg font-semibold text-white">Welcome to Cloud Designer</h2>
           <p className="text-figma-sm text-white/70 mt-1">

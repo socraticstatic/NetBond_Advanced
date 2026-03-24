@@ -49,7 +49,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 150,
                 name: 'Primary Router',
                 icon: 'Router',
-                status: 'inactive',
+                status: 'unconfigured',
                 config: { 
                   routerType: 'edge',
                   fastReroute: true,
@@ -64,7 +64,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 300,
                 name: 'Secondary Router',
                 icon: 'Router',
-                status: 'inactive',
+                status: 'unconfigured',
                 config: { 
                   routerType: 'edge',
                   fastReroute: true,
@@ -78,7 +78,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 225,
                 name: 'Cloud Destination',
                 icon: 'Server',
-                status: 'inactive',
+                status: 'unconfigured',
                 config: {
                   provider: 'AWS'
                 }
@@ -127,7 +127,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 225,
                 name: 'Load Balancer',
                 icon: 'Workflow',
-                status: 'inactive',
+                status: 'unconfigured',
                 config: {
                   vnfType: 'loadbalancer',
                   algorithm: 'round-robin',
@@ -142,7 +142,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 150,
                 name: 'Primary Path',
                 icon: 'Router',
-                status: 'inactive'
+                status: 'unconfigured'
               },
               {
                 id: `node-${Date.now()}-router2`,
@@ -152,7 +152,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 300,
                 name: 'Secondary Path',
                 icon: 'Router',
-                status: 'inactive'
+                status: 'unconfigured'
               },
               {
                 id: `node-${Date.now()}-destination`,
@@ -161,7 +161,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 225,
                 name: 'Cloud Destination',
                 icon: 'Server',
-                status: 'inactive'
+                status: 'unconfigured'
               }
             ],
             edges: [
@@ -220,7 +220,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 225,
                 name: 'Data Center',
                 icon: 'Server',
-                status: 'inactive',
+                status: 'unconfigured',
                 config: {
                   provider: 'Equinix',
                   location: 'Ashburn VA3'
@@ -234,7 +234,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 150,
                 name: 'Primary Router',
                 icon: 'Router',
-                status: 'inactive',
+                status: 'unconfigured',
                 config: {
                   routerType: 'edge',
                   bgp: true,
@@ -249,7 +249,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 300,
                 name: 'Secondary Router',
                 icon: 'Router',
-                status: 'inactive',
+                status: 'unconfigured',
                 config: {
                   routerType: 'edge',
                   bgp: true,
@@ -263,7 +263,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 225,
                 name: 'Cloud Destination',
                 icon: 'Server',
-                status: 'inactive',
+                status: 'unconfigured',
                 config: {
                   provider: 'AWS',
                   region: 'us-east-1'
@@ -318,7 +318,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 225,
                 name: 'Data Center',
                 icon: 'Server',
-                status: 'inactive'
+                status: 'unconfigured'
               },
               {
                 id: `node-${Date.now()}-primary`,
@@ -343,7 +343,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 300,
                 name: 'Standby Path',
                 icon: 'Router',
-                status: 'inactive',
+                status: 'unconfigured',
                 config: {
                   routerType: 'edge',
                   bgp: true,
@@ -357,7 +357,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 225,
                 name: 'Cloud Destination',
                 icon: 'Server',
-                status: 'inactive'
+                status: 'unconfigured'
               }
             ],
             edges: [
@@ -438,7 +438,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 300,
                 name: 'DR Region (US West)',
                 icon: 'Server',
-                status: 'inactive',
+                status: 'unconfigured',
                 config: {
                   provider: 'AWS',
                   region: 'us-west-2'
@@ -462,7 +462,7 @@ export function OutcomeSelector({ nodes, edges, onApply }: OutcomeSelectorProps)
                 y: 300,
                 name: 'DR Router',
                 icon: 'Router',
-                status: 'inactive'
+                status: 'unconfigured'
               }
             ],
             edges: [

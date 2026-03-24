@@ -24,8 +24,15 @@ export const Edge = memo(function Edge({ edge, nodes, isSelected, onClick }: Edg
   const my = (sy + ty) / 2;
 
   const serviceColor = EDGE_TYPE_COLORS[edge.type] || '#9ca3af';
-  const color = isSelected ? '#3b82f6' : edge.status === 'active' ? serviceColor : '#d1d5db';
+  const color = isSelected
+    ? '#3b82f6'
+    : edge.status === 'active'
+      ? serviceColor
+      : edge.status === 'down'
+        ? '#ef4444'
+        : '#d1d5db';
   const strokeWidth = isSelected ? 3 : 2;
+  const isInactiveOrDown = edge.status === 'inactive' || edge.status === 'down';
 
   // Quadratic bezier control point
   const dx = tx - sx;
@@ -64,7 +71,7 @@ export const Edge = memo(function Edge({ edge, nodes, isSelected, onClick }: Edg
         stroke={color}
         strokeWidth={strokeWidth}
         fill="none"
-        strokeDasharray={edge.type === 'VPN' ? '6,4' : undefined}
+        strokeDasharray={edge.type === 'VPN' || isInactiveOrDown ? '6,4' : undefined}
         style={{ pointerEvents: 'none' }}
       />
 

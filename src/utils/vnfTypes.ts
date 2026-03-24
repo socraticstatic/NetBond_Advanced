@@ -1,4 +1,10 @@
-import { Shield, Globe, Share2, Network, Scale, AlertTriangle, Zap, Cloud } from 'lucide-react';
+import { createElement } from 'react';
+import { Shield, Globe, Network, Scale, AlertTriangle, Zap, Cloud } from 'lucide-react';
+import { AttIcon } from '../components/icons/AttIcon';
+
+function CloudRouterIcon({ className }: { className?: string }) {
+  return createElement(AttIcon, { name: 'cloudRouter', className });
+}
 import { VNFType, VNFTypeInfo } from '../types/vnf';
 
 export const VNF_TYPE_INFO: Record<VNFType, VNFTypeInfo> = {
@@ -40,7 +46,7 @@ export const VNF_TYPE_INFO: Record<VNFType, VNFTypeInfo> = {
     type: 'router',
     label: 'Virtual Router',
     description: 'Software-based router for packet forwarding and network segmentation',
-    icon: 'Share2',
+    icon: 'cloudRouter',
     color: 'blue',
     defaultVendors: ['Cisco', 'Juniper', 'Arista', 'Nokia', 'Huawei'],
     commonFeatures: [
@@ -145,7 +151,7 @@ export function getVNFTypeIcon(type: VNFType) {
   const iconMap = {
     firewall: Shield,
     sdwan: Globe,
-    router: Share2,
+    router: CloudRouterIcon,
     vnat: Network,
     load_balancer: Scale,
     ids_ips: AlertTriangle,

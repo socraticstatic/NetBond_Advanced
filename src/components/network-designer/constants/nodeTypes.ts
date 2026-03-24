@@ -2,7 +2,7 @@ export const NODE_CATEGORIES = {
   function: {
     label: 'Network Functions',
     items: [
-      { type: 'router', label: 'Cloud Router', subtypes: ['cloud', 'physical', 'virtual', 'edge', 'core'], icon: 'Share2' },
+      { type: 'router', label: 'Cloud Router', subtypes: ['cloud', 'physical', 'virtual', 'edge', 'core'], icon: 'cloudRouter' },
       { type: 'firewall', label: 'Firewall', subtypes: ['ngfw', 'waf', 'stateful', 'ids-ips'], icon: 'Shield' },
       { type: 'vnf', label: 'VNF', subtypes: ['router', 'firewall', 'load-balancer', 'ids', 'wan-optimizer', 'multifunction'], icon: 'Cpu' },
       { type: 'sdwan', label: 'SD-WAN', subtypes: ['edge', 'controller', 'gateway'], icon: 'Waypoints' },

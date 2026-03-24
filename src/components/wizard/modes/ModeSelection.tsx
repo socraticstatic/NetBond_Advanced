@@ -21,7 +21,7 @@ export function ModeSelection({ onModeSelect, onCancel }: ModeSelectionProps) {
       id: 'visual' as const,
       name: 'Visual Designer',
       description: 'Design your network topology using an interactive canvas',
-      attIcon: 'router' as const,
+      attIcon: 'cloudRouter' as const,
       iconBg: 'bg-[#009FDB]',
       ctaColor: 'text-[#009FDB]',
       disabled: false

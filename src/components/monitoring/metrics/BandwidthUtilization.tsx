@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { Card } from '../../common/Card';
 import { LineChart } from '../../charts/LazyCharts';
-import { ArrowUpDown, TrendingUp, Info, Share2, Zap } from 'lucide-react';
+import { ArrowUpDown, TrendingUp, Info, Zap } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 import { chartColors } from '../../../utils/chartColors';
 
 interface BandwidthUtilizationProps {
@@ -114,7 +115,7 @@ export function BandwidthUtilization({ data, timeRange }: BandwidthUtilizationPr
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <Share2 className="h-5 w-5 text-fw-bodyLight mr-2" />
+              <AttIcon name="cloudRouter" className="h-6 w-6 text-fw-bodyLight mr-2" />
               <h4 className="text-base font-medium text-fw-heading tracking-[-0.03em]">Bandwidth Usage Profile</h4>
             </div>
             <span className="bg-fw-accent text-fw-linkHover px-2 py-1 text-figma-sm font-medium rounded-full">

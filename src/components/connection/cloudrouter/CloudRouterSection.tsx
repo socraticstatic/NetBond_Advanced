@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Plus, GitBranch } from 'lucide-react';
+import { Plus } from 'lucide-react';
+import { AttIcon } from '../../icons/AttIcon';
 import { Button } from '../../common/Button';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { CloudRouter } from '../../../types/cloudrouter';
@@ -90,7 +91,7 @@ export function CloudRouterSection({
                 {cloudRouters.filter(r => r.status === 'active').length}
               </p>
             </div>
-            <GitBranch className="h-8 w-8 text-fw-link opacity-50" />
+            <AttIcon name="cloudRouter" className="h-8 w-8 text-fw-link opacity-50" />
           </div>
         </div>
 
@@ -102,7 +103,7 @@ export function CloudRouterSection({
                 {cloudRouters.reduce((sum, r) => sum + (r.links?.length || 0), 0)}
               </p>
             </div>
-            <GitBranch className="h-8 w-8 text-fw-success opacity-50" />
+            <AttIcon name="cloudRouter" className="h-8 w-8 text-fw-success opacity-50" />
           </div>
         </div>
 
@@ -136,7 +137,7 @@ export function CloudRouterSection({
 
         {filteredCloudRouters.length === 0 ? (
           <div className="text-center py-16">
-            <GitBranch className="h-12 w-12 mx-auto text-fw-bodyLight mb-4" />
+            <AttIcon name="cloudRouter" className="h-12 w-12 mx-auto text-fw-bodyLight mb-4" />
             <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.04em] mb-2">
               {searchQuery ? 'No routers found' : 'No cloud routers'}
             </h3>

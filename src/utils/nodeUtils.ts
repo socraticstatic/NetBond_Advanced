@@ -2,8 +2,8 @@ import { NetworkNode } from '../types';
 
 export const getFunctionIconName = (functionType: string, config?: any): string => {
   switch (functionType) {
-    case 'Cloud Router': return 'Share2';
-    case 'Router': return config?.routerType === 'cloud' ? 'Share2' : 'Router';
+    case 'Cloud Router': return 'cloudRouter';
+    case 'Router': return config?.routerType === 'cloud' ? 'cloudRouter' : 'Router';
     case 'SDWAN': return 'PanelRight';
     case 'Firewall': return 'Shield';
     case 'VNF': return 'Activity';

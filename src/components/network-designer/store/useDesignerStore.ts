@@ -77,10 +77,10 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
       description: 'Hub-and-spoke topology anchored in US East with a central cloud router.',
       savedAt: '2026-03-20T14:30:00.000Z',
       nodes: [
-        { id: 's1-n1', type: 'function', functionType: 'router', x: 300, y: 200, name: 'Cloud Router', icon: 'Share2', status: 'inactive', config: {} },
-        { id: 's1-n2', type: 'destination', functionType: 'destination', cloudProvider: 'aws', x: 100, y: 100, name: 'AWS East', icon: 'Cloud', status: 'inactive', config: { cloudProvider: 'aws', region: 'us-east-1' } },
-        { id: 's1-n3', type: 'destination', functionType: 'destination', cloudProvider: 'azure', x: 500, y: 100, name: 'Azure East', icon: 'Cloud', status: 'inactive', config: { cloudProvider: 'azure', region: 'eastus' } },
-        { id: 's1-n4', type: 'datacenter', functionType: 'datacenter', dcProvider: 'equinix', x: 300, y: 350, name: 'Equinix NY5', icon: 'Database', status: 'inactive', config: { dcProvider: 'equinix' } },
+        { id: 's1-n1', type: 'function', functionType: 'router', x: 300, y: 200, name: 'Cloud Router', icon: 'cloudRouter', status: 'unconfigured', config: {} },
+        { id: 's1-n2', type: 'destination', functionType: 'destination', cloudProvider: 'aws', x: 100, y: 100, name: 'AWS East', icon: 'Cloud', status: 'unconfigured', config: { cloudProvider: 'aws', region: 'us-east-1' } },
+        { id: 's1-n3', type: 'destination', functionType: 'destination', cloudProvider: 'azure', x: 500, y: 100, name: 'Azure East', icon: 'Cloud', status: 'unconfigured', config: { cloudProvider: 'azure', region: 'eastus' } },
+        { id: 's1-n4', type: 'datacenter', functionType: 'datacenter', dcProvider: 'equinix', x: 300, y: 350, name: 'Equinix NY5', icon: 'Database', status: 'unconfigured', config: { dcProvider: 'equinix' } },
       ],
       edges: [
         { id: 's1-e1', source: 's1-n1', target: 's1-n2', type: 'Ethernet', bandwidth: '10 Gbps', status: 'inactive' },
@@ -94,12 +94,12 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
       description: 'Redundant multi-cloud design spanning AWS, Azure, and GCP with dual routers.',
       savedAt: '2026-03-21T09:15:00.000Z',
       nodes: [
-        { id: 's2-n1', type: 'function', functionType: 'router', x: 200, y: 200, name: 'Router Primary', icon: 'Share2', status: 'inactive', config: {} },
-        { id: 's2-n2', type: 'function', functionType: 'router', x: 400, y: 200, name: 'Router Secondary', icon: 'Share2', status: 'inactive', config: {} },
-        { id: 's2-n3', type: 'destination', functionType: 'destination', cloudProvider: 'aws', x: 100, y: 80, name: 'AWS West', icon: 'Cloud', status: 'inactive', config: { cloudProvider: 'aws', region: 'us-west-2' } },
-        { id: 's2-n4', type: 'destination', functionType: 'destination', cloudProvider: 'azure', x: 300, y: 80, name: 'Azure Central', icon: 'Cloud', status: 'inactive', config: { cloudProvider: 'azure' } },
-        { id: 's2-n5', type: 'destination', functionType: 'destination', cloudProvider: 'gcp', x: 500, y: 80, name: 'GCP Central', icon: 'Cloud', status: 'inactive', config: { cloudProvider: 'gcp' } },
-        { id: 's2-n6', type: 'network', functionType: 'wan', x: 300, y: 360, name: 'MPLS WAN', icon: 'Network', status: 'inactive', config: {} },
+        { id: 's2-n1', type: 'function', functionType: 'router', x: 200, y: 200, name: 'Router Primary', icon: 'cloudRouter', status: 'unconfigured', config: {} },
+        { id: 's2-n2', type: 'function', functionType: 'router', x: 400, y: 200, name: 'Router Secondary', icon: 'cloudRouter', status: 'unconfigured', config: {} },
+        { id: 's2-n3', type: 'destination', functionType: 'destination', cloudProvider: 'aws', x: 100, y: 80, name: 'AWS West', icon: 'Cloud', status: 'unconfigured', config: { cloudProvider: 'aws', region: 'us-west-2' } },
+        { id: 's2-n4', type: 'destination', functionType: 'destination', cloudProvider: 'azure', x: 300, y: 80, name: 'Azure Central', icon: 'Cloud', status: 'unconfigured', config: { cloudProvider: 'azure' } },
+        { id: 's2-n5', type: 'destination', functionType: 'destination', cloudProvider: 'gcp', x: 500, y: 80, name: 'GCP Central', icon: 'Cloud', status: 'unconfigured', config: { cloudProvider: 'gcp' } },
+        { id: 's2-n6', type: 'network', functionType: 'wan', x: 300, y: 360, name: 'MPLS WAN', icon: 'Network', status: 'unconfigured', config: {} },
       ],
       edges: [
         { id: 's2-e1', source: 's2-n1', target: 's2-n3', type: 'Ethernet', bandwidth: '10 Gbps', status: 'inactive' },

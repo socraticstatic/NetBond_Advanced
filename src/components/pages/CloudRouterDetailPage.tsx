@@ -7,11 +7,15 @@ import {
   Network,
   Activity,
   Settings,
-  GitBranch,
   ExternalLink,
   MapPin
 } from 'lucide-react';
+import { AttIcon } from '../icons/AttIcon';
 import { useStore } from '../../store/useStore';
+
+function CloudRouterIcon({ className }: { className?: string }) {
+  return <AttIcon name="cloudRouter" className={className} />;
+}
 import { Button } from '../common/Button';
 import { IconButton } from '../common/IconButton';
 import { Card } from '../common/Card';
@@ -83,7 +87,7 @@ export function CloudRouterDetailPage() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <GitBranch className="h-8 w-8 text-fw-link" />
+                <CloudRouterIcon className="h-8 w-8 text-fw-link" />
                 <h1 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">{cloudRouter.name}</h1>
               </div>
               {cloudRouter.description && (
@@ -145,7 +149,7 @@ export function CloudRouterDetailPage() {
           <MetricCard
             title="BGP Sessions"
             value={cloudRouter.performance?.bgpSessions?.total?.toString() || '0'}
-            icon={GitBranch}
+            icon={CloudRouterIcon}
             trend={cloudRouter.performance?.bgpSessions?.active > 0 ? {
               value: `${cloudRouter.performance.bgpSessions.active} active`,
               isPositive: true
@@ -168,7 +172,7 @@ export function CloudRouterDetailPage() {
               {[
                 { id: 'overview', label: 'Overview', icon: Settings },
                 { id: 'links', label: 'Links', icon: Network },
-                { id: 'vnfs', label: 'VNFs', icon: GitBranch },
+                { id: 'vnfs', label: 'VNFs', icon: CloudRouterIcon },
                 { id: 'performance', label: 'Performance', icon: Activity }
               ].map(tab => (
                 <button

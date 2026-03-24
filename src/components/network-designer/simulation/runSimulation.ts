@@ -300,7 +300,7 @@ export async function runSimulation(
     }
 
     // Reset status
-    setNodes(prev => prev.map(node => ({ ...node, status: 'inactive' })));
+    setNodes(prev => prev.map(node => ({ ...node, status: 'unconfigured' as const })));
     setEdges(prev => prev.map(e => ({ ...e, status: 'inactive' })));
     setIsRunningScenario(false);
     
