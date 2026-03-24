@@ -291,26 +291,22 @@ export function LinkSection({
       {/* Link Status Summary */}
       <LinkStatusSummary links={links} />
 
-      {/* Table Card */}
-      <div className="bg-fw-base rounded-2xl overflow-hidden">
-        <div className="px-6 py-4">
+      {/* Table */}
+      <LinkTable
+        links={filteredLinks}
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onSort={handleSort}
+        onEdit={handleEditLink}
+        onDelete={handleDeleteLink}
+        searchQuery={searchQuery}
+        showCloudRouter={true}
+        toolbar={
           <SearchFilterBar
             searchPlaceholder="Search links ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            filterContent={
-              <select
-                value={selectedCloudRouter}
-                onChange={(e) => setSelectedCloudRouter(e.target.value)}
-                className="fw-select"
-                style={{ width: 'auto', paddingRight: '2.5rem' }}
-              >
-                <option value="all">All Cloud Routers</option>
-                {cloudRouters.map(router => (
-                  <option key={router.id} value={router.id}>{router.name}</option>
-                ))}
-              </select>
-            }
+            onFilter={() => {}}
             onExport={() => {
               const headers = ['VLAN ID', 'Name', 'Status', 'Cloud Router'].join(',');
               const rows = filteredLinks.map(link =>
@@ -326,20 +322,8 @@ export function LinkSection({
               URL.revokeObjectURL(url);
             }}
           />
-        </div>
-
-        {/* Links Table */}
-        <LinkTable
-        links={filteredLinks}
-        sortField={sortField}
-        sortDirection={sortDirection}
-        onSort={handleSort}
-        onEdit={handleEditLink}
-        onDelete={handleDeleteLink}
-        searchQuery={searchQuery}
-        showCloudRouter={true}
+        }
       />
-      </div>
 
       {/* Modals */}
       <VLANModal

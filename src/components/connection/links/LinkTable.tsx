@@ -1,7 +1,7 @@
+import React, { useState } from 'react';
 import { Edit2, Trash2, Eye } from 'lucide-react';
 import { VLAN } from '../modals/VLANModal';
 import { OverflowMenu } from '../../common/OverflowMenu';
-import { useState } from 'react';
 import { EnhancedTable, TableColumn } from '../../common/EnhancedTable';
 
 interface LinkTableProps {
@@ -13,6 +13,7 @@ interface LinkTableProps {
   onDelete: (link: any) => void;
   searchQuery: string;
   showCloudRouter?: boolean;
+  toolbar?: React.ReactNode;
 }
 
 export function LinkTable({
@@ -20,7 +21,8 @@ export function LinkTable({
   onEdit,
   onDelete,
   searchQuery,
-  showCloudRouter = false
+  showCloudRouter = false,
+  toolbar,
 }: LinkTableProps) {
   const [activeOverflow, setActiveOverflow] = useState<string | null>(null);
 
@@ -95,6 +97,7 @@ export function LinkTable({
       showExport={false}
       tableId="links"
       showColumnManager={true}
+      toolbar={toolbar}
       rowActions={(link) => (
         <OverflowMenu
           items={[
