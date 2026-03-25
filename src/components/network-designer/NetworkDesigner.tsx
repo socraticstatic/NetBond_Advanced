@@ -404,10 +404,10 @@ export function NetworkDesigner({
       </div>
 
       {/* Read/Edit mode toggle - top right */}
-      <div className={`absolute ${editMode ? 'top-14' : 'top-4'} right-4 z-20 flex rounded-lg border border-fw-secondary bg-fw-base shadow-sm overflow-hidden`}>
+      <div className={`absolute ${editMode ? 'top-14' : 'top-4'} right-4 z-20 flex rounded-full border border-fw-secondary bg-fw-base shadow-sm overflow-hidden p-0.5 gap-0.5`}>
         <button
           onClick={() => setViewMode('read')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-sm font-medium transition-colors ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-figma-sm font-medium transition-colors ${
             isReadOnly ? 'bg-fw-primary text-white' : 'text-fw-body hover:bg-fw-wash'
           }`}
         >
@@ -416,7 +416,7 @@ export function NetworkDesigner({
         </button>
         <button
           onClick={() => setViewMode('edit')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-figma-sm font-medium transition-colors ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-figma-sm font-medium transition-colors ${
             !isReadOnly ? 'bg-fw-primary text-white' : 'text-fw-body hover:bg-fw-wash'
           }`}
         >
@@ -499,8 +499,8 @@ export function NetworkDesigner({
             handleAddNode('function', 'router', {});
             setShowWelcome(false);
           }}
-          onChooseTemplate={() => {
-            setIsTemplatesOpen(true);
+          onLoadTemplate={(nodes, edges) => {
+            handleLoadTemplate(nodes, edges);
             setShowWelcome(false);
           }}
         />
