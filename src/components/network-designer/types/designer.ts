@@ -28,6 +28,7 @@ export interface NetworkEdge {
     latency?: string;
     throughput?: string;
     packetLoss?: string;
+    bandwidthUtilization?: number;
   };
   config?: {
     resilience?: 'single' | 'redundant' | 'ha' | 'dual-diverse';
@@ -36,6 +37,22 @@ export interface NetworkEdge {
     bfd?: boolean;
     qosProfile?: string;
   };
+}
+
+export type SimulationPhase = 'idle' | 'initializing' | 'running' | 'paused' | 'completed' | 'error';
+
+export interface SimulationMetrics {
+  bandwidth: { current: number; max: number };
+  latency: { current: number; max: number };
+  packets: { sent: number; received: number; errors: number };
+}
+
+export interface SimulationScores {
+  resiliency: number;
+  redundancy: number;
+  disaster: number;
+  security: number;
+  performance: number;
 }
 
 export interface ValidationIssue {

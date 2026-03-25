@@ -155,4 +155,25 @@ describe('Toolbar', () => {
       expect(screen.queryByTitle('Switch to edit mode')).not.toBeInTheDocument();
     });
   });
+
+  describe('simulation button', () => {
+    it('calls onRunSimulation when Play is clicked', () => {
+      const onRunSimulation = vi.fn();
+      render(<Toolbar {...defaultProps} hasConnections={true} onRunSimulation={onRunSimulation} />);
+      const playBtn = screen.getByTitle('Run scenario');
+      playBtn.click();
+      expect(onRunSimulation).toHaveBeenCalledOnce();
+    });
+
+    it('disables Play when no connections', () => {
+      render(<Toolbar {...defaultProps} hasConnections={false} />);
+      const playBtn = screen.getByTitle('Run scenario');
+      expect(playBtn).toBeDisabled();
+    });
+
+    it('shows running state when simulation is active', () => {
+      render(<Toolbar {...defaultProps} hasConnections={true} isSimulationRunning={true} />);
+      expect(screen.getByTitle('Simulation running')).toBeTruthy();
+    });
+  });
 });

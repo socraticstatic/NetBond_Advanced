@@ -23,6 +23,8 @@ interface ToolbarProps {
   editMode?: boolean;
   readOnly?: boolean;
   onSwitchToEdit?: () => void;
+  onRunSimulation?: () => void;
+  isSimulationRunning?: boolean;
 }
 
 type MenuKey = 'function' | 'cloud' | 'datacenter' | 'network' | null;
@@ -46,6 +48,8 @@ export function Toolbar({
   editMode = false,
   readOnly = false,
   onSwitchToEdit,
+  onRunSimulation,
+  isSimulationRunning = false,
 }: ToolbarProps) {
   const [openMenu, setOpenMenu] = useState<MenuKey>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -280,15 +284,17 @@ export function Toolbar({
 
       <div className="w-px h-5 bg-fw-secondary mx-1 flex-shrink-0" />
 
-      {/* Run Scenario (Play) */}
+      {/* Run Scenario (Play/Pause) */}
       <button
         disabled={!hasConnections}
-        title="Run scenario"
+        onClick={onRunSimulation}
+        title={isSimulationRunning ? 'Simulation running' : 'Run scenario'}
         className={`p-2 rounded-full transition-colors ${
+          isSimulationRunning ? 'text-fw-link bg-blue-50' :
           hasConnections ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
         }`}
       >
-        <Play className="h-4 w-4" />
+        <Play className={`h-4 w-4 ${isSimulationRunning ? 'animate-pulse' : ''}`} />
       </button>
 
       {/* Save Template */}
