@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { NetworkNode, NetworkEdge } from '../types/designer';
+import type { NetworkNode, NetworkEdge, SimulationPhase, SimulationMetrics, SimulationScores } from '../types/designer';
 
 interface HistoryEntry {
   nodes: NetworkNode[];
@@ -31,6 +31,11 @@ interface DesignerState {
   historyIndex: number;
   drafts: Draft[];
   currentDraftId: string | null;
+  simulationPhase: SimulationPhase;
+  simulationProgress: number;
+  simulationMetrics: SimulationMetrics;
+  simulationScores: SimulationScores;
+  isSimulationRunning: boolean;
 
   setNodes: (nodes: NetworkNode[]) => void;
   setEdges: (edges: NetworkEdge[]) => void;
@@ -57,6 +62,9 @@ interface DesignerState {
   saveDraft: (name: string, description: string) => void;
   loadDraft: (id: string) => void;
   deleteDraft: (id: string) => void;
+  startSimulation: () => void;
+  stopSimulation: () => void;
+  setSimulationData: (data: Partial<Pick<DesignerState, 'simulationPhase' | 'simulationProgress' | 'simulationMetrics' | 'simulationScores'>>) => void;
 }
 
 export const useDesignerStore = create<DesignerState>((set, get) => ({
@@ -73,6 +81,15 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
   history: [],
   historyIndex: -1,
   currentDraftId: null,
+  simulationPhase: 'idle',
+  simulationProgress: 0,
+  simulationMetrics: {
+    bandwidth: { current: 0, max: 100 },
+    latency: { current: 0, max: 100 },
+    packets: { sent: 0, received: 0, errors: 0 },
+  },
+  simulationScores: { resiliency: 0, redundancy: 0, disaster: 0, security: 0, performance: 0 },
+  isSimulationRunning: false,
   drafts: [
     {
       id: 'seed-draft-1',
@@ -237,4 +254,27 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
       selectedEdgeId: null,
     });
   },
+
+  startSimulation: () => set({
+    isSimulationRunning: true,
+    simulationPhase: 'initializing',
+    simulationProgress: 0,
+    simulationMetrics: {
+      bandwidth: { current: 0, max: 100 },
+      latency: { current: 0, max: 100 },
+      packets: { sent: 0, received: 0, errors: 0 },
+    },
+    simulationScores: { resiliency: 0, redundancy: 0, disaster: 0, security: 0, performance: 0 },
+  }),
+  stopSimulation: () => set({
+    isSimulationRunning: false,
+    simulationPhase: 'idle',
+    simulationProgress: 0,
+    simulationMetrics: {
+      bandwidth: { current: 0, max: 100 },
+      latency: { current: 0, max: 100 },
+      packets: { sent: 0, received: 0, errors: 0 },
+    },
+  }),
+  setSimulationData: (data) => set(data),
 }));
