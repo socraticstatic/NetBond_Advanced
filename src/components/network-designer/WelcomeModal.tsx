@@ -149,25 +149,7 @@ export function WelcomeModal({ onClose, onCreate, onLoadTemplate }: WelcomeModal
                         <span className="text-[10px] font-medium text-fw-link bg-fw-accent px-1.5 py-0.5 rounded">Recommended</span>
                       )}
                     </div>
-                    {/* Mini topology icons */}
-                    <div className="flex items-center gap-1 mb-2">
-                      {tpl.nodes.slice(0, 4).map((n, i) => (
-                        <div
-                          key={i}
-                          className={`w-6 h-6 rounded-md flex items-center justify-center text-white text-[9px] font-bold ${
-                            n.type === 'function' ? 'bg-pink-400' :
-                            n.type === 'destination' ? 'bg-blue-400' :
-                            n.type === 'network' ? 'bg-purple-400' :
-                            'bg-gray-400'
-                          }`}
-                        >
-                          {n.name.charAt(0)}
-                        </div>
-                      ))}
-                      {tpl.nodes.length > 4 && (
-                        <span className="text-[10px] text-fw-bodyLight">+{tpl.nodes.length - 4}</span>
-                      )}
-                    </div>
+                    {/* No preview badges - title and description are sufficient */}
                     <p className="text-[11px] text-fw-bodyLight leading-snug mb-2 line-clamp-2">{tpl.description}</p>
                     <div className="flex items-center gap-3 text-[11px] text-fw-bodyLight">
                       <span>{tpl.nodeCount} nodes</span>

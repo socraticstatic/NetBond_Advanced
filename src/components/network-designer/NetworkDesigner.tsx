@@ -22,6 +22,8 @@ import { SaveTemplateModal } from './templates/SaveTemplateModal';
 import { SaveDraftModal } from './SaveDraftModal';
 import { DraftsDrawer } from './DraftsDrawer';
 import { WelcomeModal } from './WelcomeModal';
+import { NetworkSimulation } from './simulation/NetworkSimulation';
+import { runSimulation } from './simulation/runSimulation';
 
 // Preserve the props interface so LazyNetworkDesigner and ConnectionWizard still work
 interface NetworkDesignerProps {
@@ -82,6 +84,7 @@ export function NetworkDesigner({
   const viewMode = useDesignerStore((s) => s.viewMode);
   const setViewMode = useDesignerStore((s) => s.setViewMode);
   const saveToHistoryStore = useDesignerStore((s) => s.saveToHistory);
+  const isSimulationRunning = useDesignerStore((s) => s.isSimulationRunning);
 
   const isReadOnly = viewMode === 'read';
 
@@ -164,6 +167,12 @@ export function NetworkDesigner({
       handleNodeSelection(id);
     }
   }, [isCreatingEdge, handleNodeSelection]);
+
+  const handleRunSimulation = useCallback(() => {
+    if (!isSimulationRunning && edges.length > 0) {
+      runSimulation();
+    }
+  }, [isSimulationRunning, edges.length]);
 
   const handleNodeDrag = useCallback((id: string, x: number, y: number) => {
     moveNode(id, x, y);
@@ -526,7 +535,12 @@ export function NetworkDesigner({
         editMode={editMode}
         readOnly={isReadOnly}
         onSwitchToEdit={() => setViewMode('edit')}
+        onRunSimulation={handleRunSimulation}
+        isSimulationRunning={isSimulationRunning}
       />
+
+      {/* Simulation Modal */}
+      <NetworkSimulation />
     </div>
   );
 }
