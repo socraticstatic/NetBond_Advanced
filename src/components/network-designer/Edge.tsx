@@ -31,7 +31,8 @@ export const Edge = memo(function Edge({ edge, nodes, isSelected, onClick }: Edg
       : edge.status === 'down'
         ? '#ef4444'
         : '#d1d5db';
-  const strokeWidth = isSelected ? 3 : 2;
+  const isSimulating = edge.status === 'active' && (edge.metrics?.bandwidthUtilization ?? 0) > 0;
+  const strokeWidth = isSelected ? 3 : isSimulating ? 2.5 : 2;
   const isInactiveOrDown = edge.status === 'inactive' || edge.status === 'down';
 
   // Quadratic bezier control point
@@ -71,9 +72,17 @@ export const Edge = memo(function Edge({ edge, nodes, isSelected, onClick }: Edg
         stroke={color}
         strokeWidth={strokeWidth}
         fill="none"
-        strokeDasharray={edge.type === 'VPN' || isInactiveOrDown ? '6,4' : undefined}
-        style={{ pointerEvents: 'none' }}
+        strokeDasharray={isSimulating ? '8,4' : edge.type === 'VPN' || isInactiveOrDown ? '6,4' : undefined}
+        style={{
+          pointerEvents: 'none',
+          ...(isSimulating ? {
+            animation: 'edge-flow 1s linear infinite',
+          } : {}),
+        }}
       />
+      {isSimulating && (
+        <style>{`@keyframes edge-flow { to { stroke-dashoffset: -24; } }`}</style>
+      )}
 
       {/* Arrow */}
       <polygon
