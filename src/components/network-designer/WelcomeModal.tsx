@@ -156,7 +156,7 @@ export function WelcomeModal({ onClose, onCreate, onLoadTemplate }: WelcomeModal
               </div>
 
               <div className="mb-5">
-                <label className="block text-figma-sm font-medium text-fw-heading mb-1.5">Router Name</label>
+                <label className="block text-figma-sm font-medium text-fw-heading mb-1.5">Cloud Router Name</label>
                 <input
                   autoFocus
                   type="text"
