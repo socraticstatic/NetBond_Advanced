@@ -147,7 +147,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Left Side: Logo and Navigation */}
-          <div className="flex items-center">
+          <div className="flex items-center min-w-0">
             {/* Hamburger Menu Button - Now next to the logo */}
             <button
               onClick={() => setIsVerticalNav(!isVerticalNav)}
@@ -170,7 +170,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:ml-8 lg:flex lg:items-center lg:h-full" style={{ gap: '61px' }}>
+            <div className="hidden lg:ml-6 lg:flex lg:items-center lg:h-full lg:gap-4 xl:gap-8 2xl:gap-[61px]">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 // Special handling: /groups routes should be considered part of /manage
@@ -186,7 +186,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
                     onMouseLeave={() => setHoveredItem(null)}
                     className={`
                       group relative inline-flex items-center px-1 py-4 border-b-2 text-figma-base font-medium no-rounded
-                      transition-all duration-200 h-full tracking-[-0.03em]
+                      transition-all duration-200 h-full tracking-[-0.03em] whitespace-nowrap
                       ${isActive
                         ? 'border-fw-active text-fw-link'
                         : 'border-transparent text-fw-heading hover:border-fw-secondary hover:text-fw-body'
@@ -194,7 +194,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
                     `}
                   >
                     <Icon className={`
-                      h-6 w-6 mr-2 transition-transform duration-200
+                      h-5 w-5 lg:h-6 lg:w-6 mr-1.5 lg:mr-2 transition-transform duration-200 flex-shrink-0
                       ${hoveredItem === item.href ? 'scale-110' : ''}
                       ${isActive ? 'text-fw-link' : 'text-fw-heading'}
                     `} 
@@ -230,15 +230,15 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
           </div>
 
           {/* Right Side: Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 lg:space-x-4 flex-shrink-0">
             {!isMenuOpen && !isMobile && (
               <>
                 <SearchBar onSearch={onSearch} />
-                <div className="h-5 w-px bg-fw-secondary" />
+                <div className="h-5 w-px bg-fw-secondary hidden xl:block" />
                 <HelpButton />
-                <div className="h-5 w-px bg-fw-secondary" />
+                <div className="h-5 w-px bg-fw-secondary hidden xl:block" />
                 <NotificationsButton count={notifications} />
-                <div className="h-5 w-px bg-fw-secondary" />
+                <div className="h-5 w-px bg-fw-secondary hidden xl:block" />
                 <TenantSelector onProfileClick={() => navigate('/profile')} />
               </>
             )}

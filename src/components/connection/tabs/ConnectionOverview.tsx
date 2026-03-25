@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Link2, Box } from 'lucide-react';
 import { AttIcon } from '../../icons/AttIcon';
 import { Connection } from '../../../types';
+import { MiniTopology } from '../MiniTopology';
 
 import { IPEInfoTooltip } from '../../common/IPEInfoTooltip';
 import { BandwidthAdjuster } from '../BandwidthAdjuster';
@@ -92,72 +93,14 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
             Edit Topology
           </button>
         </div>
-        {/* Mini topology diagram */}
+        {/* Mini topology canvas */}
         <div className="px-6 pb-6">
-          <div className="bg-fw-base rounded-xl p-6" style={{ minHeight: '200px' }}>
-            <div className="flex items-center justify-center gap-0">
-              {/* Connection source */}
-              <div className="flex flex-col items-center" style={{ width: '120px' }}>
-                <div className="w-12 h-12 rounded-xl bg-fw-accent flex items-center justify-center border border-fw-active">
-                  <Globe className="h-6 w-6 text-fw-link" />
-                </div>
-                <div className="text-[12px] font-medium text-fw-heading mt-2">{connection.location || 'Source'}</div>
-                <div className="text-[11px] text-fw-bodyLight">{connection.type}</div>
-              </div>
-              {/* Arrow */}
-              <div className="flex items-center self-start" style={{ marginTop: '20px' }}>
-                <div className="h-0.5 w-6 bg-fw-link" />
-                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px] border-l-fw-link" />
-              </div>
-              {/* Cloud Routers */}
-              <div className="flex flex-col items-center" style={{ width: '120px' }}>
-                <div className="w-12 h-12 rounded-xl bg-fw-successLight flex items-center justify-center border border-fw-success">
-                  <Server className="h-6 w-6 text-fw-success" />
-                </div>
-                <div className="text-[12px] font-medium text-fw-heading mt-2">Cloud Routers</div>
-                <div className="text-[11px] text-fw-bodyLight">{cloudRoutersCount} active</div>
-              </div>
-              {/* Arrow */}
-              <div className="flex items-center self-start" style={{ marginTop: '20px' }}>
-                <div className="h-0.5 w-6 bg-fw-link" />
-                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px] border-l-fw-link" />
-              </div>
-              {/* Links */}
-              <div className="flex flex-col items-center" style={{ width: '120px' }}>
-                <div className="w-12 h-12 rounded-xl bg-fw-purpleLight flex items-center justify-center border border-fw-purple">
-                  <Link2 className="h-6 w-6 text-fw-purple" />
-                </div>
-                <div className="text-[12px] font-medium text-fw-heading mt-2">Links (VLANs)</div>
-                <div className="text-[11px] text-fw-bodyLight">{linksCount} segments</div>
-              </div>
-              {/* Arrow */}
-              <div className="flex items-center self-start" style={{ marginTop: '20px' }}>
-                <div className="h-0.5 w-6 bg-fw-link" />
-                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px] border-l-fw-link" />
-              </div>
-              {/* VNFs */}
-              <div className="flex flex-col items-center" style={{ width: '120px' }}>
-                <div className="w-12 h-12 rounded-xl bg-fw-warnLight flex items-center justify-center border border-fw-warn">
-                  <Shield className="h-6 w-6 text-fw-warn" />
-                </div>
-                <div className="text-[12px] font-medium text-fw-heading mt-2">VNFs</div>
-                <div className="text-[11px] text-fw-bodyLight">{vnfsCount} functions</div>
-              </div>
-              {/* Arrow */}
-              <div className="flex items-center self-start" style={{ marginTop: '20px' }}>
-                <div className="h-0.5 w-6 bg-fw-link" />
-                <div className="w-0 h-0 border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent border-l-[6px] border-l-fw-link" />
-              </div>
-              {/* Cloud destination */}
-              <div className="flex flex-col items-center" style={{ width: '120px' }}>
-                <div className="w-12 h-12 rounded-xl bg-fw-infoLight flex items-center justify-center border border-fw-active">
-                  <Box className="h-6 w-6 text-fw-link" />
-                </div>
-                <div className="text-[12px] font-medium text-fw-heading mt-2">{connection.vendor || 'Cloud'}</div>
-                <div className="text-[11px] text-fw-bodyLight">{connection.bandwidth}</div>
-              </div>
-            </div>
-          </div>
+          <MiniTopology
+            connection={connection}
+            cloudRoutersCount={cloudRoutersCount}
+            linksCount={linksCount}
+            vnfsCount={vnfsCount}
+          />
         </div>
       </div>
 
