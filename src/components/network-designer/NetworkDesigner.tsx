@@ -499,8 +499,8 @@ export function NetworkDesigner({
             handleAddNode('function', 'router', {});
             setShowWelcome(false);
           }}
-          onChooseTemplate={() => {
-            setIsTemplatesOpen(true);
+          onLoadTemplate={(nodes, edges) => {
+            handleLoadTemplate(nodes, edges);
             setShowWelcome(false);
           }}
         />
