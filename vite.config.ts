@@ -1,9 +1,23 @@
 import { defineConfig } from 'vite';
+import type { Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import { writeFileSync } from 'fs';
+import { resolve } from 'path';
+
+function buildIdPlugin(): Plugin {
+  return {
+    name: 'build-id',
+    writeBundle({ dir }) {
+      const id = Date.now().toString(36);
+      writeFileSync(resolve(dir || 'dist', 'build-id.json'), JSON.stringify({ id }));
+    },
+  };
+}
 
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
+    buildIdPlugin(),
   ],
   base: './',
   build: {

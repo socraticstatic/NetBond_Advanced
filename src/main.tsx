@@ -5,6 +5,24 @@ import './index.css';
 import './styles/fonts.css';
 import { initializePerformanceOptimizations } from './utils/performanceOptimizations';
 import { initializePreloader } from './utils/preloadStrategies';
+
+// Version check: reload once if build-id.json doesn't match cached version
+if (import.meta.env.PROD) {
+  const BUILD_ID_KEY = 'netbond-build-id';
+  fetch('./build-id.json', { cache: 'no-store' })
+    .then((r) => r.json())
+    .then(({ id }) => {
+      const cached = sessionStorage.getItem(BUILD_ID_KEY);
+      if (cached && cached !== id) {
+        sessionStorage.setItem(BUILD_ID_KEY, id);
+        window.location.reload();
+      } else {
+        sessionStorage.setItem(BUILD_ID_KEY, id);
+      }
+    })
+    .catch(() => {});
+}
+
 // Initialize performance optimizations
 initializePerformanceOptimizations();
 
