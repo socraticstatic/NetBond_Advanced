@@ -495,8 +495,9 @@ export function NetworkDesigner({
       {showWelcome && (
         <WelcomeModal
           onClose={() => setShowWelcome(false)}
-          onCreate={() => {
-            handleAddNode('function', 'router', {});
+          onCreate={(name) => {
+            const node = addNode('function', 'router');
+            if (name && node) updateNode(node.id, { name });
             setShowWelcome(false);
           }}
           onLoadTemplate={(nodes, edges) => {
