@@ -5,17 +5,16 @@ import { DESIGNER_TEMPLATES } from './templates/templateDefinitions';
 import { useDesignerStore } from './store/useDesignerStore';
 import type { NetworkNode, NetworkEdge } from './types/designer';
 
-type View = 'options' | 'create' | 'import' | 'templates' | 'drafts';
+type View = 'options' | 'import' | 'templates' | 'drafts';
 
 interface WelcomeModalProps {
   onClose: () => void;
-  onCreate: (name?: string) => void;
+  onCreate: () => void;
   onLoadTemplate: (nodes: NetworkNode[], edges: NetworkEdge[]) => void;
 }
 
 export function WelcomeModal({ onClose, onCreate, onLoadTemplate }: WelcomeModalProps) {
   const [view, setView] = useState<View>('options');
-  const [routerName, setRouterName] = useState('');
   const [isImporting, setIsImporting] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -83,7 +82,7 @@ export function WelcomeModal({ onClose, onCreate, onLoadTemplate }: WelcomeModal
             <div className="grid grid-cols-4 gap-3">
               {/* Create */}
               <button
-                onClick={() => setView('create')}
+                onClick={onCreate}
                 className="group flex flex-col items-center text-center px-3 py-5 rounded-xl border border-transparent hover:border-fw-secondary hover:bg-fw-wash cursor-pointer transition-all duration-150"
               >
                 <AttIcon name="cloudRouter" className="w-6 h-6 text-fw-bodyLight group-hover:text-fw-link transition-colors mb-3" />
@@ -129,60 +128,6 @@ export function WelcomeModal({ onClose, onCreate, onLoadTemplate }: WelcomeModal
             </div>
           )}
 
-          {/* Create View - Name your router */}
-          {view === 'create' && (
-            <div>
-              <div className="text-center mb-5">
-                <AttIcon name="cloudRouter" className="w-8 h-8 text-fw-bodyLight mx-auto mb-2" />
-                <h3 className="text-figma-base font-semibold text-fw-heading">Name Your Cloud Router</h3>
-                <p className="text-figma-xs text-fw-bodyLight mt-1">Give your cloud router a meaningful name</p>
-              </div>
-
-              {/* Mini preview */}
-              <div className="flex items-center justify-center gap-3 mb-5 py-3 px-4 bg-fw-wash rounded-lg">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-purple-50 border border-purple-200 flex items-center justify-center">
-                    <AttIcon name="cloudRouter" className="w-5 h-5 text-purple-500" />
-                  </div>
-                  <span className="text-figma-xs text-fw-bodyLight">AT&T Core</span>
-                </div>
-                <div className="h-px w-8 bg-fw-secondary" />
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-pink-50 border border-pink-200 flex items-center justify-center">
-                    <AttIcon name="cloudRouter" className="w-5 h-5 text-pink-500" />
-                  </div>
-                  <span className="text-figma-xs font-medium text-fw-heading">{routerName || 'Cloud Router'}</span>
-                </div>
-              </div>
-
-              <div className="mb-5">
-                <label className="block text-figma-sm font-medium text-fw-heading mb-1.5">Cloud Router Name</label>
-                <input
-                  autoFocus
-                  type="text"
-                  className="w-full h-10 px-3 text-figma-base border border-fw-secondary rounded-lg bg-fw-base focus:outline-none focus:border-fw-link"
-                  placeholder="e.g., Production-Finance-Cloud-Router-East-01"
-                  value={routerName}
-                  onChange={(e) => setRouterName(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' && routerName.trim()) onCreate(routerName.trim()); }}
-                />
-                <p className="text-[11px] text-fw-bodyLight mt-1.5">Choose a meaningful name that reflects your Cloud Router's role in your network architecture.</p>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <button onClick={() => { setView('options'); setRouterName(''); }} className="flex items-center gap-1 text-figma-sm text-fw-link hover:text-fw-linkHover transition-colors">
-                  <ArrowLeft className="w-3.5 h-3.5" /> Back to Options
-                </button>
-                <button
-                  onClick={() => onCreate(routerName.trim() || undefined)}
-                  className="px-4 py-2 bg-fw-primary text-white rounded-lg text-figma-sm font-medium hover:bg-fw-primaryHover transition-colors"
-                >
-                  Create Network
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Templates View */}
           {view === 'templates' && (
             <div>
@@ -191,17 +136,36 @@ export function WelcomeModal({ onClose, onCreate, onLoadTemplate }: WelcomeModal
                 <h3 className="text-figma-base font-semibold text-fw-heading">Choose a Template</h3>
                 <p className="text-figma-xs text-fw-bodyLight mt-1">Start with a proven enterprise network pattern</p>
               </div>
-              <div className="grid grid-cols-3 gap-2 mb-4">
+              <div className="grid grid-cols-3 gap-3 mb-4">
                 {DESIGNER_TEMPLATES.map((tpl) => (
                   <button
                     key={tpl.id}
                     onClick={() => handleLoadTemplate(tpl.nodes, tpl.edges)}
-                    className="text-left p-3 rounded-lg border border-fw-secondary hover:border-fw-link hover:bg-fw-wash transition-all cursor-pointer group"
+                    className="text-left p-4 rounded-xl border border-fw-secondary hover:border-fw-link hover:bg-fw-wash transition-all cursor-pointer group"
                   >
-                    <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center justify-between mb-2">
                       <span className="text-figma-sm font-semibold text-fw-heading group-hover:text-fw-link transition-colors">{tpl.name}</span>
                       {tpl.name === 'High Availability' && (
                         <span className="text-[10px] font-medium text-fw-link bg-fw-accent px-1.5 py-0.5 rounded">Recommended</span>
+                      )}
+                    </div>
+                    {/* Mini topology icons */}
+                    <div className="flex items-center gap-1 mb-2">
+                      {tpl.nodes.slice(0, 4).map((n, i) => (
+                        <div
+                          key={i}
+                          className={`w-6 h-6 rounded-md flex items-center justify-center text-white text-[9px] font-bold ${
+                            n.type === 'function' ? 'bg-pink-400' :
+                            n.type === 'destination' ? 'bg-blue-400' :
+                            n.type === 'network' ? 'bg-purple-400' :
+                            'bg-gray-400'
+                          }`}
+                        >
+                          {n.name.charAt(0)}
+                        </div>
+                      ))}
+                      {tpl.nodes.length > 4 && (
+                        <span className="text-[10px] text-fw-bodyLight">+{tpl.nodes.length - 4}</span>
                       )}
                     </div>
                     <p className="text-[11px] text-fw-bodyLight leading-snug mb-2 line-clamp-2">{tpl.description}</p>
