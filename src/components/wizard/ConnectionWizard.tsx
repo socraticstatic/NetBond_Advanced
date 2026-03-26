@@ -8,6 +8,7 @@ import { ConnectionTypeSelection } from './screens/ConnectionTypeSelection';
 import { ConnectionConfiguration } from './screens/ConnectionConfiguration';
 import { AdvancedSettings } from './screens/AdvancedSettings';
 import { ReviewConfiguration } from './screens/ReviewConfiguration';
+import { ResiliencySelection, ResiliencyLevel } from './screens/ResiliencySelection';
 import { ModeSelection } from './modes';
 import { useStore } from '../../store/useStore';
 import { Button } from '../common/Button';
@@ -34,6 +35,7 @@ const STEPS = [
   { title: 'Your Cloud Router', description: 'Name Your Cloud Router' },
   { title: 'Choose Provider', description: 'Select your cloud service provider' },
   { title: 'Connection Type', description: 'Select how you want to connect' },
+  { title: 'Resiliency', description: 'Choose your resiliency level' },
   { title: 'Basic Settings', description: 'Set bandwidth and location' },
   { title: 'Advanced Settings', description: 'Configure network settings' },
   { title: 'Review', description: 'Review your selections' }
@@ -106,6 +108,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
 
   // Legacy single-provider accessor for downstream components that haven't been updated yet
   const selectedProvider = selectedProviders[0] as CloudProvider | undefined;
+  const [resiliencyLevel, setResiliencyLevel] = useState<ResiliencyLevel>('');
   const [selectedType, setSelectedType] = useState<ConnectionType>();
   const [selectedBandwidth, setSelectedBandwidth] = useState<BandwidthOption>();
   const [selectedLocation, setSelectedLocation] = useState<LocationOption>();
@@ -246,19 +249,21 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   };
 
   const canProceed = () => {
-    // For standard flow
+    // For standard flow (7 steps: 0-6)
     switch (step) {
       case 0:
-        return cloudRouterName.trim().length > 0; // Cloud Router Name required
+        return cloudRouterName.trim().length > 0;
       case 1:
         return selectedProviders.length > 0;
       case 2:
         return !!selectedType;
       case 3:
-        return !!selectedBandwidth && !!selectedLocation;
+        return resiliencyLevel !== '';
       case 4:
-        return true; // Advanced settings are optional
+        return !!selectedBandwidth && !!selectedLocation;
       case 5:
+        return true; // Advanced settings are optional
+      case 6:
         return true; // Review step
       default:
         return false;
@@ -563,6 +568,13 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               )}
 
               {step === 3 && (
+                <ResiliencySelection
+                  resiliencyLevel={resiliencyLevel}
+                  onSelect={setResiliencyLevel}
+                />
+              )}
+
+              {step === 4 && (
                 <ConnectionConfiguration
                   selectedLocation={selectedLocation}
                   selectedBandwidth={selectedBandwidth}
@@ -575,7 +587,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 />
               )}
 
-              {step === 4 && (
+              {step === 5 && (
                 <AdvancedSettings
                   config={{
                     provider: selectedProvider,
@@ -590,7 +602,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 />
               )}
 
-              {step === 5 && (
+              {step === 6 && (
                 <ReviewConfiguration
                   config={{
                     provider: selectedProvider,
