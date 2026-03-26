@@ -94,7 +94,18 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   const [showAI, setShowAI] = useState(true);
 
   // Persistent state for all selections
-  const [selectedProvider, setSelectedProvider] = useState<CloudProvider>();
+  const [selectedProviders, setSelectedProviders] = useState<CloudProvider[]>([]);
+
+  const toggleProvider = (provider: CloudProvider) => {
+    setSelectedProviders(prev =>
+      prev.includes(provider)
+        ? prev.filter(p => p !== provider)
+        : [...prev, provider]
+    );
+  };
+
+  // Legacy single-provider accessor for downstream components that haven't been updated yet
+  const selectedProvider = selectedProviders[0] as CloudProvider | undefined;
   const [selectedType, setSelectedType] = useState<ConnectionType>();
   const [selectedBandwidth, setSelectedBandwidth] = useState<BandwidthOption>();
   const [selectedLocation, setSelectedLocation] = useState<LocationOption>();
@@ -116,7 +127,9 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       
       // Set basic config values safely
       tryCatch(() => {
-        setSelectedProvider(connectionToEdit.provider as CloudProvider);
+        if (connectionToEdit.provider) {
+          setSelectedProviders([connectionToEdit.provider as CloudProvider]);
+        }
         setSelectedType(connectionToEdit.type as ConnectionType);
         setSelectedBandwidth(connectionToEdit.bandwidth as BandwidthOption);
         setSelectedLocation(connectionToEdit.location as LocationOption);
@@ -196,7 +209,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       bandwidth: selectedBandwidth,
       location: selectedLocation
     });
-  }, [selectedProvider, selectedType, selectedBandwidth, selectedLocation]);
+  }, [selectedProviders, selectedType, selectedBandwidth, selectedLocation]);
 
   const handleCancel = () => {
     const connId = connectionToEdit?.id || locationState?.connectionId;
@@ -238,7 +251,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       case 0:
         return cloudRouterName.trim().length > 0; // Cloud Router Name required
       case 1:
-        return !!selectedProvider;
+        return selectedProviders.length > 0;
       case 2:
         return !!selectedType;
       case 3:
@@ -529,11 +542,8 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
 
               {step === 1 && (
                 <ProviderSelection
-                  selectedProvider={selectedProvider}
-                  onSelect={(provider) => {
-                    setSelectedProvider(provider);
-                    setStep(2);
-                  }}
+                  selectedProviders={selectedProviders}
+                  onToggle={toggleProvider}
                   billingChoice={billingChoice}
                   onBillingChange={updateBillingChoice}
                 />
