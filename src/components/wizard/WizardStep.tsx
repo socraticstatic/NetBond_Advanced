@@ -19,24 +19,30 @@ export function WizardStep({
   return (
     <div className="flex-1">
       <div className="flex items-center">
-        {/* Step circle */}
-        <div
-          title={title}
-          className={`
-            relative flex items-center justify-center w-7 h-7 rounded-full flex-shrink-0
-            transition-colors duration-300 ease-in-out
-            ${isCompleted
-              ? 'bg-fw-success text-white'
-              : isActive
-                ? 'bg-fw-primary text-white ring-4 ring-fw-primary/20'
-                : 'bg-fw-disabled text-white'
-            }
-          `}
-        >
-          {isCompleted ? (
-            <Check className="w-3.5 h-3.5" />
-          ) : (
-            <span className="text-figma-xs font-semibold leading-none">{number}</span>
+        {/* Step circle with centered label */}
+        <div className="relative flex-shrink-0">
+          <div
+            title={title}
+            className={`
+              flex items-center justify-center w-7 h-7 rounded-full
+              transition-colors duration-300 ease-in-out
+              ${isCompleted
+                ? 'bg-fw-success text-white'
+                : isActive
+                  ? 'bg-fw-primary text-white ring-4 ring-fw-primary/20'
+                  : 'bg-fw-disabled text-white'
+              }
+            `}
+          >
+            {isCompleted ? (
+              <Check className="w-3.5 h-3.5" />
+            ) : (
+              <span className="text-figma-xs font-semibold leading-none">{number}</span>
+            )}
+          </div>
+          {/* Label centered under circle */}
+          {isActive && (
+            <p className="absolute top-full mt-1.5 left-1/2 -translate-x-1/2 text-figma-xs font-semibold text-fw-primary whitespace-nowrap">{title}</p>
           )}
         </div>
         {/* Connector line */}
@@ -50,12 +56,8 @@ export function WizardStep({
           </div>
         )}
       </div>
-      {/* Title only shown for active step */}
-      <div className="mt-1.5 h-5">
-        {isActive && (
-          <p className="text-figma-xs font-semibold text-fw-primary whitespace-nowrap">{title}</p>
-        )}
-      </div>
+      {/* Spacer for label height */}
+      <div className="h-7" />
     </div>
   );
 }
