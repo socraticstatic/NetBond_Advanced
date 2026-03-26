@@ -33,7 +33,7 @@ export function BandwidthConfiguration({
     }));
   });
 
-  const totalBandwidth = Object.values(bandwidthSettings).reduce((sum, bw) => sum + bw, 0);
+  const totalBandwidth = connections.reduce((sum, c) => sum + (bandwidthSettings[c.key] || 1000), 0);
 
   return (
     <div className="space-y-8">
