@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Network, Globe, Activity, Settings, Info, Upload, X, AlertTriangle } from 'lucide-react';
+import { Network, Globe, Activity, Settings, Info, Upload, X, AlertTriangle, Shield } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
 import { BillingPreview } from '../BillingPreview';
 
 interface AdvancedSettingsProps {
   config: {
     provider?: CloudProvider;
+    providers?: CloudProvider[];
     type?: string;
     bandwidth?: string;
     location?: string;
@@ -22,6 +23,15 @@ interface AdvancedSettingsProps {
       serviceAccessType?: 'internet' | 'l3vmp' | 'restricted';
       ddosProtection?: boolean;
       advancedMonitoring?: boolean;
+      // Azure-specific
+      azureSubscriptionId?: string;
+      expressRouteCircuitKey?: string;
+      // Google-specific
+      gcpPairingKey?: string;
+      gcpInterconnectType?: 'dedicated' | 'partner';
+      // Oracle-specific
+      oracleOcid?: string;
+      oracleCompartmentId?: string;
     };
   };
   onConfigChange: (updates: any) => void;
@@ -392,6 +402,135 @@ export function AdvancedSettings({
                 </div>
               )}
 
+              {/* Azure-specific fields */}
+              {(config.provider === 'Azure' || config.providers?.includes('Azure' as CloudProvider)) && (
+                <>
+                  <div className="relative">
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">
+                      Azure Subscription ID
+                      <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('azureSub')} onMouseLeave={() => setShowTooltip(null)}>
+                        <Info className="h-4 w-4 inline" />
+                      </button>
+                    </label>
+                    {showTooltip === 'azureSub' && (
+                      <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                        Your Azure subscription GUID for ExpressRoute billing and resource management.
+                      </div>
+                    )}
+                    <input
+                      type="text"
+                      value={config.configuration?.azureSubscriptionId || ''}
+                      onChange={(e) => handleConfigChange('azureSubscriptionId', e.target.value)}
+                      placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                      className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono"
+                    />
+                  </div>
+                  <div className="relative">
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">
+                      ExpressRoute Service Key
+                      <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('erKey')} onMouseLeave={() => setShowTooltip(null)}>
+                        <Info className="h-4 w-4 inline" />
+                      </button>
+                    </label>
+                    {showTooltip === 'erKey' && (
+                      <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                        The service key from your Azure ExpressRoute circuit. Find it in the Azure portal under your circuit's properties.
+                      </div>
+                    )}
+                    <input
+                      type="text"
+                      value={config.configuration?.expressRouteCircuitKey || ''}
+                      onChange={(e) => handleConfigChange('expressRouteCircuitKey', e.target.value)}
+                      placeholder="Azure ExpressRoute service key"
+                      className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono"
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Google Cloud-specific fields */}
+              {(config.provider === 'Google' || config.providers?.includes('Google' as CloudProvider)) && (
+                <>
+                  <div className="relative">
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">
+                      Interconnect Type
+                      <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('gcpType')} onMouseLeave={() => setShowTooltip(null)}>
+                        <Info className="h-4 w-4 inline" />
+                      </button>
+                    </label>
+                    {showTooltip === 'gcpType' && (
+                      <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                        Dedicated provides a physical connection. Partner uses AT&T as an intermediary for smaller bandwidth needs.
+                      </div>
+                    )}
+                    <select
+                      value={config.configuration?.gcpInterconnectType || 'partner'}
+                      onChange={(e) => handleConfigChange('gcpInterconnectType', e.target.value)}
+                      className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
+                    >
+                      <option value="dedicated">Dedicated Interconnect</option>
+                      <option value="partner">Partner Interconnect</option>
+                    </select>
+                  </div>
+                  <div className="relative">
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">
+                      Pairing Key
+                      <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('gcpKey')} onMouseLeave={() => setShowTooltip(null)}>
+                        <Info className="h-4 w-4 inline" />
+                      </button>
+                    </label>
+                    {showTooltip === 'gcpKey' && (
+                      <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                        Generated in Google Cloud Console when creating a VLAN attachment. Required for Partner Interconnect.
+                      </div>
+                    )}
+                    <input
+                      type="text"
+                      value={config.configuration?.gcpPairingKey || ''}
+                      onChange={(e) => handleConfigChange('gcpPairingKey', e.target.value)}
+                      placeholder="GCP pairing key"
+                      className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono"
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Oracle-specific fields */}
+              {(config.provider === 'Oracle' || config.providers?.includes('Oracle' as CloudProvider)) && (
+                <>
+                  <div className="relative">
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">
+                      Oracle OCID
+                      <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('ocid')} onMouseLeave={() => setShowTooltip(null)}>
+                        <Info className="h-4 w-4 inline" />
+                      </button>
+                    </label>
+                    {showTooltip === 'ocid' && (
+                      <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                        Oracle Cloud Identifier for your FastConnect virtual circuit.
+                      </div>
+                    )}
+                    <input
+                      type="text"
+                      value={config.configuration?.oracleOcid || ''}
+                      onChange={(e) => handleConfigChange('oracleOcid', e.target.value)}
+                      placeholder="ocid1.virtualcircuit.oc1..."
+                      className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono"
+                    />
+                  </div>
+                  <div className="relative">
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">Compartment ID</label>
+                    <input
+                      type="text"
+                      value={config.configuration?.oracleCompartmentId || ''}
+                      onChange={(e) => handleConfigChange('oracleCompartmentId', e.target.value)}
+                      placeholder="ocid1.compartment.oc1..."
+                      className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono"
+                    />
+                  </div>
+                </>
+              )}
+
               <div className="relative">
                 <label className="block text-figma-base font-medium text-fw-body mb-2">
                   Service Access Type
@@ -418,6 +557,47 @@ export function AdvancedSettings({
                   <option value="restricted">Restricted</option>
                 </select>
               </div>
+            </div>
+          </div>
+
+          {/* Security & Monitoring */}
+          <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="p-2 bg-fw-errorLight rounded-lg">
+                <Shield className="h-5 w-5 text-fw-error" />
+              </div>
+              <div>
+                <h4 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em]">Security & Monitoring</h4>
+                <p className="text-figma-sm text-fw-bodyLight">Enable protection and observability features</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <label className="flex items-center justify-between p-3 rounded-lg border border-fw-secondary hover:bg-fw-wash transition-colors cursor-pointer">
+                <div>
+                  <span className="text-figma-base font-medium text-fw-body block">DDoS Protection</span>
+                  <span className="text-figma-xs text-fw-bodyLight">AT&T managed DDoS mitigation for inbound traffic</span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={config.configuration?.ddosProtection || false}
+                  onChange={(e) => handleConfigChange('ddosProtection', e.target.checked)}
+                  className="h-4 w-4 rounded border-fw-secondary text-brand-blue focus:ring-fw-active"
+                />
+              </label>
+
+              <label className="flex items-center justify-between p-3 rounded-lg border border-fw-secondary hover:bg-fw-wash transition-colors cursor-pointer">
+                <div>
+                  <span className="text-figma-base font-medium text-fw-body block">Advanced Monitoring</span>
+                  <span className="text-figma-xs text-fw-bodyLight">Real-time metrics, alerting, and traffic analytics</span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={config.configuration?.advancedMonitoring || false}
+                  onChange={(e) => handleConfigChange('advancedMonitoring', e.target.checked)}
+                  className="h-4 w-4 rounded border-fw-secondary text-brand-blue focus:ring-fw-active"
+                />
+              </label>
             </div>
           </div>
         </div>
