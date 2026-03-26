@@ -1,9 +1,9 @@
+import { CheckCircle2 } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
-import { BillingPreview } from '../BillingPreview';
 
 interface ProviderSelectionProps {
-  selectedProvider: CloudProvider | undefined;
-  onSelect: (provider: CloudProvider) => void;
+  selectedProviders: CloudProvider[];
+  onToggle: (provider: CloudProvider) => void;
   billingChoice: {
     planId: string;
     term: string;
@@ -12,298 +12,123 @@ interface ProviderSelectionProps {
   onBillingChange: (updates: any) => void;
 }
 
-const CLOUD_PROVIDERS = [
+const CLOUD_PROVIDERS: { id: CloudProvider; name: string; logo: string }[] = [
   {
     id: 'AWS',
     name: 'AWS',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
-    color: 'blue',
-    disabled: false,
   },
   {
     id: 'Azure',
     name: 'Microsoft Azure',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg',
-    color: 'blue',
-    disabled: false,
   },
   {
     id: 'Google',
     name: 'Google Cloud',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg',
-    color: 'blue',
-    disabled: false,
   },
   {
     id: 'Oracle',
     name: 'Oracle Cloud',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg',
-    color: 'red',
-    disabled: true,
   },
   {
     id: 'IBM',
     name: 'IBM Cloud',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg',
-    color: 'blue',
-    disabled: true,
   },
   {
     id: 'Equinix',
     name: 'Equinix',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Equinix_logo.svg',
-    color: 'orange',
-    disabled: true,
   },
   {
     id: 'Digital Realty',
     name: 'Digital Realty',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Digital_Realty_TM_Brandmark_RGB_Black.svg',
-    color: 'blue',
-    disabled: true,
   },
   {
     id: 'Centersquare',
     name: 'Centersquare',
     logo: 'https://centersquaredc.com/hs-fs/hubfs/Center-Square-Primary-Wordmark-Black-RGB.png?width=2338&height=2339&name=Center-Square-Primary-Wordmark-Black-RGB.png',
-    color: 'blue',
-    disabled: true,
   },
   {
     id: 'CoreSite',
     name: 'CoreSite',
     logo: 'https://www.coresite.com/hubfs/CoreSite-AMT-Logo-1.svg',
-    color: 'blue',
-    disabled: true,
   },
   {
     id: 'DataBank',
     name: 'DataBank',
     logo: 'https://www.databank.com/wp-content/themes/databank/assets/images/content/DB-logo-dark.svg',
-    color: 'blue',
-    disabled: true,
+  },
+  {
+    id: 'Cisco Jasper',
+    name: 'Cisco Jasper',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg',
   },
 ];
 
 export function ProviderSelection({
-  selectedProvider,
-  onSelect,
-  billingChoice,
-  onBillingChange,
+  selectedProviders,
+  onToggle,
 }: ProviderSelectionProps) {
-  // Reorganize providers into rows of 3
-  const firstRow = CLOUD_PROVIDERS.slice(0, 3);
-  const secondRow = CLOUD_PROVIDERS.slice(3, 6);
-  const thirdRow = CLOUD_PROVIDERS.slice(6, 9);
-  const lastProvider = CLOUD_PROVIDERS[9]; // DataBank
-
   return (
     <div className="space-y-8">
-      <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">
-        Select Your Cloud Provider
-      </h3>
+      <div className="text-center mb-8">
+        <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">
+          Select Your Cloud Providers
+        </h3>
+        <p className="text-figma-sm text-fw-bodyLight mt-2">
+          Choose one or more providers for your connection
+        </p>
+        {selectedProviders.length > 0 && (
+          <span className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full bg-fw-primary text-white text-figma-xs font-medium">
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            {selectedProviders.length} selected
+          </span>
+        )}
+      </div>
 
-      <div className="space-y-8">
-        {/* First Row - 3 providers */}
-        <div className="grid grid-cols-3 gap-6">
-          {firstRow.map((provider) => (
+      <div className="grid grid-cols-3 gap-6">
+        {CLOUD_PROVIDERS.map((provider) => {
+          const isSelected = selectedProviders.includes(provider.id);
+          return (
             <div key={provider.id} className="relative flex">
               <button
-                onClick={() =>
-                  !provider.disabled && onSelect(provider.id as CloudProvider)
-                }
-                disabled={provider.disabled}
+                onClick={() => onToggle(provider.id)}
                 className={`
                   w-full py-12 px-8 border-2 rounded-2xl wizard-card network-option transition-all duration-200
-                  ${
-                    provider.disabled
-                      ? 'border-fw-secondary bg-fw-wash cursor-not-allowed'
-                      : selectedProvider === provider.id
-                      ? 'border-fw-active bg-fw-primary shadow-lg transform scale-[1.02]'
-                      : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50 hover:bg-fw-base'
-                  }
-                `}
-              >
-                <div className="flex flex-col items-center">
-                  <img
-                    src={provider.logo}
-                    alt={provider.name}
-                    className={`
-                      h-12 object-contain transition-all duration-300
-                      ${
-                        provider.disabled
-                          ? 'filter grayscale opacity-50'
-                          : selectedProvider === provider.id
-                          ? 'brightness-0 invert' // White logo on blue bg
-                          : 'filter grayscale hover:filter-none' // B&W by default, color on hover
-                      }
-                    `}
-                  />
-                </div>
-              </button>
-
-              {/* Coming Soon Overlay */}
-              {provider.disabled && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
-                  <span className="badge-coming-soon badge-coming-soon-dark">
-                    Coming Soon
-                  </span>
-                </div>
-              )}
-
-            </div>
-          ))}
-        </div>
-
-        {/* Second Row - 3 providers */}
-        <div className="grid grid-cols-3 gap-6">
-          {secondRow.map((provider) => (
-            <div key={provider.id} className="relative flex">
-              <button
-                onClick={() =>
-                  !provider.disabled && onSelect(provider.id as CloudProvider)
-                }
-                disabled={provider.disabled}
-                className={`
-                  w-full py-12 px-8 border-2 rounded-2xl wizard-card network-option transition-all duration-200
-                  ${
-                    provider.disabled
-                      ? 'border-fw-secondary bg-fw-wash cursor-not-allowed'
-                      : selectedProvider === provider.id
-                      ? 'border-fw-active bg-fw-primary shadow-lg transform scale-[1.02]'
-                      : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50 hover:bg-fw-base'
-                  }
-                `}
-              >
-                <div className="flex flex-col items-center">
-                  <img
-                    src={provider.logo}
-                    alt={provider.name}
-                    className={`
-                      h-12 object-contain transition-all duration-300
-                      ${
-                        provider.disabled
-                          ? 'filter grayscale opacity-50'
-                          : selectedProvider === provider.id
-                          ? 'brightness-0 invert' // White logo on blue bg
-                          : 'filter grayscale hover:filter-none' // B&W by default, color on hover
-                      }
-                    `}
-                  />
-                </div>
-              </button>
-
-              {/* Coming Soon Overlay */}
-              {provider.disabled && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
-                  <span className="badge-coming-soon badge-coming-soon-dark">
-                    Coming Soon
-                  </span>
-                </div>
-              )}
-
-            </div>
-          ))}
-        </div>
-
-        {/* Third Row - 3 providers */}
-        <div className="grid grid-cols-3 gap-6">
-          {thirdRow.map((provider) => (
-            <div key={provider.id} className="relative flex">
-              <button
-                onClick={() =>
-                  !provider.disabled && onSelect(provider.id as CloudProvider)
-                }
-                disabled={provider.disabled}
-                className={`
-                  w-full py-12 px-8 border-2 rounded-2xl wizard-card network-option transition-all duration-200
-                  ${
-                    provider.disabled
-                      ? 'border-fw-secondary bg-fw-wash cursor-not-allowed'
-                      : selectedProvider === provider.id
-                      ? 'border-fw-active bg-fw-primary shadow-lg transform scale-[1.02]'
-                      : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50 hover:bg-fw-base'
-                  }
-                `}
-              >
-                <div className="flex flex-col items-center">
-                  <img
-                    src={provider.logo}
-                    alt={provider.name}
-                    className={`
-                      h-12 object-contain transition-all duration-300
-                      ${
-                        provider.disabled
-                          ? 'filter grayscale opacity-50'
-                          : selectedProvider === provider.id
-                          ? 'brightness-0 invert' // White logo on blue bg
-                          : 'filter grayscale hover:filter-none' // B&W by default, color on hover
-                      }
-                    `}
-                  />
-                </div>
-              </button>
-
-              {/* Coming Soon Overlay */}
-              {provider.disabled && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
-                  <span className="badge-coming-soon badge-coming-soon-dark">
-                    Coming Soon
-                  </span>
-                </div>
-              )}
-
-            </div>
-          ))}
-        </div>
-
-        {/* Last Row - 1 provider centered */}
-        <div className="flex justify-center">
-          <div className="w-1/3 relative flex">
-            <button
-              onClick={() =>
-                !lastProvider.disabled && onSelect(lastProvider.id as CloudProvider)
-              }
-              disabled={lastProvider.disabled}
-              className={`
-                w-full py-12 px-8 border-2 rounded-2xl wizard-card network-option transition-all duration-200
-                ${
-                  lastProvider.disabled
-                    ? 'border-fw-secondary bg-fw-wash cursor-not-allowed'
-                    : selectedProvider === lastProvider.id
-                    ? 'border-fw-active bg-fw-primary shadow-lg'
+                  ${isSelected
+                    ? 'border-fw-active bg-fw-primary shadow-lg transform scale-[1.02]'
                     : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50 hover:bg-fw-base'
-                }
-              `}
-            >
-              <div className="flex flex-col items-center">
-                <img
-                  src={lastProvider.logo}
-                  alt={lastProvider.name}
-                  className={`
-                    h-12 object-contain transition-all duration-300
-                    ${
-                      lastProvider.disabled
-                        ? 'filter grayscale opacity-50'
-                        : selectedProvider === lastProvider.id
-                        ? 'brightness-0 invert' // White logo on blue bg
-                        : 'filter grayscale hover:filter-none' // B&W by default, color on hover
-                    }
-                  `}
-                />
-              </div>
-            </button>
+                  }
+                `}
+              >
+                <div className="flex flex-col items-center">
+                  <img
+                    src={provider.logo}
+                    alt={provider.name}
+                    className={`
+                      h-12 object-contain transition-all duration-300
+                      ${isSelected
+                        ? 'brightness-0 invert'
+                        : 'filter grayscale hover:filter-none'
+                      }
+                    `}
+                  />
+                </div>
+              </button>
 
-            {/* Coming Soon Overlay */}
-            {lastProvider.disabled && (
-              <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
-                <span className="badge-coming-soon badge-coming-soon-dark">
-                  Coming Soon
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
+              {isSelected && (
+                <div className="absolute top-3 right-3">
+                  <CheckCircle2 className="h-6 w-6 text-white drop-shadow-md" />
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

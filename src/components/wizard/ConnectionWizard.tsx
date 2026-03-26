@@ -8,6 +8,8 @@ import { ConnectionTypeSelection } from './screens/ConnectionTypeSelection';
 import { ConnectionConfiguration } from './screens/ConnectionConfiguration';
 import { AdvancedSettings } from './screens/AdvancedSettings';
 import { ReviewConfiguration } from './screens/ReviewConfiguration';
+import { ResiliencySelection, ResiliencyLevel } from './screens/ResiliencySelection';
+import { BandwidthConfiguration } from './screens/BandwidthConfiguration';
 import { ModeSelection } from './modes';
 import { useStore } from '../../store/useStore';
 import { Button } from '../common/Button';
@@ -34,7 +36,9 @@ const STEPS = [
   { title: 'Your Cloud Router', description: 'Name Your Cloud Router' },
   { title: 'Choose Provider', description: 'Select your cloud service provider' },
   { title: 'Connection Type', description: 'Select how you want to connect' },
-  { title: 'Basic Settings', description: 'Set bandwidth and location' },
+  { title: 'Resiliency', description: 'Choose your resiliency level' },
+  { title: 'Locations', description: 'Select datacenter locations' },
+  { title: 'Bandwidth', description: 'Configure bandwidth per connection' },
   { title: 'Advanced Settings', description: 'Configure network settings' },
   { title: 'Review', description: 'Review your selections' }
 ];
@@ -94,7 +98,36 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   const [showAI, setShowAI] = useState(true);
 
   // Persistent state for all selections
-  const [selectedProvider, setSelectedProvider] = useState<CloudProvider>();
+  const [selectedProviders, setSelectedProviders] = useState<CloudProvider[]>([]);
+
+  const toggleProvider = (provider: CloudProvider) => {
+    setSelectedProviders(prev =>
+      prev.includes(provider)
+        ? prev.filter(p => p !== provider)
+        : [...prev, provider]
+    );
+  };
+
+  // Legacy single-provider accessor for downstream components that haven't been updated yet
+  const selectedProvider = selectedProviders[0] as CloudProvider | undefined;
+  const [resiliencyLevel, setResiliencyLevel] = useState<ResiliencyLevel>('');
+  const [selectedLocations, setSelectedLocations] = useState<Record<string, string[]>>({});
+
+  const [bandwidthSettings, setBandwidthSettings] = useState<Record<string, number>>({});
+
+  const updateBandwidth = (key: string, value: number) => {
+    setBandwidthSettings(prev => ({ ...prev, [key]: value }));
+  };
+
+  const toggleLocation = (providerId: string, location: string) => {
+    setSelectedLocations(prev => {
+      const current = prev[providerId] || [];
+      const updated = current.includes(location)
+        ? current.filter(l => l !== location)
+        : [...current, location];
+      return { ...prev, [providerId]: updated };
+    });
+  };
   const [selectedType, setSelectedType] = useState<ConnectionType>();
   const [selectedBandwidth, setSelectedBandwidth] = useState<BandwidthOption>();
   const [selectedLocation, setSelectedLocation] = useState<LocationOption>();
@@ -116,7 +149,9 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       
       // Set basic config values safely
       tryCatch(() => {
-        setSelectedProvider(connectionToEdit.provider as CloudProvider);
+        if (connectionToEdit.provider) {
+          setSelectedProviders([connectionToEdit.provider as CloudProvider]);
+        }
         setSelectedType(connectionToEdit.type as ConnectionType);
         setSelectedBandwidth(connectionToEdit.bandwidth as BandwidthOption);
         setSelectedLocation(connectionToEdit.location as LocationOption);
@@ -196,7 +231,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       bandwidth: selectedBandwidth,
       location: selectedLocation
     });
-  }, [selectedProvider, selectedType, selectedBandwidth, selectedLocation]);
+  }, [selectedProviders, selectedType, selectedBandwidth, selectedLocation]);
 
   const handleCancel = () => {
     const connId = connectionToEdit?.id || locationState?.connectionId;
@@ -233,19 +268,29 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   };
 
   const canProceed = () => {
-    // For standard flow
+    // For standard flow (8 steps: 0-7)
     switch (step) {
       case 0:
-        return cloudRouterName.trim().length > 0; // Cloud Router Name required
+        return cloudRouterName.trim().length > 0;
       case 1:
-        return !!selectedProvider;
+        return selectedProviders.length > 0;
       case 2:
         return !!selectedType;
       case 3:
-        return !!selectedBandwidth && !!selectedLocation;
-      case 4:
-        return true; // Advanced settings are optional
+        return resiliencyLevel !== '';
+      case 4: {
+        // Multi-provider location validation
+        if (selectedProviders.length > 0) {
+          const minLocs = resiliencyLevel === 'maximum' ? 2 : 1;
+          return selectedProviders.every(p => (selectedLocations[p] || []).length >= minLocs);
+        }
+        return !!selectedLocation;
+      }
       case 5:
+        return true; // Bandwidth defaults to 1 Gbps, always valid
+      case 6:
+        return true; // Advanced settings are optional
+      case 7:
         return true; // Review step
       default:
         return false;
@@ -529,11 +574,8 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
 
               {step === 1 && (
                 <ProviderSelection
-                  selectedProvider={selectedProvider}
-                  onSelect={(provider) => {
-                    setSelectedProvider(provider);
-                    setStep(2);
-                  }}
+                  selectedProviders={selectedProviders}
+                  onToggle={toggleProvider}
                   billingChoice={billingChoice}
                   onBillingChange={updateBillingChoice}
                 />
@@ -553,6 +595,13 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               )}
 
               {step === 3 && (
+                <ResiliencySelection
+                  resiliencyLevel={resiliencyLevel}
+                  onSelect={setResiliencyLevel}
+                />
+              )}
+
+              {step === 4 && (
                 <ConnectionConfiguration
                   selectedLocation={selectedLocation}
                   selectedBandwidth={selectedBandwidth}
@@ -562,10 +611,23 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   onLocationSelect={setSelectedLocation}
                   onBandwidthSelect={setSelectedBandwidth}
                   onBillingChange={updateBillingChoice}
+                  selectedProviders={selectedProviders}
+                  selectedLocations={selectedLocations}
+                  onToggleLocation={toggleLocation}
+                  resiliencyLevel={resiliencyLevel}
                 />
               )}
 
-              {step === 4 && (
+              {step === 5 && (
+                <BandwidthConfiguration
+                  selectedProviders={selectedProviders}
+                  selectedLocations={selectedLocations}
+                  bandwidthSettings={bandwidthSettings}
+                  onBandwidthChange={updateBandwidth}
+                />
+              )}
+
+              {step === 6 && (
                 <AdvancedSettings
                   config={{
                     provider: selectedProvider,
@@ -580,7 +642,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 />
               )}
 
-              {step === 5 && (
+              {step === 7 && (
                 <ReviewConfiguration
                   config={{
                     provider: selectedProvider,
