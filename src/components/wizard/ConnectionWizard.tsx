@@ -109,6 +109,17 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   // Legacy single-provider accessor for downstream components that haven't been updated yet
   const selectedProvider = selectedProviders[0] as CloudProvider | undefined;
   const [resiliencyLevel, setResiliencyLevel] = useState<ResiliencyLevel>('');
+  const [selectedLocations, setSelectedLocations] = useState<Record<string, string[]>>({});
+
+  const toggleLocation = (providerId: string, location: string) => {
+    setSelectedLocations(prev => {
+      const current = prev[providerId] || [];
+      const updated = current.includes(location)
+        ? current.filter(l => l !== location)
+        : [...current, location];
+      return { ...prev, [providerId]: updated };
+    });
+  };
   const [selectedType, setSelectedType] = useState<ConnectionType>();
   const [selectedBandwidth, setSelectedBandwidth] = useState<BandwidthOption>();
   const [selectedLocation, setSelectedLocation] = useState<LocationOption>();
@@ -259,8 +270,14 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
         return !!selectedType;
       case 3:
         return resiliencyLevel !== '';
-      case 4:
-        return !!selectedBandwidth && !!selectedLocation;
+      case 4: {
+        // Multi-provider location validation
+        if (selectedProviders.length > 0) {
+          const minLocs = resiliencyLevel === 'maximum' ? 2 : 1;
+          return selectedProviders.every(p => (selectedLocations[p] || []).length >= minLocs);
+        }
+        return !!selectedLocation;
+      }
       case 5:
         return true; // Advanced settings are optional
       case 6:
@@ -584,6 +601,10 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   onLocationSelect={setSelectedLocation}
                   onBandwidthSelect={setSelectedBandwidth}
                   onBillingChange={updateBillingChoice}
+                  selectedProviders={selectedProviders}
+                  selectedLocations={selectedLocations}
+                  onToggleLocation={toggleLocation}
+                  resiliencyLevel={resiliencyLevel}
                 />
               )}
 
