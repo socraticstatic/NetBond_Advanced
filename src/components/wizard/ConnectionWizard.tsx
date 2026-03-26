@@ -9,6 +9,7 @@ import { ConnectionConfiguration } from './screens/ConnectionConfiguration';
 import { AdvancedSettings } from './screens/AdvancedSettings';
 import { ReviewConfiguration } from './screens/ReviewConfiguration';
 import { ResiliencySelection, ResiliencyLevel } from './screens/ResiliencySelection';
+import { BandwidthConfiguration } from './screens/BandwidthConfiguration';
 import { ModeSelection } from './modes';
 import { useStore } from '../../store/useStore';
 import { Button } from '../common/Button';
@@ -36,7 +37,8 @@ const STEPS = [
   { title: 'Choose Provider', description: 'Select your cloud service provider' },
   { title: 'Connection Type', description: 'Select how you want to connect' },
   { title: 'Resiliency', description: 'Choose your resiliency level' },
-  { title: 'Basic Settings', description: 'Set bandwidth and location' },
+  { title: 'Locations', description: 'Select datacenter locations' },
+  { title: 'Bandwidth', description: 'Configure bandwidth per connection' },
   { title: 'Advanced Settings', description: 'Configure network settings' },
   { title: 'Review', description: 'Review your selections' }
 ];
@@ -110,6 +112,12 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   const selectedProvider = selectedProviders[0] as CloudProvider | undefined;
   const [resiliencyLevel, setResiliencyLevel] = useState<ResiliencyLevel>('');
   const [selectedLocations, setSelectedLocations] = useState<Record<string, string[]>>({});
+
+  const [bandwidthSettings, setBandwidthSettings] = useState<Record<string, number>>({});
+
+  const updateBandwidth = (key: string, value: number) => {
+    setBandwidthSettings(prev => ({ ...prev, [key]: value }));
+  };
 
   const toggleLocation = (providerId: string, location: string) => {
     setSelectedLocations(prev => {
@@ -260,7 +268,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   };
 
   const canProceed = () => {
-    // For standard flow (7 steps: 0-6)
+    // For standard flow (8 steps: 0-7)
     switch (step) {
       case 0:
         return cloudRouterName.trim().length > 0;
@@ -279,8 +287,10 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
         return !!selectedLocation;
       }
       case 5:
-        return true; // Advanced settings are optional
+        return true; // Bandwidth defaults to 1 Gbps, always valid
       case 6:
+        return true; // Advanced settings are optional
+      case 7:
         return true; // Review step
       default:
         return false;
@@ -609,6 +619,15 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               )}
 
               {step === 5 && (
+                <BandwidthConfiguration
+                  selectedProviders={selectedProviders}
+                  selectedLocations={selectedLocations}
+                  bandwidthSettings={bandwidthSettings}
+                  onBandwidthChange={updateBandwidth}
+                />
+              )}
+
+              {step === 6 && (
                 <AdvancedSettings
                   config={{
                     provider: selectedProvider,
@@ -623,7 +642,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 />
               )}
 
-              {step === 6 && (
+              {step === 7 && (
                 <ReviewConfiguration
                   config={{
                     provider: selectedProvider,
