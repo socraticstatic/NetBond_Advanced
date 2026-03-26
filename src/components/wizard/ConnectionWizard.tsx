@@ -630,11 +630,12 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               {step === 6 && (
                 <AdvancedSettings
                   config={{
+                    ...config,
                     provider: selectedProvider,
+                    providers: selectedProviders,
                     type: selectedType,
                     bandwidth: selectedBandwidth,
                     location: selectedLocation,
-                    ...config
                   }}
                   onConfigChange={updateConfig}
                   billingChoice={billingChoice}
@@ -644,14 +645,21 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
 
               {step === 7 && (
                 <ReviewConfiguration
+                  cloudRouterName={cloudRouterName}
                   config={{
+                    ...config,
                     provider: selectedProvider,
+                    providers: selectedProviders,
                     type: selectedType,
                     bandwidth: selectedBandwidth,
                     location: selectedLocation,
-                    ...config
+                    resiliencyLevel: resiliencyLevel,
                   }}
+                  selectedLocations={selectedLocations}
+                  bandwidthSettings={bandwidthSettings}
                   billingChoice={billingChoice}
+                  onBillingChange={updateBillingChoice}
+                  onEditStep={(s) => setStep(s)}
                 />
               )}
             </div>
