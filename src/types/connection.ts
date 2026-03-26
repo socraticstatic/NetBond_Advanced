@@ -1,7 +1,7 @@
 import { Divide as LucideIcon } from 'lucide-react';
 
-export type CloudProvider = 'AWS' | 'Azure' | 'Google' | 'Oracle' | 'IBM' | 'Equinix' | 'Digital Realty' | 'Centersquare' | 'CoreSite' | 'DataBank';
-export type ConnectionType = 'Internet to Cloud' | 'Cloud to Cloud' | 'DataCenter/CoLocation to Cloud' | 'Site to Cloud' | 'Internet Direct' | 'Cloud Router Test';
+export type CloudProvider = 'AWS' | 'Azure' | 'Google' | 'Oracle' | 'IBM' | 'Equinix' | 'Digital Realty' | 'Centersquare' | 'CoreSite' | 'DataBank' | 'Cisco Jasper';
+export type ConnectionType = 'Internet to Cloud' | 'Cloud to Cloud' | 'DataCenter/CoLocation to Cloud' | 'VPN to Cloud' | 'Site to Cloud' | 'Internet Direct' | 'Cloud Router Test';
 export type BandwidthOption = '100 Mbps' | '500 Mbps' | '1 Gbps' | '10 Gbps' | '100 Gbps';
 export type LocationOption = 'US East' | 'US West' | 'EU West' | 'Asia Pacific';
 
