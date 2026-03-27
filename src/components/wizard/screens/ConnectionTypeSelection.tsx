@@ -57,12 +57,12 @@ const INTERNET_CONNECTION_TYPES = [
     icon: Lock,
     description: 'Secure branch connectivity to cloud services',
     features: [
-      'Features coming soon',
-      'Features coming soon',
-      'Features coming soon',
-      'Features coming soon',
+      'SD-WAN integration',
+      'Branch auto-discovery',
+      'Zero-touch provisioning',
+      'Automated failover',
     ],
-    disabled: true,
+    disabled: false,
   },
 ];
 
@@ -211,14 +211,7 @@ export function ConnectionTypeSelection({
                     </div>
                   </button>
 
-                  {/* Coming Soon Badge: bg-black text-white rounded-lg, 12px w500 */}
-                  {disabled && (
-                    <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
-                      <span className="badge-coming-soon badge-coming-soon-dark">
-                        Coming Soon
-                      </span>
-                    </div>
-                  )}
+                  {/* Reserved for future badge overlays */}
                 </div>
               )
             )}

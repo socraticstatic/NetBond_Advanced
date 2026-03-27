@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Network, Globe, Activity, Settings, Info, Upload, X, AlertTriangle, Shield } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
 import { BillingPreview } from '../BillingPreview';
+import { PROVIDER_CREDENTIALS, isSecretField } from '../../../data/providerCredentialFields';
+import { NetworkConfigUpload } from '../NetworkConfigUpload';
 
 interface AdvancedSettingsProps {
   config: {
@@ -50,6 +52,7 @@ export function AdvancedSettings({
   onBillingChange
 }: AdvancedSettingsProps) {
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
+  const [uploadedConfigs, setUploadedConfigs] = useState<Record<string, any>>({});
   const [showBulkImport, setShowBulkImport] = useState(false);
   const [bulkSubnets, setBulkSubnets] = useState('');
   const [bulkImportError, setBulkImportError] = useState<string>();
@@ -216,33 +219,7 @@ export function AdvancedSettings({
                 </select>
               </div>
 
-              <div className="relative">
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    checked={config.configuration?.bfdEnabled || false}
-                    onChange={(e) => handleConfigChange('bfdEnabled', e.target.checked)}
-                    className="h-4 w-4 rounded border-fw-secondary text-brand-blue focus:ring-fw-active"
-                  />
-                  <div>
-                    <span className="text-figma-base font-medium text-fw-body">
-                      Enable BFD (Bidirectional Forwarding Detection)
-                      <button
-                        className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight"
-                        onMouseEnter={() => setShowTooltip('bfd')}
-                        onMouseLeave={() => setShowTooltip(null)}
-                      >
-                        <Info className="h-4 w-4 inline" />
-                      </button>
-                    </span>
-                  </div>
-                </label>
-                {showTooltip === 'bfd' && (
-                  <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
-                    BFD provides fast path failure detection between two routers. It helps in quick failover and improved network reliability.
-                  </div>
-                )}
-              </div>
+              {/* BFD moved to Advanced BGP Configuration section */}
 
               <div className="relative">
                 <label className="block text-figma-base font-medium text-fw-body mb-2">
@@ -329,32 +306,200 @@ export function AdvancedSettings({
                 </div>
               </div>
 
-              <div className="relative">
-                <label className="block text-figma-base font-medium text-fw-body mb-2">
-                  Layer 3 MTU
-                  <button
-                    className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight"
-                    onMouseEnter={() => setShowTooltip('mtu')}
-                    onMouseLeave={() => setShowTooltip(null)}
+              {/* MTU moved to Advanced BGP Configuration section */}
+            </div>
+          </div>
+
+          {/* Advanced BGP Configuration */}
+          <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="p-2 bg-fw-wash rounded-lg">
+                <Activity className="h-5 w-5 text-fw-link" />
+              </div>
+              <div>
+                <h4 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em]">Advanced BGP Configuration</h4>
+                <p className="text-figma-sm text-fw-bodyLight">Configure BGP routing, subnets, and path attributes</p>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="relative">
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">
+                    BGP Authentication Key
+                    <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('bgpKey')} onMouseLeave={() => setShowTooltip(null)}>
+                      <Info className="h-4 w-4 inline" />
+                    </button>
+                  </label>
+                  {showTooltip === 'bgpKey' && (
+                    <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                      Shared secret for BGP session authentication. Coordinate with your network team and cloud provider.
+                    </div>
+                  )}
+                  <input
+                    type="password"
+                    value={config.configuration?.bgpAuthKey || ''}
+                    onChange={(e) => handleConfigChange('bgpAuthKey', e.target.value)}
+                    placeholder="Enter BGP authentication key"
+                    className="w-full px-3 h-10 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
+                  />
+                </div>
+
+                <div className="relative">
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">
+                    MTU Size
+                    <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('mtuSelect')} onMouseLeave={() => setShowTooltip(null)}>
+                      <Info className="h-4 w-4 inline" />
+                    </button>
+                  </label>
+                  {showTooltip === 'mtuSelect' && (
+                    <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                      {getMtuTooltip()}
+                    </div>
+                  )}
+                  <select
+                    value={config.configuration?.mtuSize || '1500'}
+                    onChange={(e) => handleConfigChange('mtuSize', e.target.value)}
+                    disabled={config.provider === 'AWS' || config.providers?.includes('AWS' as CloudProvider)}
+                    className="w-full px-3 h-10 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base disabled:bg-fw-wash disabled:cursor-not-allowed"
                   >
-                    <Info className="h-4 w-4 inline" />
-                  </button>
-                </label>
-                {showTooltip === 'mtu' && (
-                  <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
-                    {getMtuTooltip()}
-                  </div>
-                )}
+                    <option value="1500">1500 (Standard)</option>
+                    <option value="9000">9000 (Jumbo Frames)</option>
+                  </select>
+                  {(config.provider === 'AWS' || config.providers?.includes('AWS' as CloudProvider)) && (
+                    <p className="mt-1 text-figma-xs text-fw-bodyLight">Auto-set by AWS VIF type selection</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                <div className="relative">
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">
+                    Customer Subnet
+                    <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('custSubnet')} onMouseLeave={() => setShowTooltip(null)}>
+                      <Info className="h-4 w-4 inline" />
+                    </button>
+                  </label>
+                  {showTooltip === 'custSubnet' && (
+                    <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                      Your side of the BGP peering subnet in CIDR notation. Typically a /30 or /31.
+                    </div>
+                  )}
+                  <input
+                    type="text"
+                    value={config.configuration?.customerSubnet || ''}
+                    onChange={(e) => handleConfigChange('customerSubnet', e.target.value)}
+                    placeholder="e.g., 192.168.1.1/30"
+                    className={`w-full px-3 h-10 rounded-lg border shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono ${
+                      config.configuration?.customerSubnet && !validateSubnet(config.configuration.customerSubnet)
+                        ? 'border-fw-error'
+                        : 'border-fw-primary'
+                    }`}
+                  />
+                  {config.configuration?.customerSubnet && !validateSubnet(config.configuration.customerSubnet) && (
+                    <p className="mt-1 text-figma-xs text-fw-error">Invalid CIDR format</p>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">
+                    Provider Subnet
+                    <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('provSubnet')} onMouseLeave={() => setShowTooltip(null)}>
+                      <Info className="h-4 w-4 inline" />
+                    </button>
+                  </label>
+                  {showTooltip === 'provSubnet' && (
+                    <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                      Provider side of the BGP peering subnet. Assigned by the cloud provider.
+                    </div>
+                  )}
+                  <input
+                    type="text"
+                    value={config.configuration?.providerSubnet || ''}
+                    onChange={(e) => handleConfigChange('providerSubnet', e.target.value)}
+                    placeholder="e.g., 192.168.1.2/30"
+                    className={`w-full px-3 h-10 rounded-lg border shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono ${
+                      config.configuration?.providerSubnet && !validateSubnet(config.configuration.providerSubnet)
+                        ? 'border-fw-error'
+                        : 'border-fw-primary'
+                    }`}
+                  />
+                  {config.configuration?.providerSubnet && !validateSubnet(config.configuration.providerSubnet) && (
+                    <p className="mt-1 text-figma-xs text-fw-error">Invalid CIDR format</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">Local Preference</label>
+                  <input
+                    type="number"
+                    value={config.configuration?.localPreference ?? 100}
+                    onChange={(e) => handleConfigChange('localPreference', parseInt(e.target.value) || 100)}
+                    className="w-full px-3 h-10 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">Prefix Limit</label>
+                  <input
+                    type="number"
+                    value={config.configuration?.prefixLimit ?? 1000}
+                    onChange={(e) => handleConfigChange('prefixLimit', parseInt(e.target.value) || 1000)}
+                    className="w-full px-3 h-10 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-figma-base font-medium text-fw-body mb-2">Community String</label>
                 <input
-                  type="number"
-                  value={config.configuration?.l3mtu || 1500}
-                  onChange={(e) => handleConfigChange('l3mtu', parseInt(e.target.value))}
-                  disabled
-                  className="w-full px-3 h-9 rounded-lg border border-fw-primary bg-fw-wash shadow-sm text-figma-base cursor-not-allowed"
+                  type="text"
+                  value={config.configuration?.communityString || ''}
+                  onChange={(e) => handleConfigChange('communityString', e.target.value)}
+                  placeholder="e.g., 65001:100"
+                  className="w-full px-3 h-10 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono"
                 />
-                <p className="mt-1 text-figma-xs text-fw-bodyLight">
-                  MTU is automatically set based on your provider and VIF type selection
-                </p>
+              </div>
+
+              <div>
+                <label className="block text-figma-base font-medium text-fw-body mb-2">Route Filter</label>
+                <select
+                  value={config.configuration?.routeFilter || 'PERMIT_ALL'}
+                  onChange={(e) => handleConfigChange('routeFilter', e.target.value)}
+                  className="w-full px-3 h-10 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
+                >
+                  <option value="PERMIT_ALL">Permit All Routes</option>
+                  <option value="CUSTOMER_ONLY">Customer Routes Only</option>
+                  <option value="CUSTOM">Custom Filter Policy</option>
+                </select>
+              </div>
+
+              <div className="relative">
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={config.configuration?.bfdEnabled || false}
+                    onChange={(e) => handleConfigChange('bfdEnabled', e.target.checked)}
+                    className="h-4 w-4 rounded border-fw-secondary text-brand-blue focus:ring-fw-active"
+                  />
+                  <span className="text-figma-base font-medium text-fw-body">
+                    Enable BFD (Bidirectional Forwarding Detection)
+                  </span>
+                </label>
+              </div>
+
+              <div className="bg-fw-wash rounded-lg p-4">
+                <div className="flex items-start space-x-2">
+                  <Activity className="w-5 h-5 mt-0.5 text-fw-link" />
+                  <div>
+                    <h4 className="font-semibold text-fw-heading text-figma-base mb-1">Advanced Network Configuration</h4>
+                    <p className="text-fw-bodyLight text-figma-sm">
+                      Ensure all BGP values are coordinated with your network team and cloud providers before provisioning.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -371,7 +516,7 @@ export function AdvancedSettings({
             </div>
 
             <div className="space-y-6">
-              {config.provider === 'AWS' && (
+              {(config.provider === 'AWS' || config.providers?.includes('AWS' as CloudProvider)) && (
                 <div className="relative">
                   <label className="block text-figma-base font-medium text-fw-body mb-2">
                     VIF Type
@@ -559,6 +704,85 @@ export function AdvancedSettings({
               </div>
             </div>
           </div>
+
+          {/* Network Config Upload */}
+          {(config.providers?.length || 0) > 0 && (
+            <NetworkConfigUpload
+              providers={config.providers || []}
+              uploadedConfigs={uploadedConfigs}
+              onConfigUploaded={(pid, cfg) => setUploadedConfigs(prev => ({ ...prev, [pid]: cfg }))}
+              onConfigRemoved={(pid) => setUploadedConfigs(prev => { const next = { ...prev }; delete next[pid]; return next; })}
+            />
+          )}
+
+          {/* Provider Configuration */}
+          {(config.providers?.length || 0) > 0 && (
+            <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="p-2 bg-fw-accent rounded-lg">
+                  <Globe className="h-5 w-5 text-brand-blue" />
+                </div>
+                <div>
+                  <h4 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em]">Provider Configuration</h4>
+                  <p className="text-figma-sm text-fw-bodyLight">Enter credentials for each selected cloud provider</p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {config.providers?.map((providerId) => {
+                  const providerConfig = PROVIDER_CREDENTIALS[providerId];
+                  if (!providerConfig) return null;
+                  const fields = providerConfig.requiredInfo;
+
+                  return (
+                    <div key={providerId} className="border border-fw-secondary rounded-xl p-4">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <span className="text-figma-base font-semibold text-fw-heading">{providerId}</span>
+                          <span className="px-2 py-0.5 bg-fw-wash text-fw-bodyLight rounded-full text-figma-xs">
+                            {fields.length} required fields
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => window.open(providerConfig.consoleUrl, '_blank')}
+                          className="text-figma-sm text-fw-link hover:underline font-medium"
+                        >
+                          Open {providerConfig.consoleName} →
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {fields.map((field) => {
+                          const fieldKey = `${providerId.toLowerCase().replace(/\s+/g, '_')}_${field.toLowerCase().replace(/\s+/g, '_')}`;
+                          const secret = isSecretField(field);
+                          return (
+                            <div key={field}>
+                              <label className="block text-figma-sm font-medium text-fw-body mb-1">
+                                {field}
+                                {secret && <Shield className="inline h-3.5 w-3.5 ml-1 text-fw-warning" />}
+                              </label>
+                              <input
+                                type={secret ? 'password' : 'text'}
+                                value={config.configuration?.[fieldKey] || ''}
+                                onChange={(e) => handleConfigChange(fieldKey, e.target.value)}
+                                placeholder={`Enter your ${field.toLowerCase()}`}
+                                className="w-full px-3 h-10 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-fw-secondary flex items-center gap-2 text-figma-xs text-fw-bodyLight">
+                        <Shield className="h-3.5 w-3.5" />
+                        <span>Credentials are encrypted and secure</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Security & Monitoring */}
           <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
