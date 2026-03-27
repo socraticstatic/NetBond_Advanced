@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X, Check, Paperclip, Trash2 } from 'lucide-react';
+import { useState, useCallback, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Upload, Check, Trash2 } from 'lucide-react';
 import { Button } from '../common/Button';
 
 interface AttachmentFile {
@@ -9,20 +9,114 @@ interface AttachmentFile {
   type: string;
 }
 
+interface MockConnection {
+  id: string;
+  name: string;
+  provider: string;
+  vnfs: { id: string; name: string; hostname: string }[];
+}
+
+const MOCK_CONNECTIONS: MockConnection[] = [
+  {
+    id: 'conn-1',
+    name: 'AWS Direct Connect - US East',
+    provider: 'AWS',
+    vnfs: [
+      { id: 'vnf-1', name: 'Palo Alto Firewall', hostname: 'PALO-MACD-TEST1' },
+      { id: 'vnf-2', name: 'SD-WAN Edge', hostname: 'SDWAN-EDGE-01' },
+    ],
+  },
+  {
+    id: 'conn-2',
+    name: 'Azure ExpressRoute - West Europe',
+    provider: 'Azure',
+    vnfs: [
+      { id: 'vnf-3', name: 'Fortinet Firewall', hostname: 'FGT-ALP-FW01' },
+    ],
+  },
+  {
+    id: 'conn-3',
+    name: 'Google Cloud Interconnect - US Central',
+    provider: 'Google Cloud',
+    vnfs: [
+      { id: 'vnf-4', name: 'Router', hostname: 'RTR-GCP-01' },
+      { id: 'vnf-5', name: 'Enterprise LMCC', hostname: 'LMCC-GCP-01' },
+    ],
+  },
+  {
+    id: 'conn-4',
+    name: 'Oracle FastConnect - US Phoenix',
+    provider: 'Oracle',
+    vnfs: [],
+  },
+];
+
+const ALL_PROVIDERS = ['AWS', 'Azure', 'Google Cloud', 'Oracle', 'IBM', 'Equinix'];
+
+const TROUBLE_TYPES = [
+  { value: 'info', label: 'Information Request' },
+  { value: 'trouble', label: 'Trouble Report' },
+  { value: 'configuration', label: 'Configuration Change' },
+];
+
+const INPUT_CLASS = 'w-full h-10 px-3 rounded-lg border bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active';
+const SELECT_CLASS = 'w-full h-10 px-3 rounded-lg border bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active appearance-none cursor-pointer';
+const LABEL_CLASS = 'block text-figma-base font-medium text-fw-heading mb-2';
+const HELPER_CLASS = 'mt-1 text-figma-sm text-fw-bodyLight';
+const ERROR_CLASS = 'mt-1 text-figma-sm text-fw-error';
+
 export function CreateTicket() {
   const navigate = useNavigate();
-  const [contact, setContact] = useState('');
-  const [category, setCategory] = useState('');
-  const [description, setDescription] = useState('');
+  const [searchParams] = useSearchParams();
+  const preselectedConnectionId = searchParams.get('connectionId') || '';
+  const preselectedAsset = searchParams.get('asset') || '';
+
+  // Form state
+  const [connectionId, setConnectionId] = useState(preselectedConnectionId);
+  const [cspName, setCspName] = useState('');
+  const [vnfId, setVnfId] = useState('');
+  const [troubleType, setTroubleType] = useState('');
+  const [description, setDescription] = useState(preselectedAsset ? `Issue with: ${preselectedAsset}` : '');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
   const [attachments, setAttachments] = useState<AttachmentFile[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
+  // Derived data
+  const selectedConnection = useMemo(
+    () => MOCK_CONNECTIONS.find(c => c.id === connectionId),
+    [connectionId]
+  );
+
+  const availableProviders = useMemo(() => {
+    if (selectedConnection) return [selectedConnection.provider];
+    return ALL_PROVIDERS;
+  }, [selectedConnection]);
+
+  const availableVnfs = useMemo(() => {
+    if (selectedConnection) return selectedConnection.vnfs;
+    return MOCK_CONNECTIONS.flatMap(c => c.vnfs);
+  }, [selectedConnection]);
+
+  // Auto-fill CSP when connection changes
+  const handleConnectionChange = (id: string) => {
+    setConnectionId(id);
+    const conn = MOCK_CONNECTIONS.find(c => c.id === id);
+    if (conn) {
+      setCspName(conn.provider);
+      setVnfId('');
+    } else {
+      setCspName('');
+      setVnfId('');
+    }
+  };
+
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
-    if (!contact.trim()) newErrors.contact = 'Contact is required';
-    if (!category) newErrors.category = 'Category is required';
+    if (!troubleType) newErrors.troubleType = 'Trouble type is required';
     if (!description.trim()) newErrors.description = 'Description is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -61,37 +155,46 @@ export function CreateTicket() {
     setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
+  const resetForm = () => {
+    setSubmitted(false);
+    setConnectionId('');
+    setCspName('');
+    setVnfId('');
+    setTroubleType('');
+    setDescription('');
+    setPhone('');
+    setEmail('');
+    setAddress('');
+    setAttachments([]);
+    setErrors({});
+  };
+
   if (submitted) {
+    const selectedVnf = availableVnfs.find(v => v.id === vnfId);
     return (
       <div className="max-w-md mx-auto py-16 flex flex-col items-center text-center">
-        <div className="w-[317px] h-[252px] bg-fw-neutral rounded-2xl mb-8 flex items-center justify-center">
-          <Check className="h-16 w-16 text-fw-bodyLight" />
+        <div className="w-20 h-20 rounded-full bg-fw-success/10 mb-6 flex items-center justify-center">
+          <Check className="h-10 w-10 text-fw-success" />
         </div>
-        <h2 className="text-figma-xl font-medium text-fw-heading tracking-[-0.03em] mb-2">
-          Your ticket was created!
+        <h2 className="text-figma-xl font-medium text-fw-heading mb-2">
+          Ticket created successfully
         </h2>
-        <p className="text-figma-base font-medium text-fw-body tracking-[-0.03em] mb-8">
-          Our support will get in contact with you soon.
+        <p className="text-figma-base text-fw-body mb-2">
+          {selectedConnection ? `Connection: ${selectedConnection.name}` : 'General support request'}
+        </p>
+        {selectedVnf && (
+          <p className="text-figma-sm text-fw-bodyLight mb-6">
+            Asset: {selectedVnf.hostname}
+          </p>
+        )}
+        <p className="text-figma-sm text-fw-bodyLight mb-8">
+          Our support team will respond within 4 business hours.
         </p>
         <div className="flex gap-3 w-full max-w-[317px]">
-          <Button
-            variant="outline"
-            onClick={() => navigate('/tickets')}
-            className="flex-1"
-          >
+          <Button variant="outline" onClick={() => navigate('/tickets')} className="flex-1">
             View tickets
           </Button>
-          <Button
-            variant="primary"
-            onClick={() => {
-              setSubmitted(false);
-              setContact('');
-              setCategory('');
-              setDescription('');
-              setAttachments([]);
-            }}
-            className="flex-1"
-          >
+          <Button variant="primary" onClick={resetForm} className="flex-1">
             Create another
           </Button>
         </div>
@@ -99,155 +202,269 @@ export function CreateTicket() {
     );
   }
 
+  const borderClass = (field: string) =>
+    errors[field] ? 'border-fw-error' : 'border-fw-secondary';
+
   return (
     <div className="max-w-7xl mx-auto">
-      {/* Back link */}
       <button
         onClick={() => navigate('/tickets')}
-        className="inline-flex items-center gap-1 text-figma-base font-medium text-fw-link tracking-[-0.03em] mb-6 hover:underline"
+        className="inline-flex items-center gap-1 text-figma-base font-medium text-fw-link mb-6 hover:underline"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to tickets
       </button>
 
-      <div className="max-w-[400px]">
-        {/* Form fields */}
-        <div className="space-y-5">
-          {/* Contact */}
-          <div>
-            <label className="block text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">
-              Your contact
-            </label>
-            <input
-              type="text"
-              value={contact}
-              onChange={e => { setContact(e.target.value); setErrors(prev => ({ ...prev, contact: '' })); }}
-              className={`w-full h-9 px-3 rounded-lg border bg-fw-base text-figma-base text-fw-heading tracking-[-0.03em] focus:outline-none focus:ring-1 focus:ring-fw-active ${
-                errors.contact ? 'border-fw-error' : 'border-fw-secondary'
-              }`}
-              placeholder="Enter your contact info"
-            />
-            {errors.contact && (
-              <p className="mt-1 text-figma-sm text-fw-error tracking-[-0.03em]">{errors.contact}</p>
-            )}
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left: Form */}
+        <div className="lg:col-span-2 max-w-[560px]">
+          <div className="space-y-6">
+            {/* Section: Asset Identification */}
+            <div>
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Asset Identification</h3>
+              <div className="space-y-4">
+                {/* Connection Name */}
+                <div>
+                  <label className={LABEL_CLASS}>Connection Name</label>
+                  <select
+                    value={connectionId}
+                    onChange={e => handleConnectionChange(e.target.value)}
+                    className={`${SELECT_CLASS} border-fw-secondary`}
+                  >
+                    <option value="">Select a connection (optional)</option>
+                    {MOCK_CONNECTIONS.map(c => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
+                  <p className={HELPER_CLASS}>Link this ticket to a specific connection</p>
+                </div>
 
-          {/* Category */}
-          <div>
-            <label className="block text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">
-              Category
-            </label>
-            <select
-              value={category}
-              onChange={e => { setCategory(e.target.value); setErrors(prev => ({ ...prev, category: '' })); }}
-              className={`w-full h-9 px-3 rounded-lg border bg-fw-base text-figma-base text-fw-heading tracking-[-0.03em] focus:outline-none focus:ring-1 focus:ring-fw-active appearance-none cursor-pointer ${
-                errors.category ? 'border-fw-error' : 'border-fw-secondary'
-              }`}
-            >
-              <option value="">Select category</option>
-              <option value="access-request">Access Request</option>
-              <option value="user-access">User Access</option>
-              <option value="decommission">Decommission Rule</option>
-              <option value="connectivity">Connectivity Issue</option>
-              <option value="billing">Billing</option>
-              <option value="other">Other</option>
-            </select>
-            {errors.category && (
-              <p className="mt-1 text-figma-sm text-fw-error tracking-[-0.03em]">{errors.category}</p>
-            )}
-          </div>
+                {/* CSP Name */}
+                <div>
+                  <label className={LABEL_CLASS}>CSP Name</label>
+                  <select
+                    value={cspName}
+                    onChange={e => setCspName(e.target.value)}
+                    disabled={!!selectedConnection}
+                    className={`${SELECT_CLASS} border-fw-secondary ${selectedConnection ? 'opacity-60 cursor-not-allowed' : ''}`}
+                  >
+                    <option value="">Select provider (optional)</option>
+                    {availableProviders.map(p => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                  {selectedConnection && (
+                    <p className={HELPER_CLASS}>Auto-filled from connection</p>
+                  )}
+                </div>
 
-          {/* Description */}
-          <div>
-            <label className="block text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">
-              Description
-            </label>
-            <textarea
-              value={description}
-              onChange={e => { setDescription(e.target.value); setErrors(prev => ({ ...prev, description: '' })); }}
-              rows={4}
-              className={`w-full px-3 py-2 rounded-lg border bg-fw-base text-figma-base text-fw-heading tracking-[-0.03em] focus:outline-none focus:ring-1 focus:ring-fw-active resize-none ${
-                errors.description ? 'border-fw-error' : 'border-fw-secondary'
-              }`}
-              placeholder="Describe your issue"
-            />
-            {errors.description && (
-              <p className="mt-1 text-figma-sm text-fw-error tracking-[-0.03em]">{errors.description}</p>
-            )}
-          </div>
-
-          {/* Attachments */}
-          <div>
-            <label className="block text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">
-              Attachment
-            </label>
-            <div
-              onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
-              onDragLeave={() => setIsDragging(false)}
-              onDrop={handleDrop}
-              className={`relative rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
-                isDragging ? 'border-fw-active bg-fw-active/5' : 'border-fw-secondary bg-fw-wash'
-              }`}
-            >
-              <Upload className="h-6 w-6 text-fw-bodyLight mx-auto mb-2" />
-              <p className="text-figma-sm font-medium text-fw-body tracking-[-0.03em] mb-1">
-                Drag and drop files here
-              </p>
-              <p className="text-figma-sm text-fw-bodyLight tracking-[-0.03em] mb-3">
-                or
-              </p>
-              <label className="inline-flex items-center justify-center h-8 px-4 rounded-full border border-fw-active text-figma-sm font-medium text-fw-link cursor-pointer hover:bg-fw-active/5 transition-colors">
-                Browse files
-                <input
-                  type="file"
-                  multiple
-                  onChange={handleFileSelect}
-                  className="hidden"
-                />
-              </label>
+                {/* VNF Name */}
+                <div>
+                  <label className={LABEL_CLASS}>VNF Name</label>
+                  <select
+                    value={vnfId}
+                    onChange={e => setVnfId(e.target.value)}
+                    className={`${SELECT_CLASS} border-fw-secondary`}
+                    disabled={availableVnfs.length === 0}
+                  >
+                    <option value="">Select VNF (optional)</option>
+                    {availableVnfs.map(v => (
+                      <option key={v.id} value={v.id}>{v.name} - {v.hostname}</option>
+                    ))}
+                  </select>
+                  {availableVnfs.length === 0 && (
+                    <p className={HELPER_CLASS}>No VNFs available for this connection</p>
+                  )}
+                </div>
+              </div>
             </div>
 
-            {/* Attachment list */}
-            {attachments.length > 0 && (
-              <div className="mt-3 space-y-2">
-                {attachments.map((file, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 rounded-lg bg-fw-base border border-fw-secondary"
+            {/* Section: Issue Details */}
+            <div>
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Issue Details</h3>
+              <div className="space-y-4">
+                {/* Trouble Type */}
+                <div>
+                  <label className={LABEL_CLASS}>
+                    Trouble Type <span className="text-fw-error">*</span>
+                  </label>
+                  <select
+                    value={troubleType}
+                    onChange={e => { setTroubleType(e.target.value); setErrors(prev => ({ ...prev, troubleType: '' })); }}
+                    className={`${SELECT_CLASS} ${borderClass('troubleType')}`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-fw-wash">
-                        <span className="text-figma-sm font-bold text-fw-heading">{file.type}</span>
-                      </div>
-                      <div>
-                        <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{file.name}</p>
-                        <p className="text-figma-sm text-fw-bodyLight tracking-[-0.03em]">{file.size}</p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => removeAttachment(index)}
-                      className="p-1.5 rounded hover:bg-fw-wash text-fw-body hover:text-fw-error transition-colors"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                ))}
+                    <option value="">Select trouble type</option>
+                    {TROUBLE_TYPES.map(t => (
+                      <option key={t.value} value={t.value}>{t.label}</option>
+                    ))}
+                  </select>
+                  {errors.troubleType && <p className={ERROR_CLASS}>{errors.troubleType}</p>}
+                </div>
+
+                {/* Trouble Description */}
+                <div>
+                  <label className={LABEL_CLASS}>
+                    Trouble Description <span className="text-fw-error">*</span>
+                  </label>
+                  <textarea
+                    value={description}
+                    onChange={e => { setDescription(e.target.value); setErrors(prev => ({ ...prev, description: '' })); }}
+                    rows={5}
+                    className={`w-full px-3 py-2 rounded-lg border bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active resize-none ${borderClass('description')}`}
+                    placeholder="Describe the issue in detail"
+                  />
+                  {errors.description && <p className={ERROR_CLASS}>{errors.description}</p>}
+                </div>
               </div>
-            )}
+            </div>
+
+            {/* Section: Customer Contact */}
+            <div>
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Customer Contact</h3>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className={LABEL_CLASS}>Phone</label>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={e => setPhone(e.target.value)}
+                      className={`${INPUT_CLASS} border-fw-secondary`}
+                      placeholder="+1 555 123-4567"
+                    />
+                  </div>
+                  <div>
+                    <label className={LABEL_CLASS}>Email</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      className={`${INPUT_CLASS} border-fw-secondary`}
+                      placeholder="user@company.com"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className={LABEL_CLASS}>Street Address</label>
+                  <input
+                    type="text"
+                    value={address}
+                    onChange={e => setAddress(e.target.value)}
+                    className={`${INPUT_CLASS} border-fw-secondary`}
+                    placeholder="123 Main St, Suite 100, Dallas, TX 75201"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section: Attachments */}
+            <div>
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Attachment (AOTS TM Log)</h3>
+              <div
+                onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={handleDrop}
+                className={`relative rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
+                  isDragging ? 'border-fw-active bg-fw-active/5' : 'border-fw-secondary bg-fw-wash'
+                }`}
+              >
+                <Upload className="h-6 w-6 text-fw-bodyLight mx-auto mb-2" />
+                <p className="text-figma-sm font-medium text-fw-body mb-1">
+                  Drag and drop files here
+                </p>
+                <p className="text-figma-sm text-fw-bodyLight mb-3">or</p>
+                <label className="inline-flex items-center justify-center h-8 px-4 rounded-full border border-fw-active text-figma-sm font-medium text-fw-link cursor-pointer hover:bg-fw-active/5 transition-colors">
+                  Browse files
+                  <input
+                    type="file"
+                    multiple
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              {attachments.length > 0 && (
+                <div className="mt-3 space-y-2">
+                  {attachments.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 rounded-lg bg-fw-base border border-fw-secondary"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-fw-wash">
+                          <span className="text-figma-sm font-bold text-fw-heading">{file.type}</span>
+                        </div>
+                        <div>
+                          <p className="text-figma-base font-medium text-fw-heading">{file.name}</p>
+                          <p className="text-figma-sm text-fw-bodyLight">{file.size}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => removeAttachment(index)}
+                        className="p-1.5 rounded hover:bg-fw-wash text-fw-body hover:text-fw-error transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Submit */}
+            <div className="pt-2">
+              <Button
+                variant="primary"
+                fullWidth
+                icon={Check}
+                onClick={handleSubmit}
+              >
+                Create ticket
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Submit button */}
-        <div className="mt-8">
-          <Button
-            variant="secondary"
-            fullWidth
-            icon={Check}
-            onClick={handleSubmit}
-            disabled={!contact && !category && !description}
-          >
-            Create ticket
-          </Button>
+        {/* Right: Summary sidebar */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-24 rounded-2xl border border-fw-secondary bg-fw-base p-5 space-y-4">
+            <h3 className="text-figma-base font-semibold text-fw-heading">Ticket Summary</h3>
+            <div className="space-y-3 text-figma-sm">
+              <div className="flex justify-between">
+                <span className="text-fw-bodyLight">Service Line</span>
+                <span className="text-fw-heading font-medium">NBAdvanced</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-fw-bodyLight">Connection</span>
+                <span className="text-fw-heading font-medium truncate ml-4 max-w-[160px]">
+                  {selectedConnection?.name || 'None'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-fw-bodyLight">Provider</span>
+                <span className="text-fw-heading font-medium">{cspName || 'None'}</span>
+              </div>
+              {vnfId && (
+                <div className="flex justify-between">
+                  <span className="text-fw-bodyLight">VNF Asset</span>
+                  <span className="text-fw-heading font-medium">
+                    {availableVnfs.find(v => v.id === vnfId)?.hostname || '-'}
+                  </span>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span className="text-fw-bodyLight">Trouble Type</span>
+                <span className="text-fw-heading font-medium">
+                  {TROUBLE_TYPES.find(t => t.value === troubleType)?.label || 'Not selected'}
+                </span>
+              </div>
+              <div className="border-t border-fw-secondary pt-3 flex justify-between">
+                <span className="text-fw-bodyLight">Reported Product</span>
+                <span className="text-fw-heading font-medium">NetBond Advanced</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

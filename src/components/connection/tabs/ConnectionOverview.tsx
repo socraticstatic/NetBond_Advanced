@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Link2, Box } from 'lucide-react';
+import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Link2, Box, Ticket } from 'lucide-react';
 import { AttIcon } from '../../icons/AttIcon';
 import { Connection } from '../../../types';
 import { MiniTopology } from '../MiniTopology';
@@ -86,12 +86,21 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
             </div>
             <p className="text-[12px] text-fw-bodyLight mt-0.5">Interactive visualization of your network connection</p>
           </div>
-          <button
-            onClick={() => navigate('/create', { state: { editMode: true, connectionId: connection.id, connectionName: connection.name, connectionStatus: connection.status } })}
-            className="tab-button text-[14px] font-medium text-fw-link hover:text-fw-linkHover transition-colors"
-          >
-            Edit Topology
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate(`/tickets/create?connectionId=conn-1`)}
+              className="tab-button inline-flex items-center gap-1 text-[14px] font-medium text-fw-bodyLight hover:text-fw-link transition-colors"
+            >
+              <Ticket className="h-3.5 w-3.5" />
+              Create Ticket
+            </button>
+            <button
+              onClick={() => navigate('/create', { state: { editMode: true, connectionId: connection.id, connectionName: connection.name, connectionStatus: connection.status } })}
+              className="tab-button text-[14px] font-medium text-fw-link hover:text-fw-linkHover transition-colors"
+            >
+              Edit Topology
+            </button>
+          </div>
         </div>
         {/* Mini topology canvas */}
         <div className="px-6 pb-6">
