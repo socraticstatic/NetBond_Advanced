@@ -92,6 +92,10 @@ export function TicketDetail() {
   const [activeTab, setActiveTab] = useState<'communication' | 'activity'>('communication');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [showCloseModal, setShowCloseModal] = useState(false);
+  const [resolutionCode, setResolutionCode] = useState('');
+  const [resolutionNotes, setResolutionNotes] = useState('');
+  const [isClosed, setIsClosed] = useState(false);
   const [editData, setEditData] = useState({
     description: MOCK_TICKET.description,
     priority: MOCK_TICKET.priority,
@@ -136,13 +140,13 @@ export function TicketDetail() {
               <Button variant="secondary" size="sm" icon={Edit2} onClick={() => setIsEditing(true)}>
                 Edit
               </Button>
-              <Button variant="outline" size="sm" onClick={() => {}}>
-                Accept
+              <Button variant="outline" size="sm" onClick={() => setShowCloseModal(true)} disabled={isClosed}>
+                {isClosed ? 'Closed' : 'Close Ticket'}
               </Button>
               <Button variant="outline" size="sm" onClick={() => {}}>
                 Return to customer
               </Button>
-              <Button variant="outline" size="sm" onClick={() => {}}>
+              <Button variant="outline" size="sm" onClick={() => navigate('/tickets')}>
                 Cancel
               </Button>
             </>
@@ -413,6 +417,70 @@ export function TicketDetail() {
           </div>
         </div>
       </div>
+
+      {/* Close Ticket Modal */}
+      {showCloseModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-fw-base rounded-2xl shadow-xl border border-fw-secondary w-full max-w-md p-6">
+            <h3 className="text-figma-lg font-semibold text-fw-heading mb-4">Close Ticket</h3>
+            <p className="text-figma-sm text-fw-bodyLight mb-4">
+              Select a resolution code and add notes before closing this ticket.
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-figma-sm font-medium text-fw-heading mb-1">
+                  Resolution Code <span className="text-fw-error">*</span>
+                </label>
+                <select
+                  value={resolutionCode}
+                  onChange={e => setResolutionCode(e.target.value)}
+                  className="w-full h-10 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active"
+                >
+                  <option value="">Select resolution</option>
+                  <option value="resolved-customer">Resolved by Customer</option>
+                  <option value="resolved-support">Resolved by Support</option>
+                  <option value="duplicate">Duplicate</option>
+                  <option value="cannot-reproduce">Cannot Reproduce</option>
+                  <option value="configuration-applied">Configuration Applied</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-figma-sm font-medium text-fw-heading mb-1">
+                  Resolution Notes
+                </label>
+                <textarea
+                  value={resolutionNotes}
+                  onChange={e => setResolutionNotes(e.target.value)}
+                  rows={3}
+                  className="w-full px-3 py-2 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active resize-none"
+                  placeholder="Add resolution details..."
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 mt-6">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => { setShowCloseModal(false); setResolutionCode(''); setResolutionNotes(''); }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                className="flex-1"
+                disabled={!resolutionCode}
+                onClick={() => {
+                  setIsClosed(true);
+                  setShowCloseModal(false);
+                  window.addToast?.({ type: 'success', title: 'Ticket Closed', message: `Resolution: ${resolutionCode}`, duration: 3000 });
+                }}
+              >
+                Close Ticket
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

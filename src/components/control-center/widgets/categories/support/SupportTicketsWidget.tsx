@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import { Ticket, Clock, CheckCircle } from 'lucide-react';
 
 export function SupportTicketsWidget() {
+  const navigate = useNavigate();
   const tickets = [
     {
       id: '1',
@@ -32,14 +34,17 @@ export function SupportTicketsWidget() {
           <Ticket className="h-5 w-5 text-fw-purple mr-2" />
           <span className="text-figma-base font-medium text-fw-heading">Recent Tickets</span>
         </div>
-        <button className="text-figma-base text-fw-link hover:text-fw-linkHover">
+        <button
+          onClick={() => navigate('/tickets/create')}
+          className="text-figma-base text-fw-link hover:text-fw-linkHover"
+        >
           Create New
         </button>
       </div>
 
       <div className="space-y-2">
         {tickets.map((ticket) => (
-          <div key={ticket.id} className="p-2 bg-fw-wash rounded-lg">
+          <div key={ticket.id} className="p-2 bg-fw-wash rounded-lg cursor-pointer hover:bg-fw-neutral transition-colors" onClick={() => navigate(`/tickets/${ticket.id}`)}>
             <div className="flex items-center justify-between mb-1">
               <span className="text-figma-base font-medium text-fw-heading">{ticket.title}</span>
               <span className={`px-2 py-0.5 text-figma-sm font-medium rounded-full ${
