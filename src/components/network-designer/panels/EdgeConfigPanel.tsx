@@ -39,6 +39,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose, readOnly = 
       title="Connection Configuration"
       onDelete={onDelete ? () => onDelete(edge.id) : undefined}
       deleteLabel="Delete connection"
+      assetName={`${edge.type} (${edge.bandwidth})`}
     >
       <div className="space-y-4">
         {/* Connection Type */}
@@ -181,7 +182,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose, readOnly = 
             }
             disabled={readOnly}
             className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-              edge.status === 'active' ? 'bg-fw-successLight0' : 'bg-fw-secondary'
+              edge.status === 'active' ? 'bg-fw-primary' : 'bg-fw-secondary'
             } ${readOnly ? 'opacity-60 cursor-not-allowed' : ''}`}
           >
             <span
