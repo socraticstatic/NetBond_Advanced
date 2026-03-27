@@ -119,7 +119,7 @@
 .form-textarea:focus {
   outline: none;
   border-color: var(--color-cobalt-600); /* #0057b8 */
-  box-shadow: 0 0 0 2px rgb(0 87 184 / 0.15);
+  box-shadow: 0 0 0 2px var(--focus-ring);
 }
 
 .form-input::placeholder,
@@ -433,7 +433,7 @@ button.border-l-2 {
 
 .search-input:focus {
   border-color: var(--color-cobalt-600);
-  box-shadow: 0 0 0 2px rgb(0 87 184 / 0.15);
+  box-shadow: 0 0 0 2px var(--focus-ring);
   outline: none;
 }
 
@@ -557,8 +557,8 @@ button.border-l-2 {
 }
 
 .badge-coming-soon-purple {
-  background-color: #f3e8ff;
-  color: #af29bb;
+  background-color: var(--fw-purple-light, #f3e8ff);
+  color: var(--color-complementary-purple, #af29bb);
 }
 
 /* Hero Banner Standard

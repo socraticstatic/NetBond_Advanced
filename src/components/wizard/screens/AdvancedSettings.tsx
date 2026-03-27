@@ -371,7 +371,7 @@ export function AdvancedSettings({
             </div>
 
             <div className="space-y-6">
-              {config.provider === 'AWS' && (
+              {(config.provider === 'AWS' || config.providers?.includes('AWS' as CloudProvider)) && (
                 <div className="relative">
                   <label className="block text-figma-base font-medium text-fw-body mb-2">
                     VIF Type
