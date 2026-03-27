@@ -238,26 +238,145 @@ export function TicketDetail() {
         ))}
       </div>
 
+      {/* EDIT MODE: full SD3 form */}
+      {isEditing && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          <div className="lg:col-span-2 max-w-[560px] space-y-6">
+            {/* Asset Identification */}
+            <div>
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Asset Identification</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-heading mb-2">Connection Name</label>
+                  <select value={editData.connection} onChange={e => setEditData({ ...editData, connection: e.target.value })} className="w-full h-10 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active">
+                    <option value="">None</option>
+                    <option value="AWS Direct Connect - US East">AWS Direct Connect - US East</option>
+                    <option value="Azure ExpressRoute - West Europe">Azure ExpressRoute - West Europe</option>
+                    <option value="Google Cloud Interconnect - US Central">Google Cloud Interconnect - US Central</option>
+                    <option value="Oracle FastConnect - US Phoenix">Oracle FastConnect - US Phoenix</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-heading mb-2">CSP Name</label>
+                  <select value={editData.csp} onChange={e => setEditData({ ...editData, csp: e.target.value })} className="w-full h-10 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active">
+                    <option value="">None</option>
+                    <option value="AWS">AWS</option>
+                    <option value="Azure">Azure</option>
+                    <option value="Google Cloud">Google Cloud</option>
+                    <option value="Oracle">Oracle</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-heading mb-2">VNF / Asset</label>
+                  <input type="text" value={editData.vnf} onChange={e => setEditData({ ...editData, vnf: e.target.value })} className="w-full h-10 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active" placeholder="VNF hostname" />
+                </div>
+              </div>
+            </div>
+
+            {/* Issue Details */}
+            <div>
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Issue Details</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-heading mb-2">Trouble Type <span className="text-fw-error">*</span></label>
+                  <select value={editData.troubleType} onChange={e => setEditData({ ...editData, troubleType: e.target.value as 'info' | 'trouble' | 'configuration' })} className="w-full h-10 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active">
+                    <option value="info">Information Request</option>
+                    <option value="trouble">Trouble Report</option>
+                    <option value="configuration">Configuration Change</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-heading mb-2">Trouble Description <span className="text-fw-error">*</span></label>
+                  <textarea value={editData.description} onChange={e => setEditData({ ...editData, description: e.target.value })} rows={6} className="w-full px-3 py-2 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active resize-none" />
+                </div>
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-heading mb-2">Status</label>
+                  <select value={editData.status} onChange={e => setEditData({ ...editData, status: e.target.value })} className="w-full h-10 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active">
+                    <option value="open">Open</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="pending">Pending</option>
+                    <option value="closed">Closed</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Customer Contact */}
+            <div>
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Customer Contact</h3>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-figma-base font-medium text-fw-heading mb-2">Organization</label>
+                    <input type="text" value={editData.requestorName} onChange={e => setEditData({ ...editData, requestorName: e.target.value })} className="w-full h-10 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active" />
+                  </div>
+                  <div>
+                    <label className="block text-figma-base font-medium text-fw-heading mb-2">Author</label>
+                    <input type="text" value={editData.authorName} onChange={e => setEditData({ ...editData, authorName: e.target.value })} className="w-full h-10 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-figma-base font-medium text-fw-heading mb-2">Phone</label>
+                    <input type="tel" value={editData.phone} onChange={e => setEditData({ ...editData, phone: e.target.value })} className="w-full h-10 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active" placeholder="+1 555 123-4567" />
+                  </div>
+                  <div>
+                    <label className="block text-figma-base font-medium text-fw-heading mb-2">Email</label>
+                    <input type="email" value={editData.email} onChange={e => setEditData({ ...editData, email: e.target.value })} className="w-full h-10 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-base text-fw-heading focus:outline-none focus:ring-1 focus:ring-fw-active" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Summary sidebar in edit mode */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 rounded-2xl border border-fw-secondary bg-fw-base p-5 space-y-4">
+              <h3 className="text-figma-base font-semibold text-fw-heading">Ticket Summary</h3>
+              <div className="space-y-3 text-figma-sm">
+                <div className="flex justify-between">
+                  <span className="text-fw-bodyLight">Ticket</span>
+                  <span className="text-fw-heading font-medium">{ticket.ticketNumber}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-fw-bodyLight">Service Line</span>
+                  <span className="text-fw-heading font-medium">NBAdvanced</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-fw-bodyLight">Connection</span>
+                  <span className="text-fw-heading font-medium truncate ml-4 max-w-[160px]">{editData.connection || 'None'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-fw-bodyLight">Trouble Type</span>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${TROUBLE_TYPE_STYLES[editData.troubleType]}`}>
+                    {TROUBLE_TYPE_LABELS[editData.troubleType]}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-fw-bodyLight">Status</span>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${STATUS_STYLES[editData.status]}`}>
+                    {STATUS_LABELS[editData.status]}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* READ MODE: detail cards */}
+      {!isEditing && (
       <div className="grid grid-cols-12 gap-6">
         {/* Main content - left side */}
         <div className="col-span-8 space-y-6">
           {/* Description card */}
           <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
             <h3 className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-3">
-              Description
+              Trouble Description
             </h3>
-            {isEditing ? (
-              <textarea
-                value={editData.description}
-                onChange={(e) => setEditData({ ...editData, description: e.target.value })}
-                className="fw-textarea"
-                style={{ height: '120px' }}
-              />
-            ) : (
-              <p className="text-figma-lg font-medium text-fw-heading tracking-[-0.03em] whitespace-pre-line">
-                {editData.description}
-              </p>
-            )}
+            <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] whitespace-pre-line">
+              {editData.description}
+            </p>
           </div>
 
           {/* Activity / Communication tabs */}
@@ -524,6 +643,7 @@ export function TicketDetail() {
           </div>
         </div>
       </div>
+      )}
 
       {/* Close Ticket Modal */}
       {showCloseModal && (
