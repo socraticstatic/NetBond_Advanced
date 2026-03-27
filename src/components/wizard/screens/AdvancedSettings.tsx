@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Network, Globe, Activity, Settings, Info, Upload, X, AlertTriangle, Shield } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
 import { BillingPreview } from '../BillingPreview';
+import { PROVIDER_CREDENTIALS, isSecretField } from '../../../data/providerCredentialFields';
+import { NetworkConfigUpload } from '../NetworkConfigUpload';
 
 interface AdvancedSettingsProps {
   config: {
@@ -50,6 +52,7 @@ export function AdvancedSettings({
   onBillingChange
 }: AdvancedSettingsProps) {
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
+  const [uploadedConfigs, setUploadedConfigs] = useState<Record<string, any>>({});
   const [showBulkImport, setShowBulkImport] = useState(false);
   const [bulkSubnets, setBulkSubnets] = useState('');
   const [bulkImportError, setBulkImportError] = useState<string>();
@@ -701,6 +704,85 @@ export function AdvancedSettings({
               </div>
             </div>
           </div>
+
+          {/* Network Config Upload */}
+          {(config.providers?.length || 0) > 0 && (
+            <NetworkConfigUpload
+              providers={config.providers || []}
+              uploadedConfigs={uploadedConfigs}
+              onConfigUploaded={(pid, cfg) => setUploadedConfigs(prev => ({ ...prev, [pid]: cfg }))}
+              onConfigRemoved={(pid) => setUploadedConfigs(prev => { const next = { ...prev }; delete next[pid]; return next; })}
+            />
+          )}
+
+          {/* Provider Configuration */}
+          {(config.providers?.length || 0) > 0 && (
+            <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="p-2 bg-fw-accent rounded-lg">
+                  <Globe className="h-5 w-5 text-brand-blue" />
+                </div>
+                <div>
+                  <h4 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em]">Provider Configuration</h4>
+                  <p className="text-figma-sm text-fw-bodyLight">Enter credentials for each selected cloud provider</p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {config.providers?.map((providerId) => {
+                  const providerConfig = PROVIDER_CREDENTIALS[providerId];
+                  if (!providerConfig) return null;
+                  const fields = providerConfig.requiredInfo;
+
+                  return (
+                    <div key={providerId} className="border border-fw-secondary rounded-xl p-4">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <span className="text-figma-base font-semibold text-fw-heading">{providerId}</span>
+                          <span className="px-2 py-0.5 bg-fw-wash text-fw-bodyLight rounded-full text-figma-xs">
+                            {fields.length} required fields
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => window.open(providerConfig.consoleUrl, '_blank')}
+                          className="text-figma-sm text-fw-link hover:underline font-medium"
+                        >
+                          Open {providerConfig.consoleName} →
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {fields.map((field) => {
+                          const fieldKey = `${providerId.toLowerCase().replace(/\s+/g, '_')}_${field.toLowerCase().replace(/\s+/g, '_')}`;
+                          const secret = isSecretField(field);
+                          return (
+                            <div key={field}>
+                              <label className="block text-figma-sm font-medium text-fw-body mb-1">
+                                {field}
+                                {secret && <Shield className="inline h-3.5 w-3.5 ml-1 text-fw-warning" />}
+                              </label>
+                              <input
+                                type={secret ? 'password' : 'text'}
+                                value={config.configuration?.[fieldKey] || ''}
+                                onChange={(e) => handleConfigChange(fieldKey, e.target.value)}
+                                placeholder={`Enter your ${field.toLowerCase()}`}
+                                className="w-full px-3 h-10 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-fw-secondary flex items-center gap-2 text-figma-xs text-fw-bodyLight">
+                        <Shield className="h-3.5 w-3.5" />
+                        <span>Credentials are encrypted and secure</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Security & Monitoring */}
           <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
