@@ -1,6 +1,8 @@
-import { Edit2, CheckCircle2, MapPin, Gauge, Shield, Network } from 'lucide-react';
+import { Edit2, CheckCircle2, MapPin, Gauge, Shield, Network, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { CloudProvider } from '../../../types/connection';
 import { BillingPreview } from '../BillingPreview';
+import { wizardToDesigner } from '../../../utils/wizardToDesigner';
 
 interface ReviewConfigurationProps {
   cloudRouterName?: string;
@@ -82,6 +84,7 @@ export function ReviewConfiguration({
   onBillingChange = () => {},
   onEditStep,
 }: ReviewConfigurationProps) {
+  const navigate = useNavigate();
   const providers = config.providers || (config.provider ? [config.provider] : []);
   const resiliencyLabel = config.resiliencyLevel === 'maximum' ? 'Maximum Resiliency' : 'Local Resiliency';
 
@@ -293,6 +296,33 @@ export function ReviewConfiguration({
             />
           </div>
         </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center justify-center gap-4 pt-2">
+        <button
+          onClick={() => {
+            const { nodes, edges } = wizardToDesigner({
+              cloudRouterName,
+              providers,
+              selectedLocations,
+              bandwidthSettings,
+              connectionType: config.type,
+              resiliencyLevel: config.resiliencyLevel,
+            });
+            navigate('/create', {
+              state: {
+                mode: 'visual',
+                initialNodes: nodes,
+                initialEdges: edges,
+              },
+            });
+          }}
+          className="inline-flex items-center gap-2 px-6 h-10 border border-fw-secondary rounded-full text-figma-base font-medium text-fw-body hover:bg-fw-wash transition-colors"
+        >
+          <Settings className="h-4 w-4" />
+          Edit in Network Designer
+        </button>
       </div>
 
       <div className="bg-fw-accent border border-fw-active rounded-xl p-4">
