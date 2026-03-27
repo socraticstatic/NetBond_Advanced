@@ -110,6 +110,17 @@ export function ProviderSelection({
                   <img
                     src={provider.logo}
                     alt={provider.name}
+                    onError={(e) => {
+                      // Replace broken image with text fallback
+                      const target = e.currentTarget;
+                      const parent = target.parentElement;
+                      if (parent) {
+                        const span = document.createElement('span');
+                        span.className = `text-figma-lg font-bold tracking-tight ${isSelected ? 'text-white' : 'text-fw-heading'}`;
+                        span.textContent = provider.name.toUpperCase();
+                        target.replaceWith(span);
+                      }
+                    }}
                     className={`
                       h-12 object-contain transition-all duration-300
                       ${isSelected
