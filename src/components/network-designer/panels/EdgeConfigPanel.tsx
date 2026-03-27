@@ -39,6 +39,7 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose, readOnly = 
       title="Connection Configuration"
       onDelete={onDelete ? () => onDelete(edge.id) : undefined}
       deleteLabel="Delete connection"
+      assetName={`${edge.type} (${edge.bandwidth})`}
     >
       <div className="space-y-4">
         {/* Connection Type */}

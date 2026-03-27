@@ -45,6 +45,7 @@ export function NodeConfigPanel({ node, onUpdate, onDelete, onClose, readOnly = 
       title={node.name}
       onDelete={onDelete ? () => onDelete(node.id) : undefined}
       deleteLabel="Delete node"
+      assetName={node.name}
     >
       {/* Tabs */}
       <fieldset disabled={readOnly} className={readOnly ? 'opacity-80' : ''}>
