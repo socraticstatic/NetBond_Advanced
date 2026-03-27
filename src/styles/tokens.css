@@ -249,6 +249,10 @@
   --fw-border: var(--fw-border-primary);
   --fw-active: var(--fw-border-active);
   --focus-ring: rgba(0, 87, 184, 0.15);
+
+  /* Complementary colors */
+  --fw-purple-light: #f3e8ff;
+  --fw-purple: var(--color-complementary-purple);
 }
 
 /* Dark mode removed - always use light mode */

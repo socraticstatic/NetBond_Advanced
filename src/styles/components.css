@@ -458,6 +458,7 @@ button.border-l-2 {
    ------------------------------------------------------------ */
 .modal-overlay {
   background-color: rgb(0 0 0 / 0.4);
+  z-index: var(--z-40, 40);
 }
 
 .modal-content {
@@ -465,6 +466,7 @@ button.border-l-2 {
   border-radius: 1.5rem; /* 24px - rounded-3xl */
   max-width: 45rem; /* 720px */
   box-shadow: var(--shadow-xl);
+  z-index: var(--z-50, 50);
 }
 
 .modal-header {
@@ -489,6 +491,7 @@ button.border-l-2 {
   background-color: white;
   border-left: 1px solid var(--color-gray-300);
   box-shadow: var(--shadow-xl);
+  z-index: var(--z-40, 40);
 }
 
 /* Page Layout
@@ -552,13 +555,13 @@ button.border-l-2 {
 }
 
 .badge-coming-soon-dark {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--color-gray-800);
+  color: white;
 }
 
 .badge-coming-soon-purple {
-  background-color: var(--fw-purple-light, #f3e8ff);
-  color: var(--color-complementary-purple, #af29bb);
+  background-color: var(--fw-purple-light);
+  color: var(--fw-purple);
 }
 
 /* Hero Banner Standard
