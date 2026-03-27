@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { X, Trash2 } from 'lucide-react';
+import { X, Trash2, Ticket } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface FloatingPanelProps {
   isOpen: boolean;
@@ -8,9 +9,11 @@ interface FloatingPanelProps {
   children: ReactNode;
   onDelete?: () => void;
   deleteLabel?: string;
+  assetName?: string;
 }
 
-export function FloatingPanel({ isOpen, onClose, title, children, onDelete, deleteLabel = 'Delete' }: FloatingPanelProps) {
+export function FloatingPanel({ isOpen, onClose, title, children, onDelete, deleteLabel = 'Delete', assetName }: FloatingPanelProps) {
+  const navigate = useNavigate();
   return (
     <div
       className={`absolute right-4 top-16 z-30 w-80 max-h-[calc(100%-8rem)] overflow-y-auto bg-fw-base rounded-2xl shadow-lg border border-fw-secondary transition-transform duration-200 ${
@@ -32,9 +35,18 @@ export function FloatingPanel({ isOpen, onClose, title, children, onDelete, dele
       {/* Content */}
       <div className="p-4">{children}</div>
 
-      {/* Delete button at bottom */}
-      {onDelete && (
-        <div className="px-4 pb-4">
+      {/* Action buttons at bottom */}
+      <div className="px-4 pb-4 space-y-2">
+        {assetName && (
+          <button
+            onClick={() => navigate(`/tickets/create?asset=${encodeURIComponent(assetName)}`)}
+            className="w-full flex items-center justify-center gap-2 h-10 rounded-lg border border-fw-secondary text-fw-bodyLight hover:text-fw-link hover:border-fw-link transition-colors text-figma-base font-medium"
+          >
+            <Ticket className="h-4 w-4" />
+            Report Issue
+          </button>
+        )}
+        {onDelete && (
           <button
             onClick={onDelete}
             className="w-full flex items-center justify-center gap-2 h-10 rounded-lg border border-fw-error text-fw-error hover:bg-fw-errorLight transition-colors text-figma-base font-medium"
@@ -42,8 +54,8 @@ export function FloatingPanel({ isOpen, onClose, title, children, onDelete, dele
             <Trash2 className="h-4 w-4" />
             {deleteLabel}
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
