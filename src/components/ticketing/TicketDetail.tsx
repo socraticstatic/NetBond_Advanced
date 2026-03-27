@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, CheckCircle, Clock, User, Paperclip, FileText, Search, Edit2, Save, X, MessageSquare, ArrowUpDown, Ticket } from 'lucide-react';
+import { ArrowLeft, RefreshCw, CheckCircle, Clock, User, Paperclip, FileText, Search, Edit2, Save, X, MessageSquare, ArrowUpDown, Ticket, Send } from 'lucide-react';
 import { Button } from '../common/Button';
 
 type StageStep = {
@@ -8,6 +8,15 @@ type StageStep = {
   completed: boolean;
   active: boolean;
 };
+
+interface ConversationMessage {
+  id: string;
+  author: string;
+  role: 'customer' | 'support';
+  timestamp: string;
+  body: string;
+  attachments?: string[];
+}
 
 interface TicketData {
   id: string;
@@ -29,6 +38,7 @@ interface TicketData {
   attachment: string;
   steps: StageStep[];
   activityLog: ActivityEntry[];
+  conversation: ConversationMessage[];
 }
 
 interface ActivityEntry {
@@ -102,6 +112,44 @@ Requesting investigation and restoration of primary tunnel.`,
     { date: '2024/10/13 8:50', topic: 'MFGLVT14F,CTA...', user: 'system', message: 'Now really closed.' },
     { date: '2024/10/13 8:50', topic: 'General', user: 'system', message: 'Automation job group 4044 has been successfuly completed.' },
   ],
+  conversation: [
+    {
+      id: 'msg-1',
+      author: 'John Martinez',
+      role: 'customer',
+      timestamp: '2024/10/13, 06:55 PM',
+      body: 'We are seeing tunnel-status-down alerts on PALO-MACD-TEST1. Traffic has failed over to secondary but we need the primary tunnel restored ASAP. This is impacting production workloads on AWS us-east-1.',
+      attachments: ['tunnel-status-log.txt'],
+    },
+    {
+      id: 'msg-2',
+      author: 'Sarah Chen',
+      role: 'support',
+      timestamp: '2024/10/13, 07:12 PM',
+      body: 'Thank you for reporting this, John. I can see the tunnel down event in our monitoring. I\'m initiating diagnostics on the IPE side now. Can you confirm whether you\'re seeing any BGP session flaps on your end?',
+    },
+    {
+      id: 'msg-3',
+      author: 'John Martinez',
+      role: 'customer',
+      timestamp: '2024/10/13, 07:25 PM',
+      body: 'Confirmed. BGP session to 169.254.10.1 dropped at 18:53 UTC and has not re-established. The secondary path via us-west-2 is holding but we\'re seeing 12ms additional latency.',
+    },
+    {
+      id: 'msg-4',
+      author: 'Sarah Chen',
+      role: 'support',
+      timestamp: '2024/10/13, 07:45 PM',
+      body: 'Found the issue. There was a fiber cut on the cross-connect at the Ashburn facility. Our NOC has dispatched a technician. ETA for repair is 90 minutes. I\'ll update you as soon as the physical layer is restored and we can bring the BGP session back up.',
+    },
+    {
+      id: 'msg-5',
+      author: 'John Martinez',
+      role: 'customer',
+      timestamp: '2024/10/13, 08:00 PM',
+      body: 'Understood. We can tolerate the secondary path for that window. Please notify us before you bring the primary back so we can monitor the failback.',
+    },
+  ],
 };
 
 export function TicketDetail() {
@@ -114,6 +162,39 @@ export function TicketDetail() {
   const [resolutionCode, setResolutionCode] = useState('');
   const [resolutionNotes, setResolutionNotes] = useState('');
   const [isClosed, setIsClosed] = useState(false);
+  const [messages, setMessages] = useState<ConversationMessage[]>(MOCK_TICKET.conversation);
+  const [replyText, setReplyText] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeTab === 'communication') {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, activeTab]);
+
+  const handleSendReply = () => {
+    if (!replyText.trim()) return;
+    const newMsg: ConversationMessage = {
+      id: `msg-${Date.now()}`,
+      author: 'John Martinez',
+      role: 'customer',
+      timestamp: new Date().toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+      body: replyText.trim(),
+    };
+    setMessages(prev => [...prev, newMsg]);
+    setReplyText('');
+    // Simulate support reply after 2 seconds
+    setTimeout(() => {
+      setMessages(prev => [...prev, {
+        id: `msg-${Date.now()}`,
+        author: 'Sarah Chen',
+        role: 'support',
+        timestamp: new Date().toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+        body: 'Thank you for the update. I\'m looking into this now and will follow up shortly.',
+      }]);
+    }, 2000);
+  };
+
   const [editData, setEditData] = useState({
     description: MOCK_TICKET.description,
     troubleType: MOCK_TICKET.troubleType,
@@ -417,7 +498,80 @@ export function TicketDetail() {
               </div>
             </div>
 
-            {/* Activity log table */}
+            {/* Communication tab - threaded conversation */}
+            {activeTab === 'communication' && (
+              <div className="flex flex-col">
+                {/* Messages */}
+                <div className="px-6 py-4 space-y-4 max-h-[480px] overflow-y-auto">
+                  {messages.map((msg) => (
+                    <div key={msg.id} className={`flex ${msg.role === 'customer' ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-[75%] ${msg.role === 'customer' ? 'order-2' : ''}`}>
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-figma-xs font-medium ${
+                            msg.role === 'support' ? 'bg-fw-link' : 'bg-fw-heading'
+                          }`}>
+                            {msg.author.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <span className="text-figma-sm font-medium text-fw-heading">{msg.author}</span>
+                          {msg.role === 'support' && (
+                            <span className="text-figma-xs px-1.5 py-0.5 rounded bg-fw-link/10 text-fw-link font-medium">Support</span>
+                          )}
+                          <span className="text-figma-xs text-fw-bodyLight">{msg.timestamp}</span>
+                        </div>
+                        <div className={`rounded-2xl px-4 py-3 text-figma-base leading-relaxed ${
+                          msg.role === 'customer'
+                            ? 'bg-fw-link text-white rounded-tr-sm'
+                            : 'bg-fw-wash text-fw-heading rounded-tl-sm'
+                        }`}>
+                          {msg.body}
+                        </div>
+                        {msg.attachments && msg.attachments.length > 0 && (
+                          <div className="mt-1.5 flex gap-2">
+                            {msg.attachments.map((file, i) => (
+                              <button key={i} className="inline-flex items-center gap-1.5 text-figma-xs text-fw-link hover:underline">
+                                <Paperclip className="h-3 w-3" />
+                                {file}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={messagesEndRef} />
+                </div>
+
+                {/* Reply input */}
+                <div className="border-t border-fw-secondary px-6 py-4">
+                  <div className="flex items-end gap-3">
+                    <div className="flex-1 relative">
+                      <textarea
+                        value={replyText}
+                        onChange={e => setReplyText(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendReply(); } }}
+                        placeholder="Type your reply..."
+                        rows={2}
+                        className="w-full px-4 py-3 rounded-xl border border-fw-secondary bg-fw-base text-figma-base text-fw-heading placeholder:text-fw-bodyLight focus:outline-none focus:ring-1 focus:ring-fw-active resize-none"
+                      />
+                      <button className="absolute right-3 bottom-3 text-fw-bodyLight hover:text-fw-link transition-colors">
+                        <Paperclip className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <button
+                      onClick={handleSendReply}
+                      disabled={!replyText.trim()}
+                      className="h-10 w-10 rounded-xl bg-fw-link text-white flex items-center justify-center hover:bg-fw-linkHover transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
+                    >
+                      <Send className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <p className="text-figma-xs text-fw-bodyLight mt-2">Press Enter to send, Shift+Enter for new line</p>
+                </div>
+              </div>
+            )}
+
+            {/* Activity log tab */}
+            {activeTab === 'activity' && (
             <table className="w-full">
               <thead>
                 <tr className="bg-fw-wash border-y border-fw-secondary">
@@ -466,6 +620,7 @@ export function TicketDetail() {
                 ))}
               </tbody>
             </table>
+            )}
           </div>
         </div>
 
