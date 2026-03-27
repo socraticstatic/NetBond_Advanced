@@ -162,6 +162,22 @@ export function TicketDetail() {
   const [resolutionCode, setResolutionCode] = useState('');
   const [resolutionNotes, setResolutionNotes] = useState('');
   const [isClosed, setIsClosed] = useState(false);
+  const [tags, setTags] = useState<string[]>(['tunnel-down', 'fiber-cut']);
+  const [tagInput, setTagInput] = useState('');
+  const TAG_SUGGESTIONS = ['bgp', 'latency', 'packet-loss', 'fiber-cut', 'tunnel-down', 'config-error', 'capacity', 'failover', 'maintenance', 'dns', 'routing', 'hardware', 'software', 'security', 'billing'];
+  const [showTagSuggestions, setShowTagSuggestions] = useState(false);
+
+  const addTag = (tag: string) => {
+    const t = tag.toLowerCase().trim().replace(/\s+/g, '-');
+    if (t && !tags.includes(t)) setTags(prev => [...prev, t]);
+    setTagInput('');
+    setShowTagSuggestions(false);
+  };
+
+  const removeTag = (tag: string) => setTags(prev => prev.filter(t => t !== tag));
+
+  const filteredSuggestions = TAG_SUGGESTIONS.filter(s => !tags.includes(s) && s.includes(tagInput.toLowerCase()));
+
   const [messages, setMessages] = useState<ConversationMessage[]>(MOCK_TICKET.conversation);
   const [replyText, setReplyText] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -721,6 +737,51 @@ export function TicketDetail() {
                   <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{editData.endDate}</p>
                 )}
               </div>
+            </div>
+          </div>
+
+          {/* Category Tags card */}
+          <div className="bg-fw-base rounded-2xl border border-fw-secondary p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">Category Tags</h3>
+              <span className="text-figma-xs text-fw-bodyLight">{tags.length} tags</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {tags.map(tag => (
+                <span key={tag} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-fw-link/10 text-fw-link text-figma-sm font-medium">
+                  {tag}
+                  <button onClick={() => removeTag(tag)} className="hover:text-fw-error transition-colors ml-0.5">
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
+              ))}
+              {tags.length === 0 && (
+                <span className="text-figma-sm text-fw-bodyLight italic">No tags added</span>
+              )}
+            </div>
+            <div className="relative">
+              <input
+                type="text"
+                value={tagInput}
+                onChange={e => { setTagInput(e.target.value); setShowTagSuggestions(true); }}
+                onFocus={() => setShowTagSuggestions(true)}
+                onKeyDown={e => { if (e.key === 'Enter' && tagInput.trim()) { e.preventDefault(); addTag(tagInput); } }}
+                placeholder="Add tag..."
+                className="w-full h-9 px-3 rounded-lg border border-fw-secondary bg-fw-base text-figma-sm text-fw-heading placeholder:text-fw-bodyLight focus:outline-none focus:ring-1 focus:ring-fw-active"
+              />
+              {showTagSuggestions && tagInput && filteredSuggestions.length > 0 && (
+                <div className="absolute left-0 right-0 top-10 z-20 bg-fw-base border border-fw-secondary rounded-lg shadow-lg max-h-32 overflow-y-auto">
+                  {filteredSuggestions.map(s => (
+                    <button
+                      key={s}
+                      onClick={() => addTag(s)}
+                      className="w-full px-3 py-2 text-left text-figma-sm text-fw-heading hover:bg-fw-wash transition-colors"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
