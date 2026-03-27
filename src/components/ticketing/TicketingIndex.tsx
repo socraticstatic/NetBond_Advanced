@@ -1,51 +1,63 @@
 import { useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, ChevronDown, Settings, Ticket, Eye, Edit, Trash2 } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, ChevronDown, Settings, Ticket, Eye, Edit, Trash2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { SearchFilterBar } from '../common/SearchFilterBar';
 import { OverflowMenu } from '../common/OverflowMenu';
 import { ColumnVisibilityPopover, ColumnDefinition } from '../common/ColumnVisibilityPopover';
 import { useColumnVisibility } from '../../hooks/useColumnVisibility';
 
-type TicketStatus = 'active' | 'queued' | 'deferred' | 'ready to close' | 'device down';
-type TicketPriority = 'device down' | 'partially impacting' | 'minor problems' | 'info tickets';
+type TicketStatus = 'open' | 'in-progress' | 'pending' | 'closed';
+type TroubleType = 'info' | 'trouble' | 'configuration';
 
-interface Ticket {
+interface TicketRow {
   id: string;
   ticketNumber: string;
   description: string;
-  state: string;
-  priority: TicketPriority;
-  stage: TicketStatus;
-  asset: string;
+  troubleType: TroubleType;
+  status: TicketStatus;
+  connection: string;
+  vnf: string;
+  created: string;
 }
 
 const STATUS_STYLES: Record<TicketStatus, string> = {
-  'active': 'bg-fw-active/10 text-fw-link',
-  'queued': 'bg-fw-warn/10 text-fw-warn',
-  'deferred': 'bg-fw-neutral text-fw-bodyLight',
-  'ready to close': 'bg-fw-success/10 text-fw-success',
-  'device down': 'bg-fw-error/10 text-fw-error',
+  'open': 'bg-fw-active/10 text-fw-link',
+  'in-progress': 'bg-fw-warn/10 text-fw-warn',
+  'pending': 'bg-fw-neutral text-fw-bodyLight',
+  'closed': 'bg-fw-success/10 text-fw-success',
 };
 
-const PRIORITY_STYLES: Record<TicketPriority, string> = {
-  'device down': 'bg-fw-error/10 text-fw-error',
-  'partially impacting': 'bg-fw-warn/10 text-fw-warn',
-  'minor problems': 'bg-fw-warn/10 text-fw-warn',
-  'info tickets': 'bg-fw-wash text-fw-bodyLight',
+const STATUS_LABELS: Record<TicketStatus, string> = {
+  'open': 'Open',
+  'in-progress': 'In Progress',
+  'pending': 'Pending',
+  'closed': 'Closed',
 };
 
-const MOCK_TICKETS: Ticket[] = [
-  { id: '1', ticketNumber: '000000328268304', description: 'SYSLOG: tunnel-status-down', state: 'Open', priority: 'device down', stage: 'active', asset: 'PALO-MACD-TEST1' },
-  { id: '2', ticketNumber: 'CHG0161575', description: 'Access Request', state: 'Open', priority: 'partially impacting', stage: 'queued', asset: '58777811' },
-  { id: '3', ticketNumber: 'CHG0161576', description: 'Access Request', state: 'Open', priority: 'minor problems', stage: 'queued', asset: '58777811' },
-  { id: '4', ticketNumber: 'CHG0161577', description: 'Access Request', state: 'Open', priority: 'info tickets', stage: 'deferred', asset: '58777811' },
-  { id: '5', ticketNumber: 'CHG0161578', description: 'Access Request', state: 'Open', priority: 'device down', stage: 'ready to close', asset: '58777811' },
-  { id: '6', ticketNumber: 'CHG0161579', description: 'User Access', state: 'Open', priority: 'partially impacting', stage: 'ready to close', asset: '58777811' },
-  { id: '7', ticketNumber: 'CHG0161580', description: 'User Access', state: 'Open', priority: 'minor problems', stage: 'active', asset: '58777811' },
-  { id: '8', ticketNumber: 'CHG0161581', description: 'Decommission Rule', state: 'Open', priority: 'info tickets', stage: 'deferred', asset: '58777811' },
-  { id: '9', ticketNumber: 'CHG0161582', description: 'Decommission Rule', state: 'Open', priority: 'device down', stage: 'ready to close', asset: '58777811' },
-  { id: '10', ticketNumber: 'CHG0161583', description: 'User Access', state: 'Open', priority: 'partially impacting', stage: 'active', asset: '58777811' },
+const TROUBLE_TYPE_STYLES: Record<TroubleType, string> = {
+  'info': 'bg-fw-wash text-fw-bodyLight',
+  'trouble': 'bg-fw-error/10 text-fw-error',
+  'configuration': 'bg-fw-active/10 text-fw-link',
+};
+
+const TROUBLE_TYPE_LABELS: Record<TroubleType, string> = {
+  'info': 'Information',
+  'trouble': 'Trouble',
+  'configuration': 'Configuration',
+};
+
+const MOCK_TICKETS: TicketRow[] = [
+  { id: '1', ticketNumber: 'SDNTCK0006232', description: 'SYSLOG: tunnel-status-down', troubleType: 'trouble', status: 'open', connection: 'AWS Direct Connect - US East', vnf: 'PALO-MACD-TEST1', created: '2024-10-13' },
+  { id: '2', ticketNumber: 'SDNTCK0006233', description: 'Bandwidth upgrade request for ExpressRoute', troubleType: 'configuration', status: 'in-progress', connection: 'Azure ExpressRoute - West Europe', vnf: 'FGT-ALP-FW01', created: '2024-10-12' },
+  { id: '3', ticketNumber: 'SDNTCK0006234', description: 'Request BGP peering configuration details', troubleType: 'info', status: 'open', connection: 'Google Cloud Interconnect - US Central', vnf: 'RTR-GCP-01', created: '2024-10-12' },
+  { id: '4', ticketNumber: 'SDNTCK0006235', description: 'Firewall rule change for DMZ access', troubleType: 'configuration', status: 'pending', connection: 'AWS Direct Connect - US East', vnf: 'PALO-MACD-TEST1', created: '2024-10-11' },
+  { id: '5', ticketNumber: 'SDNTCK0006236', description: 'Intermittent packet loss on MPLS circuit', troubleType: 'trouble', status: 'open', connection: 'Oracle FastConnect - US Phoenix', vnf: '-', created: '2024-10-11' },
+  { id: '6', ticketNumber: 'SDNTCK0006237', description: 'LMCC site addition - Dallas metro', troubleType: 'configuration', status: 'in-progress', connection: 'Google Cloud Interconnect - US Central', vnf: 'LMCC-GCP-01', created: '2024-10-10' },
+  { id: '7', ticketNumber: 'SDNTCK0006238', description: 'Billing inquiry for Q3 usage', troubleType: 'info', status: 'closed', connection: '-', vnf: '-', created: '2024-10-09' },
+  { id: '8', ticketNumber: 'SDNTCK0006239', description: 'SD-WAN edge failover not triggering', troubleType: 'trouble', status: 'open', connection: 'AWS Direct Connect - US East', vnf: 'SDWAN-EDGE-01', created: '2024-10-08' },
+  { id: '9', ticketNumber: 'SDNTCK0006240', description: 'Add new VNF to existing connection', troubleType: 'configuration', status: 'closed', connection: 'Azure ExpressRoute - West Europe', vnf: '-', created: '2024-10-07' },
+  { id: '10', ticketNumber: 'SDNTCK0006241', description: 'Request SLA report for September', troubleType: 'info', status: 'pending', connection: '-', vnf: '-', created: '2024-10-06' },
 ];
 
 const PAGE_SIZE = 20;
@@ -54,10 +66,10 @@ export function TicketingIndex() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [priorityFilter, setPriorityFilter] = useState<string>('all');
+  const [troubleTypeFilter, setTroubleTypeFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortColumn, setSortColumn] = useState<string>('ticketNumber');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showFilters, setShowFilters] = useState(false);
   const [showColumnPopover, setShowColumnPopover] = useState(false);
   const columnButtonRef = useRef<HTMLButtonElement>(null);
@@ -68,12 +80,13 @@ export function TicketingIndex() {
       const matchesSearch = searchQuery === '' ||
         ticket.ticketNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
         ticket.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ticket.asset.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesStatus = statusFilter === 'all' || ticket.stage === statusFilter;
-      const matchesPriority = priorityFilter === 'all' || ticket.priority === priorityFilter;
-      return matchesSearch && matchesStatus && matchesPriority;
+        ticket.connection.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ticket.vnf.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || ticket.status === statusFilter;
+      const matchesTroubleType = troubleTypeFilter === 'all' || ticket.troubleType === troubleTypeFilter;
+      return matchesSearch && matchesStatus && matchesTroubleType;
     });
-  }, [searchQuery, statusFilter, priorityFilter]);
+  }, [searchQuery, statusFilter, troubleTypeFilter]);
 
   const totalPages = Math.max(1, Math.ceil(filteredTickets.length / PAGE_SIZE));
   const paginatedTickets = filteredTickets.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -90,12 +103,13 @@ export function TicketingIndex() {
   };
 
   const allColumns: Array<{ key: string; label: string }> = [
-    { key: 'ticketNumber', label: 'Ticket number' },
+    { key: 'ticketNumber', label: 'Ticket Number' },
     { key: 'description', label: 'Description' },
-    { key: 'state', label: 'State' },
-    { key: 'priority', label: 'Priority' },
-    { key: 'stage', label: 'Stage' },
-    { key: 'asset', label: 'Asset' },
+    { key: 'troubleType', label: 'Trouble Type' },
+    { key: 'status', label: 'Status' },
+    { key: 'connection', label: 'Connection' },
+    { key: 'vnf', label: 'VNF / Asset' },
+    { key: 'created', label: 'Created' },
   ];
 
   const columns = visibleColumns.length === 0
@@ -104,14 +118,42 @@ export function TicketingIndex() {
 
   const columnDefs: ColumnDefinition[] = allColumns.map(c => ({ id: c.key, label: c.label }));
 
+  const renderCell = (ticket: TicketRow, key: string) => {
+    switch (key) {
+      case 'ticketNumber':
+        return <span className="text-fw-link font-medium">{ticket.ticketNumber}</span>;
+      case 'description':
+        return <span className="text-fw-body">{ticket.description}</span>;
+      case 'troubleType':
+        return (
+          <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${TROUBLE_TYPE_STYLES[ticket.troubleType]}`}>
+            {TROUBLE_TYPE_LABELS[ticket.troubleType]}
+          </span>
+        );
+      case 'status':
+        return (
+          <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${STATUS_STYLES[ticket.status]}`}>
+            {STATUS_LABELS[ticket.status]}
+          </span>
+        );
+      case 'connection':
+        return <span className="text-fw-body truncate">{ticket.connection}</span>;
+      case 'vnf':
+        return <span className="text-fw-body font-mono text-figma-sm">{ticket.vnf}</span>;
+      case 'created':
+        return <span className="text-fw-bodyLight">{ticket.created}</span>;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Table */}
       <div className="rounded-lg border border-fw-secondary overflow-hidden">
-        {/* SearchFilterBar inside border */}
+        {/* SearchFilterBar */}
         <div className="px-6 py-4 border-b border-fw-secondary">
           <SearchFilterBar
-            searchPlaceholder="Search tickets ..."
+            searchPlaceholder="Search tickets..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
             onFilter={() => setShowFilters(!showFilters)}
@@ -125,23 +167,22 @@ export function TicketingIndex() {
           {showFilters && (
             <div className="flex items-center gap-4 mt-4 pt-4 border-t border-fw-secondary">
               <div>
-                <label className="fw-label">Stage</label>
+                <label className="fw-label">Status</label>
                 <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: '180px' }}>
-                  <option value="all">All stages</option>
-                  <option value="active">Active</option>
-                  <option value="queued">Queued</option>
-                  <option value="deferred">Deferred</option>
-                  <option value="ready to close">Ready to Close</option>
+                  <option value="all">All statuses</option>
+                  <option value="open">Open</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="pending">Pending</option>
+                  <option value="closed">Closed</option>
                 </select>
               </div>
               <div>
-                <label className="fw-label">Priority</label>
-                <select value={priorityFilter} onChange={e => { setPriorityFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: '200px' }}>
-                  <option value="all">All priorities</option>
-                  <option value="device down">Device Down</option>
-                  <option value="partially impacting">Partially Impacting</option>
-                  <option value="minor problems">Minor Problems</option>
-                  <option value="info tickets">Info Tickets</option>
+                <label className="fw-label">Trouble Type</label>
+                <select value={troubleTypeFilter} onChange={e => { setTroubleTypeFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: '200px' }}>
+                  <option value="all">All types</option>
+                  <option value="info">Information</option>
+                  <option value="trouble">Trouble</option>
+                  <option value="configuration">Configuration</option>
                 </select>
               </div>
             </div>
@@ -157,7 +198,7 @@ export function TicketingIndex() {
               {columns.map(col => (
                 <th
                   key={col.key}
-                  className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis align-middle"
+                  className="px-6 h-12 text-left text-figma-sm font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis align-middle"
                 >
                   <button onClick={() => handleSort(col.key)} className="group inline-flex items-center space-x-1">
                     <span>{col.label}</span>
@@ -188,31 +229,11 @@ export function TicketingIndex() {
                 <td className="px-4 py-4 align-middle" onClick={e => e.stopPropagation()}>
                   <input type="checkbox" className="h-4 w-4 rounded border-fw-secondary" />
                 </td>
-                <td className="px-6 py-4 text-[14px] text-fw-link font-medium whitespace-nowrap overflow-hidden text-ellipsis">
-                  {ticket.ticketNumber}
-                </td>
-                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
-                  {ticket.description}
-                </td>
-                <td className="px-6 py-4 text-[14px] text-fw-heading whitespace-nowrap">
-                  <span className="inline-flex items-center gap-1">
-                    <span className="h-3 w-3 rounded-full border-2 border-fw-active" />
-                    {ticket.state}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-[12px] font-medium ${PRIORITY_STYLES[ticket.priority]}`}>
-                    {ticket.priority}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-[12px] font-medium ${STATUS_STYLES[ticket.stage]}`}>
-                    {ticket.stage}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
-                  {ticket.asset}
-                </td>
+                {columns.map(col => (
+                  <td key={col.key} className="px-6 py-4 text-figma-base whitespace-nowrap overflow-hidden text-ellipsis">
+                    {renderCell(ticket, col.key)}
+                  </td>
+                ))}
                 <td className="w-16 px-6 py-4" onClick={e => e.stopPropagation()}>
                   <div className="flex justify-end">
                     <OverflowMenu items={[
@@ -228,9 +249,9 @@ export function TicketingIndex() {
               <tr>
                 <td colSpan={columns.length + 2} className="px-6 py-16 text-center">
                   <Ticket className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
-                  <h3 className="text-[16px] font-bold text-fw-heading mb-2">No tickets found</h3>
-                  <p className="text-[14px] text-fw-bodyLight max-w-md mx-auto mb-6">
-                    {searchQuery || statusFilter !== 'all' || priorityFilter !== 'all'
+                  <h3 className="text-figma-base font-bold text-fw-heading mb-2">No tickets found</h3>
+                  <p className="text-figma-sm text-fw-bodyLight max-w-md mx-auto mb-6">
+                    {searchQuery || statusFilter !== 'all' || troubleTypeFilter !== 'all'
                       ? 'Try adjusting your search or filter criteria.'
                       : 'No support tickets have been created yet.'}
                   </p>
@@ -245,22 +266,14 @@ export function TicketingIndex() {
 
         {/* Pagination */}
         <div className="flex items-center justify-between px-6 py-3 border-t border-fw-secondary">
-          <span className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">
+          <span className="text-figma-sm font-medium text-fw-bodyLight">
             {startItem} - {endItem} of {filteredTickets.length}
           </span>
           <div className="flex items-center gap-1">
-            <button
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
-              className="p-1 rounded hover:bg-fw-wash disabled:opacity-30"
-            >
+            <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="p-1 rounded hover:bg-fw-wash disabled:opacity-30">
               <ChevronsLeft className="h-5 w-5 text-fw-heading" />
             </button>
-            <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="p-1 rounded hover:bg-fw-wash disabled:opacity-30"
-            >
+            <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-1 rounded hover:bg-fw-wash disabled:opacity-30">
               <ChevronLeft className="h-5 w-5 text-fw-heading" />
             </button>
             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + 1).map(page => (
@@ -274,22 +287,14 @@ export function TicketingIndex() {
                 {page}
               </button>
             ))}
-            <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className="p-1 rounded hover:bg-fw-wash disabled:opacity-30"
-            >
+            <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-1 rounded hover:bg-fw-wash disabled:opacity-30">
               <ChevronRight className="h-5 w-5 text-fw-heading" />
             </button>
-            <button
-              onClick={() => setCurrentPage(totalPages)}
-              disabled={currentPage === totalPages}
-              className="p-1 rounded hover:bg-fw-wash disabled:opacity-30"
-            >
+            <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="p-1 rounded hover:bg-fw-wash disabled:opacity-30">
               <ChevronsRight className="h-5 w-5 text-fw-heading" />
             </button>
             <div className="w-px h-5 bg-fw-secondary mx-1" />
-            <span className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">20</span>
+            <span className="text-figma-sm font-medium text-fw-heading">20</span>
             <ChevronDown className="h-4 w-4 text-fw-heading" />
           </div>
         </div>
