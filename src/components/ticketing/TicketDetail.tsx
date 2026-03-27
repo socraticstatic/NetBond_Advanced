@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, RefreshCw, CheckCircle, Clock, User, Paperclip, FileText, Search, Edit2, Save, X, MessageSquare, ArrowUpDown } from 'lucide-react';
+import { ArrowLeft, RefreshCw, CheckCircle, Clock, User, Paperclip, FileText, Search, Edit2, Save, X, MessageSquare, ArrowUpDown, Ticket } from 'lucide-react';
 import { Button } from '../common/Button';
 
 type StageStep = {
@@ -116,7 +116,11 @@ export function TicketDetail() {
   const [isClosed, setIsClosed] = useState(false);
   const [editData, setEditData] = useState({
     description: MOCK_TICKET.description,
+    troubleType: MOCK_TICKET.troubleType,
     status: MOCK_TICKET.status,
+    connection: MOCK_TICKET.connection,
+    csp: MOCK_TICKET.csp,
+    vnf: MOCK_TICKET.vnf,
     requestorName: MOCK_TICKET.requestorName,
     authorName: MOCK_TICKET.authorName,
     email: MOCK_TICKET.email,
@@ -348,6 +352,70 @@ export function TicketDetail() {
 
         {/* Right sidebar */}
         <div className="col-span-4 space-y-6">
+          {/* Ticket Details card */}
+          <div className="bg-fw-base rounded-2xl border border-fw-secondary p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <Ticket className="h-5 w-5 text-fw-heading" />
+              <h3 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">Ticket Details</h3>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Service Line</p>
+                <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">NBAdvanced</p>
+              </div>
+              <div>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Trouble Type</p>
+                {isEditing ? (
+                  <select value={editData.troubleType} onChange={(e) => setEditData({ ...editData, troubleType: e.target.value as 'info' | 'trouble' | 'configuration' })} className="fw-select">
+                    <option value="info">Information Request</option>
+                    <option value="trouble">Trouble Report</option>
+                    <option value="configuration">Configuration Change</option>
+                  </select>
+                ) : (
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${TROUBLE_TYPE_STYLES[editData.troubleType]}`}>
+                    {TROUBLE_TYPE_LABELS[editData.troubleType]}
+                  </span>
+                )}
+              </div>
+              <div>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Connection</p>
+                {isEditing ? (
+                  <select value={editData.connection} onChange={(e) => setEditData({ ...editData, connection: e.target.value })} className="fw-select">
+                    <option value="">None</option>
+                    <option value="AWS Direct Connect - US East">AWS Direct Connect - US East</option>
+                    <option value="Azure ExpressRoute - West Europe">Azure ExpressRoute - West Europe</option>
+                    <option value="Google Cloud Interconnect - US Central">Google Cloud Interconnect - US Central</option>
+                    <option value="Oracle FastConnect - US Phoenix">Oracle FastConnect - US Phoenix</option>
+                  </select>
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{editData.connection || '-'}</p>
+                )}
+              </div>
+              <div>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">CSP</p>
+                {isEditing ? (
+                  <select value={editData.csp} onChange={(e) => setEditData({ ...editData, csp: e.target.value })} className="fw-select">
+                    <option value="">None</option>
+                    <option value="AWS">AWS</option>
+                    <option value="Azure">Azure</option>
+                    <option value="Google Cloud">Google Cloud</option>
+                    <option value="Oracle">Oracle</option>
+                  </select>
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{editData.csp || '-'}</p>
+                )}
+              </div>
+              <div>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">VNF / Asset</p>
+                {isEditing ? (
+                  <input type="text" value={editData.vnf} onChange={(e) => setEditData({ ...editData, vnf: e.target.value })} className="fw-input" />
+                ) : (
+                  <p className="text-figma-base font-mono text-figma-sm text-fw-heading tracking-[-0.03em]">{editData.vnf || '-'}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
           {/* Time info card */}
           <div className="bg-fw-base rounded-2xl border border-fw-secondary p-5">
             <div className="flex items-center gap-2 mb-4">
