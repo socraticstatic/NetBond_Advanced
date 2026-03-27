@@ -12,16 +12,17 @@ type StageStep = {
 interface TicketData {
   id: string;
   ticketNumber: string;
-  priority: string;
-  priorityColor: string;
-  stage: string;
-  stageColor: string;
-  asset: string;
-  category: string;
+  troubleType: 'info' | 'trouble' | 'configuration';
+  status: 'open' | 'in-progress' | 'pending' | 'closed';
+  connection: string;
+  vnf: string;
+  csp: string;
   description: string;
   opened: string;
   lastUpdate: string;
   requestorName: string;
+  authorName: string;
+  email: string;
   startDate: string;
   endDate: string;
   phone: string;
@@ -37,41 +38,58 @@ interface ActivityEntry {
   message: string;
 }
 
+const TROUBLE_TYPE_LABELS: Record<string, string> = {
+  info: 'Information',
+  trouble: 'Trouble',
+  configuration: 'Configuration',
+};
+
+const TROUBLE_TYPE_STYLES: Record<string, string> = {
+  info: 'bg-fw-wash text-fw-bodyLight',
+  trouble: 'bg-fw-error/10 text-fw-error',
+  configuration: 'bg-fw-active/10 text-fw-link',
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  open: 'Open',
+  'in-progress': 'In Progress',
+  pending: 'Pending',
+  closed: 'Closed',
+};
+
+const STATUS_STYLES: Record<string, string> = {
+  open: 'bg-fw-active/10 text-fw-link',
+  'in-progress': 'bg-fw-warn/10 text-fw-warn',
+  pending: 'bg-fw-neutral text-fw-bodyLight',
+  closed: 'bg-fw-success/10 text-fw-success',
+};
+
 const MOCK_TICKET: TicketData = {
   id: '1',
   ticketNumber: 'SDNTCK0006232',
-  priority: 'device down',
-  priorityColor: '#c70032',
-  stage: 'ACTIVE',
-  stageColor: '#0057b8',
-  asset: 'FGT-ALP-FW01',
-  category: 'Access Request',
-  description: `Access Request - add:
+  troubleType: 'trouble',
+  status: 'open',
+  connection: 'AWS Direct Connect - US East',
+  vnf: 'PALO-MACD-TEST1',
+  csp: 'AWS',
+  description: `SYSLOG: tunnel-status-down
 
-Rule location: auto
-Line: 1
-ACL Interface: DMZ-Transit
-Source: Connect_Direct_DMZ_Servers (group)
-Destination: FQDN_OBJ_sftp.multi.sparkers.io (sftp.multi.sparkers.io)
-Service: tcp-ssh (TCP_22)
-Action: ACCEPT
-Log: No log
-Comment: TVG-117703
+Tunnel between PALO-MACD-TEST1 and AWS us-east-1 is reporting down status since 06:55 PM.
 
-New objects:
-Name: FQDN_OBJ_sftp.multi.sparkers.io
-Type: ADDRESS_FQDN
-Value: sftp.multi.sparkers.io
-Force installation: TRUE
+Affected VNF: Palo Alto Firewall (PALO-MACD-TEST1)
+Connection: AWS Direct Connect - US East
+Impact: Traffic failover to secondary path active.
 
-Business justification: To Send files via SFTP to Babelway on a new address`,
+Requesting investigation and restoration of primary tunnel.`,
   opened: '2024/10/13, 06:55 PM',
   lastUpdate: '2024/10/13, 12:04 AM',
   requestorName: 'Alpha Corp',
+  authorName: 'John Martinez',
+  email: 'j.martinez@alphacorp.com',
   startDate: '2024/10/13, 2:00 PM',
   endDate: '2024/10/13, 3:00 PM',
   phone: '+1 973 1234567',
-  attachment: 'Filled form.docx',
+  attachment: 'tunnel-status-log.txt',
   steps: [
     { label: 'Submitted', completed: true, active: false },
     { label: 'Acknowledged', completed: false, active: true },
@@ -98,9 +116,10 @@ export function TicketDetail() {
   const [isClosed, setIsClosed] = useState(false);
   const [editData, setEditData] = useState({
     description: MOCK_TICKET.description,
-    priority: MOCK_TICKET.priority,
-    stage: MOCK_TICKET.stage,
+    status: MOCK_TICKET.status,
     requestorName: MOCK_TICKET.requestorName,
+    authorName: MOCK_TICKET.authorName,
+    email: MOCK_TICKET.email,
     phone: MOCK_TICKET.phone,
     startDate: MOCK_TICKET.startDate,
     endDate: MOCK_TICKET.endDate,
@@ -159,22 +178,26 @@ export function TicketDetail() {
         <h1 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mb-2">
           {ticket.ticketNumber}
         </h1>
-        <div className="flex items-center gap-3">
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium bg-fw-error/10 text-fw-error">
-            {ticket.priority}
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${TROUBLE_TYPE_STYLES[ticket.troubleType]}`}>
+            {TROUBLE_TYPE_LABELS[ticket.troubleType]}
           </span>
           <div className="w-px h-4 bg-fw-secondary" />
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium bg-fw-active/10 text-fw-link">
-            {ticket.stage}
-          </span>
-          <div className="w-px h-4 bg-fw-secondary" />
-          <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">
-            {ticket.asset}
+          <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${STATUS_STYLES[isClosed ? 'closed' : editData.status]}`}>
+            {isClosed ? 'Closed' : STATUS_LABELS[editData.status]}
           </span>
           <div className="w-px h-4 bg-fw-secondary" />
           <span className="text-figma-base font-medium text-fw-body tracking-[-0.03em]">
-            {ticket.category}
+            {ticket.connection}
           </span>
+          {ticket.vnf !== '-' && (
+            <>
+              <div className="w-px h-4 bg-fw-secondary" />
+              <span className="text-figma-base font-mono text-figma-sm text-fw-bodyLight">
+                {ticket.vnf}
+              </span>
+            </>
+          )}
         </div>
       </div>
 
@@ -367,7 +390,7 @@ export function TicketDetail() {
             </div>
             <div className="space-y-3">
               <div>
-                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Name</p>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Organization</p>
                 {isEditing ? (
                   <input type="text" value={editData.requestorName} onChange={(e) => setEditData({ ...editData, requestorName: e.target.value })} className="fw-input" />
                 ) : (
@@ -375,9 +398,25 @@ export function TicketDetail() {
                 )}
               </div>
               <div>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Author</p>
+                {isEditing ? (
+                  <input type="text" value={editData.authorName} onChange={(e) => setEditData({ ...editData, authorName: e.target.value })} className="fw-input" />
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{editData.authorName}</p>
+                )}
+              </div>
+              <div>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Email</p>
+                {isEditing ? (
+                  <input type="email" value={editData.email} onChange={(e) => setEditData({ ...editData, email: e.target.value })} className="fw-input" />
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-link tracking-[-0.03em]">{editData.email}</p>
+                )}
+              </div>
+              <div>
                 <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Phone</p>
                 {isEditing ? (
-                  <input type="text" value={editData.phone} onChange={(e) => setEditData({ ...editData, phone: e.target.value })} className="fw-input" />
+                  <input type="tel" value={editData.phone} onChange={(e) => setEditData({ ...editData, phone: e.target.value })} className="fw-input" />
                 ) : (
                   <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{editData.phone}</p>
                 )}
@@ -390,15 +429,15 @@ export function TicketDetail() {
             <div className="flex items-center justify-between">
               <span className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">Status</span>
               {isEditing ? (
-                <select value={editData.stage} onChange={(e) => setEditData({ ...editData, stage: e.target.value })} className="fw-select" style={{ width: 'auto', paddingRight: '2.5rem' }}>
-                  <option value="active">Active</option>
-                  <option value="queued">Queued</option>
-                  <option value="deferred">Deferred</option>
-                  <option value="ready to close">Ready to Close</option>
+                <select value={editData.status} onChange={(e) => setEditData({ ...editData, status: e.target.value })} className="fw-select" style={{ width: 'auto', paddingRight: '2.5rem' }}>
+                  <option value="open">Open</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="pending">Pending</option>
+                  <option value="closed">Closed</option>
                 </select>
               ) : (
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium bg-fw-active/10 text-fw-link">
-                  {editData.stage}
+                <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${STATUS_STYLES[isClosed ? 'closed' : editData.status]}`}>
+                  {isClosed ? 'Closed' : STATUS_LABELS[editData.status]}
                 </span>
               )}
             </div>
