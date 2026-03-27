@@ -1,6 +1,8 @@
-import { Edit2, CheckCircle2, MapPin, Gauge, Shield, Network } from 'lucide-react';
+import { Edit2, CheckCircle2, MapPin, Gauge, Shield, Network, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { CloudProvider } from '../../../types/connection';
 import { BillingPreview } from '../BillingPreview';
+import { wizardToDesigner } from '../../../utils/wizardToDesigner';
 
 interface ReviewConfigurationProps {
   cloudRouterName?: string;
@@ -82,6 +84,7 @@ export function ReviewConfiguration({
   onBillingChange = () => {},
   onEditStep,
 }: ReviewConfigurationProps) {
+  const navigate = useNavigate();
   const providers = config.providers || (config.provider ? [config.provider] : []);
   const resiliencyLabel = config.resiliencyLevel === 'maximum' ? 'Maximum Resiliency' : 'Local Resiliency';
 
@@ -91,7 +94,34 @@ export function ReviewConfiguration({
 
   return (
     <div className="space-y-6">
-      <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">Review Your Configuration</h3>
+      {/* Success Header */}
+      <div className="bg-fw-base rounded-xl p-6 border border-fw-secondary text-center">
+        <div className="flex justify-center mb-4">
+          <div className="w-14 h-14 rounded-full bg-fw-link flex items-center justify-center">
+            <CheckCircle2 className="w-8 h-8 text-white" />
+          </div>
+        </div>
+        <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mb-2">Network Configuration Complete</h3>
+        <p className="text-figma-base text-fw-bodyLight">
+          Your cloud router <span className="font-semibold text-fw-link">{cloudRouterName || 'Unnamed'}</span> is configured and ready for deployment.
+        </p>
+        <div className="flex items-center justify-center gap-6 mt-4">
+          <div className="flex items-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-fw-link" />
+            <span className="text-figma-sm text-fw-body">{providers.length} Provider{providers.length !== 1 ? 's' : ''}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-fw-link" />
+            <span className="text-figma-sm text-fw-body">{totalLocations} Connection{totalLocations !== 1 ? 's' : ''}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-fw-link" />
+            <span className="text-figma-sm text-fw-body">
+              {totalBandwidth >= 1000 ? `${(totalBandwidth / 1000).toFixed(1)} Gbps` : `${totalBandwidth} Mbps`} Total
+            </span>
+          </div>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
@@ -218,9 +248,43 @@ export function ReviewConfiguration({
           )}
         </div>
 
-        {/* Billing Preview */}
+        {/* Right Column: Topology + Billing */}
         <div className="lg:col-span-1">
-          <div className="sticky top-4">
+          <div className="sticky top-4 space-y-6">
+            {/* Mini Topology Preview */}
+            <div className="bg-fw-base rounded-xl p-5 border border-fw-secondary">
+              <h4 className="text-figma-sm font-semibold text-fw-heading mb-4">Network Topology</h4>
+              <svg viewBox="0 0 280 200" className="w-full" style={{ minHeight: 160 }}>
+                {/* AT&T Core */}
+                <rect x="10" y="80" width="60" height="40" rx="8" fill="var(--color-gray-100, #f0f2f5)" stroke="var(--color-purple-600, #7c3aed)" strokeWidth="1.5" />
+                <text x="40" y="104" textAnchor="middle" className="text-[8px] font-semibold" fill="var(--color-purple-600, #7c3aed)">AT&T Core</text>
+
+                {/* Cloud Router */}
+                <rect x="100" y="75" width="70" height="50" rx="10" fill="var(--color-magenta-50, #fdf2f8)" stroke="var(--color-magenta-600, #db2777)" strokeWidth="1.5" />
+                <text x="135" y="97" textAnchor="middle" className="text-[7px] font-semibold" fill="var(--color-magenta-600, #db2777)">{(cloudRouterName || 'Cloud Router').substring(0, 14)}</text>
+                <text x="135" y="113" textAnchor="middle" className="text-[6px]" fill="var(--color-gray-500, #878c94)">Cloud Router</text>
+
+                {/* Connection: Core to Router */}
+                <line x1="70" y1="100" x2="100" y2="100" stroke="var(--color-purple-400, #a78bfa)" strokeWidth="1.5" strokeDasharray="4 2" />
+
+                {/* Provider Nodes */}
+                {providers.map((provider, i) => {
+                  const total = Math.max(providers.length, 1);
+                  const yStart = 200 / (total + 1);
+                  const y = yStart * (i + 1);
+                  const locs = selectedLocations[provider] || [];
+                  return (
+                    <g key={provider}>
+                      <line x1="170" y1="100" x2="210" y2={y} stroke="var(--color-cobalt-300, #93c5fd)" strokeWidth="1" />
+                      <rect x="210" y={y - 15} width="60" height="30" rx="6" fill="var(--color-cobalt-50, #eff6ff)" stroke="var(--color-cobalt-400, #60a5fa)" strokeWidth="1" />
+                      <text x="240" y={y - 1} textAnchor="middle" className="text-[7px] font-semibold" fill="var(--color-cobalt-700, #1d4ed8)">{provider.length > 8 ? provider.substring(0, 8) : provider}</text>
+                      <text x="240" y={y + 9} textAnchor="middle" className="text-[6px]" fill="var(--color-gray-500, #878c94)">{locs.length} loc{locs.length !== 1 ? 's' : ''}</text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+
             <BillingPreview
               provider={config.provider}
               type={config.type as any}
@@ -232,6 +296,33 @@ export function ReviewConfiguration({
             />
           </div>
         </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center justify-center gap-4 pt-2">
+        <button
+          onClick={() => {
+            const { nodes, edges } = wizardToDesigner({
+              cloudRouterName,
+              providers,
+              selectedLocations,
+              bandwidthSettings,
+              connectionType: config.type,
+              resiliencyLevel: config.resiliencyLevel,
+            });
+            navigate('/create', {
+              state: {
+                mode: 'visual',
+                initialNodes: nodes,
+                initialEdges: edges,
+              },
+            });
+          }}
+          className="inline-flex items-center gap-2 px-6 h-10 border border-fw-secondary rounded-full text-figma-base font-medium text-fw-body hover:bg-fw-wash transition-colors"
+        >
+          <Settings className="h-4 w-4" />
+          Edit in Network Designer
+        </button>
       </div>
 
       <div className="bg-fw-accent border border-fw-active rounded-xl p-4">
