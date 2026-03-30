@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { Search, Filter, Download, Plus, MoreVertical, Edit2, Trash2, ExternalLink } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Plus, Edit2, Trash2, ExternalLink } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { DataTable } from '../../common/DataTable';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 
 interface Partner {
   id: string;
@@ -12,11 +13,27 @@ interface Partner {
   meetMeLink: string;
 }
 
+const FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'region',
+    label: 'Region',
+    type: 'checkbox',
+    options: [
+      { value: 'North America', label: 'North America' },
+      { value: 'Europe', label: 'Europe' },
+      { value: 'Asia Pacific', label: 'Asia Pacific' },
+    ],
+  },
+];
+
 export function PartnersConfiguration() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
   const [sortField, setSortField] = useState('companyName');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({
+    groups: FILTER_GROUPS,
+  });
 
   const handleSort = (field: string) => {
     if (sortField === field) {
@@ -26,8 +43,6 @@ export function PartnersConfiguration() {
       setSortDirection('asc');
     }
   };
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
-  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
 
   // Sample data
   const [partners] = useState<Partner[]>([
@@ -53,6 +68,20 @@ export function PartnersConfiguration() {
       meetMeLink: 'https://meet.att.com/apn'
     }
   ]);
+
+  const filteredPartners = useMemo(() => {
+    const regionFilters = filters.region || [];
+    return partners.filter(p => {
+      if (regionFilters.length > 0 && !regionFilters.includes(p.region)) return false;
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        return p.companyName.toLowerCase().includes(q) ||
+          p.region.toLowerCase().includes(q) ||
+          p.countryName.toLowerCase().includes(q);
+      }
+      return true;
+    });
+  }, [partners, searchQuery, filters]);
 
   const columns = [
     {
@@ -158,7 +187,20 @@ export function PartnersConfiguration() {
             searchPlaceholder="Search partners ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            onFilter={() => setShowFilters(!showFilters)}
+            onFilter={toggle}
+            activeFilterCount={activeCount}
+            isFilterOpen={isOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={FILTER_GROUPS}
+                activeFilters={filters}
+                onFiltersChange={setFilters}
+                isOpen={isOpen}
+                onToggle={toggle}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={handleExport}
           />
         }
@@ -166,7 +208,7 @@ export function PartnersConfiguration() {
         sortDirection={sortDirection}
         onSort={handleSort}
         columns={columns}
-        data={partners}
+        data={filteredPartners}
         keyField="id"
         actions={(partner) => [
           {

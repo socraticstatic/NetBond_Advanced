@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
-import { Filter, X, Activity, Shield, Settings, Globe, Calendar, Clock, Eye, Copy, Download, ChevronUp, ChevronDown } from 'lucide-react';
-import { Button } from '../../common/Button';
+import { Activity, Shield, Settings, Globe, Calendar, Eye, Copy, Download, ChevronUp, ChevronDown } from 'lucide-react';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { ColumnVisibilityPopover, ColumnDefinition } from '../../common/ColumnVisibilityPopover';
 import { useColumnVisibility } from '../../../hooks/useColumnVisibility';
@@ -24,15 +24,54 @@ const ALL_COLUMNS: ColumnDefinition[] = [
 
 const SORTABLE_COLUMNS = ['time', 'type', 'severity', 'source', 'user'];
 
+const FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'type',
+    label: 'Log Types',
+    type: 'checkbox',
+    options: [
+      { value: 'system', label: 'System' },
+      { value: 'security', label: 'Security' },
+      { value: 'user', label: 'User' },
+      { value: 'performance', label: 'Performance' },
+    ],
+  },
+  {
+    id: 'severity',
+    label: 'Severity',
+    type: 'checkbox',
+    options: [
+      { value: 'info', label: 'Info', color: 'info' },
+      { value: 'warning', label: 'Warning', color: 'warning' },
+      { value: 'error', label: 'Error', color: 'error' },
+    ],
+  },
+  {
+    id: 'timeRange',
+    label: 'Time Range',
+    type: 'select',
+    options: [
+      { value: '1h', label: 'Last Hour' },
+      { value: '6h', label: 'Last 6 Hours' },
+      { value: '24h', label: 'Last 24 Hours' },
+      { value: '7d', label: 'Last 7 Days' },
+      { value: '30d', label: 'Last 30 Days' },
+    ],
+  },
+];
+
 function LogsContent({ selectedConnection, connections }: LogsContentProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedSeverities, setSelectedSeverities] = useState<string[]>([]);
   const [sortField, setSortField] = useState('time');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showColumnPopover, setShowColumnPopover] = useState(false);
   const columnButtonRef = useRef<HTMLButtonElement>(null);
   const { isVisible, visibleColumns } = useColumnVisibility(TABLE_ID);
+
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({
+    groups: FILTER_GROUPS,
+    initialFilters: { timeRange: ['24h'] },
+  });
 
   const handleSort = (field: string) => {
     if (sortField === field) {
@@ -46,8 +85,6 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
   const displayColumns = visibleColumns.length === 0
     ? ALL_COLUMNS
     : ALL_COLUMNS.filter(col => isVisible(col.id));
-  const [timeRange, setTimeRange] = useState('24h');
-  const [showFilters, setShowFilters] = useState(false);
 
   // Sample log data
   const logs = [
@@ -111,22 +148,20 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
 
   // Filter logs based on search and filters
   const filteredLogs = logs.filter(log => {
-    // Filter by connection
     if (selectedConnection !== 'all' && log.connectionId !== selectedConnection) {
       return false;
     }
 
-    // Filter by type
-    if (selectedTypes.length > 0 && !selectedTypes.includes(log.type)) {
+    const typeFilters = filters.type || [];
+    if (typeFilters.length > 0 && !typeFilters.includes(log.type)) {
       return false;
     }
 
-    // Filter by severity
-    if (selectedSeverities.length > 0 && !selectedSeverities.includes(log.severity)) {
+    const severityFilters = filters.severity || [];
+    if (severityFilters.length > 0 && !severityFilters.includes(log.severity)) {
       return false;
     }
 
-    // Search filter
     if (searchQuery) {
       const searchTerms = searchQuery.toLowerCase().split(' ');
       const searchableText = [
@@ -217,162 +252,6 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
 
   return (
     <div>
-
-      {/* Filters Panel */}
-      {showFilters && (
-        <div className="p-4 bg-fw-wash border-b border-fw-secondary overflow-x-auto">
-          <div className="min-w-[1000px]">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div>
-              <h3 className="text-figma-base font-medium text-fw-body mb-2">Log Types</h3>
-              <div className="space-y-2">
-                {['system', 'security', 'user', 'performance'].map(type => (
-                  <label key={type} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={selectedTypes.includes(type)}
-                      onChange={() => {
-                        if (selectedTypes.includes(type)) {
-                          setSelectedTypes(selectedTypes.filter(t => t !== type));
-                        } else {
-                          setSelectedTypes([...selectedTypes, type]);
-                        }
-                      }}
-                      className="rounded border-fw-secondary text-brand-blue focus:ring-brand-blue"
-                    />
-                    <span className="ml-2 text-figma-base text-fw-bodyLight capitalize">{type}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-figma-base font-medium text-fw-body mb-2">Severity</h3>
-              <div className="space-y-2">
-                {['info', 'warning', 'error'].map(severity => (
-                  <label key={severity} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={selectedSeverities.includes(severity)}
-                      onChange={() => {
-                        if (selectedSeverities.includes(severity)) {
-                          setSelectedSeverities(selectedSeverities.filter(s => s !== severity));
-                        } else {
-                          setSelectedSeverities([...selectedSeverities, severity]);
-                        }
-                      }}
-                      className="rounded border-fw-secondary text-brand-blue focus:ring-brand-blue"
-                    />
-                    <span className="ml-2 text-figma-base text-fw-bodyLight capitalize">{severity}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-figma-base font-medium text-fw-body mb-2">Time Range</h3>
-              <select
-                value={timeRange}
-                onChange={(e) => setTimeRange(e.target.value)}
-                className="w-full rounded-lg border-fw-secondary shadow-sm focus:border-brand-blue focus:ring-brand-blue"
-              >
-                <option value="1h">Last Hour</option>
-                <option value="6h">Last 6 Hours</option>
-                <option value="24h">Last 24 Hours</option>
-                <option value="7d">Last 7 Days</option>
-                <option value="30d">Last 30 Days</option>
-              </select>
-            </div>
-
-            <div>
-              <h3 className="text-figma-base font-medium text-fw-body mb-2">Actions</h3>
-              <div className="space-y-2">
-                <button
-                  onClick={() => {
-                    setSelectedTypes([]);
-                    setSelectedSeverities([]);
-                    setTimeRange('24h');
-                  }}
-                  className="w-full py-2 text-figma-base text-fw-bodyLight hover:text-fw-body"
-                >
-                  Reset Filters
-                </button>
-                <button
-                  onClick={() => {
-                    // Apply custom filter preset
-                  }}
-                  className="w-full py-2 text-figma-base text-brand-blue hover:text-brand-darkBlue"
-                >
-                  Save as Preset
-                </button>
-              </div>
-            </div>
-          </div>
-          </div>
-        </div>
-      )}
-
-      {/* Active Filters */}
-      {(selectedTypes.length > 0 || selectedSeverities.length > 0 || searchQuery) && (
-        <div className="p-3 border-b border-fw-secondary bg-fw-wash overflow-x-auto">
-          <div className="flex flex-wrap gap-2 min-w-[1000px]">
-          {selectedTypes.map(type => (
-            <span
-              key={type}
-              className="inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium bg-brand-lightBlue text-brand-blue"
-            >
-              Type: {type}
-              <button
-                onClick={() => setSelectedTypes(selectedTypes.filter(t => t !== type))}
-                className="ml-1 hover:text-brand-darkBlue"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </span>
-          ))}
-          {selectedSeverities.map(severity => (
-            <span
-              key={severity}
-              className={`inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium ${
-                severity === 'error' ? 'bg-fw-errorLight text-fw-error' :
-                severity === 'warning' ? 'bg-fw-warnLight text-fw-warn' :
-                'bg-fw-accent text-fw-link'
-              }`}
-            >
-              Severity: {severity}
-              <button
-                onClick={() => setSelectedSeverities(selectedSeverities.filter(s => s !== severity))}
-                className="ml-1 hover:opacity-75"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </span>
-          ))}
-          {searchQuery && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-figma-sm font-medium bg-fw-neutral text-fw-body">
-              Search: "{searchQuery}"
-              <button
-                onClick={() => setSearchQuery('')}
-                className="ml-1 hover:text-fw-heading"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </span>
-          )}
-          <button
-            onClick={() => {
-              setSelectedTypes([]);
-              setSelectedSeverities([]);
-              setSearchQuery('');
-            }}
-            className="text-figma-sm text-fw-bodyLight hover:text-fw-body ml-2"
-          >
-            Clear all
-          </button>
-          </div>
-        </div>
-      )}
-
       {/* Logs Table */}
       <div className="border border-fw-secondary rounded-lg overflow-hidden">
         {/* Search/Filter bar inside table border */}
@@ -381,7 +260,20 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
             searchPlaceholder="Search logs..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            onFilter={() => setShowFilters(!showFilters)}
+            onFilter={toggle}
+            activeFilterCount={activeCount}
+            isFilterOpen={isOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={FILTER_GROUPS}
+                activeFilters={filters}
+                onFiltersChange={setFilters}
+                isOpen={isOpen}
+                onToggle={toggle}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={() => {
               window.addToast({
                 type: 'success',

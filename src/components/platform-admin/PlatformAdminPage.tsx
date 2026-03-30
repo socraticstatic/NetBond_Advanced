@@ -1,17 +1,42 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter, Download, Plus, Eye, Edit2, AlertCircle, CheckCircle, Clock } from 'lucide-react';
+import { Plus, Eye, Edit2, AlertCircle, CheckCircle, Clock, Download } from 'lucide-react';
 import { Button } from '../common/Button';
+import { SearchFilterBar } from '../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../common/TableFilterPanel';
 import { BaseTable } from '../common/BaseTable';
 import { OverflowMenu } from '../common/OverflowMenu';
 import { mockTenants, Tenant } from '../../data/mockTenants';
 
+const FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'checkbox',
+    options: [
+      { value: 'active', label: 'Active', color: 'success' },
+      { value: 'trial', label: 'Trial', color: 'info' },
+      { value: 'suspended', label: 'Suspended', color: 'warning' },
+      { value: 'archived', label: 'Archived', color: 'default' },
+    ],
+  },
+  {
+    id: 'plan',
+    label: 'Plan',
+    type: 'checkbox',
+    options: [
+      { value: 'starter', label: 'Starter' },
+      { value: 'professional', label: 'Professional' },
+      { value: 'enterprise', label: 'Enterprise' },
+    ],
+  },
+];
+
 export function PlatformAdminPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-  const [selectedPlans, setSelectedPlans] = useState<string[]>([]);
+
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({ groups: FILTER_GROUPS });
 
   const getStatusBadge = (status: Tenant['status']) => {
     const config = {
@@ -115,11 +140,11 @@ export function PlatformAdminPage() {
       tenant.subdomain.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tenant.adminName.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus =
-      selectedStatuses.length === 0 || selectedStatuses.includes(tenant.status);
+    const statusFilters = filters['status'] || [];
+    const matchesStatus = statusFilters.length === 0 || statusFilters.includes(tenant.status);
 
-    const matchesPlan =
-      selectedPlans.length === 0 || selectedPlans.includes(tenant.plan);
+    const planFilters = filters['plan'] || [];
+    const matchesPlan = planFilters.length === 0 || planFilters.includes(tenant.plan);
 
     return matchesSearch && matchesStatus && matchesPlan;
   });
@@ -203,91 +228,31 @@ export function PlatformAdminPage() {
 
       {/* Search and Controls */}
       <div className="bg-fw-base p-4 rounded-2xl border border-fw-secondary">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search tenants..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg text-figma-base font-medium text-fw-heading tracking-[-0.03em] placeholder:text-fw-bodyLight focus:ring-2 focus:ring-fw-active focus:border-fw-active"
-            />
-          </div>
-          <div className="flex items-center space-x-4">
+        <SearchFilterBar
+          searchPlaceholder="Search tenants..."
+          searchValue={searchQuery}
+          onSearchChange={setSearchQuery}
+          onFilter={toggle}
+          activeFilterCount={activeCount}
+          isFilterOpen={isOpen}
+          onExport={handleExport}
+          actions={
             <Button variant="primary" icon={Plus} onClick={handleCreateTenant}>
               Create Tenant
             </Button>
-            <Button
-              variant="outline"
-              icon={Filter}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              Filters
-            </Button>
-            <Button variant="outline" icon={Download} onClick={handleExport}>
-              Export
-            </Button>
-          </div>
-        </div>
-
-        {showFilters && (
-          <div className="mt-4 pt-4 border-t border-fw-secondary">
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">Status</h4>
-                <div className="space-y-2">
-                  {['active', 'trial', 'suspended', 'archived'].map((status) => (
-                    <label key={status} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={selectedStatuses.includes(status)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedStatuses([...selectedStatuses, status]);
-                          } else {
-                            setSelectedStatuses(
-                              selectedStatuses.filter((s) => s !== status)
-                            );
-                          }
-                        }}
-                        className="h-4 w-4 text-fw-active rounded border-fw-secondary"
-                      />
-                      <span className="ml-2 text-figma-base font-medium text-fw-body capitalize">
-                        {status}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-figma-base font-medium text-fw-heading tracking-[-0.03em] mb-2">Plan</h4>
-                <div className="space-y-2">
-                  {['starter', 'professional', 'enterprise'].map((plan) => (
-                    <label key={plan} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={selectedPlans.includes(plan)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedPlans([...selectedPlans, plan]);
-                          } else {
-                            setSelectedPlans(selectedPlans.filter((p) => p !== plan));
-                          }
-                        }}
-                        className="h-4 w-4 text-fw-active rounded border-fw-secondary"
-                      />
-                      <span className="ml-2 text-figma-base font-medium text-fw-body capitalize">
-                        {plan}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+          }
+          filterPanel={
+            <TableFilterPanel
+              groups={FILTER_GROUPS}
+              activeFilters={filters}
+              onFiltersChange={setFilters}
+              isOpen={isOpen}
+              onToggle={toggle}
+              searchQuery={searchQuery}
+              onClearSearch={() => setSearchQuery('')}
+            />
+          }
+        />
       </div>
 
       {/* Tenants Table */}

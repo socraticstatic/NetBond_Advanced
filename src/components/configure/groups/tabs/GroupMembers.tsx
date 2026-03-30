@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { UserPlus, Trash2, ShieldCheck, Edit2, Search } from 'lucide-react';
 import { UserIcon } from '../../../common/UserIcon';
 import { Group } from '../../../../types/group';
@@ -6,9 +6,25 @@ import { User as UserType } from '../../../../types';
 import { BaseTable } from '../../../common/BaseTable';
 import { Button } from '../../../common/Button';
 import { SearchFilterBar } from '../../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../../common/TableFilterPanel';
 import { OverflowMenu } from '../../../common/OverflowMenu';
 import { ConfirmDialog } from '../../../common/ConfirmDialog';
 import { useStore } from '../../../../store/useStore';
+
+const MEMBER_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'role',
+    label: 'Role',
+    type: 'toggle',
+    options: [
+      { value: 'admin', label: 'Admin' },
+      { value: 'editor', label: 'Editor' },
+      { value: 'viewer', label: 'Viewer' },
+      { value: 'operator', label: 'Operator' },
+      { value: 'auditor', label: 'Auditor' },
+    ],
+  },
+];
 
 interface GroupMembersProps {
   group: Group;
@@ -22,6 +38,10 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [userToRemove, setUserToRemove] = useState<string | null>(null);
+
+  const { filters: memberFilters, setFilters: setMemberFilters, isOpen: memberFilterOpen, toggle: toggleMemberFilter, activeCount: memberFilterCount } = useTableFilters({
+    groups: MEMBER_FILTER_GROUPS,
+  });
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [sortField, setSortField] = useState<keyof UserType>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -35,17 +55,24 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
     }
   }, [sortField]);
 
-  const filteredUsers = users
-    .filter(user =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .sort((a, b) => {
-      const aVal = String(a[sortField]);
-      const bVal = String(b[sortField]);
-      return aVal.localeCompare(bVal) * (sortDirection === 'asc' ? 1 : -1);
-    });
+  const filteredUsers = useMemo(() => {
+    const roleFilters = memberFilters.role || [];
+    return users
+      .filter(user => {
+        if (roleFilters.length > 0 && !roleFilters.includes(user.role.toLowerCase())) return false;
+        if (!searchQuery) return true;
+        return (
+          user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.role.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      })
+      .sort((a, b) => {
+        const aVal = String(a[sortField]);
+        const bVal = String(b[sortField]);
+        return aVal.localeCompare(bVal) * (sortDirection === 'asc' ? 1 : -1);
+      });
+  }, [users, searchQuery, memberFilters, sortField, sortDirection]);
 
   const availableUsers = allUsers.filter(user => !group.userIds.includes(user.id));
 
@@ -138,6 +165,20 @@ export function GroupMembers({ group, users, allUsers }: GroupMembersProps) {
             searchPlaceholder="Search members..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
+            onFilter={toggleMemberFilter}
+            activeFilterCount={memberFilterCount}
+            isFilterOpen={memberFilterOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={MEMBER_FILTER_GROUPS}
+                activeFilters={memberFilters}
+                onFiltersChange={setMemberFilters}
+                isOpen={memberFilterOpen}
+                onToggle={toggleMemberFilter}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={() => {
               window.addToast({ type: 'success', title: 'Exported', message: 'Members exported', duration: 3000 });
             }}

@@ -1,11 +1,24 @@
 import { useState } from 'react';
-import { MoreVertical, Edit2, Trash2, Play, Pause, Search, Filter, Download, ChevronRight, Activity } from 'lucide-react';
+import { Edit2, Trash2, Play, Pause, Download, ChevronRight, Activity } from 'lucide-react';
 import { Connection } from '../../../types';
 import { BaseTable } from '../../common/BaseTable';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { Button } from '../../common/Button';
-import { FilterButton } from '../../common/FilterButton';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { useStore } from '../../../store/useStore';
+
+const FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'toggle',
+    options: [
+      { value: 'Active', label: 'Active', color: 'success' },
+      { value: 'Inactive', label: 'Inactive', color: 'default' },
+    ],
+  },
+];
 
 interface ConnectionListProps {
   searchQuery: string;
@@ -30,10 +43,18 @@ export function ConnectionList({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery || '');
 
-  const filteredConnections = connections.filter(conn =>
-    (conn.name ?? '').toLowerCase().includes((localSearchQuery || '').toLowerCase()) ||
-    (conn.type ?? '').toLowerCase().includes((localSearchQuery || '').toLowerCase())
-  );
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({ groups: FILTER_GROUPS });
+
+  const filteredConnections = connections.filter(conn => {
+    const matchesSearch =
+      (conn.name ?? '').toLowerCase().includes((localSearchQuery || '').toLowerCase()) ||
+      (conn.type ?? '').toLowerCase().includes((localSearchQuery || '').toLowerCase());
+
+    const statusFilters = filters['status'] || [];
+    const matchesStatus = statusFilters.length === 0 || statusFilters.includes(conn.status);
+
+    return matchesSearch && matchesStatus;
+  });
 
   const handleStartEdit = (connection: Connection) => {
     setEditingId(connection.id.toString());
@@ -71,7 +92,7 @@ export function ConnectionList({
   const handleToggleStatus = (connection: Connection) => {
     const newStatus = connection.status === 'Active' ? 'Inactive' : 'Active';
     updateConnection(connection.id.toString(), { status: newStatus });
-    
+
     window.addToast({
       type: 'success',
       title: 'Status Updated',
@@ -83,7 +104,7 @@ export function ConnectionList({
   const handleDelete = (id: string) => {
     removeConnection(id);
     setShowDeleteConfirm(null);
-    
+
     window.addToast({
       type: 'success',
       title: 'Connection Deleted',
@@ -202,44 +223,33 @@ export function ConnectionList({
 
       {/* Search and Controls */}
       <div className="bg-fw-base p-4 rounded-lg border border-fw-secondary mb-6">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search connections..."
-              value={localSearchQuery}
-              onChange={(e) => setLocalSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg text-figma-base font-medium tracking-[-0.03em] text-fw-heading placeholder:text-fw-bodyLight focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+        <SearchFilterBar
+          searchPlaceholder="Search connections..."
+          searchValue={localSearchQuery}
+          onSearchChange={setLocalSearchQuery}
+          onFilter={toggle}
+          activeFilterCount={activeCount}
+          isFilterOpen={isOpen}
+          onExport={() => {
+            window.addToast({
+              type: 'success',
+              title: 'Export Complete',
+              message: 'Connections exported successfully',
+              duration: 3000
+            });
+          }}
+          filterPanel={
+            <TableFilterPanel
+              groups={FILTER_GROUPS}
+              activeFilters={filters}
+              onFiltersChange={setFilters}
+              isOpen={isOpen}
+              onToggle={toggle}
+              searchQuery={localSearchQuery}
+              onClearSearch={() => setLocalSearchQuery('')}
             />
-          </div>
-          <div className="flex items-center space-x-4">
-            <FilterButton
-              onClick={() => {
-                window.addToast({
-                  type: 'info',
-                  title: 'Filters',
-                  message: 'Filter options coming soon',
-                  duration: 3000
-                });
-              }}
-            />
-            <Button
-              variant="outline"
-              icon={Download}
-              onClick={() => {
-                window.addToast({
-                  type: 'success',
-                  title: 'Export Complete',
-                  message: 'Connections exported successfully',
-                  duration: 3000
-                });
-              }}
-            >
-              Export
-            </Button>
-          </div>
-        </div>
+          }
+        />
       </div>
 
       <div className="overflow-x-auto">

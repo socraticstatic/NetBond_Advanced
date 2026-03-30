@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { MoreVertical, UserPlus, Search, Filter, Download, Shield, Eye, Lock, Globe } from 'lucide-react';
 import { UserIcon } from '../../common/UserIcon';
 import { ConnectionAccessDrawer } from './ConnectionAccessDrawer';
@@ -7,12 +7,37 @@ import { UserType } from '../types';
 import { BaseTable } from '../../common/BaseTable';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { useStore } from '../../../store/useStore';
 import { Button } from '../../common/Button';
 import { PermissionBadge } from '../../common/PermissionBadge';
 import { ScopeBadge } from '../../common/ScopeBadge';
 import { permissionChecker } from '../../../utils/permissionChecker';
 import { Role, ROLE_PERMISSIONS, PERMISSION_LABELS } from '../../../types/permissions';
+
+const USER_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'role',
+    label: 'Role',
+    type: 'checkbox',
+    options: [
+      { value: 'admin', label: 'Admin' },
+      { value: 'editor', label: 'Editor' },
+      { value: 'viewer', label: 'Viewer' },
+      { value: 'operator', label: 'Operator' },
+      { value: 'auditor', label: 'Auditor' },
+    ],
+  },
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'toggle',
+    options: [
+      { value: 'active', label: 'Active', color: 'success' },
+      { value: 'inactive', label: 'Inactive', color: 'warning' },
+    ],
+  },
+];
 
 interface UserListProps {
   searchQuery: string;
@@ -26,20 +51,38 @@ export function UserList({ searchQuery }: UserListProps) {
   const [showAddModal, setShowAddModal] = useState(false);
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery || '');
 
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({
+    groups: USER_FILTER_GROUPS,
+  });
+
   // Check if current user can manage users
   const canManageUsers = permissionChecker.hasPermission(currentRole, {
     permission: 'manage_users',
     resource: 'user'
   });
 
-  const filteredUsers = users.filter(user => {
-    const query = (localSearchQuery || '').toLowerCase();
-    const userName = (user.name || '').toLowerCase();
-    const userEmail = (user.email || '').toLowerCase();
-    const userRole = (user.role || '').toLowerCase();
+  const filteredUsers = useMemo(() => {
+    const roleFilters = filters.role || [];
+    const statusFilters = filters.status || [];
 
-    return userName.includes(query) || userEmail.includes(query) || userRole.includes(query);
-  });
+    return users.filter(user => {
+      const query = (localSearchQuery || '').toLowerCase();
+      const userName = (user.name || '').toLowerCase();
+      const userEmail = (user.email || '').toLowerCase();
+      const userRole = (user.role || '').toLowerCase();
+
+      const matchesSearch = userName.includes(query) || userEmail.includes(query) || userRole.includes(query);
+      if (!matchesSearch) return false;
+
+      if (roleFilters.length > 0 && !roleFilters.includes(userRole)) return false;
+      if (statusFilters.length > 0) {
+        const userStatus = (user as any).status || 'active';
+        if (!statusFilters.includes(userStatus)) return false;
+      }
+
+      return true;
+    });
+  }, [users, localSearchQuery, filters]);
 
   const handleUpdateAccess = (userId: string, connectionAccess: any[]) => {
     window.addToast({
@@ -287,14 +330,20 @@ export function UserList({ searchQuery }: UserListProps) {
               searchPlaceholder="Search by name, email, or role..."
               searchValue={localSearchQuery}
               onSearchChange={(value) => setLocalSearchQuery(value || '')}
-              onFilter={() => {
-                window.addToast({
-                  type: 'info',
-                  title: 'Filter Users',
-                  message: 'Advanced filtering coming soon',
-                  duration: 3000
-                });
-              }}
+              onFilter={toggle}
+              activeFilterCount={activeCount}
+              isFilterOpen={isOpen}
+              filterPanel={
+                <TableFilterPanel
+                  groups={USER_FILTER_GROUPS}
+                  activeFilters={filters}
+                  onFiltersChange={setFilters}
+                  isOpen={isOpen}
+                  onToggle={toggle}
+                  searchQuery={localSearchQuery}
+                  onClearSearch={() => setLocalSearchQuery('')}
+                />
+              }
               onExport={() => {
                 window.addToast({
                   type: 'success',
