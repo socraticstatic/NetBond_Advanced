@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef } from 'react';
-import { AlertTriangle, CheckCircle, Info, ChevronDown, ChevronUp, Settings, X, Eye, Copy, Download } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Info, ChevronDown, ChevronUp, Settings, Eye, Copy, Download } from 'lucide-react';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { ColumnVisibilityPopover, ColumnDefinition } from '../../common/ColumnVisibilityPopover';
 import { useColumnVisibility } from '../../../hooks/useColumnVisibility';
@@ -34,16 +35,42 @@ const ALL_COLUMNS: ColumnDefinition[] = [
 
 const SORTABLE_COLUMNS = ['logId', 'timestamp', 'type', 'category', 'source'];
 
+const FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'type',
+    label: 'Type',
+    type: 'toggle',
+    options: [
+      { value: 'error', label: 'Error', color: 'error' },
+      { value: 'warning', label: 'Warning', color: 'warning' },
+      { value: 'info', label: 'Info', color: 'info' },
+      { value: 'success', label: 'Success', color: 'success' },
+    ],
+  },
+  {
+    id: 'category',
+    label: 'Category',
+    type: 'toggle',
+    options: [
+      { value: 'system', label: 'System' },
+      { value: 'security', label: 'Security' },
+      { value: 'performance', label: 'Performance' },
+      { value: 'user', label: 'User' },
+    ],
+  },
+];
+
 export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [sortField, setSortField] = useState<keyof Log>('timestamp');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
-  const [showFilters, setShowFilters] = useState(false);
   const [showColumnPopover, setShowColumnPopover] = useState(false);
   const columnButtonRef = useRef<HTMLButtonElement>(null);
   const { isVisible, visibleColumns } = useColumnVisibility(TABLE_ID);
+
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({
+    groups: FILTER_GROUPS,
+  });
 
   const logs: Log[] = [
     {
@@ -112,23 +139,14 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
     }
   };
 
-  const handleTypeToggle = (type: string) => {
-    setSelectedTypes(prev =>
-      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
-    );
-  };
-
-  const handleCategoryToggle = (category: string) => {
-    setSelectedCategories(prev =>
-      prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
-    );
-  };
-
   const filteredLogs = useMemo(() => {
+    const typeFilters = filters.type || [];
+    const categoryFilters = filters.category || [];
+
     return logs
       .filter(log => {
-        if (selectedTypes.length > 0 && !selectedTypes.includes(log.type)) return false;
-        if (selectedCategories.length > 0 && !selectedCategories.includes(log.category)) return false;
+        if (typeFilters.length > 0 && !typeFilters.includes(log.type)) return false;
+        if (categoryFilters.length > 0 && !categoryFilters.includes(log.category)) return false;
         if (searchQuery.trim()) {
           const searchTerms = searchQuery.toLowerCase().split(' ');
           const searchableText = [
@@ -155,7 +173,7 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
         }
         return String(aValue).localeCompare(String(bValue)) * modifier;
       });
-  }, [searchQuery, selectedTypes, selectedCategories, sortField, sortDirection]);
+  }, [searchQuery, filters, sortField, sortDirection]);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -227,9 +245,6 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
     );
   }
 
-  const logTypes = ['error', 'warning', 'info', 'success'];
-  const categories = ['system', 'security', 'performance', 'user'];
-
   const displayColumns = visibleColumns.length === 0
     ? ALL_COLUMNS
     : ALL_COLUMNS.filter(col => isVisible(col.id));
@@ -273,13 +288,25 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
 
   return (
     <div className="rounded-lg border border-fw-secondary overflow-hidden">
-      {/* SearchFilterBar inside border */}
       <div className="px-6 py-4 border-b border-fw-secondary">
         <SearchFilterBar
           searchPlaceholder="Search logs..."
           searchValue={searchQuery}
           onSearchChange={setSearchQuery}
-          onFilter={() => setShowFilters(!showFilters)}
+          onFilter={toggle}
+          activeFilterCount={activeCount}
+          isFilterOpen={isOpen}
+          filterPanel={
+            <TableFilterPanel
+              groups={FILTER_GROUPS}
+              activeFilters={filters}
+              onFiltersChange={setFilters}
+              isOpen={isOpen}
+              onToggle={toggle}
+              searchQuery={searchQuery}
+              onClearSearch={() => setSearchQuery('')}
+            />
+          }
           onExport={() => {
             window.addToast?.({
               type: 'success',
@@ -289,66 +316,6 @@ export function ConnectionLogs({ connectionId }: ConnectionLogsProps) {
             });
           }}
         />
-        {showFilters && (
-          <div className="flex items-center gap-4 mt-4 pt-4 border-t border-fw-secondary">
-            <div>
-              <label className="fw-label">Type</label>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {logTypes.map(type => (
-                  <button
-                    key={type}
-                    onClick={() => handleTypeToggle(type)}
-                    className={`px-3 py-1 rounded-lg text-[12px] font-medium ${
-                      selectedTypes.includes(type) ? getTypeStyles(type) : 'bg-fw-wash text-fw-body hover:bg-fw-neutral'
-                    }`}
-                  >
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <label className="fw-label">Category</label>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {categories.map(category => (
-                  <button
-                    key={category}
-                    onClick={() => handleCategoryToggle(category)}
-                    className={`px-3 py-1 rounded-lg text-[12px] font-medium ${
-                      selectedCategories.includes(category) ? 'bg-fw-accent text-fw-link' : 'bg-fw-wash text-fw-body hover:bg-fw-neutral'
-                    }`}
-                  >
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-        {/* Active Filters */}
-        {(selectedTypes.length > 0 || selectedCategories.length > 0) && (
-          <div className="mt-3 flex items-center gap-2">
-            <span className="text-[12px] text-fw-bodyLight">Active:</span>
-            <div className="flex flex-wrap gap-1">
-              {selectedTypes.map(type => (
-                <span key={type} className={`inline-flex items-center px-2 py-0.5 rounded text-[12px] font-medium ${getTypeStyles(type)}`}>
-                  {type}
-                  <button onClick={() => handleTypeToggle(type)} className="ml-1.5 hover:opacity-75">
-                    <X className="h-3 w-3" />
-                  </button>
-                </span>
-              ))}
-              {selectedCategories.map(category => (
-                <span key={category} className="inline-flex items-center px-2 py-0.5 rounded text-[12px] font-medium bg-fw-accent text-fw-link">
-                  {category}
-                  <button onClick={() => handleCategoryToggle(category)} className="ml-1.5 hover:opacity-75">
-                    <X className="h-3 w-3" />
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       <table className="w-full table-fixed">

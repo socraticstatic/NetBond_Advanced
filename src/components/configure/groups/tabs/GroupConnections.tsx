@@ -1,12 +1,25 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { PlusCircle, X, Search, Eye, Trash2 } from 'lucide-react';
 import { Connection, Group } from '../../../../types';
 import { Button } from '../../../common/Button';
 import { useStore } from '../../../../store/useStore';
 import { BaseTable } from '../../../common/BaseTable';
 import { SearchFilterBar } from '../../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../../common/TableFilterPanel';
 import { OverflowMenu } from '../../../common/OverflowMenu';
 import { ConfirmDialog } from '../../../common/ConfirmDialog';
+
+const CONN_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'toggle',
+    options: [
+      { value: 'Active', label: 'Active', color: 'success' },
+      { value: 'Inactive', label: 'Inactive', color: 'warning' },
+    ],
+  },
+];
 
 interface GroupConnectionsProps {
   group: Group;
@@ -22,27 +35,35 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
   const [showAddModal, setShowAddModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showRemoveConfirm, setShowRemoveConfirm] = useState<string | null>(null);
-  const [filteredConnections, setFilteredConnections] = useState(connections);
   const [sortField, setSortField] = useState<keyof Connection>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const { filters: connFilters, setFilters: setConnFilters, isOpen: connFilterOpen, toggle: toggleConnFilter, activeCount: connFilterCount } = useTableFilters({
+    groups: CONN_FILTER_GROUPS,
+  });
 
   const availableConnections = allConnections.filter(
     conn => !group.connectionIds.includes(conn.id.toString())
   );
 
-  useEffect(() => {
-    const filtered = connections.filter(conn =>
-      conn.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conn.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conn.location.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    const sorted = [...filtered].sort((a, b) => {
-      const aVal = String(a[sortField]);
-      const bVal = String(b[sortField]);
-      return aVal.localeCompare(bVal) * (sortDirection === 'asc' ? 1 : -1);
-    });
-    setFilteredConnections(sorted);
-  }, [connections, searchQuery, sortField, sortDirection]);
+  const filteredConnections = useMemo(() => {
+    const statusFilters = connFilters.status || [];
+    return connections
+      .filter(conn => {
+        if (statusFilters.length > 0 && !statusFilters.includes(conn.status)) return false;
+        if (!searchQuery) return true;
+        return (
+          conn.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          conn.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          conn.location.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      })
+      .sort((a, b) => {
+        const aVal = String(a[sortField]);
+        const bVal = String(b[sortField]);
+        return aVal.localeCompare(bVal) * (sortDirection === 'asc' ? 1 : -1);
+      });
+  }, [connections, searchQuery, connFilters, sortField, sortDirection]);
 
   const handleSort = useCallback((field: keyof Connection) => {
     if (sortField === field) {
@@ -144,6 +165,20 @@ export function GroupConnections({ group, connections, allConnections }: GroupCo
             searchPlaceholder="Search connections..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
+            onFilter={toggleConnFilter}
+            activeFilterCount={connFilterCount}
+            isFilterOpen={connFilterOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={CONN_FILTER_GROUPS}
+                activeFilters={connFilters}
+                onFiltersChange={setConnFilters}
+                isOpen={connFilterOpen}
+                onToggle={toggleConnFilter}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={() => {
               const csv = [
                 ['Name', 'Type', 'Status', 'Bandwidth', 'Location'].join(','),

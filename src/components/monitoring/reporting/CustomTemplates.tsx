@@ -1,9 +1,25 @@
-import { useState } from 'react';
-import { FileText, Edit, Trash2, Copy, Download, Plus, Settings, Layout, Filter, Star, Clock, LayoutGrid, List, Search } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { FileText, Edit, Trash2, Copy, Download, Plus, Settings, Layout, Star, Clock, LayoutGrid, List } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { DataTable } from '../../common/DataTable';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { Modal } from '../../common/Modal';
+
+const TEMPLATE_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'type',
+    label: 'Type',
+    type: 'toggle',
+    options: [
+      { value: 'Performance', label: 'Performance', color: 'info' },
+      { value: 'Security', label: 'Security', color: 'error' },
+      { value: 'Usage', label: 'Usage', color: 'success' },
+      { value: 'Billing', label: 'Billing', color: 'warning' },
+      { value: 'Custom', label: 'Custom' },
+    ],
+  },
+];
 
 interface Template {
   id: string;
@@ -269,9 +285,12 @@ const initialTemplates: Template[] = [
 export function CustomTemplates() {
   const [templates, setTemplates] = useState(initialTemplates);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [selectedType, setSelectedType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+
+  const { filters: templateFilters, setFilters: setTemplateFilters, isOpen: templateFilterOpen, toggle: toggleTemplateFilter, activeCount: templateFilterCount } = useTableFilters({
+    groups: TEMPLATE_FILTER_GROUPS,
+  });
   const [sortField, setSortField] = useState('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
@@ -346,14 +365,15 @@ export function CustomTemplates() {
     });
   };
 
-  const filteredTemplates = templates.filter(template => {
-    const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         template.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = selectedType === 'all' || template.type === selectedType;
-    return matchesSearch && matchesType;
-  });
-
-  const types = ['all', 'Performance', 'Security', 'Usage', 'Billing', 'Custom'];
+  const filteredTemplates = useMemo(() => {
+    const typeFilters = templateFilters.type || [];
+    return templates.filter(template => {
+      if (typeFilters.length > 0 && !typeFilters.includes(template.type)) return false;
+      if (!searchQuery) return true;
+      return template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+             template.description.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  }, [templates, searchQuery, templateFilters]);
 
   return (
     <div className="space-y-6">
@@ -431,10 +451,20 @@ export function CustomTemplates() {
           searchPlaceholder="Search templates ..."
           searchValue={searchQuery}
           onSearchChange={setSearchQuery}
-          onFilter={() => {
-            const idx = types.indexOf(selectedType);
-            setSelectedType(types[(idx + 1) % types.length]);
-          }}
+          onFilter={toggleTemplateFilter}
+          activeFilterCount={templateFilterCount}
+          isFilterOpen={templateFilterOpen}
+          filterPanel={
+            <TableFilterPanel
+              groups={TEMPLATE_FILTER_GROUPS}
+              activeFilters={templateFilters}
+              onFiltersChange={setTemplateFilters}
+              isOpen={templateFilterOpen}
+              onToggle={toggleTemplateFilter}
+              searchQuery={searchQuery}
+              onClearSearch={() => setSearchQuery('')}
+            />
+          }
           onExport={() => {
             window.addToast?.({ type: 'success', title: 'Exported', message: 'Templates exported', duration: 3000 });
           }}
@@ -570,10 +600,20 @@ export function CustomTemplates() {
               searchPlaceholder="Search templates ..."
               searchValue={searchQuery}
               onSearchChange={setSearchQuery}
-              onFilter={() => {
-                const idx = types.indexOf(selectedType);
-                setSelectedType(types[(idx + 1) % types.length]);
-              }}
+              onFilter={toggleTemplateFilter}
+              activeFilterCount={templateFilterCount}
+              isFilterOpen={templateFilterOpen}
+              filterPanel={
+                <TableFilterPanel
+                  groups={TEMPLATE_FILTER_GROUPS}
+                  activeFilters={templateFilters}
+                  onFiltersChange={setTemplateFilters}
+                  isOpen={templateFilterOpen}
+                  onToggle={toggleTemplateFilter}
+                  searchQuery={searchQuery}
+                  onClearSearch={() => setSearchQuery('')}
+                />
+              }
               onExport={() => {
                 window.addToast?.({ type: 'success', title: 'Templates Exported', message: 'Template data exported successfully', duration: 3000 });
               }}

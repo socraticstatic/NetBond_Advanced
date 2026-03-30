@@ -3,23 +3,35 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, ChevronDown, Settings, Ticket, Eye, Edit, Trash2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { SearchFilterBar } from '../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../common/TableFilterPanel';
 import { OverflowMenu } from '../common/OverflowMenu';
 import { ColumnVisibilityPopover, ColumnDefinition } from '../common/ColumnVisibilityPopover';
 import { useColumnVisibility } from '../../hooks/useColumnVisibility';
 
-type TicketStatus = 'open' | 'in-progress' | 'pending' | 'closed';
 type TroubleType = 'info' | 'trouble' | 'configuration';
+type TicketStatus = 'open' | 'in-progress' | 'pending' | 'closed';
 
-interface TicketRow {
+interface Ticket {
   id: string;
   ticketNumber: string;
   description: string;
   troubleType: TroubleType;
   status: TicketStatus;
   connection: string;
-  vnf: string;
-  created: string;
+  asset: string;
 }
+
+const TROUBLE_TYPE_STYLES: Record<TroubleType, string> = {
+  'info': 'bg-fw-accent text-fw-link',
+  'trouble': 'bg-fw-error/10 text-fw-error',
+  'configuration': 'bg-fw-warn/10 text-fw-warn',
+};
+
+const TROUBLE_TYPE_LABELS: Record<TroubleType, string> = {
+  'info': 'Information',
+  'trouble': 'Trouble',
+  'configuration': 'Configuration',
+};
 
 const STATUS_STYLES: Record<TicketStatus, string> = {
   'open': 'bg-fw-active/10 text-fw-link',
@@ -35,58 +47,74 @@ const STATUS_LABELS: Record<TicketStatus, string> = {
   'closed': 'Closed',
 };
 
-const TROUBLE_TYPE_STYLES: Record<TroubleType, string> = {
-  'info': 'bg-fw-wash text-fw-bodyLight',
-  'trouble': 'bg-fw-error/10 text-fw-error',
-  'configuration': 'bg-fw-active/10 text-fw-link',
-};
-
-const TROUBLE_TYPE_LABELS: Record<TroubleType, string> = {
-  'info': 'Information',
-  'trouble': 'Trouble',
-  'configuration': 'Configuration',
-};
-
-const MOCK_TICKETS: TicketRow[] = [
-  { id: '1', ticketNumber: 'SDNTCK0006232', description: 'SYSLOG: tunnel-status-down', troubleType: 'trouble', status: 'open', connection: 'AWS Direct Connect - US East', vnf: 'PALO-MACD-TEST1', created: '2024-10-13' },
-  { id: '2', ticketNumber: 'SDNTCK0006233', description: 'Bandwidth upgrade request for ExpressRoute', troubleType: 'configuration', status: 'in-progress', connection: 'Azure ExpressRoute - West Europe', vnf: 'FGT-ALP-FW01', created: '2024-10-12' },
-  { id: '3', ticketNumber: 'SDNTCK0006234', description: 'Request BGP peering configuration details', troubleType: 'info', status: 'open', connection: 'Google Cloud Interconnect - US Central', vnf: 'RTR-GCP-01', created: '2024-10-12' },
-  { id: '4', ticketNumber: 'SDNTCK0006235', description: 'Firewall rule change for DMZ access', troubleType: 'configuration', status: 'pending', connection: 'AWS Direct Connect - US East', vnf: 'PALO-MACD-TEST1', created: '2024-10-11' },
-  { id: '5', ticketNumber: 'SDNTCK0006236', description: 'Intermittent packet loss on MPLS circuit', troubleType: 'trouble', status: 'open', connection: 'Oracle FastConnect - US Phoenix', vnf: '-', created: '2024-10-11' },
-  { id: '6', ticketNumber: 'SDNTCK0006237', description: 'LMCC site addition - Dallas metro', troubleType: 'configuration', status: 'in-progress', connection: 'Google Cloud Interconnect - US Central', vnf: 'LMCC-GCP-01', created: '2024-10-10' },
-  { id: '7', ticketNumber: 'SDNTCK0006238', description: 'Billing inquiry for Q3 usage', troubleType: 'info', status: 'closed', connection: '-', vnf: '-', created: '2024-10-09' },
-  { id: '8', ticketNumber: 'SDNTCK0006239', description: 'SD-WAN edge failover not triggering', troubleType: 'trouble', status: 'open', connection: 'AWS Direct Connect - US East', vnf: 'SDWAN-EDGE-01', created: '2024-10-08' },
-  { id: '9', ticketNumber: 'SDNTCK0006240', description: 'Add new VNF to existing connection', troubleType: 'configuration', status: 'closed', connection: 'Azure ExpressRoute - West Europe', vnf: '-', created: '2024-10-07' },
-  { id: '10', ticketNumber: 'SDNTCK0006241', description: 'Request SLA report for September', troubleType: 'info', status: 'pending', connection: '-', vnf: '-', created: '2024-10-06' },
+const MOCK_TICKETS: Ticket[] = [
+  { id: '1', ticketNumber: 'TKT-2024-001', description: 'Tunnel status down on AWS Direct Connect', troubleType: 'trouble', status: 'open', connection: 'AWS Direct Connect - US East', asset: 'PALO-FW-PROD-01' },
+  { id: '2', ticketNumber: 'TKT-2024-002', description: 'Request BGP peering configuration change', troubleType: 'configuration', status: 'in-progress', connection: 'Azure ExpressRoute - West', asset: 'CR-EAST-01' },
+  { id: '3', ticketNumber: 'TKT-2024-003', description: 'Bandwidth upgrade inquiry for Q2', troubleType: 'info', status: 'open', connection: 'Google Interconnect - Central', asset: '' },
+  { id: '4', ticketNumber: 'TKT-2024-004', description: 'High latency on Oracle FastConnect link', troubleType: 'trouble', status: 'pending', connection: 'Oracle FastConnect - Phoenix', asset: 'CR-WEST-02' },
+  { id: '5', ticketNumber: 'TKT-2024-005', description: 'Add VLAN tagging to production link', troubleType: 'configuration', status: 'closed', connection: 'AWS Direct Connect - US East', asset: 'VLAN-100' },
+  { id: '6', ticketNumber: 'TKT-2024-006', description: 'VNF firewall rule update request', troubleType: 'configuration', status: 'open', connection: 'Azure ExpressRoute - West', asset: 'PALO-FW-DEV-01' },
+  { id: '7', ticketNumber: 'TKT-2024-007', description: 'Connection failover test scheduling', troubleType: 'info', status: 'in-progress', connection: 'AWS Direct Connect - US East', asset: '' },
+  { id: '8', ticketNumber: 'TKT-2024-008', description: 'Packet loss detected on Cloud Router B', troubleType: 'trouble', status: 'open', connection: 'Google Interconnect - Central', asset: 'CR-CENTRAL-01' },
+  { id: '9', ticketNumber: 'TKT-2024-009', description: 'Decommission old SD-WAN VNF', troubleType: 'configuration', status: 'closed', connection: 'Oracle FastConnect - Phoenix', asset: 'SDWAN-BRANCH-01' },
+  { id: '10', ticketNumber: 'TKT-2024-010', description: 'SLA compliance report request', troubleType: 'info', status: 'pending', connection: 'AWS Direct Connect - US East', asset: '' },
 ];
 
 const PAGE_SIZE = 20;
 
+const FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'troubleType',
+    label: 'Trouble Type',
+    type: 'toggle',
+    options: [
+      { value: 'info', label: 'Information', color: 'info' },
+      { value: 'trouble', label: 'Trouble', color: 'error' },
+      { value: 'configuration', label: 'Configuration', color: 'warning' },
+    ],
+  },
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'toggle',
+    options: [
+      { value: 'open', label: 'Open', color: 'info' },
+      { value: 'in-progress', label: 'In Progress', color: 'warning' },
+      { value: 'pending', label: 'Pending' },
+      { value: 'closed', label: 'Closed', color: 'success' },
+    ],
+  },
+];
+
 export function TicketingIndex() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [troubleTypeFilter, setTroubleTypeFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortColumn, setSortColumn] = useState<string>('ticketNumber');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
-  const [showFilters, setShowFilters] = useState(false);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [showColumnPopover, setShowColumnPopover] = useState(false);
   const columnButtonRef = useRef<HTMLButtonElement>(null);
   const { isVisible, visibleColumns } = useColumnVisibility('tickets');
 
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({
+    groups: FILTER_GROUPS,
+  });
+
   const filteredTickets = useMemo(() => {
+    const troubleTypeFilters = filters.troubleType || [];
+    const statusFilters = filters.status || [];
+
     return MOCK_TICKETS.filter(ticket => {
       const matchesSearch = searchQuery === '' ||
         ticket.ticketNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
         ticket.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         ticket.connection.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ticket.vnf.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesStatus = statusFilter === 'all' || ticket.status === statusFilter;
-      const matchesTroubleType = troubleTypeFilter === 'all' || ticket.troubleType === troubleTypeFilter;
-      return matchesSearch && matchesStatus && matchesTroubleType;
+        ticket.asset.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesTroubleType = troubleTypeFilters.length === 0 || troubleTypeFilters.includes(ticket.troubleType);
+      const matchesStatus = statusFilters.length === 0 || statusFilters.includes(ticket.status);
+      return matchesSearch && matchesTroubleType && matchesStatus;
     });
-  }, [searchQuery, statusFilter, troubleTypeFilter]);
+  }, [searchQuery, filters]);
 
   const totalPages = Math.max(1, Math.ceil(filteredTickets.length / PAGE_SIZE));
   const paginatedTickets = filteredTickets.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -103,13 +131,12 @@ export function TicketingIndex() {
   };
 
   const allColumns: Array<{ key: string; label: string }> = [
-    { key: 'ticketNumber', label: 'Ticket Number' },
+    { key: 'ticketNumber', label: 'Ticket' },
     { key: 'description', label: 'Description' },
     { key: 'troubleType', label: 'Trouble Type' },
     { key: 'status', label: 'Status' },
     { key: 'connection', label: 'Connection' },
-    { key: 'vnf', label: 'VNF / Asset' },
-    { key: 'created', label: 'Created' },
+    { key: 'asset', label: 'Asset' },
   ];
 
   const columns = visibleColumns.length === 0
@@ -118,45 +145,30 @@ export function TicketingIndex() {
 
   const columnDefs: ColumnDefinition[] = allColumns.map(c => ({ id: c.key, label: c.label }));
 
-  const renderCell = (ticket: TicketRow, key: string) => {
-    switch (key) {
-      case 'ticketNumber':
-        return <span className="text-fw-link font-medium">{ticket.ticketNumber}</span>;
-      case 'description':
-        return <span className="text-fw-body">{ticket.description}</span>;
-      case 'troubleType':
-        return (
-          <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${TROUBLE_TYPE_STYLES[ticket.troubleType]}`}>
-            {TROUBLE_TYPE_LABELS[ticket.troubleType]}
-          </span>
-        );
-      case 'status':
-        return (
-          <span className={`inline-flex items-center px-2 py-0.5 rounded text-figma-sm font-medium ${STATUS_STYLES[ticket.status]}`}>
-            {STATUS_LABELS[ticket.status]}
-          </span>
-        );
-      case 'connection':
-        return <span className="text-fw-body truncate">{ticket.connection}</span>;
-      case 'vnf':
-        return <span className="text-fw-body font-mono text-figma-sm">{ticket.vnf}</span>;
-      case 'created':
-        return <span className="text-fw-bodyLight">{ticket.created}</span>;
-      default:
-        return null;
-    }
-  };
-
   return (
     <div className="space-y-6">
+      {/* Table */}
       <div className="rounded-lg border border-fw-secondary overflow-hidden">
-        {/* SearchFilterBar */}
+        {/* SearchFilterBar inside border */}
         <div className="px-6 py-4 border-b border-fw-secondary">
           <SearchFilterBar
-            searchPlaceholder="Search tickets..."
+            searchPlaceholder="Search tickets ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            onFilter={() => setShowFilters(!showFilters)}
+            onFilter={toggle}
+            activeFilterCount={activeCount}
+            isFilterOpen={isOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={FILTER_GROUPS}
+                activeFilters={filters}
+                onFiltersChange={(f) => { setFilters(f); setCurrentPage(1); }}
+                isOpen={isOpen}
+                onToggle={toggle}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={() => window.addToast?.({ type: 'success', title: 'Exported', message: 'Tickets exported', duration: 3000 })}
             actions={
               <Button variant="primary" icon={Plus} onClick={() => navigate('/tickets/create')}>
@@ -164,29 +176,6 @@ export function TicketingIndex() {
               </Button>
             }
           />
-          {showFilters && (
-            <div className="flex items-center gap-4 mt-4 pt-4 border-t border-fw-secondary">
-              <div>
-                <label className="fw-label">Status</label>
-                <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: '180px' }}>
-                  <option value="all">All statuses</option>
-                  <option value="open">Open</option>
-                  <option value="in-progress">In Progress</option>
-                  <option value="pending">Pending</option>
-                  <option value="closed">Closed</option>
-                </select>
-              </div>
-              <div>
-                <label className="fw-label">Trouble Type</label>
-                <select value={troubleTypeFilter} onChange={e => { setTroubleTypeFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: '200px' }}>
-                  <option value="all">All types</option>
-                  <option value="info">Information</option>
-                  <option value="trouble">Trouble</option>
-                  <option value="configuration">Configuration</option>
-                </select>
-              </div>
-            </div>
-          )}
         </div>
 
         <table className="w-full table-fixed">
@@ -198,7 +187,7 @@ export function TicketingIndex() {
               {columns.map(col => (
                 <th
                   key={col.key}
-                  className="px-6 h-12 text-left text-figma-sm font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis align-middle"
+                  className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis align-middle"
                 >
                   <button onClick={() => handleSort(col.key)} className="group inline-flex items-center space-x-1">
                     <span>{col.label}</span>
@@ -229,11 +218,28 @@ export function TicketingIndex() {
                 <td className="px-4 py-4 align-middle" onClick={e => e.stopPropagation()}>
                   <input type="checkbox" className="h-4 w-4 rounded border-fw-secondary" />
                 </td>
-                {columns.map(col => (
-                  <td key={col.key} className="px-6 py-4 text-figma-base whitespace-nowrap overflow-hidden text-ellipsis">
-                    {renderCell(ticket, col.key)}
-                  </td>
-                ))}
+                <td className="px-6 py-4 text-[14px] text-fw-link font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+                  {ticket.ticketNumber}
+                </td>
+                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
+                  {ticket.description}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] font-medium ${TROUBLE_TYPE_STYLES[ticket.troubleType]}`}>
+                    {TROUBLE_TYPE_LABELS[ticket.troubleType]}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] font-medium ${STATUS_STYLES[ticket.status]}`}>
+                    {STATUS_LABELS[ticket.status]}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
+                  {ticket.connection || '-'}
+                </td>
+                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
+                  {ticket.asset || '-'}
+                </td>
                 <td className="w-16 px-6 py-4" onClick={e => e.stopPropagation()}>
                   <div className="flex justify-end">
                     <OverflowMenu items={[
@@ -249,10 +255,10 @@ export function TicketingIndex() {
               <tr>
                 <td colSpan={columns.length + 2} className="px-6 py-16 text-center">
                   <Ticket className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
-                  <h3 className="text-figma-base font-bold text-fw-heading mb-2">No tickets found</h3>
-                  <p className="text-figma-sm text-fw-bodyLight max-w-md mx-auto mb-6">
-                    {searchQuery || statusFilter !== 'all' || troubleTypeFilter !== 'all'
-                      ? 'Try adjusting your search or filter criteria.'
+                  <h3 className="text-[16px] font-bold text-fw-heading mb-2">No tickets found</h3>
+                  <p className="text-[14px] text-fw-bodyLight max-w-md mx-auto mb-6">
+                    {searchQuery || activeCount > 0
+                      ? 'Try adjusting your search or filters.'
                       : 'No support tickets have been created yet.'}
                   </p>
                   <Button variant="primary" icon={Plus} onClick={() => navigate('/tickets/create')}>
@@ -266,14 +272,22 @@ export function TicketingIndex() {
 
         {/* Pagination */}
         <div className="flex items-center justify-between px-6 py-3 border-t border-fw-secondary">
-          <span className="text-figma-sm font-medium text-fw-bodyLight">
+          <span className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em]">
             {startItem} - {endItem} of {filteredTickets.length}
           </span>
           <div className="flex items-center gap-1">
-            <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1} className="p-1 rounded hover:bg-fw-wash disabled:opacity-30">
+            <button
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+              className="p-1 rounded hover:bg-fw-wash disabled:opacity-30"
+            >
               <ChevronsLeft className="h-5 w-5 text-fw-heading" />
             </button>
-            <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-1 rounded hover:bg-fw-wash disabled:opacity-30">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="p-1 rounded hover:bg-fw-wash disabled:opacity-30"
+            >
               <ChevronLeft className="h-5 w-5 text-fw-heading" />
             </button>
             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + 1).map(page => (
@@ -287,14 +301,22 @@ export function TicketingIndex() {
                 {page}
               </button>
             ))}
-            <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-1 rounded hover:bg-fw-wash disabled:opacity-30">
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="p-1 rounded hover:bg-fw-wash disabled:opacity-30"
+            >
               <ChevronRight className="h-5 w-5 text-fw-heading" />
             </button>
-            <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} className="p-1 rounded hover:bg-fw-wash disabled:opacity-30">
+            <button
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+              className="p-1 rounded hover:bg-fw-wash disabled:opacity-30"
+            >
               <ChevronsRight className="h-5 w-5 text-fw-heading" />
             </button>
             <div className="w-px h-5 bg-fw-secondary mx-1" />
-            <span className="text-figma-sm font-medium text-fw-heading">20</span>
+            <span className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">20</span>
             <ChevronDown className="h-4 w-4 text-fw-heading" />
           </div>
         </div>

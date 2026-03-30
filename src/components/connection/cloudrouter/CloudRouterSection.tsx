@@ -1,12 +1,27 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Plus } from 'lucide-react';
 import { AttIcon } from '../../icons/AttIcon';
 import { Button } from '../../common/Button';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { CloudRouterTable } from './CloudRouterTable';
 import { VNF } from '../../../types/vnf';
 import { Connection } from '../../../types';
+
+const CR_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'toggle',
+    options: [
+      { value: 'active', label: 'Active', color: 'success' },
+      { value: 'inactive', label: 'Inactive', color: 'warning' },
+      { value: 'provisioning', label: 'Provisioning', color: 'info' },
+      { value: 'error', label: 'Error', color: 'error' },
+    ],
+  },
+];
 
 interface CloudRouterSectionProps {
   cloudRouters: CloudRouter[];
@@ -27,7 +42,10 @@ export function CloudRouterSection({
   connection
 }: CloudRouterSectionProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
+
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({
+    groups: CR_FILTER_GROUPS,
+  });
 
   // Calculate bandwidth usage
   const calculateTotalUsedBandwidth = () => {
@@ -56,15 +74,19 @@ export function CloudRouterSection({
   const availableBandwidth = connectionBandwidthValue - totalUsedBandwidth;
 
   // Filter cloud routers
-  const filteredCloudRouters = cloudRouters.filter(router => {
-    if (!searchQuery) return true;
-    const searchLower = searchQuery.toLowerCase();
-    return (
-      router.name.toLowerCase().includes(searchLower) ||
-      router.description?.toLowerCase().includes(searchLower) ||
-      router.location?.toLowerCase().includes(searchLower)
-    );
-  });
+  const filteredCloudRouters = useMemo(() => {
+    const statusFilters = filters.status || [];
+    return cloudRouters.filter(router => {
+      if (statusFilters.length > 0 && !statusFilters.includes(router.status)) return false;
+      if (!searchQuery) return true;
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        router.name.toLowerCase().includes(searchLower) ||
+        router.description?.toLowerCase().includes(searchLower) ||
+        router.location?.toLowerCase().includes(searchLower)
+      );
+    });
+  }, [cloudRouters, searchQuery, filters]);
 
   return (
     <div className="space-y-6">
@@ -130,7 +152,20 @@ export function CloudRouterSection({
             searchPlaceholder="Search routers ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            onFilter={() => setShowFilters(!showFilters)}
+            onFilter={toggle}
+            activeFilterCount={activeCount}
+            isFilterOpen={isOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={CR_FILTER_GROUPS}
+                activeFilters={filters}
+                onFiltersChange={setFilters}
+                isOpen={isOpen}
+                onToggle={toggle}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={() => window.addToast?.({ type: 'success', title: 'Exported', message: 'Cloud routers exported', duration: 3000 })}
           />
         </div>
