@@ -1,10 +1,24 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Plus, Download, Edit, Trash2, Play, Eye, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { DataTable } from '../../common/DataTable';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { Badge, StatusBadge } from '../../common/Badge';
 import { Modal } from '../../common/Modal';
+
+const REPORT_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'toggle',
+    options: [
+      { value: 'generated', label: 'Generated', color: 'success' },
+      { value: 'scheduled', label: 'Scheduled', color: 'info' },
+      { value: 'draft', label: 'Draft', color: 'warning' },
+    ],
+  },
+];
 
 type ReportStatus = 'generated' | 'scheduled' | 'draft';
 type OutputFormat = 'PDF' | 'CSV' | 'Excel' | 'JSON';
@@ -289,6 +303,10 @@ export function CustomReports() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [searchQuery, setSearchQuery] = useState('');
 
+  const { filters: reportFilters, setFilters: setReportFilters, isOpen: reportFilterOpen, toggle: toggleReportFilter, activeCount: reportFilterCount } = useTableFilters({
+    groups: REPORT_FILTER_GROUPS,
+  });
+
   const handleSort = (field: keyof CustomReport) => {
     if (field === sortField) {
       setSortDirection(d => d === 'asc' ? 'desc' : 'asc');
@@ -298,12 +316,24 @@ export function CustomReports() {
     }
   };
 
-  const sortedReports = [...reports].sort((a, b) => {
-    const av = a[sortField] ?? '';
-    const bv = b[sortField] ?? '';
-    const cmp = String(av).localeCompare(String(bv));
-    return sortDirection === 'asc' ? cmp : -cmp;
-  });
+  const sortedReports = useMemo(() => {
+    const statusFilters = reportFilters.status || [];
+    return [...reports]
+      .filter(r => {
+        if (statusFilters.length > 0 && !statusFilters.includes(r.status)) return false;
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          return r.name.toLowerCase().includes(q) || r.description.toLowerCase().includes(q);
+        }
+        return true;
+      })
+      .sort((a, b) => {
+        const av = a[sortField] ?? '';
+        const bv = b[sortField] ?? '';
+        const cmp = String(av).localeCompare(String(bv));
+        return sortDirection === 'asc' ? cmp : -cmp;
+      });
+  }, [reports, reportFilters, searchQuery, sortField, sortDirection]);
 
   const handleCreate = (data: CreateReportFormData) => {
     const newReport: CustomReport = {
@@ -503,7 +533,20 @@ export function CustomReports() {
             searchPlaceholder="Search reports ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            onFilter={() => {}}
+            onFilter={toggleReportFilter}
+            activeFilterCount={reportFilterCount}
+            isFilterOpen={reportFilterOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={REPORT_FILTER_GROUPS}
+                activeFilters={reportFilters}
+                onFiltersChange={setReportFilters}
+                isOpen={reportFilterOpen}
+                onToggle={toggleReportFilter}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={() => {
               window.addToast?.({ type: 'success', title: 'Exported', message: 'Custom reports exported', duration: 3000 });
             }}

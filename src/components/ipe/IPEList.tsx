@@ -1,8 +1,39 @@
-import { useState } from 'react';
-import { Server, MapPin, Filter, Download, Plus, Search } from 'lucide-react';
-import { IPE, DataCenterProvider, IPERegion } from '../../types/ipe';
+import { useState, useMemo } from 'react';
+import { Server, MapPin, Download, Plus } from 'lucide-react';
+import { IPE } from '../../types/ipe';
 import { IPECard } from './IPECard';
 import { Button } from '../common/Button';
+import { SearchFilterBar } from '../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../common/TableFilterPanel';
+
+const FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'provider',
+    label: 'Data Center Provider',
+    type: 'select',
+    placeholder: 'All Providers',
+    options: [
+      { value: 'Equinix', label: 'Equinix' },
+      { value: 'Cisco Jasper', label: 'Cisco Jasper' },
+      { value: 'Databank', label: 'Databank' },
+      { value: 'CoreWeave', label: 'CoreWeave' },
+    ],
+  },
+  {
+    id: 'region',
+    label: 'Region',
+    type: 'select',
+    placeholder: 'All Regions',
+    options: [
+      { value: 'US East', label: 'US East' },
+      { value: 'US West', label: 'US West' },
+      { value: 'Europe', label: 'Europe' },
+      { value: 'Asia Pacific', label: 'Asia Pacific' },
+      { value: 'Latin America', label: 'Latin America' },
+      { value: 'Middle East', label: 'Middle East' },
+    ],
+  },
+];
 
 interface IPEListProps {
   ipes: IPE[];
@@ -12,19 +43,24 @@ interface IPEListProps {
 
 export function IPEList({ ipes, onIPEClick, onAddIPE }: IPEListProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedProvider, setSelectedProvider] = useState<DataCenterProvider | 'all'>('all');
-  const [selectedRegion, setSelectedRegion] = useState<IPERegion | 'all'>('all');
-  const [showFilters, setShowFilters] = useState(false);
 
-  const filteredIPEs = ipes.filter(ipe => {
-    const matchesSearch =
-      ipe.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ipe.location.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesProvider = selectedProvider === 'all' || ipe.dataCenterProvider === selectedProvider;
-    const matchesRegion = selectedRegion === 'all' || ipe.region === selectedRegion;
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({ groups: FILTER_GROUPS });
 
-    return matchesSearch && matchesProvider && matchesRegion;
-  });
+  const filteredIPEs = useMemo(() => {
+    return ipes.filter(ipe => {
+      const matchesSearch =
+        ipe.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ipe.location.toLowerCase().includes(searchQuery.toLowerCase());
+
+      const providerFilters = filters['provider'] || [];
+      const matchesProvider = providerFilters.length === 0 || providerFilters.includes(ipe.dataCenterProvider);
+
+      const regionFilters = filters['region'] || [];
+      const matchesRegion = regionFilters.length === 0 || regionFilters.includes(ipe.region);
+
+      return matchesSearch && matchesProvider && matchesRegion;
+    });
+  }, [ipes, searchQuery, filters]);
 
   const totalCapacity = ipes.reduce((sum, ipe) => {
     const capacity = parseFloat(ipe.installedCapacity.replace(/[^0-9.]/g, ''));
@@ -51,14 +87,6 @@ export function IPEList({ ipes, onIPEClick, onAddIPE }: IPEListProps) {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              icon={Filter}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              Filters
-            </Button>
             <Button
               variant="outline"
               size="sm"
@@ -106,55 +134,26 @@ export function IPEList({ ipes, onIPEClick, onAddIPE }: IPEListProps) {
           </div>
         </div>
 
-        <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-fw-bodyLight" />
-          <input
-            type="text"
-            placeholder="Search IPEs by name or location..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-fw-secondary rounded-full h-9 focus:ring-2 focus:ring-fw-active focus:border-transparent"
-          />
-        </div>
-
-        {showFilters && (
-          <div className="flex flex-wrap gap-3 mb-4 p-4 bg-fw-wash rounded-lg">
-            <div className="flex-1 min-w-[200px]">
-              <label className="block text-figma-base font-medium text-fw-body mb-1">
-                Data Center Provider
-              </label>
-              <select
-                value={selectedProvider}
-                onChange={(e) => setSelectedProvider(e.target.value as DataCenterProvider | 'all')}
-                className="w-full form-control"
-              >
-                <option value="all">All Providers</option>
-                <option value="Equinix">Equinix</option>
-                <option value="Cisco Jasper">Cisco Jasper</option>
-                <option value="Databank">Databank</option>
-                <option value="CoreWeave">CoreWeave</option>
-              </select>
-            </div>
-            <div className="flex-1 min-w-[200px]">
-              <label className="block text-figma-base font-medium text-fw-body mb-1">
-                Region
-              </label>
-              <select
-                value={selectedRegion}
-                onChange={(e) => setSelectedRegion(e.target.value as IPERegion | 'all')}
-                className="w-full form-control"
-              >
-                <option value="all">All Regions</option>
-                <option value="US East">US East</option>
-                <option value="US West">US West</option>
-                <option value="Europe">Europe</option>
-                <option value="Asia Pacific">Asia Pacific</option>
-                <option value="Latin America">Latin America</option>
-                <option value="Middle East">Middle East</option>
-              </select>
-            </div>
-          </div>
-        )}
+        <SearchFilterBar
+          searchPlaceholder="Search IPEs by name or location..."
+          searchValue={searchQuery}
+          onSearchChange={setSearchQuery}
+          onFilter={toggle}
+          activeFilterCount={activeCount}
+          isFilterOpen={isOpen}
+          showExport={false}
+          filterPanel={
+            <TableFilterPanel
+              groups={FILTER_GROUPS}
+              activeFilters={filters}
+              onFiltersChange={setFilters}
+              isOpen={isOpen}
+              onToggle={toggle}
+              searchQuery={searchQuery}
+              onClearSearch={() => setSearchQuery('')}
+            />
+          }
+        />
       </div>
 
       {filteredIPEs.length > 0 ? (
@@ -172,7 +171,7 @@ export function IPEList({ ipes, onIPEClick, onAddIPE }: IPEListProps) {
           <MapPin className="h-12 w-12 mx-auto text-fw-bodyLight mb-4" />
           <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-1">No IPEs Found</h3>
           <p className="text-fw-bodyLight">
-            {searchQuery || selectedProvider !== 'all' || selectedRegion !== 'all'
+            {searchQuery || activeCount > 0
               ? 'Try adjusting your filters'
               : 'No infrastructure provider edge routers configured yet'}
           </p>

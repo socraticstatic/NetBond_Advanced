@@ -1,11 +1,27 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Plus, Shield } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { VNF, VNFType } from '../../../types/vnf';
 import { VNFTable } from './VNFTable';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { useStore } from '../../../store/useStore';
+
+const VNF_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'type',
+    label: 'Type',
+    type: 'toggle',
+    options: [
+      { value: 'firewall', label: 'Firewall', color: 'error' },
+      { value: 'sdwan', label: 'SD-WAN', color: 'info' },
+      { value: 'router', label: 'Router' },
+      { value: 'vnat', label: 'NAT', color: 'warning' },
+      { value: 'custom', label: 'Custom' },
+    ],
+  },
+];
 
 interface VNFSectionProps {
   vnfs: VNF[];
@@ -25,25 +41,27 @@ export function VNFSection({
   connectionId
 }: VNFSectionProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [vnfTypeFilter, setVnfTypeFilter] = useState<VNFType | 'all'>('all');
   const openWindow = useStore(state => state.openWindow);
   const isWindowOpen = useStore(state => state.isWindowOpen);
 
-  // Filter VNFs
-  const filteredVNFs = vnfs.filter(vnf => {
-    const matchesType = vnfTypeFilter === 'all' || vnf.type === vnfTypeFilter;
-
-    if (!searchQuery) return matchesType;
-
-    const searchLower = searchQuery.toLowerCase();
-    const matchesSearch = (
-      vnf.name.toLowerCase().includes(searchLower) ||
-      vnf.vendor?.toLowerCase().includes(searchLower) ||
-      vnf.type.toLowerCase().includes(searchLower)
-    );
-
-    return matchesType && matchesSearch;
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({
+    groups: VNF_FILTER_GROUPS,
   });
+
+  // Filter VNFs
+  const filteredVNFs = useMemo(() => {
+    const typeFilters = filters.type || [];
+    return vnfs.filter(vnf => {
+      if (typeFilters.length > 0 && !typeFilters.includes(vnf.type)) return false;
+      if (!searchQuery) return true;
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        vnf.name.toLowerCase().includes(searchLower) ||
+        vnf.vendor?.toLowerCase().includes(searchLower) ||
+        vnf.type.toLowerCase().includes(searchLower)
+      );
+    });
+  }, [vnfs, searchQuery, filters]);
 
   // Count VNFs by type
   const vnfsByType = {
@@ -145,7 +163,20 @@ export function VNFSection({
             searchPlaceholder="Search VNFs ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            onFilter={() => {}}
+            onFilter={toggle}
+            activeFilterCount={activeCount}
+            isFilterOpen={isOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={VNF_FILTER_GROUPS}
+                activeFilters={filters}
+                onFiltersChange={setFilters}
+                isOpen={isOpen}
+                onToggle={toggle}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={() => {
               const getTypeName = (type: VNFType) => {
                 switch(type) {

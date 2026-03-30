@@ -1,16 +1,43 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Layers, Search, Filter, Download, Plus, LayoutGrid, List, Minimize2, Maximize2, X, Activity, ShoppingBag, Cpu, PlusCircle
+  Layers, Download, Plus, LayoutGrid, List, Minimize2, Maximize2, ShoppingBag, PlusCircle
 } from 'lucide-react';
 import { Group } from '../types/group';
 import { Button } from './common/Button';
+import { SearchFilterBar } from './common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from './common/TableFilterPanel';
 import { useStore } from '../store/useStore';
 import { AddGroupModal } from './configure/groups/AddGroupModal';
 import { GroupCardView, GroupListView } from './group/views';
 import { ConfirmDialog } from './common/ConfirmDialog';
 import { ConnectionTabs } from './connection/ConnectionTabs';
 import { ControlCenterManager } from './control-center/ControlCenterManager';
+
+const FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'type',
+    label: 'Pool Type',
+    type: 'checkbox',
+    options: [
+      { value: 'business', label: 'Business' },
+      { value: 'department', label: 'Department' },
+      { value: 'project', label: 'Project' },
+      { value: 'team', label: 'Team' },
+      { value: 'custom', label: 'Custom' },
+    ],
+  },
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'checkbox',
+    options: [
+      { value: 'active', label: 'Active', color: 'success' },
+      { value: 'inactive', label: 'Inactive', color: 'default' },
+      { value: 'suspended', label: 'Suspended', color: 'warning' },
+    ],
+  },
+];
 
 export function ManageGroupsPage() {
   const navigate = useNavigate();
@@ -19,41 +46,38 @@ export function ManageGroupsPage() {
   const removeGroup = useStore(state => state.removeGroup);
   const users = useStore(state => state.users);
   const addGroup = useStore(state => state.addGroup);
-  
+
   const [activeTab, setActiveTab] = useState<'groups' | 'marketplace' | 'control-center'>('groups');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [showFilters, setShowFilters] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [areAllMinimized, setAreAllMinimized] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState<string | null>(null);
-  const [filters, setFilters] = useState({
-    type: [] as Array<Group['type']>,
-    status: [] as Array<Group['status']>
-  });
+
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({ groups: FILTER_GROUPS });
 
   // Filter groups based on search and filters
   const filteredGroups = groups.filter(group => {
     const searchLower = searchQuery.toLowerCase();
-    const matchesSearch = !searchLower || 
+    const matchesSearch = !searchLower ||
       group.name.toLowerCase().includes(searchLower) ||
       group.description.toLowerCase().includes(searchLower);
 
     if (!matchesSearch) return false;
 
-    // Type filter
-    const matchesType = !filters.type.length || filters.type.includes(group.type);
-    
-    // Status filter
-    const matchesStatus = !filters.status.length || filters.status.includes(group.status);
-    
+    const typeFilters = filters['type'] || [];
+    const matchesType = typeFilters.length === 0 || typeFilters.includes(group.type);
+
+    const statusFilters = filters['status'] || [];
+    const matchesStatus = statusFilters.length === 0 || statusFilters.includes(group.status);
+
     return matchesType && matchesStatus;
   });
 
   const handleDeleteGroup = (id: string) => {
     removeGroup(id);
     setShowConfirmDelete(null);
-    
+
     window.addToast({
       type: 'success',
       title: 'Pool Deleted',
@@ -61,7 +85,7 @@ export function ManageGroupsPage() {
       duration: 3000
     });
   };
-  
+
   const handleAddGroup = async (newGroup: Omit<Group, 'id' | 'createdAt'>) => {
     // Generate ID and createdAt
     const groupToAdd = {
@@ -69,11 +93,11 @@ export function ManageGroupsPage() {
       id: `group-${Date.now()}`,
       createdAt: new Date().toISOString()
     } as Group;
-    
+
     try {
       await addGroup(groupToAdd);
       setShowAddModal(false);
-      
+
       window.addToast({
         type: 'success',
         title: 'Pool Created',
@@ -103,7 +127,7 @@ export function ManageGroupsPage() {
         g.userIds.length
       ].join(','))
     ].join('\n');
-    
+
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -111,7 +135,7 @@ export function ManageGroupsPage() {
     link.download = 'pools.csv';
     link.click();
     URL.revokeObjectURL(url);
-    
+
     window.addToast({
       type: 'success',
       title: 'Export Complete',
@@ -127,30 +151,28 @@ export function ManageGroupsPage() {
           <>
             {/* Search and Controls */}
             <div className="flex items-center space-x-4 mb-6">
-              {/* Search - wider input */}
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fw-bodyLight h-5 w-5" />
-                <input
-                  type="text"
-                  placeholder="Search pools ..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 h-9 border border-fw-secondary rounded-lg bg-fw-base text-figma-base font-medium placeholder:text-fw-disabled focus:ring-2 focus:ring-fw-active focus:border-fw-active"
+              <div className="flex-1">
+                <SearchFilterBar
+                  searchPlaceholder="Search pools ..."
+                  searchValue={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  onFilter={toggle}
+                  activeFilterCount={activeCount}
+                  isFilterOpen={isOpen}
+                  showExport={false}
+                  filterPanel={
+                    <TableFilterPanel
+                      groups={FILTER_GROUPS}
+                      activeFilters={filters}
+                      onFiltersChange={setFilters}
+                      isOpen={isOpen}
+                      onToggle={toggle}
+                      searchQuery={searchQuery}
+                      onClearSearch={() => setSearchQuery('')}
+                    />
+                  }
                 />
               </div>
-
-              {/* Divider */}
-              <div className="h-6 w-px bg-fw-secondary" />
-
-              {/* Filter */}
-              <Button
-                variant="ghost"
-                icon={Filter}
-                onClick={() => setShowFilters(!showFilters)}
-                size="md"
-              >
-                Filter
-              </Button>
 
               {/* Minimize All - grid only */}
               {viewMode === 'grid' && (
@@ -218,131 +240,6 @@ export function ManageGroupsPage() {
               </Button>
             </div>
 
-            {/* Expanded Filters */}
-            {showFilters && (
-              <div className="bg-fw-base rounded-2xl border border-fw-secondary shadow-sm mb-6 p-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <h4 className="text-figma-base font-medium text-fw-heading mb-2">Pool Type</h4>
-                    <div className="space-y-2">
-                      {['business', 'department', 'project', 'team', 'custom'].map((type) => (
-                        <label key={type} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={filters.type.includes(type as Group['type'])}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setFilters({...filters, type: [...filters.type, type as Group['type']]});
-                              } else {
-                                setFilters({...filters, type: filters.type.filter(t => t !== type)});
-                              }
-                            }}
-                            className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                          />
-                          <span className="ml-2 text-figma-base text-fw-body capitalize">{type}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="text-figma-base font-medium text-fw-heading mb-2">Status</h4>
-                    <div className="space-y-2">
-                      {['active', 'inactive', 'suspended'].map((status) => (
-                        <label key={status} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={filters.status.includes(status as Group['status'])}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setFilters({...filters, status: [...filters.status, status as Group['status']]});
-                              } else {
-                                setFilters({...filters, status: filters.status.filter(s => s !== status)});
-                              }
-                            }}
-                            className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                          />
-                          <span className="ml-2 text-figma-base text-fw-body capitalize">{status}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="text-figma-base font-medium text-fw-heading mb-2">Advanced Filters</h4>
-                    <div className="space-y-2">
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                        />
-                        <span className="ml-2 text-figma-base text-fw-body">Has Connections</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                        />
-                        <span className="ml-2 text-figma-base text-fw-body">Has Members</span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                        />
-                        <span className="ml-2 text-figma-base text-fw-body">Has Addresses</span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Active Filters */}
-            {(Object.values(filters).some(arr => arr.length > 0) || searchQuery) && (
-              <div className="flex flex-wrap gap-2 mb-6">
-                {Object.entries(filters).map(([category, values]) =>
-                  values.map((value) => (
-                    <span
-                      key={`${category}-${value}`}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-figma-base bg-fw-accent text-fw-link"
-                    >
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                      <button
-                        onClick={() => setFilters(prev => ({
-                          ...prev,
-                          [category]: prev[category as keyof typeof prev].filter(v => v !== value)
-                        }))}
-                        className="ml-2 hover:text-fw-linkHover"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))
-                )}
-                {searchQuery && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-figma-base bg-fw-neutral text-fw-body">
-                    "{searchQuery}"
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="ml-2 hover:text-fw-heading"
-                    >
-                      ×
-                    </button>
-                  </span>
-                )}
-                <button
-                  onClick={() => {
-                    setFilters({ type: [], status: [] });
-                    setSearchQuery('');
-                  }}
-                  className="text-figma-base text-fw-bodyLight hover:text-fw-body"
-                >
-                  Clear all
-                </button>
-              </div>
-            )}
-
             <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
               {filteredGroups.length === 0 ? (
                 <div className="text-center py-12">
@@ -350,14 +247,14 @@ export function ManageGroupsPage() {
                   <p className="text-fw-bodyLight">No pools match your search criteria</p>
                 </div>
               ) : viewMode === 'list' ? (
-                <GroupListView 
-                  groups={filteredGroups} 
+                <GroupListView
+                  groups={filteredGroups}
                   onDelete={(id) => setShowConfirmDelete(id)}
-                  onSelect={(id) => navigate(`/groups/${id}`)} 
+                  onSelect={(id) => navigate(`/groups/${id}`)}
                 />
               ) : (
-                <GroupCardView 
-                  groups={filteredGroups} 
+                <GroupCardView
+                  groups={filteredGroups}
                   onDelete={(id) => setShowConfirmDelete(id)}
                   isMinimized={areAllMinimized}
                 />
@@ -408,7 +305,7 @@ export function ManageGroupsPage() {
           Create Pool
         </Button>
       </div>
-      
+
       <div className="mb-8">
         <ConnectionTabs
           activeTab={activeTab}
@@ -417,10 +314,10 @@ export function ManageGroupsPage() {
           groupCount={groups.length}
         />
       </div>
-      
+
       <div className="space-y-6 min-h-[calc(100vh-16rem)] pb-12">
         {renderContent()}
-        
+
         {/* Add Pool Modal */}
         <AddGroupModal
           isOpen={showAddModal}
