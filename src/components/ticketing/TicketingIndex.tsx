@@ -1,79 +1,120 @@
 import { useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, ChevronDown, Settings, Ticket, Eye, Edit, Trash2 } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp, ChevronDown, Settings, Ticket, Eye, Edit, Trash2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { SearchFilterBar } from '../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../common/TableFilterPanel';
 import { OverflowMenu } from '../common/OverflowMenu';
 import { ColumnVisibilityPopover, ColumnDefinition } from '../common/ColumnVisibilityPopover';
 import { useColumnVisibility } from '../../hooks/useColumnVisibility';
 
-type TicketStatus = 'active' | 'queued' | 'deferred' | 'ready to close' | 'device down';
-type TicketPriority = 'device down' | 'partially impacting' | 'minor problems' | 'info tickets';
+type TroubleType = 'info' | 'trouble' | 'configuration';
+type TicketStatus = 'open' | 'in-progress' | 'pending' | 'closed';
 
 interface Ticket {
   id: string;
   ticketNumber: string;
   description: string;
-  state: string;
-  priority: TicketPriority;
-  stage: TicketStatus;
+  troubleType: TroubleType;
+  status: TicketStatus;
+  connection: string;
   asset: string;
 }
 
-const STATUS_STYLES: Record<TicketStatus, string> = {
-  'active': 'bg-fw-active/10 text-fw-link',
-  'queued': 'bg-fw-warn/10 text-fw-warn',
-  'deferred': 'bg-fw-neutral text-fw-bodyLight',
-  'ready to close': 'bg-fw-success/10 text-fw-success',
-  'device down': 'bg-fw-error/10 text-fw-error',
+const TROUBLE_TYPE_STYLES: Record<TroubleType, string> = {
+  'info': 'bg-fw-accent text-fw-link',
+  'trouble': 'bg-fw-error/10 text-fw-error',
+  'configuration': 'bg-fw-warn/10 text-fw-warn',
 };
 
-const PRIORITY_STYLES: Record<TicketPriority, string> = {
-  'device down': 'bg-fw-error/10 text-fw-error',
-  'partially impacting': 'bg-fw-warn/10 text-fw-warn',
-  'minor problems': 'bg-fw-warn/10 text-fw-warn',
-  'info tickets': 'bg-fw-wash text-fw-bodyLight',
+const TROUBLE_TYPE_LABELS: Record<TroubleType, string> = {
+  'info': 'Information',
+  'trouble': 'Trouble',
+  'configuration': 'Configuration',
+};
+
+const STATUS_STYLES: Record<TicketStatus, string> = {
+  'open': 'bg-fw-active/10 text-fw-link',
+  'in-progress': 'bg-fw-warn/10 text-fw-warn',
+  'pending': 'bg-fw-neutral text-fw-bodyLight',
+  'closed': 'bg-fw-success/10 text-fw-success',
+};
+
+const STATUS_LABELS: Record<TicketStatus, string> = {
+  'open': 'Open',
+  'in-progress': 'In Progress',
+  'pending': 'Pending',
+  'closed': 'Closed',
 };
 
 const MOCK_TICKETS: Ticket[] = [
-  { id: '1', ticketNumber: '000000328268304', description: 'SYSLOG: tunnel-status-down', state: 'Open', priority: 'device down', stage: 'active', asset: 'PALO-MACD-TEST1' },
-  { id: '2', ticketNumber: 'CHG0161575', description: 'Access Request', state: 'Open', priority: 'partially impacting', stage: 'queued', asset: '58777811' },
-  { id: '3', ticketNumber: 'CHG0161576', description: 'Access Request', state: 'Open', priority: 'minor problems', stage: 'queued', asset: '58777811' },
-  { id: '4', ticketNumber: 'CHG0161577', description: 'Access Request', state: 'Open', priority: 'info tickets', stage: 'deferred', asset: '58777811' },
-  { id: '5', ticketNumber: 'CHG0161578', description: 'Access Request', state: 'Open', priority: 'device down', stage: 'ready to close', asset: '58777811' },
-  { id: '6', ticketNumber: 'CHG0161579', description: 'User Access', state: 'Open', priority: 'partially impacting', stage: 'ready to close', asset: '58777811' },
-  { id: '7', ticketNumber: 'CHG0161580', description: 'User Access', state: 'Open', priority: 'minor problems', stage: 'active', asset: '58777811' },
-  { id: '8', ticketNumber: 'CHG0161581', description: 'Decommission Rule', state: 'Open', priority: 'info tickets', stage: 'deferred', asset: '58777811' },
-  { id: '9', ticketNumber: 'CHG0161582', description: 'Decommission Rule', state: 'Open', priority: 'device down', stage: 'ready to close', asset: '58777811' },
-  { id: '10', ticketNumber: 'CHG0161583', description: 'User Access', state: 'Open', priority: 'partially impacting', stage: 'active', asset: '58777811' },
+  { id: '1', ticketNumber: 'TKT-2024-001', description: 'Tunnel status down on AWS Direct Connect', troubleType: 'trouble', status: 'open', connection: 'AWS Direct Connect - US East', asset: 'PALO-FW-PROD-01' },
+  { id: '2', ticketNumber: 'TKT-2024-002', description: 'Request BGP peering configuration change', troubleType: 'configuration', status: 'in-progress', connection: 'Azure ExpressRoute - West', asset: 'CR-EAST-01' },
+  { id: '3', ticketNumber: 'TKT-2024-003', description: 'Bandwidth upgrade inquiry for Q2', troubleType: 'info', status: 'open', connection: 'Google Interconnect - Central', asset: '' },
+  { id: '4', ticketNumber: 'TKT-2024-004', description: 'High latency on Oracle FastConnect link', troubleType: 'trouble', status: 'pending', connection: 'Oracle FastConnect - Phoenix', asset: 'CR-WEST-02' },
+  { id: '5', ticketNumber: 'TKT-2024-005', description: 'Add VLAN tagging to production link', troubleType: 'configuration', status: 'closed', connection: 'AWS Direct Connect - US East', asset: 'VLAN-100' },
+  { id: '6', ticketNumber: 'TKT-2024-006', description: 'VNF firewall rule update request', troubleType: 'configuration', status: 'open', connection: 'Azure ExpressRoute - West', asset: 'PALO-FW-DEV-01' },
+  { id: '7', ticketNumber: 'TKT-2024-007', description: 'Connection failover test scheduling', troubleType: 'info', status: 'in-progress', connection: 'AWS Direct Connect - US East', asset: '' },
+  { id: '8', ticketNumber: 'TKT-2024-008', description: 'Packet loss detected on Cloud Router B', troubleType: 'trouble', status: 'open', connection: 'Google Interconnect - Central', asset: 'CR-CENTRAL-01' },
+  { id: '9', ticketNumber: 'TKT-2024-009', description: 'Decommission old SD-WAN VNF', troubleType: 'configuration', status: 'closed', connection: 'Oracle FastConnect - Phoenix', asset: 'SDWAN-BRANCH-01' },
+  { id: '10', ticketNumber: 'TKT-2024-010', description: 'SLA compliance report request', troubleType: 'info', status: 'pending', connection: 'AWS Direct Connect - US East', asset: '' },
 ];
 
 const PAGE_SIZE = 20;
 
+const FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'troubleType',
+    label: 'Trouble Type',
+    type: 'toggle',
+    options: [
+      { value: 'info', label: 'Information', color: 'info' },
+      { value: 'trouble', label: 'Trouble', color: 'error' },
+      { value: 'configuration', label: 'Configuration', color: 'warning' },
+    ],
+  },
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'toggle',
+    options: [
+      { value: 'open', label: 'Open', color: 'info' },
+      { value: 'in-progress', label: 'In Progress', color: 'warning' },
+      { value: 'pending', label: 'Pending' },
+      { value: 'closed', label: 'Closed', color: 'success' },
+    ],
+  },
+];
+
 export function TicketingIndex() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortColumn, setSortColumn] = useState<string>('ticketNumber');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [showFilters, setShowFilters] = useState(false);
   const [showColumnPopover, setShowColumnPopover] = useState(false);
   const columnButtonRef = useRef<HTMLButtonElement>(null);
   const { isVisible, visibleColumns } = useColumnVisibility('tickets');
 
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({
+    groups: FILTER_GROUPS,
+  });
+
   const filteredTickets = useMemo(() => {
+    const troubleTypeFilters = filters.troubleType || [];
+    const statusFilters = filters.status || [];
+
     return MOCK_TICKETS.filter(ticket => {
       const matchesSearch = searchQuery === '' ||
         ticket.ticketNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
         ticket.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ticket.connection.toLowerCase().includes(searchQuery.toLowerCase()) ||
         ticket.asset.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesStatus = statusFilter === 'all' || ticket.stage === statusFilter;
-      const matchesPriority = priorityFilter === 'all' || ticket.priority === priorityFilter;
-      return matchesSearch && matchesStatus && matchesPriority;
+      const matchesTroubleType = troubleTypeFilters.length === 0 || troubleTypeFilters.includes(ticket.troubleType);
+      const matchesStatus = statusFilters.length === 0 || statusFilters.includes(ticket.status);
+      return matchesSearch && matchesTroubleType && matchesStatus;
     });
-  }, [searchQuery, statusFilter, priorityFilter]);
+  }, [searchQuery, filters]);
 
   const totalPages = Math.max(1, Math.ceil(filteredTickets.length / PAGE_SIZE));
   const paginatedTickets = filteredTickets.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -90,11 +131,11 @@ export function TicketingIndex() {
   };
 
   const allColumns: Array<{ key: string; label: string }> = [
-    { key: 'ticketNumber', label: 'Ticket number' },
+    { key: 'ticketNumber', label: 'Ticket' },
     { key: 'description', label: 'Description' },
-    { key: 'state', label: 'State' },
-    { key: 'priority', label: 'Priority' },
-    { key: 'stage', label: 'Stage' },
+    { key: 'troubleType', label: 'Trouble Type' },
+    { key: 'status', label: 'Status' },
+    { key: 'connection', label: 'Connection' },
     { key: 'asset', label: 'Asset' },
   ];
 
@@ -114,7 +155,20 @@ export function TicketingIndex() {
             searchPlaceholder="Search tickets ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            onFilter={() => setShowFilters(!showFilters)}
+            onFilter={toggle}
+            activeFilterCount={activeCount}
+            isFilterOpen={isOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={FILTER_GROUPS}
+                activeFilters={filters}
+                onFiltersChange={(f) => { setFilters(f); setCurrentPage(1); }}
+                isOpen={isOpen}
+                onToggle={toggle}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={() => window.addToast?.({ type: 'success', title: 'Exported', message: 'Tickets exported', duration: 3000 })}
             actions={
               <Button variant="primary" icon={Plus} onClick={() => navigate('/tickets/create')}>
@@ -122,30 +176,6 @@ export function TicketingIndex() {
               </Button>
             }
           />
-          {showFilters && (
-            <div className="flex items-center gap-4 mt-4 pt-4 border-t border-fw-secondary">
-              <div>
-                <label className="fw-label">Stage</label>
-                <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: '180px' }}>
-                  <option value="all">All stages</option>
-                  <option value="active">Active</option>
-                  <option value="queued">Queued</option>
-                  <option value="deferred">Deferred</option>
-                  <option value="ready to close">Ready to Close</option>
-                </select>
-              </div>
-              <div>
-                <label className="fw-label">Priority</label>
-                <select value={priorityFilter} onChange={e => { setPriorityFilter(e.target.value); setCurrentPage(1); }} className="fw-select" style={{ width: '200px' }}>
-                  <option value="all">All priorities</option>
-                  <option value="device down">Device Down</option>
-                  <option value="partially impacting">Partially Impacting</option>
-                  <option value="minor problems">Minor Problems</option>
-                  <option value="info tickets">Info Tickets</option>
-                </select>
-              </div>
-            </div>
-          )}
         </div>
 
         <table className="w-full table-fixed">
@@ -194,24 +224,21 @@ export function TicketingIndex() {
                 <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
                   {ticket.description}
                 </td>
-                <td className="px-6 py-4 text-[14px] text-fw-heading whitespace-nowrap">
-                  <span className="inline-flex items-center gap-1">
-                    <span className="h-3 w-3 rounded-full border-2 border-fw-active" />
-                    {ticket.state}
+                <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] font-medium ${TROUBLE_TYPE_STYLES[ticket.troubleType]}`}>
+                    {TROUBLE_TYPE_LABELS[ticket.troubleType]}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-[12px] font-medium ${PRIORITY_STYLES[ticket.priority]}`}>
-                    {ticket.priority}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-[12px] font-medium ${STATUS_STYLES[ticket.stage]}`}>
-                    {ticket.stage}
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] font-medium ${STATUS_STYLES[ticket.status]}`}>
+                    {STATUS_LABELS[ticket.status]}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
-                  {ticket.asset}
+                  {ticket.connection || '-'}
+                </td>
+                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
+                  {ticket.asset || '-'}
                 </td>
                 <td className="w-16 px-6 py-4" onClick={e => e.stopPropagation()}>
                   <div className="flex justify-end">
@@ -230,8 +257,8 @@ export function TicketingIndex() {
                   <Ticket className="h-12 w-12 text-fw-bodyLight mx-auto mb-4" />
                   <h3 className="text-[16px] font-bold text-fw-heading mb-2">No tickets found</h3>
                   <p className="text-[14px] text-fw-bodyLight max-w-md mx-auto mb-6">
-                    {searchQuery || statusFilter !== 'all' || priorityFilter !== 'all'
-                      ? 'Try adjusting your search or filter criteria.'
+                    {searchQuery || activeCount > 0
+                      ? 'Try adjusting your search or filters.'
                       : 'No support tickets have been created yet.'}
                   </p>
                   <Button variant="primary" icon={Plus} onClick={() => navigate('/tickets/create')}>

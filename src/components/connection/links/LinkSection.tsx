@@ -1,8 +1,32 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Plus, Download } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { Connection, Link } from '../../../types';
+
+const LINK_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'toggle',
+    options: [
+      { value: 'active', label: 'Active', color: 'success' },
+      { value: 'inactive', label: 'Inactive', color: 'warning' },
+      { value: 'maintenance', label: 'Maintenance', color: 'info' },
+    ],
+  },
+  {
+    id: 'type',
+    label: 'Type',
+    type: 'toggle',
+    options: [
+      { value: 'data', label: 'Data' },
+      { value: 'management', label: 'Management' },
+      { value: 'backup', label: 'Backup' },
+    ],
+  },
+];
 import { LinkTable } from './LinkTable';
 import { LinkStatusSummary } from './LinkStatusSummary';
 import { VLANModal } from '../modals/VLANModal';
@@ -103,6 +127,10 @@ export function LinkSection({
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
+
+  const { filters: linkFilters, setFilters: setLinkFilters, isOpen: linkFilterOpen, toggle: toggleLinkFilter, activeCount: linkFilterCount } = useTableFilters({
+    groups: LINK_FILTER_GROUPS,
+  });
   const [editingLink, setEditingLink] = useState<Link & { cloudRouterName?: string, cloudRouterId?: string } | undefined>();
   const [deletingLink, setDeletingLink] = useState<Link & { cloudRouterName?: string, cloudRouterId?: string } | undefined>();
   const [selectedCloudRouter, setSelectedCloudRouter] = useState<string>('all');
@@ -247,26 +275,30 @@ export function LinkSection({
     }
   });
 
-  // Filter links based on search query and selected cloud router
-  const filteredLinks = sortedLinks.filter(link => {
-    // Filter by cloud router
-    if (selectedCloudRouter !== 'all' && link.cloudRouterId !== selectedCloudRouter) {
-      return false;
-    }
-    
-    // Filter by search
-    if (!searchQuery) return true;
-    
-    const searchLower = searchQuery.toLowerCase();
-    return (
-      link.name.toLowerCase().includes(searchLower) ||
-      link.ipSubnet?.toLowerCase().includes(searchLower) ||
-      link.tags?.some(tag => tag.toLowerCase().includes(searchLower)) ||
-      link.type?.toLowerCase().includes(searchLower) ||
-      link.vlanId.toString().includes(searchLower) ||
-      (link.cloudRouterName && link.cloudRouterName.toLowerCase().includes(searchLower))
-    );
-  });
+  // Filter links based on search query, selected cloud router, and filter panel
+  const filteredLinks = useMemo(() => {
+    const statusFilters = linkFilters.status || [];
+    const typeFilters = linkFilters.type || [];
+
+    return sortedLinks.filter(link => {
+      if (selectedCloudRouter !== 'all' && link.cloudRouterId !== selectedCloudRouter) {
+        return false;
+      }
+      if (statusFilters.length > 0 && !statusFilters.includes(link.status)) return false;
+      if (typeFilters.length > 0 && !typeFilters.includes(link.type || '')) return false;
+
+      if (!searchQuery) return true;
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        link.name.toLowerCase().includes(searchLower) ||
+        link.ipSubnet?.toLowerCase().includes(searchLower) ||
+        link.tags?.some(tag => tag.toLowerCase().includes(searchLower)) ||
+        link.type?.toLowerCase().includes(searchLower) ||
+        link.vlanId.toString().includes(searchLower) ||
+        (link.cloudRouterName && link.cloudRouterName.toLowerCase().includes(searchLower))
+      );
+    });
+  }, [sortedLinks, selectedCloudRouter, searchQuery, linkFilters]);
 
   return (
     <div className="space-y-6">
@@ -306,7 +338,20 @@ export function LinkSection({
             searchPlaceholder="Search links ..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            onFilter={() => {}}
+            onFilter={toggleLinkFilter}
+            activeFilterCount={linkFilterCount}
+            isFilterOpen={linkFilterOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={LINK_FILTER_GROUPS}
+                activeFilters={linkFilters}
+                onFiltersChange={setLinkFilters}
+                isOpen={linkFilterOpen}
+                onToggle={toggleLinkFilter}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={() => {
               const headers = ['VLAN ID', 'Name', 'Status', 'Cloud Router'].join(',');
               const rows = filteredLinks.map(link =>

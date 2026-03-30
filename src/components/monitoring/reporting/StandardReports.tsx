@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import { FileText, Download, Calendar, TrendingUp, Activity, DollarSign, Shield, Eye, ChevronDown, Filter, Search, LayoutGrid, List, X } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { FileText, Download, Calendar, TrendingUp, Activity, DollarSign, Shield, Eye, ChevronDown, LayoutGrid, List, X } from 'lucide-react';
 import { Button } from '../../common/Button';
+import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { DataTable } from '../../common/DataTable';
 import { Modal } from '../../common/Modal';
 import { useMonitoring } from '../context/MonitoringContext';
@@ -207,13 +209,52 @@ const availableReports: Report[] = [
   }
 ];
 
+const REPORT_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'category',
+    label: 'Category',
+    type: 'toggle',
+    options: [
+      { value: 'performance', label: 'Performance', color: 'info' },
+      { value: 'security', label: 'Security', color: 'error' },
+      { value: 'billing', label: 'Billing', color: 'warning' },
+      { value: 'operations', label: 'Operations', color: 'success' },
+    ],
+  },
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'toggle',
+    options: [
+      { value: 'ready', label: 'Ready', color: 'success' },
+      { value: 'generating', label: 'Generating', color: 'info' },
+      { value: 'stale', label: 'Stale', color: 'warning' },
+    ],
+  },
+  {
+    id: 'frequency',
+    label: 'Frequency',
+    type: 'select',
+    placeholder: 'All',
+    options: [
+      { value: 'on-demand', label: 'On-demand' },
+      { value: 'daily', label: 'Daily' },
+      { value: 'weekly', label: 'Weekly' },
+      { value: 'monthly', label: 'Monthly' },
+    ],
+  },
+];
+
 export function StandardReports() {
   const { selectedConnection, timeRange } = useMonitoring();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [generatingReports, setGeneratingReports] = useState<Set<string>>(new Set());
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
   const [previewReport, setPreviewReport] = useState<Report | null>(null);
+
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({
+    groups: REPORT_FILTER_GROUPS,
+  });
 
   const getCategoryIcon = (category: Report['category']) => {
     switch (category) {
@@ -1274,20 +1315,22 @@ export function StandardReports() {
     }
   };
 
-  const filteredReports = availableReports.filter(report => {
-    const matchesSearch = report.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         report.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || report.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredReports = useMemo(() => {
+    const categoryFilters = filters.category || [];
+    const statusFilters = filters.status || [];
+    const frequencyFilters = filters.frequency || [];
 
-  const categories = [
-    { id: 'all', label: 'All Reports', count: availableReports.length },
-    { id: 'performance', label: 'Performance', count: availableReports.filter(r => r.category === 'performance').length },
-    { id: 'security', label: 'Security', count: availableReports.filter(r => r.category === 'security').length },
-    { id: 'billing', label: 'Billing', count: availableReports.filter(r => r.category === 'billing').length },
-    { id: 'operations', label: 'Operations', count: availableReports.filter(r => r.category === 'operations').length }
-  ];
+    return availableReports.filter(report => {
+      const matchesSearch = !searchQuery ||
+        report.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        report.description.toLowerCase().includes(searchQuery.toLowerCase());
+      if (!matchesSearch) return false;
+      if (categoryFilters.length > 0 && !categoryFilters.includes(report.category)) return false;
+      if (statusFilters.length > 0 && !statusFilters.includes(report.status)) return false;
+      if (frequencyFilters.length > 0 && !frequencyFilters.includes(report.frequency)) return false;
+      return true;
+    });
+  }, [searchQuery, filters]);
 
   return (
     <div className="space-y-6">
@@ -1316,31 +1359,28 @@ export function StandardReports() {
       </div>
 
       {/* Filters & View Toggle */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-fw-bodyLight" />
-          <input
-            type="text"
-            placeholder="Search reports..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 text-figma-base text-fw-body placeholder:text-fw-disabled border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-transparent"
+      <div className="flex items-center gap-4">
+        <div className="flex-1">
+          <SearchFilterBar
+            searchPlaceholder="Search reports..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            onFilter={toggle}
+            activeFilterCount={activeCount}
+            isFilterOpen={isOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={REPORT_FILTER_GROUPS}
+                activeFilters={filters}
+                onFiltersChange={setFilters}
+                isOpen={isOpen}
+                onToggle={toggle}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
+            showExport={false}
           />
-        </div>
-        <div className="relative">
-          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-fw-bodyLight pointer-events-none" />
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="pl-10 pr-8 py-2 text-figma-base text-fw-body border border-fw-secondary rounded-lg focus:ring-2 focus:ring-fw-active focus:border-transparent appearance-none bg-fw-base cursor-pointer"
-          >
-            {categories.map(cat => (
-              <option key={cat.id} value={cat.id}>
-                {cat.label} ({cat.count})
-              </option>
-            ))}
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-fw-bodyLight pointer-events-none" />
         </div>
         <div className="flex items-center bg-fw-base rounded-lg border border-fw-secondary p-1">
           <button

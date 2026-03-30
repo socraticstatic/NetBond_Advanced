@@ -7,6 +7,7 @@ import {
 import { AttIcon } from '../../icons/AttIcon';
 import { Button } from '../../common/Button';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
+import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { Toggle } from '../../common/Toggle';
 import { RoutingPolicy, PolicyAppliesTo, PolicyAction, PolicyProtocol } from '../../../types/routingPolicy';
@@ -25,9 +26,43 @@ interface PoliciesTabProps {
   allLinks: Link[];
 }
 
+const POLICY_FILTER_GROUPS: FilterGroup[] = [
+  {
+    id: 'action',
+    label: 'Action',
+    type: 'checkbox',
+    options: [
+      { value: 'allow', label: 'Allow', color: 'success' },
+      { value: 'deny', label: 'Deny', color: 'error' },
+      { value: 'manipulate', label: 'Manipulate', color: 'warning' },
+      { value: 'advertise', label: 'Advertise', color: 'info' },
+    ],
+  },
+  {
+    id: 'appliesTo',
+    label: 'Applies To',
+    type: 'checkbox',
+    options: [
+      { value: 'all', label: 'All' },
+      { value: 'links', label: 'Links' },
+      { value: 'cloudrouters', label: 'Cloud Routers' },
+      { value: 'vnfs', label: 'VNFs' },
+    ],
+  },
+  {
+    id: 'enabled',
+    label: 'Status',
+    type: 'select',
+    placeholder: 'All',
+    options: [
+      { value: 'enabled', label: 'Enabled' },
+      { value: 'disabled', label: 'Disabled' },
+    ],
+  },
+];
+
 export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: PoliciesTabProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
   const [activeOverflow, setActiveOverflow] = useState<string | null>(null);
   const [selectedAppliesTo, setSelectedAppliesTo] = useState<PolicyAppliesTo>('all');
   const [selectedTargetIds, setSelectedTargetIds] = useState<string[]>([]);
@@ -47,10 +82,8 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
   const [editingPolicy, setEditingPolicy] = useState<RoutingPolicy | undefined>();
   const [expandedPolicy, setExpandedPolicy] = useState<string | null>(null);
 
-  const [filters, setFilters] = useState({
-    action: [] as PolicyAction[],
-    appliesTo: [] as PolicyAppliesTo[],
-    enabled: 'all' as 'all' | 'enabled' | 'disabled'
+  const { filters, setFilters, isOpen, toggle, activeCount } = useTableFilters({
+    groups: POLICY_FILTER_GROUPS,
   });
 
   // Sample routing policies
@@ -129,17 +162,21 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
   ]);
 
   const filteredPolicies = useMemo(() => {
+    const actionFilters = filters.action || [];
+    const appliesToFilters = filters.appliesTo || [];
+    const enabledFilters = filters.enabled || [];
+
     return policies
       .filter(policy => {
         const matchesSearch = !searchQuery ||
           policy.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           policy.description.toLowerCase().includes(searchQuery.toLowerCase());
 
-        const matchesAction = !filters.action.length || filters.action.includes(policy.action);
-        const matchesAppliesTo = !filters.appliesTo.length || filters.appliesTo.includes(policy.appliesTo);
-        const matchesEnabled = filters.enabled === 'all' ||
-          (filters.enabled === 'enabled' && policy.enabled) ||
-          (filters.enabled === 'disabled' && !policy.enabled);
+        const matchesAction = actionFilters.length === 0 || actionFilters.includes(policy.action);
+        const matchesAppliesTo = appliesToFilters.length === 0 || appliesToFilters.includes(policy.appliesTo);
+        const matchesEnabled = enabledFilters.length === 0 ||
+          (enabledFilters.includes('enabled') && policy.enabled) ||
+          (enabledFilters.includes('disabled') && !policy.enabled);
 
         return matchesSearch && matchesAction && matchesAppliesTo && matchesEnabled;
       })
@@ -257,81 +294,23 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
             searchPlaceholder="Search policies..."
             searchValue={searchQuery}
             onSearchChange={setSearchQuery}
-            onFilter={() => setShowFilters(!showFilters)}
+            onFilter={toggle}
+            activeFilterCount={activeCount}
+            isFilterOpen={isOpen}
+            filterPanel={
+              <TableFilterPanel
+                groups={POLICY_FILTER_GROUPS}
+                activeFilters={filters}
+                onFiltersChange={setFilters}
+                isOpen={isOpen}
+                onToggle={toggle}
+                searchQuery={searchQuery}
+                onClearSearch={() => setSearchQuery('')}
+              />
+            }
             onExport={exportPolicies}
           />
         </div>
-
-        {/* Filters Panel */}
-        {showFilters && (
-          <div className="px-6 py-4 border-b border-fw-secondary bg-fw-wash">
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <h4 className="text-figma-sm font-medium text-fw-body mb-2">Action</h4>
-                <div className="space-y-2">
-                  {['allow', 'deny', 'manipulate', 'advertise'].map((action) => (
-                    <label key={action} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={filters.action.includes(action as PolicyAction)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setFilters({ ...filters, action: [...filters.action, action as PolicyAction] });
-                          } else {
-                            setFilters({ ...filters, action: filters.action.filter(a => a !== action) });
-                          }
-                        }}
-                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                      />
-                      <span className="ml-2 text-figma-base text-fw-body capitalize">{action}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-figma-sm font-medium text-fw-body mb-2">Applies To</h4>
-                <div className="space-y-2">
-                  {['all', 'links', 'cloudrouters', 'vnfs'].map((type) => (
-                    <label key={type} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={filters.appliesTo.includes(type as PolicyAppliesTo)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setFilters({ ...filters, appliesTo: [...filters.appliesTo, type as PolicyAppliesTo] });
-                          } else {
-                            setFilters({ ...filters, appliesTo: filters.appliesTo.filter(t => t !== type) });
-                          }
-                        }}
-                        className="rounded border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                      />
-                      <span className="ml-2 text-figma-base text-fw-body capitalize">{type}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-figma-sm font-medium text-fw-body mb-2">Status</h4>
-                <div className="space-y-2">
-                  {['all', 'enabled', 'disabled'].map((status) => (
-                    <label key={status} className="flex items-center">
-                      <input
-                        type="radio"
-                        name="enabled"
-                        checked={filters.enabled === status}
-                        onChange={() => setFilters({ ...filters, enabled: status as any })}
-                        className="border-fw-secondary text-fw-link focus:ring-fw-active h-4 w-4"
-                      />
-                      <span className="ml-2 text-figma-base text-fw-body capitalize">{status}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
       {/* Policies List */}
         {filteredPolicies.length === 0 ? (
@@ -339,7 +318,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
             <Shield className="h-12 w-12 text-fw-disabled mx-auto mb-3" />
             <p className="text-fw-body">No routing policies found</p>
             <p className="text-figma-sm text-fw-bodyLight mt-1">
-              {searchQuery || filters.action.length || filters.appliesTo.length
+              {searchQuery || activeCount > 0
                 ? 'Try adjusting your filters'
                 : 'Create your first routing policy to get started'
               }
