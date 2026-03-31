@@ -62,7 +62,7 @@ const INTERNET_CONNECTION_TYPES = [
       'Zero-touch provisioning',
       'Automated failover',
     ],
-    disabled: false,
+    disabled: true,
   },
 ];
 
@@ -169,6 +169,11 @@ export function ConnectionTypeSelection({
                           >
                             {type}
                           </span>
+                          {disabled && (
+                            <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#686e74', backgroundColor: 'rgba(104,110,116,0.16)' }}>
+                              Coming Soon
+                            </span>
+                          )}
                           {!disabled && (
                             <button
                               className="ml-2 text-fw-disabled hover:text-fw-body"
