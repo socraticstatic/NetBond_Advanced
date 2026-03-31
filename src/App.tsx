@@ -40,7 +40,10 @@ const LazyAPIToolbox = lazy(() =>
   }))
 );
 
-const LazyConnectionDetails = lazy(() => 
+const LazyAWSWorkflowPage = lazy(() =>
+  import('./components/pages/AWSWorkflowPage')
+);
+const LazyConnectionDetails = lazy(() =>
   import('./components/connection/ConnectionDetails').then(module => ({ 
     default: module.ConnectionDetails 
   }))
@@ -575,6 +578,14 @@ function App() {
                       </Suspense>
                     </SubNav>
                   </AsyncBoundary>
+                } />
+
+                <Route path="/aws-workflow" element={
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyAWSWorkflowPage />
+                    </Suspense>
+                  </div>
                 } />
 
                 <Route path="/connections/:id/*" element={
