@@ -104,6 +104,32 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
         </div>
       </div>
 
+      {/* Monthly Cost Summary */}
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-figma-base font-medium text-fw-bodyLight">Monthly Cost</p>
+            <p className="text-figma-xl font-bold text-fw-heading mt-1">
+              ${connection.billing?.total?.toLocaleString() || '7,999'}<span className="text-figma-base font-medium text-fw-bodyLight">/mo</span>
+            </p>
+          </div>
+          <div className="flex items-center gap-6">
+            <div>
+              <p className="text-figma-sm text-fw-bodyLight">Plan</p>
+              <p className="text-figma-base font-medium text-fw-heading capitalize">{connection.billing?.planId?.replace(/-/g, ' ') || 'Pay as you go'}</p>
+            </div>
+            <div>
+              <p className="text-figma-sm text-fw-bodyLight">Bandwidth</p>
+              <p className="text-figma-base font-medium text-fw-heading">{connection.bandwidth}</p>
+            </div>
+            <div>
+              <p className="text-figma-sm text-fw-bodyLight">Provider</p>
+              <p className="text-figma-base font-medium text-fw-heading">{connection.type?.split('-')[0]?.trim() || 'AT&T'}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Connection Configuration */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Connection Information */}
