@@ -11,6 +11,8 @@ import { VNF, VNFType, VNFInterface, VNFTemplate } from '../../../types/vnf';
 import { Link } from '../../../types/connection';
 import { SideDrawer } from '../../common/SideDrawer';
 import { useStore } from '../../../store/useStore';
+import { LMCCConfigDrawer } from '../lmcc/LMCCConfigDrawer';
+import { LMCCConfiguration } from '../../../types/lmcc';
 
 // Utility function to get user-friendly VNF type names
 const getTypeName = (type: VNFType): string => {
@@ -23,6 +25,8 @@ const getTypeName = (type: VNFType): string => {
       return 'Router';
     case 'vnat':
       return 'NAT';
+    case 'lmcc':
+      return 'LMCC';
     case 'custom':
       return 'Custom';
     default:
@@ -127,6 +131,25 @@ const VNF_TEMPLATES: VNFTemplate[] = [
     }
   },
   {
+    id: 'template-lmcc',
+    name: 'AT&T LMCC',
+    description: 'Layer 3 Managed Cloud Connectivity for multi-site enterprise deployments',
+    type: 'lmcc',
+    vendor: 'AT&T NetBond',
+    model: 'Managed Cloud Connectivity',
+    throughput: '10 Gbps',
+    defaultConfiguration: {
+      routingProtocols: ['BGP']
+    },
+    icon: Cloud,
+    recommendedUseCase: 'Multi-site connectivity, BGP routing, dynamic bandwidth allocation',
+    licenseRequired: false,
+    pricing: {
+      monthly: 2500,
+      annually: 25000
+    }
+  },
+  {
     id: 'template-custom',
     name: 'Custom VNF',
     description: 'Configure your own custom network function',
@@ -178,6 +201,10 @@ export function VNFModal({
   const [routingProtocols, setRoutingProtocols] = useState<string[]>([]);
   const [linkIds, setLinkIds] = useState<string[]>([]);
   const [selectedConnectionsForLinks, setSelectedConnectionsForLinks] = useState<string[]>([connectionId]);
+
+  // LMCC Configuration state
+  const [showLMCCConfig, setShowLMCCConfig] = useState(false);
+  const [lmccConfiguration, setLmccConfiguration] = useState<LMCCConfiguration | undefined>();
 
   // New interface form
   const [newInterface, setNewInterface] = useState<Partial<VNFInterface>>({
@@ -421,7 +448,8 @@ export function VNFModal({
         interfaces: interfaces.length > 0 ? interfaces : undefined,
         routingProtocols: routingProtocols.length > 0 ? routingProtocols : undefined,
         highAvailability: highAvailability || undefined,
-        managementIP: managementIP || undefined
+        managementIP: managementIP || undefined,
+        lmccConfiguration: type === 'lmcc' ? lmccConfiguration : undefined
       },
       createdAt: isEditMode && vnf ? vnf.createdAt : new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -497,6 +525,7 @@ export function VNFModal({
   );
 
   return (
+    <>
     <SideDrawer
       isOpen={isOpen}
       onClose={onClose}
@@ -1102,10 +1131,71 @@ export function VNFModal({
                   </div>
                 )}
               </div>
+              {/* LMCC Configuration Section */}
+              {type === 'lmcc' && (
+                <div className="mt-6 p-4 rounded-lg border border-fw-secondary">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Settings className={`h-4 w-4 ${lmccConfiguration ? 'text-fw-success' : 'text-fw-warn'}`} />
+                      <span className="text-figma-base font-medium text-fw-heading">
+                        {lmccConfiguration ? 'LMCC Configuration' : 'LMCC Configuration Required'}
+                      </span>
+                    </div>
+                  </div>
+                  {lmccConfiguration ? (
+                    <div className="space-y-2 text-figma-sm">
+                      <div className="flex justify-between">
+                        <span className="text-fw-bodyLight">Sites</span>
+                        <span className="text-fw-heading font-medium">{lmccConfiguration.selectedSites.length}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-fw-bodyLight">Total Bandwidth</span>
+                        <span className="text-fw-heading font-medium">
+                          {lmccConfiguration.bandwidthAllocations.reduce((sum, a) => sum + a.bandwidth, 0)} Mbps
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-fw-bodyLight">Termination</span>
+                        <span className="text-fw-heading font-medium capitalize">{lmccConfiguration.taoConfig.terminationType}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-fw-bodyLight">Routing</span>
+                        <span className="text-fw-heading font-medium capitalize">{lmccConfiguration.taoConfig.routingPolicy}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-figma-sm text-fw-bodyLight mb-3">
+                      Complete the LMCC configuration to activate this VNF
+                    </p>
+                  )}
+                  <Button
+                    variant={lmccConfiguration ? 'outline' : 'primary'}
+                    size="sm"
+                    className="w-full mt-3"
+                    onClick={() => setShowLMCCConfig(true)}
+                  >
+                    {lmccConfiguration ? 'Edit Configuration' : 'Configure Now'}
+                  </Button>
+                </div>
+              )}
             </form>
           )}
         </div>
 
     </SideDrawer>
+
+    {/* LMCC Configuration Drawer */}
+    {type === 'lmcc' && (
+      <LMCCConfigDrawer
+        isOpen={showLMCCConfig}
+        onClose={() => setShowLMCCConfig(false)}
+        onSave={(config) => {
+          setLmccConfiguration(config);
+          setShowLMCCConfig(false);
+        }}
+        existingConfig={lmccConfiguration}
+      />
+    )}
+    </>
   );
 }

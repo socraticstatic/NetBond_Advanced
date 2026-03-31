@@ -34,6 +34,10 @@ interface AdvancedSettingsProps {
       // Oracle-specific
       oracleOcid?: string;
       oracleCompartmentId?: string;
+      // Cloud-to-Cloud specific
+      peeringType?: 'private' | 'direct' | 'exchange';
+      encryptionMode?: 'ipsec' | 'macsec' | 'none';
+      routeExchange?: 'full' | 'partial' | 'default';
     };
   };
   onConfigChange: (updates: any) => void;
@@ -780,6 +784,76 @@ export function AdvancedSettings({
                     </div>
                   );
                 })}
+              </div>
+            </div>
+          )}
+
+          {/* Cloud-to-Cloud Specific Settings */}
+          {config.type === 'Cloud to Cloud' && (
+            <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-fw-accent flex items-center justify-center">
+                  <Network className="h-5 w-5 text-fw-link" />
+                </div>
+                <div>
+                  <h4 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em]">Cloud-to-Cloud Peering</h4>
+                  <p className="text-figma-sm text-fw-bodyLight">Configure private backbone connectivity between cloud environments</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">Peering Type</label>
+                  <select
+                    value={config.configuration?.peeringType || 'private'}
+                    onChange={(e) => handleConfigChange('peeringType', e.target.value)}
+                    className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
+                  >
+                    <option value="private">Private Backbone Transit</option>
+                    <option value="direct">Direct Cloud Peering</option>
+                    <option value="exchange">Cloud Exchange</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">Encryption Mode</label>
+                  <select
+                    value={config.configuration?.encryptionMode || 'ipsec'}
+                    onChange={(e) => handleConfigChange('encryptionMode', e.target.value)}
+                    className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
+                  >
+                    <option value="ipsec">IPSec Tunnel</option>
+                    <option value="macsec">MACsec (Layer 2)</option>
+                    <option value="none">No Encryption (Private Only)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-figma-base font-medium text-fw-body mb-2">Route Exchange</label>
+                  <select
+                    value={config.configuration?.routeExchange || 'full'}
+                    onChange={(e) => handleConfigChange('routeExchange', e.target.value)}
+                    className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base"
+                  >
+                    <option value="full">Full Route Table Exchange</option>
+                    <option value="partial">Partial (Filtered Routes)</option>
+                    <option value="default">Default Route Only</option>
+                  </select>
+                </div>
+
+                <div className="bg-fw-wash rounded-lg p-4 mt-4">
+                  <div className="flex items-start gap-3">
+                    <Info className="h-5 w-5 text-fw-link shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-figma-sm font-medium text-fw-heading">LMCC Available</p>
+                      <p className="text-figma-sm text-fw-bodyLight mt-1">
+                        AT&T Layer 3 Managed Cloud Connectivity (LMCC) can be configured as a VNF on your connection
+                        for enterprise multi-site deployments with managed BGP routing, dynamic bandwidth allocation,
+                        and SLA-backed connectivity.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
