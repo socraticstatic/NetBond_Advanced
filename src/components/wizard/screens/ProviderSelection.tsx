@@ -1,5 +1,6 @@
 import { CheckCircle2 } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
+import { BillingPreview } from '../BillingPreview';
 
 interface ProviderSelectionProps {
   selectedProviders: CloudProvider[];
@@ -73,73 +74,88 @@ const CLOUD_PROVIDERS: { id: CloudProvider; name: string; logo: string }[] = [
 export function ProviderSelection({
   selectedProviders,
   onToggle,
+  billingChoice,
+  onBillingChange,
 }: ProviderSelectionProps) {
   return (
-    <div className="space-y-8">
-      <div className="text-center mb-8">
-        <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">
-          Select Your Cloud Providers
-        </h3>
-        <p className="text-figma-sm text-fw-bodyLight mt-2">
-          Choose one or more providers for your connection
-        </p>
-        {selectedProviders.length > 0 && (
-          <span className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full bg-fw-primary text-white text-figma-xs font-medium">
-            <CheckCircle2 className="h-3.5 w-3.5" />
-            {selectedProviders.length} selected
-          </span>
-        )}
-      </div>
+    <div className="space-y-6">
+      <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">
+        Select Your Cloud Providers
+      </h3>
 
-      <div className="grid grid-cols-3 gap-6">
-        {CLOUD_PROVIDERS.map((provider) => {
-          const isSelected = selectedProviders.includes(provider.id);
-          return (
-            <div key={provider.id} className="relative flex">
-              <button
-                onClick={() => onToggle(provider.id)}
-                className={`
-                  w-full py-12 px-8 border-2 rounded-2xl wizard-card network-option transition-all duration-200
-                  ${isSelected
-                    ? 'border-fw-active bg-fw-primary shadow-lg transform scale-[1.02]'
-                    : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50 hover:bg-fw-base'
-                  }
-                `}
-              >
-                <div className="flex flex-col items-center">
-                  <img
-                    src={provider.logo}
-                    alt={provider.name}
-                    onError={(e) => {
-                      // Replace broken image with text fallback
-                      const target = e.currentTarget;
-                      const parent = target.parentElement;
-                      if (parent) {
-                        const span = document.createElement('span');
-                        span.className = `text-figma-lg font-bold tracking-tight ${isSelected ? 'text-white' : 'text-fw-heading'}`;
-                        span.textContent = provider.name.toUpperCase();
-                        target.replaceWith(span);
-                      }
-                    }}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <div className="text-center mb-8">
+            <p className="text-figma-sm text-fw-bodyLight mt-2">
+              Choose one or more providers for your connection
+            </p>
+            {selectedProviders.length > 0 && (
+              <span className="inline-flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full bg-fw-primary text-white text-figma-xs font-medium">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                {selectedProviders.length} selected
+              </span>
+            )}
+          </div>
+
+          <div className="grid grid-cols-3 gap-6">
+            {CLOUD_PROVIDERS.map((provider) => {
+              const isSelected = selectedProviders.includes(provider.id);
+              return (
+                <div key={provider.id} className="relative flex">
+                  <button
+                    onClick={() => onToggle(provider.id)}
                     className={`
-                      h-12 object-contain transition-all duration-300
+                      w-full py-12 px-8 border-2 rounded-2xl wizard-card network-option transition-all duration-200
                       ${isSelected
-                        ? 'brightness-0 invert'
-                        : 'filter grayscale hover:filter-none'
+                        ? 'border-fw-active bg-fw-primary shadow-lg transform scale-[1.02]'
+                        : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50 hover:bg-fw-base'
                       }
                     `}
-                  />
-                </div>
-              </button>
+                  >
+                    <div className="flex flex-col items-center">
+                      <img
+                        src={provider.logo}
+                        alt={provider.name}
+                        onError={(e) => {
+                          // Replace broken image with text fallback
+                          const target = e.currentTarget;
+                          const parent = target.parentElement;
+                          if (parent) {
+                            const span = document.createElement('span');
+                            span.className = `text-figma-lg font-bold tracking-tight ${isSelected ? 'text-white' : 'text-fw-heading'}`;
+                            span.textContent = provider.name.toUpperCase();
+                            target.replaceWith(span);
+                          }
+                        }}
+                        className={`
+                          h-12 object-contain transition-all duration-300
+                          ${isSelected
+                            ? 'brightness-0 invert'
+                            : 'filter grayscale hover:filter-none'
+                          }
+                        `}
+                      />
+                    </div>
+                  </button>
 
-              {isSelected && (
-                <div className="absolute top-3 right-3">
-                  <CheckCircle2 className="h-6 w-6 text-white drop-shadow-md" />
+                  {isSelected && (
+                    <div className="absolute top-3 right-3">
+                      <CheckCircle2 className="h-6 w-6 text-white drop-shadow-md" />
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          );
-        })}
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="lg:col-span-1">
+          <BillingPreview
+            provider={selectedProviders[0] as any}
+            selectedPlanId={billingChoice.planId}
+            onPlanChange={(planId) => onBillingChange({ ...billingChoice, planId })}
+          />
+        </div>
       </div>
     </div>
   );

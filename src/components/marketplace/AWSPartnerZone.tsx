@@ -31,21 +31,18 @@ export function AWSPartnerZone() {
   ]);
 
   const handleConfigureConnection = (connection: AWSConnection) => {
-    window.addToast?.({
-      type: 'info',
-      title: 'AWS Connection Configuration',
-      message: `Opening configuration wizard for ${connection.connectionName}`,
-      duration: 3000
+    navigate('/create', {
+      state: {
+        editMode: false,
+        preSelectedProvider: 'AWS',
+        preSelectedType: 'Internet to Cloud',
+        awsConnection: connection
+      }
     });
   };
 
   const handleViewWorkflow = () => {
-    window.addToast?.({
-      type: 'info',
-      title: 'AWS Workflow',
-      message: 'AWS workflow documentation coming soon',
-      duration: 3000
-    });
+    navigate('/aws-workflow');
   };
 
   return (
