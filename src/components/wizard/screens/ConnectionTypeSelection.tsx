@@ -93,20 +93,6 @@ export function ConnectionTypeSelection({
     disabled: ct.disabled || !availableTypes.includes(ct.type),
   }));
 
-  const PROVIDER_LOGOS: Record<string, string> = {
-    'AWS': 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
-    'Azure': 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg',
-    'Google': 'https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg',
-    'Oracle': 'https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg',
-    'IBM': 'https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg',
-    'Equinix': 'https://logo.clearbit.com/equinix.com',
-    'Digital Realty': 'https://logo.clearbit.com/digitalrealty.com',
-    'CoreSite': 'https://logo.clearbit.com/coresite.com',
-    'DataBank': 'https://logo.clearbit.com/databank.com',
-    'Centersquare': 'https://logo.clearbit.com/centersquare.com',
-    'Cisco Jasper': 'https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg',
-  };
-
   // Provider-specific product name for each connection type
   const getProviderContext = (connType: string): string | null => {
     if (!provider) return null;
@@ -138,8 +124,6 @@ export function ConnectionTypeSelection({
     };
     return contexts[provider]?.[connType] || null;
   };
-
-  const providerLogo = provider ? PROVIDER_LOGOS[provider] : null;
 
   const tooltips: Record<string, string> = {
     'Internet to Cloud': 'High-performance internet connectivity with dedicated bandwidth to cloud services. Includes built-in security, DDoS protection, and 24/7 monitoring.',
