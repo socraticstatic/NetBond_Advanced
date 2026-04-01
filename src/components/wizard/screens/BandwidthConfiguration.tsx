@@ -1,7 +1,7 @@
-import { Gauge } from 'lucide-react';
+import { Gauge, Zap, Lock } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
 import { BillingPreview } from '../BillingPreview';
-import { getProviderBandwidth } from '../../../data/providerBandwidth';
+import { getProviderBandwidth, getProviderBandwidthConfig } from '../../../data/providerBandwidth';
 
 interface BandwidthConfigurationProps {
   selectedProviders: CloudProvider[];
@@ -102,6 +102,37 @@ export function BandwidthConfiguration({
                           <option key={opt.value} value={opt.value}>{opt.label}</option>
                         ))}
                       </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-figma-xs text-fw-bodyLight mb-1.5">Bandwidth Mode</label>
+                      {(() => {
+                        const config = getProviderBandwidthConfig(providerId);
+                        return (
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              type="button"
+                              className="flex items-center gap-2 px-3 py-2 rounded-lg border text-figma-xs font-medium transition-colors border-fw-active bg-fw-accent text-fw-link"
+                            >
+                              <Lock className="h-3.5 w-3.5" />
+                              Fixed
+                            </button>
+                            <button
+                              type="button"
+                              className="flex items-center gap-2 px-3 py-2 rounded-lg border text-figma-xs font-medium transition-colors border-fw-secondary bg-fw-wash text-fw-body hover:border-fw-active/50"
+                            >
+                              <Zap className="h-3.5 w-3.5" />
+                              Burstable
+                            </button>
+                          </div>
+                        );
+                      })()}
+                      {(() => {
+                        const config = getProviderBandwidthConfig(providerId);
+                        return (
+                          <p className="text-figma-xs text-fw-bodyLight mt-1.5">{config.burstNote}</p>
+                        );
+                      })()}
                     </div>
 
                     <div>
