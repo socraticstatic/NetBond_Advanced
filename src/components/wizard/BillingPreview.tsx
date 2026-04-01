@@ -243,7 +243,7 @@ export function BillingPreview({
   const selectedPlanColors = getPlanColorClasses(selectedPlan);
 
   return (
-    <div ref={containerRef} className="bg-fw-base rounded-xl border border-fw-secondary sticky top-24">
+    <div ref={containerRef} className="bg-fw-base rounded-xl border border-fw-secondary">
       <div className="p-4 border-b border-fw-secondary bg-fw-wash">
         <div className="flex items-center">
           <Receipt className="h-5 w-5 text-brand-blue mr-2" />
