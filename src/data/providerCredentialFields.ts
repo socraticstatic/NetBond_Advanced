@@ -11,7 +11,7 @@ export const PROVIDER_CREDENTIALS: Record<string, ProviderCredentialConfig> = {
     consoleName: 'AWS Console',
   },
   'Azure': {
-    requiredInfo: ['Subscription ID', 'Tenant ID', 'Client ID', 'Client Secret'],
+    requiredInfo: ['ExpressRoute Service Key', 'Subscription ID', 'Tenant ID', 'Client ID', 'Client Secret'],
     consoleUrl: 'https://portal.azure.com/#blade/Microsoft_Azure_ExpressRoute',
     consoleName: 'Azure Portal',
   },
@@ -21,7 +21,7 @@ export const PROVIDER_CREDENTIALS: Record<string, ProviderCredentialConfig> = {
     consoleName: 'Google Cloud Console',
   },
   'Oracle': {
-    requiredInfo: ['Tenancy OCID', 'User OCID', 'API Key', 'Region'],
+    requiredInfo: ['Tenancy OCID', 'Compartment ID', 'DRG ID', 'Region'],
     consoleUrl: 'https://cloud.oracle.com/networking/fast-connect',
     consoleName: 'Oracle Cloud Console',
   },
