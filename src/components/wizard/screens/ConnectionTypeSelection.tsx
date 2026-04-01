@@ -1,6 +1,7 @@
 import { Globe, Lock, Network, Cog, Info } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { ConnectionType } from '../../../types/connection';
+import { getAvailableConnectionTypes } from '../../../data/providerConnectionTypes';
 
 const INTERNET_CONNECTION_TYPES = [
   {
@@ -68,17 +69,29 @@ const INTERNET_CONNECTION_TYPES = [
 interface ConnectionTypeSelectionProps {
   selectedType: ConnectionType | undefined;
   provider?: string;
+  providers?: string[];
   onSelect: (type: ConnectionType) => void;
 }
 
 export function ConnectionTypeSelection({
   selectedType,
   provider,
+  providers = [],
   onSelect,
 }: ConnectionTypeSelectionProps) {
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
 
-  const connectionTypes = INTERNET_CONNECTION_TYPES;
+  // Filter connection types based on selected provider(s)
+  const availableTypes = useMemo(() => {
+    const allProviders = providers.length > 0 ? providers : provider ? [provider] : [];
+    return getAvailableConnectionTypes(allProviders);
+  }, [provider, providers]);
+
+  const connectionTypes = INTERNET_CONNECTION_TYPES.map(ct => ({
+    ...ct,
+    // Disable types not available for selected provider(s), unless it's Site to Cloud (already disabled)
+    disabled: ct.disabled || !availableTypes.includes(ct.type),
+  }));
 
   const PROVIDER_LOGOS: Record<string, string> = {
     'AWS': 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
