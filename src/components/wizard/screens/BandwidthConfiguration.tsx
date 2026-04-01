@@ -1,15 +1,7 @@
 import { Gauge } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
 import { BillingPreview } from '../BillingPreview';
-
-const BANDWIDTH_OPTIONS = [
-  { value: 100, label: '100 Mbps' },
-  { value: 500, label: '500 Mbps' },
-  { value: 1000, label: '1 Gbps' },
-  { value: 2000, label: '2 Gbps' },
-  { value: 5000, label: '5 Gbps' },
-  { value: 10000, label: '10 Gbps' },
-];
+import { getProviderBandwidth } from '../../../data/providerBandwidth';
 
 interface BandwidthConfigurationProps {
   selectedProviders: CloudProvider[];
@@ -50,7 +42,7 @@ export function BandwidthConfiguration({
   const firstBandwidthKey = connections[0]?.key;
   const firstBandwidth = firstBandwidthKey ? (bandwidthSettings[firstBandwidthKey] || 1000) : undefined;
   const firstBandwidthLabel = firstBandwidth
-    ? BANDWIDTH_OPTIONS.find(o => o.value === firstBandwidth)?.label
+    ? getProviderBandwidth(selectedProviders[0] || '').find(o => o.value === firstBandwidth)?.label
     : undefined;
 
   return (
@@ -82,7 +74,7 @@ export function BandwidthConfiguration({
           <div className={`grid gap-6 ${connections.length > 1 ? 'grid-cols-2' : 'grid-cols-1 max-w-lg mx-auto'}`}>
             {connections.map(({ providerId, location, key }) => {
               const currentBw = bandwidthSettings[key] || 1000;
-              const option = BANDWIDTH_OPTIONS.find(o => o.value === currentBw) || BANDWIDTH_OPTIONS[2];
+              const option = getProviderBandwidth(providerId).find(o => o.value === currentBw) || getProviderBandwidth(providerId)[2];
 
               return (
                 <div key={key} className="border border-fw-secondary rounded-2xl overflow-hidden">
@@ -106,7 +98,7 @@ export function BandwidthConfiguration({
                         onChange={(e) => onBandwidthChange(key, parseInt(e.target.value))}
                         className="h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link"
                       >
-                        {BANDWIDTH_OPTIONS.map(opt => (
+                        {getProviderBandwidth(providerId).map(opt => (
                           <option key={opt.value} value={opt.value}>{opt.label}</option>
                         ))}
                       </select>

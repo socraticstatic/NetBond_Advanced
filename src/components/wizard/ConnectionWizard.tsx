@@ -282,7 +282,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       case 4: {
         // Multi-provider location validation
         if (selectedProviders.length > 0) {
-          const minLocs = resiliencyLevel === 'maximum' ? 2 : 1;
+          const minLocs = resiliencyLevel === 'maximum' ? 2 : resiliencyLevel === 'geo' ? 2 : 1;
           return selectedProviders.every(p => (selectedLocations[p] || []).length >= minLocs);
         }
         return !!selectedLocation;
@@ -600,6 +600,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   resiliencyLevel={resiliencyLevel}
                   onSelect={setResiliencyLevel}
                   provider={selectedProvider}
+                  providers={selectedProviders}
                   type={selectedType}
                   billingChoice={billingChoice}
                   onBillingChange={updateBillingChoice}
