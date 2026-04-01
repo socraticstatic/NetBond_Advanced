@@ -138,7 +138,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
     addons: []
   });
 
-  const [showCostDrawer, setShowCostDrawer] = useState(false);
+  const [showCostDrawer, setShowCostDrawer] = useState(true);
 
   // For visual editor, convert connection to nodes and edges
   const [initialNodes, setInitialNodes] = useState<NetworkNode[]>([]);
@@ -586,6 +586,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 <ConnectionTypeSelection
                   selectedType={selectedType}
                   provider={selectedProvider}
+                  providers={selectedProviders}
                   onSelect={(type) => {
                     setSelectedType(type);
                     setStep(3);
@@ -670,42 +671,34 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               </div>
             )}
 
-            {/* Floating Cost Summary Button */}
+            {/* Cost Summary - collapsible panel, starts open */}
             {step > 0 && step < 7 && (
-              <div className="flex justify-end mb-4">
+              <div className="mb-6 bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
                 <button
                   onClick={() => setShowCostDrawer(!showCostDrawer)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-fw-base border border-fw-secondary shadow-sm hover:shadow-md transition-shadow text-figma-sm font-medium text-fw-heading"
+                  className="w-full px-5 py-3 bg-fw-wash border-b border-fw-secondary flex items-center justify-between hover:bg-fw-neutral transition-colors"
                 >
-                  <DollarSign className="h-4 w-4 text-fw-link" />
-                  <span className="text-fw-link font-semibold">
-                    ${billingChoice.planId === '36-months' ? '1,999' : '999'}.00
+                  <div className="flex items-center gap-2">
+                    <DollarSign className="h-4 w-4 text-fw-link" />
+                    <span className="text-figma-base font-semibold text-fw-heading">Cost Summary</span>
+                  </div>
+                  <span className="text-figma-xs text-fw-bodyLight">
+                    {showCostDrawer ? 'Collapse' : 'Expand'}
                   </span>
-                  <span className="text-fw-bodyLight">/mo</span>
                 </button>
-              </div>
-            )}
-
-            {/* Cost Summary Drawer */}
-            {showCostDrawer && step > 0 && step < 7 && (
-              <div className="mb-6 bg-fw-base rounded-2xl border border-fw-secondary shadow-lg overflow-hidden">
-                <div className="px-5 py-3 bg-fw-wash border-b border-fw-secondary flex items-center justify-between">
-                  <span className="text-figma-base font-semibold text-fw-heading">Cost Summary</span>
-                  <button onClick={() => setShowCostDrawer(false)} className="text-fw-bodyLight hover:text-fw-body">
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-                <div className="p-5">
-                  <BillingPreview
-                    provider={selectedProvider as any}
-                    type={selectedType as any}
-                    bandwidth={selectedBandwidth as any}
-                    redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geo'}
-                    configuration={config.configuration}
-                    selectedPlanId={billingChoice.planId}
-                    onPlanChange={(planId) => updateBillingChoice({ planId })}
-                  />
-                </div>
+                {showCostDrawer && (
+                  <div className="p-5">
+                    <BillingPreview
+                      provider={selectedProvider as any}
+                      type={selectedType as any}
+                      bandwidth={selectedBandwidth as any}
+                      redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geo'}
+                      configuration={config.configuration}
+                      selectedPlanId={billingChoice.planId}
+                      onPlanChange={(planId) => updateBillingChoice({ planId })}
+                    />
+                  </div>
+                )}
               </div>
             )}
 
