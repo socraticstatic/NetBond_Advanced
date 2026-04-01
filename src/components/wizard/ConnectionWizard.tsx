@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, Suspense, lazy } from 'react';
-import { Globe, Server, Cloud, X, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Globe, Server, Cloud, X, ArrowLeft, ArrowRight, DollarSign } from 'lucide-react';
 import { PhaseIndicator } from './PhaseIndicator';
 import { CloudProvider, ConnectionType, BandwidthOption, LocationOption, ConnectionConfig } from '../../types/connection';
 import { ProviderSelection } from './screens/ProviderSelection';
@@ -137,6 +137,8 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
     term: 'monthly',
     addons: []
   });
+
+  const [showCostDrawer, setShowCostDrawer] = useState(false);
 
   // For visual editor, convert connection to nodes and edges
   const [initialNodes, setInitialNodes] = useState<NetworkNode[]>([]);
@@ -577,8 +579,6 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 <ProviderSelection
                   selectedProviders={selectedProviders}
                   onToggle={toggleProvider}
-                  billingChoice={billingChoice}
-                  onBillingChange={updateBillingChoice}
                 />
               )}
 
@@ -590,8 +590,6 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                     setSelectedType(type);
                     setStep(3);
                   }}
-                  billingChoice={billingChoice}
-                  onBillingChange={updateBillingChoice}
                 />
               )}
 
@@ -602,8 +600,6 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   provider={selectedProvider}
                   providers={selectedProviders}
                   type={selectedType}
-                  billingChoice={billingChoice}
-                  onBillingChange={updateBillingChoice}
                 />
               )}
 
@@ -613,10 +609,8 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   selectedBandwidth={selectedBandwidth}
                   provider={selectedProvider}
                   type={selectedType}
-                  billingChoice={billingChoice}
                   onLocationSelect={setSelectedLocation}
                   onBandwidthSelect={setSelectedBandwidth}
-                  onBillingChange={updateBillingChoice}
                   selectedProviders={selectedProviders}
                   selectedLocations={selectedLocations}
                   onToggleLocation={toggleLocation}
@@ -631,8 +625,6 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   bandwidthSettings={bandwidthSettings}
                   onBandwidthChange={updateBandwidth}
                   type={selectedType}
-                  billingChoice={billingChoice}
-                  onBillingChange={updateBillingChoice}
                 />
               )}
 
@@ -647,8 +639,6 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                     location: selectedLocation,
                   }}
                   onConfigChange={updateConfig}
-                  billingChoice={billingChoice}
-                  onBillingChange={updateBillingChoice}
                 />
               )}
 
@@ -677,6 +667,45 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
             {error && (
               <div className="mt-6 p-4 bg-fw-errorLight border border-fw-error rounded-xl">
                 <p className="text-figma-base text-fw-error">{error}</p>
+              </div>
+            )}
+
+            {/* Floating Cost Summary Button */}
+            {step > 0 && step < 7 && (
+              <div className="flex justify-end mb-4">
+                <button
+                  onClick={() => setShowCostDrawer(!showCostDrawer)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-fw-base border border-fw-secondary shadow-sm hover:shadow-md transition-shadow text-figma-sm font-medium text-fw-heading"
+                >
+                  <DollarSign className="h-4 w-4 text-fw-link" />
+                  <span className="text-fw-link font-semibold">
+                    ${billingChoice.planId === '36-months' ? '1,999' : '999'}.00
+                  </span>
+                  <span className="text-fw-bodyLight">/mo</span>
+                </button>
+              </div>
+            )}
+
+            {/* Cost Summary Drawer */}
+            {showCostDrawer && step > 0 && step < 7 && (
+              <div className="mb-6 bg-fw-base rounded-2xl border border-fw-secondary shadow-lg overflow-hidden">
+                <div className="px-5 py-3 bg-fw-wash border-b border-fw-secondary flex items-center justify-between">
+                  <span className="text-figma-base font-semibold text-fw-heading">Cost Summary</span>
+                  <button onClick={() => setShowCostDrawer(false)} className="text-fw-bodyLight hover:text-fw-body">
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="p-5">
+                  <BillingPreview
+                    provider={selectedProvider as any}
+                    type={selectedType as any}
+                    bandwidth={selectedBandwidth as any}
+                    redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geo'}
+                    configuration={config.configuration}
+                    selectedPlanId={billingChoice.planId}
+                    onPlanChange={(planId) => updateBillingChoice({ planId })}
+                  />
+                </div>
               </div>
             )}
 
