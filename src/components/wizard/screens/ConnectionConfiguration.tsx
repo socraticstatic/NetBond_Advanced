@@ -1,6 +1,6 @@
 import { CheckCircle2, AlertTriangle, MapPin } from 'lucide-react';
 import { CloudProvider, LocationOption, BandwidthOption } from '../../../types/connection';
-import { PROVIDER_LOCATIONS } from '../../../data/providerLocations';
+import { getLocationLabels } from '../../../data/providerLocations';
 import { BillingPreview } from '../BillingPreview';
 import type { ResiliencyLevel } from './ResiliencySelection';
 
@@ -64,17 +64,21 @@ export function ConnectionConfiguration({
               <p className="text-figma-sm text-fw-bodyLight mt-2">
                 {resiliencyLevel === 'maximum'
                   ? 'Maximum resiliency requires at least 2 locations per provider.'
-                  : 'Select at least 1 location per provider.'}
+                  : resiliencyLevel === 'geo'
+                    ? 'Geographic resiliency requires at least 2 locations per provider.'
+                    : 'Select at least 1 location per provider.'}
               </p>
             </div>
 
-            {resiliencyLevel === 'maximum' && (
+            {(resiliencyLevel === 'maximum' || resiliencyLevel === 'geo') && (
               <div className="flex items-start gap-3 p-4 rounded-xl bg-fw-warningLight border border-fw-warning">
                 <AlertTriangle className="h-5 w-5 text-fw-warning flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-figma-sm font-medium text-fw-heading">Maximum Resiliency Selected</p>
+                  <p className="text-figma-sm font-medium text-fw-heading">
+                    {resiliencyLevel === 'maximum' ? 'Maximum' : 'Geographic'} Resiliency Selected
+                  </p>
                   <p className="text-figma-xs text-fw-bodyLight mt-1">
-                    Each provider must have at least 2 locations for geographic failover.
+                    Each provider must have at least 2 locations for {resiliencyLevel === 'maximum' ? 'full geographic' : 'geographic'} failover.
                   </p>
                 </div>
               </div>
@@ -82,7 +86,7 @@ export function ConnectionConfiguration({
 
             <div className="space-y-8">
               {selectedProviders.map((providerId) => {
-                const locations = PROVIDER_LOCATIONS[providerId] || [];
+                const locations = getLocationLabels(providerId);
                 const selected = selectedLocations[providerId] || [];
                 const needsMore = resiliencyLevel === 'maximum' && selected.length < 2;
 
