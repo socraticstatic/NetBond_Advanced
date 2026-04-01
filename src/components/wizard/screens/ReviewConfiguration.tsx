@@ -86,7 +86,9 @@ export function ReviewConfiguration({
 }: ReviewConfigurationProps) {
   const navigate = useNavigate();
   const providers = config.providers || (config.provider ? [config.provider] : []);
-  const resiliencyLabel = config.resiliencyLevel === 'maximum' ? 'Maximum Resiliency' : 'Local Resiliency';
+  const resiliencyLabel = config.resiliencyLevel === 'maximum' ? 'Maximum Resiliency'
+    : config.resiliencyLevel === 'geo' ? 'Geographic Resiliency'
+    : 'Local Resiliency';
 
   const totalLocations = Object.values(selectedLocations).reduce((sum, locs) => sum + locs.length, 0);
   const bandwidthEntries = Object.entries(bandwidthSettings);
