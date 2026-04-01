@@ -34,6 +34,8 @@ interface AdvancedSettingsProps {
       // Oracle-specific
       oracleOcid?: string;
       oracleCompartmentId?: string;
+      // Azure-specific
+      azureSku?: 'local' | 'standard' | 'premium';
       // Cloud-to-Cloud specific
       peeringType?: 'private' | 'direct' | 'exchange';
       encryptionMode?: 'ipsec' | 'macsec' | 'none';
@@ -507,6 +509,46 @@ export function AdvancedSettings({
               </div>
             </div>
           </div>
+
+          {/* Azure ExpressRoute SKU (separate from resiliency) */}
+          {(config.provider === 'Azure' || config.providers?.includes('Azure' as CloudProvider)) && (
+            <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-fw-accent flex items-center justify-center">
+                  <Globe className="h-5 w-5 text-fw-link" />
+                </div>
+                <div>
+                  <h4 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em]">ExpressRoute SKU</h4>
+                  <p className="text-figma-sm text-fw-bodyLight">Determines which Azure regions your Connection can reach. Separate from resiliency level.</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { value: 'local', title: 'Local', desc: 'One Azure region near your peering location. Metered data included in price.' },
+                  { value: 'standard', title: 'Standard', desc: 'All Azure regions in your geopolitical area (e.g., all of North America).' },
+                  { value: 'premium', title: 'Premium', desc: 'Global access across all Azure regions worldwide.' },
+                ].map(sku => {
+                  const isSelected = (config.configuration?.azureSku || 'standard') === sku.value;
+                  return (
+                    <button
+                      key={sku.value}
+                      onClick={() => handleConfigChange('azureSku', sku.value)}
+                      className={`p-4 rounded-xl border-2 text-left transition-all ${
+                        isSelected
+                          ? 'border-fw-active bg-fw-accent'
+                          : 'border-fw-secondary bg-fw-wash hover:border-fw-active/50'
+                      }`}
+                    >
+                      <p className={`text-figma-base font-semibold mb-1 ${isSelected ? 'text-fw-link' : 'text-fw-heading'}`}>
+                        {sku.title}
+                      </p>
+                      <p className="text-figma-xs text-fw-bodyLight">{sku.desc}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
             <div className="flex items-center space-x-3 mb-6">
