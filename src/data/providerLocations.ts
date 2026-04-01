@@ -9,5 +9,5 @@ export const PROVIDER_LOCATIONS: Record<string, string[]> = {
   'Centersquare': ['Atlanta', 'Dallas', 'Denver', 'Phoenix', 'Toronto'],
   'CoreSite': ['New York', 'Los Angeles', 'Chicago', 'Denver', 'Virginia'],
   'DataBank': ['Dallas', 'Minneapolis', 'Kansas City', 'Baltimore', 'Salt Lake City'],
-  'Cisco Jasper': ['Ashburn VA', 'Columbus OH', 'Lynnwood WA', 'Atlanta GA', 'San Jose CA', 'Phoenix AZ'],
+  'Cisco Jasper': ['Ashburn, VA - CenterSquare', 'Columbus, OH - Cologix', 'Lynnwood, WA - CenterSquare', 'Atlanta, GA - QTS', 'Atlanta New DC - Equinix', 'San Jose, CA - Equinix', 'Phoenix, AZ - Digital Realty'],
 };
