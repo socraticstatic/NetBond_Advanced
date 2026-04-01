@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, Suspense, lazy } from 'react';
-import { Globe, Server, Cloud, X, ArrowLeft, ArrowRight, DollarSign } from 'lucide-react';
+import { Globe, Server, Cloud, X, ArrowLeft, ArrowRight } from 'lucide-react';
 import { PhaseIndicator } from './PhaseIndicator';
 import { CloudProvider, ConnectionType, BandwidthOption, LocationOption, ConnectionConfig } from '../../types/connection';
 import { ProviderSelection } from './screens/ProviderSelection';
@@ -138,7 +138,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
     addons: []
   });
 
-  const [showCostDrawer, setShowCostDrawer] = useState(true);
+  // Cost sidebar is always visible on desktop (hidden on mobile via lg:block)
 
   // For visual editor, convert connection to nodes and edges
   const [initialNodes, setInitialNodes] = useState<NetworkNode[]>([]);
@@ -543,7 +543,9 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               />
             </div>
 
-            <div className="max-w-3xl mx-auto relative">
+            <div className="flex gap-8">
+            {/* Main content */}
+            <div className="flex-1 min-w-0 max-w-3xl relative">
               {/* AI Assistant */}
               {showAI && (
                 <NetworkAI
@@ -671,36 +673,25 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               </div>
             )}
 
-            {/* Cost Summary - collapsible panel, starts open */}
+            </div>
+
+            {/* Sticky Cost Summary Sidebar */}
             {step > 0 && step < 7 && (
-              <div className="mb-6 bg-fw-base rounded-2xl border border-fw-secondary overflow-hidden">
-                <button
-                  onClick={() => setShowCostDrawer(!showCostDrawer)}
-                  className="w-full px-5 py-3 bg-fw-wash border-b border-fw-secondary flex items-center justify-between hover:bg-fw-neutral transition-colors"
-                >
-                  <div className="flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-fw-link" />
-                    <span className="text-figma-base font-semibold text-fw-heading">Cost Summary</span>
-                  </div>
-                  <span className="text-figma-xs text-fw-bodyLight">
-                    {showCostDrawer ? 'Collapse' : 'Expand'}
-                  </span>
-                </button>
-                {showCostDrawer && (
-                  <div className="p-5">
-                    <BillingPreview
-                      provider={selectedProvider as any}
-                      type={selectedType as any}
-                      bandwidth={selectedBandwidth as any}
-                      redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geo'}
-                      configuration={config.configuration}
-                      selectedPlanId={billingChoice.planId}
-                      onPlanChange={(planId) => updateBillingChoice({ planId })}
-                    />
-                  </div>
-                )}
+              <div className="hidden lg:block w-[300px] shrink-0">
+                <div className="sticky top-24">
+                  <BillingPreview
+                    provider={selectedProvider as any}
+                    type={selectedType as any}
+                    bandwidth={selectedBandwidth as any}
+                    redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geo'}
+                    configuration={config.configuration}
+                    selectedPlanId={billingChoice.planId}
+                    onPlanChange={(planId) => updateBillingChoice({ planId })}
+                  />
+                </div>
               </div>
             )}
+            </div>
 
             {/* Footer buttons - Figma spec: pill buttons, h-9 */}
             <div className="mt-12 flex items-center justify-between">
