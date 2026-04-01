@@ -1,7 +1,6 @@
 import { CheckCircle2, AlertTriangle, MapPin } from 'lucide-react';
 import { CloudProvider, LocationOption, BandwidthOption } from '../../../types/connection';
 import { getLocationLabels } from '../../../data/providerLocations';
-import { BillingPreview } from '../BillingPreview';
 import type { ResiliencyLevel } from './ResiliencySelection';
 
 interface ConnectionConfigurationProps {
@@ -9,14 +8,8 @@ interface ConnectionConfigurationProps {
   selectedBandwidth: BandwidthOption | undefined;
   provider?: string;
   type?: string;
-  billingChoice: {
-    planId: string;
-    term: string;
-    addons: string[];
-  };
   onLocationSelect: (location: LocationOption) => void;
   onBandwidthSelect: (bandwidth: BandwidthOption) => void;
-  onBillingChange: (updates: any) => void;
   // New multi-provider props
   selectedProviders?: CloudProvider[];
   selectedLocations?: Record<string, string[]>;
@@ -34,21 +27,10 @@ export function ConnectionConfiguration({
   selectedBandwidth,
   provider,
   type,
-  billingChoice,
   onLocationSelect,
   onBandwidthSelect,
-  onBillingChange,
 }: ConnectionConfigurationProps) {
   const minLocations = resiliencyLevel === 'maximum' ? 2 : 1;
-
-  // Derive first selected location for billing preview
-  const firstSelectedLocation = (() => {
-    for (const p of selectedProviders) {
-      const locs = selectedLocations[p] || [];
-      if (locs.length > 0) return locs[0];
-    }
-    return selectedLocation;
-  })();
 
   // If we have multi-provider data, use the new UI
   if (selectedProviders.length > 0 && onToggleLocation) {
@@ -58,8 +40,7 @@ export function ConnectionConfiguration({
           Select Locations
         </h3>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2 space-y-8">
+        <div className="space-y-8">
             <div className="text-center">
               <p className="text-figma-sm text-fw-bodyLight mt-2">
                 {resiliencyLevel === 'maximum'
@@ -142,17 +123,6 @@ export function ConnectionConfiguration({
                 );
               })}
             </div>
-          </div>
-
-          <div className="lg:col-span-1">
-            <BillingPreview
-              provider={selectedProviders[0] as any}
-              type={type as any}
-              location={firstSelectedLocation}
-              selectedPlanId={billingChoice.planId}
-              onPlanChange={(planId) => onBillingChange({ ...billingChoice, planId })}
-            />
-          </div>
         </div>
       </div>
     );
@@ -165,8 +135,6 @@ export function ConnectionConfiguration({
         Configure Your Connection
       </h3>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
           <div className="grid grid-cols-2 gap-3">
             {['US East', 'US West', 'EU West', 'Asia Pacific'].map((location) => (
               <button
@@ -188,18 +156,6 @@ export function ConnectionConfiguration({
               </button>
             ))}
           </div>
-        </div>
-
-        <div className="lg:col-span-1">
-          <BillingPreview
-            provider={provider as any}
-            type={type as any}
-            location={selectedLocation}
-            selectedPlanId={billingChoice.planId}
-            onPlanChange={(planId) => onBillingChange({ ...billingChoice, planId })}
-          />
-        </div>
-      </div>
     </div>
   );
 }

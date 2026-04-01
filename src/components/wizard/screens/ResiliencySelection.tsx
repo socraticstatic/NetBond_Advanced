@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { Shield, ShieldCheck, ShieldAlert } from 'lucide-react';
-import { BillingPreview } from '../BillingPreview';
 import { getResiliencyConfig } from '../../../data/providerResiliency';
 
 export type ResiliencyLevel = 'local' | 'geo' | 'maximum' | '';
@@ -11,12 +10,6 @@ interface ResiliencySelectionProps {
   provider?: string;
   providers?: string[];
   type?: string;
-  billingChoice: {
-    planId: string;
-    term: string;
-    addons: string[];
-  };
-  onBillingChange: (updates: any) => void;
 }
 
 const TIER_META = {
@@ -25,7 +18,7 @@ const TIER_META = {
   maximum: { title: 'Maximum Resiliency', icon: ShieldCheck },
 } as const;
 
-export function ResiliencySelection({ resiliencyLevel, onSelect, provider, providers, type, billingChoice, onBillingChange }: ResiliencySelectionProps) {
+export function ResiliencySelection({ resiliencyLevel, onSelect, provider, providers, type }: ResiliencySelectionProps) {
   // Use the first selected provider for display, or fall back
   const primaryProvider = provider || (providers && providers[0]) || '';
 
@@ -57,8 +50,6 @@ export function ResiliencySelection({ resiliencyLevel, onSelect, provider, provi
         </p>
       )}
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
           <div className="grid grid-cols-3 gap-4 max-w-4xl mx-auto">
             {options.map((option) => {
               const isSelected = resiliencyLevel === option.id;
@@ -109,18 +100,6 @@ export function ResiliencySelection({ resiliencyLevel, onSelect, provider, provi
               );
             })}
           </div>
-        </div>
-
-        <div className="lg:col-span-1">
-          <BillingPreview
-            provider={provider as any}
-            type={type as any}
-            redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geo'}
-            selectedPlanId={billingChoice.planId}
-            onPlanChange={(planId) => onBillingChange({ ...billingChoice, planId })}
-          />
-        </div>
-      </div>
     </div>
   );
 }
