@@ -21,8 +21,13 @@ interface BandwidthConfigurationProps {
  * - Google: Soft limit - capacity approximate. Can exceed. Not guaranteed.
  * - Oracle: Fixed only. No burst capability. Billed per port-hour.
  */
+/**
+ * Only Azure natively supports burstable bandwidth (2x via redundancy link).
+ * Google has soft limits (can exceed) but that's not user-selectable bursting.
+ * AWS and Oracle use traffic policing - no burst.
+ */
 function canBurst(provider: string): boolean {
-  return provider === 'Azure' || provider === 'Google';
+  return provider === 'Azure';
 }
 
 function getBurstRules(provider: string): { heading: string; rules: string[]; warning?: string } {
