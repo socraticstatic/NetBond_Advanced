@@ -1,16 +1,9 @@
 import { CheckCircle2 } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
-import { BillingPreview } from '../BillingPreview';
 
 interface ProviderSelectionProps {
   selectedProviders: CloudProvider[];
   onToggle: (provider: CloudProvider) => void;
-  billingChoice: {
-    planId: string;
-    term: string;
-    addons: string[];
-  };
-  onBillingChange: (updates: any) => void;
 }
 
 const CLOUD_PROVIDERS: { id: CloudProvider; name: string; logo: string }[] = [
@@ -74,8 +67,6 @@ const CLOUD_PROVIDERS: { id: CloudProvider; name: string; logo: string }[] = [
 export function ProviderSelection({
   selectedProviders,
   onToggle,
-  billingChoice,
-  onBillingChange,
 }: ProviderSelectionProps) {
   return (
     <div className="space-y-6">
@@ -83,8 +74,6 @@ export function ProviderSelection({
         Select Your Cloud Providers
       </h3>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
           <div className="text-center mb-8">
             <p className="text-figma-sm text-fw-bodyLight mt-2">
               Choose one or more providers for your connection
@@ -147,16 +136,6 @@ export function ProviderSelection({
               );
             })}
           </div>
-        </div>
-
-        <div className="lg:col-span-1">
-          <BillingPreview
-            provider={selectedProviders[0] as any}
-            selectedPlanId={billingChoice.planId}
-            onPlanChange={(planId) => onBillingChange({ ...billingChoice, planId })}
-          />
-        </div>
-      </div>
     </div>
   );
 }

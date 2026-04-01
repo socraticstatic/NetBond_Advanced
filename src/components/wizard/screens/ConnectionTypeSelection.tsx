@@ -1,7 +1,6 @@
 import { Globe, Lock, Network, Cog, Info } from 'lucide-react';
 import { useState } from 'react';
 import { ConnectionType } from '../../../types/connection';
-import { BillingPreview } from '../BillingPreview';
 
 const INTERNET_CONNECTION_TYPES = [
   {
@@ -70,35 +69,64 @@ interface ConnectionTypeSelectionProps {
   selectedType: ConnectionType | undefined;
   provider?: string;
   onSelect: (type: ConnectionType) => void;
-  billingChoice: {
-    planId: string;
-    term: string;
-    addons: string[];
-  };
-  onBillingChange: (updates: any) => void;
 }
 
 export function ConnectionTypeSelection({
   selectedType,
   provider,
   onSelect,
-  billingChoice,
-  onBillingChange
 }: ConnectionTypeSelectionProps) {
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
 
   const connectionTypes = INTERNET_CONNECTION_TYPES;
 
-  const getProviderLogo = () => {
-    const logos: Record<string, string> = {
-      'AWS': 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
-      'Azure': 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg',
-      'Google': 'https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg',
-    };
-    return provider ? logos[provider] : null;
+  const PROVIDER_LOGOS: Record<string, string> = {
+    'AWS': 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
+    'Azure': 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg',
+    'Google': 'https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg',
+    'Oracle': 'https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg',
+    'IBM': 'https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg',
+    'Equinix': 'https://logo.clearbit.com/equinix.com',
+    'Digital Realty': 'https://logo.clearbit.com/digitalrealty.com',
+    'CoreSite': 'https://logo.clearbit.com/coresite.com',
+    'DataBank': 'https://logo.clearbit.com/databank.com',
+    'Centersquare': 'https://logo.clearbit.com/centersquare.com',
+    'Cisco Jasper': 'https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg',
   };
 
-  const providerLogo = getProviderLogo();
+  // Provider-specific product name for each connection type
+  const getProviderContext = (connType: string): string | null => {
+    if (!provider) return null;
+    const contexts: Record<string, Record<string, string>> = {
+      'AWS': {
+        'Internet to Cloud': 'Provisions an AWS Direct Connect hosted connection',
+        'Cloud to Cloud': 'Uses Transit VIF on Direct Connect',
+        'DataCenter/CoLocation to Cloud': 'Provisions a Dedicated Direct Connect',
+        'VPN to Cloud': 'Uses AWS Site-to-Site VPN (not Direct Connect)',
+      },
+      'Azure': {
+        'Internet to Cloud': 'Provisions an Azure ExpressRoute circuit',
+        'Cloud to Cloud': 'Uses ExpressRoute Global Reach',
+        'DataCenter/CoLocation to Cloud': 'Provisions ExpressRoute Direct',
+        'VPN to Cloud': 'Uses Azure VPN Gateway (not ExpressRoute)',
+      },
+      'Google': {
+        'Internet to Cloud': 'Provisions a Google Partner Interconnect',
+        'Cloud to Cloud': 'Uses multiple VLAN Attachments',
+        'DataCenter/CoLocation to Cloud': 'Provisions a Dedicated Interconnect',
+        'VPN to Cloud': 'Uses Google Cloud VPN (not Interconnect)',
+      },
+      'Oracle': {
+        'Internet to Cloud': 'Provisions an Oracle FastConnect virtual circuit',
+        'Cloud to Cloud': 'Uses multiple FastConnect virtual circuits',
+        'DataCenter/CoLocation to Cloud': 'Provisions FastConnect Direct',
+        'VPN to Cloud': 'Uses OCI Site-to-Site VPN (not FastConnect)',
+      },
+    };
+    return contexts[provider]?.[connType] || null;
+  };
+
+  const providerLogo = provider ? PROVIDER_LOGOS[provider] : null;
 
   const tooltips: Record<string, string> = {
     'Internet to Cloud': 'High-performance internet connectivity with dedicated bandwidth to cloud services. Includes built-in security, DDoS protection, and 24/7 monitoring.',
@@ -113,9 +141,6 @@ export function ConnectionTypeSelection({
       {/* Content title: 24px w700 #1d2329 */}
       <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">Choose Your Connection Type</h3>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        {/* Connection Types - full width cards */}
-        <div className="lg:col-span-2">
           <div className="space-y-4">
             {connectionTypes.map(
               ({ type, icon: Icon, description, color, features, disabled }) => (
@@ -135,12 +160,12 @@ export function ConnectionTypeSelection({
                     `}
                   >
                     <div className="flex items-start">
-                      <div className="flex-shrink-0">
-                        {/* Card icon: 32x32 */}
-                        {type === 'Internet to Cloud' && providerLogo ? (
+                      <div className="flex-shrink-0 flex items-center gap-2">
+                        {/* Provider logo on ALL cards when a provider is selected */}
+                        {providerLogo && !disabled ? (
                           <img
                             src={providerLogo}
-                            alt={provider}
+                            alt={provider || ''}
                             className="h-8 w-8 object-contain"
                           />
                         ) : (
@@ -194,11 +219,17 @@ export function ConnectionTypeSelection({
                           </div>
                         )}
                         {/* Card desc: 14px w500 #454b52 (active) or #878c94 (disabled) */}
-                        <span className={`text-figma-base font-medium block mb-4 mt-1 ${
+                        <span className={`text-figma-base font-medium block mb-2 mt-1 ${
                           disabled ? 'text-fw-disabled' : 'text-fw-body'
                         }`}>
                           {description}
                         </span>
+                        {/* Provider-specific context from decision tree */}
+                        {!disabled && getProviderContext(type) && (
+                          <span className="text-figma-xs text-fw-link block mb-3">
+                            {getProviderContext(type)}
+                          </span>
+                        )}
                         <div className="grid grid-cols-2 gap-2">
                           {features.map((feature, index) => (
                             <div
@@ -221,18 +252,6 @@ export function ConnectionTypeSelection({
               )
             )}
           </div>
-        </div>
-
-        {/* Billing Preview */}
-        <div className="lg:col-span-1">
-          <BillingPreview
-            provider={provider as any}
-            type={selectedType}
-            selectedPlanId={billingChoice.planId}
-            onPlanChange={(planId) => onBillingChange({ ...billingChoice, planId })}
-          />
-        </div>
-      </div>
     </div>
   );
 }
