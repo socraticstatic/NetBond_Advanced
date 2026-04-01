@@ -1,14 +1,27 @@
 /**
- * Provider-specific bandwidth tiers.
+ * Provider-specific bandwidth tiers and burst models.
  *
- * Each provider has different available bandwidth options.
- * AWS Hosted goes to 25G. Google Partner goes to 50G.
- * Oracle partner caps at 10G. Azure caps at 10G (Direct at 100G).
+ * Each provider has different available bandwidth options AND different
+ * bandwidth enforcement models:
+ * - AWS: Fixed (traffic policing, excess dropped)
+ * - Azure: Burstable up to 2x via redundancy link
+ * - Google: Soft limits (approximate, can exceed)
+ * - Oracle: Fixed (no burst)
  */
 
 export interface BandwidthOption {
   value: number;
   label: string;
+}
+
+export type BurstModel = 'fixed' | 'burstable' | 'soft';
+
+export interface ProviderBandwidthConfig {
+  options: BandwidthOption[];
+  burstModel: BurstModel;
+  burstMultiplier?: number;
+  burstNote: string;
+  billingNote: string;
 }
 
 const AWS_HOSTED: BandwidthOption[] = [
@@ -66,11 +79,39 @@ const DEFAULT_BANDWIDTH: BandwidthOption[] = [
   { value: 10000, label: '10 Gbps' },
 ];
 
-const PROVIDER_BANDWIDTH: Record<string, BandwidthOption[]> = {
-  'AWS': AWS_HOSTED,
-  'Azure': AZURE_CIRCUIT,
-  'Google': GOOGLE_PARTNER,
-  'Oracle': ORACLE_PARTNER,
+const PROVIDER_CONFIGS: Record<string, ProviderBandwidthConfig> = {
+  'AWS': {
+    options: AWS_HOSTED,
+    burstModel: 'fixed',
+    burstNote: 'Traffic exceeding provisioned rate is dropped (traffic policing).',
+    billingNote: 'Billed per port-hour plus data transfer.',
+  },
+  'Azure': {
+    options: AZURE_CIRCUIT,
+    burstModel: 'burstable',
+    burstMultiplier: 2,
+    burstNote: 'Can burst up to 2x provisioned bandwidth using redundancy link. Not for sustained use.',
+    billingNote: 'Metered (pay per GB outbound) or Unlimited (flat rate).',
+  },
+  'Google': {
+    options: GOOGLE_PARTNER,
+    burstModel: 'soft',
+    burstNote: 'Capacity is approximate. Attachments may exceed provisioned bandwidth. Rate limiting on your router recommended.',
+    billingNote: 'Billed per VLAN attachment capacity.',
+  },
+  'Oracle': {
+    options: ORACLE_PARTNER,
+    burstModel: 'fixed',
+    burstNote: 'Fixed provisioned bandwidth. Can be modified after creation.',
+    billingNote: 'Billed per port-hour only. No data transfer charges.',
+  },
+};
+
+const DEFAULT_CONFIG: ProviderBandwidthConfig = {
+  options: DEFAULT_BANDWIDTH,
+  burstModel: 'fixed',
+  burstNote: 'Fixed provisioned bandwidth.',
+  billingNote: 'Standard billing.',
 };
 
 /**
@@ -78,5 +119,12 @@ const PROVIDER_BANDWIDTH: Record<string, BandwidthOption[]> = {
  * Falls back to a default set for providers without specific data.
  */
 export function getProviderBandwidth(provider: string): BandwidthOption[] {
-  return PROVIDER_BANDWIDTH[provider] || DEFAULT_BANDWIDTH;
+  return (PROVIDER_CONFIGS[provider] || DEFAULT_CONFIG).options;
+}
+
+/**
+ * Get full bandwidth config including burst model for a provider.
+ */
+export function getProviderBandwidthConfig(provider: string): ProviderBandwidthConfig {
+  return PROVIDER_CONFIGS[provider] || DEFAULT_CONFIG;
 }
