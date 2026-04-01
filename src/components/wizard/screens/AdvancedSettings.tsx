@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Network, Globe, Activity, Settings, Info, Upload, X, AlertTriangle, Shield } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
-import { BillingPreview } from '../BillingPreview';
 import { PROVIDER_CREDENTIALS, isSecretField } from '../../../data/providerCredentialFields';
 import { NetworkConfigUpload } from '../NetworkConfigUpload';
 
@@ -43,19 +42,11 @@ interface AdvancedSettingsProps {
     };
   };
   onConfigChange: (updates: any) => void;
-  billingChoice: {
-    planId: string;
-    term: string;
-    addons: string[];
-  };
-  onBillingChange: (updates: any) => void;
 }
 
-export function AdvancedSettings({ 
-  config, 
+export function AdvancedSettings({
+  config,
   onConfigChange,
-  billingChoice,
-  onBillingChange
 }: AdvancedSettingsProps) {
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
   const [uploadedConfigs, setUploadedConfigs] = useState<Record<string, any>>({});
@@ -140,8 +131,7 @@ export function AdvancedSettings({
     <div className="space-y-8">
       <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">Advanced Configuration</h3>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6">
           <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
             <div className="flex items-center space-x-3 mb-6">
               <div className="p-2 bg-fw-accent rounded-lg">
@@ -941,21 +931,6 @@ export function AdvancedSettings({
             </div>
           </div>
         </div>
-
-        <div className="lg:col-span-1">
-          <div className="sticky top-4">
-            <BillingPreview
-              provider={config.provider}
-              type={config.type as any}
-              bandwidth={config.bandwidth as any}
-              location={config.location}
-              configuration={config.configuration}
-              selectedPlanId={billingChoice.planId}
-              onPlanChange={(planId) => onBillingChange({ ...billingChoice, planId })}
-            />
-          </div>
-        </div>
-      </div>
 
       {showBulkImport && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
