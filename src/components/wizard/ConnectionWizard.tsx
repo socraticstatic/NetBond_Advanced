@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, Suspense, lazy } from 'react';
-import { Globe, Server, Cloud, X, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Globe, Server, Cloud, X, ArrowLeft, ArrowRight, DollarSign } from 'lucide-react';
+import { SideDrawer } from '../common/SideDrawer';
 import { PhaseIndicator } from './PhaseIndicator';
 import { CloudProvider, ConnectionType, BandwidthOption, LocationOption, ConnectionConfig } from '../../types/connection';
 import { ProviderSelection } from './screens/ProviderSelection';
@@ -138,7 +139,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
     addons: []
   });
 
-  // Cost sidebar is always visible on desktop (hidden on mobile via lg:block)
+  const [showCostDrawer, setShowCostDrawer] = useState(false);
 
   // For visual editor, convert connection to nodes and edges
   const [initialNodes, setInitialNodes] = useState<NetworkNode[]>([]);
@@ -684,23 +685,44 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
 
             </div>
 
-            {/* Sticky Cost Summary Sidebar */}
+          </div>
+
+            {/* Cost Summary Drawer - slides in from right */}
             {step > 0 && step < 7 && (
-              <div className="hidden lg:block w-[300px] shrink-0">
-                <div className="sticky top-24">
+              <>
+                <button
+                  onClick={() => setShowCostDrawer(true)}
+                  className="fixed right-6 bottom-24 z-30 inline-flex items-center gap-2 px-5 py-3 rounded-full bg-fw-primary text-white shadow-lg hover:bg-fw-primaryHover transition-colors text-figma-base font-medium"
+                >
+                  <DollarSign className="h-5 w-5" />
+                  Cost Estimate
+                </button>
+                <SideDrawer
+                  isOpen={showCostDrawer}
+                  onClose={() => setShowCostDrawer(false)}
+                  title="Cost Summary"
+                  size="sm"
+                >
                   <BillingPreview
-                    provider={selectedProvider as any}
+                    provider={(selectedProvider || selectedProviders[0]) as any}
                     type={selectedType as any}
-                    bandwidth={selectedBandwidth as any}
+                    bandwidth={(() => {
+                      const firstKey = Object.keys(bandwidthSettings)[0];
+                      if (firstKey) {
+                        const bw = bandwidthSettings[firstKey];
+                        if (bw >= 1000) return `${bw / 1000} Gbps` as any;
+                        return `${bw} Mbps` as any;
+                      }
+                      return selectedBandwidth as any;
+                    })()}
                     redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geo'}
                     configuration={config.configuration}
                     selectedPlanId={billingChoice.planId}
                     onPlanChange={(planId) => updateBillingChoice({ planId })}
                   />
-                </div>
-              </div>
+                </SideDrawer>
+              </>
             )}
-          </div>
 
             {/* Footer buttons - Figma spec: pill buttons, h-9 */}
             <div className="mt-12 flex items-center justify-between">
