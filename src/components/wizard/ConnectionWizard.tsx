@@ -558,29 +558,17 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               {step === 0 && (
                 <div className="space-y-6">
                   <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">Name Your Cloud Router</h3>
-
-                  <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                    <div className="lg:col-span-2">
-                      <div className="max-w-[500px] mx-auto">
-                        <input
-                          type="text"
-                          value={cloudRouterName}
-                          onChange={(e) => setCloudRouterName(e.target.value)}
-                          placeholder="e.g., Production-Finance-Cloud-Router-East-01"
-                          className="w-full h-9 px-3 rounded-lg border border-fw-primary text-figma-base font-medium text-fw-heading placeholder:text-fw-bodyLight focus:border-fw-active focus:ring-fw-active focus:outline-none"
-                        />
-                        <p className="mt-2 text-figma-xs font-medium text-fw-disabled">
-                          Choose a meaningful name that reflects your Cloud Router's role in your network architecture.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="lg:col-span-1">
-                      <BillingPreview
-                        selectedPlanId={billingChoice.planId}
-                        onPlanChange={(planId) => updateBillingChoice({ planId })}
-                      />
-                    </div>
+                  <div className="max-w-[500px] mx-auto">
+                    <input
+                      type="text"
+                      value={cloudRouterName}
+                      onChange={(e) => setCloudRouterName(e.target.value)}
+                      placeholder="e.g., Production-Finance-Cloud-Router-East-01"
+                      className="w-full h-9 px-3 rounded-lg border border-fw-primary text-figma-base font-medium text-fw-heading placeholder:text-fw-bodyLight focus:border-fw-active focus:ring-fw-active focus:outline-none"
+                    />
+                    <p className="mt-2 text-figma-xs font-medium text-fw-disabled">
+                      Choose a meaningful name that reflects your Cloud Router's role in your network architecture.
+                    </p>
                   </div>
                 </div>
               )}
