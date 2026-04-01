@@ -9,6 +9,7 @@ import { ConnectionConfiguration } from './screens/ConnectionConfiguration';
 import { AdvancedSettings } from './screens/AdvancedSettings';
 import { ReviewConfiguration } from './screens/ReviewConfiguration';
 import { ResiliencySelection, ResiliencyLevel } from './screens/ResiliencySelection';
+import { getMinLocations } from '../../data/providerResiliency';
 import { BandwidthConfiguration } from './screens/BandwidthConfiguration';
 import { BillingPreview } from './BillingPreview';
 import { ModeSelection } from './modes';
@@ -282,18 +283,14 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       case 3:
         return resiliencyLevel !== '';
       case 4: {
-        // Multi-provider location validation using provider-specific rules
+        // Location validation using provider-specific resiliency rules
         if (selectedProviders.length > 0) {
           return selectedProviders.every(p => {
             const locs = (selectedLocations[p] || []).length;
-            if (resiliencyLevel === 'maximum') return locs >= 2;
-            if (resiliencyLevel === 'geo') {
-              // Oracle Geo = same location, different devices -> only 1 location needed
-              if (p === 'Oracle') return locs >= 1;
-              // All others need 2 locations for Geo
-              return locs >= 2;
-            }
-            return locs >= 1;
+            const tier = (resiliencyLevel || 'local') as 'local' | 'geo' | 'maximum';
+            // Use minLocations from provider resiliency config
+            const minLocs = getMinLocations(p, tier);
+            return locs >= minLocs;
           });
         }
         return !!selectedLocation;
