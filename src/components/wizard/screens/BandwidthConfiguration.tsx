@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Gauge, Zap, Lock, AlertTriangle, Info } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
 import { getProviderBandwidth, getProviderBandwidthConfig } from '../../../data/providerBandwidth';
+import { getResiliencyConfig } from '../../../data/providerResiliency';
 
 interface BandwidthConfigurationProps {
   selectedProviders: CloudProvider[];
@@ -9,6 +10,7 @@ interface BandwidthConfigurationProps {
   bandwidthSettings: Record<string, number>;
   onBandwidthChange: (key: string, value: number) => void;
   type?: string;
+  resiliencyLevel?: string;
 }
 
 /**
@@ -79,19 +81,34 @@ export function BandwidthConfiguration({
   bandwidthSettings,
   onBandwidthChange,
   type,
+  resiliencyLevel = 'local',
 }: BandwidthConfigurationProps) {
-  // Per-connection bandwidth mode (fixed or burstable)
   const [bandwidthModes, setBandwidthModes] = useState<Record<string, 'fixed' | 'burstable'>>({});
-  // Which card has burst rules expanded
   const [expandedBurstRules, setExpandedBurstRules] = useState<string | null>(null);
 
+  // Build connections based on provider resiliency rules:
+  // AWS Max = 2 connections per location (4 total across 2 locations)
+  // Azure Max = 1 circuit per location (2 total across 2 metros)
+  // Google Max = 2 attachments per location (4 total across 2 metros)
+  // Oracle Geo = 2 circuits at same location
   const connections = selectedProviders.flatMap(providerId => {
     const locations = selectedLocations[providerId] || [];
-    return locations.map(location => ({
-      providerId,
-      location,
-      key: `${providerId}-${location}`,
-    }));
+    const tier = (resiliencyLevel || 'local') as 'local' | 'geo' | 'maximum';
+    const config = getResiliencyConfig(providerId, tier);
+    const connectionsPerLocation = Math.max(1, Math.ceil(config.minConnections / Math.max(1, config.minLocations)));
+
+    return locations.flatMap(location => {
+      if (connectionsPerLocation <= 1) {
+        return [{ providerId, location, key: `${providerId}-${location}`, connectionIndex: 1 }];
+      }
+      // Multiple connections per location (e.g., AWS Max = 2 per location)
+      return Array.from({ length: connectionsPerLocation }, (_, i) => ({
+        providerId,
+        location,
+        key: `${providerId}-${location}-${i + 1}`,
+        connectionIndex: i + 1,
+      }));
+    });
   });
 
   const totalBandwidth = connections.reduce((sum, c) => sum + (bandwidthSettings[c.key] || 1000), 0);
@@ -130,7 +147,7 @@ export function BandwidthConfiguration({
         </div>
 
         <div className={`grid gap-6 ${connections.length > 1 ? 'grid-cols-2' : 'grid-cols-1 max-w-lg mx-auto'}`}>
-          {connections.map(({ providerId, location, key }) => {
+          {connections.map(({ providerId, location, key, connectionIndex }) => {
             const currentBw = bandwidthSettings[key] || 1000;
             const bandwidthOptions = getProviderBandwidth(providerId);
             const option = bandwidthOptions.find(o => o.value === currentBw) || bandwidthOptions[2] || bandwidthOptions[0];
@@ -143,7 +160,9 @@ export function BandwidthConfiguration({
               <div key={key} className="border border-fw-secondary rounded-2xl overflow-hidden">
                 {/* Header */}
                 <div className="px-5 py-4 bg-fw-wash border-b border-fw-secondary">
-                  <p className="text-figma-sm font-semibold text-fw-heading">{providerId}</p>
+                  <p className="text-figma-sm font-semibold text-fw-heading">
+                    {providerId}{connectionIndex > 1 ? ` - Connection ${connectionIndex}` : ''}
+                  </p>
                   <p className="text-figma-xs text-fw-bodyLight">{location}</p>
                 </div>
 

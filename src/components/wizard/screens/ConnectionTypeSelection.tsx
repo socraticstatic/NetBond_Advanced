@@ -43,12 +43,12 @@ const INTERNET_CONNECTION_TYPES = [
   {
     type: 'VPN to Cloud',
     icon: Lock,
-    description: 'Encrypted tunnel connectivity from any site to cloud',
+    description: 'Encrypted tunnel over internet. Does not use the provider\'s dedicated interconnect product.',
     features: [
       'IPSec/IKEv2 encryption',
       'Split-tunnel support',
       'Redundant endpoints',
-      'Policy-based routing',
+      'Can coexist as failover alongside dedicated connections',
     ],
     disabled: false,
   },
@@ -173,15 +173,8 @@ export function ConnectionTypeSelection({
                     `}
                   >
                     <div className="flex items-start">
-                      <div className="flex-shrink-0 flex items-center gap-2">
-                        {/* Provider logo on ALL cards when a provider is selected */}
-                        {providerLogo && !disabled ? (
-                          <img
-                            src={providerLogo}
-                            alt={provider || ''}
-                            className="h-8 w-8 object-contain"
-                          />
-                        ) : (
+                      <div className="flex-shrink-0">
+                        {/* Connection type icon - AT&T concept, not provider */}
                           <Icon
                             className={`h-8 w-8 ${
                               disabled
@@ -191,7 +184,6 @@ export function ConnectionTypeSelection({
                                   : 'text-fw-body'
                             } mt-1`}
                           />
-                        )}
                       </div>
                       <div className="ml-4 text-left flex-1">
                         <div className="flex items-center">

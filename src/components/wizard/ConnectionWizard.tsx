@@ -282,10 +282,19 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       case 3:
         return resiliencyLevel !== '';
       case 4: {
-        // Multi-provider location validation
+        // Multi-provider location validation using provider-specific rules
         if (selectedProviders.length > 0) {
-          const minLocs = resiliencyLevel === 'maximum' ? 2 : resiliencyLevel === 'geo' ? 2 : 1;
-          return selectedProviders.every(p => (selectedLocations[p] || []).length >= minLocs);
+          return selectedProviders.every(p => {
+            const locs = (selectedLocations[p] || []).length;
+            if (resiliencyLevel === 'maximum') return locs >= 2;
+            if (resiliencyLevel === 'geo') {
+              // Oracle Geo = same location, different devices -> only 1 location needed
+              if (p === 'Oracle') return locs >= 1;
+              // All others need 2 locations for Geo
+              return locs >= 2;
+            }
+            return locs >= 1;
+          });
         }
         return !!selectedLocation;
       }
@@ -628,6 +637,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   bandwidthSettings={bandwidthSettings}
                   onBandwidthChange={updateBandwidth}
                   type={selectedType}
+                  resiliencyLevel={resiliencyLevel}
                 />
               )}
 
@@ -664,7 +674,6 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   onEditStep={(s) => setStep(s)}
                 />
               )}
-            </div>
 
             {/* Error message */}
             {error && (
@@ -691,7 +700,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 </div>
               </div>
             )}
-            </div>
+          </div>
 
             {/* Footer buttons - Figma spec: pill buttons, h-9 */}
             <div className="mt-12 flex items-center justify-between">
