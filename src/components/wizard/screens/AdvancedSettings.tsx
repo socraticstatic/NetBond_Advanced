@@ -33,6 +33,7 @@ interface AdvancedSettingsProps {
       // Oracle-specific
       oracleOcid?: string;
       oracleCompartmentId?: string;
+      oracleDrgId?: string;
       // Azure-specific
       azureSku?: 'local' | 'standard' | 'premium';
       // Cloud-to-Cloud specific
@@ -368,63 +369,76 @@ export function AdvancedSettings({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
-                <div className="relative">
-                  <label className="block text-figma-base font-medium text-fw-body mb-2">
-                    Customer Subnet
-                    <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('custSubnet')} onMouseLeave={() => setShowTooltip(null)}>
-                      <Info className="h-4 w-4 inline" />
-                    </button>
-                  </label>
-                  {showTooltip === 'custSubnet' && (
-                    <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
-                      Your side of the BGP peering subnet in CIDR notation. Typically a /30 or /31.
-                    </div>
-                  )}
-                  <input
-                    type="text"
-                    value={config.configuration?.customerSubnet || ''}
-                    onChange={(e) => handleConfigChange('customerSubnet', e.target.value)}
-                    placeholder="e.g., 192.168.1.1/30"
-                    className={`w-full px-3 h-10 rounded-lg border shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono ${
-                      config.configuration?.customerSubnet && !validateSubnet(config.configuration.customerSubnet)
-                        ? 'border-fw-error'
-                        : 'border-fw-primary'
-                    }`}
-                  />
-                  {config.configuration?.customerSubnet && !validateSubnet(config.configuration.customerSubnet) && (
-                    <p className="mt-1 text-figma-xs text-fw-error">Invalid CIDR format</p>
-                  )}
+              {/* Google assigns BGP peering IPs - customer only provides ASN */}
+              {(config.provider === 'Google' || config.providers?.includes('Google' as CloudProvider)) ? (
+                <div className="bg-fw-accent rounded-lg p-4 flex items-start gap-3">
+                  <Info className="h-5 w-5 text-fw-link shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-figma-sm font-medium text-fw-heading">Google Cloud assigns BGP peering IPs</p>
+                    <p className="text-figma-xs text-fw-bodyLight mt-1">
+                      For Google Cloud Interconnect, BGP session IP addresses are automatically assigned by Google. You only need to provide your ASN (configured above).
+                    </p>
+                  </div>
                 </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="relative">
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">
+                      Customer Subnet
+                      <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('custSubnet')} onMouseLeave={() => setShowTooltip(null)}>
+                        <Info className="h-4 w-4 inline" />
+                      </button>
+                    </label>
+                    {showTooltip === 'custSubnet' && (
+                      <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                        Your side of the BGP peering subnet in CIDR notation. Typically a /30 or /31.
+                      </div>
+                    )}
+                    <input
+                      type="text"
+                      value={config.configuration?.customerSubnet || ''}
+                      onChange={(e) => handleConfigChange('customerSubnet', e.target.value)}
+                      placeholder="e.g., 192.168.1.1/30"
+                      className={`w-full px-3 h-10 rounded-lg border shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono ${
+                        config.configuration?.customerSubnet && !validateSubnet(config.configuration.customerSubnet)
+                          ? 'border-fw-error'
+                          : 'border-fw-primary'
+                      }`}
+                    />
+                    {config.configuration?.customerSubnet && !validateSubnet(config.configuration.customerSubnet) && (
+                      <p className="mt-1 text-figma-xs text-fw-error">Invalid CIDR format</p>
+                    )}
+                  </div>
 
-                <div className="relative">
-                  <label className="block text-figma-base font-medium text-fw-body mb-2">
-                    Provider Subnet
-                    <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('provSubnet')} onMouseLeave={() => setShowTooltip(null)}>
-                      <Info className="h-4 w-4 inline" />
-                    </button>
-                  </label>
-                  {showTooltip === 'provSubnet' && (
-                    <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
-                      Provider side of the BGP peering subnet. Assigned by the cloud provider.
-                    </div>
-                  )}
-                  <input
-                    type="text"
-                    value={config.configuration?.providerSubnet || ''}
-                    onChange={(e) => handleConfigChange('providerSubnet', e.target.value)}
-                    placeholder="e.g., 192.168.1.2/30"
-                    className={`w-full px-3 h-10 rounded-lg border shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono ${
-                      config.configuration?.providerSubnet && !validateSubnet(config.configuration.providerSubnet)
-                        ? 'border-fw-error'
-                        : 'border-fw-primary'
-                    }`}
-                  />
-                  {config.configuration?.providerSubnet && !validateSubnet(config.configuration.providerSubnet) && (
-                    <p className="mt-1 text-figma-xs text-fw-error">Invalid CIDR format</p>
-                  )}
+                  <div className="relative">
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">
+                      Provider Subnet
+                      <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('provSubnet')} onMouseLeave={() => setShowTooltip(null)}>
+                        <Info className="h-4 w-4 inline" />
+                      </button>
+                    </label>
+                    {showTooltip === 'provSubnet' && (
+                      <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                        Provider side of the BGP peering subnet. Assigned by the cloud provider.
+                      </div>
+                    )}
+                    <input
+                      type="text"
+                      value={config.configuration?.providerSubnet || ''}
+                      onChange={(e) => handleConfigChange('providerSubnet', e.target.value)}
+                      placeholder="e.g., 192.168.1.2/30"
+                      className={`w-full px-3 h-10 rounded-lg border shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono ${
+                        config.configuration?.providerSubnet && !validateSubnet(config.configuration.providerSubnet)
+                          ? 'border-fw-error'
+                          : 'border-fw-primary'
+                      }`}
+                    />
+                    {config.configuration?.providerSubnet && !validateSubnet(config.configuration.providerSubnet) && (
+                      <p className="mt-1 text-figma-xs text-fw-error">Invalid CIDR format</p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="grid grid-cols-2 gap-6">
                 <div>
@@ -706,6 +720,26 @@ export function AdvancedSettings({
                       value={config.configuration?.oracleCompartmentId || ''}
                       onChange={(e) => handleConfigChange('oracleCompartmentId', e.target.value)}
                       placeholder="ocid1.compartment.oc1..."
+                      className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono"
+                    />
+                  </div>
+                  <div className="relative">
+                    <label className="block text-figma-base font-medium text-fw-body mb-2">
+                      DRG ID
+                      <button className="ml-2 text-fw-bodyLight hover:text-fw-bodyLight" onMouseEnter={() => setShowTooltip('drg')} onMouseLeave={() => setShowTooltip(null)}>
+                        <Info className="h-4 w-4 inline" />
+                      </button>
+                    </label>
+                    {showTooltip === 'drg' && (
+                      <div className="absolute z-10 w-72 px-3 py-2 bg-fw-heading text-white text-figma-base rounded-lg -top-2 left-full ml-2">
+                        Dynamic Routing Gateway ID. The DRG is the single entry point for private traffic to your VCN over FastConnect.
+                      </div>
+                    )}
+                    <input
+                      type="text"
+                      value={config.configuration?.oracleDrgId || ''}
+                      onChange={(e) => handleConfigChange('oracleDrgId', e.target.value)}
+                      placeholder="ocid1.drg.oc1..."
                       className="w-full px-3 h-9 rounded-lg border border-fw-primary shadow-sm focus:border-fw-active focus:ring-fw-active text-figma-base font-mono"
                     />
                   </div>
