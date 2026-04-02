@@ -54,7 +54,7 @@ const createBillingData = (
 export const sampleConnections: Connection[] = [
   {
     id: 'conn-lmcc-1',
-    name: 'LMCC - San Jose Metro',
+    name: 'AWS Max - San Jose Metro',
     type: 'Internet to Cloud',
     status: 'Active',
     bandwidth: '1 Gbps',
@@ -93,7 +93,7 @@ export const sampleConnections: Connection[] = [
   },
   {
     id: 'conn-lmcc-pending',
-    name: 'LMCC - Los Angeles (Awaiting Setup)',
+    name: 'AWS Max - Los Angeles (Awaiting Setup)',
     type: 'Internet to Cloud',
     status: 'Pending',
     bandwidth: '1 Gbps',
