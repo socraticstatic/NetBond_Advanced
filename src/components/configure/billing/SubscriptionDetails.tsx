@@ -27,12 +27,12 @@ export function SubscriptionDetails() {
 
   return (
     <div className="space-y-6">
-      {/* LMCC Billing Model */}
+      {/* AWS Max Billing Model */}
       <div className="card border-fw-active/30">
         <div className="card-header bg-fw-accent">
           <div className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-fw-link" />
-            <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">LMCC Billing Model</h3>
+            <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">AWS Max Billing Model</h3>
             <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>AWS Direct Connect</span>
           </div>
         </div>
