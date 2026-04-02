@@ -78,9 +78,15 @@ export function ConnectionCardHeader({
                       <Shield className="h-3 w-3" />
                       LMCC
                     </span>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.16)' }}>
-                      {connection.configuration.lmccActivePaths}/{connection.configuration.lmccPaths} paths
-                    </span>
+                    {connection.configuration.lmccPending ? (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.16)' }}>
+                        Awaiting Setup
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.16)' }}>
+                        {connection.configuration.lmccActivePaths}/{connection.configuration.lmccPaths} paths
+                      </span>
+                    )}
                     <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#454b52', backgroundColor: 'rgba(69,75,82,0.12)' }}>
                       {connection.configuration.lmccMetro}
                     </span>
