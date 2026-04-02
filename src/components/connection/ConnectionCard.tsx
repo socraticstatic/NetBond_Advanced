@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { AttIcon } from '../icons/AttIcon';
@@ -390,18 +391,19 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
         />
       )}
 
-      {/* LMCC Kickoff Modal for pending LMCC connections */}
-      {isPendingLmcc && showLmccKickoff && !showLmccOnboarding && (
+      {/* LMCC Kickoff Modal - portal to body to escape transform stacking context */}
+      {isPendingLmcc && showLmccKickoff && !showLmccOnboarding && createPortal(
         <LMCCKickoffModal
           connection={MOCK_LMCC_CONNECTIONS.find(c => c.status === 'pending-acceptance') || MOCK_LMCC_CONNECTIONS[0]}
           isOpen={true}
           onClose={() => setShowLmccKickoff(false)}
           onStartSetup={() => { setShowLmccKickoff(false); setShowLmccOnboarding(true); }}
-        />
+        />,
+        document.body
       )}
 
-      {/* LMCC Onboarding Drawer */}
-      {isPendingLmcc && showLmccOnboarding && (
+      {/* LMCC Onboarding Drawer - portal to body */}
+      {isPendingLmcc && showLmccOnboarding && createPortal(
         <LMCCOnboardingDrawer
           connection={MOCK_LMCC_CONNECTIONS.find(c => c.status === 'pending-acceptance') || MOCK_LMCC_CONNECTIONS[0]}
           isOpen={true}
@@ -420,7 +422,8 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
               duration: 5000,
             });
           }}
-        />
+        />,
+        document.body
       )}
     </motion.div>
   );

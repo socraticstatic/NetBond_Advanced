@@ -38,7 +38,7 @@ export function LMCCKickoffModal({ connection, isOpen, onClose, onStartSetup }: 
   const pendingPaths = connection.paths.filter(p => p.status === 'pending').length;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4" onClick={onClose}>
       <div
         className="bg-fw-base rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
