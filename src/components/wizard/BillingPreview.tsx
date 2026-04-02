@@ -11,10 +11,13 @@ interface BillingPreviewProps {
     bfdEnabled?: boolean;
     ddosProtection?: boolean;
     advancedMonitoring?: boolean;
+    lmccContractTerm?: string;
   };
   location?: string;
   selectedPlanId?: string;
   onPlanChange?: (planId: string) => void;
+  resiliencyLevel?: string;
+  lmccBandwidth?: number;
 }
 
 export function BillingPreview({
@@ -25,8 +28,11 @@ export function BillingPreview({
   configuration,
   location,
   selectedPlanId = 'pay-as-you-go',
-  onPlanChange
+  onPlanChange,
+  resiliencyLevel,
+  lmccBandwidth,
 }: BillingPreviewProps) {
+  const isLmcc = provider === 'AWS' && resiliencyLevel === 'maximum' && type === 'Internet to Cloud';
   const [showPlanSelector, setShowPlanSelector] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -130,79 +136,130 @@ export function BillingPreview({
     'Equinix': 1.05
   };
 
+  // LMCC pricing tiers (per path/month)
+  const lmccPricing: Record<number, number> = {
+    1000: 1249,   // 1 Gbps
+    50: 299,
+    100: 399,
+    200: 499,
+    300: 599,
+    400: 699,
+    500: 849,
+    2000: 1999,
+    5000: 3499,
+    10000: 5999,
+    25000: 12999,
+    50000: 22999,
+    100000: 39999,
+  };
+
   // Calculate line items
-  const lineItems: Array<{ description: string; amount: number }> = [];
+  const lineItems: Array<{ description: string; amount: number; note?: string }> = [];
 
-  // Connection type line item
-  if (type) {
-    lineItems.push({
-      description: `${type} Connection`,
-      amount: 0
-    });
-  }
+  if (isLmcc) {
+    // LMCC-specific pricing
+    const bw = lmccBandwidth || 1000;
+    const perPathCost = lmccPricing[bw] || 1249;
+    const bwLabel = bw >= 1000 ? `${bw / 1000} Gbps` : `${bw} Mbps`;
 
-  // Region line item
-  if (location) {
     lineItems.push({
-      description: `${location} Region`,
-      amount: 0
-    });
-  }
-
-  // Base connection cost
-  if (bandwidth) {
-    const baseAmount = basePricing[bandwidth];
-    lineItems.push({
-      description: `${bandwidth} Base Connection`,
-      amount: baseAmount
+      description: 'LMCC Connection (4 paths)',
+      amount: 0,
+      note: 'Maximum Resiliency'
     });
 
-    // Provider adjustment
-    if (provider) {
-      const multiplier = providerMultiplier[provider];
-      const adjustment = baseAmount * (multiplier - 1);
-      if (adjustment !== 0) {
-        lineItems.push({
-          description: `Platform Fee`,
-          amount: adjustment
-        });
-      }
+    lineItems.push({
+      description: `${bwLabel} x 4 paths`,
+      amount: perPathCost * 4,
+    });
+
+    lineItems.push({
+      description: 'MPLS Transport (AVPN)',
+      amount: 0,
+      note: 'Included'
+    });
+
+    const contractTerm = configuration?.lmccContractTerm || 'trial';
+    if (contractTerm === 'trial') {
+      lineItems.push({
+        description: 'Trial Contract',
+        amount: 0,
+        note: 'Zero-penalty disconnect'
+      });
     }
   } else {
-    lineItems.push({
-      description: 'Base Connection',
-      amount: 999
-    });
-  }
+    // Standard pricing
+    // Connection type line item
+    if (type) {
+      lineItems.push({
+        description: `${type} Connection`,
+        amount: 0
+      });
+    }
 
-  // Redundancy cost
-  if (redundancy) {
-    lineItems.push({
-      description: 'Redundant Path',
-      amount: bandwidth ? basePricing[bandwidth] * 0.5 : 499
-    });
-  }
+    // Region line item
+    if (location) {
+      lineItems.push({
+        description: `${location} Region`,
+        amount: 0
+      });
+    }
 
-  // Additional features
-  if (configuration?.bfdEnabled) {
-    lineItems.push({
-      description: 'BFD Monitoring',
-      amount: 99
-    });
-  }
+    // Base connection cost
+    if (bandwidth) {
+      const baseAmount = basePricing[bandwidth];
+      lineItems.push({
+        description: `${bandwidth} Base Connection`,
+        amount: baseAmount
+      });
 
-  if (configuration?.ddosProtection) {
-    lineItems.push({
-      description: 'DDoS Protection',
-      amount: 299
-    });
-  }
+      // Provider adjustment
+      if (provider) {
+        const multiplier = providerMultiplier[provider];
+        const adjustment = baseAmount * (multiplier - 1);
+        if (adjustment !== 0) {
+          lineItems.push({
+            description: `Platform Fee`,
+            amount: adjustment
+          });
+        }
+      }
+    } else {
+      lineItems.push({
+        description: 'Base Connection',
+        amount: 999
+      });
+    }
 
-  if (configuration?.advancedMonitoring) {
-    lineItems.push({
-      description: 'Advanced Monitoring',
-      amount: 199
-    });
+    // Redundancy cost
+    if (redundancy) {
+      lineItems.push({
+        description: 'Redundant Path',
+        amount: bandwidth ? basePricing[bandwidth] * 0.5 : 499
+      });
+    }
+
+    // Additional features
+    if (configuration?.bfdEnabled) {
+      lineItems.push({
+        description: 'BFD Monitoring',
+        amount: 99
+      });
+    }
+
+    if (configuration?.ddosProtection) {
+      lineItems.push({
+        description: 'DDoS Protection',
+        amount: 299
+      });
+    }
+
+    if (configuration?.advancedMonitoring) {
+      lineItems.push({
+        description: 'Advanced Monitoring',
+        amount: 199
+      });
+    }
   }
 
   // Calculate totals
@@ -307,11 +364,20 @@ export function BillingPreview({
             <div key={index} className="flex items-center justify-between text-figma-base">
               <span className="text-fw-bodyLight">{item.description}</span>
               <span className="font-medium text-fw-heading">
-                {item.amount === 0 ? 'Included' : `$${item.amount.toFixed(2)}`}
+                {item.note ? item.note : item.amount === 0 ? 'Included' : `$${item.amount.toFixed(2)}`}
               </span>
             </div>
           ))}
         </div>
+
+        {/* LMCC billing note */}
+        {isLmcc && (
+          <div className="mb-3 p-2 rounded-lg bg-fw-wash border border-fw-secondary">
+            <p className="text-figma-xs text-fw-bodyLight">
+              Billing starts when BGP reaches "Established." Preview: fixed rate. GA: 95th percentile burstable.
+            </p>
+          </div>
+        )}
 
         {/* Totals */}
         <div className="border-t border-fw-secondary pt-3 space-y-2">

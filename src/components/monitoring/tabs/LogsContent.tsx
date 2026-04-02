@@ -143,6 +143,73 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
         latency: '150ms',
         threshold: '100ms'
       }
+    },
+    // LMCC-specific log entries
+    {
+      id: 'lmcc-1',
+      timestamp: '2026-07-01 14:00',
+      type: 'system',
+      severity: 'info',
+      message: 'LMCC provisioning initiated - 4 hosted connections across MX304-SV1-A, MX304-SV1-B, MX304-SV5-A, MX304-SV5-B',
+      source: 'LMCC Orchestrator',
+      user: 'system',
+      connectionId: 'conn-lmcc-1',
+      metadata: { metro: 'San Jose, CA', paths: 4 }
+    },
+    {
+      id: 'lmcc-2',
+      timestamp: '2026-07-01 14:05',
+      type: 'system',
+      severity: 'info',
+      message: 'AWS hosted connection dxcon-abc001 accepted by customer in AWS Console',
+      source: 'AWS Partner API',
+      user: 'customer@company.com',
+      connectionId: 'conn-lmcc-1',
+      metadata: { awsConnectionId: 'dxcon-abc001', vlan: 1001 }
+    },
+    {
+      id: 'lmcc-3',
+      timestamp: '2026-07-01 14:12',
+      type: 'system',
+      severity: 'info',
+      message: 'Path 1 BGP state transition: idle > connect > active > open-sent > open-confirm > established',
+      source: 'BGP Monitor',
+      user: 'system',
+      connectionId: 'conn-lmcc-1',
+      metadata: { ipeId: 'MX304-SV1-A', bgpState: 'established' }
+    },
+    {
+      id: 'lmcc-4',
+      timestamp: '2026-07-01 14:15',
+      type: 'system',
+      severity: 'info',
+      message: 'BFD session established on all 4 paths - failover detection active (3x300ms = 900ms)',
+      source: 'BFD Monitor',
+      user: 'system',
+      connectionId: 'conn-lmcc-1',
+      metadata: { bfdInterval: 300, bfdMultiplier: 3 }
+    },
+    {
+      id: 'lmcc-5',
+      timestamp: '2026-07-01 14:15',
+      type: 'system',
+      severity: 'info',
+      message: 'LMCC billing started - BGP Established on all 4 paths. Trial contract, fixed-rate billing.',
+      source: 'Billing Engine',
+      user: 'system',
+      connectionId: 'conn-lmcc-1',
+      metadata: { billingTrigger: 'bgp-established', contractType: 'trial' }
+    },
+    {
+      id: 'lmcc-6',
+      timestamp: '2026-07-01 14:15',
+      type: 'performance',
+      severity: 'info',
+      message: '802.1Q VLAN tag verification passed - all 4 IPE sub-interfaces match AWS Console IDs (1001, 1002, 1003, 1004)',
+      source: 'LMCC Orchestrator',
+      user: 'system',
+      connectionId: 'conn-lmcc-1',
+      metadata: { vlans: [1001, 1002, 1003, 1004] }
     }
   ];
 

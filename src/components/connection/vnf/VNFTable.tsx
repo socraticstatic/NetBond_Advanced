@@ -88,7 +88,6 @@ export function VNFTable({
               vnf.type === 'sdwan' ? 'bg-fw-neutral' :
               vnf.type === 'router' ? 'bg-fw-accent' :
               vnf.type === 'vnat' ? 'bg-fw-successLight' :
-              vnf.type === 'lmcc' ? 'bg-fw-accent' :
               'bg-fw-neutral'
             }`}>
               {getTypeIcon(vnf.type)}
@@ -102,16 +101,6 @@ export function VNFTable({
               {vnf.name}
             </button>
             <div className="text-figma-sm text-fw-bodyLight">{vnf.description}</div>
-            {vnf.type === 'lmcc' && vnf.configuration?.lmccConfiguration && (
-              <div className="flex items-center gap-2 mt-1">
-                <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>
-                  {vnf.configuration.lmccConfiguration.selectedSites.length} sites
-                </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.16)' }}>
-                  {vnf.configuration.lmccConfiguration.bandwidthAllocations.reduce((sum: number, a: any) => sum + a.bandwidth, 0)} Mbps
-                </span>
-              </div>
-            )}
           </div>
         </div>
       ),

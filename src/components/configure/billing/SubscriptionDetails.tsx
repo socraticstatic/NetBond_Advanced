@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Package, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Package, TrendingUp, AlertTriangle, Shield, Info } from 'lucide-react';
 import { PricingPlanModal } from './PricingPlanModal';
 import { Button } from '../../common/Button';
 
@@ -27,6 +27,55 @@ export function SubscriptionDetails() {
 
   return (
     <div className="space-y-6">
+      {/* LMCC Billing Model */}
+      <div className="card border-fw-active/30">
+        <div className="card-header bg-fw-accent">
+          <div className="flex items-center gap-2">
+            <Shield className="h-5 w-5 text-fw-link" />
+            <h3 className="text-lg font-medium text-fw-heading tracking-[-0.03em]">LMCC Billing Model</h3>
+            <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>AWS Direct Connect</span>
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            <div>
+              <p className="text-figma-xs text-fw-bodyLight">Billing Trigger</p>
+              <p className="text-figma-sm font-semibold text-fw-heading">BGP Established</p>
+              <p className="text-figma-xs text-fw-bodyLight mt-0.5">Revenue starts when BGP reaches Established state</p>
+            </div>
+            <div>
+              <p className="text-figma-xs text-fw-bodyLight">Preview Model</p>
+              <p className="text-figma-sm font-semibold text-fw-heading">Fixed Rate</p>
+              <p className="text-figma-xs text-fw-bodyLight mt-0.5">Fixed cost per contract term</p>
+            </div>
+            <div>
+              <p className="text-figma-xs text-fw-bodyLight">GA Model</p>
+              <p className="text-figma-sm font-semibold text-fw-heading">95th Percentile Burstable</p>
+              <p className="text-figma-xs text-fw-bodyLight mt-0.5">Measured from MX-304 sub-interfaces</p>
+            </div>
+            <div>
+              <p className="text-figma-xs text-fw-bodyLight">Contract Mapping</p>
+              <p className="text-figma-sm font-semibold text-fw-heading">1 Contract : 4 AWS IDs</p>
+              <p className="text-figma-xs text-fw-bodyLight mt-0.5">Single contract maps to 4 hosted connections</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="p-3 rounded-lg bg-fw-wash border border-fw-secondary">
+              <p className="text-figma-xs text-fw-bodyLight">Early Termination</p>
+              <p className="text-figma-sm font-medium text-fw-heading">Trial: $0 / Fixed: ETF applies</p>
+            </div>
+            <div className="p-3 rounded-lg bg-fw-wash border border-fw-secondary">
+              <p className="text-figma-xs text-fw-bodyLight">M2M Disconnect</p>
+              <p className="text-figma-sm font-medium text-fw-heading">Immediate delete, pro-rated final invoice</p>
+            </div>
+            <div className="p-3 rounded-lg bg-fw-wash border border-fw-secondary">
+              <p className="text-figma-xs text-fw-bodyLight">Speed Change</p>
+              <p className="text-figma-sm font-medium text-fw-heading">Provision new 4, delete old 4</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Current Plan */}
       <div className="card">
         <div className="card-header bg-fw-wash">
