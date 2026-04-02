@@ -553,39 +553,42 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
               />
             </div>
 
-            <div className="flex gap-8">
-            {/* Main content */}
-            <div className="flex-1 min-w-0 max-w-3xl relative">
-              {/* AI Assistant */}
-              {showAI && (
-                <NetworkAI
-                  provider={selectedProvider}
-                  type={selectedType}
-                  bandwidth={selectedBandwidth}
-                  location={selectedLocation}
-                  step={step}
-                  onNextStep={() => setStep(s => Math.min(s + 1, STEPS.length - 1))}
-                  onSuggestion={handleAISuggestion}
-                />
-              )}
+            {/* AI Assistant - full width, above the flex layout */}
+            {showAI && (
+              <NetworkAI
+                provider={selectedProvider}
+                type={selectedType}
+                bandwidth={selectedBandwidth}
+                location={selectedLocation}
+                step={step}
+                onNextStep={() => setStep(s => Math.min(s + 1, STEPS.length - 1))}
+                onSuggestion={handleAISuggestion}
+              />
+            )}
 
-              {step === 0 && (
-                <div className="space-y-6">
-                  <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">Name Your Cloud Router</h3>
-                  <div className="max-w-[500px] mx-auto">
-                    <input
-                      type="text"
-                      value={cloudRouterName}
-                      onChange={(e) => setCloudRouterName(e.target.value)}
-                      placeholder="e.g., Production-Finance-Cloud-Router-East-01"
-                      className="w-full h-9 px-3 rounded-lg border border-fw-primary text-figma-base font-medium text-fw-heading placeholder:text-fw-bodyLight focus:border-fw-active focus:ring-fw-active focus:outline-none"
-                    />
-                    <p className="mt-2 text-figma-xs font-medium text-fw-disabled">
-                      Choose a meaningful name that reflects your Cloud Router's role in your network architecture.
-                    </p>
-                  </div>
+            {/* Step 0: Name - full width centered, no sidebar */}
+            {step === 0 && (
+              <div className="max-w-xl mx-auto space-y-6">
+                <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">Name Your Cloud Router</h3>
+                <div className="max-w-[500px] mx-auto">
+                  <input
+                    type="text"
+                    value={cloudRouterName}
+                    onChange={(e) => setCloudRouterName(e.target.value)}
+                    placeholder="e.g., Production-Finance-Cloud-Router-East-01"
+                    className="w-full h-9 px-3 rounded-lg border border-fw-primary text-figma-base font-medium text-fw-heading placeholder:text-fw-bodyLight focus:border-fw-active focus:ring-fw-active focus:outline-none"
+                  />
+                  <p className="mt-2 text-figma-xs font-medium text-fw-disabled">
+                    Choose a meaningful name that reflects your Cloud Router's role in your network architecture.
+                  </p>
                 </div>
-              )}
+              </div>
+            )}
+
+            {/* Steps 1-6: content + sidebar layout */}
+            {step >= 1 && step <= 6 && (
+            <div className="flex gap-8">
+            <div className="flex-1 min-w-0 max-w-3xl relative">
 
               {step === 1 && (
                 <ProviderSelection
@@ -657,25 +660,53 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 />
               )}
 
-              {step === 7 && (
-                <ReviewConfiguration
-                  cloudRouterName={cloudRouterName}
-                  config={{
-                    ...config,
-                    provider: selectedProvider,
-                    providers: selectedProviders,
-                    type: selectedType,
-                    bandwidth: selectedBandwidth,
-                    location: selectedLocation,
-                    resiliencyLevel: resiliencyLevel,
-                  }}
-                  selectedLocations={selectedLocations}
-                  bandwidthSettings={bandwidthSettings}
-                  billingChoice={billingChoice}
-                  onBillingChange={updateBillingChoice}
-                  onEditStep={(s) => setStep(s)}
-                />
-              )}
+            </div>
+
+            {/* Cost Summary - persistent sticky sidebar */}
+            <aside className="hidden lg:block w-[280px] shrink-0 self-start sticky top-24">
+              <BillingPreview
+                provider={(selectedProvider || selectedProviders[0]) as any}
+                type={selectedType as any}
+                bandwidth={(() => {
+                  const firstKey = Object.keys(bandwidthSettings)[0];
+                  if (firstKey) {
+                    const bw = bandwidthSettings[firstKey];
+                    if (bw >= 1000) return `${bw / 1000} Gbps` as any;
+                    return `${bw} Mbps` as any;
+                  }
+                  return selectedBandwidth as any;
+                })()}
+                redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geodiversity'}
+                configuration={config.configuration}
+                selectedPlanId={billingChoice.planId}
+                onPlanChange={(planId) => updateBillingChoice({ planId })}
+                resiliencyLevel={resiliencyLevel}
+                lmccBandwidth={bandwidthSettings['AWS-lmcc']}
+              />
+            </aside>
+            </div>
+            )}
+
+            {/* Step 7: Review - full width, no sidebar */}
+            {step === 7 && (
+              <ReviewConfiguration
+                cloudRouterName={cloudRouterName}
+                config={{
+                  ...config,
+                  provider: selectedProvider,
+                  providers: selectedProviders,
+                  type: selectedType,
+                  bandwidth: selectedBandwidth,
+                  location: selectedLocation,
+                  resiliencyLevel: resiliencyLevel,
+                }}
+                selectedLocations={selectedLocations}
+                bandwidthSettings={bandwidthSettings}
+                billingChoice={billingChoice}
+                onBillingChange={updateBillingChoice}
+                onEditStep={(s) => setStep(s)}
+              />
+            )}
 
             {/* Error message */}
             {error && (
@@ -683,34 +714,6 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 <p className="text-figma-base text-fw-error">{error}</p>
               </div>
             )}
-
-            </div>
-
-            {/* Cost Summary - persistent sticky sidebar */}
-            {step > 0 && step < 7 && (
-              <aside className="hidden lg:block w-[280px] shrink-0 self-start sticky top-24">
-                <BillingPreview
-                  provider={(selectedProvider || selectedProviders[0]) as any}
-                  type={selectedType as any}
-                  bandwidth={(() => {
-                    const firstKey = Object.keys(bandwidthSettings)[0];
-                    if (firstKey) {
-                      const bw = bandwidthSettings[firstKey];
-                      if (bw >= 1000) return `${bw / 1000} Gbps` as any;
-                      return `${bw} Mbps` as any;
-                    }
-                    return selectedBandwidth as any;
-                  })()}
-                  redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geodiversity'}
-                  configuration={config.configuration}
-                  selectedPlanId={billingChoice.planId}
-                  onPlanChange={(planId) => updateBillingChoice({ planId })}
-                  resiliencyLevel={resiliencyLevel}
-                  lmccBandwidth={bandwidthSettings['AWS-lmcc']}
-                />
-              </aside>
-            )}
-            </div>
 
             {/* Footer buttons - Figma spec: pill buttons, h-9 */}
             <div className="mt-12 flex items-center justify-between">
