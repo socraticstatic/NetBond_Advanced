@@ -5,6 +5,7 @@ import { PROVIDER_CREDENTIALS, isSecretField } from '../../../data/providerCrede
 import { NetworkConfigUpload } from '../NetworkConfigUpload';
 
 interface AdvancedSettingsProps {
+  resiliencyLevel?: string;
   config: {
     provider?: CloudProvider;
     providers?: CloudProvider[];
@@ -48,6 +49,7 @@ interface AdvancedSettingsProps {
 export function AdvancedSettings({
   config,
   onConfigChange,
+  resiliencyLevel,
 }: AdvancedSettingsProps) {
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
   const [uploadedConfigs, setUploadedConfigs] = useState<Record<string, any>>({});
@@ -128,7 +130,7 @@ export function AdvancedSettings({
     }
   };
 
-  const isAwsLmcc = config.provider === 'AWS' && config.type === 'Internet to Cloud';
+  const isAwsLmcc = config.provider === 'AWS' && resiliencyLevel === 'maximum';
 
   return (
     <div className="space-y-8">
