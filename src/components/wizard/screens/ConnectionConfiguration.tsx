@@ -36,8 +36,8 @@ export function ConnectionConfiguration({
   const navigate = useNavigate();
   const minLocations = resiliencyLevel === 'maximum' || resiliencyLevel === 'geodiversity' ? 2 : 1;
 
-  // AWS + Maximum Resiliency = LMCC metro selection
-  const isAwsMax = selectedProviders.includes('AWS' as CloudProvider) && resiliencyLevel === 'maximum';
+  // AWS + Maximum Resiliency + Internet to Cloud = LMCC metro selection
+  const isAwsMax = selectedProviders.includes('AWS' as CloudProvider) && resiliencyLevel === 'maximum' && type === 'Internet to Cloud';
 
   // If we have multi-provider data, use the new UI
   if (selectedProviders.length > 0 && onToggleLocation) {

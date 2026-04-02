@@ -287,8 +287,8 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
         if (selectedProviders.length > 0) {
           return selectedProviders.every(p => {
             const locs = (selectedLocations[p] || []).length;
-            // AWS + Maximum = LMCC metro selection (single metro, not min locations)
-            if (p === 'AWS' && resiliencyLevel === 'maximum') {
+            // AWS + Maximum + Internet to Cloud = LMCC metro selection (single metro)
+            if (p === 'AWS' && resiliencyLevel === 'maximum' && selectedType === 'Internet to Cloud') {
               return locs >= 1; // One metro selected
             }
             const tier = (resiliencyLevel || 'standard') as 'standard' | 'maximum' | 'geodiversity';

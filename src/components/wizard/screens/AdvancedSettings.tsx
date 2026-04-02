@@ -130,7 +130,7 @@ export function AdvancedSettings({
     }
   };
 
-  const isAwsLmcc = config.provider === 'AWS' && resiliencyLevel === 'maximum';
+  const isAwsLmcc = config.provider === 'AWS' && resiliencyLevel === 'maximum' && config.type === 'Internet to Cloud';
 
   return (
     <div className="space-y-8">
