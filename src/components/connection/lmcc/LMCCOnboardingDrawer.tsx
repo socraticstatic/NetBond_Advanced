@@ -50,6 +50,17 @@ export function LMCCOnboardingDrawer({ connection, isOpen, onClose, onActivate }
   return (
     <SideDrawer isOpen={isOpen} onClose={onClose} title="AWS Max Onboarding" width="lg">
       <div className="space-y-6">
+        {/* AWS branding */}
+        <div className="flex items-center gap-3 pb-3 border-b border-fw-secondary">
+          <div className="w-10 h-7 rounded-lg bg-fw-base border border-fw-secondary flex items-center justify-center p-1">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" className="w-full h-full object-contain" />
+          </div>
+          <div>
+            <p className="text-figma-sm font-semibold text-fw-heading">AWS Direct Connect - Maximum Resiliency</p>
+            <p className="text-figma-xs text-fw-bodyLight">AT&T NetBond Advanced Max</p>
+          </div>
+        </div>
+
         {/* Step indicator */}
         <div className="flex items-center gap-1">
           {STEP_LABELS.map((label, i) => (
@@ -122,7 +133,7 @@ export function LMCCOnboardingDrawer({ connection, isOpen, onClose, onActivate }
                 type="text"
                 value={config.cloudRouterName}
                 onChange={(e) => updateConfig({ cloudRouterName: e.target.value })}
-                placeholder="e.g., LMCC-Production-SanJose"
+                placeholder="e.g., AWSMax-Production-SanJose"
                 className="w-full h-9 px-3 rounded-lg border border-fw-secondary text-figma-base focus:border-fw-active focus:outline-none"
               />
             </div>

@@ -50,16 +50,16 @@ export function ConnectionConfiguration({
       return (
         <div className="space-y-6">
           <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-2">
-            Select LMCC Metro
+            Select AWS Max Metro
           </h3>
           <p className="text-figma-sm text-fw-bodyLight text-center mb-6">
-            AT&T LMCC auto-provisions 4 hosted connections across 4 IPEs in 2 diverse datacenters within your selected metro.
+            AT&T auto-provisions 4 hosted connections across 4 IPEs in 2 diverse datacenters within your selected metro.
           </p>
 
           <div className="flex items-start gap-3 p-4 rounded-xl bg-fw-accent border border-fw-active/20 mb-6">
             <Shield className="h-5 w-5 text-fw-link flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-figma-sm font-medium text-fw-heading">Maximum Resiliency via LMCC</p>
+              <p className="text-figma-sm font-medium text-fw-heading">Maximum Resiliency via AWS Max</p>
               <p className="text-figma-xs text-fw-bodyLight mt-1">
                 Each metro contains 2 diverse datacenter sites. AT&T automatically distributes 4 connections (2 per site, on separate Juniper MX-304 devices) for full device + location redundancy.
               </p>

@@ -59,7 +59,7 @@ export function AWSPartnerZone() {
             </div>
             <div>
               <h2 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em]">AWS Partner Integration</h2>
-              <p className="text-figma-base text-fw-bodyLight">LMCC (Last Mile Cloud Connectivity) via AWS Direct Connect</p>
+              <p className="text-figma-base text-fw-bodyLight">NetBond Advanced Max via AWS Direct Connect</p>
             </div>
           </div>
         </div>
@@ -282,7 +282,7 @@ export function AWSPartnerZone() {
             { title: 'Create Virtual Interfaces', desc: 'On each accepted connection, create a Private VIF (VPC), Transit VIF (TGW), or Public VIF to route traffic.' },
             { title: 'Configure in NetBond', desc: 'Return to NetBond to set your Cloud Router name, BGP preferences, monitoring alerts, and notification channels.' },
             { title: 'BGP/BFD Establish', desc: 'AT&T configures 802.1Q sub-interfaces with AWS-assigned VLAN IDs. BGP and BFD sessions establish automatically.' },
-            { title: 'Connection Active', desc: 'Billing starts when BGP reaches Established. Your LMCC connection appears here with 4-path health monitoring.' },
+            { title: 'Connection Active', desc: 'Billing starts when BGP reaches Established. Your AWS Max connection appears here with 4-path health monitoring.' },
           ].map((step, idx) => (
             <li key={idx} className="flex items-start gap-3">
               <div className="flex-shrink-0 w-6 h-6 rounded-full bg-fw-primary text-white flex items-center justify-center text-figma-sm font-semibold">
@@ -311,7 +311,7 @@ export function AWSPartnerZone() {
             </div>
             <div>
               <p className="text-figma-sm font-semibold text-fw-heading">AWS Direct Connect - Maximum Resiliency</p>
-              <p className="text-figma-xs text-fw-bodyLight">AT&T LMCC (Last Mile Cloud Connectivity)</p>
+              <p className="text-figma-xs text-fw-bodyLight">AT&T NetBond Advanced Max</p>
             </div>
           </div>
 
@@ -433,7 +433,7 @@ export function AWSPartnerZone() {
             <div className="flex items-start gap-2 p-3 rounded-lg bg-fw-warningLight border border-fw-warning">
               <AlertTriangle className="h-4 w-4 text-fw-warning shrink-0 mt-0.5" />
               <p className="text-figma-xs text-fw-body">
-                Without Enterprise Support and a Well-Architected Review, the 99.99% SLA will not apply. You can still provision LMCC but won't have SLA coverage.
+                Without Enterprise Support and a Well-Architected Review, the 99.99% SLA will not apply. You can still provision AWS Max but won't have SLA coverage.
               </p>
             </div>
           )}
@@ -482,7 +482,7 @@ export function AWSPartnerZone() {
                 setSelectedMetro(null);
               }}
             >
-              Submit LMCC Request
+              Submit AWS Max Request
               <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </div>
