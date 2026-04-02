@@ -101,10 +101,12 @@ export function ConnectionConfiguration({
                     <Lock className="absolute top-3 right-3 h-4 w-4 text-fw-disabled" />
                   )}
 
-                  {/* Phase badge */}
+                  {/* Phase badge - white on selected blue, standard on unselected */}
                   <span
-                    className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium mb-2"
-                    style={{ color: phaseTag.color, backgroundColor: phaseTag.bg }}
+                    className={`inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium mb-2 ${
+                      isSelected ? 'text-white bg-white/20' : isGaOnly ? 'text-fw-disabled bg-fw-wash' : ''
+                    }`}
+                    style={!isSelected && !isGaOnly ? { color: phaseTag.color, backgroundColor: phaseTag.bg } : undefined}
                   >
                     {phaseTag.label}
                   </span>
