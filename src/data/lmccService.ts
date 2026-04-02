@@ -1,239 +1,265 @@
-import { LMCCSite, LMCCConfiguration } from '../types/lmcc';
+/**
+ * LMCC (Last Mile Cloud Connectivity) Data Layer
+ *
+ * LMCC is AT&T's automated maximum resiliency interconnect product for AWS.
+ * This module provides metro definitions, phase capabilities, and mock
+ * connection data for the prototype.
+ *
+ * Source of truth: references/lmcc-product-brief.md
+ */
 
-// Mock LMCC sites data (will be replaced with Supabase queries)
-export const mockLMCCSites: LMCCSite[] = [
+import {
+  LMCCMetro,
+  LMCCPhaseConfig,
+  LMCCConnection,
+  LMCCContractType,
+} from '../types/lmcc';
+
+// --- Metro Definitions ---
+
+export const LMCC_METROS: LMCCMetro[] = [
   {
-    id: 'site-sf',
-    name: 'San Francisco Metro',
-    address: '123 Market Street',
-    city: 'San Francisco',
-    state: 'CA',
-    zip: '94105',
-    country: 'US',
-    region: 'US-West',
-    latitude: 37.7749,
-    longitude: -122.4194,
-    availability: 'available'
+    id: 'metro-sj',
+    name: 'San Jose, CA',
+    datacenters: ['Equinix SV1', 'Equinix SV5'],
+    facilities: ['Equinix'],
+    phase: 'preview',
   },
   {
-    id: 'site-ny',
-    name: 'New York Metro',
-    address: '350 Fifth Avenue',
-    city: 'New York',
-    state: 'NY',
-    zip: '10118',
-    country: 'US',
-    region: 'US-East',
-    latitude: 40.7128,
-    longitude: -74.0060,
-    availability: 'available'
+    id: 'metro-la',
+    name: 'Los Angeles, CA',
+    datacenters: ['Equinix LA1', 'Equinix LA3'],
+    facilities: ['Equinix'],
+    phase: 'preview',
   },
   {
-    id: 'site-chi',
-    name: 'Chicago Metro',
-    address: '233 S Wacker Drive',
-    city: 'Chicago',
-    state: 'IL',
-    zip: '60606',
-    country: 'US',
-    region: 'US-Central',
-    latitude: 41.8781,
-    longitude: -87.6298,
-    availability: 'available'
+    id: 'metro-ash',
+    name: 'Ashburn, VA',
+    datacenters: ['Equinix DC2', 'CoreSite VA1'],
+    facilities: ['Equinix', 'CoreSite'],
+    phase: 'ga',
   },
-  {
-    id: 'site-dal',
-    name: 'Dallas Metro',
-    address: '2200 Ross Avenue',
-    city: 'Dallas',
-    state: 'TX',
-    zip: '75201',
-    country: 'US',
-    region: 'US-South',
-    latitude: 32.7767,
-    longitude: -96.7970,
-    availability: 'available'
-  },
-  {
-    id: 'site-la',
-    name: 'Los Angeles Metro',
-    address: '633 West Fifth Street',
-    city: 'Los Angeles',
-    state: 'CA',
-    zip: '90071',
-    country: 'US',
-    region: 'US-West',
-    latitude: 34.0522,
-    longitude: -118.2437,
-    availability: 'available'
-  },
-  {
-    id: 'site-sea',
-    name: 'Seattle Metro',
-    address: '1918 Eighth Avenue',
-    city: 'Seattle',
-    state: 'WA',
-    zip: '98101',
-    country: 'US',
-    region: 'US-West',
-    latitude: 47.6062,
-    longitude: -122.3321,
-    availability: 'available'
-  },
-  {
-    id: 'site-bos',
-    name: 'Boston Metro',
-    address: '185 Franklin Street',
-    city: 'Boston',
-    state: 'MA',
-    zip: '02110',
-    country: 'US',
-    region: 'US-East',
-    latitude: 42.3601,
-    longitude: -71.0589,
-    availability: 'available'
-  },
-  {
-    id: 'site-atl',
-    name: 'Atlanta Metro',
-    address: '191 Peachtree Street',
-    city: 'Atlanta',
-    state: 'GA',
-    zip: '30303',
-    country: 'US',
-    region: 'US-South',
-    latitude: 33.7490,
-    longitude: -84.3880,
-    availability: 'available'
-  },
-  {
-    id: 'site-den',
-    name: 'Denver Metro',
-    address: '1801 California Street',
-    city: 'Denver',
-    state: 'CO',
-    zip: '80202',
-    country: 'US',
-    region: 'US-Central',
-    latitude: 39.7392,
-    longitude: -104.9903,
-    availability: 'available'
-  },
-  {
-    id: 'site-mia',
-    name: 'Miami Metro',
-    address: '701 Brickell Avenue',
-    city: 'Miami',
-    state: 'FL',
-    zip: '33131',
-    country: 'US',
-    region: 'US-South',
-    latitude: 25.7617,
-    longitude: -80.1918,
-    availability: 'available'
-  },
-  {
-    id: 'site-phx',
-    name: 'Phoenix Metro',
-    address: '100 N Central Avenue',
-    city: 'Phoenix',
-    state: 'AZ',
-    zip: '85004',
-    country: 'US',
-    region: 'US-West',
-    latitude: 33.4484,
-    longitude: -112.0740,
-    availability: 'available'
-  },
-  {
-    id: 'site-pdx',
-    name: 'Portland Metro',
-    address: '121 SW Salmon Street',
-    city: 'Portland',
-    state: 'OR',
-    zip: '97204',
-    country: 'US',
-    region: 'US-West',
-    latitude: 45.5152,
-    longitude: -122.6784,
-    availability: 'available'
-  },
-  {
-    id: 'site-aus',
-    name: 'Austin Metro',
-    address: '300 W 6th Street',
-    city: 'Austin',
-    state: 'TX',
-    zip: '78701',
-    country: 'US',
-    region: 'US-South',
-    latitude: 30.2672,
-    longitude: -97.7431,
-    availability: 'available'
-  },
-  {
-    id: 'site-clt',
-    name: 'Charlotte Metro',
-    address: '214 North Tryon Street',
-    city: 'Charlotte',
-    state: 'NC',
-    zip: '28202',
-    country: 'US',
-    region: 'US-East',
-    latitude: 35.2271,
-    longitude: -80.8431,
-    availability: 'available'
-  },
-  {
-    id: 'site-msp',
-    name: 'Minneapolis Metro',
-    address: '80 South 8th Street',
-    city: 'Minneapolis',
-    state: 'MN',
-    zip: '55402',
-    country: 'US',
-    region: 'US-Central',
-    latitude: 44.9778,
-    longitude: -93.2650,
-    availability: 'available'
-  }
 ];
 
-// Mock storage for LMCC configurations (will be replaced with Supabase)
-const mockConfigurations: Map<string, LMCCConfiguration> = new Map();
-
-export const lmccService = {
-  // Get all available LMCC sites
-  async getSites(): Promise<LMCCSite[]> {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return mockLMCCSites;
+// GA-expanded metros (San Jose + LA get CoreSite added)
+export const LMCC_METROS_GA: LMCCMetro[] = [
+  {
+    id: 'metro-sj',
+    name: 'San Jose, CA',
+    datacenters: ['Equinix SV1', 'Equinix SV5', 'CoreSite SV1'],
+    facilities: ['Equinix', 'CoreSite'],
+    phase: 'ga',
   },
-
-  // Get LMCC configuration for a specific VNF
-  async getConfiguration(vnfId: string): Promise<LMCCConfiguration | null> {
-    await new Promise(resolve => setTimeout(resolve, 200));
-    return mockConfigurations.get(vnfId) || null;
+  {
+    id: 'metro-la',
+    name: 'Los Angeles, CA',
+    datacenters: ['Equinix LA1', 'Equinix LA3', 'CoreSite LA1'],
+    facilities: ['Equinix', 'CoreSite'],
+    phase: 'ga',
   },
-
-  // Save LMCC configuration
-  async saveConfiguration(config: LMCCConfiguration): Promise<LMCCConfiguration> {
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    const savedConfig: LMCCConfiguration = {
-      ...config,
-      id: config.id || `lmcc-${Date.now()}`,
-      updatedAt: new Date().toISOString(),
-      createdAt: config.createdAt || new Date().toISOString()
-    };
-
-    mockConfigurations.set(config.vnfId, savedConfig);
-    return savedConfig;
+  {
+    id: 'metro-ash',
+    name: 'Ashburn, VA',
+    datacenters: ['Equinix DC2', 'CoreSite VA1'],
+    facilities: ['Equinix', 'CoreSite'],
+    phase: 'ga',
   },
+];
 
-  // Delete LMCC configuration
-  async deleteConfiguration(vnfId: string): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    mockConfigurations.delete(vnfId);
-  }
+// Phase launch dates
+export const PHASE_DATES = {
+  preview: 'June 30, 2026',
+  ga: 'November 30, 2026',
+} as const;
+
+// --- Phase Capabilities ---
+
+export const LMCC_PHASES: Record<'preview' | 'ga', LMCCPhaseConfig> = {
+  preview: {
+    phase: 'preview',
+    availableMetros: ['metro-sj', 'metro-la'],
+    bandwidthOptions: [1000],  // Fixed 1 Gbps only
+    contractTypes: ['trial'],
+    transports: ['mpls'],
+    operations: ['create', 'delete'],
+  },
+  ga: {
+    phase: 'ga',
+    availableMetros: ['metro-sj', 'metro-la', 'metro-ash'],
+    bandwidthOptions: [50, 100, 200, 300, 400, 500, 1000, 2000, 5000, 10000, 25000, 50000, 100000],
+    contractTypes: ['monthly', 'fixed-12', 'fixed-24', 'fixed-36'],
+    transports: ['mpls', 'internet'],
+    operations: ['create', 'read', 'update', 'delete'],
+  },
 };
+
+// Current phase for the prototype
+export const CURRENT_PHASE: 'preview' | 'ga' = 'preview';
+
+// --- Helpers ---
+
+export function getAvailableMetros(phase?: 'preview' | 'ga'): LMCCMetro[] {
+  const p = phase || CURRENT_PHASE;
+  const config = LMCC_PHASES[p];
+  return LMCC_METROS.filter(m => config.availableMetros.includes(m.id));
+}
+
+export function getMetroById(id: string): LMCCMetro | undefined {
+  return LMCC_METROS.find(m => m.id === id);
+}
+
+export function getBandwidthOptions(phase?: 'preview' | 'ga'): number[] {
+  const p = phase || CURRENT_PHASE;
+  return LMCC_PHASES[p].bandwidthOptions;
+}
+
+export function getContractTypes(phase?: 'preview' | 'ga'): LMCCContractType[] {
+  const p = phase || CURRENT_PHASE;
+  return LMCC_PHASES[p].contractTypes;
+}
+
+export function formatBandwidth(mbps: number): string {
+  if (mbps >= 1000) return `${mbps / 1000} Gbps`;
+  return `${mbps} Mbps`;
+}
+
+export function getPhaseLabel(phase: 'preview' | 'ga'): string {
+  return phase === 'preview' ? `Preview (${PHASE_DATES.preview})` : `GA (${PHASE_DATES.ga})`;
+}
+
+export function getPhaseTag(phase: 'preview' | 'ga'): { label: string; color: string; bg: string } {
+  return phase === 'preview'
+    ? { label: 'Preview - June 2026', color: '#cc7a00', bg: 'rgba(204,122,0,0.16)' }
+    : { label: 'GA - November 2026', color: '#2d7e24', bg: 'rgba(45,126,36,0.16)' };
+}
+
+// --- Mock Data ---
+
+export const MOCK_LMCC_CONNECTIONS: LMCCConnection[] = [
+  {
+    id: 'lmcc-001',
+    awsAccountId: '123456789012',
+    metro: LMCC_METROS[0], // San Jose
+    status: 'active',
+    contractType: 'trial',
+    bandwidth: 1000,
+    transport: 'mpls',
+    paths: [
+      {
+        id: 'path-1',
+        ipeId: 'MX304-SV1-A',
+        datacenter: 'Equinix SV1',
+        awsConnectionId: 'dxcon-abc001',
+        vlanId: 1001,
+        bgpState: 'established',
+        physicalPort: '100GE-0/0/0',
+        status: 'active',
+      },
+      {
+        id: 'path-2',
+        ipeId: 'MX304-SV1-B',
+        datacenter: 'Equinix SV1',
+        awsConnectionId: 'dxcon-abc002',
+        vlanId: 1002,
+        bgpState: 'established',
+        physicalPort: '100GE-0/0/1',
+        status: 'active',
+      },
+      {
+        id: 'path-3',
+        ipeId: 'MX304-SV5-A',
+        datacenter: 'Equinix SV5',
+        awsConnectionId: 'dxcon-abc003',
+        vlanId: 1003,
+        bgpState: 'established',
+        physicalPort: '100GE-0/0/0',
+        status: 'active',
+      },
+      {
+        id: 'path-4',
+        ipeId: 'MX304-SV5-B',
+        datacenter: 'Equinix SV5',
+        awsConnectionId: 'dxcon-abc004',
+        vlanId: 1004,
+        bgpState: 'established',
+        physicalPort: '100GE-0/0/1',
+        status: 'active',
+      },
+    ],
+    bgp: {
+      partnerASN: 7018,     // AT&T's ASN
+      customerASN: 65000,
+      md5Key: '********',
+    },
+    bfd: { interval: 100, multiplier: 3 },
+    billing: {
+      trigger: 'bgp-established',
+      startedAt: '2026-07-01T14:30:00Z',
+      model: 'fixed-rate',
+    },
+    createdAt: '2026-07-01T14:00:00Z',
+    updatedAt: '2026-07-01T14:30:00Z',
+  },
+  {
+    id: 'lmcc-002',
+    awsAccountId: '987654321098',
+    metro: LMCC_METROS[1], // Los Angeles
+    status: 'pending-acceptance',
+    contractType: 'trial',
+    bandwidth: 1000,
+    transport: 'mpls',
+    paths: [
+      {
+        id: 'path-5',
+        ipeId: 'MX304-LA1-A',
+        datacenter: 'Equinix LA1',
+        awsConnectionId: 'dxcon-def001',
+        vlanId: 2001,
+        bgpState: 'idle',
+        physicalPort: '100GE-0/0/0',
+        status: 'pending',
+      },
+      {
+        id: 'path-6',
+        ipeId: 'MX304-LA1-B',
+        datacenter: 'Equinix LA1',
+        awsConnectionId: 'dxcon-def002',
+        vlanId: 2002,
+        bgpState: 'idle',
+        physicalPort: '100GE-0/0/1',
+        status: 'pending',
+      },
+      {
+        id: 'path-7',
+        ipeId: 'MX304-LA3-A',
+        datacenter: 'Equinix LA3',
+        awsConnectionId: 'dxcon-def003',
+        vlanId: 2003,
+        bgpState: 'idle',
+        physicalPort: '100GE-0/0/0',
+        status: 'pending',
+      },
+      {
+        id: 'path-8',
+        ipeId: 'MX304-LA3-B',
+        datacenter: 'Equinix LA3',
+        awsConnectionId: 'dxcon-def004',
+        vlanId: 2004,
+        bgpState: 'idle',
+        physicalPort: '100GE-0/0/1',
+        status: 'pending',
+      },
+    ],
+    bgp: {
+      partnerASN: 7018,
+      customerASN: 65100,
+    },
+    bfd: { interval: 100, multiplier: 3 },
+    billing: {
+      trigger: 'bgp-established',
+      model: 'fixed-rate',
+    },
+    createdAt: '2026-07-15T10:00:00Z',
+    updatedAt: '2026-07-15T10:00:00Z',
+  },
+];

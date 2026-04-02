@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { Gauge, Zap, Lock, AlertTriangle, Info } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Gauge, Zap, Lock, AlertTriangle, Info, Shield, Server } from 'lucide-react';
 import { CloudProvider } from '../../../types/connection';
 import { getProviderBandwidth, getProviderBandwidthConfig } from '../../../data/providerBandwidth';
 import { getResiliencyConfig } from '../../../data/providerResiliency';
+import { getBandwidthOptions as getLmccBandwidthOptions, formatBandwidth, getMetroById, CURRENT_PHASE, LMCC_PHASES } from '../../../data/lmccService';
 
 interface BandwidthConfigurationProps {
   selectedProviders: CloudProvider[];
@@ -86,19 +87,18 @@ export function BandwidthConfiguration({
   bandwidthSettings,
   onBandwidthChange,
   type,
-  resiliencyLevel = 'local',
+  resiliencyLevel = 'standard',
 }: BandwidthConfigurationProps) {
   const [bandwidthModes, setBandwidthModes] = useState<Record<string, 'fixed' | 'burstable'>>({});
   const [expandedBurstRules, setExpandedBurstRules] = useState<string | null>(null);
 
   // Build connections based on provider resiliency rules:
-  // AWS Max = 2 connections per location (4 total across 2 locations)
-  // Azure Max = 1 circuit per location (2 total across 2 metros)
-  // Google Max = 2 attachments per location (4 total across 2 metros)
-  // Oracle Geo = 2 circuits at same location
+  // Standard = 1-2 connections at 1 site (provider-specific)
+  // Maximum = 4 links: 2 per site x 2 sites in 1 metro (AWS uses LMCC, intercepts below)
+  // Geodiversity = 4 links: 2 per metro x 2 metros
   const connections = selectedProviders.flatMap(providerId => {
     const locations = selectedLocations[providerId] || [];
-    const tier = (resiliencyLevel || 'local') as 'local' | 'geo' | 'maximum';
+    const tier = (resiliencyLevel || 'standard') as 'standard' | 'maximum' | 'geodiversity';
     const config = getResiliencyConfig(providerId, tier);
     const connectionsPerLocation = Math.max(1, Math.ceil(config.minConnections / Math.max(1, config.minLocations)));
 
@@ -116,6 +116,17 @@ export function BandwidthConfiguration({
     });
   });
 
+  // AWS + Maximum Resiliency = LMCC: single bandwidth for all 4 paths
+  const isAwsLmcc = selectedProviders.includes('AWS' as CloudProvider) && resiliencyLevel === 'maximum' && type === 'Internet to Cloud';
+
+  // Initialize LMCC bandwidth key on mount
+  useEffect(() => {
+    if (isAwsLmcc && !bandwidthSettings['AWS-lmcc']) {
+      const defaultBw = getLmccBandwidthOptions()[0] || 1000;
+      onBandwidthChange('AWS-lmcc', defaultBw);
+    }
+  }, [isAwsLmcc]);
+
   const totalBandwidth = connections.reduce((sum, c) => sum + (bandwidthSettings[c.key] || 1000), 0);
 
   const toggleMode = (key: string, providerId: string) => {
@@ -125,6 +136,145 @@ export function BandwidthConfiguration({
       [key]: prev[key] === 'burstable' ? 'fixed' : 'burstable',
     }));
   };
+
+  // LMCC: single bandwidth applied to all 4 paths
+  if (isAwsLmcc) {
+    const lmccBwOptions = getLmccBandwidthOptions();
+    const selectedMetroId = (selectedLocations['AWS'] || [])[0];
+    const metro = selectedMetroId ? getMetroById(selectedMetroId) : null;
+    const lmccKey = 'AWS-lmcc';
+    const currentLmccBw = bandwidthSettings[lmccKey] || lmccBwOptions[0] || 1000;
+
+    return (
+      <div className="space-y-6">
+        <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-2">
+          Configure LMCC Bandwidth
+        </h3>
+        <p className="text-figma-sm text-fw-bodyLight text-center mb-6">
+          One bandwidth value applies to all 4 hosted connections in your LMCC metro.
+        </p>
+
+        <div className="max-w-lg mx-auto space-y-6">
+          {/* LMCC Info with phase context */}
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-fw-accent border border-fw-active/20">
+            <Shield className="h-5 w-5 text-fw-link flex-shrink-0 mt-0.5" />
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-figma-sm font-medium text-fw-heading">Maximum Resiliency via LMCC</p>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>
+                  {CURRENT_PHASE === 'preview' ? 'June 2026' : 'November 2026'}
+                </span>
+              </div>
+              <p className="text-figma-xs text-fw-bodyLight mt-1">
+                AT&T provisions 4 identical hosted connections at {formatBandwidth(currentLmccBw)} each across {metro ? metro.datacenters.join(' and ') : '2 diverse datacenters'}.
+              </p>
+              <div className="mt-2 flex items-center gap-3 text-figma-xs">
+                <span className="flex items-center gap-1">
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June</span>
+                  Fixed 1 Gbps
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.12)' }}>Nov</span>
+                  {formatBandwidth(LMCC_PHASES.ga.bandwidthOptions[0])} - {formatBandwidth(LMCC_PHASES.ga.bandwidthOptions[LMCC_PHASES.ga.bandwidthOptions.length - 1])}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Single bandwidth selector */}
+          <div className="border border-fw-secondary rounded-2xl overflow-hidden">
+            <div className="px-5 py-4 bg-fw-wash border-b border-fw-secondary">
+              <p className="text-figma-sm font-semibold text-fw-heading">
+                {metro ? metro.name : 'LMCC Metro'} - All 4 Paths
+              </p>
+              {metro && (
+                <div className="flex items-center gap-3 mt-1.5">
+                  {metro.datacenters.map((dc) => (
+                    <span key={dc} className="inline-flex items-center gap-1 text-figma-xs text-fw-bodyLight">
+                      <Server className="h-3 w-3" />
+                      {dc}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="px-5 py-4 bg-fw-primary text-center">
+              <span className="text-figma-xl font-bold text-white">
+                {formatBandwidth(currentLmccBw)}
+              </span>
+              <span className="block text-figma-xs text-white/70 mt-1">
+                per path - {formatBandwidth(currentLmccBw * 4)} total aggregate
+              </span>
+            </div>
+
+            <div className="p-5 space-y-4">
+              <div>
+                <label className="block text-figma-xs text-fw-bodyLight mb-1.5">Bandwidth per Path</label>
+                <select
+                  value={currentLmccBw}
+                  onChange={(e) => onBandwidthChange(lmccKey, parseInt(e.target.value))}
+                  className="h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link"
+                >
+                  {lmccBwOptions.map(bw => (
+                    <option key={bw} value={bw}>{formatBandwidth(bw)}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="text-figma-xs text-fw-bodyLight space-y-1">
+                <p className="flex items-center gap-1.5">
+                  <Lock className="h-3 w-3" />
+                  Fixed bandwidth only - AWS traffic policing enforced
+                </p>
+                <p className="flex items-center gap-1.5">
+                  <Info className="h-3 w-3" />
+                  Speed changes require provisioning 4 new paths at the new speed
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* 4-path summary */}
+          <div className="grid grid-cols-4 gap-2">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="p-3 rounded-lg bg-fw-wash border border-fw-secondary text-center">
+                <p className="text-figma-xs font-medium text-fw-heading">Path {i}</p>
+                <p className="text-figma-xs text-fw-bodyLight">{formatBandwidth(currentLmccBw)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Non-AWS providers still use standard bandwidth config */}
+        {selectedProviders.filter(p => p !== 'AWS').length > 0 && (
+          <div className="mt-8 border-t border-fw-secondary pt-6">
+            <h4 className="text-figma-base font-semibold text-fw-heading mb-4">Other Providers</h4>
+            <div className="grid gap-6 grid-cols-1 max-w-lg mx-auto">
+              {connections.filter(c => c.providerId !== 'AWS').map(({ providerId, location, key }) => {
+                const currentBw = bandwidthSettings[key] || 1000;
+                const bandwidthOptions = getProviderBandwidth(providerId);
+                return (
+                  <div key={key} className="border border-fw-secondary rounded-2xl p-5">
+                    <p className="text-figma-sm font-semibold text-fw-heading">{providerId} - {location}</p>
+                    <select
+                      value={currentBw}
+                      onChange={(e) => onBandwidthChange(key, parseInt(e.target.value))}
+                      className="mt-2 h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link"
+                    >
+                      {bandwidthOptions.map(opt => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
+                    </select>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

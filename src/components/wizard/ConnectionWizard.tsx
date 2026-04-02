@@ -287,7 +287,11 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
         if (selectedProviders.length > 0) {
           return selectedProviders.every(p => {
             const locs = (selectedLocations[p] || []).length;
-            const tier = (resiliencyLevel || 'local') as 'local' | 'geo' | 'maximum';
+            // AWS + Maximum + Internet to Cloud = LMCC metro selection (single metro)
+            if (p === 'AWS' && resiliencyLevel === 'maximum' && selectedType === 'Internet to Cloud') {
+              return locs >= 1; // One metro selected
+            }
+            const tier = (resiliencyLevel || 'standard') as 'standard' | 'maximum' | 'geodiversity';
             // Use minLocations from provider resiliency config
             const minLocs = getMinLocations(p, tier);
             return locs >= minLocs;
@@ -649,6 +653,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                     location: selectedLocation,
                   }}
                   onConfigChange={updateConfig}
+                  resiliencyLevel={resiliencyLevel}
                 />
               )}
 
@@ -696,10 +701,12 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                     }
                     return selectedBandwidth as any;
                   })()}
-                  redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geo'}
+                  redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geodiversity'}
                   configuration={config.configuration}
                   selectedPlanId={billingChoice.planId}
                   onPlanChange={(planId) => updateBillingChoice({ planId })}
+                  resiliencyLevel={resiliencyLevel}
+                  lmccBandwidth={bandwidthSettings['AWS-lmcc']}
                 />
               </aside>
             )}

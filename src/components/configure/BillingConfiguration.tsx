@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Building2, DollarSign, Users, Settings, Shield, Lock, Eye, FileText } from 'lucide-react';
+import { Building2, DollarSign, Users, Settings, Shield, Lock, Eye, FileText, Info } from 'lucide-react';
 import { VerticalTabGroup } from '../navigation/VerticalTabGroup';
 import { TabItem } from '../../types/navigation';
 import { Button } from '../common/Button';
@@ -137,6 +137,48 @@ export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfig
             <h3 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">Enterprise Billing Configuration</h3>
             <p className="text-figma-sm font-medium text-fw-bodyLight tracking-[-0.03em] mt-1">
               Configure account-wide billing settings, tenant hierarchy, cost allocation methods, and integration with external billing systems. These settings apply across your entire organization.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* LMCC Billing Model */}
+      <div className="mb-6 bg-fw-base border border-fw-active/30 rounded-xl overflow-hidden">
+        <div className="px-4 py-3 bg-fw-accent border-b border-fw-active/20 flex items-center gap-2">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" className="w-8 h-4 object-contain" />
+          <Shield className="h-4 w-4 text-fw-link" />
+          <span className="text-figma-sm font-semibold text-fw-heading">LMCC Billing Model</span>
+          <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>AWS Direct Connect</span>
+        </div>
+        <div className="p-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+            <div>
+              <p className="text-figma-xs text-fw-bodyLight">Billing Trigger</p>
+              <p className="text-figma-sm font-semibold text-fw-heading">BGP Established</p>
+            </div>
+            <div>
+              <p className="text-figma-xs text-fw-bodyLight flex items-center gap-1">
+                Billing Model
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June</span>
+              </p>
+              <p className="text-figma-sm font-semibold text-fw-heading">Fixed Rate</p>
+            </div>
+            <div>
+              <p className="text-figma-xs text-fw-bodyLight flex items-center gap-1">
+                Billing Model
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.12)' }}>Nov</span>
+              </p>
+              <p className="text-figma-sm font-semibold text-fw-heading">95th Percentile Burstable</p>
+            </div>
+            <div>
+              <p className="text-figma-xs text-fw-bodyLight">Contract Mapping</p>
+              <p className="text-figma-sm font-semibold text-fw-heading">1 Contract : 4 AWS IDs</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2 p-2 rounded-lg bg-fw-wash border border-fw-secondary">
+            <Info className="h-3.5 w-3.5 text-fw-bodyLight shrink-0 mt-0.5" />
+            <p className="text-figma-xs text-fw-bodyLight">
+              LMCC contracts map a single billing contract to 4 AWS hosted connection IDs. Early termination fees apply to fixed-term contracts (12/24/36 mo). Trial and M2M contracts can disconnect without penalty.
             </p>
           </div>
         </div>
