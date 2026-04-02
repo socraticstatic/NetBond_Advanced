@@ -32,7 +32,7 @@ export function BillingPreview({
   resiliencyLevel,
   lmccBandwidth,
 }: BillingPreviewProps) {
-  const isLmcc = provider === 'AWS' && resiliencyLevel === 'maximum';
+  const isLmcc = provider === 'AWS' && resiliencyLevel === 'maximum' && type === 'Internet to Cloud';
   const [showPlanSelector, setShowPlanSelector] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);

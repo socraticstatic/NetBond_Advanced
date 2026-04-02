@@ -87,7 +87,7 @@ export function ReviewConfiguration({
 }: ReviewConfigurationProps) {
   const navigate = useNavigate();
   const providers = config.providers || (config.provider ? [config.provider] : []);
-  const isAwsLmcc = providers.includes('AWS' as CloudProvider) && config.resiliencyLevel === 'maximum';
+  const isAwsLmcc = providers.includes('AWS' as CloudProvider) && config.resiliencyLevel === 'maximum' && config.type === 'Internet to Cloud';
   const lmccMetroId = isAwsLmcc ? (selectedLocations['AWS'] || [])[0] : null;
   const lmccMetro = lmccMetroId ? getMetroById(lmccMetroId) : null;
   const resiliencyLabel = config.resiliencyLevel === 'geodiversity'

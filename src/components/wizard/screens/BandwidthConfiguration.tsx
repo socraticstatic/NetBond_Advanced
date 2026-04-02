@@ -117,7 +117,7 @@ export function BandwidthConfiguration({
   });
 
   // AWS + Maximum Resiliency = LMCC: single bandwidth for all 4 paths
-  const isAwsLmcc = selectedProviders.includes('AWS' as CloudProvider) && resiliencyLevel === 'maximum';
+  const isAwsLmcc = selectedProviders.includes('AWS' as CloudProvider) && resiliencyLevel === 'maximum' && type === 'Internet to Cloud';
 
   // Initialize LMCC bandwidth key on mount
   useEffect(() => {
