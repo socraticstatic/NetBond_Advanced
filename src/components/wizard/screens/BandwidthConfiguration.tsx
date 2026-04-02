@@ -148,10 +148,10 @@ export function BandwidthConfiguration({
     return (
       <div className="space-y-6">
         <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-2">
-          Configure LMCC Bandwidth
+          Configure AWS Max Bandwidth
         </h3>
         <p className="text-figma-sm text-fw-bodyLight text-center mb-6">
-          One bandwidth value applies to all 4 hosted connections in your LMCC metro.
+          One bandwidth value applies to all 4 hosted connections in your AWS Max metro.
         </p>
 
         <div className="max-w-lg mx-auto space-y-6">
@@ -160,7 +160,7 @@ export function BandwidthConfiguration({
             <Shield className="h-5 w-5 text-fw-link flex-shrink-0 mt-0.5" />
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <p className="text-figma-sm font-medium text-fw-heading">Maximum Resiliency via LMCC</p>
+                <p className="text-figma-sm font-medium text-fw-heading">Maximum Resiliency via AWS Max</p>
                 <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>
                   {CURRENT_PHASE === 'preview' ? 'June 2026' : 'November 2026'}
                 </span>
@@ -185,7 +185,7 @@ export function BandwidthConfiguration({
           <div className="border border-fw-secondary rounded-2xl overflow-hidden">
             <div className="px-5 py-4 bg-fw-wash border-b border-fw-secondary">
               <p className="text-figma-sm font-semibold text-fw-heading">
-                {metro ? metro.name : 'LMCC Metro'} - All 4 Paths
+                {metro ? metro.name : 'AWS Max Metro'} - All 4 Paths
               </p>
               {metro && (
                 <div className="flex items-center gap-3 mt-1.5">

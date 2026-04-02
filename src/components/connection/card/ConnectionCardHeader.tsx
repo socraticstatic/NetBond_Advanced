@@ -76,7 +76,7 @@ export function ConnectionCardHeader({
                   <div className="flex items-center gap-2 mt-1">
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>
                       <Shield className="h-3 w-3" />
-                      LMCC
+                      AWS Max
                     </span>
                     {connection.configuration.lmccPending ? (
                       <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.16)' }}>

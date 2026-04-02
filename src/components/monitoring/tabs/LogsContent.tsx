@@ -150,8 +150,8 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
       timestamp: '2026-07-01 14:00',
       type: 'system',
       severity: 'info',
-      message: 'LMCC provisioning initiated - 4 hosted connections across MX304-SV1-A, MX304-SV1-B, MX304-SV5-A, MX304-SV5-B',
-      source: 'LMCC Orchestrator',
+      message: 'AWS Max provisioning initiated - 4 hosted connections across MX304-SV1-A, MX304-SV1-B, MX304-SV5-A, MX304-SV5-B',
+      source: 'AWS Max Orchestrator',
       user: 'system',
       connectionId: 'conn-lmcc-1',
       metadata: { metro: 'San Jose, CA', paths: 4 }
@@ -194,7 +194,7 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
       timestamp: '2026-07-01 14:15',
       type: 'system',
       severity: 'info',
-      message: 'LMCC billing started - BGP Established on all 4 paths. Trial contract, fixed-rate billing.',
+      message: 'AWS Max billing started - BGP Established on all 4 paths. Trial contract, fixed-rate billing.',
       source: 'Billing Engine',
       user: 'system',
       connectionId: 'conn-lmcc-1',
@@ -206,7 +206,7 @@ function LogsContent({ selectedConnection, connections }: LogsContentProps) {
       type: 'performance',
       severity: 'info',
       message: '802.1Q VLAN tag verification passed - all 4 IPE sub-interfaces match AWS Console IDs (1001, 1002, 1003, 1004)',
-      source: 'LMCC Orchestrator',
+      source: 'AWS Max Orchestrator',
       user: 'system',
       connectionId: 'conn-lmcc-1',
       metadata: { vlans: [1001, 1002, 1003, 1004] }
