@@ -4,8 +4,10 @@ import { Button } from '../common/Button';
 import { useNavigate } from 'react-router-dom';
 import { LMCCStatusPanel } from '../connection/lmcc/LMCCStatusPanel';
 import { MOCK_LMCC_CONNECTIONS, LMCC_METROS, formatBandwidth, CURRENT_PHASE, LMCC_PHASES, getPhaseTag, PHASE_DATES } from '../../data/lmccService';
-import { LMCCConnection, LMCCMetro } from '../../types/lmcc';
+import { LMCCConnection, LMCCMetro, LMCCOnboardingConfig } from '../../types/lmcc';
 import { SideDrawer } from '../common/SideDrawer';
+import { LMCCKickoffModal } from '../connection/lmcc/LMCCKickoffModal';
+import { LMCCOnboardingDrawer } from '../connection/lmcc/LMCCOnboardingDrawer';
 
 export function AWSPartnerZone() {
   const navigate = useNavigate();
@@ -14,6 +16,26 @@ export function AWSPartnerZone() {
   const [showInitiateModal, setShowInitiateModal] = useState(false);
   const [selectedMetro, setSelectedMetro] = useState<LMCCMetro | null>(null);
   const [prereqChecks, setPrereqChecks] = useState({ awsAccount: false, enterpriseSupport: false, wellArchitected: false });
+
+  // Onboarding flow for AWS-initiated connections
+  const [kickoffConnection, setKickoffConnection] = useState<LMCCConnection | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  const handleStartSetup = () => {
+    setKickoffConnection(prev => prev); // keep the connection
+    setShowOnboarding(true);
+  };
+
+  const handleActivate = (config: LMCCOnboardingConfig) => {
+    setShowOnboarding(false);
+    setKickoffConnection(null);
+    window.addToast?.({
+      type: 'success',
+      title: 'LMCC Connection Activated',
+      message: `${config.cloudRouterName} is now active with 4 paths in ${kickoffConnection?.metro.name}.`,
+      duration: 5000,
+    });
+  };
 
   const activeConnections = lmccConnections.filter(c => c.status === 'active');
   const pendingConnections = lmccConnections.filter(c => c.status === 'pending-acceptance' || c.status === 'provisioning');
@@ -197,6 +219,16 @@ export function AWSPartnerZone() {
                       <p className="text-figma-xs text-fw-warn mt-0.5">Pending</p>
                     </div>
                   ))}
+                </div>
+                <div className="mt-3 flex justify-end">
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => setKickoffConnection(conn)}
+                  >
+                    Configure
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
                 </div>
               </div>
             ))}
@@ -450,6 +482,26 @@ export function AWSPartnerZone() {
           </div>
         </div>
       </SideDrawer>
+
+      {/* LMCC Kickoff Modal - appears when Configure is clicked on a pending connection */}
+      {kickoffConnection && !showOnboarding && (
+        <LMCCKickoffModal
+          connection={kickoffConnection}
+          isOpen={true}
+          onClose={() => setKickoffConnection(null)}
+          onStartSetup={handleStartSetup}
+        />
+      )}
+
+      {/* LMCC Onboarding Drawer - 4-step configuration after kickoff */}
+      {kickoffConnection && showOnboarding && (
+        <LMCCOnboardingDrawer
+          connection={kickoffConnection}
+          isOpen={true}
+          onClose={() => { setShowOnboarding(false); setKickoffConnection(null); }}
+          onActivate={handleActivate}
+        />
+      )}
     </div>
   );
 }
