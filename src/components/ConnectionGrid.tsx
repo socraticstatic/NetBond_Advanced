@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { GridView } from './connection/views/GridView';
 import { ListView } from './connection/views/ListView';
@@ -12,6 +13,10 @@ import { TableFilterPanel, useTableFilters, FilterGroup } from './common/TableFi
 import { useStore } from '../store/useStore';
 import { getGroupsForConnection } from '../utils/groups';
 import { useIsMobile } from '../hooks/useMobileDetection';
+import { LMCCKickoffModal } from './connection/lmcc/LMCCKickoffModal';
+import { LMCCOnboardingDrawer } from './connection/lmcc/LMCCOnboardingDrawer';
+import { MOCK_LMCC_CONNECTIONS } from '../data/lmccService';
+import { LMCCOnboardingConfig } from '../types/lmcc';
 
 interface ConnectionGridProps {
   connections: Connection[];
@@ -19,12 +24,31 @@ interface ConnectionGridProps {
 
 export function ConnectionGrid({ connections }: ConnectionGridProps) {
   const groups = useStore(state => state.groups);
+  const updateConnection = useStore(state => state.updateConnection);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [areAllMinimized, setAreAllMinimized] = useState(false);
+
+  // Auto-detect pending AWS Max connections and prompt "Did you initiate?"
+  const [awsMaxPromptConn, setAwsMaxPromptConn] = useState<Connection | null>(null);
+  const [awsMaxPromptDismissed, setAwsMaxPromptDismissed] = useState(false);
+  const [showKickoff, setShowKickoff] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    if (awsMaxPromptDismissed) return;
+    const pendingAwsMax = connections.find(c =>
+      c.status === 'Pending' && c.configuration?.isLmcc && c.configuration?.lmccPending
+    );
+    if (pendingAwsMax && !awsMaxPromptConn) {
+      // Delay slightly so the page renders first
+      const timer = setTimeout(() => setAwsMaxPromptConn(pendingAwsMax), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [connections, awsMaxPromptDismissed]);
 
   // Build dynamic filter groups from connection data
   const connectionFilterGroups = useMemo<FilterGroup[]>(() => [
@@ -250,6 +274,92 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
           />
         )}
       </div>
+
+      {/* "Did you initiate?" confirmation for pending AWS Max connections */}
+      {awsMaxPromptConn && !showKickoff && !showOnboarding && createPortal(
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4" onClick={() => { setAwsMaxPromptConn(null); setAwsMaxPromptDismissed(true); }}>
+          <div className="bg-fw-base rounded-2xl max-w-md w-full shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="px-6 py-5 bg-fw-wash border-b border-fw-secondary">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-7 rounded-lg bg-fw-base border border-fw-secondary flex items-center justify-center p-1">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" className="w-full h-full object-contain" />
+                </div>
+                <h2 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">New AWS Max Connection</h2>
+              </div>
+            </div>
+            <div className="px-6 py-5">
+              <p className="text-figma-base text-fw-body mb-3">
+                Did you initiate an AWS Max connection?
+              </p>
+              <p className="text-figma-sm text-fw-bodyLight mb-4">
+                We detected a new pending Maximum Resiliency connection in <strong>{awsMaxPromptConn.configuration?.lmccMetro || awsMaxPromptConn.location}</strong> from AWS Account <strong>{awsMaxPromptConn.origin?.externalAccountId || 'unknown'}</strong>.
+              </p>
+              <div className="p-3 rounded-lg bg-fw-wash border border-fw-secondary mb-4">
+                <div className="flex items-center gap-2 text-figma-xs">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>AWS Max</span>
+                  <span className="text-fw-heading font-medium">{awsMaxPromptConn.name}</span>
+                </div>
+                <p className="text-figma-xs text-fw-bodyLight mt-1">4 hosted connections awaiting acceptance and configuration</p>
+              </div>
+            </div>
+            <div className="px-6 py-4 border-t border-fw-secondary bg-fw-wash flex items-center justify-between">
+              <button
+                onClick={() => { setAwsMaxPromptConn(null); setAwsMaxPromptDismissed(true); }}
+                className="text-figma-sm font-medium text-fw-bodyLight hover:text-fw-body"
+              >
+                No, dismiss
+              </button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setShowKickoff(true)}
+              >
+                Yes, set it up
+              </Button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Kickoff modal after "Yes" confirmation */}
+      {awsMaxPromptConn && showKickoff && !showOnboarding && createPortal(
+        <LMCCKickoffModal
+          connection={MOCK_LMCC_CONNECTIONS.find(c => c.status === 'pending-acceptance') || MOCK_LMCC_CONNECTIONS[0]}
+          isOpen={true}
+          onClose={() => { setShowKickoff(false); setAwsMaxPromptConn(null); setAwsMaxPromptDismissed(true); }}
+          onStartSetup={() => { setShowKickoff(false); setShowOnboarding(true); }}
+        />,
+        document.body
+      )}
+
+      {/* Onboarding drawer after kickoff */}
+      {awsMaxPromptConn && showOnboarding && createPortal(
+        <LMCCOnboardingDrawer
+          connection={MOCK_LMCC_CONNECTIONS.find(c => c.status === 'pending-acceptance') || MOCK_LMCC_CONNECTIONS[0]}
+          isOpen={true}
+          onClose={() => { setShowOnboarding(false); setAwsMaxPromptConn(null); setAwsMaxPromptDismissed(true); }}
+          onActivate={(config: LMCCOnboardingConfig) => {
+            setShowOnboarding(false);
+            setAwsMaxPromptDismissed(true);
+            if (awsMaxPromptConn) {
+              updateConnection(awsMaxPromptConn.id, {
+                status: 'Active',
+                name: config.cloudRouterName || awsMaxPromptConn.name,
+                configuration: { ...awsMaxPromptConn.configuration, lmccPending: false, lmccActivePaths: 4 },
+              });
+            }
+            setAwsMaxPromptConn(null);
+            window.addToast?.({
+              type: 'success',
+              title: 'AWS Max Connection Activated',
+              message: `${config.cloudRouterName} is now active with 4 paths.`,
+              duration: 5000,
+            });
+          }}
+        />,
+        document.body
+      )}
     </div>
   );
 }
