@@ -15,6 +15,10 @@ import { ConnectionCardProgress } from './card/ConnectionCardProgress';
 import { ConnectionCardAction } from './card/ConnectionCardAction';
 import { ConnectionCardMinimized } from './card/ConnectionCardMinimized';
 import { AWSPendingConfigModal } from './modals/AWSPendingConfigModal';
+import { LMCCKickoffModal } from './lmcc/LMCCKickoffModal';
+import { LMCCOnboardingDrawer } from './lmcc/LMCCOnboardingDrawer';
+import { MOCK_LMCC_CONNECTIONS } from '../../data/lmccService';
+import { LMCCOnboardingConfig } from '../../types/lmcc';
 
 interface ConnectionCardProps {
   connection: Connection;
@@ -39,8 +43,11 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   const [nameError, setNameError] = useState<string | null>(null);
   const [showEffects] = useState(true);
   const [showAWSConfigModal, setShowAWSConfigModal] = useState(false);
+  const [showLmccKickoff, setShowLmccKickoff] = useState(false);
+  const [showLmccOnboarding, setShowLmccOnboarding] = useState(false);
 
   const isPendingAWS = connection.status === 'Pending' && connection.origin?.source === 'aws-marketplace';
+  const isPendingLmcc = connection.status === 'Pending' && connection.configuration?.isLmcc && connection.configuration?.lmccPending;
 
   // Update local minimized state when prop changes
   useEffect(() => {
@@ -196,6 +203,10 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   };
 
   const handleCardClick = () => {
+    if (isPendingLmcc) {
+      setShowLmccKickoff(true);
+      return;
+    }
     if (isPendingAWS) {
       setShowAWSConfigModal(true);
       return;
@@ -376,6 +387,39 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
           isOpen={showAWSConfigModal}
           onClose={() => setShowAWSConfigModal(false)}
           onActivate={handleAWSActivation}
+        />
+      )}
+
+      {/* LMCC Kickoff Modal for pending LMCC connections */}
+      {isPendingLmcc && showLmccKickoff && !showLmccOnboarding && (
+        <LMCCKickoffModal
+          connection={MOCK_LMCC_CONNECTIONS.find(c => c.status === 'pending-acceptance') || MOCK_LMCC_CONNECTIONS[0]}
+          isOpen={true}
+          onClose={() => setShowLmccKickoff(false)}
+          onStartSetup={() => { setShowLmccKickoff(false); setShowLmccOnboarding(true); }}
+        />
+      )}
+
+      {/* LMCC Onboarding Drawer */}
+      {isPendingLmcc && showLmccOnboarding && (
+        <LMCCOnboardingDrawer
+          connection={MOCK_LMCC_CONNECTIONS.find(c => c.status === 'pending-acceptance') || MOCK_LMCC_CONNECTIONS[0]}
+          isOpen={true}
+          onClose={() => { setShowLmccOnboarding(false); }}
+          onActivate={(config: LMCCOnboardingConfig) => {
+            setShowLmccOnboarding(false);
+            updateConnection(connection.id, {
+              status: 'Active',
+              name: config.cloudRouterName || connection.name,
+              configuration: { ...connection.configuration, lmccPending: false, lmccActivePaths: 4 },
+            });
+            window.addToast?.({
+              type: 'success',
+              title: 'LMCC Connection Activated',
+              message: `${config.cloudRouterName} is now active with 4 paths.`,
+              duration: 5000,
+            });
+          }}
         />
       )}
     </motion.div>
