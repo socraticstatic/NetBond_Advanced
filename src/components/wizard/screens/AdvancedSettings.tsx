@@ -128,9 +128,85 @@ export function AdvancedSettings({
     }
   };
 
+  const isAwsLmcc = config.provider === 'AWS' && config.type === 'Internet to Cloud';
+
   return (
     <div className="space-y-8">
       <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">Advanced Configuration</h3>
+
+        {/* LMCC Contract & Transport (AWS Max only) */}
+        {isAwsLmcc && (
+          <div className="bg-fw-base p-6 rounded-xl border border-fw-active/30 mb-6">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="p-2 bg-fw-accent rounded-lg">
+                <Shield className="h-5 w-5 text-brand-blue" />
+              </div>
+              <div>
+                <h4 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em]">LMCC Configuration</h4>
+                <p className="text-figma-sm text-fw-bodyLight">Contract term and transport for your LMCC connection</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-figma-base font-medium text-fw-body mb-2">
+                  Contract Term
+                  <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June 2026</span>
+                </label>
+                <select
+                  value={config.configuration?.lmccContractTerm || 'trial'}
+                  onChange={(e) => handleConfigChange('lmccContractTerm', e.target.value)}
+                  className="w-full h-9 px-3 rounded-lg border border-fw-primary text-figma-base focus:border-fw-active focus:ring-fw-active"
+                >
+                  <option value="trial">Trial (zero-penalty disconnect)</option>
+                  <option value="monthly" disabled>Month-to-Month - November 2026</option>
+                  <option value="fixed-12" disabled>12 Month Fixed Term - November 2026</option>
+                  <option value="fixed-24" disabled>24 Month Fixed Term - November 2026</option>
+                  <option value="fixed-36" disabled>36 Month Fixed Term - November 2026</option>
+                </select>
+                <p className="text-figma-xs text-fw-bodyLight mt-1">
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June</span>Trial only
+                  <span className="mx-1">|</span>
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.12)' }}>Nov</span>M2M, 12, 24, 36 month
+                </p>
+              </div>
+              <div>
+                <label className="block text-figma-base font-medium text-fw-body mb-2">
+                  Transport Type
+                  <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June 2026</span>
+                </label>
+                <select
+                  value={config.configuration?.lmccTransport || 'mpls'}
+                  onChange={(e) => handleConfigChange('lmccTransport', e.target.value)}
+                  className="w-full h-9 px-3 rounded-lg border border-fw-primary text-figma-base focus:border-fw-active focus:ring-fw-active"
+                >
+                  <option value="mpls">MPLS (AT&T AVPN)</option>
+                  <option value="internet" disabled>Internet - November 2026</option>
+                </select>
+                <p className="text-figma-xs text-fw-bodyLight mt-1">
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June</span>MPLS only
+                  <span className="mx-1">|</span>
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.12)' }}>Nov</span>+ Internet
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-start gap-2 p-3 rounded-lg bg-fw-warningLight border border-fw-warning">
+              <AlertTriangle className="h-4 w-4 text-fw-warning shrink-0 mt-0.5" />
+              <div className="text-figma-xs text-fw-body">
+                <p className="font-medium">SLA Prerequisites</p>
+                <p className="mt-0.5">99.99% SLA requires an <strong>AWS Enterprise Support plan</strong> and a completed <strong>Well-Architected Review</strong> with an AWS Solutions Architect. Without these, the SLA does not apply.</p>
+              </div>
+            </div>
+
+            <div className="mt-3 flex items-start gap-2 p-3 rounded-lg bg-fw-wash border border-fw-secondary">
+              <Info className="h-4 w-4 text-fw-bodyLight shrink-0 mt-0.5" />
+              <div className="text-figma-xs text-fw-bodyLight">
+                <p>Billing starts when BGP reaches "Established" state. MACsec encryption is not available for hosted connections - use IPsec via Site-to-Site VPN if encryption is required.</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="space-y-6">
           <div className="bg-fw-base p-6 rounded-xl border border-fw-secondary">
@@ -499,6 +575,27 @@ export function AdvancedSettings({
                   </span>
                 </label>
               </div>
+
+              {/* BGP/BFD warnings */}
+              {config.configuration?.bfdEnabled && (
+                <div className="flex items-start gap-2 p-3 rounded-lg bg-fw-warningLight border border-fw-warning">
+                  <AlertTriangle className="h-4 w-4 text-fw-warning shrink-0 mt-0.5" />
+                  <div className="text-figma-xs text-fw-body">
+                    <p className="font-medium">BFD + Graceful Restart Conflict</p>
+                    <p className="mt-0.5">Do NOT enable BGP graceful restart when BFD is active. Graceful restart delays convergence and defeats BFD's sub-second failover. AWS minimum BFD: 300ms interval, multiplier 3 (900ms detection).</p>
+                  </div>
+                </div>
+              )}
+
+              {config.configuration?.peerAsn === 'private' && config.provider === 'AWS' && (
+                <div className="flex items-start gap-2 p-3 rounded-lg bg-fw-warningLight border border-fw-warning">
+                  <AlertTriangle className="h-4 w-4 text-fw-warning shrink-0 mt-0.5" />
+                  <div className="text-figma-xs text-fw-body">
+                    <p className="font-medium">Private ASN Limitation</p>
+                    <p className="mt-0.5">AWS strips private ASNs and replaces them with 7224 on public VIFs. AS path prepending will not work with a private ASN.</p>
+                  </div>
+                </div>
+              )}
 
               <div className="bg-fw-wash rounded-lg p-4">
                 <div className="flex items-start space-x-2">

@@ -1,8 +1,9 @@
-import { Edit2, CheckCircle2, MapPin, Gauge, Shield, Network, Settings } from 'lucide-react';
+import { Edit2, CheckCircle2, MapPin, Gauge, Shield, Network, Settings, Server, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CloudProvider } from '../../../types/connection';
 import { BillingPreview } from '../BillingPreview';
 import { wizardToDesigner } from '../../../utils/wizardToDesigner';
+import { getMetroById, formatBandwidth } from '../../../data/lmccService';
 
 interface ReviewConfigurationProps {
   cloudRouterName?: string;
@@ -86,7 +87,11 @@ export function ReviewConfiguration({
 }: ReviewConfigurationProps) {
   const navigate = useNavigate();
   const providers = config.providers || (config.provider ? [config.provider] : []);
-  const resiliencyLabel = config.resiliencyLevel === 'maximum' ? 'Maximum Resiliency'
+  const isAwsLmcc = providers.includes('AWS' as CloudProvider) && config.resiliencyLevel === 'maximum';
+  const lmccMetroId = isAwsLmcc ? (selectedLocations['AWS'] || [])[0] : null;
+  const lmccMetro = lmccMetroId ? getMetroById(lmccMetroId) : null;
+  const resiliencyLabel = config.resiliencyLevel === 'maximum'
+    ? (isAwsLmcc ? 'Maximum Resiliency (LMCC)' : 'Maximum Resiliency')
     : config.resiliencyLevel === 'geo' ? 'Geographic Resiliency'
     : 'Local Resiliency';
 
@@ -144,6 +149,41 @@ export function ReviewConfiguration({
             {providers.map(provider => {
               const locs = selectedLocations[provider] || [];
               if (locs.length === 0) return null;
+
+              // LMCC metro display for AWS + Maximum
+              if (provider === 'AWS' && isAwsLmcc && lmccMetro) {
+                return (
+                  <div key={provider} className="mt-3 p-4 bg-fw-accent rounded-lg border border-fw-active/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Shield className="h-4 w-4 text-fw-link" />
+                      <p className="text-figma-sm font-semibold text-fw-heading">AWS - LMCC Metro: {lmccMetro.name}</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 mb-3">
+                      {lmccMetro.datacenters.map((dc, i) => (
+                        <div key={dc} className="flex items-center gap-2 p-2 bg-fw-base rounded-lg border border-fw-secondary">
+                          <Server className="h-3.5 w-3.5 text-fw-bodyLight" />
+                          <div>
+                            <p className="text-figma-xs font-medium text-fw-heading">{dc}</p>
+                            <p className="text-figma-xs text-fw-bodyLight">Site {i + 1} - 2 IPEs</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="text-figma-xs text-fw-body space-y-1">
+                      <p>4 hosted connections auto-provisioned across 4 Juniper MX-304 devices</p>
+                      <p>Contract: {config.configuration?.lmccContractTerm === 'trial' ? 'Trial (Preview)' : config.configuration?.lmccContractTerm || 'Trial'}</p>
+                      <p>Transport: {config.configuration?.lmccTransport === 'mpls' ? 'MPLS (AT&T AVPN)' : 'Internet'}</p>
+                    </div>
+                    <div className="mt-3 flex items-start gap-2 p-2 rounded bg-fw-warningLight border border-fw-warning">
+                      <AlertTriangle className="h-3.5 w-3.5 text-fw-warning shrink-0 mt-0.5" />
+                      <p className="text-figma-xs text-fw-body">
+                        99.99% SLA requires AWS Enterprise Support + Well-Architected Review
+                      </p>
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <div key={provider} className="mt-3 p-3 bg-fw-wash rounded-lg">
                   <p className="text-figma-xs font-semibold text-fw-heading mb-2">{provider}</p>
@@ -163,25 +203,40 @@ export function ReviewConfiguration({
           {/* Bandwidth */}
           <div className="bg-fw-base rounded-xl p-6 border border-fw-secondary">
             <SectionHeader icon={Gauge} title="Bandwidth" step={5} onEdit={onEditStep} />
-            <ReviewRow
-              label="Total Bandwidth"
-              value={totalBandwidth >= 1000 ? `${(totalBandwidth / 1000).toFixed(1)} Gbps` : `${totalBandwidth} Mbps`}
-            />
-            <ReviewRow label="Connections" value={`${bandwidthEntries.length}`} />
+            {isAwsLmcc ? (
+              <>
+                {bandwidthSettings['AWS-lmcc'] && (
+                  <>
+                    <ReviewRow label="Per-Path Bandwidth" value={formatBandwidth(bandwidthSettings['AWS-lmcc'])} />
+                    <ReviewRow label="Total Aggregate" value={formatBandwidth(bandwidthSettings['AWS-lmcc'] * 4)} />
+                    <ReviewRow label="Paths" value="4 (auto-provisioned by AT&T)" />
+                    <ReviewRow label="Bandwidth Mode" value="Fixed (AWS traffic policing enforced)" />
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <ReviewRow
+                  label="Total Bandwidth"
+                  value={totalBandwidth >= 1000 ? `${(totalBandwidth / 1000).toFixed(1)} Gbps` : `${totalBandwidth} Mbps`}
+                />
+                <ReviewRow label="Connections" value={`${bandwidthEntries.length}`} />
 
-            {bandwidthEntries.length > 0 && (
-              <div className="mt-3 space-y-1.5">
-                {bandwidthEntries.map(([key, bw]) => {
-                  const [provider, location] = key.split(':');
-                  const bwLabel = bw >= 1000 ? `${(bw / 1000).toFixed(1)} Gbps` : `${bw} Mbps`;
-                  return (
-                    <div key={key} className="flex items-center justify-between p-2 bg-fw-wash rounded text-figma-xs">
-                      <span className="text-fw-body">{provider} / {location}</span>
-                      <span className="font-medium text-fw-heading">{bwLabel}</span>
-                    </div>
-                  );
-                })}
-              </div>
+                {bandwidthEntries.length > 0 && (
+                  <div className="mt-3 space-y-1.5">
+                    {bandwidthEntries.map(([key, bw]) => {
+                      const [provider, location] = key.split(':');
+                      const bwLabel = bw >= 1000 ? `${(bw / 1000).toFixed(1)} Gbps` : `${bw} Mbps`;
+                      return (
+                        <div key={key} className="flex items-center justify-between p-2 bg-fw-wash rounded text-figma-xs">
+                          <span className="text-fw-body">{provider} / {location}</span>
+                          <span className="font-medium text-fw-heading">{bwLabel}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
             )}
           </div>
 

@@ -7,6 +7,8 @@ import { MiniTopology } from '../MiniTopology';
 
 import { IPEInfoTooltip } from '../../common/IPEInfoTooltip';
 import { BandwidthAdjuster } from '../BandwidthAdjuster';
+import { LMCCStatusPanel } from '../lmcc/LMCCStatusPanel';
+import { MOCK_LMCC_CONNECTIONS } from '../../../data/lmccService';
 
 interface ConnectionOverviewProps {
   connection: Connection;
@@ -23,16 +25,29 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
     setCurrentBandwidth(newBandwidth);
     // In a real app, this would update the store and trigger an API call
   };
+  const isLmcc = connection.configuration?.isLmcc;
+  // Find matching LMCC connection from mock data
+  const lmccConnection = isLmcc ? MOCK_LMCC_CONNECTIONS.find(c => c.status === 'active') : null;
+
   return (
     <div className="space-y-6">
-      {/* Quick Bandwidth Adjuster */}
-      <BandwidthAdjuster
-        currentBandwidth={currentBandwidth}
-        onBandwidthChange={handleBandwidthChange}
-        connectionId={connection.id}
-        connectionName={connection.name}
-        connectionStatus={connection.status}
-      />
+      {/* LMCC 4-Path Status Panel */}
+      {isLmcc && lmccConnection && (
+        <div className="bg-fw-base rounded-xl p-6 border border-fw-active/20">
+          <LMCCStatusPanel connection={lmccConnection} />
+        </div>
+      )}
+
+      {/* Quick Bandwidth Adjuster (hidden for LMCC - speed changes require delete/recreate) */}
+      {!isLmcc && (
+        <BandwidthAdjuster
+          currentBandwidth={currentBandwidth}
+          onBandwidthChange={handleBandwidthChange}
+          connectionId={connection.id}
+          connectionName={connection.name}
+          connectionStatus={connection.status}
+        />
+      )}
 
       {/* Network Architecture Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

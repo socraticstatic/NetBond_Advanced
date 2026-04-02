@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { Cloud, Building2, CheckCircle, AlertCircle, ArrowRight, Users, Lock, CreditCard, Settings, FileText, Zap, MousePointer, Code, Database, Network } from 'lucide-react';
 import { Button } from '../../common/Button';
-import { SiteSelectionPanel } from './SiteSelectionPanel';
-import { BandwidthAllocationPanel } from './BandwidthAllocationPanel';
-import { TAOConfigurationPanel } from './TAOConfigurationPanel';
-import { mockLMCCSites } from '../../../data/lmccService';
-import { LMCCBandwidthAllocation, TAOConfiguration } from '../../../types/lmcc';
+// LMCC config panels removed - LMCC is automated, not manually configured
+// Keeping workflow visualization for the provisioning flow diagram
 
 interface WorkflowStep {
   id: string;
@@ -25,34 +22,7 @@ export default function LMCCWorkflowVisualization() {
   const [showAWSConsole, setShowAWSConsole] = useState(false);
   const [showBusinessCenter, setShowBusinessCenter] = useState(false);
   const [showNetBondPortal, setShowNetBondPortal] = useState(false);
-  const [showSiteSelection, setShowSiteSelection] = useState(false);
-  const [showBandwidthAllocation, setShowBandwidthAllocation] = useState(false);
-  const [showTAOConfig, setShowTAOConfig] = useState(false);
-
-  // Demo configuration state
-  const [selectedSites, setSelectedSites] = useState<string[]>([]);
-  const [bandwidthAllocations, setBandwidthAllocations] = useState<LMCCBandwidthAllocation[]>([]);
-  const [taoConfig, setTaoConfig] = useState<TAOConfiguration>({
-    terminationType: 'public',
-    baseSubnet: '10.100.0.0/16',
-    startingVlanId: 100,
-    ipAllocations: [],
-    routingPolicy: 'static'
-  });
-
-  // Initialize bandwidth allocations when sites are selected
-  React.useEffect(() => {
-    const newAllocations = [...bandwidthAllocations];
-    selectedSites.forEach(siteId => {
-      if (!newAllocations.find(a => a.siteId === siteId)) {
-        newAllocations.push({ siteId, bandwidth: 100 });
-      }
-    });
-    const filteredAllocations = newAllocations.filter(a => selectedSites.includes(a.siteId));
-    if (filteredAllocations.length !== bandwidthAllocations.length) {
-      setBandwidthAllocations(filteredAllocations);
-    }
-  }, [selectedSites]);
+  // Legacy config modals removed - LMCC provisioning is automated by AT&T
 
   // Define workflow step order
   const stepOrder = [
@@ -741,136 +711,7 @@ export default function LMCCWorkflowVisualization() {
         </div>
       )}
 
-      {/* Site Selection Configuration Modal */}
-      {showSiteSelection && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowSiteSelection(false)}>
-          <div className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 z-10">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold">NetBond Advanced Portal - Site Selection</h2>
-                  <p className="text-sm text-gray-600 mt-1">Step 1 of 3: Configure LMCC Sites</p>
-                </div>
-                <button onClick={() => setShowSiteSelection(false)} className="text-gray-500 hover:text-gray-700 text-2xl leading-none">
-                  ✕
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <SiteSelectionPanel
-                sites={mockLMCCSites}
-                selectedSites={selectedSites}
-                onSitesChange={setSelectedSites}
-              />
-              <div className="mt-6 flex justify-between pt-4 border-t border-gray-200">
-                <Button variant="secondary" onClick={() => setShowSiteSelection(false)}>
-                  Close
-                </Button>
-                <Button
-                  onClick={() => {
-                    setShowSiteSelection(false);
-                    setActiveStep('lmcc-config-tao');
-                    // Simulate moving to next step
-                    setTimeout(() => setShowBandwidthAllocation(true), 300);
-                  }}
-                  disabled={selectedSites.length === 0}
-                >
-                  Next: Configure Bandwidth <ArrowRight className="h-4 w-4 ml-1" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Bandwidth Allocation Configuration Modal */}
-      {showBandwidthAllocation && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowBandwidthAllocation(false)}>
-          <div className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 z-10">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold">NetBond Advanced Portal - Bandwidth Allocation</h2>
-                  <p className="text-sm text-gray-600 mt-1">Step 2 of 3: Configure Bandwidth & View Billing</p>
-                </div>
-                <button onClick={() => setShowBandwidthAllocation(false)} className="text-gray-500 hover:text-gray-700 text-2xl leading-none">
-                  ✕
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <BandwidthAllocationPanel
-                sites={mockLMCCSites}
-                selectedSites={selectedSites}
-                bandwidthAllocations={bandwidthAllocations}
-                onBandwidthChange={setBandwidthAllocations}
-              />
-              <div className="mt-6 flex justify-between pt-4 border-t border-gray-200">
-                <Button variant="secondary" onClick={() => setShowBandwidthAllocation(false)}>
-                  Close
-                </Button>
-                <Button
-                  onClick={() => {
-                    setShowBandwidthAllocation(false);
-                    setActiveStep('billing-surprise');
-                    // Simulate moving to next step
-                    setTimeout(() => setShowTAOConfig(true), 300);
-                  }}
-                  disabled={bandwidthAllocations.length === 0}
-                >
-                  Next: Configure TAO <ArrowRight className="h-4 w-4 ml-1" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAO Configuration Modal */}
-      {showTAOConfig && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowTAOConfig(false)}>
-          <div className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 z-10">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold">NetBond Advanced Portal - TAO Configuration</h2>
-                  <p className="text-sm text-gray-600 mt-1">Step 3 of 3: Configure Termination & Orchestration</p>
-                </div>
-                <button onClick={() => setShowTAOConfig(false)} className="text-gray-500 hover:text-gray-700 text-2xl leading-none">
-                  ✕
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <TAOConfigurationPanel
-                sites={mockLMCCSites}
-                selectedSites={selectedSites}
-                taoConfig={taoConfig}
-                onConfigChange={setTaoConfig}
-              />
-              <div className="mt-6 flex justify-between pt-4 border-t border-gray-200">
-                <Button variant="secondary" onClick={() => setShowTAOConfig(false)}>
-                  Close
-                </Button>
-                <Button
-                  onClick={() => {
-                    setShowTAOConfig(false);
-                    setActiveStep('aws-billing-display');
-                    window.addToast?.({
-                      type: 'success',
-                      title: 'Configuration Complete',
-                      message: 'LMCC configuration saved. Billing details will be sent to AWS Console for approval.',
-                      duration: 5000
-                    });
-                  }}
-                >
-                  Complete Configuration <CheckCircle className="h-4 w-4 ml-1" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Legacy config modals removed - LMCC provisioning is automated */}
     </div>
   );
 }

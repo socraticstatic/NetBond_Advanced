@@ -193,6 +193,17 @@ export function BandwidthScalingPolicy() {
 
   return (
     <div className="space-y-6">
+      {/* LMCC Bandwidth Notice */}
+      <div className="flex items-start gap-3 p-4 rounded-xl bg-fw-accent border border-fw-active/20">
+        <Info className="h-5 w-5 text-fw-link flex-shrink-0 mt-0.5" />
+        <div>
+          <p className="text-figma-sm font-semibold text-fw-heading">LMCC Connections: Auto-Scaling Not Supported</p>
+          <p className="text-figma-xs text-fw-bodyLight mt-1">
+            AWS Direct Connect hosted connections (used by LMCC) do not support dynamic bandwidth changes. To change speed on an LMCC connection, you must provision 4 new paths at the new bandwidth, have the customer accept them in the AWS Console, then delete the 4 old paths. Auto-scaling policies below apply only to non-LMCC connections.
+          </p>
+        </div>
+      </div>
+
       {/* Header Card */}
       <div className="bg-fw-base border border-fw-secondary rounded-2xl shadow-sm">
         <div className="p-6 border-b border-fw-secondary">
