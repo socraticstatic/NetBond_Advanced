@@ -199,7 +199,7 @@ export function BandwidthScalingPolicy() {
         <div>
           <p className="text-figma-sm font-semibold text-fw-heading">AWS Max Connections: Auto-Scaling Not Supported</p>
           <p className="text-figma-xs text-fw-bodyLight mt-1">
-            AWS Direct Connect hosted connections (used by LMCC) do not support dynamic bandwidth changes. To change speed on an AWS Max connection, you must provision 4 new paths at the new bandwidth, have the customer accept them in the AWS Console, then delete the 4 old paths. Auto-scaling policies below apply only to non-AWS Max connections.
+            AWS Direct Connect hosted connections (used by AWS Max) do not support dynamic bandwidth changes. To change speed on an AWS Max connection, you must provision 4 new paths at the new bandwidth, have the customer accept them in the AWS Console, then delete the 4 old paths. Auto-scaling policies below apply only to non-AWS Max connections.
           </p>
         </div>
       </div>
