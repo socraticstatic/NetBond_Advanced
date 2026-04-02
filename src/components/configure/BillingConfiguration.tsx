@@ -142,12 +142,12 @@ export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfig
         </div>
       </div>
 
-      {/* LMCC Billing Model */}
+      {/* AWS Max Billing Model */}
       <div className="mb-6 bg-fw-base border border-fw-active/30 rounded-xl overflow-hidden">
         <div className="px-4 py-3 bg-fw-accent border-b border-fw-active/20 flex items-center gap-2">
           <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" className="w-8 h-4 object-contain" />
           <Shield className="h-4 w-4 text-fw-link" />
-          <span className="text-figma-sm font-semibold text-fw-heading">LMCC Billing Model</span>
+          <span className="text-figma-sm font-semibold text-fw-heading">AWS Max Billing Model</span>
           <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>AWS Direct Connect</span>
         </div>
         <div className="p-4">
@@ -178,7 +178,7 @@ export function BillingConfiguration({ defaultTab = 'hierarchy' }: BillingConfig
           <div className="flex items-start gap-2 p-2 rounded-lg bg-fw-wash border border-fw-secondary">
             <Info className="h-3.5 w-3.5 text-fw-bodyLight shrink-0 mt-0.5" />
             <p className="text-figma-xs text-fw-bodyLight">
-              LMCC contracts map a single billing contract to 4 AWS hosted connection IDs. Early termination fees apply to fixed-term contracts (12/24/36 mo). Trial and M2M contracts can disconnect without penalty.
+              AWS Max contracts map a single billing contract to 4 AWS hosted connection IDs. Early termination fees apply to fixed-term contracts (12/24/36 mo). Trial and M2M contracts can disconnect without penalty.
             </p>
           </div>
         </div>

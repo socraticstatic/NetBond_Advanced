@@ -144,8 +144,8 @@ export function AdvancedSettings({
                 <Shield className="h-5 w-5 text-brand-blue" />
               </div>
               <div>
-                <h4 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em]">LMCC Configuration</h4>
-                <p className="text-figma-sm text-fw-bodyLight">Contract term and transport for your LMCC connection</p>
+                <h4 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em]">AWS Max Configuration</h4>
+                <p className="text-figma-sm text-fw-bodyLight">Contract term and transport for your AWS Max connection</p>
               </div>
             </div>
 

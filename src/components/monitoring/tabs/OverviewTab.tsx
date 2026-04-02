@@ -74,7 +74,7 @@ export function OverviewTab() {
                       <div className="flex items-center gap-2">
                         <Shield className="h-4 w-4 text-fw-link" />
                         <span className="font-medium text-fw-heading">{connection.name}</span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>LMCC</span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>AWS Max</span>
                         <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.16)' }}>{activePaths}/4 paths</span>
                       </div>
                       <span className="text-figma-sm text-fw-bodyLight">{lmccConn.metro.name}</span>

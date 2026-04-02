@@ -68,8 +68,9 @@ export function LMCCStatusPanel({ connection }: LMCCStatusPanelProps) {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2 mb-1">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" className="w-8 h-4 object-contain" />
             <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">
-              LMCC - {connection.metro.name}
+              AWS Max - {connection.metro.name}
             </h3>
             {getConnectionStatusBadge(connection.status)}
           </div>
