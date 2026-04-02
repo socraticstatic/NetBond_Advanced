@@ -93,10 +93,9 @@ export function BandwidthConfiguration({
   const [expandedBurstRules, setExpandedBurstRules] = useState<string | null>(null);
 
   // Build connections based on provider resiliency rules:
-  // AWS Max = 2 connections per location (4 total across 2 locations)
-  // Azure Max = 1 circuit per location (2 total across 2 metros)
-  // Google Max = 2 attachments per location (4 total across 2 metros)
-  // Oracle Geo = 2 circuits at same location
+  // Standard = 1-2 connections at 1 site (provider-specific)
+  // Maximum = 4 links: 2 per site x 2 sites in 1 metro (AWS uses LMCC, intercepts below)
+  // Geodiversity = 4 links: 2 per metro x 2 metros
   const connections = selectedProviders.flatMap(providerId => {
     const locations = selectedLocations[providerId] || [];
     const tier = (resiliencyLevel || 'standard') as 'standard' | 'maximum' | 'geodiversity';

@@ -653,6 +653,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                     location: selectedLocation,
                   }}
                   onConfigChange={updateConfig}
+                  resiliencyLevel={resiliencyLevel}
                 />
               )}
 

@@ -1,7 +1,8 @@
-import { CheckCircle2, AlertTriangle, MapPin, Shield, Server, ArrowRight, Lock } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, MapPin, Shield, Server, ArrowRight, Lock, Globe, Info } from 'lucide-react';
 import { CloudProvider, LocationOption, BandwidthOption } from '../../../types/connection';
-import { getLocationLabels } from '../../../data/providerLocations';
+import { getLocationLabels, getLocations, getMetros, getLocationsInMetro } from '../../../data/providerLocations';
 import { LMCC_METROS, CURRENT_PHASE, getPhaseTag } from '../../../data/lmccService';
+import { getResiliencyConfig } from '../../../data/providerResiliency';
 import type { ResiliencyLevel } from './ResiliencySelection';
 import { useNavigate } from 'react-router-dom';
 
@@ -193,18 +194,18 @@ export function ConnectionConfiguration({
       );
     }
 
-    // Standard location selection for non-LMCC flows
+    // Location selection - adapts per provider's locationBehavior
     return (
       <div className="space-y-6">
         <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-8">
-          Select Locations
+          {resiliencyLevel === 'geodiversity' ? 'Select Metros for Geodiversity' : 'Select Locations'}
         </h3>
 
         <div className="space-y-8">
             <div className="text-center">
               <p className="text-figma-sm text-fw-bodyLight mt-2">
                 {resiliencyLevel === 'geodiversity'
-                  ? 'Geodiversity requires selecting a primary and secondary metro.'
+                  ? 'Select a primary and geographically independent secondary metro per provider.'
                   : resiliencyLevel === 'maximum'
                     ? 'Maximum resiliency provisions 4 links across 2 sites in 1 metro.'
                     : 'Select at least 1 location per provider.'}
@@ -212,12 +213,12 @@ export function ConnectionConfiguration({
             </div>
 
             {resiliencyLevel === 'geodiversity' && (
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-fw-warningLight border border-fw-warning">
-                <AlertTriangle className="h-5 w-5 text-fw-warning flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-fw-accent border border-fw-active/20">
+                <Globe className="h-5 w-5 text-fw-link flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-figma-sm font-medium text-fw-heading">Geodiversity Selected</p>
+                  <p className="text-figma-sm font-medium text-fw-heading">Geo-Diverse, Metro-Independent Redundancy</p>
                   <p className="text-figma-xs text-fw-bodyLight mt-1">
-                    Select a primary metro and a geographically independent secondary metro. Each metro will have local redundancy.
+                    Select 2 geographically independent metros. Each metro will have local redundancy with 2 links. This protects against device, site, and metro-wide outages.
                   </p>
                 </div>
               </div>
@@ -225,10 +226,164 @@ export function ConnectionConfiguration({
 
             <div className="space-y-8">
               {selectedProviders.map((providerId) => {
-                const locations = getLocationLabels(providerId);
+                const tier = (resiliencyLevel || 'standard') as 'standard' | 'maximum' | 'geodiversity';
+                const config = getResiliencyConfig(providerId, tier);
                 const selected = selectedLocations[providerId] || [];
-                const needsMore = (resiliencyLevel === 'maximum' || resiliencyLevel === 'geodiversity') && selected.length < 2;
+                const needsMore = (resiliencyLevel === 'maximum' || resiliencyLevel === 'geodiversity') && selected.length < config.minLocations;
 
+                // Azure/Google Maximum: metro-grouped site picker
+                if (config.locationBehavior === 'single-metro-manual' && resiliencyLevel === 'maximum') {
+                  const providerMetros = getMetros(providerId);
+
+                  return (
+                    <div key={providerId} className="border border-fw-secondary rounded-2xl overflow-hidden">
+                      <div className="px-5 py-4 bg-fw-wash border-b border-fw-secondary flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Shield className="h-5 w-5 text-fw-link" />
+                          <div>
+                            <h4 className="text-figma-base font-semibold text-fw-heading">{providerId} - Select 2 Sites in Same Metro</h4>
+                            <p className="text-figma-xs text-fw-bodyLight">
+                              {providerId === 'Google'
+                                ? 'Sites must be in different edge availability domains for 99.9% SLA.'
+                                : 'Select 2 peering locations within the same metro to match provider portal behavior.'}
+                            </p>
+                          </div>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-figma-xs font-medium ${
+                          needsMore ? 'bg-fw-warningLight text-fw-warning' : selected.length >= 2 ? 'bg-fw-primary text-white' : 'bg-fw-wash text-fw-bodyLight border border-fw-secondary'
+                        }`}>
+                          {selected.length}/2 selected
+                        </span>
+                      </div>
+
+                      <div className="p-5 space-y-4">
+                        {providerMetros.map(metro => {
+                          const metroLocations = getLocationsInMetro(providerId, metro);
+                          if (metroLocations.length < 2) return null;
+
+                          const metroSelected = selected.filter(s => metroLocations.some(ml => ml.label === s));
+                          const isActiveMetro = metroSelected.length > 0;
+
+                          return (
+                            <div key={metro} className={`border rounded-xl overflow-hidden ${isActiveMetro ? 'border-fw-active' : 'border-fw-secondary'}`}>
+                              <div className={`px-4 py-2 flex items-center gap-2 ${isActiveMetro ? 'bg-fw-accent' : 'bg-fw-wash'}`}>
+                                <MapPin className={`h-4 w-4 ${isActiveMetro ? 'text-fw-link' : 'text-fw-bodyLight'}`} />
+                                <span className="text-figma-sm font-semibold text-fw-heading">{metro} Metro</span>
+                                {metroSelected.length >= 2 && <CheckCircle2 className="h-3.5 w-3.5 text-fw-success" />}
+                              </div>
+                              <div className="p-3 grid grid-cols-2 gap-2">
+                                {metroLocations.map(loc => {
+                                  const isSelected = selected.includes(loc.label);
+                                  // If 2 already selected in another metro, disable this metro
+                                  const otherMetroSelected = selected.filter(s => !metroLocations.some(ml => ml.label === s)).length;
+                                  const disabledByOtherMetro = otherMetroSelected >= 2 && !isSelected;
+
+                                  return (
+                                    <button
+                                      key={loc.label}
+                                      disabled={disabledByOtherMetro}
+                                      onClick={() => {
+                                        // If selecting from a new metro, clear previous selections
+                                        if (!isActiveMetro && selected.length > 0) {
+                                          selected.forEach(s => onToggleLocation(providerId, s));
+                                        }
+                                        onToggleLocation(providerId, loc.label);
+                                      }}
+                                      className={`relative p-3 border-2 rounded-lg text-left transition-all text-figma-xs ${
+                                        disabledByOtherMetro ? 'border-fw-secondary bg-fw-wash opacity-40 cursor-not-allowed'
+                                        : isSelected ? 'border-fw-active bg-fw-accent shadow-sm' : 'border-fw-secondary bg-fw-base hover:border-fw-active/50'
+                                      }`}
+                                    >
+                                      <span className="font-medium text-fw-heading block">{loc.label}</span>
+                                      {loc.edgeDomain && (
+                                        <span className="text-fw-bodyLight block mt-0.5">Edge: {loc.edgeDomain}</span>
+                                      )}
+                                      {isSelected && <CheckCircle2 className="absolute top-2 right-2 h-3.5 w-3.5 text-fw-link" />}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
+
+                        {providerId === 'Google' && (
+                          <div className="flex items-start gap-2 p-3 rounded-lg bg-fw-wash border border-fw-secondary">
+                            <Info className="h-3.5 w-3.5 text-fw-bodyLight shrink-0 mt-0.5" />
+                            <p className="text-figma-xs text-fw-bodyLight">
+                              For 99.9% SLA, selected sites must be in <strong>different edge availability domains</strong> within the same metro.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Geodiversity: dual-metro picker
+                if (resiliencyLevel === 'geodiversity') {
+                  const providerMetros = getMetros(providerId);
+
+                  return (
+                    <div key={providerId} className="border border-fw-secondary rounded-2xl overflow-hidden">
+                      <div className="px-5 py-4 bg-fw-wash border-b border-fw-secondary flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Globe className="h-5 w-5 text-fw-link" />
+                          <div>
+                            <h4 className="text-figma-base font-semibold text-fw-heading">{providerId} - Select 2 Independent Metros</h4>
+                            <p className="text-figma-xs text-fw-bodyLight">Each metro provides local redundancy. Metros must be geographically independent.</p>
+                          </div>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-figma-xs font-medium ${
+                          needsMore ? 'bg-fw-warningLight text-fw-warning' : selected.length >= 2 ? 'bg-fw-primary text-white' : 'bg-fw-wash text-fw-bodyLight border border-fw-secondary'
+                        }`}>
+                          {selected.length}/2 metros
+                        </span>
+                      </div>
+
+                      <div className="p-5">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          {providerMetros.map(metro => {
+                            // For geodiversity, user selects metros (not individual sites)
+                            const isSelected = selected.includes(metro);
+                            const isFull = selected.length >= 2 && !isSelected;
+                            const metroLocs = getLocationsInMetro(providerId, metro);
+
+                            return (
+                              <button
+                                key={metro}
+                                disabled={isFull}
+                                onClick={() => onToggleLocation(providerId, metro)}
+                                className={`relative p-4 border-2 rounded-xl text-left transition-all ${
+                                  isFull ? 'border-fw-secondary bg-fw-wash opacity-40 cursor-not-allowed'
+                                  : isSelected ? 'border-fw-active bg-fw-accent shadow-md' : 'border-fw-secondary bg-fw-base hover:border-fw-active/50'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2 mb-2">
+                                  <MapPin className={`h-4 w-4 ${isSelected ? 'text-fw-link' : 'text-fw-body'}`} />
+                                  <span className="text-figma-sm font-semibold text-fw-heading">{metro}</span>
+                                </div>
+                                <p className="text-figma-xs text-fw-bodyLight">{metroLocs.length} site{metroLocs.length !== 1 ? 's' : ''} available</p>
+                                {selected.indexOf(metro) === 0 && (
+                                  <span className="absolute top-2 right-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-fw-primary text-white">Primary</span>
+                                )}
+                                {selected.indexOf(metro) === 1 && (
+                                  <span className="absolute top-2 right-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-fw-accent text-fw-link border border-fw-active">Secondary</span>
+                                )}
+                                {isSelected && !isFull && selected.indexOf(metro) === -1 && (
+                                  <CheckCircle2 className="absolute top-2 right-2 h-4 w-4 text-fw-link" />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Standard: flat location grid
+                const locations = getLocationLabels(providerId);
                 return (
                   <div key={providerId} className="border border-fw-secondary rounded-2xl overflow-hidden">
                     <div className="px-5 py-4 bg-fw-wash border-b border-fw-secondary flex items-center justify-between">
@@ -236,17 +391,10 @@ export function ConnectionConfiguration({
                         <MapPin className="h-5 w-5 text-fw-body" />
                         <h4 className="text-figma-base font-semibold text-fw-heading">{providerId}</h4>
                       </div>
-                      <span className={`
-                        px-3 py-1 rounded-full text-figma-xs font-medium
-                        ${needsMore
-                          ? 'bg-fw-warningLight text-fw-warning'
-                          : selected.length > 0
-                            ? 'bg-fw-primary text-white'
-                            : 'bg-fw-wash text-fw-bodyLight border border-fw-secondary'
-                        }
-                      `}>
+                      <span className={`px-3 py-1 rounded-full text-figma-xs font-medium ${
+                        selected.length > 0 ? 'bg-fw-primary text-white' : 'bg-fw-wash text-fw-bodyLight border border-fw-secondary'
+                      }`}>
                         {selected.length} selected
-                        {needsMore && ` (${2 - selected.length} more needed)`}
                       </span>
                     </div>
 
@@ -258,20 +406,14 @@ export function ConnectionConfiguration({
                             <button
                               key={location}
                               onClick={() => onToggleLocation(providerId, location)}
-                              className={`
-                                relative p-4 border-2 rounded-xl text-left transition-all duration-200
-                                ${isSelected
-                                  ? 'border-fw-active bg-fw-blue-light shadow-md'
-                                  : 'border-fw-secondary bg-fw-base hover:border-fw-active/50 hover:bg-fw-wash'
-                                }
-                              `}
+                              className={`relative p-4 border-2 rounded-xl text-left transition-all duration-200 ${
+                                isSelected ? 'border-fw-active bg-fw-blue-light shadow-md' : 'border-fw-secondary bg-fw-base hover:border-fw-active/50 hover:bg-fw-wash'
+                              }`}
                             >
                               <span className={`text-figma-sm font-medium block ${isSelected ? 'text-fw-heading' : 'text-fw-body'}`}>
                                 {location}
                               </span>
-                              {isSelected && (
-                                <CheckCircle2 className="absolute top-2 right-2 h-4 w-4 text-fw-link" />
-                              )}
+                              {isSelected && <CheckCircle2 className="absolute top-2 right-2 h-4 w-4 text-fw-link" />}
                             </button>
                           );
                         })}

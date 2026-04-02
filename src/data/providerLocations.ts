@@ -8,50 +8,65 @@
  *
  * The "servesRegions" field shows which cloud regions a location connects to,
  * displayed as help text in the wizard.
+ *
+ * The "metro" field groups locations by metropolitan area - used by
+ * Maximum resiliency (Azure: pick 2 sites in same metro) and
+ * Geodiversity (pick sites in 2 different metros).
+ *
+ * The "edgeDomain" field is Google-specific - edge availability domains
+ * within a metro. 99.9% SLA requires different edge domains.
  */
 
 export interface ProviderLocation {
   label: string;
   servesRegions?: string[];
+  metro?: string;
+  edgeDomain?: string;
 }
 
 export const PROVIDER_LOCATIONS: Record<string, ProviderLocation[]> = {
   'AWS': [
-    { label: 'Ashburn, VA (Equinix)', servesRegions: ['us-east-1'] },
-    { label: 'Columbus, OH (Cologix)', servesRegions: ['us-east-2'] },
-    { label: 'Chicago, IL (CoreSite)', servesRegions: ['us-east-2'] },
-    { label: 'Dallas, TX (Equinix)', servesRegions: ['us-east-1', 'us-west-2'] },
-    { label: 'Los Angeles, CA (CoreSite)', servesRegions: ['us-west-2'] },
-    { label: 'Portland, OR (Pittock)', servesRegions: ['us-west-2'] },
+    { label: 'Ashburn, VA (Equinix)', servesRegions: ['us-east-1'], metro: 'Ashburn' },
+    { label: 'Columbus, OH (Cologix)', servesRegions: ['us-east-2'], metro: 'Columbus' },
+    { label: 'Chicago, IL (CoreSite)', servesRegions: ['us-east-2'], metro: 'Chicago' },
+    { label: 'Dallas, TX (Equinix)', servesRegions: ['us-east-1', 'us-west-2'], metro: 'Dallas' },
+    { label: 'Los Angeles, CA (CoreSite)', servesRegions: ['us-west-2'], metro: 'Los Angeles' },
+    { label: 'Portland, OR (Pittock)', servesRegions: ['us-west-2'], metro: 'Portland' },
   ],
   'Azure': [
-    { label: 'Ashburn (Equinix)', servesRegions: ['East US', 'East US 2'] },
-    { label: 'Chicago (Equinix)', servesRegions: ['North Central US'] },
-    { label: 'Dallas (Equinix)', servesRegions: ['South Central US'] },
-    { label: 'Los Angeles (CoreSite)', servesRegions: ['West US'] },
-    { label: 'San Jose (Equinix)', servesRegions: ['West US 2'] },
-    { label: 'Seattle (Equinix)', servesRegions: ['West US 2'] },
+    { label: 'Ashburn (Equinix)', servesRegions: ['East US', 'East US 2'], metro: 'Washington DC' },
+    { label: 'Ashburn 2 (Coresite)', servesRegions: ['East US', 'East US 2'], metro: 'Washington DC' },
+    { label: 'Chicago (Equinix)', servesRegions: ['North Central US'], metro: 'Chicago' },
+    { label: 'Chicago 2 (Cyrus One)', servesRegions: ['North Central US'], metro: 'Chicago' },
+    { label: 'Dallas (Equinix)', servesRegions: ['South Central US'], metro: 'Dallas' },
+    { label: 'Dallas 2 (Digital Realty)', servesRegions: ['South Central US'], metro: 'Dallas' },
+    { label: 'Los Angeles (CoreSite)', servesRegions: ['West US'], metro: 'Los Angeles' },
+    { label: 'San Jose (Equinix)', servesRegions: ['West US 2'], metro: 'Silicon Valley' },
+    { label: 'Seattle (Equinix)', servesRegions: ['West US 2'], metro: 'Seattle' },
   ],
   'Google': [
-    { label: 'Ashburn, VA', servesRegions: ['us-east1', 'us-east4'] },
-    { label: 'Chicago, IL', servesRegions: ['us-central1'] },
-    { label: 'Dallas, TX', servesRegions: ['us-south1'] },
-    { label: 'Los Angeles, CA', servesRegions: ['us-west2'] },
-    { label: 'New York, NY', servesRegions: ['us-east1'] },
+    { label: 'Ashburn, VA (Equinix)', servesRegions: ['us-east1', 'us-east4'], metro: 'Ashburn', edgeDomain: 'ash-zone1' },
+    { label: 'Ashburn, VA (CoreSite)', servesRegions: ['us-east1', 'us-east4'], metro: 'Ashburn', edgeDomain: 'ash-zone2' },
+    { label: 'Chicago, IL (Equinix)', servesRegions: ['us-central1'], metro: 'Chicago', edgeDomain: 'chi-zone1' },
+    { label: 'Chicago, IL (CoreSite)', servesRegions: ['us-central1'], metro: 'Chicago', edgeDomain: 'chi-zone2' },
+    { label: 'Dallas, TX (Equinix)', servesRegions: ['us-south1'], metro: 'Dallas', edgeDomain: 'dal-zone1' },
+    { label: 'Los Angeles, CA (Equinix)', servesRegions: ['us-west2'], metro: 'Los Angeles', edgeDomain: 'lax-zone1' },
+    { label: 'Los Angeles, CA (CoreSite)', servesRegions: ['us-west2'], metro: 'Los Angeles', edgeDomain: 'lax-zone2' },
+    { label: 'New York, NY (Equinix)', servesRegions: ['us-east1'], metro: 'New York', edgeDomain: 'nyc-zone1' },
   ],
   'Oracle': [
-    { label: 'Ashburn, VA (US East)', servesRegions: ['us-ashburn-1'] },
-    { label: 'Phoenix, AZ (US West)', servesRegions: ['us-phoenix-1'] },
-    { label: 'Frankfurt (Europe)', servesRegions: ['eu-frankfurt-1'] },
-    { label: 'Tokyo (Asia Pacific)', servesRegions: ['ap-tokyo-1'] },
+    { label: 'Ashburn, VA (US East)', servesRegions: ['us-ashburn-1'], metro: 'Ashburn' },
+    { label: 'Phoenix, AZ (US West)', servesRegions: ['us-phoenix-1'], metro: 'Phoenix' },
+    { label: 'Frankfurt (Europe)', servesRegions: ['eu-frankfurt-1'], metro: 'Frankfurt' },
+    { label: 'Tokyo (Asia Pacific)', servesRegions: ['ap-tokyo-1'], metro: 'Tokyo' },
   ],
   'IBM': [
-    { label: 'Dallas' },
-    { label: 'Washington DC' },
-    { label: 'London' },
-    { label: 'Frankfurt' },
-    { label: 'Tokyo' },
-    { label: 'Sydney' },
+    { label: 'Dallas', metro: 'Dallas' },
+    { label: 'Washington DC', metro: 'Washington DC' },
+    { label: 'London', metro: 'London' },
+    { label: 'Frankfurt', metro: 'Frankfurt' },
+    { label: 'Tokyo', metro: 'Tokyo' },
+    { label: 'Sydney', metro: 'Sydney' },
   ],
   'Equinix': [
     { label: 'New York' },
@@ -104,7 +119,6 @@ export const PROVIDER_LOCATIONS: Record<string, ProviderLocation[]> = {
 
 /**
  * Backward-compatible helper that returns just the label strings.
- * Used by ConnectionConfiguration.tsx which expects string[].
  */
 export function getLocationLabels(provider: string): string[] {
   const locations = PROVIDER_LOCATIONS[provider];
@@ -117,4 +131,20 @@ export function getLocationLabels(provider: string): string[] {
  */
 export function getLocations(provider: string): ProviderLocation[] {
   return PROVIDER_LOCATIONS[provider] || [];
+}
+
+/**
+ * Get unique metros for a provider.
+ */
+export function getMetros(provider: string): string[] {
+  const locations = PROVIDER_LOCATIONS[provider] || [];
+  return [...new Set(locations.map(l => l.metro).filter(Boolean))] as string[];
+}
+
+/**
+ * Get locations within a specific metro for a provider.
+ */
+export function getLocationsInMetro(provider: string, metro: string): ProviderLocation[] {
+  const locations = PROVIDER_LOCATIONS[provider] || [];
+  return locations.filter(l => l.metro === metro);
 }
