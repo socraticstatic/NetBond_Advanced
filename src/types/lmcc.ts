@@ -99,6 +99,30 @@ export interface LMCCConnection {
   updatedAt: string;
 }
 
+// --- Onboarding (AWS-initiated flow) ---
+
+export interface LMCCOnboardingConfig {
+  cloudRouterName: string;
+  contractType: LMCCContractType;
+  transport: 'mpls' | 'internet';
+  vifType: 'private' | 'transit' | 'public';
+  customerASN: number;
+  bgpMd5Key: string;
+  pathPreference: 'active-active' | 'active-passive';
+  alerts: {
+    bgpPathDown: boolean;
+    bfdFailover: boolean;
+    contractExpiry: boolean;
+    pathAsymmetry: boolean;
+  };
+  notifications: {
+    email: string;
+    slack: boolean;
+    pagerduty: boolean;
+  };
+  billingAcknowledged: boolean;
+}
+
 // --- Phase capabilities ---
 
 export interface LMCCPhaseConfig {
