@@ -90,10 +90,11 @@ export function ReviewConfiguration({
   const isAwsLmcc = providers.includes('AWS' as CloudProvider) && config.resiliencyLevel === 'maximum';
   const lmccMetroId = isAwsLmcc ? (selectedLocations['AWS'] || [])[0] : null;
   const lmccMetro = lmccMetroId ? getMetroById(lmccMetroId) : null;
-  const resiliencyLabel = config.resiliencyLevel === 'maximum'
-    ? (isAwsLmcc ? 'Maximum Resiliency (LMCC)' : 'Maximum Resiliency')
-    : config.resiliencyLevel === 'geo' ? 'Geographic Resiliency'
-    : 'Local Resiliency';
+  const resiliencyLabel = config.resiliencyLevel === 'geodiversity'
+    ? 'Geodiversity'
+    : config.resiliencyLevel === 'maximum'
+      ? (isAwsLmcc ? 'Maximum Resiliency (LMCC)' : 'Maximum Resiliency')
+      : 'Standard Resiliency';
 
   const totalLocations = Object.values(selectedLocations).reduce((sum, locs) => sum + locs.length, 0);
   const bandwidthEntries = Object.entries(bandwidthSettings);

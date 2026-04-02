@@ -33,7 +33,7 @@ export function ConnectionConfiguration({
   onBandwidthSelect,
 }: ConnectionConfigurationProps) {
   const navigate = useNavigate();
-  const minLocations = resiliencyLevel === 'maximum' ? 2 : 1;
+  const minLocations = resiliencyLevel === 'maximum' || resiliencyLevel === 'geodiversity' ? 2 : 1;
 
   // AWS + Maximum Resiliency = LMCC metro selection
   const isAwsMax = selectedProviders.includes('AWS' as CloudProvider) && resiliencyLevel === 'maximum';
@@ -203,23 +203,21 @@ export function ConnectionConfiguration({
         <div className="space-y-8">
             <div className="text-center">
               <p className="text-figma-sm text-fw-bodyLight mt-2">
-                {resiliencyLevel === 'maximum'
-                  ? 'Maximum resiliency requires at least 2 locations per provider.'
-                  : resiliencyLevel === 'geo'
-                    ? 'Geographic resiliency requires at least 2 locations per provider.'
+                {resiliencyLevel === 'geodiversity'
+                  ? 'Geodiversity requires selecting a primary and secondary metro.'
+                  : resiliencyLevel === 'maximum'
+                    ? 'Maximum resiliency provisions 4 links across 2 sites in 1 metro.'
                     : 'Select at least 1 location per provider.'}
               </p>
             </div>
 
-            {(resiliencyLevel === 'maximum' || resiliencyLevel === 'geo') && (
+            {resiliencyLevel === 'geodiversity' && (
               <div className="flex items-start gap-3 p-4 rounded-xl bg-fw-warningLight border border-fw-warning">
                 <AlertTriangle className="h-5 w-5 text-fw-warning flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-figma-sm font-medium text-fw-heading">
-                    {resiliencyLevel === 'maximum' ? 'Maximum' : 'Geographic'} Resiliency Selected
-                  </p>
+                  <p className="text-figma-sm font-medium text-fw-heading">Geodiversity Selected</p>
                   <p className="text-figma-xs text-fw-bodyLight mt-1">
-                    Each provider must have at least 2 locations for {resiliencyLevel === 'maximum' ? 'full geographic' : 'geographic'} failover.
+                    Select a primary metro and a geographically independent secondary metro. Each metro will have local redundancy.
                   </p>
                 </div>
               </div>
@@ -229,7 +227,7 @@ export function ConnectionConfiguration({
               {selectedProviders.map((providerId) => {
                 const locations = getLocationLabels(providerId);
                 const selected = selectedLocations[providerId] || [];
-                const needsMore = resiliencyLevel === 'maximum' && selected.length < 2;
+                const needsMore = (resiliencyLevel === 'maximum' || resiliencyLevel === 'geodiversity') && selected.length < 2;
 
                 return (
                   <div key={providerId} className="border border-fw-secondary rounded-2xl overflow-hidden">

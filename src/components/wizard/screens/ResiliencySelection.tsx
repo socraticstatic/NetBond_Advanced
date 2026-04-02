@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { Shield, ShieldCheck, ShieldAlert } from 'lucide-react';
-import { getResiliencyConfig } from '../../../data/providerResiliency';
+import { Shield, ShieldCheck, Globe } from 'lucide-react';
+import { getResiliencyConfig, Tier, getAvailableTiers } from '../../../data/providerResiliency';
 
-export type ResiliencyLevel = 'local' | 'geo' | 'maximum' | '';
+export type ResiliencyLevel = Tier | '';
 
 interface ResiliencySelectionProps {
   resiliencyLevel: ResiliencyLevel;
@@ -13,28 +13,29 @@ interface ResiliencySelectionProps {
 }
 
 const TIER_META = {
-  local: { title: 'Local Resiliency', icon: Shield },
-  geo: { title: 'Geographic Resiliency', icon: ShieldAlert },
-  maximum: { title: 'Maximum Resiliency', icon: ShieldCheck },
+  standard: { title: 'Standard', icon: Shield, subtitle: 'Single-site, locally redundant' },
+  maximum: { title: 'Maximum', icon: ShieldCheck, subtitle: 'Maximum resilience within one metro' },
+  geodiversity: { title: 'Geodiversity', icon: Globe, subtitle: 'Geo-diverse, metro-independent redundancy' },
 } as const;
 
 export function ResiliencySelection({ resiliencyLevel, onSelect, provider, providers, type }: ResiliencySelectionProps) {
-  // Use the first selected provider for display, or fall back
   const primaryProvider = provider || (providers && providers[0]) || '';
 
   const options = useMemo(() => {
-    const tiers: Array<'local' | 'geo' | 'maximum'> = ['local', 'geo', 'maximum'];
+    const tiers = getAvailableTiers();
     return tiers.map(tier => {
       const config = getResiliencyConfig(primaryProvider, tier);
       const meta = TIER_META[tier];
       return {
         id: tier,
         title: meta.title,
+        subtitle: meta.subtitle,
         icon: meta.icon,
         providerTierName: config.providerName,
         sla: config.sla,
         description: config.architecture,
         details: config.details,
+        uiLabel: config.uiLabel,
       };
     });
   }, [primaryProvider]);
@@ -73,14 +74,18 @@ export function ResiliencySelection({ resiliencyLevel, onSelect, provider, provi
                     <Icon className={`h-6 w-6 ${isSelected ? 'text-white' : 'text-fw-body'}`} />
                   </div>
 
-                  <h4 className={`text-figma-base font-bold mb-1 ${isSelected ? 'text-white' : 'text-fw-heading'}`}>
+                  <h4 className={`text-figma-base font-bold mb-0.5 ${isSelected ? 'text-white' : 'text-fw-heading'}`}>
                     {option.title}
                   </h4>
+
+                  <p className={`text-figma-xs font-medium mb-2 ${isSelected ? 'text-white/80' : 'text-fw-bodyLight'}`}>
+                    {option.subtitle}
+                  </p>
 
                   {primaryProvider && (
                     <p className={`text-figma-xs font-medium mb-2 ${isSelected ? 'text-white/90' : 'text-fw-link'}`}>
                       {primaryProvider}: {option.providerTierName}
-                      {option.sla !== 'None' && ` - ${option.sla} SLA`}
+                      {option.sla !== 'None' && option.sla !== 'No SLA' && ` - ${option.sla} SLA`}
                     </p>
                   )}
 

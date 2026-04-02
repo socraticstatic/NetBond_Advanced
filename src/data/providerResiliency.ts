@@ -1,43 +1,25 @@
 /**
- * Provider-specific resiliency tier configurations.
+ * NetBond Advanced Resiliency Tiers
  *
- * VERIFIED FROM PROVIDER DOCUMENTATION (April 2026):
+ * Three tiers (High removed per product requirements):
  *
- * KEY TERMINOLOGY:
- * - Region: Cloud provider's logical deployment (us-east-1, East US, us-central1)
- * - Metro: Metropolitan area with one or more physical sites (Ashburn VA metro, NYC metro)
- * - Location/Site: Specific datacenter building (Equinix DC2, CoreSite LA1)
- * - Device: Physical AWS/Azure/Google/Oracle router at a location
+ * 1. STANDARD - Local redundancy at 1 site
+ *    Single site, redundant routers/links within that site.
+ *    Protects against device/link failure. No site/metro protection.
  *
- * AWS Direct Connect:
- * - Direct Connect locations are physical datacenter sites (NOT regions)
- * - Multiple locations can exist within one metro (e.g., Equinix DC2 + Digital Realty in Ashburn)
- * - Direct Connect Gateway lets you reach ANY region from ANY location
- * - Maximum Resiliency = connections on separate devices in MORE THAN ONE location
- *   (4 connections minimum: 2 per location, on different devices, across 2+ locations)
- *   All locations can be in the same metro or different metros
- *   Source: https://aws.amazon.com/directconnect/resiliency-recommendation/
+ * 2. MAXIMUM - 4 links across 2 sites in 1 metro
+ *    Two sites in the same metro, two links per site.
+ *    Protects against device, link, and single-site failures.
+ *    Still one metro only.
+ *    AWS: Customer selects one metro (AT&T LMCC auto-provisions)
+ *    Azure: Customer selects two sites (matches portal.azure.com UX)
+ *    Google: 2 sites, different edge availability domains
+ *    Oracle: 2 circuits on different devices at same location
  *
- * Azure ExpressRoute:
- * - Each circuit has built-in primary + secondary (active-active to 2 MSEEs)
- * - Peering locations are physical sites, NOT Azure regions
- * - Many metros have 2 peering locations (e.g., Amsterdam & Amsterdam2)
- * - Same-metro redundancy: 2 circuits at different peering locations in same metro
- * - Cross-metro redundancy: 2 circuits at peering locations in different metros
- *   (requires Premium SKU if different geopolitical regions)
- *   Source: https://learn.microsoft.com/en-us/azure/expressroute/designing-for-high-availability-with-expressroute
- *
- * Google Cloud Interconnect:
- * - Interconnect locations have edge availability domains (zones within a site)
- * - 99.9% SLA: 2 attachments in same metro, different edge availability domains
- * - 99.99% SLA: attachments in 2 different metros, each with domain diversity
- *   Source: https://cloud.google.com/network-connectivity/docs/interconnect/sla
- *
- * Oracle FastConnect:
- * - Redundant = 2 virtual circuits at same location on different devices
- * - Location-diverse = circuits at different FastConnect locations
- * - 99.9% SLA requires redundant connections with redundant BGP peers
- *   Source: https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/fastconnectresiliency.htm
+ * 3. GEODIVERSITY - 4 links across 2 sites in 2 metros
+ *    Two different metros, each with local redundancy.
+ *    Protects against device, site, and metro-wide failures.
+ *    Highest resilience option.
  */
 
 export interface ResiliencyTierConfig {
@@ -46,95 +28,116 @@ export interface ResiliencyTierConfig {
   architecture: string;
   minConnections: number;
   minLocations: number;
+  minMetros: number;
   locationConstraint: string;
+  locationBehavior: 'single-site' | 'single-metro-auto' | 'single-metro-manual' | 'dual-metro';
   details: string[];
+  uiLabel: string;
 }
 
-type Tier = 'local' | 'geo' | 'maximum';
+export type Tier = 'standard' | 'maximum' | 'geodiversity';
 
 const AWS_TIERS: Record<Tier, ResiliencyTierConfig> = {
-  local: {
+  standard: {
     providerName: 'Dev/Test',
     sla: 'No SLA',
-    architecture: 'Connections on separate devices at a single Direct Connect location. Protects against device failure only.',
+    architecture: 'Connectivity from one Direct Connect location with redundant routers/links within the site. Protects against device failure only.',
     minConnections: 2,
     minLocations: 1,
+    minMetros: 1,
     locationConstraint: '1 Direct Connect location, separate devices',
+    locationBehavior: 'single-site',
+    uiLabel: 'Single-site, locally redundant',
     details: [
-      '2 connections on separate devices',
+      'Redundant connections on separate devices',
       'Single Direct Connect location',
-      'Device failure protection only',
-      'NOT recommended for production',
-    ],
-  },
-  geo: {
-    providerName: 'High Resiliency',
-    sla: '99.9%',
-    architecture: 'One connection at each of two or more Direct Connect locations. Protects against location failure.',
-    minConnections: 2,
-    minLocations: 2,
-    locationConstraint: '2+ Direct Connect locations, 1 connection each',
-    details: [
-      '2+ connections across 2+ locations',
-      'Location failure protection',
-      'Can be same metro or different metros',
-      'Recommended for non-critical production',
+      'Device and link failure protection',
+      'No protection against site or metro outages',
     ],
   },
   maximum: {
     providerName: 'Maximum Resiliency (LMCC)',
     sla: '99.99%',
-    architecture: 'AT&T LMCC auto-provisions 4 hosted connections across 4 IPEs (Juniper MX-304) in 2 diverse datacenters within your selected metro.',
+    architecture: 'AT&T LMCC auto-provisions 4 hosted connections across 4 IPEs (Juniper MX-304) in 2 diverse sites within your selected metro. Customer selects one metro.',
     minConnections: 4,
     minLocations: 2,
-    locationConstraint: '2 diverse datacenters within 1 metro, 2 IPEs per datacenter',
+    minMetros: 1,
+    locationConstraint: '2 sites in 1 metro, 2 links per site',
+    locationBehavior: 'single-metro-auto',
+    uiLabel: 'Maximum resilience within one metro',
     details: [
-      '4 hosted connections on 4 separate devices',
-      '2 diverse datacenters within 1 metro',
-      'AT&T LMCC automates provisioning end-to-end',
-      'Requires AWS Enterprise Support + Well-Architected Review for SLA',
+      '4 links: 2 sites x 2 links per site',
+      'AT&T LMCC automates provisioning',
+      'Customer selects metro only',
+      'Requires Enterprise Support + Well-Architected Review for SLA',
+    ],
+  },
+  geodiversity: {
+    providerName: 'Geo-Diverse Resiliency',
+    sla: '99.99%',
+    architecture: '4 hosted connections across 2 sites in 2 geographically independent metros. Each metro has local redundancy. Highest protection level.',
+    minConnections: 4,
+    minLocations: 2,
+    minMetros: 2,
+    locationConstraint: '2 metros, each with 2 links at 1 site',
+    locationBehavior: 'dual-metro',
+    uiLabel: 'Geo-diverse, metro-independent redundancy',
+    details: [
+      '4 links across 2 independent metros',
+      'Each metro has local redundancy',
+      'Protects against metro-wide outages',
+      'Required for business-critical and regulated workloads',
     ],
   },
 };
 
 const AZURE_TIERS: Record<Tier, ResiliencyTierConfig> = {
-  local: {
+  standard: {
     providerName: 'Single Circuit',
     sla: '99.95%',
     architecture: 'One ExpressRoute circuit with built-in primary and secondary connections (active-active to 2 MSEEs) at one peering location.',
     minConnections: 1,
     minLocations: 1,
+    minMetros: 1,
     locationConstraint: '1 peering location',
+    locationBehavior: 'single-site',
+    uiLabel: 'Single-site, locally redundant',
     details: [
       '1 circuit with primary + secondary (built-in)',
       'Active-active to 2 Microsoft Edge routers',
       'Single peering location',
-      'No protection against location failure',
-    ],
-  },
-  geo: {
-    providerName: 'Same-Metro Redundancy',
-    sla: '99.95%',
-    architecture: 'Two ExpressRoute circuits at two peering locations in the same metro. Low-latency failover.',
-    minConnections: 2,
-    minLocations: 2,
-    locationConstraint: '2 peering locations in same metro (e.g., Amsterdam + Amsterdam2)',
-    details: [
-      '2 circuits at 2 peering locations',
-      'Same metropolitan area',
-      'Low-latency failover',
-      'Protection against single-location failure',
+      'No protection against site failure',
     ],
   },
   maximum: {
-    providerName: 'Cross-Metro Redundancy',
+    providerName: 'Maximum Resiliency',
     sla: '99.99%',
-    architecture: 'Two ExpressRoute circuits at peering locations in different metros. Full geographic diversity. Premium SKU needed if different geopolitical regions.',
+    architecture: 'Two ExpressRoute circuits at two peering locations in the same metro. Customer selects both sites to match Azure portal behavior.',
     minConnections: 2,
     minLocations: 2,
-    locationConstraint: '2 peering locations in different metros',
+    minMetros: 1,
+    locationConstraint: '2 peering locations in same metro',
+    locationBehavior: 'single-metro-manual',
+    uiLabel: 'Maximum resilience within one metro',
     details: [
-      '2 circuits in different metros',
+      '2 circuits at 2 sites in same metro',
+      'Customer selects both peering locations',
+      'Low-latency failover',
+      'Protection against single-site failure',
+    ],
+  },
+  geodiversity: {
+    providerName: 'Geo-Diverse Resiliency',
+    sla: '99.99%',
+    architecture: 'Two or more ExpressRoute circuits at peering locations in different metros. Full geographic diversity. Premium SKU needed if different geopolitical regions.',
+    minConnections: 2,
+    minLocations: 2,
+    minMetros: 2,
+    locationConstraint: '2 peering locations in different metros',
+    locationBehavior: 'dual-metro',
+    uiLabel: 'Geo-diverse, metro-independent redundancy',
+    details: [
+      '2+ circuits in different metros',
       'Full geographic diversity',
       'Premium SKU if crossing geopolitical boundary',
       'Zone-redundant gateways recommended',
@@ -143,39 +146,48 @@ const AZURE_TIERS: Record<Tier, ResiliencyTierConfig> = {
 };
 
 const GOOGLE_TIERS: Record<Tier, ResiliencyTierConfig> = {
-  local: {
+  standard: {
     providerName: 'No SLA',
     sla: 'None',
     architecture: 'Single VLAN attachment at one interconnect location. No uptime SLA from Google.',
     minConnections: 1,
     minLocations: 1,
+    minMetros: 1,
     locationConstraint: '1 interconnect location',
+    locationBehavior: 'single-site',
+    uiLabel: 'Single-site, locally redundant',
     details: [
       '1 VLAN attachment',
       'No uptime SLA',
       'Development and testing only',
     ],
   },
-  geo: {
+  maximum: {
     providerName: '99.9% Production',
     sla: '99.9%',
-    architecture: 'Two VLAN attachments in the same metro, in different edge availability domains.',
+    architecture: 'Two VLAN attachments at two sites in the same metro, in different edge availability domains.',
     minConnections: 2,
-    minLocations: 1,
-    locationConstraint: 'Same metro, different edge availability domains',
+    minLocations: 2,
+    minMetros: 1,
+    locationConstraint: '2 sites in same metro, different edge availability domains',
+    locationBehavior: 'single-metro-manual',
+    uiLabel: 'Maximum resilience within one metro',
     details: [
-      '2 attachments in same metro',
+      '2 attachments at 2 sites in same metro',
       'MUST be in different edge availability domains',
       '99.9% uptime SLA',
     ],
   },
-  maximum: {
+  geodiversity: {
     providerName: '99.99% Critical Production',
     sla: '99.99%',
     architecture: 'VLAN attachments across two different metros, each pair in different edge availability domains.',
     minConnections: 4,
     minLocations: 2,
-    locationConstraint: '2 different metros, each with different edge availability domains',
+    minMetros: 2,
+    locationConstraint: '2 different metros, each with edge availability domain diversity',
+    locationBehavior: 'dual-metro',
+    uiLabel: 'Geo-diverse, metro-independent redundancy',
     details: [
       '4 attachments across 2 metros',
       'Edge availability domain diversity per metro',
@@ -186,26 +198,32 @@ const GOOGLE_TIERS: Record<Tier, ResiliencyTierConfig> = {
 };
 
 const ORACLE_TIERS: Record<Tier, ResiliencyTierConfig> = {
-  local: {
+  standard: {
     providerName: 'Single Circuit',
     sla: 'None',
     architecture: 'One virtual circuit at one FastConnect location. No SLA guaranteed.',
     minConnections: 1,
     minLocations: 1,
+    minMetros: 1,
     locationConstraint: '1 FastConnect location',
+    locationBehavior: 'single-site',
+    uiLabel: 'Single-site, locally redundant',
     details: [
       '1 virtual circuit',
       'No SLA guaranteed',
       'Single point of failure',
     ],
   },
-  geo: {
+  maximum: {
     providerName: 'Redundant',
     sla: '99.9%',
     architecture: 'Two virtual circuits at the same FastConnect location on different physical devices. Requires redundant BGP peers.',
     minConnections: 2,
     minLocations: 1,
+    minMetros: 1,
     locationConstraint: 'Same FastConnect location, different physical devices',
+    locationBehavior: 'single-site',
+    uiLabel: 'Maximum resilience within one metro',
     details: [
       '2 circuits on different devices',
       'Same FastConnect location',
@@ -213,13 +231,16 @@ const ORACLE_TIERS: Record<Tier, ResiliencyTierConfig> = {
       'Device failure protection',
     ],
   },
-  maximum: {
+  geodiversity: {
     providerName: 'Location-Diverse',
     sla: '99.9%+',
-    architecture: 'Two or more virtual circuits at different FastConnect locations. Partner diversity optional.',
+    architecture: 'Two or more virtual circuits at different FastConnect locations in different metros.',
     minConnections: 2,
     minLocations: 2,
-    locationConstraint: '2+ different FastConnect locations',
+    minMetros: 2,
+    locationConstraint: '2+ different FastConnect locations in different metros',
+    locationBehavior: 'dual-metro',
+    uiLabel: 'Geo-diverse, metro-independent redundancy',
     details: [
       '2+ circuits at different locations',
       'Full location diversity',
@@ -230,32 +251,41 @@ const ORACLE_TIERS: Record<Tier, ResiliencyTierConfig> = {
 };
 
 const DEFAULT_TIERS: Record<Tier, ResiliencyTierConfig> = {
-  local: {
+  standard: {
     providerName: 'Standard',
     sla: '99.9%',
-    architecture: 'Single connection at one location.',
+    architecture: 'Single connection at one location with local redundancy.',
     minConnections: 1,
     minLocations: 1,
+    minMetros: 1,
     locationConstraint: '1 location',
-    details: ['Single connection', 'Standard redundancy'],
-  },
-  geo: {
-    providerName: 'Geographic',
-    sla: '99.95%',
-    architecture: 'Connections across two locations.',
-    minConnections: 2,
-    minLocations: 2,
-    locationConstraint: '2 locations',
-    details: ['Geographic redundancy', 'Location failover'],
+    locationBehavior: 'single-site',
+    uiLabel: 'Single-site, locally redundant',
+    details: ['Single connection', 'Local redundancy'],
   },
   maximum: {
     providerName: 'Maximum',
     sla: '99.99%',
-    architecture: 'Fully redundant connections across multiple locations.',
-    minConnections: 2,
+    architecture: 'Fully redundant connections across 2 sites in one metro.',
+    minConnections: 4,
     minLocations: 2,
-    locationConstraint: '2+ locations with full redundancy',
-    details: ['Full redundancy', 'Maximum availability'],
+    minMetros: 1,
+    locationConstraint: '2 sites in 1 metro',
+    locationBehavior: 'single-metro-auto',
+    uiLabel: 'Maximum resilience within one metro',
+    details: ['4 links across 2 sites', 'Single metro'],
+  },
+  geodiversity: {
+    providerName: 'Geo-Diverse',
+    sla: '99.99%',
+    architecture: 'Fully redundant connections across 2 metros.',
+    minConnections: 4,
+    minLocations: 2,
+    minMetros: 2,
+    locationConstraint: '2 metros with local redundancy each',
+    locationBehavior: 'dual-metro',
+    uiLabel: 'Geo-diverse, metro-independent redundancy',
+    details: ['Full redundancy across metros', 'Maximum availability'],
   },
 };
 
@@ -279,4 +309,8 @@ export function getAllResiliencyTiers(provider: string): Record<Tier, Resiliency
 export function getMinLocations(provider: string, tier: Tier): number {
   const config = getResiliencyConfig(provider, tier);
   return config.minLocations;
+}
+
+export function getAvailableTiers(): Tier[] {
+  return ['standard', 'maximum', 'geodiversity'];
 }

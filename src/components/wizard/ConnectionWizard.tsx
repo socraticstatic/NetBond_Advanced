@@ -291,7 +291,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
             if (p === 'AWS' && resiliencyLevel === 'maximum') {
               return locs >= 1; // One metro selected
             }
-            const tier = (resiliencyLevel || 'local') as 'local' | 'geo' | 'maximum';
+            const tier = (resiliencyLevel || 'standard') as 'standard' | 'maximum' | 'geodiversity';
             // Use minLocations from provider resiliency config
             const minLocs = getMinLocations(p, tier);
             return locs >= minLocs;
@@ -700,7 +700,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                     }
                     return selectedBandwidth as any;
                   })()}
-                  redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geo'}
+                  redundancy={resiliencyLevel === 'maximum' || resiliencyLevel === 'geodiversity'}
                   configuration={config.configuration}
                   selectedPlanId={billingChoice.planId}
                   onPlanChange={(planId) => updateBillingChoice({ planId })}
