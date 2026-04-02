@@ -161,8 +161,8 @@ export function BandwidthConfiguration({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <p className="text-figma-sm font-medium text-fw-heading">Maximum Resiliency via AWS Max</p>
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>
-                  {CURRENT_PHASE === 'preview' ? 'June 2026' : 'November 2026'}
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium text-fw-link bg-fw-accent border border-fw-active/20">
+                  {CURRENT_PHASE === 'preview' ? 'Preview' : 'GA'}
                 </span>
               </div>
               <p className="text-figma-xs text-fw-bodyLight mt-1">
@@ -170,11 +170,11 @@ export function BandwidthConfiguration({
               </p>
               <div className="mt-2 flex items-center gap-3 text-figma-xs">
                 <span className="flex items-center gap-1">
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June</span>
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium text-fw-link bg-fw-accent border border-fw-active/20">June</span>
                   Fixed 1 Gbps
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.12)' }}>Nov</span>
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium text-fw-success bg-fw-successLight">Nov</span>
                   {formatBandwidth(LMCC_PHASES.ga.bandwidthOptions[0])} - {formatBandwidth(LMCC_PHASES.ga.bandwidthOptions[LMCC_PHASES.ga.bandwidthOptions.length - 1])}
                 </span>
               </div>

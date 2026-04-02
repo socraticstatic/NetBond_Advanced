@@ -153,7 +153,7 @@ export function AdvancedSettings({
               <div>
                 <label className="block text-figma-base font-medium text-fw-body mb-2">
                   Contract Term
-                  <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June 2026</span>
+                  <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium text-fw-link bg-fw-accent border border-fw-active/20">Preview</span>
                 </label>
                 <select
                   value={config.configuration?.lmccContractTerm || 'trial'}
@@ -167,15 +167,15 @@ export function AdvancedSettings({
                   <option value="fixed-36" disabled>36 Month Fixed Term - November 2026</option>
                 </select>
                 <p className="text-figma-xs text-fw-bodyLight mt-1">
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June</span>Trial only
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1 text-fw-link bg-fw-accent border border-fw-active/20">June</span>Trial only
                   <span className="mx-1">|</span>
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.12)' }}>Nov</span>M2M, 12, 24, 36 month
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1 text-fw-success bg-fw-successLight">Nov</span>M2M, 12, 24, 36 month
                 </p>
               </div>
               <div>
                 <label className="block text-figma-base font-medium text-fw-body mb-2">
                   Transport Type
-                  <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June 2026</span>
+                  <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium text-fw-link bg-fw-accent border border-fw-active/20">Preview</span>
                 </label>
                 <select
                   value={config.configuration?.lmccTransport || 'mpls'}
@@ -186,9 +186,9 @@ export function AdvancedSettings({
                   <option value="internet" disabled>Internet - November 2026</option>
                 </select>
                 <p className="text-figma-xs text-fw-bodyLight mt-1">
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1" style={{ color: '#cc7a00', backgroundColor: 'rgba(204,122,0,0.12)' }}>June</span>MPLS only
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1 text-fw-link bg-fw-accent border border-fw-active/20">June</span>MPLS only
                   <span className="mx-1">|</span>
-                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.12)' }}>Nov</span>+ Internet
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium mr-1 text-fw-success bg-fw-successLight">Nov</span>+ Internet
                 </p>
               </div>
             </div>
