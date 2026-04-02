@@ -235,6 +235,88 @@ export const createRuleSlice: StateCreator<RuleSlice> = (set, get) => ({
         successRate: 100,
         lastExecuted: '2024-03-11T12:00:00Z',
         maxExecutionsPerHour: 3
+      },
+      // LMCC-specific alert rules
+      {
+        id: 'alert-lmcc-bgp',
+        type: 'alert',
+        name: 'LMCC BGP Path Down',
+        description: 'Alert when any LMCC BGP session drops from Established. Warning at 1 path, Critical at 2+ paths.',
+        enabled: true,
+        status: 'active',
+        priority: 'critical',
+        createdAt: '2026-07-01T14:00:00Z',
+        updatedAt: '2026-07-01T14:00:00Z',
+        createdBy: 'admin',
+        triggerCount: 0,
+        lastTriggered: undefined,
+        conditions: [
+          {
+            type: 'pattern',
+            field: 'message',
+            operator: 'contains',
+            value: 'LMCC BGP'
+          }
+        ],
+        actions: {
+          email: true,
+          slack: true,
+          webhook: true
+        },
+        cooldownMinutes: 5
+      },
+      {
+        id: 'alert-lmcc-bfd',
+        type: 'alert',
+        name: 'LMCC BFD Failover Triggered',
+        description: 'Alert when BFD detects path failure and triggers sub-second failover on any LMCC path.',
+        enabled: true,
+        status: 'active',
+        priority: 'high',
+        createdAt: '2026-07-01T14:00:00Z',
+        updatedAt: '2026-07-01T14:00:00Z',
+        createdBy: 'admin',
+        triggerCount: 0,
+        lastTriggered: undefined,
+        conditions: [
+          {
+            type: 'pattern',
+            field: 'message',
+            operator: 'contains',
+            value: 'BFD failure'
+          }
+        ],
+        actions: {
+          email: true,
+          slack: true,
+          webhook: false
+        },
+        cooldownMinutes: 1
+      },
+      {
+        id: 'notification-lmcc-contract',
+        type: 'notification',
+        name: 'LMCC Contract Expiration Warning',
+        description: 'Notify 30/60/90 days before fixed-term LMCC contract expires.',
+        enabled: true,
+        status: 'active',
+        priority: 'medium',
+        createdAt: '2026-07-01T14:00:00Z',
+        updatedAt: '2026-07-01T14:00:00Z',
+        createdBy: 'admin',
+        triggerCount: 0,
+        lastTriggered: undefined,
+        metricId: 'contract_expiry',
+        threshold: {
+          operator: 'less_than',
+          value: 90
+        },
+        channels: {
+          email: true,
+          slack: false,
+          webhook: false
+        },
+        escalationLevel: 1
       }
     ];
 

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Edit2, Minimize2, Cloud } from 'lucide-react';
+import { Edit2, Minimize2, Cloud, Shield } from 'lucide-react';
 import { NetworkNode } from '../../../types';
 import { IconButton } from '../../common/IconButton';
 import { ConnectionOverflowMenu } from '../ConnectionOverflowMenu';
@@ -72,7 +72,21 @@ export function ConnectionCardHeader({
                 >
                   {name}
                 </h3>
-                {connection?.origin?.source === 'aws-marketplace' && (
+                {connection?.configuration?.isLmcc && (
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>
+                      <Shield className="h-3 w-3" />
+                      LMCC
+                    </span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#2d7e24', backgroundColor: 'rgba(45,126,36,0.16)' }}>
+                      {connection.configuration.lmccActivePaths}/{connection.configuration.lmccPaths} paths
+                    </span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#454b52', backgroundColor: 'rgba(69,75,82,0.12)' }}>
+                      {connection.configuration.lmccMetro}
+                    </span>
+                  </div>
+                )}
+                {connection?.origin?.source === 'aws-marketplace' && !connection?.configuration?.isLmcc && (
                   <div className="flex items-center gap-2 mt-1">
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-fw-accent border border-fw-warn/30 rounded text-figma-sm font-semibold text-fw-warn">
                       <img
