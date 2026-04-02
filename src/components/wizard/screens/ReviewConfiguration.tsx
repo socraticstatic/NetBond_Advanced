@@ -93,7 +93,7 @@ export function ReviewConfiguration({
   const resiliencyLabel = config.resiliencyLevel === 'geodiversity'
     ? 'Geodiversity'
     : config.resiliencyLevel === 'maximum'
-      ? (isAwsLmcc ? 'Maximum Resiliency (LMCC)' : 'Maximum Resiliency')
+      ? (isAwsLmcc ? 'Maximum Resiliency (AWS Max)' : 'Maximum Resiliency')
       : 'Standard Resiliency';
 
   const totalLocations = Object.values(selectedLocations).reduce((sum, locs) => sum + locs.length, 0);
@@ -157,7 +157,7 @@ export function ReviewConfiguration({
                   <div key={provider} className="mt-3 p-4 bg-fw-accent rounded-lg border border-fw-active/20">
                     <div className="flex items-center gap-2 mb-3">
                       <Shield className="h-4 w-4 text-fw-link" />
-                      <p className="text-figma-sm font-semibold text-fw-heading">AWS - LMCC Metro: {lmccMetro.name}</p>
+                      <p className="text-figma-sm font-semibold text-fw-heading">AWS Max Metro: {lmccMetro.name}</p>
                     </div>
                     <div className="grid grid-cols-2 gap-2 mb-3">
                       {lmccMetro.datacenters.map((dc, i) => (

@@ -163,7 +163,7 @@ export function BillingPreview({
     const bwLabel = bw >= 1000 ? `${bw / 1000} Gbps` : `${bw} Mbps`;
 
     lineItems.push({
-      description: 'LMCC Connection (4 paths)',
+      description: 'AWS Max Connection (4 paths)',
       amount: 0,
       note: 'Maximum Resiliency'
     });
