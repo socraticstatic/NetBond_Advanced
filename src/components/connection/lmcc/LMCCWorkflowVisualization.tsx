@@ -132,8 +132,8 @@ export default function LMCCWorkflowVisualization() {
     },
     {
       id: 'lmcc-config-sites',
-      title: 'LMCC Site Selection',
-      description: 'Select the geographic sites where your LMCC connection will be established',
+      title: 'AWS Max Site Selection',
+      description: 'Select the geographic sites where your AWS Max connection will be established',
       status: getStepStatus('lmcc-config-sites'),
       type: 'netbond',
       icon: Settings
@@ -165,7 +165,7 @@ export default function LMCCWorkflowVisualization() {
     {
       id: 'billing-surprise',
       title: 'Billing Preview',
-      description: 'Review complete billing breakdown and pricing for your LMCC connection',
+      description: 'Review complete billing breakdown and pricing for your AWS Max connection',
       status: getStepStatus('billing-surprise'),
       type: 'netbond',
       icon: CreditCard,
@@ -200,7 +200,7 @@ export default function LMCCWorkflowVisualization() {
     {
       id: 'provisioning',
       title: 'Connection Provisioning',
-      description: 'NetBond Advanced provisions your LMCC connection across all selected sites',
+      description: 'NetBond Advanced provisions your AWS Max connection across all selected sites',
       status: getStepStatus('provisioning'),
       type: 'netbond',
       icon: Zap
@@ -246,7 +246,7 @@ export default function LMCCWorkflowVisualization() {
     <div className="space-y-4">
       {/* Header */}
       <div className="border-b border-gray-200 pb-4">
-        <h2 className="text-xl font-semibold text-gray-900">LMCC Integration Workflow</h2>
+        <h2 className="text-xl font-semibold text-gray-900">AWS Max Integration Workflow</h2>
         <p className="text-sm text-gray-600 mt-1">
           Complete end-to-end flow from AWS Console to NetBond Advanced provisioning
         </p>
@@ -386,7 +386,7 @@ export default function LMCCWorkflowVisualization() {
                               setShowSiteSelection(true);
                             }}
                           >
-                            Configure LMCC Sites
+                            Configure AWS Max Sites
                           </Button>
                         )}
                         {step.id === 'lmcc-config-tao' && (
@@ -453,7 +453,7 @@ export default function LMCCWorkflowVisualization() {
           </li>
           <li className="flex items-start gap-2">
             <Network className="w-4 h-4 mt-0.5 text-blue-600 flex-shrink-0" />
-            <span><strong>NetBond Advanced Portal:</strong> Customer redirected to portal to configure LMCC sites, bandwidth allocation, and TAO parameters</span>
+            <span><strong>NetBond Advanced Portal:</strong> Customer redirected to portal to configure AWS Max sites, bandwidth allocation, and TAO parameters</span>
           </li>
           <li className="flex items-start gap-2">
             <Building2 className="w-4 h-4 mt-0.5 text-purple-600 flex-shrink-0" />
@@ -658,7 +658,7 @@ export default function LMCCWorkflowVisualization() {
                   </h3>
                   <div className="text-sm space-y-2">
                     <div className="flex justify-between"><span className="text-gray-600">Request ID:</span> <span className="font-mono text-gray-900">AWS-REQ-789012</span></div>
-                    <div className="flex justify-between"><span className="text-gray-600">Connection Type:</span> <span className="font-semibold text-gray-900">LMCC</span></div>
+                    <div className="flex justify-between"><span className="text-gray-600">Connection Type:</span> <span className="font-semibold text-gray-900">AWS Max</span></div>
                     <div className="flex justify-between"><span className="text-gray-600">AWS Region:</span> <span className="font-mono text-gray-900">us-east-1</span></div>
                     <div className="flex justify-between"><span className="text-gray-600">Requested Bandwidth:</span> <span className="font-semibold text-gray-900">10 Gbps</span></div>
                     <div className="flex justify-between"><span className="text-gray-600">Status:</span> <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-md text-xs font-semibold">Pending Configuration</span></div>
@@ -670,7 +670,7 @@ export default function LMCCWorkflowVisualization() {
                     <li className="flex items-start gap-3">
                       <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-semibold">1</div>
                       <div>
-                        <div className="font-medium text-gray-900">Select LMCC Sites</div>
+                        <div className="font-medium text-gray-900">Select AWS Max Sites</div>
                         <div className="text-sm text-gray-600">Choose NetBond locations for multi-point connectivity</div>
                       </div>
                     </li>

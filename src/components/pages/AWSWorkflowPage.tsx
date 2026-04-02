@@ -63,7 +63,7 @@ export default function AWSWorkflowPage() {
           <h3 className="text-figma-lg font-semibold text-fw-heading mb-3">Need Help?</h3>
           <p className="text-figma-base text-fw-body mb-4">
             Our support team is available 24/7 to assist with AWS Direct Connect integration
-            and LMCC configuration.
+            and AWS Max configuration.
           </p>
           <div className="space-y-2">
             <div className="text-figma-base">
