@@ -48,7 +48,7 @@ export function LMCCOnboardingDrawer({ connection, isOpen, onClose, onActivate }
   const monthlyCost = perPathCost * 4;
 
   return (
-    <SideDrawer isOpen={isOpen} onClose={onClose} title="LMCC Onboarding" width="lg">
+    <SideDrawer isOpen={isOpen} onClose={onClose} title="AWS Max Onboarding" width="lg">
       <div className="space-y-6">
         {/* Step indicator */}
         <div className="flex items-center gap-1">

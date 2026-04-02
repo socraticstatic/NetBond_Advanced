@@ -417,7 +417,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
             });
             window.addToast?.({
               type: 'success',
-              title: 'LMCC Connection Activated',
+              title: 'AWS Max Connection Activated',
               message: `${config.cloudRouterName} is now active with 4 paths.`,
               duration: 5000,
             });
