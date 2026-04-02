@@ -1006,19 +1006,6 @@ export function AdvancedSettings({
                   </select>
                 </div>
 
-                <div className="bg-fw-wash rounded-lg p-4 mt-4">
-                  <div className="flex items-start gap-3">
-                    <Info className="h-5 w-5 text-fw-link shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-figma-sm font-medium text-fw-heading">LMCC Available</p>
-                      <p className="text-figma-sm text-fw-bodyLight mt-1">
-                        AT&T Layer 3 Managed Cloud Connectivity (LMCC) can be configured as a VNF on your connection
-                        for enterprise multi-site deployments with managed BGP routing, dynamic bandwidth allocation,
-                        and SLA-backed connectivity.
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           )}
