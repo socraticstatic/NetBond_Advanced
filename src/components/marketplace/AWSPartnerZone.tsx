@@ -31,7 +31,7 @@ export function AWSPartnerZone() {
     setKickoffConnection(null);
     window.addToast?.({
       type: 'success',
-      title: 'LMCC Connection Activated',
+      title: 'AWS Max Connection Activated',
       message: `${config.cloudRouterName} is now active with 4 paths in ${kickoffConnection?.metro.name}.`,
       duration: 5000,
     });
@@ -80,13 +80,13 @@ export function AWSPartnerZone() {
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-fw-base rounded-full border border-fw-secondary mb-3">
               <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" className="w-8 h-4 object-contain" />
               <Shield className="w-4 h-4 text-fw-body" />
-              <span className="text-figma-sm font-semibold text-fw-heading">Maximum Resiliency - LMCC</span>
+              <span className="text-figma-sm font-semibold text-fw-heading">AT&T NetBond Advanced Max</span>
             </div>
             <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] mb-2">
               4-Path Automated Interconnect
             </h3>
             <p className="text-figma-base text-fw-body mb-4">
-              AT&T LMCC auto-provisions 4 hosted connections across 4 IPEs in 2 diverse datacenters within your selected metro. Initiated from the AWS Console - AT&T handles the rest.
+              Initiate from NetBond Advanced. AT&T auto-provisions 4 hosted connections across 4 IPEs in 2 diverse datacenters within your selected metro. Connections appear in your AWS Console for acceptance.
             </p>
             <div className="flex flex-wrap gap-3">
               <Button
@@ -94,7 +94,7 @@ export function AWSPartnerZone() {
                 size="sm"
                 onClick={() => setShowInitiateModal(true)}
               >
-                Initiate LMCC Connection
+                Initiate AWS Max Connection
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
               <Button
@@ -110,10 +110,10 @@ export function AWSPartnerZone() {
             <div className="text-figma-sm font-semibold text-fw-bodyLight uppercase tracking-wider mb-3">Customer Flow</div>
             <div className="space-y-3">
               {[
-                { icon: Cloud, label: '1. AWS Console', desc: 'Select Maximum Resiliency + Metro' },
-                { icon: Sparkles, label: '2. Choose AT&T', desc: 'Select AT&T as Direct Connect Partner' },
-                { icon: Network, label: '3. Auto-Provision', desc: 'AT&T provisions 4 hosted connections' },
-                { icon: CheckCircle2, label: '4. Accept in AWS', desc: 'Click Accept on each of 4 connections' },
+                { icon: Sparkles, label: '1. Initiate in NetBond', desc: 'Select metro, bandwidth, and contract' },
+                { icon: Network, label: '2. AT&T Provisions', desc: 'Auto-provisions 4 hosted connections' },
+                { icon: Cloud, label: '3. Accept in AWS', desc: 'Accept 4 connections in AWS Console' },
+                { icon: CheckCircle2, label: '4. Create VIFs', desc: 'Create Virtual Interfaces on each' },
                 { icon: Building2, label: '5. BGP Establishes', desc: 'Billing starts, connection goes Active' },
               ].map((step, idx) => {
                 const Icon = step.icon;
@@ -134,11 +134,11 @@ export function AWSPartnerZone() {
         </div>
       </div>
 
-      {/* Active LMCC Connections */}
+      {/* Active AWS Max Connections */}
       {activeConnections.length > 0 && (
         <div>
           <h3 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em] mb-4">
-            Active LMCC Connections
+            Active AWS Max Connections
             <span className="ml-2 px-2 py-1 bg-fw-successLight text-fw-success rounded-full text-figma-sm font-semibold">
               {activeConnections.length}
             </span>
@@ -174,11 +174,11 @@ export function AWSPartnerZone() {
         </div>
       )}
 
-      {/* Pending LMCC Connections */}
+      {/* Pending AWS Max Connections */}
       {pendingConnections.length > 0 && (
         <div>
           <h3 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em] mb-4">
-            Pending LMCC Connections
+            Pending AWS Max Connections
             <span className="ml-2 px-2 py-1 bg-fw-warn/10 text-fw-warn rounded-full text-figma-sm font-semibold">
               {pendingConnections.length}
             </span>
@@ -272,17 +272,17 @@ export function AWSPartnerZone() {
 
       {/* Getting Started */}
       <div className="bg-fw-wash border border-fw-secondary rounded-lg p-6">
-        <h3 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em] mb-4">Getting Started with LMCC</h3>
+        <h3 className="text-figma-lg font-semibold text-fw-heading tracking-[-0.03em] mb-4">Getting Started with AWS Max</h3>
         <ol className="space-y-3">
           {[
-            { title: 'Navigate to AWS Direct Connect', desc: 'In AWS Console: Networking & Content Delivery - Direct Connect - Create Connection' },
-            { title: 'Select Maximum Resiliency', desc: 'Choose Maximum Resiliency and select your preferred metro (San Jose or Los Angeles)' },
-            { title: 'Choose AT&T as Partner', desc: 'Select AT&T NetBond from the partner list. AT&T auto-detects the request via AWS Partner API.' },
-            { title: 'AT&T Auto-Provisions', desc: 'AT&T validates your AWS Account ID, checks metro capacity, and provisions 4 hosted connections across 4 IPEs in 2 diverse sites.' },
-            { title: 'Accept in AWS Console', desc: '4 "Pending" connections appear in your AWS Console. Click Accept on each one.' },
-            { title: 'Create Virtual Interfaces', desc: 'Create a Private VIF, Transit VIF, or Public VIF on each accepted connection to route traffic to your VPCs.' },
-            { title: 'BGP Establishes', desc: 'AT&T configures 802.1Q sub-interfaces with AWS-assigned VLAN IDs. BGP/BFD sessions establish. Billing starts.' },
-            { title: 'Connection Active', desc: 'Your LMCC connection appears here in NetBond Advanced as "Active" with 4-path health monitoring.' },
+            { title: 'Initiate in NetBond Advanced', desc: 'Click "Initiate AWS Max Connection" above. Select your metro, bandwidth, and contract term. Provide your AWS Account ID.' },
+            { title: 'AT&T Validates and Provisions', desc: 'AT&T validates your AWS Account ID, checks metro capacity, and auto-provisions 4 hosted connections across 4 IPEs in 2 diverse sites within your metro.' },
+            { title: 'Connections Appear in AWS Console', desc: '4 "Pending" hosted connections appear in your AWS Direct Connect console within minutes.' },
+            { title: 'Accept Connections in AWS Console', desc: 'In AWS Console: Direct Connect - Connections. Click Accept on each of the 4 pending connections.' },
+            { title: 'Create Virtual Interfaces', desc: 'On each accepted connection, create a Private VIF (VPC), Transit VIF (TGW), or Public VIF to route traffic.' },
+            { title: 'Configure in NetBond', desc: 'Return to NetBond to set your Cloud Router name, BGP preferences, monitoring alerts, and notification channels.' },
+            { title: 'BGP/BFD Establish', desc: 'AT&T configures 802.1Q sub-interfaces with AWS-assigned VLAN IDs. BGP and BFD sessions establish automatically.' },
+            { title: 'Connection Active', desc: 'Billing starts when BGP reaches Established. Your LMCC connection appears here with 4-path health monitoring.' },
           ].map((step, idx) => (
             <li key={idx} className="flex items-start gap-3">
               <div className="flex-shrink-0 w-6 h-6 rounded-full bg-fw-primary text-white flex items-center justify-center text-figma-sm font-semibold">
@@ -300,7 +300,7 @@ export function AWSPartnerZone() {
       <SideDrawer
         isOpen={showInitiateModal}
         onClose={() => { setShowInitiateModal(false); setSelectedMetro(null); }}
-        title="Initiate LMCC Connection"
+        title="Initiate AWS Max Connection"
         width="lg"
       >
         <div className="space-y-6">
@@ -443,13 +443,13 @@ export function AWSPartnerZone() {
             <h4 className="text-figma-base font-semibold text-fw-heading mb-3">3. What Happens Next</h4>
             <div className="space-y-2">
               {[
-                { step: '1', text: 'You\'ll be redirected to AWS Direct Connect console' },
-                { step: '2', text: 'Select "Maximum Resiliency" and your metro' },
-                { step: '3', text: 'Choose "AT&T" as your Direct Connect Partner' },
-                { step: '4', text: 'AT&T auto-provisions 4 hosted connections in ~15 minutes' },
-                { step: '5', text: '4 "Pending" connections appear in your AWS Console' },
-                { step: '6', text: 'Accept each connection, then create Virtual Interfaces' },
-                { step: '7', text: 'BGP establishes, billing starts, connection goes Active here' },
+                { step: '1', text: 'AT&T validates your AWS Account ID and metro capacity' },
+                { step: '2', text: 'AT&T auto-provisions 4 hosted connections in ~15 minutes' },
+                { step: '3', text: '4 "Pending" connections appear in your AWS Direct Connect console' },
+                { step: '4', text: 'Accept each connection in AWS Console' },
+                { step: '5', text: 'Create Virtual Interfaces (Private, Transit, or Public VIF) on each' },
+                { step: '6', text: 'Return to NetBond to configure BGP, monitoring, and alerts' },
+                { step: '7', text: 'BGP/BFD establish, billing starts, connection goes Active here' },
               ].map(item => (
                 <div key={item.step} className="flex items-start gap-2.5">
                   <div className="w-5 h-5 rounded-full bg-fw-primary text-white flex items-center justify-center text-[10px] font-semibold shrink-0 mt-0.5">
@@ -466,19 +466,25 @@ export function AWSPartnerZone() {
             <Button variant="outline" size="sm" onClick={() => { setShowInitiateModal(false); setSelectedMetro(null); }}>
               Cancel
             </Button>
-            <a
-              href="https://console.aws.amazon.com/directconnect/v2/home#/connections/create"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-figma-base transition-colors ${
-                selectedMetro && prereqChecks.awsAccount
-                  ? 'bg-fw-active text-white hover:bg-fw-linkHover'
-                  : 'bg-fw-disabled text-fw-disabled cursor-not-allowed pointer-events-none'
-              }`}
+            <Button
+              variant="primary"
+              size="sm"
+              disabled={!selectedMetro || !prereqChecks.awsAccount}
+              onClick={() => {
+                setShowInitiateModal(false);
+                // Simulate AT&T receiving the request and provisioning
+                window.addToast?.({
+                  type: 'success',
+                  title: 'AWS Max Request Submitted',
+                  message: `AT&T is provisioning 4 hosted connections in ${selectedMetro?.name}. They will appear in your AWS Console shortly.`,
+                  duration: 7000,
+                });
+                setSelectedMetro(null);
+              }}
             >
-              Continue to AWS Console
-              <ExternalLink className="w-4 h-4" />
-            </a>
+              Submit LMCC Request
+              <ArrowRight className="w-4 h-4 ml-1" />
+            </Button>
           </div>
         </div>
       </SideDrawer>
