@@ -50,7 +50,7 @@ export function LMCCKickoffModal({ connection, isOpen, onClose, onStartSetup }: 
               <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" className="w-full h-full object-contain" />
             </div>
             <div>
-              <h2 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">New LMCC Connection Detected</h2>
+              <h2 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em]">New AWS Max Connection Detected</h2>
               <p className="text-figma-xs text-fw-bodyLight">AWS Direct Connect - Maximum Resiliency</p>
             </div>
           </div>
