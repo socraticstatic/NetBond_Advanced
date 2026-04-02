@@ -87,7 +87,7 @@ export function BandwidthConfiguration({
   bandwidthSettings,
   onBandwidthChange,
   type,
-  resiliencyLevel = 'local',
+  resiliencyLevel = 'standard',
 }: BandwidthConfigurationProps) {
   const [bandwidthModes, setBandwidthModes] = useState<Record<string, 'fixed' | 'burstable'>>({});
   const [expandedBurstRules, setExpandedBurstRules] = useState<string | null>(null);
@@ -99,7 +99,7 @@ export function BandwidthConfiguration({
   // Oracle Geo = 2 circuits at same location
   const connections = selectedProviders.flatMap(providerId => {
     const locations = selectedLocations[providerId] || [];
-    const tier = (resiliencyLevel || 'local') as 'local' | 'geo' | 'maximum';
+    const tier = (resiliencyLevel || 'standard') as 'standard' | 'maximum' | 'geodiversity';
     const config = getResiliencyConfig(providerId, tier);
     const connectionsPerLocation = Math.max(1, Math.ceil(config.minConnections / Math.max(1, config.minLocations)));
 
