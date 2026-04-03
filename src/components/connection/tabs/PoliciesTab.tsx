@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import {
-  Plus, Play, Pause, Edit2, Trash2,
+  Plus, Play, Pause, Edit2, Trash2, X,
   Shield, AlertTriangle, Check, Network, Layers,
-  ChevronDown, ChevronUp
+  ChevronDown, ChevronUp, Globe, ArrowRight, Settings
 } from 'lucide-react';
 import { AttIcon } from '../../icons/AttIcon';
 import { Button } from '../../common/Button';
@@ -10,7 +10,7 @@ import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { Toggle } from '../../common/Toggle';
-import { RoutingPolicy, PolicyAppliesTo, PolicyAction, PolicyProtocol } from '../../../types/routingPolicy';
+import { RoutingPolicy, PolicyAppliesTo, PolicyAction, PolicyProtocol, InheritedPolicyOverride, PolicyPrefix, PolicyCommunity, PolicyASPath } from '../../../types/routingPolicy';
 import { Connection } from '../../../types';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { VNF } from '../../../types/vnf';
@@ -161,6 +161,122 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
     }
   ]);
 
+  // Inherited global policies with per-connection specificity
+  const [inheritedPolicies, setInheritedPolicies] = useState<InheritedPolicyOverride[]>([
+    {
+      globalPolicyId: 'deny-matching-routes',
+      globalPolicyName: 'Deny Matching Routes',
+      globalPolicyAction: 'deny',
+      direction: 'onPremiseToPartner',
+      overrideEnabled: true,
+      prefixes: [
+        { id: 'p1', value: '192.168.100.0/24', action: 'include' },
+        { id: 'p2', value: '10.255.0.0/16', action: 'include' },
+      ],
+      communities: [],
+      asPathFilters: [],
+      priority: 300,
+    },
+    {
+      globalPolicyId: 'deny-matching-routes-reverse',
+      globalPolicyName: 'Deny Matching Routes',
+      globalPolicyAction: 'deny',
+      direction: 'partnerToOnPremise',
+      overrideEnabled: false,
+      prefixes: [],
+      communities: [],
+      asPathFilters: [],
+      priority: 300,
+    },
+    {
+      globalPolicyId: 'block-default-routes',
+      globalPolicyName: 'Block Default Routes',
+      globalPolicyAction: 'deny',
+      direction: 'onPremiseToPartner',
+      overrideEnabled: true,
+      prefixes: [
+        { id: 'p3', value: '0.0.0.0/0', action: 'include' },
+      ],
+      communities: [],
+      asPathFilters: [],
+      priority: 350,
+    },
+    {
+      globalPolicyId: 'advertise-static',
+      globalPolicyName: 'Advertise Static Routes',
+      globalPolicyAction: 'advertise',
+      direction: 'onPremiseToPartner',
+      overrideEnabled: true,
+      prefixes: [
+        { id: 'p4', value: '10.0.0.0/8', action: 'include' },
+        { id: 'p5', value: '172.16.0.0/12', action: 'include' },
+        { id: 'p6', value: '192.168.0.0/16', action: 'include' },
+      ],
+      communities: [
+        { id: 'c1', value: '65000:100', action: 'tag' },
+      ],
+      asPathFilters: [],
+      priority: 50,
+    },
+    {
+      globalPolicyId: 'community-filter-customer',
+      globalPolicyName: 'Community Value Filter (Customer)',
+      globalPolicyAction: 'allow',
+      direction: 'onPremiseToPartner',
+      overrideEnabled: false,
+      prefixes: [],
+      communities: [
+        { id: 'c2', value: '65000:*', action: 'match' },
+      ],
+      asPathFilters: [],
+      priority: 200,
+    },
+  ]);
+
+  const [expandedInherited, setExpandedInherited] = useState<string | null>(null);
+  const [showAdvanced, setShowAdvanced] = useState<Record<string, boolean>>({});
+  const [newPrefixInputs, setNewPrefixInputs] = useState<Record<string, string>>({});
+
+  const toggleInheritedOverride = (id: string) => {
+    setInheritedPolicies(prev => prev.map(p =>
+      p.globalPolicyId === id ? { ...p, overrideEnabled: !p.overrideEnabled } : p
+    ));
+  };
+
+  const addPrefix = (policyId: string) => {
+    const value = newPrefixInputs[policyId]?.trim();
+    if (!value) return;
+    // Basic CIDR validation
+    const cidrPattern = /^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$/;
+    if (!cidrPattern.test(value)) {
+      window.addToast?.({ type: 'error', title: 'Invalid Prefix', message: 'Enter a valid CIDR notation (e.g., 10.0.0.0/8)', duration: 3000 });
+      return;
+    }
+    setInheritedPolicies(prev => prev.map(p =>
+      p.globalPolicyId === policyId ? { ...p, prefixes: [...p.prefixes, { id: `p-${Date.now()}`, value, action: 'include' }] } : p
+    ));
+    setNewPrefixInputs(prev => ({ ...prev, [policyId]: '' }));
+  };
+
+  const removePrefix = (policyId: string, prefixId: string) => {
+    setInheritedPolicies(prev => prev.map(p =>
+      p.globalPolicyId === policyId ? { ...p, prefixes: p.prefixes.filter(px => px.id !== prefixId) } : p
+    ));
+  };
+
+  const addCommunity = (policyId: string, value: string, action: 'match' | 'tag' | 'strip') => {
+    if (!value.trim()) return;
+    setInheritedPolicies(prev => prev.map(p =>
+      p.globalPolicyId === policyId ? { ...p, communities: [...p.communities, { id: `c-${Date.now()}`, value: value.trim(), action }] } : p
+    ));
+  };
+
+  const removeCommunity = (policyId: string, communityId: string) => {
+    setInheritedPolicies(prev => prev.map(p =>
+      p.globalPolicyId === policyId ? { ...p, communities: p.communities.filter(c => c.id !== communityId) } : p
+    ));
+  };
+
   const filteredPolicies = useMemo(() => {
     const actionFilters = filters.action || [];
     const appliesToFilters = filters.appliesTo || [];
@@ -286,6 +402,210 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
           Add Policy
         </Button>
       </div>
+
+      {/* Inherited Global Policies */}
+      <div className="bg-fw-base rounded-xl border border-fw-secondary overflow-hidden">
+        <div className="px-5 py-4 bg-fw-wash border-b border-fw-secondary flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Globe className="h-5 w-5 text-fw-link" />
+            <h3 className="text-figma-base font-semibold text-fw-heading">Inherited Global Policies</h3>
+            <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>
+              {inheritedPolicies.filter(p => p.overrideEnabled).length} active
+            </span>
+          </div>
+          <p className="text-figma-xs text-fw-bodyLight">From Configure &gt; Policies</p>
+        </div>
+
+        <div className="divide-y divide-fw-secondary">
+          {inheritedPolicies.map(policy => {
+            const isExpanded = expandedInherited === policy.globalPolicyId;
+            const isAdvanced = showAdvanced[policy.globalPolicyId] || false;
+            const actionColors: Record<string, { color: string; bg: string }> = {
+              deny: { color: '#cc3333', bg: 'rgba(204,51,51,0.12)' },
+              allow: { color: '#2d7e24', bg: 'rgba(45,126,36,0.12)' },
+              manipulate: { color: '#cc7a00', bg: 'rgba(204,122,0,0.12)' },
+              advertise: { color: '#0057b8', bg: 'rgba(0,87,184,0.12)' },
+            };
+            const ac = actionColors[policy.globalPolicyAction] || actionColors.allow;
+
+            return (
+              <div key={policy.globalPolicyId} className={`${policy.overrideEnabled ? '' : 'opacity-50'}`}>
+                {/* Policy header */}
+                <div className="px-5 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Toggle
+                      checked={policy.overrideEnabled}
+                      onChange={() => toggleInheritedOverride(policy.globalPolicyId)}
+                      label=""
+                    />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-figma-sm font-medium text-fw-heading">{policy.globalPolicyName}</span>
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: ac.color, backgroundColor: ac.bg }}>
+                          {policy.globalPolicyAction}
+                        </span>
+                        <span className="text-figma-xs text-fw-bodyLight flex items-center gap-1">
+                          {policy.direction === 'onPremiseToPartner' ? 'On Premise' : 'Partner'}
+                          <ArrowRight className="h-3 w-3" />
+                          {policy.direction === 'onPremiseToPartner' ? 'Partner' : 'On Premise'}
+                        </span>
+                      </div>
+                      {policy.prefixes.length > 0 && (
+                        <p className="text-figma-xs text-fw-bodyLight mt-0.5">
+                          {policy.prefixes.length} prefix{policy.prefixes.length !== 1 ? 'es' : ''}{policy.communities.length > 0 ? `, ${policy.communities.length} communit${policy.communities.length !== 1 ? 'ies' : 'y'}` : ''}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setExpandedInherited(isExpanded ? null : policy.globalPolicyId)}
+                    className="text-figma-xs font-medium text-fw-link hover:text-fw-linkHover flex items-center gap-1"
+                  >
+                    {isExpanded ? 'Collapse' : 'Add Specificity'}
+                    {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                  </button>
+                </div>
+
+                {/* Expanded: prefix list + advanced */}
+                {isExpanded && policy.overrideEnabled && (
+                  <div className="px-5 pb-4 space-y-3">
+                    {/* Prefix list (simple view) */}
+                    <div>
+                      <label className="block text-figma-xs font-medium text-fw-body mb-1.5">
+                        Prefixes ({policy.globalPolicyAction === 'advertise' ? 'routes to advertise' : policy.globalPolicyAction === 'deny' ? 'routes to deny' : 'routes to allow'})
+                      </label>
+                      <div className="space-y-1.5">
+                        {policy.prefixes.map(prefix => (
+                          <div key={prefix.id} className="flex items-center gap-2">
+                            <code className="flex-1 px-3 py-1.5 bg-fw-wash border border-fw-secondary rounded-lg text-figma-xs font-mono text-fw-heading">
+                              {prefix.value}
+                            </code>
+                            <span className="text-figma-xs text-fw-bodyLight w-14">{prefix.action}</span>
+                            <button onClick={() => removePrefix(policy.globalPolicyId, prefix.id)} className="text-fw-disabled hover:text-fw-error">
+                              <X className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={newPrefixInputs[policy.globalPolicyId] || ''}
+                            onChange={(e) => setNewPrefixInputs(prev => ({ ...prev, [policy.globalPolicyId]: e.target.value }))}
+                            onKeyDown={(e) => e.key === 'Enter' && addPrefix(policy.globalPolicyId)}
+                            placeholder="e.g., 10.0.0.0/8"
+                            className="flex-1 h-8 px-3 rounded-lg border border-fw-secondary text-figma-xs font-mono focus:border-fw-active focus:outline-none"
+                          />
+                          <Button variant="outline" size="sm" onClick={() => addPrefix(policy.globalPolicyId)}>
+                            <Plus className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Advanced toggle */}
+                    <button
+                      onClick={() => setShowAdvanced(prev => ({ ...prev, [policy.globalPolicyId]: !isAdvanced }))}
+                      className="flex items-center gap-1.5 text-figma-xs font-medium text-fw-link hover:text-fw-linkHover"
+                    >
+                      <Settings className="h-3.5 w-3.5" />
+                      {isAdvanced ? 'Hide Advanced' : 'Advanced Settings'}
+                      {isAdvanced ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                    </button>
+
+                    {/* Advanced section */}
+                    {isAdvanced && (
+                      <div className="p-4 rounded-lg bg-fw-wash border border-fw-secondary space-y-4">
+                        {/* BGP Communities */}
+                        <div>
+                          <label className="block text-figma-xs font-medium text-fw-body mb-1.5">BGP Communities</label>
+                          <div className="space-y-1.5">
+                            {policy.communities.map(comm => (
+                              <div key={comm.id} className="flex items-center gap-2">
+                                <code className="flex-1 px-3 py-1.5 bg-fw-base border border-fw-secondary rounded-lg text-figma-xs font-mono text-fw-heading">
+                                  {comm.value}
+                                </code>
+                                <select
+                                  value={comm.action}
+                                  onChange={(e) => {
+                                    setInheritedPolicies(prev => prev.map(p =>
+                                      p.globalPolicyId === policy.globalPolicyId
+                                        ? { ...p, communities: p.communities.map(c => c.id === comm.id ? { ...c, action: e.target.value as any } : c) }
+                                        : p
+                                    ));
+                                  }}
+                                  className="h-8 px-2 rounded-lg border border-fw-secondary text-figma-xs bg-fw-base"
+                                >
+                                  <option value="match">Match</option>
+                                  <option value="tag">Tag</option>
+                                  <option value="strip">Strip</option>
+                                </select>
+                                <button onClick={() => removeCommunity(policy.globalPolicyId, comm.id)} className="text-fw-disabled hover:text-fw-error">
+                                  <X className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="text"
+                                placeholder="e.g., 65000:100"
+                                className="flex-1 h-8 px-3 rounded-lg border border-fw-secondary text-figma-xs font-mono focus:border-fw-active focus:outline-none"
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    addCommunity(policy.globalPolicyId, (e.target as HTMLInputElement).value, 'match');
+                                    (e.target as HTMLInputElement).value = '';
+                                  }
+                                }}
+                              />
+                              <span className="text-figma-xs text-fw-bodyLight">Enter to add</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* AS-Path Filters */}
+                        <div>
+                          <label className="block text-figma-xs font-medium text-fw-body mb-1.5">AS-Path Filters</label>
+                          {policy.asPathFilters.length === 0 ? (
+                            <p className="text-figma-xs text-fw-bodyLight">No AS-path filters configured</p>
+                          ) : (
+                            <div className="space-y-1.5">
+                              {policy.asPathFilters.map(asp => (
+                                <div key={asp.id} className="flex items-center gap-2">
+                                  <code className="flex-1 px-3 py-1.5 bg-fw-base border border-fw-secondary rounded-lg text-figma-xs font-mono">{asp.pattern}</code>
+                                  <span className="text-figma-xs text-fw-bodyLight">{asp.action}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Priority */}
+                        <div className="flex items-center gap-3">
+                          <label className="text-figma-xs font-medium text-fw-body">Priority</label>
+                          <input
+                            type="number"
+                            value={policy.priority}
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value) || 0;
+                              setInheritedPolicies(prev => prev.map(p =>
+                                p.globalPolicyId === policy.globalPolicyId ? { ...p, priority: val } : p
+                              ));
+                            }}
+                            className="w-20 h-8 px-3 rounded-lg border border-fw-secondary text-figma-xs text-center focus:border-fw-active focus:outline-none"
+                          />
+                          <span className="text-figma-xs text-fw-bodyLight">Lower number = higher priority</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Custom Connection Policies */}
+      <h3 className="text-figma-base font-semibold text-fw-heading">Custom Policies</h3>
 
       {/* Search and Controls */}
       <div className="rounded-lg border border-fw-secondary overflow-hidden">
