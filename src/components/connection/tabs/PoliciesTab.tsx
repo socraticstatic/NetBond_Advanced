@@ -1033,6 +1033,86 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
             </div>
           </div>
 
+          {/* Prefix / Subnet Specificity */}
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold text-fw-heading border-b border-fw-secondary pb-2">
+              Route Specificity
+            </h3>
+
+            <FormField label="Prefixes / Subnets" helpText={
+              selectedAction === 'advertise' ? 'Routes to advertise to BGP neighbors' :
+              selectedAction === 'deny' ? 'Routes to deny or block' :
+              selectedAction === 'allow' ? 'Routes to explicitly allow' :
+              'Routes to apply manipulation to'
+            }>
+              <div className="space-y-2">
+                <div id="drawer-prefix-list" className="space-y-1.5">
+                  {/* Placeholder prefixes based on action */}
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="e.g., 10.0.0.0/8"
+                    className="flex-1 h-8 px-3 rounded-lg border border-fw-secondary text-figma-xs font-mono focus:border-fw-active focus:outline-none"
+                  />
+                  <Button variant="outline" size="sm">
+                    <Plus className="h-3.5 w-3.5 mr-1" /> Add
+                  </Button>
+                </div>
+              </div>
+            </FormField>
+
+            {/* Advanced: Communities and AS-Path */}
+            <details className="group">
+              <summary className="flex items-center gap-1.5 text-figma-xs font-medium text-fw-link hover:text-fw-linkHover cursor-pointer list-none">
+                <Settings className="h-3.5 w-3.5" />
+                Advanced: BGP Communities & AS-Path
+                <ChevronDown className="h-3 w-3 group-open:rotate-180 transition-transform" />
+              </summary>
+              <div className="mt-3 p-4 rounded-lg bg-fw-wash border border-fw-secondary space-y-4">
+                <FormField label="BGP Communities" helpText="Tag, match, or strip community values">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        placeholder="e.g., 65000:100"
+                        className="flex-1 h-8 px-3 rounded-lg border border-fw-secondary text-figma-xs font-mono focus:border-fw-active focus:outline-none"
+                      />
+                      <select className="h-8 px-2 rounded-lg border border-fw-secondary text-figma-xs bg-fw-base">
+                        <option value="match">Match</option>
+                        <option value="tag">Tag</option>
+                        <option value="strip">Strip</option>
+                      </select>
+                      <Button variant="outline" size="sm">
+                        <Plus className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                </FormField>
+
+                <FormField label="AS-Path Filters" helpText="Filter or manipulate based on AS path">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        placeholder="e.g., ^65001$"
+                        className="flex-1 h-8 px-3 rounded-lg border border-fw-secondary text-figma-xs font-mono focus:border-fw-active focus:outline-none"
+                      />
+                      <select className="h-8 px-2 rounded-lg border border-fw-secondary text-figma-xs bg-fw-base">
+                        <option value="allow">Allow</option>
+                        <option value="deny">Deny</option>
+                        <option value="prepend">Prepend</option>
+                      </select>
+                      <Button variant="outline" size="sm">
+                        <Plus className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                </FormField>
+              </div>
+            </details>
+          </div>
+
           {/* Target Selection */}
           <div className="space-y-4">
             <h3 className="text-base font-semibold text-fw-heading border-b border-fw-secondary pb-2">
