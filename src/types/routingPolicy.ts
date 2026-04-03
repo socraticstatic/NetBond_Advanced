@@ -32,3 +32,38 @@ export interface PolicyTarget {
   name: string;
   type: 'link' | 'cloudrouter' | 'vnf';
 }
+
+// --- Per-connection specificity for inherited global policies ---
+
+export interface PolicyPrefix {
+  id: string;
+  value: string;        // CIDR notation: "10.0.0.0/8"
+  action: 'include' | 'exclude';
+}
+
+export interface PolicyCommunity {
+  id: string;
+  value: string;        // "65000:100"
+  action: 'match' | 'tag' | 'strip';
+}
+
+export interface PolicyASPath {
+  id: string;
+  pattern: string;      // Regex: "^65001$"
+  action: 'allow' | 'deny' | 'prepend';
+  prependCount?: number;
+}
+
+export type PolicyDirection = 'onPremiseToPartner' | 'partnerToOnPremise';
+
+export interface InheritedPolicyOverride {
+  globalPolicyId: string;
+  globalPolicyName: string;
+  globalPolicyAction: PolicyAction;
+  direction: PolicyDirection;
+  overrideEnabled: boolean;
+  prefixes: PolicyPrefix[];
+  communities: PolicyCommunity[];
+  asPathFilters: PolicyASPath[];
+  priority: number;
+}
