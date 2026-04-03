@@ -2,7 +2,8 @@ import { useState, useMemo } from 'react';
 import {
   Plus, Play, Pause, Edit2, Trash2, X,
   Shield, AlertTriangle, Check, Network, Layers,
-  ChevronDown, ChevronUp, Globe, ArrowRight, Settings
+  ChevronDown, ChevronUp, Globe, ArrowRight, Settings,
+  Upload, Download, FileText
 } from 'lucide-react';
 import { AttIcon } from '../../icons/AttIcon';
 import { Button } from '../../common/Button';
@@ -241,6 +242,8 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
   const [expandedInherited, setExpandedInherited] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState<Record<string, boolean>>({});
   const [newPrefixInputs, setNewPrefixInputs] = useState<Record<string, string>>({});
+  const [bulkEditMode, setBulkEditMode] = useState<Record<string, boolean>>({});
+  const [bulkEditText, setBulkEditText] = useState<Record<string, string>>({});
 
   const toggleInheritedOverride = (id: string) => {
     setInheritedPolicies(prev => prev.map(p =>
@@ -280,6 +283,80 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
     setInheritedPolicies(prev => prev.map(p =>
       p.globalPolicyId === policyId ? { ...p, communities: p.communities.filter(c => c.id !== communityId) } : p
     ));
+  };
+
+  // Bulk operations
+  const cidrPattern = /^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$/;
+
+  const enterBulkEdit = (policyId: string) => {
+    const policy = inheritedPolicies.find(p => p.globalPolicyId === policyId);
+    if (!policy) return;
+    setBulkEditText(prev => ({ ...prev, [policyId]: policy.prefixes.map(p => p.value).join('\n') }));
+    setBulkEditMode(prev => ({ ...prev, [policyId]: true }));
+  };
+
+  const saveBulkEdit = (policyId: string) => {
+    const text = bulkEditText[policyId] || '';
+    const lines = text.split(/[\n,;]+/).map(l => l.trim()).filter(Boolean);
+    const valid: PolicyPrefix[] = [];
+    const invalid: string[] = [];
+    lines.forEach(line => {
+      if (cidrPattern.test(line)) {
+        valid.push({ id: `p-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, value: line, action: 'include' });
+      } else {
+        invalid.push(line);
+      }
+    });
+    if (invalid.length > 0) {
+      window.addToast?.({ type: 'error', title: 'Invalid Prefixes', message: `${invalid.length} invalid: ${invalid.slice(0, 3).join(', ')}${invalid.length > 3 ? '...' : ''}`, duration: 5000 });
+    }
+    setInheritedPolicies(prev => prev.map(p =>
+      p.globalPolicyId === policyId ? { ...p, prefixes: valid } : p
+    ));
+    setBulkEditMode(prev => ({ ...prev, [policyId]: false }));
+    if (valid.length > 0) {
+      window.addToast?.({ type: 'success', title: 'Prefixes Updated', message: `${valid.length} prefix${valid.length !== 1 ? 'es' : ''} saved`, duration: 3000 });
+    }
+  };
+
+  const downloadPrefixes = (policyId: string) => {
+    const policy = inheritedPolicies.find(p => p.globalPolicyId === policyId);
+    if (!policy || policy.prefixes.length === 0) return;
+    const csv = 'prefix,action\n' + policy.prefixes.map(p => `${p.value},${p.action}`).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${policy.globalPolicyName.replace(/\s+/g, '-').toLowerCase()}-prefixes.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleBulkUpload = (policyId: string) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.csv,.txt';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const text = ev.target?.result as string;
+        // Parse CSV or newline-separated
+        const lines = text.split(/[\n,;]+/).map(l => l.trim()).filter(l => l && cidrPattern.test(l));
+        const newPrefixes: PolicyPrefix[] = lines.map(line => ({
+          id: `p-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          value: line,
+          action: 'include' as const,
+        }));
+        setInheritedPolicies(prev => prev.map(p =>
+          p.globalPolicyId === policyId ? { ...p, prefixes: [...p.prefixes, ...newPrefixes] } : p
+        ));
+        window.addToast?.({ type: 'success', title: 'Prefixes Imported', message: `${newPrefixes.length} prefix${newPrefixes.length !== 1 ? 'es' : ''} added from ${file.name}`, duration: 3000 });
+      };
+      reader.readAsText(file);
+    };
+    input.click();
   };
 
   const filteredPolicies = useMemo(() => {
@@ -483,11 +560,44 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                 {/* Expanded: prefix list + advanced */}
                 {isExpanded && policy.overrideEnabled && (
                   <div className="px-5 pb-4 space-y-3">
-                    {/* Prefix list (simple view) */}
+                    {/* Prefix list with bulk operations */}
                     <div>
-                      <label className="block text-figma-xs font-medium text-fw-body mb-1.5">
-                        Prefixes ({policy.globalPolicyAction === 'advertise' ? 'routes to advertise' : policy.globalPolicyAction === 'deny' ? 'routes to deny' : 'routes to allow'})
-                      </label>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-figma-xs font-medium text-fw-body">
+                          Prefixes ({policy.globalPolicyAction === 'advertise' ? 'routes to advertise' : policy.globalPolicyAction === 'deny' ? 'routes to deny' : 'routes to allow'})
+                          {policy.prefixes.length > 0 && <span className="ml-1 text-fw-bodyLight">({policy.prefixes.length})</span>}
+                        </label>
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => handleBulkUpload(policy.globalPolicyId)} className="p-1 text-fw-bodyLight hover:text-fw-link rounded" title="Upload CSV">
+                            <Upload className="h-3.5 w-3.5" />
+                          </button>
+                          <button onClick={() => downloadPrefixes(policy.globalPolicyId)} className="p-1 text-fw-bodyLight hover:text-fw-link rounded" title="Download CSV" disabled={policy.prefixes.length === 0}>
+                            <Download className="h-3.5 w-3.5" />
+                          </button>
+                          <button onClick={() => bulkEditMode[policy.globalPolicyId] ? saveBulkEdit(policy.globalPolicyId) : enterBulkEdit(policy.globalPolicyId)} className="p-1 text-fw-bodyLight hover:text-fw-link rounded" title={bulkEditMode[policy.globalPolicyId] ? 'Save bulk edit' : 'Bulk edit'}>
+                            <FileText className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {bulkEditMode[policy.globalPolicyId] ? (
+                        <div className="space-y-2">
+                          <textarea
+                            value={bulkEditText[policy.globalPolicyId] || ''}
+                            onChange={(e) => setBulkEditText(prev => ({ ...prev, [policy.globalPolicyId]: e.target.value }))}
+                            placeholder="One prefix per line in CIDR notation:&#10;10.0.0.0/8&#10;172.16.0.0/12&#10;192.168.0.0/16"
+                            rows={8}
+                            className="w-full px-3 py-2 rounded-lg border border-fw-active text-figma-xs font-mono focus:outline-none focus:ring-1 focus:ring-fw-active"
+                          />
+                          <div className="flex items-center justify-between">
+                            <p className="text-figma-xs text-fw-bodyLight">One CIDR prefix per line. Supports paste from spreadsheets.</p>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" onClick={() => setBulkEditMode(prev => ({ ...prev, [policy.globalPolicyId]: false }))}>Cancel</Button>
+                              <Button variant="primary" size="sm" onClick={() => saveBulkEdit(policy.globalPolicyId)}>Save {(bulkEditText[policy.globalPolicyId] || '').split('\n').filter(l => l.trim()).length} Prefixes</Button>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
                       <div className="space-y-1.5">
                         {policy.prefixes.map(prefix => (
                           <div key={prefix.id} className="flex items-center gap-2">
@@ -514,6 +624,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                           </Button>
                         </div>
                       </div>
+                      )}
                     </div>
 
                     {/* Advanced toggle */}
@@ -1062,16 +1173,39 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               Route Specificity
             </h3>
 
-            <FormField label="Prefixes / Subnets" helpText={
-              selectedAction === 'advertise' ? 'Routes to advertise to BGP neighbors' :
-              selectedAction === 'deny' ? 'Routes to deny or block' :
-              selectedAction === 'allow' ? 'Routes to explicitly allow' :
-              'Routes to apply manipulation to'
-            }>
-              <div className="space-y-2">
-                <div id="drawer-prefix-list" className="space-y-1.5">
-                  {/* Placeholder prefixes based on action */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-figma-xs font-medium text-fw-body">
+                  Prefixes / Subnets
+                  <span className="ml-1 text-fw-bodyLight font-normal">
+                    ({selectedAction === 'advertise' ? 'routes to advertise' : selectedAction === 'deny' ? 'routes to deny' : selectedAction === 'allow' ? 'routes to allow' : 'routes to manipulate'})
+                  </span>
+                </label>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => {
+                      const input = document.createElement('input');
+                      input.type = 'file';
+                      input.accept = '.csv,.txt';
+                      input.onchange = (e) => {
+                        const file = (e.target as HTMLInputElement).files?.[0];
+                        if (file) window.addToast?.({ type: 'success', title: 'File Selected', message: `${file.name} ready to import`, duration: 3000 });
+                      };
+                      input.click();
+                    }}
+                    className="p-1 text-fw-bodyLight hover:text-fw-link rounded" title="Upload CSV/TXT"
+                  >
+                    <Upload className="h-3.5 w-3.5" />
+                  </button>
+                  <button className="p-1 text-fw-bodyLight hover:text-fw-link rounded" title="Download CSV">
+                    <Download className="h-3.5 w-3.5" />
+                  </button>
+                  <button className="p-1 text-fw-bodyLight hover:text-fw-link rounded" title="Bulk edit (textarea)">
+                    <FileText className="h-3.5 w-3.5" />
+                  </button>
                 </div>
+              </div>
+              <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
@@ -1082,8 +1216,9 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                     <Plus className="h-3.5 w-3.5 mr-1" /> Add
                   </Button>
                 </div>
+                <p className="text-figma-xs text-fw-bodyLight">Add one at a time or use bulk upload/edit icons above for large prefix lists.</p>
               </div>
-            </FormField>
+            </div>
 
             {/* Advanced: Communities and AS-Path */}
             <details className="group">
