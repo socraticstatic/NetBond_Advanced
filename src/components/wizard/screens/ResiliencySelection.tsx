@@ -147,6 +147,19 @@ export function ResiliencySelection({ resiliencyLevel, onSelect, provider, provi
               );
             })}
           </div>
+
+          {/* AWS Max swivel-chair notice */}
+          {primaryProvider === 'AWS' && resiliencyLevel === 'maximum' && type === 'Internet to Cloud' && (
+            <div className="max-w-2xl mx-auto mt-6 flex items-start gap-3 p-4 rounded-xl bg-fw-accent border border-fw-active/20">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" className="w-8 h-5 object-contain shrink-0 mt-0.5" />
+              <div>
+                <p className="text-figma-sm font-semibold text-fw-heading">You'll need to visit the AWS Console after this wizard</p>
+                <p className="text-figma-xs text-fw-bodyLight mt-0.5">
+                  AWS Max creates your order here in NetBond and generates an activation key. After submitting, you'll take that key to the AWS Direct Connect console to accept 4 hosted connections and create Virtual Interfaces. We'll walk you through it.
+                </p>
+              </div>
+            </div>
+          )}
     </div>
   );
 }
