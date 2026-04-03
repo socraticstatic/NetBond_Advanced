@@ -6,6 +6,7 @@ export const DESIGNER_TEMPLATES: DesignerTemplate[] = [
     id: 'high-availability',
     name: 'High Availability',
     description: 'AT&T Core (IPE) with dual Cloud Routers and AWS destination. Triangle topology with MPLS uplinks and Direct Connect to cloud.',
+    tier: 'maximum',
     nodeCount: 4,
     edgeCount: 4,
     nodes: [
@@ -98,6 +99,7 @@ export const DESIGNER_TEMPLATES: DesignerTemplate[] = [
   // 2. Cloud-to-Cloud Local
   {
     id: 'cloud-to-cloud-local',
+    tier: 'standard',
     name: 'Cloud-to-Cloud Local',
     description: 'Cloud Router bridging AWS and Azure in the same region. Direct Connect to AWS, ExpressRoute to Azure.',
     nodeCount: 3,
@@ -163,6 +165,7 @@ export const DESIGNER_TEMPLATES: DesignerTemplate[] = [
   // 3. Internet-to-Cloud
   {
     id: 'internet-to-cloud',
+    tier: 'standard',
     name: 'Internet-to-Cloud',
     description: 'Internet access through a firewall and Cloud Router to AWS. Left-to-right linear chain.',
     nodeCount: 4,
@@ -246,6 +249,7 @@ export const DESIGNER_TEMPLATES: DesignerTemplate[] = [
   // 4. SD-WAN Hybrid
   {
     id: 'sdwan-hybrid',
+    tier: 'standard',
     name: 'SD-WAN Hybrid',
     description: 'SD-WAN edge connecting to AT&T Core, then Cloud Router reaching AWS and Azure. Unified overlay across MPLS links.',
     nodeCount: 5,
@@ -350,6 +354,7 @@ export const DESIGNER_TEMPLATES: DesignerTemplate[] = [
   // 5. Dual Diverse HA
   {
     id: 'dual-diverse-ha',
+    tier: 'geodiversity',
     name: 'Dual Diverse HA',
     description: 'Two IPE nodes and two Cloud Routers in full mesh. Each router connects to both AWS and Azure for maximum resilience.',
     nodeCount: 6,
@@ -441,6 +446,7 @@ export const DESIGNER_TEMPLATES: DesignerTemplate[] = [
   // 6. Simple VNF Chain
   {
     id: 'simple-vnf-chain',
+    tier: 'standard',
     name: 'Simple VNF Chain',
     description: 'AT&T Core (IPE) through a VNF firewall and Cloud Router to AWS. Linear service chain for traffic inspection.',
     nodeCount: 4,
@@ -519,6 +525,33 @@ export const DESIGNER_TEMPLATES: DesignerTemplate[] = [
         bandwidth: '1 Gbps',
         status: 'active',
       },
+    ],
+  },
+  // 7. AWS Max (Auto-Provisioned by AT&T)
+  {
+    id: 'aws-max-auto',
+    name: 'AWS Max (Auto-Provisioned)',
+    description: '4 IPEs (Juniper MX-304) across 2 diverse sites in 1 metro. Auto-provisioned by AT&T for Maximum Resiliency.',
+    tier: 'maximum',
+    providerOnly: 'AWS',
+    nodeCount: 7,
+    edgeCount: 6,
+    nodes: [
+      { id: 'awsmax-ipe-1', type: 'network', functionType: 'ipe', x: 80, y: 120, name: 'MX304-SV1-A', icon: 'Network', status: 'active', config: {}, metro: 'San Jose' },
+      { id: 'awsmax-ipe-2', type: 'network', functionType: 'ipe', x: 80, y: 280, name: 'MX304-SV1-B', icon: 'Network', status: 'active', config: {}, metro: 'San Jose' },
+      { id: 'awsmax-ipe-3', type: 'network', functionType: 'ipe', x: 80, y: 440, name: 'MX304-SV5-A', icon: 'Network', status: 'active', config: {}, metro: 'San Jose' },
+      { id: 'awsmax-ipe-4', type: 'network', functionType: 'ipe', x: 80, y: 600, name: 'MX304-SV5-B', icon: 'Network', status: 'active', config: {}, metro: 'San Jose' },
+      { id: 'awsmax-cr-1', type: 'function', functionType: 'router', subType: 'cloud', x: 350, y: 200, name: 'Cloud Router (Site 1)', icon: 'Cloud', status: 'active', config: {} },
+      { id: 'awsmax-cr-2', type: 'function', functionType: 'router', subType: 'cloud', x: 350, y: 520, name: 'Cloud Router (Site 2)', icon: 'Cloud', status: 'active', config: {} },
+      { id: 'awsmax-aws', type: 'destination', functionType: 'cloud', cloudProvider: 'aws', x: 620, y: 360, name: 'AWS Direct Connect', icon: 'Cloud', status: 'active', config: {} },
+    ],
+    edges: [
+      { id: 'awsmax-e1', source: 'awsmax-ipe-1', target: 'awsmax-cr-1', type: 'Direct Connect', bandwidth: '1 Gbps', status: 'active', config: { resilience: 'ha', bfd: true } },
+      { id: 'awsmax-e2', source: 'awsmax-ipe-2', target: 'awsmax-cr-1', type: 'Direct Connect', bandwidth: '1 Gbps', status: 'active', config: { resilience: 'ha', bfd: true } },
+      { id: 'awsmax-e3', source: 'awsmax-ipe-3', target: 'awsmax-cr-2', type: 'Direct Connect', bandwidth: '1 Gbps', status: 'active', config: { resilience: 'ha', bfd: true } },
+      { id: 'awsmax-e4', source: 'awsmax-ipe-4', target: 'awsmax-cr-2', type: 'Direct Connect', bandwidth: '1 Gbps', status: 'active', config: { resilience: 'ha', bfd: true } },
+      { id: 'awsmax-e5', source: 'awsmax-cr-1', target: 'awsmax-aws', type: 'Direct Connect', bandwidth: '1 Gbps', status: 'active' },
+      { id: 'awsmax-e6', source: 'awsmax-cr-2', target: 'awsmax-aws', type: 'Direct Connect', bandwidth: '1 Gbps', status: 'active' },
     ],
   },
 ];
