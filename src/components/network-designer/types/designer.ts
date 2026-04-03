@@ -1,6 +1,8 @@
 export type NodeStatus = 'unconfigured' | 'configured-inactive' | 'active' | 'active-down';
 export type EdgeStatus = 'active' | 'inactive' | 'down';
 
+export type ResiliencyTier = 'standard' | 'maximum' | 'geodiversity';
+
 export interface NetworkNode {
   id: string;
   type: 'function' | 'destination' | 'network' | 'datacenter';
@@ -8,6 +10,7 @@ export interface NetworkNode {
   subType?: string;
   cloudProvider?: string;
   dcProvider?: string;
+  metro?: string;
   x: number;
   y: number;
   name: string;
@@ -66,6 +69,8 @@ export interface DesignerTemplate {
   id: string;
   name: string;
   description: string;
+  tier?: ResiliencyTier;
+  providerOnly?: string;
   nodes: NetworkNode[];
   edges: NetworkEdge[];
   nodeCount: number;
