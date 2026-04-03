@@ -164,7 +164,7 @@ export function ConnectionTypeSelection({
                               disabled
                                 ? 'text-fw-disabled'
                                 : selectedType === type
-                                  ? 'text-fw-link'
+                                  ? 'text-fw-link group-hover/card:text-white'
                                   : 'text-fw-body'
                             } mt-1`}
                           />
@@ -177,7 +177,7 @@ export function ConnectionTypeSelection({
                               disabled
                                 ? 'font-medium text-fw-disabled'
                                 : selectedType === type
-                                  ? 'font-bold text-fw-link'
+                                  ? 'font-bold text-fw-link group-hover/card:text-white'
                                   : 'font-bold text-fw-heading'
                             }`}
                           >
@@ -209,13 +209,13 @@ export function ConnectionTypeSelection({
                         )}
                         {/* Card desc: 14px w500 #454b52 (active) or #878c94 (disabled) */}
                         <span className={`text-figma-base font-medium block mb-2 mt-1 ${
-                          disabled ? 'text-fw-disabled' : 'text-fw-body'
+                          disabled ? 'text-fw-disabled' : selectedType === type ? 'text-fw-body group-hover/card:text-white/80' : 'text-fw-body'
                         }`}>
                           {description}
                         </span>
                         {/* Provider-specific context from decision tree */}
                         {!disabled && getProviderContext(type) && (
-                          <span className="text-figma-xs text-fw-link block mb-3">
+                          <span className={`text-figma-xs block mb-3 ${selectedType === type ? 'text-fw-link group-hover/card:text-white/70' : 'text-fw-link'}`}>
                             {getProviderContext(type)}
                           </span>
                         )}
@@ -224,10 +224,10 @@ export function ConnectionTypeSelection({
                             <div
                               key={index}
                               className={`flex items-center text-figma-base font-medium ${
-                                disabled ? 'text-fw-disabled' : 'text-fw-body'
+                                disabled ? 'text-fw-disabled' : selectedType === type ? 'text-fw-body group-hover/card:text-white/70' : 'text-fw-body'
                               }`}
                             >
-                              <Cog className="h-5 w-5 mr-2 flex-shrink-0 text-fw-disabled" />
+                              <Cog className={`h-5 w-5 mr-2 flex-shrink-0 ${selectedType === type ? 'text-fw-disabled group-hover/card:text-white/50' : 'text-fw-disabled'}`} />
                               {feature}
                             </div>
                           ))}
