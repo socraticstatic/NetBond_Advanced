@@ -136,9 +136,9 @@ export function BillingPreview({
     'Equinix': 1.05
   };
 
-  // LMCC pricing tiers (per path/month)
+  // AWS Max estimated pricing (placeholder - actual pricing via AT&T sales)
   const lmccPricing: Record<number, number> = {
-    1000: 1249,   // 1 Gbps
+    1000: 1249,   // 1 Gbps - estimated
     50: 299,
     100: 399,
     200: 499,
@@ -374,7 +374,7 @@ export function BillingPreview({
         {isLmcc && (
           <div className="mb-3 p-2 rounded-lg bg-fw-wash border border-fw-secondary">
             <p className="text-figma-xs text-fw-bodyLight">
-              Billing starts when BGP reaches "Established." Preview: fixed rate. GA: 95th percentile burstable.
+              Estimated pricing - contact AT&T sales for final rates. Billing starts when BGP reaches "Established." Preview: fixed rate. GA: 95th percentile burstable.
             </p>
           </div>
         )}
