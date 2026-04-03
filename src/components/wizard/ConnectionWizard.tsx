@@ -440,7 +440,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   const handleAISuggestion = (suggestion: any) => {
     try {
       if (suggestion.provider) {
-        setSelectedProvider(suggestion.provider);
+        setSelectedProviders([suggestion.provider]);
       }
       if (suggestion.type) {
         setSelectedType(suggestion.type);

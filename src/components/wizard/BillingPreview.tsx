@@ -37,8 +37,8 @@ export function BillingPreview({
   const containerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Payment plans
-  const paymentPlans = [
+  // Payment plans - filter by AWS Max phase when applicable
+  const allPaymentPlans = [
     {
       id: 'trial',
       name: 'Trial',
@@ -81,7 +81,12 @@ export function BillingPreview({
     }
   ];
 
-  const selectedPlan = paymentPlans.find(plan => plan.id === selectedPlanId) || paymentPlans[1];
+  // AWS Max Preview: only Trial available
+  const paymentPlans = isLmcc
+    ? allPaymentPlans.map(p => p.id === 'trial' ? p : { ...p, disabled: true, description: p.description + ' (GA - November 2026)' })
+    : allPaymentPlans;
+
+  const selectedPlan = paymentPlans.find(plan => plan.id === selectedPlanId) || paymentPlans[isLmcc ? 0 : 1];
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -332,12 +337,15 @@ export function BillingPreview({
                 return (
                   <button
                     key={plan.id}
+                    disabled={(plan as any).disabled}
                     onClick={() => {
+                      if ((plan as any).disabled) return;
                       onPlanChange?.(plan.id);
                       setShowPlanSelector(false);
                     }}
                     className={`
-                      w-full px-4 py-2 text-left hover:bg-fw-wash first:rounded-t-lg last:rounded-b-lg
+                      w-full px-4 py-2 text-left first:rounded-t-lg last:rounded-b-lg
+                      ${(plan as any).disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-fw-wash'}
                       ${selectedPlanId === plan.id ? 'bg-fw-wash' : ''}
                     `}
                   >

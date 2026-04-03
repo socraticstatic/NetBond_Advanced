@@ -113,6 +113,17 @@ export function ReviewConfiguration({
         <p className="text-figma-base text-fw-bodyLight">
           Your cloud router <span className="font-semibold text-fw-link">{cloudRouterName || 'Unnamed'}</span> is configured and ready for deployment.
         </p>
+        {isAwsLmcc && (
+          <div className="mt-4 text-left max-w-md mx-auto p-3 rounded-lg bg-fw-accent border border-fw-active/20">
+            <p className="text-figma-xs font-semibold text-fw-heading mb-1">Next Steps After Submission</p>
+            <ol className="text-figma-xs text-fw-bodyLight space-y-0.5 list-decimal list-inside">
+              <li>AT&T provisions 4 hosted connections (~15 min)</li>
+              <li>Accept each connection in your AWS Console</li>
+              <li>Create Virtual Interfaces (Private, Transit, or Public VIF)</li>
+              <li>Return to NetBond to confirm BGP and activate</li>
+            </ol>
+          </div>
+        )}
         <div className="flex items-center justify-center gap-6 mt-4">
           <div className="flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-full bg-fw-link" />
