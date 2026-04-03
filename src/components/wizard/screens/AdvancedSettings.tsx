@@ -207,6 +207,24 @@ export function AdvancedSettings({
                 <p>Billing starts when BGP reaches "Established" state. MACsec encryption is not available for hosted connections - use IPsec via Site-to-Site VPN if encryption is required.</p>
               </div>
             </div>
+
+            <div className="mt-4 grid grid-cols-3 gap-3">
+              <div className="p-3 rounded-lg bg-fw-wash border border-fw-secondary">
+                <p className="text-figma-xs text-fw-bodyLight">BFD Interval</p>
+                <p className="text-figma-sm font-semibold text-fw-heading">300ms</p>
+                <p className="text-figma-xs text-fw-disabled">AWS minimum</p>
+              </div>
+              <div className="p-3 rounded-lg bg-fw-wash border border-fw-secondary">
+                <p className="text-figma-xs text-fw-bodyLight">BFD Multiplier</p>
+                <p className="text-figma-sm font-semibold text-fw-heading">3x</p>
+                <p className="text-figma-xs text-fw-disabled">Detection threshold</p>
+              </div>
+              <div className="p-3 rounded-lg bg-fw-wash border border-fw-secondary">
+                <p className="text-figma-xs text-fw-bodyLight">Failover Time</p>
+                <p className="text-figma-sm font-semibold text-fw-heading">900ms</p>
+                <p className="text-figma-xs text-fw-disabled">Sub-second detection</p>
+              </div>
+            </div>
           </div>
         )}
 
