@@ -34,6 +34,9 @@ interface NetworkDesignerProps {
   editMode?: boolean;
   connectionId?: string;
   connectionStatus?: string;
+  resiliencyLevel?: string;
+  selectedProviders?: string[];
+  selectedConnectionType?: string;
 }
 
 function legacyNodeToNew(n: LegacyNetworkNode): NetworkNode {
@@ -69,8 +72,27 @@ export function NetworkDesigner({
   editMode = false,
   connectionId,
   connectionStatus,
+  resiliencyLevel,
+  selectedProviders = [],
+  selectedConnectionType,
 }: NetworkDesignerProps) {
   const [showEditWarning, setShowEditWarning] = useState(editMode && connectionStatus === 'Active');
+
+  // Tier context
+  const setResiliencyContext = useDesignerStore((s) => s.setResiliencyContext);
+  const resiliencyTier = useDesignerStore((s) => s.resiliencyTier);
+  const storeProviders = useDesignerStore((s) => s.selectedProviders);
+  const storeConnectionType = useDesignerStore((s) => s.selectedConnectionType);
+  const isAwsMax = resiliencyLevel === 'maximum' && selectedProviders.includes('AWS') && selectedConnectionType === 'Internet to Cloud';
+
+  // Sync tier context to store on mount/change
+  useEffect(() => {
+    setResiliencyContext(
+      (resiliencyLevel as any) || null,
+      selectedProviders,
+      selectedConnectionType || null
+    );
+  }, [resiliencyLevel, selectedProviders, selectedConnectionType]);
 
   // Store state
   const nodes = useDesignerStore((s) => s.nodes);
@@ -86,7 +108,7 @@ export function NetworkDesigner({
   const saveToHistoryStore = useDesignerStore((s) => s.saveToHistory);
   const isSimulationRunning = useDesignerStore((s) => s.isSimulationRunning);
 
-  const isReadOnly = viewMode === 'read';
+  const isReadOnly = viewMode === 'read' || isAwsMax;
 
   // Hooks
   const { addNode, moveNode, updateNode, deleteNode, updateEdge, deleteEdge, clearCanvas } = useNetworkManager();
@@ -106,7 +128,7 @@ export function NetworkDesigner({
 
   // Validation - compute error node IDs
   const errorNodeIds = useMemo(() => {
-    const issues = validateTopology(nodes, edges);
+    const issues = validateTopology(nodes, edges, resiliencyTier, storeProviders[0] || null, storeConnectionType);
     const ids = new Set<string>();
     for (const issue of issues) {
       if (issue.severity === 'error' && issue.nodeId) {
@@ -382,6 +404,17 @@ export function NetworkDesigner({
               Back to Connection detail
             </button>
           </div>
+          {/* AWS Max auto-provision banner */}
+          {isAwsMax && (
+            <div className="flex items-center gap-3 px-4 py-3 bg-fw-accent border-b border-fw-active/20">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" className="w-8 h-4 object-contain" />
+              <div className="text-figma-sm text-fw-heading">
+                <span className="font-semibold">AWS Max - Auto-Provisioned by AT&T</span>
+                <span className="text-fw-bodyLight ml-2">4 IPEs across 2 diverse sites. This topology is managed automatically.</span>
+              </div>
+            </div>
+          )}
+
           {showEditWarning && (
             <div className="flex items-center justify-between px-4 py-2 bg-amber-50 border-b border-amber-200">
               <div className="flex items-center gap-2 text-figma-sm text-amber-800">
