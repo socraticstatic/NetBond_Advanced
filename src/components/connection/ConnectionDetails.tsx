@@ -566,8 +566,10 @@ export function ConnectionDetails() {
           </div>
         </div>
 
-        {/* Connection Edit Warning */}
-        <ConnectionEditWarning connection={connection} className="mb-6" />
+        {/* Connection Edit Warning - policies can be edited while active */}
+        {activeTab !== 'policies' && (
+          <ConnectionEditWarning connection={connection} className="mb-6" />
+        )}
 
         {/* Action Bar */}
         <div className="mb-6 flex items-center justify-between">
