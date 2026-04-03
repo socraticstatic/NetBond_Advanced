@@ -114,14 +114,40 @@ export function ReviewConfiguration({
           Your cloud router <span className="font-semibold text-fw-link">{cloudRouterName || 'Unnamed'}</span> is configured and ready for deployment.
         </p>
         {isAwsLmcc && (
-          <div className="mt-4 text-left max-w-md mx-auto p-3 rounded-lg bg-fw-accent border border-fw-active/20">
-            <p className="text-figma-xs font-semibold text-fw-heading mb-1">Next Steps After Submission</p>
-            <ol className="text-figma-xs text-fw-bodyLight space-y-0.5 list-decimal list-inside">
-              <li>AT&T provisions 4 hosted connections (~15 min)</li>
-              <li>Accept each connection in your AWS Console</li>
-              <li>Create Virtual Interfaces (Private, Transit, or Public VIF)</li>
-              <li>Return to NetBond to confirm BGP and activate</li>
-            </ol>
+          <div className="mt-4 text-left max-w-md mx-auto space-y-3">
+            {/* Activation key to copy to AWS */}
+            <div className="p-4 rounded-lg bg-fw-wash border-2 border-fw-active/30">
+              <p className="text-figma-xs font-semibold text-fw-heading mb-2">Your Activation Key</p>
+              <div className="flex items-center gap-2">
+                <code className="flex-1 px-3 py-2 bg-fw-base border border-fw-secondary rounded-lg text-figma-sm font-mono text-fw-heading tracking-wider select-all">
+                  NB-MAX-{Math.random().toString(36).substring(2, 6).toUpperCase()}-{Math.random().toString(36).substring(2, 6).toUpperCase()}
+                </code>
+                <button
+                  onClick={() => {
+                    const code = document.querySelector('code.select-all');
+                    if (code) { navigator.clipboard.writeText(code.textContent || ''); window.addToast?.({ type: 'success', title: 'Copied', message: 'Activation key copied to clipboard', duration: 2000 }); }
+                  }}
+                  className="px-3 py-2 text-figma-xs font-medium text-fw-link bg-fw-accent border border-fw-active/20 rounded-lg hover:bg-fw-primary hover:text-white transition-colors"
+                >
+                  Copy
+                </button>
+              </div>
+              <p className="text-figma-xs text-fw-bodyLight mt-2">
+                Copy this key and paste it into your AWS Direct Connect console when prompted. This links your AT&T NetBond Advanced Max order to your AWS account.
+              </p>
+            </div>
+
+            {/* Next steps */}
+            <div className="p-3 rounded-lg bg-fw-accent border border-fw-active/20">
+              <p className="text-figma-xs font-semibold text-fw-heading mb-1">Next Steps After Submission</p>
+              <ol className="text-figma-xs text-fw-bodyLight space-y-0.5 list-decimal list-inside">
+                <li>Copy the activation key above</li>
+                <li>Open your AWS Direct Connect console</li>
+                <li>Paste the key when accepting the 4 hosted connections</li>
+                <li>Create Virtual Interfaces on each connection</li>
+                <li>Return to NetBond to confirm BGP and activate</li>
+              </ol>
+            </div>
           </div>
         )}
         <div className="flex items-center justify-center gap-6 mt-4">
