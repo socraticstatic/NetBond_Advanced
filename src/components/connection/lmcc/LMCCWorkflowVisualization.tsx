@@ -216,7 +216,7 @@ export default function LMCCWorkflowVisualization() {
     {
       id: 'complete',
       title: 'Connection Active',
-      description: 'Your LMCC connection is now live and ready for use',
+      description: 'Your AWS Max connection is now live and ready for use',
       status: getStepStatus('complete'),
       type: 'netbond',
       icon: CheckCircle
@@ -578,7 +578,7 @@ export default function LMCCWorkflowVisualization() {
                       <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
                         <li>AWS sends connection request to AT&T API with all parameters</li>
                         <li>You'll receive notification to complete setup in NetBond Advanced portal</li>
-                        <li>Configure LMCC sites, bandwidth allocation, and TAO settings</li>
+                        <li>Configure AWS Max sites, bandwidth allocation, and TAO settings</li>
                         <li>Review billing - costs will be displayed back in this AWS console</li>
                         <li>Approve and provision connection</li>
                       </ol>

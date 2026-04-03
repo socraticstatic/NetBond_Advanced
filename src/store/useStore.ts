@@ -82,7 +82,7 @@ export const useStore = create<Store>((set, get) => {
     connections = connections.map(c => {
       const sample = sampleMap.get(c.id);
       if (sample) {
-        return { ...c, name: sample.name, configuration: { ...c.configuration, ...sample.configuration } };
+        return { ...c, name: sample.name, status: sample.status, configuration: { ...c.configuration, ...sample.configuration } };
       }
       return c;
     });
