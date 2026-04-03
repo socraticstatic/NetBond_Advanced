@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { Shield, ShieldCheck, Globe } from 'lucide-react';
+import { useMemo, useEffect } from 'react';
+import { Shield, ShieldCheck, Globe, Info } from 'lucide-react';
 import { getResiliencyConfig, Tier, getAvailableTiers } from '../../../data/providerResiliency';
 
 export type ResiliencyLevel = Tier | '';
@@ -18,8 +18,19 @@ const TIER_META = {
   geodiversity: { title: 'Geodiversity', icon: Globe, subtitle: 'Geo-diverse, metro-independent redundancy' },
 } as const;
 
+// VPN uses encrypted tunnels over internet, not dedicated interconnect
+const VPN_TYPES = ['VPN to Cloud'];
+
 export function ResiliencySelection({ resiliencyLevel, onSelect, provider, providers, type }: ResiliencySelectionProps) {
   const primaryProvider = provider || (providers && providers[0]) || '';
+  const isVpn = VPN_TYPES.includes(type || '');
+
+  // Auto-select Standard for VPN
+  useEffect(() => {
+    if (isVpn && resiliencyLevel !== 'standard') {
+      onSelect('standard');
+    }
+  }, [isVpn]);
 
   const options = useMemo(() => {
     const tiers = getAvailableTiers();
@@ -39,6 +50,37 @@ export function ResiliencySelection({ resiliencyLevel, onSelect, provider, provi
       };
     });
   }, [primaryProvider]);
+
+  // VPN: show message, auto-select Standard
+  if (isVpn) {
+    return (
+      <div className="space-y-6">
+        <h3 className="text-figma-xl font-bold text-fw-heading tracking-[-0.03em] text-center mb-2">
+          Resiliency
+        </h3>
+        <div className="max-w-xl mx-auto">
+          <div className="flex items-start gap-3 p-5 rounded-xl bg-fw-accent border border-fw-active/20">
+            <Info className="h-5 w-5 text-fw-link shrink-0 mt-0.5" />
+            <div>
+              <p className="text-figma-sm font-semibold text-fw-heading mb-1">VPN uses encrypted tunnels over the internet</p>
+              <p className="text-figma-xs text-fw-bodyLight">
+                VPN to Cloud does not use the provider's dedicated interconnect product. Resiliency is managed via redundant VPN endpoints, not physical path diversity. Standard resiliency has been selected automatically.
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 p-4 border-2 border-fw-active bg-fw-primary rounded-2xl">
+            <div className="flex items-center gap-3">
+              <Shield className="h-6 w-6 text-white" />
+              <div>
+                <p className="text-figma-base font-bold text-white">Standard</p>
+                <p className="text-figma-xs text-white/70">Single-site, locally redundant</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
