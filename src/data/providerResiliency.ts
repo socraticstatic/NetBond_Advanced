@@ -56,9 +56,9 @@ const AWS_TIERS: Record<Tier, ResiliencyTierConfig> = {
     ],
   },
   maximum: {
-    providerName: 'Maximum Resiliency (LMCC)',
+    providerName: 'Maximum Resiliency (AWS Max)',
     sla: '99.99%',
-    architecture: 'AT&T LMCC auto-provisions 4 hosted connections across 4 IPEs (Juniper MX-304) in 2 diverse sites within your selected metro. Customer selects one metro.',
+    architecture: 'AT&T auto-provisions 4 hosted connections across 4 IPEs (Juniper MX-304) in 2 diverse sites within your selected metro. Customer selects one metro.',
     minConnections: 4,
     minLocations: 2,
     minMetros: 1,
@@ -67,7 +67,7 @@ const AWS_TIERS: Record<Tier, ResiliencyTierConfig> = {
     uiLabel: 'Maximum resilience within one metro',
     details: [
       '4 links: 2 sites x 2 links per site',
-      'AT&T LMCC automates provisioning',
+      'AT&T automates provisioning end-to-end',
       'Customer selects metro only',
       'Requires Enterprise Support + Well-Architected Review for SLA',
     ],
