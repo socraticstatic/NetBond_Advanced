@@ -240,8 +240,8 @@ export const createRuleSlice: StateCreator<RuleSlice> = (set, get) => ({
       {
         id: 'alert-lmcc-bgp',
         type: 'alert',
-        name: 'LMCC BGP Path Down',
-        description: 'Alert when any LMCC BGP session drops from Established. Warning at 1 path, Critical at 2+ paths.',
+        name: 'AWS Max BGP Path Down',
+        description: 'Alert when any AWS Max BGP session drops from Established. Warning at 1 path, Critical at 2+ paths.',
         enabled: true,
         status: 'active',
         priority: 'critical',
@@ -255,7 +255,7 @@ export const createRuleSlice: StateCreator<RuleSlice> = (set, get) => ({
             type: 'pattern',
             field: 'message',
             operator: 'contains',
-            value: 'LMCC BGP'
+            value: 'AWS Max BGP'
           }
         ],
         actions: {
@@ -268,8 +268,8 @@ export const createRuleSlice: StateCreator<RuleSlice> = (set, get) => ({
       {
         id: 'alert-lmcc-bfd',
         type: 'alert',
-        name: 'LMCC BFD Failover Triggered',
-        description: 'Alert when BFD detects path failure and triggers sub-second failover on any LMCC path.',
+        name: 'AWS Max BFD Failover Triggered',
+        description: 'Alert when BFD detects path failure and triggers sub-second failover on any AWS Max path.',
         enabled: true,
         status: 'active',
         priority: 'high',
@@ -296,8 +296,8 @@ export const createRuleSlice: StateCreator<RuleSlice> = (set, get) => ({
       {
         id: 'notification-lmcc-contract',
         type: 'notification',
-        name: 'LMCC Contract Expiration Warning',
-        description: 'Notify 30/60/90 days before fixed-term LMCC contract expires.',
+        name: 'AWS Max Contract Expiration Warning',
+        description: 'Notify 30/60/90 days before fixed-term AWS Max contract expires.',
         enabled: true,
         status: 'active',
         priority: 'medium',
