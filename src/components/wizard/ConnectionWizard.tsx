@@ -519,6 +519,9 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                   editMode={isEditMode}
                   connectionId={connectionToEdit?.id || locationState?.connectionId}
                   connectionStatus={connectionToEdit?.status || locationState?.connectionStatus}
+                  resiliencyLevel={resiliencyLevel}
+                  selectedProviders={selectedProviders as string[]}
+                  selectedConnectionType={selectedType}
                 />
               </Suspense>
             </AsyncBoundary>

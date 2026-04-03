@@ -21,6 +21,9 @@ interface LazyNetworkDesignerProps {
   editMode?: boolean;
   connectionId?: string;
   connectionStatus?: string;
+  resiliencyLevel?: string;
+  selectedProviders?: string[];
+  selectedConnectionType?: string;
 }
 
 function LazyNetworkDesigner({
@@ -30,7 +33,10 @@ function LazyNetworkDesigner({
   initialEdges = [],
   editMode = false,
   connectionId,
-  connectionStatus
+  connectionStatus,
+  resiliencyLevel,
+  selectedProviders,
+  selectedConnectionType,
 }: LazyNetworkDesignerProps) {
   const [hasError, setHasError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
@@ -102,14 +108,17 @@ function LazyNetworkDesigner({
       fallback={<NetworkDesignerErrorFallback />}
     >
       <Suspense fallback={LoadingFallback}>
-        <NetworkDesignerComponent 
-          onComplete={onComplete} 
+        <NetworkDesignerComponent
+          onComplete={onComplete}
           onCancel={onCancel}
           initialNodes={initialNodes}
           initialEdges={initialEdges}
           editMode={editMode}
           connectionId={connectionId}
           connectionStatus={connectionStatus}
+          resiliencyLevel={resiliencyLevel}
+          selectedProviders={selectedProviders}
+          selectedConnectionType={selectedConnectionType}
         />
       </Suspense>
     </ErrorBoundary>

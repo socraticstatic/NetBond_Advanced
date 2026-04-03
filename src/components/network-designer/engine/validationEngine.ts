@@ -1,4 +1,4 @@
-import type { NetworkNode, NetworkEdge, ValidationIssue } from '../types/designer';
+import type { NetworkNode, NetworkEdge, ValidationIssue, ResiliencyTier } from '../types/designer';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -204,8 +204,14 @@ function checkMultipleTransportWithoutSDWAN(nodes: NetworkNode[], edges: Network
 // Main export
 // ---------------------------------------------------------------------------
 
-export function validateTopology(nodes: NetworkNode[], edges: NetworkEdge[]): ValidationIssue[] {
-  return [
+export function validateTopology(
+  nodes: NetworkNode[],
+  edges: NetworkEdge[],
+  tier?: ResiliencyTier | null,
+  provider?: string | null,
+  connectionType?: string | null,
+): ValidationIssue[] {
+  const issues = [
     ...checkOrphanNodes(nodes, edges),
     ...checkCloudNotThroughCloudRouter(nodes, edges),
     ...checkCloudRouterNotConnectedToIPE(nodes, edges),
@@ -216,4 +222,88 @@ export function validateTopology(nodes: NetworkNode[], edges: NetworkEdge[]): Va
     ...checkMultipleDestsWithSingleCR(nodes),
     ...checkMultipleTransportWithoutSDWAN(nodes, edges),
   ];
+
+  // Tier-specific validation
+  if (tier) {
+    issues.push(...validateTierRequirements(nodes, edges, tier, provider, connectionType));
+  }
+
+  return issues;
+}
+
+// ---------------------------------------------------------------------------
+// Tier-Aware Validation
+// ---------------------------------------------------------------------------
+
+function validateTierRequirements(
+  nodes: NetworkNode[],
+  edges: NetworkEdge[],
+  tier: ResiliencyTier,
+  provider?: string | null,
+  connectionType?: string | null,
+): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const ipeNodes = nodes.filter(isIPE);
+  const linkCount = edges.length;
+  const metros = new Set(nodes.map(n => n.metro).filter(Boolean));
+
+  // AWS Max auto-provisions - no manual validation needed
+  if (provider === 'AWS' && tier === 'maximum' && connectionType === 'Internet to Cloud') {
+    if (nodes.length > 0 && ipeNodes.length !== 4) {
+      issues.push({
+        id: 'tier-aws-max-auto',
+        severity: 'info',
+        message: 'AWS Max is auto-provisioned by AT&T with 4 IPEs across 2 sites. This topology is read-only.',
+      });
+    }
+    return issues;
+  }
+
+  switch (tier) {
+    case 'standard':
+      if (ipeNodes.length > 1) {
+        issues.push({
+          id: 'tier-standard-sites',
+          severity: 'warning',
+          message: `Standard resiliency uses 1 site. You have ${ipeNodes.length} IPE nodes. Consider Maximum or Geodiversity for multi-site.`,
+        });
+      }
+      break;
+
+    case 'maximum':
+      if (nodes.length > 0 && ipeNodes.length > 0 && ipeNodes.length < 4) {
+        issues.push({
+          id: 'tier-max-link-count',
+          severity: 'error',
+          message: `Maximum resiliency requires 4 links across 2 sites. You have ${ipeNodes.length} IPE node${ipeNodes.length !== 1 ? 's' : ''}. Add ${4 - ipeNodes.length} more.`,
+        });
+      }
+      if (metros.size > 1) {
+        issues.push({
+          id: 'tier-max-single-metro',
+          severity: 'warning',
+          message: `Maximum resiliency uses 1 metro. Your nodes span ${metros.size} metros. For multi-metro, use Geodiversity.`,
+        });
+      }
+      break;
+
+    case 'geodiversity':
+      if (nodes.length > 0 && ipeNodes.length > 0 && ipeNodes.length < 4) {
+        issues.push({
+          id: 'tier-geo-link-count',
+          severity: 'error',
+          message: `Geodiversity requires 4 links across 2 sites in 2 metros. You have ${ipeNodes.length} IPE node${ipeNodes.length !== 1 ? 's' : ''}.`,
+        });
+      }
+      if (nodes.length > 0 && metros.size < 2 && ipeNodes.length > 0) {
+        issues.push({
+          id: 'tier-geo-metro-diversity',
+          severity: 'error',
+          message: `Geodiversity requires nodes in 2 independent metros. ${metros.size === 0 ? 'No metro tags set on nodes.' : 'All nodes are in the same metro.'} Tag IPE nodes with different metros.`,
+        });
+      }
+      break;
+  }
+
+  return issues;
 }

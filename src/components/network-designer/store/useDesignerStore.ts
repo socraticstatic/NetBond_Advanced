@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { NetworkNode, NetworkEdge, SimulationPhase, SimulationMetrics, SimulationScores } from '../types/designer';
+import type { NetworkNode, NetworkEdge, SimulationPhase, SimulationMetrics, SimulationScores, ResiliencyTier } from '../types/designer';
 
 interface HistoryEntry {
   nodes: NetworkNode[];
@@ -37,6 +37,12 @@ interface DesignerState {
   simulationScores: SimulationScores;
   isSimulationRunning: boolean;
 
+  // Tier context from wizard
+  resiliencyTier: ResiliencyTier | null;
+  selectedProviders: string[];
+  selectedConnectionType: string | null;
+
+  setResiliencyContext: (tier: ResiliencyTier | null, providers: string[], connectionType: string | null) => void;
   setNodes: (nodes: NetworkNode[]) => void;
   setEdges: (edges: NetworkEdge[]) => void;
   setPanOffset: (offset: { x: number; y: number }) => void;
@@ -90,6 +96,10 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
   },
   simulationScores: { resiliency: 0, redundancy: 0, disaster: 0, security: 0, performance: 0 },
   isSimulationRunning: false,
+  resiliencyTier: null,
+  selectedProviders: [],
+  selectedConnectionType: null,
+  setResiliencyContext: (tier, providers, connectionType) => set({ resiliencyTier: tier, selectedProviders: providers, selectedConnectionType: connectionType }),
   drafts: [
     {
       id: 'seed-draft-1',
