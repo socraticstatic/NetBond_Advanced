@@ -39,6 +39,34 @@ const PROVIDER_ICONS: Record<string, string> = {
 };
 
 export function wizardToDesigner(state: WizardState): { nodes: NetworkNode[]; edges: NetworkEdge[] } {
+  // AWS Max: use the pre-built 4-IPE template topology
+  const isAwsMax = state.resiliencyLevel === 'maximum' &&
+    state.providers.includes('AWS' as any) &&
+    state.connectionType === 'Internet to Cloud';
+
+  if (isAwsMax) {
+    const metro = (state.selectedLocations['AWS'] || [])[0] || 'Metro';
+    return {
+      nodes: [
+        { id: 'awsmax-ipe-1', type: 'network', functionType: 'ipe', x: 80, y: 120, name: 'MX304-Site1-A', icon: 'Network', status: 'active', config: {}, metro },
+        { id: 'awsmax-ipe-2', type: 'network', functionType: 'ipe', x: 80, y: 280, name: 'MX304-Site1-B', icon: 'Network', status: 'active', config: {}, metro },
+        { id: 'awsmax-ipe-3', type: 'network', functionType: 'ipe', x: 80, y: 440, name: 'MX304-Site2-A', icon: 'Network', status: 'active', config: {}, metro },
+        { id: 'awsmax-ipe-4', type: 'network', functionType: 'ipe', x: 80, y: 600, name: 'MX304-Site2-B', icon: 'Network', status: 'active', config: {}, metro },
+        { id: 'awsmax-cr-1', type: 'function', functionType: 'router', subType: 'cloud', x: 350, y: 200, name: 'Cloud Router (Site 1)', icon: 'Cloud', status: 'active', config: {} },
+        { id: 'awsmax-cr-2', type: 'function', functionType: 'router', subType: 'cloud', x: 350, y: 520, name: 'Cloud Router (Site 2)', icon: 'Cloud', status: 'active', config: {} },
+        { id: 'awsmax-aws', type: 'destination', functionType: 'cloud', cloudProvider: 'aws', x: 620, y: 360, name: 'AWS Direct Connect', icon: 'Cloud', status: 'active', config: {} },
+      ],
+      edges: [
+        { id: 'awsmax-e1', source: 'awsmax-ipe-1', target: 'awsmax-cr-1', type: 'direct-connect', bandwidth: '1 Gbps', status: 'active', config: { resilience: 'ha', bfd: true } },
+        { id: 'awsmax-e2', source: 'awsmax-ipe-2', target: 'awsmax-cr-1', type: 'direct-connect', bandwidth: '1 Gbps', status: 'active', config: { resilience: 'ha', bfd: true } },
+        { id: 'awsmax-e3', source: 'awsmax-ipe-3', target: 'awsmax-cr-2', type: 'direct-connect', bandwidth: '1 Gbps', status: 'active', config: { resilience: 'ha', bfd: true } },
+        { id: 'awsmax-e4', source: 'awsmax-ipe-4', target: 'awsmax-cr-2', type: 'direct-connect', bandwidth: '1 Gbps', status: 'active', config: { resilience: 'ha', bfd: true } },
+        { id: 'awsmax-e5', source: 'awsmax-cr-1', target: 'awsmax-aws', type: 'direct-connect', bandwidth: '1 Gbps', status: 'active' },
+        { id: 'awsmax-e6', source: 'awsmax-cr-2', target: 'awsmax-aws', type: 'direct-connect', bandwidth: '1 Gbps', status: 'active' },
+      ],
+    };
+  }
+
   const nodes: NetworkNode[] = [];
   const edges: NetworkEdge[] = [];
 
