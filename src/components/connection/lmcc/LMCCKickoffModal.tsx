@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CheckCircle2, ArrowRight, Shield, Server, ExternalLink } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { LMCCConnection } from '../../../types/lmcc';
@@ -32,10 +33,13 @@ const PHASES = [
 ];
 
 export function LMCCKickoffModal({ connection, isOpen, onClose, onStartSetup }: LMCCKickoffModalProps) {
+  const [activationKey, setActivationKey] = useState('');
+
   if (!isOpen) return null;
 
   const activePaths = connection.paths.filter(p => p.status === 'active').length;
   const pendingPaths = connection.paths.filter(p => p.status === 'pending').length;
+  const keyIsValid = activationKey.trim().length >= 8;
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4" onClick={onClose}>
@@ -120,6 +124,23 @@ export function LMCCKickoffModal({ connection, isOpen, onClose, onStartSetup }: 
           )}
         </div>
 
+        {/* Activation Key */}
+        <div className="px-6 py-4 border-t border-fw-secondary">
+          <label className="block text-figma-xs font-medium text-fw-body mb-1.5">
+            Activation Key
+          </label>
+          <input
+            type="text"
+            value={activationKey}
+            onChange={(e) => setActivationKey(e.target.value)}
+            placeholder="Enter the activation key from your AT&T order confirmation"
+            className="w-full h-9 px-3 rounded-lg border border-fw-secondary text-figma-base focus:border-fw-active focus:outline-none"
+          />
+          <p className="text-figma-xs text-fw-bodyLight mt-1">
+            The activation key was sent to the email associated with your AT&T NetBond account.
+          </p>
+        </div>
+
         {/* Actions */}
         <div className="px-6 py-4 border-t border-fw-secondary bg-fw-wash flex items-center justify-between">
           <button
@@ -128,7 +149,7 @@ export function LMCCKickoffModal({ connection, isOpen, onClose, onStartSetup }: 
           >
             I'll Do This Later
           </button>
-          <Button variant="primary" size="sm" onClick={onStartSetup}>
+          <Button variant="primary" size="sm" onClick={onStartSetup} disabled={!keyIsValid}>
             Start Setup
             <ArrowRight className="w-4 h-4 ml-1" />
           </Button>
