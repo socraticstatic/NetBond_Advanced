@@ -44,7 +44,7 @@ export function LMCCOnboardingDrawer({ connection, isOpen, onClose, onActivate }
   };
 
   // Per-path cost from LMCC pricing
-  const perPathCost = 1249; // 1 Gbps tier
+  const perPathCost = 1249; // 1 Gbps tier - estimated, contact AT&T sales for actual
   const monthlyCost = perPathCost * 4;
 
   return (
@@ -341,7 +341,7 @@ export function LMCCOnboardingDrawer({ connection, isOpen, onClose, onActivate }
                   <span className="font-bold text-fw-link">${monthlyCost.toLocaleString()}.00</span>
                 </div>
               </div>
-              <p className="text-figma-xs text-fw-bodyLight mt-2">Billing starts when BGP reaches "Established" state.</p>
+              <p className="text-figma-xs text-fw-bodyLight mt-2">Estimated pricing - contact AT&T sales for final rates. Billing starts when BGP reaches "Established" state.</p>
             </div>
 
             {/* Billing acknowledgment */}
