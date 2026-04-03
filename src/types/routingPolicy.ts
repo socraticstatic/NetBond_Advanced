@@ -56,10 +56,13 @@ export interface PolicyASPath {
 
 export type PolicyDirection = 'onPremiseToPartner' | 'partnerToOnPremise';
 
+export type PolicyProtocolContext = 'internet' | 'l3vpn-ipv4' | 'l3vpn-ipv6' | 'restricted-ipv4';
+
 export interface InheritedPolicyOverride {
   globalPolicyId: string;
   globalPolicyName: string;
   globalPolicyAction: PolicyAction;
+  protocolContext: PolicyProtocolContext;
   direction: PolicyDirection;
   overrideEnabled: boolean;
   prefixes: PolicyPrefix[];

@@ -10,7 +10,7 @@ import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
 import { OverflowMenu } from '../../common/OverflowMenu';
 import { Toggle } from '../../common/Toggle';
-import { RoutingPolicy, PolicyAppliesTo, PolicyAction, PolicyProtocol, InheritedPolicyOverride, PolicyPrefix, PolicyCommunity, PolicyASPath } from '../../../types/routingPolicy';
+import { RoutingPolicy, PolicyAppliesTo, PolicyAction, PolicyProtocol, InheritedPolicyOverride, PolicyPrefix, PolicyCommunity, PolicyASPath, PolicyProtocolContext } from '../../../types/routingPolicy';
 import { Connection } from '../../../types';
 import { CloudRouter } from '../../../types/cloudrouter';
 import { VNF } from '../../../types/vnf';
@@ -167,6 +167,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
       globalPolicyId: 'deny-matching-routes',
       globalPolicyName: 'Deny Matching Routes',
       globalPolicyAction: 'deny',
+      protocolContext: 'l3vpn-ipv4',
       direction: 'onPremiseToPartner',
       overrideEnabled: true,
       prefixes: [
@@ -181,6 +182,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
       globalPolicyId: 'deny-matching-routes-reverse',
       globalPolicyName: 'Deny Matching Routes',
       globalPolicyAction: 'deny',
+      protocolContext: 'l3vpn-ipv4',
       direction: 'partnerToOnPremise',
       overrideEnabled: false,
       prefixes: [],
@@ -192,6 +194,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
       globalPolicyId: 'block-default-routes',
       globalPolicyName: 'Block Default Routes',
       globalPolicyAction: 'deny',
+      protocolContext: 'l3vpn-ipv4',
       direction: 'onPremiseToPartner',
       overrideEnabled: true,
       prefixes: [
@@ -205,6 +208,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
       globalPolicyId: 'advertise-static',
       globalPolicyName: 'Advertise Static Routes',
       globalPolicyAction: 'advertise',
+      protocolContext: 'l3vpn-ipv4',
       direction: 'onPremiseToPartner',
       overrideEnabled: true,
       prefixes: [
@@ -222,6 +226,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
       globalPolicyId: 'community-filter-customer',
       globalPolicyName: 'Community Value Filter (Customer)',
       globalPolicyAction: 'allow',
+      protocolContext: 'l3vpn-ipv6',
       direction: 'onPremiseToPartner',
       overrideEnabled: false,
       prefixes: [],
@@ -427,6 +432,12 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               advertise: { color: '#0057b8', bg: 'rgba(0,87,184,0.12)' },
             };
             const ac = actionColors[policy.globalPolicyAction] || actionColors.allow;
+            const contextLabels: Record<string, string> = {
+              'internet': 'Internet',
+              'l3vpn-ipv4': 'L3VPN IPv4',
+              'l3vpn-ipv6': 'L3VPN IPv6',
+              'restricted-ipv4': 'Restricted IPv4',
+            };
 
             return (
               <div key={policy.globalPolicyId} className={`${policy.overrideEnabled ? '' : 'opacity-50'}`}>
@@ -443,6 +454,9 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                         <span className="text-figma-sm font-medium text-fw-heading">{policy.globalPolicyName}</span>
                         <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: ac.color, backgroundColor: ac.bg }}>
                           {policy.globalPolicyAction}
+                        </span>
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-fw-wash text-fw-body border border-fw-secondary">
+                          {contextLabels[policy.protocolContext] || policy.protocolContext}
                         </span>
                         <span className="text-figma-xs text-fw-bodyLight flex items-center gap-1">
                           {policy.direction === 'onPremiseToPartner' ? 'On Premise' : 'Partner'}
@@ -869,8 +883,8 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
               Action Configuration
             </h3>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField label="Action" required helpText="Inherited from Configure > Policies">
+            <div className="grid grid-cols-3 gap-4">
+              <FormField label="Action" required>
                 <select
                   className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active"
                   value={selectedAction}
@@ -880,6 +894,15 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                   <option value="deny">Deny</option>
                   <option value="manipulate">Manipulate</option>
                   <option value="advertise">Advertise</option>
+                </select>
+              </FormField>
+
+              <FormField label="Policy Context" required helpText="Which routing table this applies to">
+                <select className="w-full px-3 h-9 border border-fw-secondary rounded-lg text-figma-base focus:ring-2 focus:ring-fw-active focus:border-fw-active">
+                  <option value="l3vpn-ipv4">L3VPN IPv4</option>
+                  <option value="l3vpn-ipv6">L3VPN IPv6</option>
+                  <option value="restricted-ipv4">Restricted IPv4</option>
+                  <option value="internet">Internet</option>
                 </select>
               </FormField>
 
