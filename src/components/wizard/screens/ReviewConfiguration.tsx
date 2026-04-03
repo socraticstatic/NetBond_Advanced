@@ -427,13 +427,16 @@ export function ReviewConfiguration({
                 mode: 'visual',
                 initialNodes: nodes,
                 initialEdges: edges,
+                resiliencyLevel: config.resiliencyLevel,
+                selectedProviders: providers,
+                selectedConnectionType: config.type,
               },
             });
           }}
-          className="inline-flex items-center gap-2 px-6 h-10 border border-fw-secondary rounded-full text-figma-base font-medium text-fw-body hover:bg-fw-wash transition-colors"
+          className="inline-flex items-center gap-2 px-6 h-10 bg-fw-wash border border-fw-secondary rounded-full text-figma-base font-medium text-fw-link hover:bg-fw-accent hover:border-fw-active/30 transition-colors"
         >
           <Settings className="h-4 w-4" />
-          Edit in Network Designer
+          Open in Visual Designer
         </button>
       </div>
 

@@ -100,7 +100,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   const [showAI, setShowAI] = useState(true);
 
   // Persistent state for all selections
-  const [selectedProviders, setSelectedProviders] = useState<CloudProvider[]>([]);
+  const [selectedProviders, setSelectedProviders] = useState<CloudProvider[]>(locationState?.selectedProviders || []);
 
   const toggleProvider = (provider: CloudProvider) => {
     setSelectedProviders(prev =>
@@ -112,7 +112,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
 
   // Legacy single-provider accessor for downstream components that haven't been updated yet
   const selectedProvider = selectedProviders[0] as CloudProvider | undefined;
-  const [resiliencyLevel, setResiliencyLevel] = useState<ResiliencyLevel>('');
+  const [resiliencyLevel, setResiliencyLevel] = useState<ResiliencyLevel>(locationState?.resiliencyLevel || '');
   const [selectedLocations, setSelectedLocations] = useState<Record<string, string[]>>({});
 
   const [bandwidthSettings, setBandwidthSettings] = useState<Record<string, number>>({});
@@ -130,7 +130,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
       return { ...prev, [providerId]: updated };
     });
   };
-  const [selectedType, setSelectedType] = useState<ConnectionType>();
+  const [selectedType, setSelectedType] = useState<ConnectionType>(locationState?.selectedConnectionType as ConnectionType);
   const [selectedBandwidth, setSelectedBandwidth] = useState<BandwidthOption>();
   const [selectedLocation, setSelectedLocation] = useState<LocationOption>();
   const [billingChoice, setBillingChoice] = useState<BillingChoice>({
