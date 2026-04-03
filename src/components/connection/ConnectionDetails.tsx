@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Cog, Play, Pause, Trash2, Edit2, Activity, Network, Users, Globe, Cloud } from 'lucide-react';
+import { ArrowLeft, Cog, Play, Pause, Trash2, Edit2, Activity, Network, Users, Globe, Cloud, AlertCircle } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { SubNav } from '../navigation/SubNav';
 import { ConnectionTabs, ConnectionTabType } from './tabs/ConnectionTabs';
@@ -30,7 +30,7 @@ import { DeleteCloudRouterModal } from './cloudrouter/DeleteCloudRouterModal';
 import { MobileConnectionDetails } from './MobileConnectionDetails';
 import { useIsMobile } from '../../hooks/useMobileDetection';
 import { useVNFSync } from '../../hooks/useVNFSync';
-import { ConnectionEditWarning } from '../common/ConnectionEditWarning';
+// ConnectionEditWarning replaced with inline specific messaging
 
 export function ConnectionDetails() {
   const { id } = useParams();
@@ -566,9 +566,20 @@ export function ConnectionDetails() {
           </div>
         </div>
 
-        {/* Connection Edit Warning - policies can be edited while active */}
-        {activeTab !== 'policies' && (
-          <ConnectionEditWarning connection={connection} className="mb-6" />
+        {/* Connection Edit Warning - specific about what requires deactivation */}
+        {connection.status === 'Active' && !['policies', 'access', 'billing', 'logs', 'api', 'apps'].includes(activeTab) && (
+          <div className="flex items-start space-x-3 p-4 bg-fw-warnLight border border-fw-warn rounded-lg mb-6">
+            <AlertCircle className="h-5 w-5 text-fw-warn flex-shrink-0 mt-0.5" />
+            <div>
+              <h4 className="text-figma-base font-semibold text-fw-heading mb-1">Connection Must Be Deactivated to Modify</h4>
+              <p className="text-figma-base text-fw-body">
+                Changes to network topology, cloud routers, links, and VNFs require the connection to be deactivated first.
+              </p>
+              <p className="text-figma-xs text-fw-bodyLight mt-1">
+                Policies, access controls, billing, API keys, apps, and logs can be modified while active.
+              </p>
+            </div>
+          </div>
         )}
 
         {/* Action Bar */}
