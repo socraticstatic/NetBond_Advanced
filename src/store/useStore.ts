@@ -75,8 +75,18 @@ export const useStore = create<Store>((set, get) => {
   // Merge connections: use persisted, but ensure new sample connections are added
   let connections = persistedState.connections ? [...persistedState.connections] : [];
 
-  // If persisted connections exist, merge in any new sample connections that don't exist yet
+  // If persisted connections exist, merge in new sample connections AND update existing ones
   if (persistedState.connections && persistedState.connections.length > 0) {
+    const sampleMap = new Map(sampleConnections.map(sc => [sc.id, sc]));
+    // Update existing connections with latest sample data (name, configuration, etc.)
+    connections = connections.map(c => {
+      const sample = sampleMap.get(c.id);
+      if (sample) {
+        return { ...c, name: sample.name, configuration: { ...c.configuration, ...sample.configuration } };
+      }
+      return c;
+    });
+    // Add any new sample connections not yet in persisted state
     const existingIds = new Set(connections.map(c => c.id));
     const newConnections = sampleConnections.filter(sc => !existingIds.has(sc.id));
     connections = [...newConnections, ...connections];
