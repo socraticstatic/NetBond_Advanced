@@ -1,4 +1,5 @@
-import { Edit2, CheckCircle2, MapPin, Gauge, Shield, Network, Settings, Server, AlertTriangle } from 'lucide-react';
+import { useState } from 'react';
+import { Edit2, CheckCircle2, MapPin, Gauge, Shield, Network, Settings, Server, AlertTriangle, Copy, ExternalLink, Key } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CloudProvider } from '../../../types/connection';
 import { BillingPreview } from '../BillingPreview';
@@ -86,6 +87,9 @@ export function ReviewConfiguration({
   onEditStep,
 }: ReviewConfigurationProps) {
   const navigate = useNavigate();
+  const [activationKey] = useState(() =>
+    `NB-MAX-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`
+  );
   const providers = config.providers || (config.provider ? [config.provider] : []);
   const isAwsLmcc = providers.includes('AWS' as CloudProvider) && config.resiliencyLevel === 'maximum' && config.type === 'Internet to Cloud';
   const lmccMetroId = isAwsLmcc ? (selectedLocations['AWS'] || [])[0] : null;
@@ -114,38 +118,51 @@ export function ReviewConfiguration({
           Your cloud router <span className="font-semibold text-fw-link">{cloudRouterName || 'Unnamed'}</span> is configured and ready for deployment.
         </p>
         {isAwsLmcc && (
-          <div className="mt-4 text-left max-w-md mx-auto space-y-3">
-            {/* Activation key to copy to AWS */}
-            <div className="p-4 rounded-lg bg-fw-wash border-2 border-fw-active/30">
-              <p className="text-figma-xs font-semibold text-fw-heading mb-2">Your Activation Key</p>
-              <div className="flex items-center gap-2">
-                <code className="flex-1 px-3 py-2 bg-fw-base border border-fw-secondary rounded-lg text-figma-sm font-mono text-fw-heading tracking-wider select-all">
-                  NB-MAX-{Math.random().toString(36).substring(2, 6).toUpperCase()}-{Math.random().toString(36).substring(2, 6).toUpperCase()}
+          <div className="mt-6 max-w-lg mx-auto">
+            {/* Activation Key - prominent hero */}
+            <div className="p-6 rounded-2xl bg-fw-primary text-white text-center">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <Key className="h-6 w-6" />
+                <h4 className="text-figma-lg font-bold">Your Activation Key</h4>
+              </div>
+              <p className="text-figma-sm text-white/80 mb-4">
+                Copy this key and take it to your AWS Direct Connect console to link your order.
+              </p>
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <code className="px-6 py-3 bg-white/10 border-2 border-white/30 rounded-xl text-figma-xl font-mono font-bold tracking-[0.15em] select-all">
+                  {activationKey}
                 </code>
                 <button
                   onClick={() => {
-                    const code = document.querySelector('code.select-all');
-                    if (code) { navigator.clipboard.writeText(code.textContent || ''); window.addToast?.({ type: 'success', title: 'Copied', message: 'Activation key copied to clipboard', duration: 2000 }); }
+                    navigator.clipboard.writeText(activationKey);
+                    window.addToast?.({ type: 'success', title: 'Copied', message: 'Activation key copied to clipboard', duration: 2000 });
                   }}
-                  className="px-3 py-2 text-figma-xs font-medium text-fw-link bg-fw-accent border border-fw-active/20 rounded-lg hover:bg-fw-primary hover:text-white transition-colors"
+                  className="p-3 bg-white/20 hover:bg-white/30 rounded-xl transition-colors"
+                  title="Copy to clipboard"
                 >
-                  Copy
+                  <Copy className="h-5 w-5" />
                 </button>
               </div>
-              <p className="text-figma-xs text-fw-bodyLight mt-2">
-                Copy this key and paste it into your AWS Direct Connect console when prompted. This links your AT&T NetBond Advanced Max order to your AWS account.
-              </p>
+              <a
+                href="https://console.aws.amazon.com/directconnect/v2/home#/connections"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-fw-primary rounded-lg font-medium text-figma-sm hover:bg-white/90 transition-colors"
+              >
+                Open AWS Console
+                <ExternalLink className="h-4 w-4" />
+              </a>
             </div>
 
             {/* Next steps */}
-            <div className="p-3 rounded-lg bg-fw-accent border border-fw-active/20">
-              <p className="text-figma-xs font-semibold text-fw-heading mb-1">Next Steps After Submission</p>
-              <ol className="text-figma-xs text-fw-bodyLight space-y-0.5 list-decimal list-inside">
-                <li>Copy the activation key above</li>
-                <li>Open your AWS Direct Connect console</li>
-                <li>Paste the key when accepting the 4 hosted connections</li>
-                <li>Create Virtual Interfaces on each connection</li>
-                <li>Return to NetBond to confirm BGP and activate</li>
+            <div className="mt-4 p-4 rounded-xl bg-fw-wash border border-fw-secondary text-left">
+              <p className="text-figma-xs font-semibold text-fw-heading mb-2">What to do in AWS Console</p>
+              <ol className="text-figma-xs text-fw-bodyLight space-y-1 list-decimal list-inside">
+                <li>Go to Direct Connect &gt; Connections</li>
+                <li>You'll see 4 pending hosted connections from AT&T</li>
+                <li>Accept each connection using the activation key above</li>
+                <li>Create a Virtual Interface (Private, Transit, or Public) on each</li>
+                <li>Return to NetBond to confirm BGP sessions and activate</li>
               </ol>
             </div>
           </div>
