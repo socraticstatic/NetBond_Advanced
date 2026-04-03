@@ -79,8 +79,8 @@ export interface LMCCBGP {
 }
 
 export interface LMCCBFD {
-  interval: 100;           // BFD interval in ms (always 100ms)
-  multiplier: 3;           // Detect multiplier (3x100ms = 300ms failover)
+  interval: 300;           // BFD interval in ms (AWS minimum is 300ms)
+  multiplier: 3;           // Detect multiplier (3x300ms = 900ms failover)
 }
 
 export interface LMCCConnection {
