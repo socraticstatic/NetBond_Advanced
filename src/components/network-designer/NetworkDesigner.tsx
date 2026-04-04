@@ -405,9 +405,10 @@ export function NetworkDesigner({
 
   return (
     <div className={containerClass}>
-      {/* Edit mode: back nav + warning */}
-      {editMode && (
+      {/* Top banners */}
+      {(editMode || isAwsMax) && (
         <div className="absolute top-0 left-0 right-0 z-30">
+          {editMode && (
           <div className="flex items-center justify-between px-4 py-2 bg-fw-base border-b border-fw-secondary">
             <button
               onClick={onCancel}
@@ -417,6 +418,7 @@ export function NetworkDesigner({
               Back to Connection detail
             </button>
           </div>
+          )}
           {/* AWS Max auto-provision banner */}
           {isAwsMax && (
             <div className="flex items-center gap-3 px-4 py-3 bg-fw-accent border-b border-fw-active/20">
