@@ -552,9 +552,8 @@ export function NetworkDesigner({
       {showWelcome && (
         <WelcomeModal
           onClose={() => setShowWelcome(false)}
-          onCreate={(name) => {
-            const node = addNode('function', 'router');
-            if (name && node) updateNode(node.id, { name });
+          onCreate={() => {
+            addNode('function', 'router');
             setShowWelcome(false);
           }}
           onLoadTemplate={(nodes, edges) => {
