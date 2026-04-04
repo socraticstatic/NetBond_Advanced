@@ -147,7 +147,7 @@ export function ReviewConfiguration({
                 href="https://console.aws.amazon.com/directconnect/v2/home#/connections"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-fw-primary rounded-lg font-medium text-figma-sm hover:bg-white/90 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/20 text-white border border-white/40 rounded-lg font-medium text-figma-sm hover:bg-white/30 transition-colors"
               >
                 Open AWS Console
                 <ExternalLink className="h-4 w-4" />
