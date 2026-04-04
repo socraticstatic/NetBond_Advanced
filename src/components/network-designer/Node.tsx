@@ -205,6 +205,13 @@ export const Node = memo(function Node({
         </span>
       )}
 
+      {/* Metro badge */}
+      {node.metro && (
+        <span className="absolute -bottom-10 text-[8px] font-medium text-fw-link bg-fw-accent border border-fw-active/20 px-1.5 py-0.5 rounded truncate max-w-[80px]">
+          {node.metro}
+        </span>
+      )}
+
       {/* Status dot */}
       <span
         data-testid="status-dot"
