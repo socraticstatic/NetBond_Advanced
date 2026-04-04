@@ -701,6 +701,11 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 billingChoice={billingChoice}
                 onBillingChange={updateBillingChoice}
                 onEditStep={(s) => setStep(s)}
+                onSwitchToVisual={(nodes, edges) => {
+                  setInitialNodes(nodes);
+                  setInitialEdges(edges);
+                  setMode('visual');
+                }}
               />
             )}
 
