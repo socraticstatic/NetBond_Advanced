@@ -366,37 +366,44 @@ export function ReviewConfiguration({
         <div className="lg:col-span-1">
           <div className="sticky top-4 space-y-6">
             {/* Mini Topology Preview */}
+            {/* Topology diagram */}
             <div className="bg-fw-base rounded-xl p-5 border border-fw-secondary">
-              <h4 className="text-figma-sm font-semibold text-fw-heading mb-4">Network Topology</h4>
-              <svg viewBox="0 0 280 200" className="w-full" style={{ minHeight: 160 }}>
+              <h4 className="text-figma-sm font-semibold text-fw-heading mb-3">Network Topology</h4>
+              <div className="flex items-center justify-center gap-3">
                 {/* AT&T Core */}
-                <rect x="10" y="80" width="60" height="40" rx="8" fill="var(--color-gray-100, #f0f2f5)" stroke="var(--color-purple-600, #7c3aed)" strokeWidth="1.5" />
-                <text x="40" y="104" textAnchor="middle" className="text-[8px] font-semibold" fill="var(--color-purple-600, #7c3aed)">AT&T Core</text>
+                <div className="flex flex-col items-center">
+                  <div className="w-12 h-12 rounded-lg bg-purple-50 border-2 border-purple-300 flex items-center justify-center">
+                    <Network className="h-5 w-5 text-purple-600" />
+                  </div>
+                  <span className="text-[10px] text-fw-bodyLight mt-1">AT&T Core</span>
+                </div>
+
+                {/* Connection line */}
+                <div className="w-8 border-t-2 border-dashed border-purple-300" />
 
                 {/* Cloud Router */}
-                <rect x="100" y="75" width="70" height="50" rx="10" fill="var(--color-magenta-50, #fdf2f8)" stroke="var(--color-magenta-600, #db2777)" strokeWidth="1.5" />
-                <text x="135" y="97" textAnchor="middle" className="text-[7px] font-semibold" fill="var(--color-magenta-600, #db2777)">{(cloudRouterName || 'Cloud Router').substring(0, 14)}</text>
-                <text x="135" y="113" textAnchor="middle" className="text-[6px]" fill="var(--color-gray-500, #878c94)">Cloud Router</text>
+                <div className="flex flex-col items-center">
+                  <div className="w-12 h-12 rounded-lg bg-pink-50 border-2 border-pink-300 flex items-center justify-center">
+                    <Settings className="h-5 w-5 text-pink-600" />
+                  </div>
+                  <span className="text-[10px] text-fw-bodyLight mt-1 max-w-[60px] text-center truncate">{(cloudRouterName || 'Router').substring(0, 10)}</span>
+                </div>
 
-                {/* Connection: Core to Router */}
-                <line x1="70" y1="100" x2="100" y2="100" stroke="var(--color-purple-400, #a78bfa)" strokeWidth="1.5" strokeDasharray="4 2" />
+                {/* Connection line */}
+                <div className="w-8 border-t-2 border-blue-300" />
 
-                {/* Provider Nodes */}
-                {providers.map((provider, i) => {
-                  const total = Math.max(providers.length, 1);
-                  const yStart = 200 / (total + 1);
-                  const y = yStart * (i + 1);
-                  const locs = selectedLocations[provider] || [];
-                  return (
-                    <g key={provider}>
-                      <line x1="170" y1="100" x2="210" y2={y} stroke="var(--color-cobalt-300, #93c5fd)" strokeWidth="1" />
-                      <rect x="210" y={y - 15} width="60" height="30" rx="6" fill="var(--color-cobalt-50, #eff6ff)" stroke="var(--color-cobalt-400, #60a5fa)" strokeWidth="1" />
-                      <text x="240" y={y - 1} textAnchor="middle" className="text-[7px] font-semibold" fill="var(--color-cobalt-700, #1d4ed8)">{provider.length > 8 ? provider.substring(0, 8) : provider}</text>
-                      <text x="240" y={y + 9} textAnchor="middle" className="text-[6px]" fill="var(--color-gray-500, #878c94)">{locs.length} loc{locs.length !== 1 ? 's' : ''}</text>
-                    </g>
-                  );
-                })}
-              </svg>
+                {/* Provider(s) */}
+                <div className="flex flex-col gap-2">
+                  {providers.map(provider => (
+                    <div key={provider} className="flex flex-col items-center">
+                      <div className="w-12 h-12 rounded-lg bg-blue-50 border-2 border-blue-300 flex items-center justify-center">
+                        <MapPin className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <span className="text-[10px] text-fw-bodyLight mt-1">{provider}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <BillingPreview
