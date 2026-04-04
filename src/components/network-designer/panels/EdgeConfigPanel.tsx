@@ -1,6 +1,8 @@
+import { useMemo } from 'react';
 import type { NetworkEdge } from '../types/designer';
 import { EDGE_TYPE_OPTIONS, BANDWIDTH_OPTIONS } from '../constants/edgeTypes';
 import { FloatingPanel } from './FloatingPanel';
+import { useDesignerStore } from '../store/useDesignerStore';
 
 interface EdgeConfigPanelProps {
   edge: NetworkEdge;
@@ -14,11 +16,11 @@ const FIELD_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-b
 const SELECT_CLASS = 'h-9 px-3 rounded-lg border border-fw-secondary text-figma-base bg-fw-base w-full focus:outline-none focus:border-fw-link disabled:opacity-60 disabled:cursor-not-allowed';
 const LABEL_CLASS = 'block text-figma-sm text-fw-bodyLight mb-1';
 
-const RESILIENCE_OPTIONS = [
-  { value: 'single', label: 'Single Connection' },
-  { value: 'redundant', label: 'Redundant' },
-  { value: 'ha', label: 'High Availability' },
-  { value: 'dual-diverse', label: 'Dual-Diverse' },
+const ALL_RESILIENCE_OPTIONS = [
+  { value: 'single', label: 'Single Connection', minTier: 'standard' },
+  { value: 'redundant', label: 'Redundant', minTier: 'standard' },
+  { value: 'ha', label: 'High Availability', minTier: 'maximum' },
+  { value: 'dual-diverse', label: 'Dual-Diverse', minTier: 'geodiversity' },
 ] as const;
 
 const RTO_OPTIONS = [
@@ -27,7 +29,19 @@ const RTO_OPTIONS = [
   { value: 'immediate', label: 'Immediate (Subsecond)' },
 ] as const;
 
+const TIER_RANK: Record<string, number> = { standard: 0, maximum: 1, geodiversity: 2 };
+
 export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose, readOnly = false }: EdgeConfigPanelProps) {
+  const resiliencyTier = useDesignerStore(s => s.resiliencyTier);
+
+  const RESILIENCE_OPTIONS = useMemo(() => {
+    const rank = TIER_RANK[resiliencyTier || 'standard'] ?? 0;
+    return ALL_RESILIENCE_OPTIONS.map(opt => ({
+      ...opt,
+      recommended: opt.minTier === (resiliencyTier || 'standard'),
+      disabled: TIER_RANK[opt.minTier] > rank,
+    }));
+  }, [resiliencyTier]);
   const updateConfig = (key: string, value: unknown) => {
     onUpdate(edge.id, { config: { ...edge.config, [key]: value } });
   };
@@ -84,7 +98,9 @@ export function EdgeConfigPanel({ edge, onUpdate, onDelete, onClose, readOnly = 
             }
           >
             {RESILIENCE_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+              <option key={opt.value} value={opt.value} disabled={opt.disabled}>
+                {opt.label}{opt.recommended ? ' (Recommended)' : ''}{opt.disabled ? ' (Higher tier required)' : ''}
+              </option>
             ))}
           </select>
         </div>
