@@ -67,10 +67,44 @@ export function wizardToDesigner(state: WizardState): { nodes: NetworkNode[]; ed
     };
   }
 
+  // Maximum or Geodiversity (non-AWS): generate 4-IPE topology
+  const isMaxOrGeo = state.resiliencyLevel === 'maximum' || state.resiliencyLevel === 'geodiversity';
+
+  if (isMaxOrGeo) {
+    const locations = Object.entries(state.selectedLocations).flatMap(([provider, locs]) =>
+      locs.map(loc => ({ provider, location: loc }))
+    );
+    const site1 = locations[0]?.location || 'Site 1';
+    const site2 = locations[1]?.location || 'Site 2';
+    const provider = state.providers[0] || 'Cloud';
+    const edgeType = EDGE_TYPE_MAP[provider] || 'ethernet';
+    const bw = Object.values(state.bandwidthSettings)[0] || 1000;
+    const bwLabel = bw >= 1000 ? `${(bw / 1000).toFixed(0)} Gbps` : `${bw} Mbps`;
+
+    const nodes: NetworkNode[] = [
+      { id: 'max-ipe-1', type: 'network', functionType: 'ipe', x: 80, y: 120, name: `IPE-1 (${site1})`, icon: 'Network', status: 'active', config: {}, metro: site1 },
+      { id: 'max-ipe-2', type: 'network', functionType: 'ipe', x: 80, y: 280, name: `IPE-2 (${site1})`, icon: 'Network', status: 'active', config: {}, metro: site1 },
+      { id: 'max-ipe-3', type: 'network', functionType: 'ipe', x: 80, y: 440, name: `IPE-3 (${site2})`, icon: 'Network', status: 'active', config: {}, metro: site2 },
+      { id: 'max-ipe-4', type: 'network', functionType: 'ipe', x: 80, y: 600, name: `IPE-4 (${site2})`, icon: 'Network', status: 'active', config: {}, metro: site2 },
+      { id: 'max-cr-1', type: 'function', functionType: 'router', subType: 'cloud', x: 350, y: 200, name: `Cloud Router (${site1})`, icon: 'Cloud', status: 'active', config: {} },
+      { id: 'max-cr-2', type: 'function', functionType: 'router', subType: 'cloud', x: 350, y: 520, name: `Cloud Router (${site2})`, icon: 'Cloud', status: 'active', config: {} },
+      { id: 'max-dest', type: 'destination', functionType: 'cloud', cloudProvider: provider, x: 620, y: 360, name: provider, icon: PROVIDER_ICONS[provider] || 'cloud', status: 'active', config: { provider } },
+    ];
+    const edges: NetworkEdge[] = [
+      { id: 'max-e1', source: 'max-ipe-1', target: 'max-cr-1', type: edgeType, bandwidth: bwLabel, status: 'active', config: { resilience: 'ha', bfd: true } },
+      { id: 'max-e2', source: 'max-ipe-2', target: 'max-cr-1', type: edgeType, bandwidth: bwLabel, status: 'active', config: { resilience: 'ha', bfd: true } },
+      { id: 'max-e3', source: 'max-ipe-3', target: 'max-cr-2', type: edgeType, bandwidth: bwLabel, status: 'active', config: { resilience: 'ha', bfd: true } },
+      { id: 'max-e4', source: 'max-ipe-4', target: 'max-cr-2', type: edgeType, bandwidth: bwLabel, status: 'active', config: { resilience: 'ha', bfd: true } },
+      { id: 'max-e5', source: 'max-cr-1', target: 'max-dest', type: edgeType, bandwidth: bwLabel, status: 'active' },
+      { id: 'max-e6', source: 'max-cr-2', target: 'max-dest', type: edgeType, bandwidth: bwLabel, status: 'active' },
+    ];
+    return { nodes, edges };
+  }
+
   const nodes: NetworkNode[] = [];
   const edges: NetworkEdge[] = [];
 
-  // AT&T Core node (left side)
+  // Standard: AT&T Core node (left side)
   const coreNode: NetworkNode = {
     id: 'wizard-core',
     type: 'network',
