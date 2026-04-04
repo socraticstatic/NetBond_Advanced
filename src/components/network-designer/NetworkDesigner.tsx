@@ -138,7 +138,7 @@ export function NetworkDesigner({
     return ids;
   }, [nodes, edges]);
 
-  // Initialize store with initial nodes/edges on mount
+  // Initialize store with initial nodes/edges on mount, or clear if fresh
   useEffect(() => {
     if (initialNodes.length > 0 || initialEdges.length > 0) {
       const converted = initialNodes.map(legacyNodeToNew);
@@ -146,9 +146,15 @@ export function NetworkDesigner({
       setNodes(converted);
       setEdges(convertedEdges);
       saveToHistoryStore();
+    } else if (!editMode) {
+      // Fresh entry - clear stale state from previous sessions
+      setNodes([]);
+      setEdges([]);
     }
     if (editMode) {
       setViewMode('read');
+    } else {
+      setViewMode('edit');
     }
     // Only run on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
