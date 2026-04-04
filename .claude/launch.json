@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "sdci-dev",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "5179"],
+      "runtimeExecutable": "/bin/bash",
+      "runtimeArgs": ["-c", "export PATH=/Users/micahbos/.nvm/versions/node/v20.16.0/bin:$PATH && npm run dev -- --port 5179"],
       "port": 5179
     }
   ]
