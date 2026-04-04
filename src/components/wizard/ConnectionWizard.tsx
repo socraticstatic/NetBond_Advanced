@@ -15,7 +15,7 @@ import { BillingPreview } from './BillingPreview';
 import { ModeSelection } from './modes';
 import { useStore } from '../../store/useStore';
 import { Button } from '../common/Button';
-import { Toggle } from '../common/Toggle';
+// Toggle removed - Niva panel has its own minimize control
 import { NetworkAI } from './NetworkAI';
 import { Connection, NetworkNode, NetworkEdge } from '../../types';
 import { AsyncBoundary } from '../common/AsyncBoundary';
@@ -539,13 +539,6 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 Change Creation Mode
               </button>
 
-              <div className="flex items-center">
-                <Toggle
-                  checked={showAI}
-                  onChange={setShowAI}
-                  label="AI Assistant"
-                />
-              </div>
             </div>
 
             <div className="max-w-4xl mx-auto mb-12">
