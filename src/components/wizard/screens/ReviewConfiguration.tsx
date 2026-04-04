@@ -44,6 +44,7 @@ interface ReviewConfigurationProps {
   };
   onBillingChange?: (updates: any) => void;
   onEditStep?: (step: number) => void;
+  onSwitchToVisual?: (nodes: any[], edges: any[]) => void;
 }
 
 function SectionHeader({ icon: Icon, title, step, onEdit }: { icon: any; title: string; step?: number; onEdit?: (step: number) => void }) {
@@ -85,6 +86,7 @@ export function ReviewConfiguration({
   billingChoice,
   onBillingChange = () => {},
   onEditStep,
+  onSwitchToVisual,
 }: ReviewConfigurationProps) {
   const navigate = useNavigate();
   const [activationKey] = useState(() =>
@@ -422,16 +424,20 @@ export function ReviewConfiguration({
               connectionType: config.type,
               resiliencyLevel: config.resiliencyLevel,
             });
-            navigate('/create', {
-              state: {
-                mode: 'visual',
-                initialNodes: nodes,
-                initialEdges: edges,
-                resiliencyLevel: config.resiliencyLevel,
-                selectedProviders: providers,
-                selectedConnectionType: config.type,
-              },
-            });
+            if (onSwitchToVisual) {
+              onSwitchToVisual(nodes, edges);
+            } else {
+              navigate('/create', {
+                state: {
+                  mode: 'visual',
+                  initialNodes: nodes,
+                  initialEdges: edges,
+                  resiliencyLevel: config.resiliencyLevel,
+                  selectedProviders: providers,
+                  selectedConnectionType: config.type,
+                },
+              });
+            }
           }}
           className="inline-flex items-center gap-2 px-6 h-10 bg-fw-wash border border-fw-secondary rounded-full text-figma-base font-medium text-fw-link hover:bg-fw-accent hover:border-fw-active/30 transition-colors"
         >
