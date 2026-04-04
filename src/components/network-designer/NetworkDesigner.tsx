@@ -121,7 +121,7 @@ export function NetworkDesigner({
   const [isSaveTemplateOpen, setIsSaveTemplateOpen] = useState(false);
   const [isSaveDraftOpen, setIsSaveDraftOpen] = useState(false);
   const [isDraftsOpen, setIsDraftsOpen] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(!editMode && initialNodes.length === 0);
+  const [showWelcome, setShowWelcome] = useState(!editMode && initialNodes.length === 0 && !resiliencyLevel);
 
   // Canvas ref for PDF export
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -295,14 +295,21 @@ export function NetworkDesigner({
       const sourceNode = nodes.find((n) => n.id === edge.source);
       const targetNode = nodes.find((n) => n.id === edge.target);
 
+      const metros = [...new Set(nodes.map(n => n.metro).filter(Boolean))];
       return {
         id: editMode && connectionId ? connectionId : `conn-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
         name: `${sourceNode?.name || 'Source'} to ${targetNode?.name || 'Target'}`,
         type: (edge.type as Connection['type']) || 'Internet to Cloud',
         status: 'Inactive',
         bandwidth: edge.bandwidth,
-        location: sourceNode?.config?.region || targetNode?.config?.region || 'US East',
-        provider: targetNode?.config?.provider,
+        location: sourceNode?.metro || sourceNode?.config?.region || targetNode?.config?.region || 'US East',
+        provider: targetNode?.config?.provider || targetNode?.cloudProvider,
+        configuration: {
+          resiliencyLevel: resiliencyTier || undefined,
+          isLmcc: isAwsMax || undefined,
+          lmccMetro: isAwsMax ? metros[0] : undefined,
+          designerGenerated: true,
+        },
       };
     });
 
