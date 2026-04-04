@@ -128,20 +128,25 @@ export function MiniTopology({ connection, cloudRoutersCount = 2, linksCount = 0
     );
   });
 
-  return (
-    <div className="relative bg-fw-base rounded-xl" style={{ height: '220px' }}>
-      {/* Edge lines */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none">
-        {edgeLines}
-      </svg>
+  // Compute bounds to center and scale
+  const maxX = Math.max(...nodes.map(n => n.x + NODE_W), 500);
 
-      {/* Nodes */}
-      {nodes.map((node) => (
-        <div
-          key={node.id}
-          className="absolute flex flex-col items-center"
-          style={{ left: node.x, top: node.y }}
-        >
+  return (
+    <div className="relative bg-fw-base rounded-xl overflow-hidden" style={{ height: '200px' }}>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative" style={{ width: maxX + 40, height: 200, transform: `scale(${Math.min(1, (typeof window !== 'undefined' ? 500 : 500) / (maxX + 40))})`, transformOrigin: 'center center' }}>
+          {/* Edge lines */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none">
+            {edgeLines}
+          </svg>
+
+          {/* Nodes */}
+          {nodes.map((node) => (
+            <div
+              key={node.id}
+              className="absolute flex flex-col items-center"
+              style={{ left: node.x, top: node.y }}
+            >
           <div
             className={`w-16 h-16 rounded-xl flex items-center justify-center border-2 transition-shadow ${
               node.isActive
@@ -177,6 +182,8 @@ export function MiniTopology({ connection, cloudRoutersCount = 2, linksCount = 0
           )}
         </div>
       ))}
+        </div>
+      </div>
     </div>
   );
 }
