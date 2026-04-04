@@ -366,53 +366,79 @@ export function BillingPreview({
           )}
         </div>
 
-        {/* Line Items */}
-        <div className="space-y-2 mb-4">
-          {lineItems.map((item, index) => (
-            <div key={index} className="flex items-center justify-between text-figma-base">
-              <span className="text-fw-bodyLight">{item.description}</span>
-              <span className="font-medium text-fw-heading">
-                {item.note ? item.note : item.amount === 0 ? 'Included' : `$${item.amount.toFixed(2)}`}
-              </span>
-            </div>
-          ))}
-        </div>
+        {/* Ledger */}
+        <table className="w-full text-figma-xs">
+          {/* Connection Section */}
+          <thead>
+            <tr>
+              <th colSpan={2} className="text-left text-[10px] font-semibold text-fw-bodyLight uppercase tracking-wider pb-1 pt-2">Connection</th>
+            </tr>
+          </thead>
+          <tbody className="border-b border-fw-secondary">
+            {lineItems.filter(i => i.amount === 0).map((item, idx) => (
+              <tr key={`inc-${idx}`}>
+                <td className="py-1 text-fw-body">{item.description}</td>
+                <td className="py-1 text-right text-fw-bodyLight">{item.note || 'Included'}</td>
+              </tr>
+            ))}
+          </tbody>
 
-        {/* LMCC billing note */}
+          {/* Charges Section */}
+          <thead>
+            <tr>
+              <th colSpan={2} className="text-left text-[10px] font-semibold text-fw-bodyLight uppercase tracking-wider pb-1 pt-3">Charges</th>
+            </tr>
+          </thead>
+          <tbody className="border-b border-fw-secondary">
+            {lineItems.filter(i => i.amount > 0).map((item, idx) => (
+              <tr key={`chg-${idx}`}>
+                <td className="py-1 text-fw-body">{item.description}</td>
+                <td className="py-1 text-right font-medium text-fw-heading">${item.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+              </tr>
+            ))}
+          </tbody>
+
+          {/* Totals Section */}
+          <thead>
+            <tr>
+              <th colSpan={2} className="text-left text-[10px] font-semibold text-fw-bodyLight uppercase tracking-wider pb-1 pt-3">Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="py-1 text-fw-bodyLight">Subtotal</td>
+              <td className="py-1 text-right font-medium text-fw-heading">${subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+            </tr>
+            {planDiscount > 0 && (
+              <tr>
+                <td className="py-1 text-complementary-green">Plan Discount</td>
+                <td className="py-1 text-right font-medium text-complementary-green">-${planDiscount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+              </tr>
+            )}
+            <tr>
+              <td className="py-1 text-fw-bodyLight">Est. Tax (10%)</td>
+              <td className="py-1 text-right font-medium text-fw-heading">${estimatedTax.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+            </tr>
+            <tr className="border-t border-fw-secondary">
+              <td className="pt-2 pb-1 text-figma-sm font-semibold text-fw-heading">Estimated Monthly</td>
+              <td className="pt-2 pb-1 text-right text-figma-sm font-bold text-brand-blue">${total.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        {/* Notes */}
         {isLmcc && (
-          <div className="mb-3 p-2 rounded-lg bg-fw-wash border border-fw-secondary">
-            <p className="text-figma-xs text-fw-bodyLight">
+          <div className="mt-3 p-2 rounded-lg bg-fw-wash border border-fw-secondary">
+            <p className="text-[10px] text-fw-bodyLight leading-tight">
               Estimated pricing - contact AT&T sales for final rates. Billing starts when BGP reaches "Established." Preview: fixed rate. GA: 95th percentile burstable.
             </p>
           </div>
         )}
 
-        {/* Totals */}
-        <div className="border-t border-fw-secondary pt-3 space-y-2">
-          <div className="flex items-center justify-between text-figma-base">
-            <span className="text-fw-bodyLight">Subtotal</span>
-            <span className="font-medium text-fw-heading">${subtotal.toFixed(2)}</span>
-          </div>
-          {planDiscount > 0 && (
-            <div className="flex items-center justify-between text-figma-base">
-              <span className="text-complementary-green">Plan Discount</span>
-              <span className="font-medium text-complementary-green">-${planDiscount.toFixed(2)}</span>
-            </div>
-          )}
-          <div className="flex items-center justify-between text-figma-base">
-            <span className="text-fw-bodyLight">Est. Tax (10%)</span>
-            <span className="font-medium text-fw-heading">${estimatedTax.toFixed(2)}</span>
-          </div>
-          <div className="flex items-center justify-between text-figma-lg font-medium pt-2 border-t border-fw-secondary">
-            <span className="text-fw-heading">Total</span>
-            <span className="text-brand-blue">${total.toFixed(2)}</span>
-          </div>
-        </div>
-
         {selectedPlan.id === 'trial' && (
-          <div className="mt-3 flex items-center justify-between text-figma-base text-complementary-green pt-2 border-t border-fw-secondary">
+          <div className="mt-3 flex items-center justify-between text-figma-xs text-complementary-green pt-2 border-t border-fw-secondary">
             <span className="flex items-center">
-              <Clock className="h-4 w-4 mr-1" />
+              <Clock className="h-3.5 w-3.5 mr-1" />
               Trial Period
             </span>
             <span className="font-medium">30 days</span>
