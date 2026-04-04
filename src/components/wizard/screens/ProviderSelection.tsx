@@ -60,7 +60,7 @@ const CLOUD_PROVIDERS: { id: CloudProvider; name: string; logo: string }[] = [
   {
     id: 'Cisco Jasper',
     name: 'Cisco Jasper',
-    logo: 'https://logo.clearbit.com/cisco.com',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg',
   },
 ];
 

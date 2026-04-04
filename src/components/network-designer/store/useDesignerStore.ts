@@ -14,6 +14,9 @@ export interface Draft {
   nodes: NetworkNode[];
   edges: NetworkEdge[];
   thumbnail?: string;
+  resiliencyTier?: ResiliencyTier | null;
+  selectedProviders?: string[];
+  selectedConnectionType?: string | null;
 }
 
 interface DesignerState {
@@ -224,7 +227,7 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
   setViewMode: (mode) => set({ viewMode: mode, isCreatingEdge: false, edgeStartNodeId: null }),
 
   saveDraft: (name, description) => {
-    const { nodes, edges } = get();
+    const { nodes, edges, resiliencyTier, selectedProviders, selectedConnectionType } = get();
     const draft: Draft = {
       id: `draft-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
       name,
@@ -232,6 +235,9 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
       savedAt: new Date().toISOString(),
       nodes: JSON.parse(JSON.stringify(nodes)),
       edges: JSON.parse(JSON.stringify(edges)),
+      resiliencyTier,
+      selectedProviders: [...selectedProviders],
+      selectedConnectionType,
     };
     set((s) => ({ drafts: [draft, ...s.drafts], currentDraftId: draft.id }));
   },
@@ -246,6 +252,9 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
       selectedNodeId: null,
       selectedEdgeId: null,
       currentDraftId: id,
+      resiliencyTier: draft.resiliencyTier ?? null,
+      selectedProviders: draft.selectedProviders ?? [],
+      selectedConnectionType: draft.selectedConnectionType ?? null,
     });
   },
   deleteDraft: (id) => {
