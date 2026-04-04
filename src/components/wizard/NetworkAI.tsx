@@ -305,13 +305,7 @@ export function NetworkAI({
         {isOpen ? (
           <Brain className="h-6 w-6" />
         ) : (
-          <div className="relative flex items-center justify-center h-10 w-10">
-            <Zap className="h-6 w-6" />
-            <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-fw-success opacity-75 animate-ping"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-fw-success"></span>
-            </span>
-          </div>
+          <Zap className="h-6 w-6" />
         )}
       </button>
 
@@ -319,9 +313,9 @@ export function NetworkAI({
       <div
         ref={dragRef}
         className={`
-          fixed bg-fw-base border border-fw-secondary rounded-2xl shadow-2xl flex flex-col overflow-hidden
-          ${isOpen ? 'w-96 h-[600px] opacity-100' : 'w-0 h-0 opacity-0 pointer-events-none'}
-          ${isDragging ? 'cursor-grabbing select-none' : ''}
+          fixed bg-fw-base border border-fw-secondary rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-opacity duration-300
+          ${isOpen ? 'w-96 h-[600px] opacity-40 hover:opacity-100 focus-within:opacity-100' : 'w-0 h-0 opacity-0 pointer-events-none'}
+          ${isDragging ? 'cursor-grabbing select-none !opacity-100' : ''}
         `}
         style={
           position
@@ -344,14 +338,13 @@ export function NetworkAI({
               <p className="text-figma-sm text-white/70">NetBond Advanced AI Assistant</p>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="flex h-6 items-center justify-center">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fw-success opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-fw-success"></span>
-              </span>
-            </div>
-          </div>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="p-1 rounded-lg hover:bg-white/20 transition-colors text-white/70 hover:text-white"
+            title="Minimize"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+          </button>
         </div>
 
         {/* Messages Container - Scrollable */}
