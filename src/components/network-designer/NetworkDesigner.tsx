@@ -314,6 +314,8 @@ export function NetworkDesigner({
           resiliencyLevel: resiliencyTier || undefined,
           isLmcc: isAwsMax || undefined,
           lmccMetro: isAwsMax ? metros[0] : undefined,
+          selectedProviders: storeProviders.length > 0 ? storeProviders : undefined,
+          selectedConnectionType: storeConnectionType || undefined,
           designerGenerated: true,
         },
       };
