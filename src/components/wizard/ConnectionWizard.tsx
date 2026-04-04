@@ -144,6 +144,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
   // For visual editor, convert connection to nodes and edges
   const [initialNodes, setInitialNodes] = useState<NetworkNode[]>([]);
   const [initialEdges, setInitialEdges] = useState<NetworkEdge[]>([]);
+  const [designerKey, setDesignerKey] = useState(0);
 
   // Initialize from existing connection if provided
   useEffect(() => {
@@ -512,6 +513,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 </div>
               }>
                 <LazyNetworkDesigner
+                  key={designerKey}
                   onComplete={handleComplete}
                   onCancel={handleCancel}
                   initialNodes={initialNodes}
@@ -704,6 +706,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                 onSwitchToVisual={(nodes, edges) => {
                   setInitialNodes(nodes);
                   setInitialEdges(edges);
+                  setDesignerKey(k => k + 1);
                   setMode('visual');
                 }}
               />
