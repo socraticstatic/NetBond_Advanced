@@ -19,6 +19,8 @@ import { AppsConfiguration } from './tabs/AppsConfiguration';
 import { IconButton } from '../common/IconButton';
 import { Button } from '../common/Button';
 import { usePermission } from '../../hooks/usePermission';
+import { ResiliencyMap } from './tabs/ResiliencyMap';
+import { FailoverTestModal } from './modals/FailoverTestModal';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { useEditableField } from '../../hooks/useEditableField';
 import { VNF } from '../../types/vnf';
@@ -44,6 +46,7 @@ export function ConnectionDetails() {
   const [activeTab, setActiveTab] = useState<ConnectionTabType>('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showFailoverTest, setShowFailoverTest] = useState(false);
 
   // VNF state management
   const [showAddVNFModal, setShowAddVNFModal] = useState(false);
@@ -371,6 +374,8 @@ export function ConnectionDetails() {
     switch (activeTab) {
       case 'overview':
         return <ConnectionOverview connection={connection} cloudRoutersCount={cloudRoutersCount} linksCount={linksCount} vnfsCount={vnfsCount} />;
+      case 'resiliency':
+        return <ResiliencyMap connection={connection} />;
       case 'cloudrouters':
         return (
           <NetworkTab
@@ -610,6 +615,19 @@ export function ConnectionDetails() {
                 Delete
               </Button>
             )}
+
+            {/* Test Failover - only for Maximum/Geodiversity */}
+            {((connection.configuration as any)?.resiliencyLevel === 'maximum' ||
+              (connection.configuration as any)?.resiliencyLevel === 'geodiversity' ||
+              (connection.configuration as any)?.isLmcc) && (
+              <Button
+                variant="outline"
+                icon={Activity}
+                onClick={() => setShowFailoverTest(true)}
+              >
+                Test Failover
+              </Button>
+            )}
           </div>
 
           <Button
@@ -683,6 +701,12 @@ export function ConnectionDetails() {
         onClose={() => setDeletingVNF(undefined)}
         onConfirm={handleConfirmDeleteVNF}
         vnfName={deletingVNF?.name || ''}
+      />
+
+      <FailoverTestModal
+        isOpen={showFailoverTest}
+        onClose={() => setShowFailoverTest(false)}
+        connectionName={connection.name}
       />
     </div>
   );
