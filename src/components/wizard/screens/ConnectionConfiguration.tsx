@@ -280,10 +280,15 @@ export function ConnectionConfiguration({
                                   const otherMetroSelected = selected.filter(s => !metroLocations.some(ml => ml.label === s)).length;
                                   const disabledByOtherMetro = otherMetroSelected >= 2 && !isSelected;
 
+                                  // Google: enforce different edge availability domains
+                                  const selectedInMetro = metroLocations.filter(ml => selected.includes(ml.label));
+                                  const sameEdgeDomain = providerId === 'Google' && !isSelected && selectedInMetro.length >= 1
+                                    && loc.edgeDomain && selectedInMetro.some(s => s.edgeDomain === loc.edgeDomain);
+
                                   return (
                                     <button
                                       key={loc.label}
-                                      disabled={disabledByOtherMetro}
+                                      disabled={disabledByOtherMetro || !!sameEdgeDomain}
                                       onClick={() => {
                                         // If selecting from a new metro, clear previous selections
                                         if (!isActiveMetro && selected.length > 0) {
@@ -292,13 +297,15 @@ export function ConnectionConfiguration({
                                         onToggleLocation(providerId, loc.label);
                                       }}
                                       className={`relative p-3 border-2 rounded-lg text-left transition-all text-figma-xs ${
-                                        disabledByOtherMetro ? 'border-fw-secondary bg-fw-wash opacity-40 cursor-not-allowed'
+                                        disabledByOtherMetro || sameEdgeDomain ? 'border-fw-secondary bg-fw-wash opacity-40 cursor-not-allowed'
                                         : isSelected ? 'border-fw-active bg-fw-accent shadow-sm' : 'border-fw-secondary bg-fw-base hover:border-fw-active/50'
                                       }`}
                                     >
                                       <span className="font-medium text-fw-heading block">{loc.label}</span>
                                       {loc.edgeDomain && (
-                                        <span className="text-fw-bodyLight block mt-0.5">Edge: {loc.edgeDomain}</span>
+                                        <span className={`block mt-0.5 ${sameEdgeDomain ? 'text-fw-error' : 'text-fw-bodyLight'}`}>
+                                          Edge: {loc.edgeDomain}{sameEdgeDomain ? ' (same domain)' : ''}
+                                        </span>
                                       )}
                                       {isSelected && <CheckCircle2 className="absolute top-2 right-2 h-3.5 w-3.5 text-fw-link" />}
                                     </button>
