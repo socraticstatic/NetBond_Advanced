@@ -1,3 +1,11 @@
+export interface TenantBrandingConfig {
+  productName: string;
+  primaryColor: string;
+  accentColor: string;
+  fontFamily: string;
+  logo?: string;
+}
+
 export interface Tenant {
   id: string;
   name: string;
@@ -10,6 +18,7 @@ export interface Tenant {
   connectionCount: number;
   createdAt: string;
   lastActivity: string;
+  branding?: TenantBrandingConfig;
 }
 
 export const mockTenants: Tenant[] = [
@@ -25,6 +34,7 @@ export const mockTenants: Tenant[] = [
     connectionCount: 48,
     createdAt: '2023-01-15',
     lastActivity: '2025-11-12',
+    branding: { productName: 'NetBond® Advanced', primaryColor: '#0057B8', accentColor: '#009FDB', fontFamily: 'Inter' },
   },
   {
     id: 'TNT-002',
@@ -38,6 +48,7 @@ export const mockTenants: Tenant[] = [
     connectionCount: 23,
     createdAt: '2023-03-22',
     lastActivity: '2025-11-11',
+    branding: { productName: 'GlobalTech CloudNet', primaryColor: '#059669', accentColor: '#34D399', fontFamily: 'Inter' },
   },
   {
     id: 'TNT-003',
@@ -51,6 +62,7 @@ export const mockTenants: Tenant[] = [
     connectionCount: 8,
     createdAt: '2025-10-28',
     lastActivity: '2025-11-10',
+    branding: { productName: 'AcmeCloud Connect', primaryColor: '#10B981', accentColor: '#34D399', fontFamily: 'Inter' },
   },
   {
     id: 'TNT-004',
@@ -64,6 +76,7 @@ export const mockTenants: Tenant[] = [
     connectionCount: 67,
     createdAt: '2023-06-10',
     lastActivity: '2025-11-12',
+    branding: { productName: 'GNS Cloud Bridge', primaryColor: '#1E3A8A', accentColor: '#F59E0B', fontFamily: 'Inter' },
   },
   {
     id: 'TNT-005',
