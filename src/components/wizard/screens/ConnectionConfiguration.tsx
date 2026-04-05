@@ -391,8 +391,12 @@ export function ConnectionConfiguration({
                   );
                 }
 
-                // Standard: flat location grid
-                const locations = getLocationLabels(providerId);
+                // Standard: locations grouped by metro
+                const fullLocations = getLocations(providerId);
+                const metros = getMetros(providerId);
+                // If no metros defined, fall back to flat list
+                const hasMetros = metros.length > 0;
+
                 return (
                   <div key={providerId} className="border border-fw-secondary rounded-2xl overflow-hidden">
                     <div className="px-5 py-4 bg-fw-wash border-b border-fw-secondary flex items-center justify-between">
@@ -407,26 +411,59 @@ export function ConnectionConfiguration({
                       </span>
                     </div>
 
-                    <div className="p-5">
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        {locations.map((location) => {
-                          const isSelected = selected.includes(location);
-                          return (
-                            <button
-                              key={location}
-                              onClick={() => onToggleLocation(providerId, location)}
-                              className={`relative p-4 border-2 rounded-xl text-left transition-all duration-200 ${
-                                isSelected ? 'border-fw-active bg-fw-blue-light shadow-md' : 'border-fw-secondary bg-fw-base hover:border-fw-active/50 hover:bg-fw-wash'
-                              }`}
-                            >
-                              <span className={`text-figma-sm font-medium block ${isSelected ? 'text-fw-heading' : 'text-fw-body'}`}>
-                                {location}
-                              </span>
-                              {isSelected && <CheckCircle2 className="absolute top-2 right-2 h-4 w-4 text-fw-link" />}
-                            </button>
-                          );
-                        })}
-                      </div>
+                    <div className="p-5 space-y-4">
+                      {hasMetros ? metros.map((metro) => {
+                        const metroLocations = getLocationsInMetro(providerId, metro);
+                        return (
+                          <div key={metro}>
+                            <h5 className="text-figma-sm font-semibold text-fw-bodyLight uppercase tracking-wider mb-2">{metro}</h5>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                              {metroLocations.map((loc) => {
+                                const isSelected = selected.includes(loc.label);
+                                return (
+                                  <button
+                                    key={loc.label}
+                                    onClick={() => onToggleLocation(providerId, loc.label)}
+                                    className={`relative p-3 border-2 rounded-xl text-left transition-all duration-200 ${
+                                      isSelected ? 'border-fw-active bg-fw-blue-light shadow-md' : 'border-fw-secondary bg-fw-base hover:border-fw-active/50 hover:bg-fw-wash'
+                                    }`}
+                                  >
+                                    <span className={`text-figma-sm font-medium block ${isSelected ? 'text-fw-heading' : 'text-fw-body'}`}>
+                                      {loc.label}
+                                    </span>
+                                    {loc.servesRegions && loc.servesRegions.length > 0 && (
+                                      <span className="text-figma-xs text-fw-bodyLight mt-0.5 block">
+                                        {loc.servesRegions.join(', ')}
+                                      </span>
+                                    )}
+                                    {isSelected && <CheckCircle2 className="absolute top-2 right-2 h-4 w-4 text-fw-link" />}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      }) : (
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          {fullLocations.map((loc) => {
+                            const isSelected = selected.includes(loc.label);
+                            return (
+                              <button
+                                key={loc.label}
+                                onClick={() => onToggleLocation(providerId, loc.label)}
+                                className={`relative p-4 border-2 rounded-xl text-left transition-all duration-200 ${
+                                  isSelected ? 'border-fw-active bg-fw-blue-light shadow-md' : 'border-fw-secondary bg-fw-base hover:border-fw-active/50 hover:bg-fw-wash'
+                                }`}
+                              >
+                                <span className={`text-figma-sm font-medium block ${isSelected ? 'text-fw-heading' : 'text-fw-body'}`}>
+                                  {loc.label}
+                                </span>
+                                {isSelected && <CheckCircle2 className="absolute top-2 right-2 h-4 w-4 text-fw-link" />}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
