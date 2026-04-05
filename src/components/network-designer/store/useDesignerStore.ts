@@ -252,6 +252,8 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
       selectedNodeId: null,
       selectedEdgeId: null,
       currentDraftId: id,
+      panOffset: { x: 0, y: 0 },
+      zoomLevel: 1,
       resiliencyTier: draft.resiliencyTier ?? null,
       selectedProviders: draft.selectedProviders ?? [],
       selectedConnectionType: draft.selectedConnectionType ?? null,
@@ -266,12 +268,53 @@ export const useDesignerStore = create<DesignerState>((set, get) => ({
 
   loadTemplate: (nodes, edges) => {
     get().saveToHistory();
-    set({
-      nodes: JSON.parse(JSON.stringify(nodes)),
-      edges: JSON.parse(JSON.stringify(edges)),
-      selectedNodeId: null,
-      selectedEdgeId: null,
-    });
+    const clonedNodes = JSON.parse(JSON.stringify(nodes)) as NetworkNode[];
+
+    // Fit topology centered in the visible canvas area
+    const canvas = document.querySelector('[class*="overflow-hidden"][class*="select-none"]');
+    const vpW = canvas ? canvas.clientWidth : 1000;
+    const vpH = canvas ? canvas.clientHeight - 70 : 430; // toolbar + status bar
+    const padding = 40; // breathing room around edges
+
+    if (clonedNodes.length > 0) {
+      const nodeSize = 64;
+      const labelSpace = 30; // space for labels below nodes
+      const minX = Math.min(...clonedNodes.map(n => n.x));
+      const maxX = Math.max(...clonedNodes.map(n => n.x)) + nodeSize;
+      const minY = Math.min(...clonedNodes.map(n => n.y));
+      const maxY = Math.max(...clonedNodes.map(n => n.y)) + nodeSize + labelSpace;
+      const topoW = maxX - minX;
+      const topoH = maxY - minY;
+
+      // Calculate zoom to fit, capped at 1.0 (never zoom in beyond 100%)
+      const scaleX = (vpW - padding * 2) / topoW;
+      const scaleY = (vpH - padding * 2) / topoH;
+      const zoom = Math.min(scaleX, scaleY, 1.0);
+
+      // Center with pan offset
+      const scaledW = topoW * zoom;
+      const scaledH = topoH * zoom;
+      const panX = (vpW - scaledW) / 2 - minX * zoom;
+      const panY = (vpH - scaledH) / 2 - minY * zoom;
+
+      set({
+        nodes: clonedNodes,
+        edges: JSON.parse(JSON.stringify(edges)),
+        selectedNodeId: null,
+        selectedEdgeId: null,
+        panOffset: { x: panX, y: panY },
+        zoomLevel: zoom,
+      });
+    } else {
+      set({
+        nodes: clonedNodes,
+        edges: JSON.parse(JSON.stringify(edges)),
+        selectedNodeId: null,
+        selectedEdgeId: null,
+        panOffset: { x: 0, y: 0 },
+        zoomLevel: 1,
+      });
+    }
   },
 
   startSimulation: () => set({

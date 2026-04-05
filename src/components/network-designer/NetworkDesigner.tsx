@@ -229,11 +229,10 @@ export function NetworkDesigner({
   }, [addNode]);
 
   // Load a template
+  const storeLoadTemplate = useDesignerStore((s) => s.loadTemplate);
   const handleLoadTemplate = useCallback((templateNodes: NetworkNode[], templateEdges: NetworkEdge[]) => {
-    setNodes(templateNodes);
-    setEdges(templateEdges);
-    saveToHistoryStore();
-  }, [setNodes, setEdges, saveToHistoryStore]);
+    storeLoadTemplate(templateNodes, templateEdges);
+  }, [storeLoadTemplate]);
 
   // Save template handler (logs for now - real storage would be persisted)
   const handleSaveTemplate = useCallback((name: string, description: string) => {
