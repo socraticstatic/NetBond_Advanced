@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { PhaseIndicator } from '../wizard/PhaseIndicator';
+import { APIExplorer } from './APIExplorer';
 import { APIImportStep } from './steps/APIImportStep';
 import { APIConfigureStep } from './steps/APIConfigureStep';
 import { APIMappingStep } from './steps/APIMappingStep';
@@ -65,6 +66,7 @@ export interface DataMapping {
 
 export function APIToolbox() {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<'builder' | 'explorer'>('explorer');
   const [currentStep, setCurrentStep] = useState(1);
   const [apiConfig, setApiConfig] = useState<Partial<APIConfig>>({
     authType: 'none',
@@ -122,6 +124,30 @@ export function APIToolbox() {
 
   return (
     <div className="bg-fw-base rounded-2xl shadow-xl p-8">
+      {/* Tab bar */}
+      <div className="flex items-center gap-1 mb-8 border-b border-fw-secondary">
+        <button
+          onClick={() => setActiveTab('explorer')}
+          className={`px-4 py-2.5 text-figma-base font-medium border-b-2 transition-colors ${
+            activeTab === 'explorer' ? 'border-fw-active text-fw-link' : 'border-transparent text-fw-bodyLight hover:text-fw-body'
+          }`}
+        >
+          API Explorer
+        </button>
+        <button
+          onClick={() => setActiveTab('builder')}
+          className={`px-4 py-2.5 text-figma-base font-medium border-b-2 transition-colors ${
+            activeTab === 'builder' ? 'border-fw-active text-fw-link' : 'border-transparent text-fw-bodyLight hover:text-fw-body'
+          }`}
+        >
+          API Builder
+        </button>
+      </div>
+
+      {activeTab === 'explorer' ? (
+        <APIExplorer />
+      ) : (
+      <>
       <div className="flex items-center justify-center space-x-4 mb-8">
         <button
           onClick={handleCancel}
@@ -180,6 +206,8 @@ export function APIToolbox() {
           </div>
         </div>
       </div>
+      </>
+      )}
     </div>
   );
 }

@@ -1,4 +1,6 @@
-import { Edit2, Trash2, ExternalLink, Download, Play, Pause } from 'lucide-react';
+import { useState } from 'react';
+import { Edit2, Trash2, ExternalLink, Download, Play, Pause, Zap } from 'lucide-react';
+import { ModifyBandwidthModal } from './modals/ModifyBandwidthModal';
 import { useNavigate } from 'react-router-dom';
 import { Connection } from '../../types';
 import { OverflowMenu } from '../common/OverflowMenu';
@@ -22,6 +24,7 @@ export function ConnectionOverflowMenu({
 }: ConnectionOverflowMenuProps) {
   const navigate = useNavigate();
   const updateConnection = useStore(state => state.updateConnection);
+  const [showBandwidthModal, setShowBandwidthModal] = useState(false);
 
   const handleToggleStatus = () => {
     const newStatus = connection.status === 'Active' ? 'Inactive' : 'Active';
@@ -92,6 +95,13 @@ export function ConnectionOverflowMenu({
       onClick: () => navigate(`/connections/${connection.id}`)
     },
     {
+      id: 'bandwidth',
+      label: 'Modify Bandwidth',
+      icon: <Zap className="h-4 w-4" />,
+      onClick: () => setShowBandwidthModal(true),
+      disabled: connection.status === 'Provisioning',
+    },
+    {
       id: 'edit',
       label: 'Edit Connection',
       icon: <Edit2 className="h-4 w-4" />,
@@ -117,12 +127,19 @@ export function ConnectionOverflowMenu({
   ];
 
   return (
-    <OverflowMenu
-      items={menuItems}
-      containerRef={containerRef}
-      className="z-30 rounded-full"
-      isOpen={isActive}
-      onOpenChange={onOpenChange}
-    />
+    <>
+      <OverflowMenu
+        items={menuItems}
+        containerRef={containerRef}
+        className="z-30 rounded-full"
+        isOpen={isActive}
+        onOpenChange={onOpenChange}
+      />
+      <ModifyBandwidthModal
+        connection={connection}
+        isOpen={showBandwidthModal}
+        onClose={() => setShowBandwidthModal(false)}
+      />
+    </>
   );
 }
