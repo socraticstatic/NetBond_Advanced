@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Shield, AlertTriangle, CheckCircle, XCircle, ChevronDown } from 'lucide-react';
+import { Shield, AlertTriangle, ChevronDown } from 'lucide-react';
 import { Connection } from '../../../types';
 
 interface ResiliencyMapProps {
@@ -113,20 +113,17 @@ export function ResiliencyMap({ connection }: ResiliencyMapProps) {
         )}
       </div>
 
-      {/* Status banner */}
-      <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${
-        allUp ? 'bg-fw-successLight border-fw-success/20' : 'bg-fw-errorLight border-fw-error/20'
-      }`}>
-        {allUp ? <CheckCircle className="h-5 w-5 text-fw-success" /> : <AlertTriangle className="h-5 w-5 text-fw-error" />}
-        <div>
-          <p className={`text-figma-base font-medium ${allUp ? 'text-fw-success' : 'text-fw-error'}`}>
-            {allUp ? 'All paths operational' : `${totalPaths - activePaths} of ${totalPaths} paths down`}
-          </p>
-          <p className="text-figma-sm text-fw-bodyLight">
-            {activePaths}/{totalPaths} active paths
-            {!allUp && scenario !== 'normal' && ` | Failover: ${failoverTime} | Packet loss: ${packetLoss}`}
-          </p>
-        </div>
+      {/* Status line */}
+      <div className="flex items-center gap-2 text-figma-sm">
+        <div className={`w-2 h-2 rounded-full ${allUp ? 'bg-fw-success' : 'bg-fw-error'}`} />
+        <span className="font-medium text-fw-heading">
+          {activePaths}/{totalPaths} paths active
+        </span>
+        {!allUp && scenario !== 'normal' && (
+          <span className="text-fw-bodyLight">
+            Failover: {failoverTime} | Packet loss: {packetLoss}
+          </span>
+        )}
       </div>
 
       {/* Path diagram */}
@@ -195,13 +192,9 @@ export function ResiliencyMap({ connection }: ResiliencyMapProps) {
       )}
 
       {tier === 'standard' && (
-        <div className="flex items-start gap-3 p-4 bg-fw-warn/5 border border-fw-warn/20 rounded-xl">
-          <AlertTriangle className="h-5 w-5 text-fw-warn mt-0.5 shrink-0" />
-          <div>
-            <p className="text-figma-base font-medium text-fw-warn">No path diversity</p>
-            <p className="text-figma-sm text-fw-bodyLight">This connection has a single path with no site or metro redundancy. Upgrade to Maximum or Geodiversity for automatic failover protection.</p>
-          </div>
-        </div>
+        <p className="text-figma-sm text-fw-bodyLight">
+          Single path, no site diversity. Upgrade to Maximum or Geodiversity for failover protection.
+        </p>
       )}
     </div>
   );
