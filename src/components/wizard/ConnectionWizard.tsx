@@ -490,7 +490,7 @@ export function ConnectionWizard({ onComplete, onCancel, initialConnection, edit
                         onClick={() => setMode('step-by-step')}
                         className="w-full px-6 py-3 bg-fw-ctaPrimary text-white rounded-full hover:bg-fw-ctaPrimaryHover"
                       >
-                        Switch to Step-by-Step Wizard
+                        Switch to Guided Setup
                       </button>
                       <button
                         onClick={() => window.location.reload()}

@@ -63,7 +63,7 @@ describe('Toolbar', () => {
     it('all buttons have title attributes for tooltips', () => {
       mockScreenWidth = 800;
       render(<Toolbar {...defaultProps} />);
-      expect(screen.getByTitle('Choose template')).toBeInTheDocument();
+      expect(screen.getByTitle('Templates')).toBeInTheDocument();
       expect(screen.getByTitle('Add Cloud Router')).toBeInTheDocument();
       expect(screen.getByTitle('Add network function')).toBeInTheDocument();
       expect(screen.getByTitle('Add cloud destination')).toBeInTheDocument();
@@ -74,7 +74,7 @@ describe('Toolbar', () => {
       expect(screen.getByTitle('Clear canvas')).toBeInTheDocument();
       expect(screen.getByTitle('Export PDF')).toBeInTheDocument();
       expect(screen.getByTitle('Maximize')).toBeInTheDocument();
-      expect(screen.getByTitle('Create connections')).toBeInTheDocument();
+      expect(screen.getByTitle('Deploy')).toBeInTheDocument();
     });
   });
 
@@ -91,10 +91,10 @@ describe('Toolbar', () => {
     it('renders all icon buttons at any width', () => {
       mockScreenWidth = 375;
       render(<Toolbar {...defaultProps} />);
-      expect(screen.getByTitle('Choose template')).toBeInTheDocument();
+      expect(screen.getByTitle('Templates')).toBeInTheDocument();
       expect(screen.getByTitle('Add Cloud Router')).toBeInTheDocument();
       expect(screen.getByTitle('Maximize')).toBeInTheDocument();
-      expect(screen.getByTitle('Create connections')).toBeInTheDocument();
+      expect(screen.getByTitle('Deploy')).toBeInTheDocument();
     });
   });
 
@@ -104,9 +104,9 @@ describe('Toolbar', () => {
       expect(screen.getByTitle('Save updates')).toBeInTheDocument();
     });
 
-    it('shows "Create connections" title when editMode is false', () => {
+    it('shows "Deploy" title when editMode is false', () => {
       render(<Toolbar {...defaultProps} editMode={false} />);
-      expect(screen.getByTitle('Create connections')).toBeInTheDocument();
+      expect(screen.getByTitle('Deploy')).toBeInTheDocument();
     });
 
     it('shows "Save updates" label text at wide viewport in edit mode', () => {
@@ -115,10 +115,10 @@ describe('Toolbar', () => {
       expect(screen.getByText('Save updates')).toBeInTheDocument();
     });
 
-    it('shows "Create" label text at wide viewport in create mode', () => {
+    it('shows "Deploy" label text at wide viewport in create mode', () => {
       mockScreenWidth = 1280;
       render(<Toolbar {...defaultProps} editMode={false} />);
-      expect(screen.getByText('Create')).toBeInTheDocument();
+      expect(screen.getByText('Deploy')).toBeInTheDocument();
     });
 
     it('applies primary button style in edit mode', () => {
@@ -160,14 +160,14 @@ describe('Toolbar', () => {
     it('calls onRunSimulation when Play is clicked', () => {
       const onRunSimulation = vi.fn();
       render(<Toolbar {...defaultProps} hasConnections={true} onRunSimulation={onRunSimulation} />);
-      const playBtn = screen.getByTitle('Run scenario');
+      const playBtn = screen.getByTitle('Simulate');
       playBtn.click();
       expect(onRunSimulation).toHaveBeenCalledOnce();
     });
 
     it('disables Play when no connections', () => {
       render(<Toolbar {...defaultProps} hasConnections={false} />);
-      const playBtn = screen.getByTitle('Run scenario');
+      const playBtn = screen.getByTitle('Simulate');
       expect(playBtn).toBeDisabled();
     });
 

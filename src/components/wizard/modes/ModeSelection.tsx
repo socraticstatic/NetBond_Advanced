@@ -10,7 +10,7 @@ export function ModeSelection({ onModeSelect, onCancel }: ModeSelectionProps) {
   const modes = [
     {
       id: 'step-by-step' as const,
-      name: 'Step-by-Step Wizard',
+      name: 'Guided Setup',
       description: 'Guided connection setup with detailed configuration options',
       attIcon: 'checklist' as const,
       iconBg: 'bg-[#0057B8]',
@@ -19,7 +19,7 @@ export function ModeSelection({ onModeSelect, onCancel }: ModeSelectionProps) {
     },
     {
       id: 'visual' as const,
-      name: 'Visual Designer',
+      name: 'Network Designer',
       description: 'Design your network topology using an interactive canvas',
       attIcon: 'cloudRouter' as const,
       iconBg: 'bg-[#009FDB]',
@@ -28,7 +28,7 @@ export function ModeSelection({ onModeSelect, onCancel }: ModeSelectionProps) {
     },
     {
       id: 'api' as const,
-      name: 'API Configuration',
+      name: 'API Builder',
       description: 'Configure your connection using JSON and API endpoints',
       attIcon: 'apis' as const,
       iconBg: 'bg-[#003D82]',

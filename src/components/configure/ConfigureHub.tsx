@@ -44,7 +44,7 @@ export function ConfigureHub({ defaultTab = 'connections' }: ConfigureHubProps) 
 
   const tabs = [
     { id: 'connections', label: 'Connections', icon: <Server className="h-5 w-5 mr-2" /> },
-    { id: 'groups', label: 'Pools', icon: <Layers className="h-5 w-5 mr-2" /> },
+    { id: 'groups', label: 'Groups', icon: <Layers className="h-5 w-5 mr-2" /> },
     { id: 'users', label: 'Users', icon: <Users className="h-5 w-5 mr-2" /> },
     { id: 'billing', label: 'Billing', icon: <CreditCard className="h-5 w-5 mr-2" /> },
     { id: 'reports', label: 'Reports', icon: <FileText className="h-5 w-5 mr-2" /> },

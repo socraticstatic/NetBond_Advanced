@@ -25,7 +25,7 @@ export interface Connection {
   id: string;
   name: string;
   type: ConnectionType;
-  status: 'Active' | 'Inactive' | 'Pending';
+  status: 'Active' | 'Inactive' | 'Pending' | 'Provisioning';
   bandwidth: string;
   location: string;
   provider?: CloudProvider;

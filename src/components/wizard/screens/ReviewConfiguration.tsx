@@ -449,7 +449,7 @@ export function ReviewConfiguration({
           className="inline-flex items-center gap-2 px-6 h-10 bg-fw-wash border border-fw-secondary rounded-full text-figma-base font-medium text-fw-link hover:bg-fw-accent hover:border-fw-active/30 transition-colors"
         >
           <Settings className="h-4 w-4" />
-          Open in Visual Designer
+          Open in Network Designer
         </button>
       </div>
 

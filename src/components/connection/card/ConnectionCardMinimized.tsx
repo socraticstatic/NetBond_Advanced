@@ -112,6 +112,11 @@ export function ConnectionCardMinimized({
               <span className="flex items-center">
                 Activating...
               </span>
+            ) : connection.status === 'Provisioning' ? (
+              <span className="flex items-center">
+                <Play className="h-3 w-3 mr-1 animate-spin" />
+                Provisioning...
+              </span>
             ) : connection.status === 'Active' ? (
               <>
                 <Pause className="h-3 w-3 mr-1" />

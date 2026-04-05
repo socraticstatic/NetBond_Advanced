@@ -63,7 +63,7 @@ export function AbstractionLevelSelector({
               ? 'bg-blue-50 text-blue-600'
               : 'hover:bg-gray-100 text-gray-500 hover:text-gray-700'
           }`}
-          title="Circuit View"
+          title="Infrastructure View"
           type="button"
         >
           <Circuit className="h-5 w-5" />
