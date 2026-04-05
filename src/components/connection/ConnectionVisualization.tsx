@@ -239,7 +239,7 @@ export function ConnectionVisualization({ connection, standalone = false }: Conn
     window.addToast({
       type: 'info',
       title: 'Edit Network Topology',
-      message: 'Opening Visual Designer to edit your network configuration',
+      message: 'Opening Network Designer to edit your network configuration',
       duration: 3000
     });
   };

@@ -9,6 +9,7 @@ export interface ConnectionSlice {
   removeConnection: (id: string) => Promise<void>;
   setSelectedConnection: (id: string | null) => void;
   fetchConnections: () => Promise<void>;
+  completeProvisioning: (id: string) => void;
 }
 
 export const createConnectionSlice: StateCreator<ConnectionSlice> = (set, get) => ({
@@ -34,11 +35,11 @@ export const createConnectionSlice: StateCreator<ConnectionSlice> = (set, get) =
       // Generate a unique ID if not provided
       const newId = connection.id || `conn-${Date.now()}`;
       
-      // Ensure new connections start as inactive
+      // New connections start in provisioning state
       const newConnection: Connection = {
         ...connection,
         id: newId,
-        status: 'Inactive',
+        status: 'Provisioning',
         performance: {
           latency: '<10ms',
           packetLoss: '<0.1%',
@@ -72,10 +73,10 @@ export const createConnectionSlice: StateCreator<ConnectionSlice> = (set, get) =
       }));
 
       window.addToast({
-        type: 'success',
-        title: 'Connection Created',
-        message: 'New connection has been created. You can activate it from the management dashboard.',
-        duration: 3000
+        type: 'info',
+        title: 'Provisioning Started',
+        message: 'Your connection is being provisioned. This usually takes a few moments.',
+        duration: 4000
       });
 
     } catch (error) {
@@ -99,8 +100,8 @@ export const createConnectionSlice: StateCreator<ConnectionSlice> = (set, get) =
       }
 
       // Check if trying to modify configuration while connection is active
-      // Allow status changes, but prevent other modifications when active
-      const isConfigChange = Object.keys(updates).some(key => key !== 'status');
+      // Allow status changes and provisioning updates, but prevent other modifications when active
+      const isConfigChange = Object.keys(updates).some(key => key !== 'status' && key !== 'performance');
       if (connection.status === 'Active' && isConfigChange) {
         throw new Error('Cannot modify an active connection. Please deactivate the connection first.');
       }
@@ -183,4 +184,32 @@ export const createConnectionSlice: StateCreator<ConnectionSlice> = (set, get) =
   },
 
   setSelectedConnection: (id) => set({ selectedConnection: id }),
+
+  completeProvisioning: (id) => {
+    set((state) => ({
+      connections: state.connections.map((conn) =>
+        conn.id === id
+          ? {
+              ...conn,
+              status: 'Active' as const,
+              performance: {
+                ...conn.performance!,
+                throughput: conn.bandwidth || '1 Gbps',
+                tunnels: 'Active',
+                bandwidthUtilization: Math.floor(Math.random() * 25) + 5,
+                currentUsage: `${Math.floor(Math.random() * 200) + 50} Mbps`,
+                utilizationTrend: Array.from({ length: 7 }, () => Math.floor(Math.random() * 30) + 5),
+              },
+            }
+          : conn
+      ),
+    }));
+
+    window.addToast({
+      type: 'success',
+      title: 'Connection Active',
+      message: 'Connection active. BGP sessions established.',
+      duration: 4000,
+    });
+  },
 });

@@ -138,7 +138,7 @@ export function Toolbar({
       {/* Choose (Templates) */}
       <button
         onClick={onOpenTemplates}
-        title="Choose template"
+        title="Templates"
         className="flex items-center gap-1.5 px-3 py-1.5 text-figma-base font-medium text-fw-heading hover:bg-fw-wash rounded-full transition-colors"
       >
         <LayoutGrid className="h-4 w-4 flex-shrink-0" />
@@ -288,7 +288,7 @@ export function Toolbar({
       <button
         disabled={!hasConnections}
         onClick={onRunSimulation}
-        title={isSimulationRunning ? 'Simulation running' : 'Run scenario'}
+        title={isSimulationRunning ? 'Simulation running' : 'Simulate'}
         className={`p-2 rounded-full transition-colors ${
           isSimulationRunning ? 'text-fw-link bg-blue-50' :
           hasConnections ? 'text-fw-heading hover:bg-fw-wash' : 'text-fw-disabled cursor-not-allowed'
@@ -364,7 +364,7 @@ export function Toolbar({
       <button
         onClick={onCreateConnections}
         disabled={!hasConnections}
-        title={editMode ? 'Save updates' : 'Create connections'}
+        title={editMode ? 'Save updates' : 'Deploy'}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors font-medium text-figma-base ${
           hasConnections
             ? editMode
@@ -374,7 +374,7 @@ export function Toolbar({
         }`}
       >
         <Check className="h-4 w-4 flex-shrink-0" />
-        {showLabels && <span>{editMode ? 'Save updates' : 'Create'}</span>}
+        {showLabels && <span>{editMode ? 'Save updates' : 'Deploy'}</span>}
       </button>
     </div>
   );

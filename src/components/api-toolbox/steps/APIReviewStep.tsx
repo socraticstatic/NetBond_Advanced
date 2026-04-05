@@ -43,7 +43,7 @@ export function APIReviewStep({ config, onChange, onNext }: APIReviewStepProps) 
         <div className="bg-fw-base border border-fw-secondary rounded-lg p-6">
           <h3 className="text-figma-lg font-bold text-fw-heading tracking-[-0.03em] mb-4 flex items-center">
             <Globe className="h-5 w-5 mr-2 text-fw-link" />
-            API Configuration
+            API Builder
           </h3>
           <dl className="space-y-3">
             <div>

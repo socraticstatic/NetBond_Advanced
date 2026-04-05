@@ -56,15 +56,15 @@ const SECTION_WALKTHROUGHS = [
     subtitle: 'Create a new connection.',
     features: [
       {
-        name: 'Step-by-Step Wizard',
+        name: 'Guided Setup',
         description: 'Guided connection setup with detailed configuration options',
       },
       {
-        name: 'Visual Designer',
+        name: 'Network Designer',
         description: 'Design your network topology using an interactive canvas',
       },
       {
-        name: 'API Configuration',
+        name: 'API Builder',
         description: 'Configure your connection using JSON and API endpoints',
       },
     ],

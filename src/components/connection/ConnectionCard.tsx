@@ -20,6 +20,7 @@ import { LMCCKickoffModal } from './lmcc/LMCCKickoffModal';
 import { LMCCOnboardingDrawer } from './lmcc/LMCCOnboardingDrawer';
 import { MOCK_LMCC_CONNECTIONS } from '../../data/lmccService';
 import { LMCCOnboardingConfig } from '../../types/lmcc';
+import { ProvisioningTracker } from './ProvisioningTracker';
 
 interface ConnectionCardProps {
   connection: Connection;
@@ -35,6 +36,8 @@ interface ConnectionCardProps {
 export function ConnectionCard({ connection, groups = [], isMinimized: isMinimizedProp = false, onClick }: ConnectionCardProps) {
   const navigate = useNavigate();
   const updateConnection = useStore(state => state.updateConnection);
+  const completeProvisioning = useStore(state => state.completeProvisioning);
+  const isProvisioning = connection.status === 'Provisioning';
   const [isMinimized, setIsMinimized] = useState(isMinimizedProp);
   const [isPending, setIsPending] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -182,6 +185,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   };
 
   const getHealthStatus = () => {
+    if (connection.status === 'Provisioning') return { label: 'PROVISIONING', color: 'bg-brand-lightBlue text-fw-link' };
     if (connection.status !== 'Active') return { label: 'INACTIVE', color: 'bg-fw-secondary text-fw-disabled' };
 
     const utilization = connection.performance?.bandwidthUtilization || 0;
@@ -204,6 +208,7 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
   };
 
   const handleCardClick = () => {
+    if (isProvisioning) return; // Don't navigate during provisioning
     if (isPendingLmcc) {
       setShowLmccKickoff(true);
       return;
@@ -332,32 +337,43 @@ export function ConnectionCard({ connection, groups = [], isMinimized: isMinimiz
             connection={connection}
           />
 
-          {/* Status - Figma: immediately after header */}
-          <ConnectionCardStatus
-            status={connection.status}
-            bandwidthUtilization={connection.performance?.bandwidthUtilization || 0}
-            isPending={isPending}
-            progress={progress}
-            remainingTime={remainingTime}
-            handleToggleStatus={handleToggleStatus}
-            healthStatus={healthStatus}
-            showEffects={showEffects}
-          />
+          {isProvisioning ? (
+            <div className="p-6 flex-grow">
+              <ProvisioningTracker
+                connectionId={connection.id}
+                onComplete={(id) => completeProvisioning(id)}
+              />
+            </div>
+          ) : (
+            <>
+              {/* Status - Figma: immediately after header */}
+              <ConnectionCardStatus
+                status={connection.status}
+                bandwidthUtilization={connection.performance?.bandwidthUtilization || 0}
+                isPending={isPending}
+                progress={progress}
+                remainingTime={remainingTime}
+                handleToggleStatus={handleToggleStatus}
+                healthStatus={healthStatus}
+                showEffects={showEffects}
+              />
 
-          <div className="p-6 space-y-4 flex-grow">
-            {/* Bandwidth Utilization Bar */}
-            <ConnectionCardProgress
-              performance={connection.performance}
-              bandwidth={connection.bandwidth}
-            />
+              <div className="p-6 space-y-4 flex-grow">
+                {/* Bandwidth Utilization Bar */}
+                <ConnectionCardProgress
+                  performance={connection.performance}
+                  bandwidth={connection.bandwidth}
+                />
 
-            {/* Connection Metrics */}
-            <ConnectionCardMetrics
-              connection={connection}
-              billingInfo={billingInfo}
-              performance={connection.performance}
-            />
-          </div>
+                {/* Connection Metrics */}
+                <ConnectionCardMetrics
+                  connection={connection}
+                  billingInfo={billingInfo}
+                  performance={connection.performance}
+                />
+              </div>
+            </>
+          )}
 
           {/* Action */}
           {isPendingAWS ? (
