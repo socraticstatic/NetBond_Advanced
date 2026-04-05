@@ -23,8 +23,8 @@ const SCENARIOS: Scenario[] = [
     description: 'Full platform access',
     tenantId: 'TNT-001',
     role: 'super-admin',
-    color: 'text-fw-body hover:bg-fw-wash',
-    activeColor: 'bg-fw-purple text-white',
+    color: 'text-fw-bodyLight hover:bg-fw-wash',
+    activeColor: 'bg-fw-heading/10 text-fw-heading',
     navigateTo: '/manage',
   },
   {
@@ -34,8 +34,8 @@ const SCENARIOS: Scenario[] = [
     description: 'Acme Corp portal',
     tenantId: 'TNT-002',
     role: 'admin',
-    color: 'text-fw-body hover:bg-fw-wash',
-    activeColor: 'bg-fw-success text-white',
+    color: 'text-fw-bodyLight hover:bg-fw-wash',
+    activeColor: 'bg-fw-heading/10 text-fw-heading',
     navigateTo: '/manage',
   },
   {
@@ -45,8 +45,8 @@ const SCENARIOS: Scenario[] = [
     description: 'GNS reseller view',
     tenantId: 'TNT-004',
     role: 'admin',
-    color: 'text-fw-body hover:bg-fw-wash',
-    activeColor: 'bg-brand-blue text-white',
+    color: 'text-fw-bodyLight hover:bg-fw-wash',
+    activeColor: 'bg-fw-heading/10 text-fw-heading',
     navigateTo: '/reseller',
   },
 ];
@@ -78,8 +78,8 @@ export function DemoScenarioBar() {
   };
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[55] flex items-center gap-1 px-2 py-1.5 rounded-full bg-fw-base border border-fw-secondary shadow-lg">
-      <span className="text-figma-xs font-medium text-fw-bodyLight px-2 hidden lg:block">Demo:</span>
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[55] flex items-center gap-0.5 px-1.5 py-1 rounded-full bg-fw-base/90 backdrop-blur-sm border border-fw-secondary/50 shadow-sm">
+      <span className="text-[10px] font-medium text-fw-disabled px-1.5 hidden lg:block uppercase tracking-wider">Demo</span>
       {SCENARIOS.map((scenario) => {
         const isActive = activeId === scenario.id;
         const Icon = scenario.icon;
@@ -88,11 +88,11 @@ export function DemoScenarioBar() {
             key={scenario.id}
             onClick={() => handleSelect(scenario)}
             title={scenario.description}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-figma-sm font-medium transition-all duration-200 ${
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium transition-all duration-200 ${
               isActive ? scenario.activeColor : scenario.color
             }`}
           >
-            <Icon className="h-3.5 w-3.5" />
+            <Icon className="h-3 w-3" />
             <span className="hidden sm:inline">{scenario.label}</span>
           </button>
         );
