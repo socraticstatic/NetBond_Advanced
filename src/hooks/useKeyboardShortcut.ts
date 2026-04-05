@@ -33,11 +33,18 @@ export function useKeyboardShortcut(
 
     // Don't trigger shortcuts when typing in input fields
     const target = event.target as HTMLElement;
-    if (
-      target.tagName === 'INPUT' ||
-      target.tagName === 'TEXTAREA' ||
-      target.isContentEditable
-    ) {
+    const active = document.activeElement as HTMLElement | null;
+    const isInput = (el: HTMLElement | null) =>
+      el && (
+        el.tagName === 'INPUT' ||
+        el.tagName === 'TEXTAREA' ||
+        el.tagName === 'SELECT' ||
+        el.isContentEditable ||
+        el.getAttribute('role') === 'textbox' ||
+        el.getAttribute('role') === 'searchbox' ||
+        el.closest('input, textarea, select, [contenteditable="true"]')
+      );
+    if (isInput(target) || isInput(active)) {
       return;
     }
 

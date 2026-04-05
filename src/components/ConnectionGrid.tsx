@@ -34,7 +34,13 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
 
   // Auto-detect pending AWS Max connections and prompt "Did you initiate?"
   const [awsMaxPromptConn, setAwsMaxPromptConn] = useState<Connection | null>(null);
-  const [awsMaxPromptDismissed, setAwsMaxPromptDismissed] = useState(false);
+  const [awsMaxPromptDismissed, _setAwsMaxPromptDismissed] = useState(
+    () => sessionStorage.getItem('lmcc-prompt-dismissed') === 'true'
+  );
+  const setAwsMaxPromptDismissed = (v: boolean) => {
+    _setAwsMaxPromptDismissed(v);
+    if (v) sessionStorage.setItem('lmcc-prompt-dismissed', 'true');
+  };
   const [showKickoff, setShowKickoff] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
