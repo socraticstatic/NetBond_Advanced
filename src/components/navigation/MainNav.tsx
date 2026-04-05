@@ -13,6 +13,7 @@ import { TenantSelector } from './TenantSelector';
 import { TabItem } from '../../types/navigation';
 import { Button } from '../common/Button';
 import { useStore } from '../../store/useStore';
+import { usePermissions } from '../../hooks/usePermission';
 
 interface NavItem {
   label: string;
@@ -33,6 +34,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
   const tenantBranding = useStore(state => state.tenantBranding);
   const activeTenantId = useStore(state => state.activeTenantId);
   const isATT = activeTenantId === 'TNT-001';
+  const { canCreate, canEdit } = usePermissions();
   const [notifications] = useState(3);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -89,6 +91,16 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
   ];
 
   const navItems = items.length ? items : defaultItems;
+
+  // Check if a nav item is disabled by role
+  // User role: can only View. No Create, no Configure.
+  // Admin: full access except Platform admin.
+  // Super-admin: everything.
+  const isNavDisabled = (href: string) => {
+    if (href === '/create' && !canCreate) return true;
+    if (href === '/configure' && !canEdit) return true;
+    return false;
+  };
 
   // Transform NavItem[] to navigation sections for AdaptiveNavigation
   const navSections = [
@@ -188,35 +200,39 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
             <div className="hidden lg:ml-6 lg:flex lg:items-center lg:h-full lg:gap-4 xl:gap-8 2xl:gap-[61px]">
               {navItems.map((item) => {
                 const Icon = item.icon;
+                const disabled = isNavDisabled(item.href);
                 // Special handling: /groups routes should be considered part of /manage
-                const isActive = item.href === '/manage'
+                const isActive = !disabled && (item.href === '/manage'
                   ? (location.pathname.startsWith('/manage') || location.pathname.startsWith('/groups'))
-                  : location.pathname.startsWith(item.href);
+                  : location.pathname.startsWith(item.href));
 
                 return (
                   <Link
                     key={item.href}
-                    to={item.href}
-                    onMouseEnter={() => setHoveredItem(item.href)}
+                    to={disabled ? '#' : item.href}
+                    onClick={disabled ? (e: React.MouseEvent) => e.preventDefault() : undefined}
+                    onMouseEnter={() => !disabled && setHoveredItem(item.href)}
                     onMouseLeave={() => setHoveredItem(null)}
                     className={`
                       group relative inline-flex items-center px-1 py-4 border-b-2 text-figma-base font-medium no-rounded
                       transition-all duration-200 h-full tracking-[-0.03em] whitespace-nowrap
-                      ${isActive
-                        ? 'border-fw-active text-fw-link'
-                        : 'border-transparent text-fw-heading hover:border-fw-secondary hover:text-fw-body'
+                      ${disabled
+                        ? 'border-transparent text-fw-disabled cursor-not-allowed opacity-50'
+                        : isActive
+                          ? 'border-fw-active text-fw-link'
+                          : 'border-transparent text-fw-heading hover:border-fw-secondary hover:text-fw-body'
                       }
                     `}
                   >
                     <Icon className={`
                       h-5 w-5 lg:h-6 lg:w-6 mr-1.5 lg:mr-2 transition-transform duration-200 flex-shrink-0
-                      ${hoveredItem === item.href ? 'scale-110' : ''}
-                      ${isActive ? 'text-fw-link' : 'text-fw-heading'}
-                    `} 
+                      ${!disabled && hoveredItem === item.href ? 'scale-110' : ''}
+                      ${disabled ? 'text-fw-disabled' : isActive ? 'text-fw-link' : 'text-fw-heading'}
+                    `}
                     />
                     <span className={`
                       transition-all duration-200 tracking-[-0.03em]
-                      ${hoveredItem === item.href ? 'transform translate-y-[-1px]' : ''}
+                      ${!disabled && hoveredItem === item.href ? 'transform translate-y-[-1px]' : ''}
                     `}>
                       {item.label}
                     </span>
