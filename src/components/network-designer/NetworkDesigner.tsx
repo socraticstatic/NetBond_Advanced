@@ -108,7 +108,7 @@ export function NetworkDesigner({
   const saveToHistoryStore = useDesignerStore((s) => s.saveToHistory);
   const isSimulationRunning = useDesignerStore((s) => s.isSimulationRunning);
 
-  const isReadOnly = viewMode === 'read' || isAwsMax;
+  const isReadOnly = viewMode === 'read';
 
   // Hooks
   const { addNode, moveNode, updateNode, deleteNode, updateEdge, deleteEdge, clearCanvas } = useNetworkManager();
@@ -151,11 +151,8 @@ export function NetworkDesigner({
       setNodes([]);
       setEdges([]);
     }
-    if (editMode) {
-      setViewMode('read');
-    } else {
-      setViewMode('edit');
-    }
+    // Always start in edit mode - user navigated here to work
+    setViewMode('edit');
     // Only run on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -346,10 +343,10 @@ export function NetworkDesigner({
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [isCreatingEdge, edgeStartNodeId]);
 
-  // Layout
+  // Layout - flex column so banners push canvas down
   const containerClass = isMaximized
-    ? 'fixed inset-0 z-50 bg-fw-wash'
-    : 'relative w-full h-[600px] bg-fw-wash rounded-2xl border border-fw-secondary overflow-hidden';
+    ? 'fixed inset-0 z-50 bg-fw-wash flex flex-col'
+    : 'relative w-full h-[600px] bg-fw-wash rounded-2xl border border-fw-secondary overflow-hidden flex flex-col';
 
   // Find source node position for edge preview
   const edgeSourceNode = edgeStartNodeId ? nodes.find(n => n.id === edgeStartNodeId) : null;
@@ -406,19 +403,19 @@ export function NetworkDesigner({
 
   return (
     <div className={containerClass}>
-      {/* Top banners */}
-      {(editMode || isAwsMax) && (
-        <div className="absolute top-0 left-0 right-0 z-30">
+      {/* Top banners - normal flow, push canvas down */}
+      {(editMode || isAwsMax || showEditWarning) && (
+        <div className="flex-shrink-0">
           {editMode && (
-          <div className="flex items-center justify-between px-4 py-2 bg-fw-base border-b border-fw-secondary">
-            <button
-              onClick={onCancel}
-              className="flex items-center gap-1.5 text-figma-base font-medium text-fw-link hover:text-fw-linkHover transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Connection detail
-            </button>
-          </div>
+            <div className="flex items-center justify-between px-4 py-2 bg-fw-base border-b border-fw-secondary">
+              <button
+                onClick={onCancel}
+                className="flex items-center gap-1.5 text-figma-base font-medium text-fw-link hover:text-fw-linkHover transition-colors"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Connection detail
+              </button>
+            </div>
           )}
           {/* AWS Max auto-provision banner */}
           {isAwsMax && (
@@ -426,11 +423,10 @@ export function NetworkDesigner({
               <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS" className="w-8 h-4 object-contain" />
               <div className="text-figma-sm text-fw-heading">
                 <span className="font-semibold">AWS Max - Auto-Provisioned by AT&T</span>
-                <span className="text-fw-bodyLight ml-2">4 IPEs across 2 diverse sites. This topology is managed automatically.</span>
+                <span className="text-fw-bodyLight ml-2">4 IPEs across 2 diverse sites. Manual edits may be overwritten by auto-provisioning.</span>
               </div>
             </div>
           )}
-
           {showEditWarning && (
             <div className="flex items-center justify-between px-4 py-2 bg-amber-50 border-b border-amber-200">
               <div className="flex items-center gap-2 text-figma-sm text-amber-800">
@@ -445,53 +441,55 @@ export function NetworkDesigner({
         </div>
       )}
 
-      {/* Floating minimize button when maximized */}
-      {isMaximized && (
-        <button
-          onClick={toggleMaximize}
-          className="fixed top-4 right-4 z-[60] inline-flex items-center gap-2 h-9 px-4 text-figma-base font-medium text-fw-heading bg-fw-base border border-fw-secondary rounded-full shadow-lg hover:bg-fw-wash transition-colors"
-        >
-          <Minimize2 className="h-4 w-4" />
-          Minimize
-        </button>
-      )}
+      {/* Canvas area - flex-1 with relative positioning for overlays */}
+      <div className="relative flex-1 min-h-0">
+        {/* Floating minimize button when maximized */}
+        {isMaximized && (
+          <button
+            onClick={toggleMaximize}
+            className="fixed top-4 right-4 z-[60] inline-flex items-center gap-2 h-9 px-4 text-figma-base font-medium text-fw-heading bg-fw-base border border-fw-secondary rounded-full shadow-lg hover:bg-fw-wash transition-colors"
+          >
+            <Minimize2 className="h-4 w-4" />
+            Minimize
+          </button>
+        )}
 
-      {/* StatusBar - top center */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20">
-        <StatusBar nodes={nodes} edges={edges} />
-      </div>
+        {/* StatusBar - top center */}
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20">
+          <StatusBar nodes={nodes} edges={edges} />
+        </div>
 
-      {/* Read/Edit mode toggle - top right */}
-      <div className={`absolute ${editMode ? 'top-14' : 'top-4'} right-4 z-20 flex rounded-full border border-fw-secondary bg-fw-base shadow-sm overflow-hidden p-0.5 gap-0.5`}>
-        <button
-          onClick={() => setViewMode('read')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-figma-sm font-medium transition-colors ${
-            isReadOnly ? 'bg-fw-primary text-white' : 'text-fw-body hover:bg-fw-wash'
-          }`}
-        >
-          <Eye className="h-3.5 w-3.5" />
-          Read
-        </button>
-        <button
-          onClick={() => setViewMode('edit')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-figma-sm font-medium transition-colors ${
-            !isReadOnly ? 'bg-fw-primary text-white' : 'text-fw-body hover:bg-fw-wash'
-          }`}
-        >
-          <Pencil className="h-3.5 w-3.5" />
-          Edit
-        </button>
-      </div>
+        {/* Read/Edit mode toggle - top right */}
+        <div className="absolute top-4 right-4 z-20 flex rounded-full border border-fw-secondary bg-fw-base shadow-sm overflow-hidden p-0.5 gap-0.5">
+          <button
+            onClick={() => setViewMode('read')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-figma-sm font-medium transition-colors ${
+              isReadOnly ? 'bg-fw-primary text-white' : 'text-fw-body hover:bg-fw-wash'
+            }`}
+          >
+            <Eye className="h-3.5 w-3.5" />
+            Read
+          </button>
+          <button
+            onClick={() => setViewMode('edit')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-figma-sm font-medium transition-colors ${
+              !isReadOnly ? 'bg-fw-primary text-white' : 'text-fw-body hover:bg-fw-wash'
+            }`}
+          >
+            <Pencil className="h-3.5 w-3.5" />
+            Edit
+          </button>
+        </div>
 
-      {/* Canvas - fills the container */}
-      <div ref={canvasRef} className="absolute inset-0">
-        <Canvas svgContent={svgContent}>
-          {nodeChildren}
-        </Canvas>
-      </div>
+        {/* Canvas - fills the canvas area */}
+        <div ref={canvasRef} className="absolute inset-0">
+          <Canvas svgContent={svgContent}>
+            {nodeChildren}
+          </Canvas>
+        </div>
 
-      {/* ZoomControls - bottom right */}
-      <ZoomControls />
+        {/* ZoomControls - bottom right */}
+        <ZoomControls />
 
       {/* Templates drawer */}
       <TemplatesDrawer
@@ -590,6 +588,7 @@ export function NetworkDesigner({
 
       {/* Simulation Modal */}
       <NetworkSimulation />
+      </div>{/* end canvas area */}
     </div>
   );
 }
