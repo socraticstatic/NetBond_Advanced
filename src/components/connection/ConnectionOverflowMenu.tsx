@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Edit2, Trash2, ExternalLink, Download, Play, Pause, Zap } from 'lucide-react';
+import { Edit2, Trash2, ExternalLink, Download, Play, Pause, Zap, Copy } from 'lucide-react';
 import { ModifyBandwidthModal } from './modals/ModifyBandwidthModal';
 import { useNavigate } from 'react-router-dom';
 import { Connection } from '../../types';
@@ -114,6 +114,20 @@ export function ConnectionOverflowMenu({
       label: 'Export Data',
       icon: <Download className="h-4 w-4" />,
       onClick: exportConnectionData
+    },
+    {
+      id: 'clone',
+      label: 'Clone Connection',
+      icon: <Copy className="h-4 w-4" />,
+      onClick: () => navigate('/create', {
+        state: {
+          mode: 'step-by-step',
+          selectedProviders: connection.provider ? [connection.provider] : [],
+          selectedConnectionType: connection.type,
+          cloneName: `${connection.name} (Clone)`,
+          cloneBandwidth: connection.bandwidth,
+        }
+      })
     },
     {
       id: 'delete',

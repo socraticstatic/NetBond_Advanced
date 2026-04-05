@@ -7,6 +7,7 @@ import { AttIcon } from '../../icons/AttIcon';
 
 export type ConnectionTabType =
   | 'overview'
+  | 'resiliency'
   | 'cloudrouters'
   | 'links'
   | 'vnfs'
@@ -32,6 +33,7 @@ interface ConnectionTabsProps {
 
 const TABS: Tab[] = [
   { id: 'overview', label: 'Overview', icon: <Activity className="h-5 w-5" /> },
+  { id: 'resiliency', label: 'Resiliency', icon: <Shield className="h-5 w-5" /> },
   { id: 'cloudrouters', label: 'Cloud Routers', icon: <AttIcon name="cloudRouter" className="h-6 w-6" /> },
   { id: 'links', label: 'Links', icon: <Network className="h-5 w-5" /> },
   { id: 'vnfs', label: 'VNFs', icon: <Shield className="h-5 w-5" /> },
