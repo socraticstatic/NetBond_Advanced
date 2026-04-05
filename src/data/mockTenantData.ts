@@ -22,8 +22,8 @@ export const tenantData: Record<string, TenantDataSet> = {
     // Acme Corp
     branding: {
       productName: 'AcmeCloud Connect',
-      primaryColor: '#10B981',
-      accentColor: '#34D399',
+      primaryColor: '#0F766E',
+      accentColor: '#14B8A6',
       fontFamily: 'Inter',
     },
     connections: [

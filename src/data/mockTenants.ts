@@ -48,7 +48,7 @@ export const mockTenants: Tenant[] = [
     connectionCount: 3,
     createdAt: '2025-06-15',
     lastActivity: '2026-04-04',
-    branding: { productName: 'AcmeCloud Connect', primaryColor: '#10B981', accentColor: '#34D399', fontFamily: 'Inter' },
+    branding: { productName: 'AcmeCloud Connect', primaryColor: '#0F766E', accentColor: '#14B8A6', fontFamily: 'Inter' },
   },
   {
     id: 'TNT-003',
@@ -62,7 +62,7 @@ export const mockTenants: Tenant[] = [
     connectionCount: 8,
     createdAt: '2025-10-28',
     lastActivity: '2025-11-10',
-    branding: { productName: 'AcmeCloud Connect', primaryColor: '#10B981', accentColor: '#34D399', fontFamily: 'Inter' },
+    branding: { productName: 'AcmeCloud Connect', primaryColor: '#0F766E', accentColor: '#14B8A6', fontFamily: 'Inter' },
   },
   {
     id: 'TNT-004',
