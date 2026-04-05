@@ -29,7 +29,7 @@ export function MobileManagePage({ connections, groups, activeTab, onTabChange }
 
   const tabs = [
     { id: 'connections' as const, label: 'Connections', icon: Network, count: stats.connections },
-    { id: 'groups' as const, label: 'Groups', icon: Users, count: stats.groups },
+    { id: 'groups' as const, label: 'Pools', icon: Users, count: stats.groups },
     { id: 'control-center' as const, label: 'Control', icon: Grid, count: 0 },
     { id: 'marketplace' as const, label: 'Market', icon: ShoppingBag, count: 0 },
   ];
