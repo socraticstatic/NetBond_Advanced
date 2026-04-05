@@ -26,23 +26,29 @@ export interface ProviderLocation {
 
 export const PROVIDER_LOCATIONS: Record<string, ProviderLocation[]> = {
   'AWS': [
-    { label: 'Ashburn, VA (Equinix)', servesRegions: ['us-east-1'], metro: 'Ashburn' },
-    { label: 'Columbus, OH (Cologix)', servesRegions: ['us-east-2'], metro: 'Columbus' },
-    { label: 'Chicago, IL (CoreSite)', servesRegions: ['us-east-2'], metro: 'Chicago' },
-    { label: 'Dallas, TX (Equinix)', servesRegions: ['us-east-1', 'us-west-2'], metro: 'Dallas' },
-    { label: 'Los Angeles, CA (CoreSite)', servesRegions: ['us-west-2'], metro: 'Los Angeles' },
-    { label: 'Portland, OR (Pittock)', servesRegions: ['us-west-2'], metro: 'Portland' },
+    // Direct Connect locations serve ALL AWS regions via the AWS backbone.
+    // The "servesRegions" field shows the nearest region for latency guidance only.
+    { label: 'Ashburn, VA (Equinix DC1-DC15)', servesRegions: ['us-east-1', 'us-east-2'], metro: 'Ashburn' },
+    { label: 'Columbus, OH (Cologix COL1)', servesRegions: ['us-east-2'], metro: 'Columbus' },
+    { label: 'Chicago, IL (CoreSite CH1)', servesRegions: ['us-east-2', 'us-west-2'], metro: 'Chicago' },
+    { label: 'Dallas, TX (Equinix DA1)', servesRegions: ['us-east-1', 'us-west-2'], metro: 'Dallas' },
+    { label: 'Los Angeles, CA (CoreSite LA1)', servesRegions: ['us-west-2', 'us-west-1'], metro: 'Los Angeles' },
+    { label: 'Portland, OR (Pittock Block)', servesRegions: ['us-west-2'], metro: 'Portland' },
   ],
   'Azure': [
-    { label: 'Ashburn (Equinix)', servesRegions: ['East US', 'East US 2'], metro: 'Washington DC' },
-    { label: 'Ashburn 2 (Coresite)', servesRegions: ['East US', 'East US 2'], metro: 'Washington DC' },
-    { label: 'Chicago (Equinix)', servesRegions: ['North Central US'], metro: 'Chicago' },
-    { label: 'Chicago 2 (Cyrus One)', servesRegions: ['North Central US'], metro: 'Chicago' },
-    { label: 'Dallas (Equinix)', servesRegions: ['South Central US'], metro: 'Dallas' },
-    { label: 'Dallas 2 (Digital Realty)', servesRegions: ['South Central US'], metro: 'Dallas' },
-    { label: 'Los Angeles (CoreSite)', servesRegions: ['West US'], metro: 'Los Angeles' },
-    { label: 'San Jose (Equinix)', servesRegions: ['West US 2'], metro: 'Silicon Valley' },
-    { label: 'Seattle (Equinix)', servesRegions: ['West US 2'], metro: 'Seattle' },
+    // Peering locations where AT&T NetBond is listed as connectivity provider
+    { label: 'Atlanta (Equinix AT1)', servesRegions: ['East US', 'East US 2'], metro: 'Atlanta' },
+    { label: 'Ashburn (Equinix DC2)', servesRegions: ['East US', 'East US 2'], metro: 'Washington DC' },
+    { label: 'Ashburn 2 (CoreSite VA2)', servesRegions: ['East US', 'East US 2'], metro: 'Washington DC' },
+    { label: 'Chicago (Equinix CH1)', servesRegions: ['North Central US'], metro: 'Chicago' },
+    { label: 'Chicago 2 (CoreSite CH1)', servesRegions: ['North Central US'], metro: 'Chicago' },
+    { label: 'Dallas (Equinix DA3)', servesRegions: ['South Central US'], metro: 'Dallas' },
+    { label: 'Dallas 2 (Digital Realty DFW10)', servesRegions: ['South Central US'], metro: 'Dallas' },
+    { label: 'Los Angeles (CoreSite LA1)', servesRegions: ['West US'], metro: 'Los Angeles' },
+    { label: 'Phoenix (EdgeConneX PHX01)', servesRegions: ['West US 3'], metro: 'Phoenix' },
+    { label: 'San Antonio (CyrusOne SA1)', servesRegions: ['South Central US'], metro: 'San Antonio' },
+    { label: 'San Jose (Equinix SV1)', servesRegions: ['West US', 'West US 2'], metro: 'Silicon Valley' },
+    { label: 'Seattle (Equinix SE2)', servesRegions: ['West US 2'], metro: 'Seattle' },
   ],
   'Google': [
     { label: 'Ashburn, VA (Equinix)', servesRegions: ['us-east1', 'us-east4'], metro: 'Ashburn', edgeDomain: 'ash-zone1' },
