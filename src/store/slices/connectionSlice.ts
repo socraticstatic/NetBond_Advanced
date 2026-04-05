@@ -35,11 +35,12 @@ export const createConnectionSlice: StateCreator<ConnectionSlice> = (set, get) =
       // Generate a unique ID if not provided
       const newId = connection.id || `conn-${Date.now()}`;
       
-      // New connections start in provisioning state
+      // New connections start in provisioning state unless they specify
+      // a different status (e.g. 'Pending' for LMCC onboarding flow)
       const newConnection: Connection = {
         ...connection,
         id: newId,
-        status: 'Provisioning',
+        status: connection.status === 'Pending' ? 'Pending' : 'Provisioning',
         performance: {
           latency: '<10ms',
           packetLoss: '<0.1%',
@@ -73,9 +74,11 @@ export const createConnectionSlice: StateCreator<ConnectionSlice> = (set, get) =
       }));
 
       window.addToast({
-        type: 'info',
-        title: 'Provisioning Started',
-        message: 'Your connection is being provisioned. This usually takes a few moments.',
+        type: newConnection.status === 'Pending' ? 'success' : 'info',
+        title: newConnection.status === 'Pending' ? 'Connection Created' : 'Provisioning Started',
+        message: newConnection.status === 'Pending'
+          ? 'Connection created. Complete setup to activate.'
+          : 'Your connection is being provisioned. This usually takes a few moments.',
         duration: 4000
       });
 
