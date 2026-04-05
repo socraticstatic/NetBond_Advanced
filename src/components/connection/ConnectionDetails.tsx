@@ -18,6 +18,7 @@ import { APIConfiguration } from './tabs/APIConfiguration';
 import { AppsConfiguration } from './tabs/AppsConfiguration';
 import { IconButton } from '../common/IconButton';
 import { Button } from '../common/Button';
+import { usePermission } from '../../hooks/usePermission';
 import { ConfirmDialog } from '../common/ConfirmDialog';
 import { useEditableField } from '../../hooks/useEditableField';
 import { VNF } from '../../types/vnf';
@@ -39,6 +40,7 @@ export function ConnectionDetails() {
   const updateConnection = useStore(state => state.updateConnection);
   const removeConnection = useStore(state => state.removeConnection);
   const isMobile = useIsMobile();
+  const canDelete = usePermission('delete');
   const [activeTab, setActiveTab] = useState<ConnectionTabType>('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -598,14 +600,16 @@ export function ConnectionDetails() {
               {connection.status === 'Active' ? 'Active' : 'Inactive'}
             </button>
 
-            {/* Delete Button */}
-            <Button
-              variant="outline-danger"
-              icon={Trash2}
-              onClick={() => setShowDeleteConfirm(true)}
-            >
-              Delete
-            </Button>
+            {/* Delete Button - hidden for User role */}
+            {canDelete && (
+              <Button
+                variant="outline-danger"
+                icon={Trash2}
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                Delete
+              </Button>
+            )}
           </div>
 
           <Button

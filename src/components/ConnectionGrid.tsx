@@ -13,6 +13,7 @@ import { TableFilterPanel, useTableFilters, FilterGroup } from './common/TableFi
 import { useStore } from '../store/useStore';
 import { getGroupsForConnection } from '../utils/groups';
 import { useIsMobile } from '../hooks/useMobileDetection';
+import { usePermission } from '../hooks/usePermission';
 import { LMCCKickoffModal } from './connection/lmcc/LMCCKickoffModal';
 import { LMCCOnboardingDrawer } from './connection/lmcc/LMCCOnboardingDrawer';
 import { MOCK_LMCC_CONNECTIONS } from '../data/lmccService';
@@ -27,6 +28,7 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
   const updateConnection = useStore(state => state.updateConnection);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const canCreate = usePermission('create');
 
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
@@ -242,15 +244,17 @@ export function ConnectionGrid({ connections }: ConnectionGridProps) {
         <div className="h-6 w-px bg-fw-secondary" />
 
         {/* Create Connection - Figma: primary blue pill button */}
-        <Button
-          variant="primary"
-          icon={PlusCircle}
-          onClick={() => navigate('/create')}
-          size="md"
-          className="px-6"
-        >
-          Create Connection
-        </Button>
+        {canCreate && (
+          <Button
+            variant="primary"
+            icon={PlusCircle}
+            onClick={() => navigate('/create')}
+            size="md"
+            className="px-6"
+          >
+            Create Connection
+          </Button>
+        )}
       </div>
 
       <div>
