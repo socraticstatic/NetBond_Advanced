@@ -27,6 +27,7 @@ import { ImpersonationBanner } from './components/common/ImpersonationBanner';
 import { PWAUpdatePrompt, usePWAUpdate } from './components/common/PWAUpdatePrompt';
 import { MaintenanceModal } from './components/common/MaintenanceModal';
 import { DemoRoleSwitcher } from './components/common/DemoRoleSwitcher';
+import { DemoScenarioBar } from './components/common/DemoScenarioBar';
 
 // Optimized lazy loading with better error handling
 const LazyConnectionWizard = lazy(() =>
@@ -210,6 +211,12 @@ const LazyMaintenancePage = lazy(() =>
 const LazyNewsPage = lazy(() =>
   import('./components/pages/NewsPage').then(module => ({
     default: module.NewsPage
+  }))
+);
+
+const LazyResellerDashboard = lazy(() =>
+  import('./components/reseller/ResellerDashboard').then(module => ({
+    default: module.ResellerDashboard
   }))
 );
 
@@ -470,6 +477,14 @@ function App() {
                   )
                 } />
 
+                <Route path="/reseller" element={
+                  <AsyncBoundary fallback={<LoadingFallback />}>
+                    <Suspense fallback={<LoadingFallback />}>
+                      <LazyResellerDashboard />
+                    </Suspense>
+                  </AsyncBoundary>
+                } />
+
                 <Route path="/profile" element={
                   <AsyncBoundary fallback={<LoadingFallback />}>
                     <SubNav
@@ -687,6 +702,7 @@ function App() {
             />
             {/* SmartAssistant removed */}
             <FeedbackWidget />
+            <DemoScenarioBar />
             <DemoRoleSwitcher />
             <MaintenanceModal
               isOpen={showMaintenance}

@@ -12,7 +12,7 @@ export function DemoRoleSwitcher() {
   const setRole = useStore(state => state.setRole);
 
   return (
-    <div className="fixed bottom-4 right-4 z-[100] flex items-center gap-1 px-1.5 py-1.5 rounded-full bg-fw-base border border-fw-secondary shadow-lg">
+    <div className="fixed bottom-16 right-4 z-[100] flex items-center gap-1 px-1.5 py-1.5 rounded-full bg-fw-base border border-fw-secondary shadow-lg">
       {ROLES.map((role) => {
         const isActive = currentRole === role.id;
         return (
