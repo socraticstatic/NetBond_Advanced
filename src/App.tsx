@@ -26,6 +26,7 @@ import { GlobalKeyboardShortcuts } from './components/common/GlobalKeyboardShort
 import { ImpersonationBanner } from './components/common/ImpersonationBanner';
 import { PWAUpdatePrompt, usePWAUpdate } from './components/common/PWAUpdatePrompt';
 import { MaintenanceModal } from './components/common/MaintenanceModal';
+import { DemoRoleSwitcher } from './components/common/DemoRoleSwitcher';
 
 // Optimized lazy loading with better error handling
 const LazyConnectionWizard = lazy(() =>
@@ -686,6 +687,7 @@ function App() {
             />
             {/* SmartAssistant removed */}
             <FeedbackWidget />
+            <DemoRoleSwitcher />
             <MaintenanceModal
               isOpen={showMaintenance}
               onClose={() => setShowMaintenance(false)}
