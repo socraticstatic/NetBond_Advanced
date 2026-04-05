@@ -74,7 +74,7 @@ describe('Toolbar', () => {
       expect(screen.getByTitle('Clear canvas')).toBeInTheDocument();
       expect(screen.getByTitle('Export PDF')).toBeInTheDocument();
       expect(screen.getByTitle('Maximize')).toBeInTheDocument();
-      expect(screen.getByTitle('Deploy')).toBeInTheDocument();
+      expect(screen.getByTitle('Create connections')).toBeInTheDocument();
     });
   });
 
@@ -94,7 +94,7 @@ describe('Toolbar', () => {
       expect(screen.getByTitle('Templates')).toBeInTheDocument();
       expect(screen.getByTitle('Add Cloud Router')).toBeInTheDocument();
       expect(screen.getByTitle('Maximize')).toBeInTheDocument();
-      expect(screen.getByTitle('Deploy')).toBeInTheDocument();
+      expect(screen.getByTitle('Create connections')).toBeInTheDocument();
     });
   });
 
@@ -104,9 +104,9 @@ describe('Toolbar', () => {
       expect(screen.getByTitle('Save updates')).toBeInTheDocument();
     });
 
-    it('shows "Deploy" title when editMode is false', () => {
+    it('shows "Create connections" title when editMode is false', () => {
       render(<Toolbar {...defaultProps} editMode={false} />);
-      expect(screen.getByTitle('Deploy')).toBeInTheDocument();
+      expect(screen.getByTitle('Create connections')).toBeInTheDocument();
     });
 
     it('shows "Save updates" label text at wide viewport in edit mode', () => {
@@ -115,10 +115,10 @@ describe('Toolbar', () => {
       expect(screen.getByText('Save updates')).toBeInTheDocument();
     });
 
-    it('shows "Deploy" label text at wide viewport in create mode', () => {
+    it('shows "Create" label text at wide viewport in create mode', () => {
       mockScreenWidth = 1280;
       render(<Toolbar {...defaultProps} editMode={false} />);
-      expect(screen.getByText('Deploy')).toBeInTheDocument();
+      expect(screen.getByText('Create')).toBeInTheDocument();
     });
 
     it('applies primary button style in edit mode', () => {

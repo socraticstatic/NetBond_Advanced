@@ -364,7 +364,7 @@ export function Toolbar({
       <button
         onClick={onCreateConnections}
         disabled={!hasConnections}
-        title={editMode ? 'Save updates' : 'Deploy'}
+        title={editMode ? 'Save updates' : 'Create connections'}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors font-medium text-figma-base ${
           hasConnections
             ? editMode
@@ -374,7 +374,7 @@ export function Toolbar({
         }`}
       >
         <Check className="h-4 w-4 flex-shrink-0" />
-        {showLabels && <span>{editMode ? 'Save updates' : 'Deploy'}</span>}
+        {showLabels && <span>{editMode ? 'Save updates' : 'Create'}</span>}
       </button>
     </div>
   );
