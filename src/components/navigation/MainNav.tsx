@@ -12,6 +12,7 @@ import { AdaptiveNavigation } from './AdaptiveNavigation';
 import { TenantSelector } from './TenantSelector';
 import { TabItem } from '../../types/navigation';
 import { Button } from '../common/Button';
+import { useStore } from '../../store/useStore';
 
 interface NavItem {
   label: string;
@@ -29,6 +30,9 @@ interface MainNavProps {
 export function MainNav({ items = [], onSearch }: MainNavProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const tenantBranding = useStore(state => state.tenantBranding);
+  const activeTenantId = useStore(state => state.activeTenantId);
+  const isATT = activeTenantId === 'TNT-001';
   const [notifications] = useState(3);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -164,8 +168,19 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
               tabIndex={0}
             >
               <div className="flex items-center">
-                <span className="text-base font-bold text-brand-accent tracking-[-0.03em]">AT&T</span>
-                <span className="ml-2 text-base font-bold text-black tracking-[-0.03em]">NetBond<sup className="text-[10px]">®</sup> Advanced</span>
+                {isATT ? (
+                  <>
+                    <span className="text-base font-bold text-brand-accent tracking-[-0.03em]">AT&T</span>
+                    <span className="ml-2 text-base font-bold text-black tracking-[-0.03em]">NetBond<sup className="text-[10px]">®</sup> Advanced</span>
+                  </>
+                ) : (
+                  <span
+                    className="text-base font-bold tracking-[-0.03em]"
+                    style={{ color: tenantBranding.primaryColor }}
+                  >
+                    {tenantBranding.productName}
+                  </span>
+                )}
               </div>
             </div>
 

@@ -1,17 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Upload, RotateCcw, Eye, Save, Palette, Type, Image as ImageIcon } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Tenant } from '../../data/mockTenants';
+import { useStore } from '../../store/useStore';
+import { applyBranding, DEFAULT_BRANDING } from '../../utils/theme';
 
 interface BrandingCustomizationProps {
   tenant: Tenant;
 }
 
 export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
-  const [primaryColor, setPrimaryColor] = useState('#0066CC');
-  const [secondaryColor, setSecondaryColor] = useState('#00A0E3');
-  const [fontFamily, setFontFamily] = useState('Inter');
+  const tenantBranding = useStore(state => state.tenantBranding);
+  const updateTenantBranding = useStore(state => state.updateTenantBranding);
+
+  const [primaryColor, setPrimaryColor] = useState(tenantBranding.primaryColor || '#0066CC');
+  const [secondaryColor, setSecondaryColor] = useState(tenantBranding.accentColor || '#00A0E3');
+  const [fontFamily, setFontFamily] = useState(tenantBranding.fontFamily || 'Inter');
   const [previewMode, setPreviewMode] = useState<'light' | 'dark'>('light');
+
+  // Sync from store when tenant changes
+  useEffect(() => {
+    setPrimaryColor(tenantBranding.primaryColor);
+    setSecondaryColor(tenantBranding.accentColor);
+    setFontFamily(tenantBranding.fontFamily);
+  }, [tenantBranding]);
 
   const colorPresets = [
     { name: 'AT&T Blue', primary: '#0066CC', secondary: '#00A0E3' },
@@ -31,22 +43,33 @@ export function BrandingCustomization({ tenant }: BrandingCustomizationProps) {
   ];
 
   const handleSave = () => {
+    // Persist to store and apply CSS variables live
+    updateTenantBranding({
+      primaryColor,
+      accentColor: secondaryColor,
+      fontFamily,
+    });
     window.addToast({
       type: 'success',
       title: 'Branding Saved',
-      message: 'Tenant branding has been updated successfully',
+      message: 'Branding updated. Changes are live across the platform.',
       duration: 3000,
     });
   };
 
   const handleReset = () => {
-    setPrimaryColor('#0066CC');
-    setSecondaryColor('#00A0E3');
-    setFontFamily('Inter');
+    setPrimaryColor(DEFAULT_BRANDING.primaryColor);
+    setSecondaryColor(DEFAULT_BRANDING.accentColor);
+    setFontFamily(DEFAULT_BRANDING.fontFamily);
+    updateTenantBranding({
+      primaryColor: DEFAULT_BRANDING.primaryColor,
+      accentColor: DEFAULT_BRANDING.accentColor,
+      fontFamily: DEFAULT_BRANDING.fontFamily,
+    });
     window.addToast({
       type: 'info',
       title: 'Branding Reset',
-      message: 'Branding has been reset to default values',
+      message: 'Branding has been reset to AT&T defaults',
       duration: 3000,
     });
   };

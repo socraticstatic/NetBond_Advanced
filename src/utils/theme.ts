@@ -80,3 +80,56 @@ function isLightColor(hex: string): boolean {
 function getContrastTextColor(bgHex: string): string {
   return isLightColor(bgHex) ? '#000000' : '#ffffff';
 }
+
+/**
+ * Tenant branding configuration
+ */
+export interface BrandingConfig {
+  productName: string;
+  primaryColor: string;
+  accentColor: string;
+  fontFamily: string;
+  logo?: string;
+}
+
+export const DEFAULT_BRANDING: BrandingConfig = {
+  productName: 'NetBond® Advanced',
+  primaryColor: '#0057B8',
+  accentColor: '#009FDB',
+  fontFamily: 'Inter',
+};
+
+/**
+ * Applies tenant branding by mapping brand colors to CSS custom properties.
+ * Called on tenant switch and branding editor save.
+ */
+export function applyBranding(branding: BrandingConfig): void {
+  const root = document.documentElement;
+  const { primaryColor, accentColor } = branding;
+
+  // Map to existing Tailwind/Figma tokens
+  root.style.setProperty('--color-brand-primary', primaryColor);
+  root.style.setProperty('--color-brand-accent', accentColor);
+
+  // Generate hover variant (darken primary by 10%)
+  const { r, g, b } = hexToRGB(primaryColor);
+  const darken = (v: number) => Math.max(0, Math.floor(v * 0.85));
+  root.style.setProperty('--color-brand-primary-hover', `rgb(${darken(r)}, ${darken(g)}, ${darken(b)})`);
+
+  // Light tint of accent for backgrounds
+  root.style.setProperty('--color-brand-accent-light', hexToRGBA(accentColor, 0.1));
+
+  // Font family
+  if (branding.fontFamily && branding.fontFamily !== 'Inter') {
+    root.style.setProperty('--font-family-brand', branding.fontFamily);
+  } else {
+    root.style.removeProperty('--font-family-brand');
+  }
+}
+
+/**
+ * Resets branding to AT&T defaults
+ */
+export function resetBranding(): void {
+  applyBranding(DEFAULT_BRANDING);
+}
