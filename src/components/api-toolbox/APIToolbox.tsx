@@ -124,20 +124,24 @@ export function APIToolbox() {
 
   return (
     <div className="bg-fw-base rounded-2xl shadow-xl p-8">
-      {/* Tab bar */}
-      <div className="flex items-center gap-1 mb-8 border-b border-fw-secondary">
+      {/* Tab bar - rounded pill style */}
+      <div className="flex items-center gap-2 mb-8">
         <button
           onClick={() => setActiveTab('explorer')}
-          className={`px-4 py-2.5 text-figma-base font-medium border-b-2 transition-colors ${
-            activeTab === 'explorer' ? 'border-fw-active text-fw-link' : 'border-transparent text-fw-bodyLight hover:text-fw-body'
+          className={`px-5 h-9 rounded-full text-figma-base font-medium transition-colors ${
+            activeTab === 'explorer'
+              ? 'bg-fw-primary text-white'
+              : 'bg-fw-wash text-fw-body border border-fw-secondary hover:bg-fw-accent'
           }`}
         >
           API Explorer
         </button>
         <button
           onClick={() => setActiveTab('builder')}
-          className={`px-4 py-2.5 text-figma-base font-medium border-b-2 transition-colors ${
-            activeTab === 'builder' ? 'border-fw-active text-fw-link' : 'border-transparent text-fw-bodyLight hover:text-fw-body'
+          className={`px-5 h-9 rounded-full text-figma-base font-medium transition-colors ${
+            activeTab === 'builder'
+              ? 'bg-fw-primary text-white'
+              : 'bg-fw-wash text-fw-body border border-fw-secondary hover:bg-fw-accent'
           }`}
         >
           API Builder
