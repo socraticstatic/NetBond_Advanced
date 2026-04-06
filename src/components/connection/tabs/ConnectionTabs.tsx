@@ -7,7 +7,6 @@ import { AttIcon } from '../../icons/AttIcon';
 
 export type ConnectionTabType =
   | 'overview'
-  | 'resiliency'
   | 'cloudrouters'
   | 'links'
   | 'vnfs'
@@ -33,7 +32,6 @@ interface ConnectionTabsProps {
 
 const TABS: Tab[] = [
   { id: 'overview', label: 'Overview', icon: <Activity className="h-5 w-5" /> },
-  { id: 'resiliency', label: 'Resiliency', icon: <Shield className="h-5 w-5" /> },
   { id: 'cloudrouters', label: 'Cloud Routers', icon: <AttIcon name="cloudRouter" className="h-6 w-6" /> },
   { id: 'links', label: 'Links', icon: <Network className="h-5 w-5" /> },
   { id: 'vnfs', label: 'VNFs', icon: <Shield className="h-5 w-5" /> },
@@ -49,7 +47,7 @@ const TABS: Tab[] = [
 export function ConnectionTabs({ activeTab, onTabChange }: ConnectionTabsProps) {
   return (
     <div className="border-b border-fw-secondary">
-      <nav className="-mb-px flex items-center gap-0 overflow-x-auto scrollbar-none" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <nav className="-mb-px flex items-center gap-0">
         {TABS.map((tab) => (
           <button
             key={tab.id}

@@ -374,8 +374,6 @@ export function ConnectionDetails() {
     switch (activeTab) {
       case 'overview':
         return <ConnectionOverview connection={connection} cloudRoutersCount={cloudRoutersCount} linksCount={linksCount} vnfsCount={vnfsCount} />;
-      case 'resiliency':
-        return <ResiliencyMap connection={connection} />;
       case 'cloudrouters':
         return (
           <NetworkTab
