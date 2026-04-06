@@ -112,3 +112,10 @@ stats.html
 .bolt-sync-timestamp
 # Electron build output
 release/
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+.claude/settings.local.json
