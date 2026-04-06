@@ -1181,33 +1181,24 @@ export function UserProfile() {
       {/* Get the App */}
       <div className="bg-fw-base rounded-xl border border-fw-secondary p-6 mt-8">
         <h3 className="text-figma-base font-bold text-fw-heading mb-4">Get the App</h3>
+        <p className="text-figma-sm text-fw-bodyLight mb-4">Download and double-click. No setup, no terminal, no login.</p>
 
-        <div className="space-y-4">
-          <div>
-            <p className="text-figma-sm font-medium text-fw-heading">Desktop App (recommended)</p>
-            <p className="text-figma-sm text-fw-bodyLight mt-1">
-              Download and double-click to run. No setup required.
-            </p>
-            <p className="text-figma-sm text-fw-bodyLight mt-1">
-              Available at <span className="font-mono text-fw-link">github.com/socraticstatic/NetBond_Advanced/releases</span>
-            </p>
-          </div>
-
-          <div className="border-t border-fw-secondary pt-4">
-            <p className="text-figma-sm font-medium text-fw-heading">Developer Setup</p>
-            <p className="text-figma-sm text-fw-bodyLight mt-1">
-              Requires <span className="font-mono">Node.js 18+</span> from <span className="font-mono text-fw-link">nodejs.org</span>
-            </p>
-            <div className="mt-2 bg-fw-heading rounded-lg p-3 font-mono text-figma-xs text-green-300">
-              <div>git clone github.com/socraticstatic/NetBond_Advanced</div>
-              <div>cd NetBond_Advanced</div>
-              <div>npm install</div>
-              <div>npm run dev</div>
-            </div>
-          </div>
+        <div className="flex items-center gap-3">
+          <a
+            href="https://github.com/socraticstatic/NetBond_Advanced/releases/download/v1.0.0/AT.T.NetBond.Advanced-1.0.0-arm64.dmg"
+            className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-fw-primary text-white text-figma-base font-medium hover:bg-fw-primaryHover transition-colors"
+          >
+            Download for Mac
+          </a>
+          <a
+            href="https://github.com/socraticstatic/NetBond_Advanced/releases/download/v1.0.0/AT.T.NetBond.Advanced.Setup.1.0.0.exe"
+            className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-fw-base text-fw-heading text-figma-base font-medium border border-fw-secondary hover:bg-fw-wash transition-colors"
+          >
+            Download for Windows
+          </a>
         </div>
 
-        <p className="text-figma-sm text-fw-bodyLight mt-4">Mac and Windows. No internet needed after install.</p>
+        <p className="text-figma-sm text-fw-bodyLight mt-4">Mac: open the .dmg, drag to Applications. Windows: run the installer.</p>
       </div>
 
       {/* Permission Matrix Modal */}
