@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react';
 import {
-  Plus, Play, Pause, Edit2, Trash2, X, Copy,
+  Plus, Play, Pause, Edit2, Trash2, X,
   Shield, AlertTriangle, Check, Network, Layers,
   ChevronDown, ChevronUp, Globe, ArrowRight, Settings,
   Upload, Download, FileText
 } from 'lucide-react';
 import { AttIcon } from '../../icons/AttIcon';
+import { CopyButton } from '../../common/CopyButton';
 import { Button } from '../../common/Button';
 import { SearchFilterBar } from '../../common/SearchFilterBar';
 import { TableFilterPanel, useTableFilters, FilterGroup } from '../../common/TableFilterPanel';
@@ -19,24 +20,6 @@ import { Link } from '../../../types';
 import { Modal } from '../../common/Modal';
 import { SideDrawer } from '../../common/SideDrawer';
 import { FormField } from '../../form/FormField';
-
-function CopyBtn({ value }: { value: string }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    <button
-      onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(value); setCopied(true); setTimeout(() => setCopied(false), 1200); }}
-      className="relative p-1 text-fw-disabled hover:text-fw-link rounded transition-colors"
-      title="Copy"
-    >
-      {copied ? <Check className="h-3 w-3 text-fw-success" /> : <Copy className="h-3 w-3" />}
-      {copied && (
-        <span className="absolute -top-6 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-[9px] font-medium bg-fw-heading text-white whitespace-nowrap">
-          Copied
-        </span>
-      )}
-    </button>
-  );
-}
 
 interface PoliciesTabProps {
   connection: Connection;
@@ -622,7 +605,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                             <code className="flex-1 px-3 py-1.5 bg-fw-wash border border-fw-secondary rounded-lg text-figma-sm font-mono text-fw-heading">
                               {prefix.value}
                             </code>
-                            <CopyBtn value={prefix.value} />
+                            <CopyButton value={prefix.value} />
                             <span className="text-figma-sm text-fw-bodyLight w-14">{prefix.action}</span>
                             <button onClick={() => removePrefix(policy.globalPolicyId, prefix.id)} className="text-fw-disabled hover:text-fw-error">
                               <X className="h-3.5 w-3.5" />
@@ -668,7 +651,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                                 <code className="flex-1 px-3 py-1.5 bg-fw-base border border-fw-secondary rounded-lg text-figma-sm font-mono text-fw-heading">
                                   {comm.value}
                                 </code>
-                                <CopyBtn value={comm.value} />
+                                <CopyButton value={comm.value} />
                                 <select
                                   value={comm.action}
                                   onChange={(e) => {
@@ -716,7 +699,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                               {policy.asPathFilters.map(asp => (
                                 <div key={asp.id} className="flex items-center gap-2">
                                   <code className="flex-1 px-3 py-1.5 bg-fw-base border border-fw-secondary rounded-lg text-figma-sm font-mono text-fw-heading">{asp.pattern}</code>
-                                  <CopyBtn value={asp.pattern} />
+                                  <CopyButton value={asp.pattern} />
                                   <span className="text-figma-sm text-fw-bodyLight">{asp.action}</span>
                                 </div>
                               ))}

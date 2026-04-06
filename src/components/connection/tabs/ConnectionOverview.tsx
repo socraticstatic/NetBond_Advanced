@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Network, Copy, Check } from 'lucide-react';
+import { Network } from 'lucide-react';
+import { CopyButton } from '../../common/CopyButton';
 import { Connection } from '../../../types';
 import { MiniTopology } from '../MiniTopology';
 import { LMCCStatusPanel } from '../lmcc/LMCCStatusPanel';
@@ -14,30 +15,13 @@ interface ConnectionOverviewProps {
   vnfsCount?: number;
 }
 
-function CopyVal({ value }: { value: string }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    <button
-      onClick={() => { navigator.clipboard.writeText(value); setCopied(true); setTimeout(() => setCopied(false), 1200); }}
-      className="relative p-1 text-fw-disabled hover:text-fw-link rounded transition-colors"
-    >
-      {copied ? <Check className="h-3 w-3 text-fw-success" /> : <Copy className="h-3 w-3" />}
-      {copied && (
-        <span className="absolute -top-6 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-[9px] font-medium bg-fw-heading text-white whitespace-nowrap">
-          Copied
-        </span>
-      )}
-    </button>
-  );
-}
-
 function Row({ label, value, copy }: { label: string; value: string | React.ReactNode; copy?: string }) {
   return (
     <div className="flex items-center justify-between py-2.5 border-b border-fw-secondary/50 last:border-b-0">
       <span className="text-figma-sm text-fw-bodyLight">{label}</span>
       <div className="flex items-center gap-1.5">
         <span className="text-figma-sm font-medium text-fw-heading">{value}</span>
-        {copy && <CopyVal value={copy} />}
+        {copy && <CopyButton value={copy} />}
       </div>
     </div>
   );
