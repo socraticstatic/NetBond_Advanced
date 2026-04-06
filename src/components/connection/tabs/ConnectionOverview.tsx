@@ -9,6 +9,7 @@ import { IPEInfoTooltip } from '../../common/IPEInfoTooltip';
 import { BandwidthAdjuster } from '../BandwidthAdjuster';
 import { LMCCStatusPanel } from '../lmcc/LMCCStatusPanel';
 import { MOCK_LMCC_CONNECTIONS } from '../../../data/lmccService';
+import { ResiliencyMap } from './ResiliencyMap';
 
 interface ConnectionOverviewProps {
   connection: Connection;
@@ -403,6 +404,11 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Resiliency Architecture */}
+      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
+        <ResiliencyMap connection={connection} />
       </div>
     </div>
   );
