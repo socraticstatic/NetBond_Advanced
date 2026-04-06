@@ -261,7 +261,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
           </div>
 
           {/* Right Side: Actions */}
-          <div className="flex items-center space-x-2 lg:space-x-4 flex-shrink-0">
+          <div className="flex items-center space-x-2 lg:space-x-4 flex-shrink-0 pr-2">
             {!isMenuOpen && !isMobile && (
               <>
                 <SearchBar onSearch={onSearch} />
