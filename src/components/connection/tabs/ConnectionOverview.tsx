@@ -1,12 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, Wifi, Signal, Clock, Network, Shield, Globe, Server, TrendingUp, ArrowUpDown, Group as UserGroup, Link2, Box, Ticket } from 'lucide-react';
-import { AttIcon } from '../../icons/AttIcon';
+import { Network, Copy, Check } from 'lucide-react';
 import { Connection } from '../../../types';
 import { MiniTopology } from '../MiniTopology';
-
-import { IPEInfoTooltip } from '../../common/IPEInfoTooltip';
-import { BandwidthAdjuster } from '../BandwidthAdjuster';
 import { LMCCStatusPanel } from '../lmcc/LMCCStatusPanel';
 import { MOCK_LMCC_CONNECTIONS } from '../../../data/lmccService';
 import { ResiliencyMap } from './ResiliencyMap';
@@ -18,108 +14,131 @@ interface ConnectionOverviewProps {
   vnfsCount?: number;
 }
 
+function CopyVal({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      onClick={() => { navigator.clipboard.writeText(value); setCopied(true); setTimeout(() => setCopied(false), 1200); }}
+      className="relative p-1 text-fw-disabled hover:text-fw-link rounded transition-colors"
+    >
+      {copied ? <Check className="h-3 w-3 text-fw-success" /> : <Copy className="h-3 w-3" />}
+      {copied && (
+        <span className="absolute -top-6 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-[9px] font-medium bg-fw-heading text-white whitespace-nowrap">
+          Copied
+        </span>
+      )}
+    </button>
+  );
+}
+
+function Row({ label, value, copy }: { label: string; value: string | React.ReactNode; copy?: string }) {
+  return (
+    <div className="flex items-center justify-between py-2.5 border-b border-fw-secondary/50 last:border-b-0">
+      <span className="text-figma-sm text-fw-bodyLight">{label}</span>
+      <div className="flex items-center gap-1.5">
+        <span className="text-figma-sm font-medium text-fw-heading">{value}</span>
+        {copy && <CopyVal value={copy} />}
+      </div>
+    </div>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const color = status === 'Active' ? 'text-fw-success' : status === 'Pending' ? 'text-fw-warn' : 'text-fw-bodyLight';
+  return <span className={`text-figma-sm font-medium ${color}`}>{status}</span>;
+}
+
 export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCount = 0, vnfsCount = 0 }: ConnectionOverviewProps) {
   const navigate = useNavigate();
-  const [currentBandwidth, setCurrentBandwidth] = useState(connection.bandwidth);
-
-  const handleBandwidthChange = (newBandwidth: string) => {
-    setCurrentBandwidth(newBandwidth);
-    // In a real app, this would update the store and trigger an API call
-  };
   const isLmcc = connection.configuration?.isLmcc;
-  // Find matching LMCC connection from mock data
   const lmccConnection = isLmcc ? MOCK_LMCC_CONNECTIONS.find(c => c.status === 'active') : null;
+  const isActive = connection.status === 'Active';
+  const isPending = connection.status === 'Pending' || connection.status === 'Provisioning';
+  const providers = connection.providers?.join(', ') || connection.provider || 'N/A';
+  const locations = connection.locations?.join(', ') || connection.location || 'N/A';
 
   return (
     <div className="space-y-6">
-      {/* LMCC 4-Path Status Panel */}
+      {/* LMCC 4-path panel (only for LMCC connections) */}
       {isLmcc && lmccConnection && (
-        <div className="bg-fw-base rounded-xl p-6 border border-fw-active/20">
+        <div className="bg-fw-base rounded-xl border border-fw-secondary p-5">
           <LMCCStatusPanel connection={lmccConnection} />
         </div>
       )}
 
-      {/* Quick Bandwidth Adjuster (hidden for LMCC - speed changes require delete/recreate) */}
-      {!isLmcc && (
-        <BandwidthAdjuster
-          currentBandwidth={currentBandwidth}
-          onBandwidthChange={handleBandwidthChange}
-          connectionId={connection.id}
-          connectionName={connection.name}
-          connectionStatus={connection.status}
-        />
-      )}
-
-      {/* Network Architecture Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-fw-wash rounded-lg p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center mb-2">
-                <AttIcon name="cloudRouter" className="h-6 w-6 text-fw-bodyLight mr-2" />
-                <p className="text-figma-lg font-bold text-fw-heading">Cloud Routers</p>
-              </div>
-              <p className="text-figma-xl font-bold text-fw-heading">{connection.cloudRouterCount || cloudRoutersCount}</p>
-              <p className="text-figma-sm text-fw-bodyLight mt-1">Virtual routing instances</p>
-            </div>
-          </div>
+      {/* Area 1: Two columns - Details + Performance */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Left: Connection Details */}
+        <div className="bg-fw-base rounded-xl border border-fw-secondary p-5">
+          <h3 className="text-figma-base font-bold text-fw-heading mb-3">Connection Details</h3>
+          <Row label="Type" value={connection.type} />
+          <Row label="Provider" value={providers} />
+          <Row label="Location" value={locations} copy={locations} />
+          <Row label="Bandwidth" value={connection.bandwidth} />
+          <Row label="Plan" value={connection.billing?.planId?.replace(/-/g, ' ') || 'Pay as you go'} />
+          {connection.primaryIPE && connection.primaryIPE !== 'Not provisioned' && connection.primaryIPE !== 'Not configured' && (
+            <Row label="Primary IPE" value={connection.primaryIPE} copy={connection.primaryIPE} />
+          )}
+          {connection.secondaryIPE && (
+            <Row label="Secondary IPE" value={connection.secondaryIPE} copy={connection.secondaryIPE} />
+          )}
+          {connection.security?.encryption && (
+            <Row label="Encryption" value={connection.security.encryption} />
+          )}
+          {connection.security?.firewall !== undefined && (
+            <Row label="Firewall" value={connection.security.firewall ? 'Enabled' : 'Disabled'} />
+          )}
+          {connection.security?.ddosProtection !== undefined && (
+            <Row label="DDoS Protection" value={connection.security.ddosProtection ? 'Enabled' : 'Disabled'} />
+          )}
         </div>
 
-        <div className="bg-fw-wash rounded-lg p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center mb-2">
-                <Link2 className="h-5 w-5 text-fw-bodyLight mr-2" />
-                <p className="text-figma-lg font-bold text-fw-heading">Links (VLANs)</p>
+        {/* Right: Performance + Cost */}
+        <div className="bg-fw-base rounded-xl border border-fw-secondary p-5">
+          {isActive && connection.performance ? (
+            <>
+              <h3 className="text-figma-base font-bold text-fw-heading mb-3">Performance</h3>
+              <Row label="Latency" value={connection.performance.latency} />
+              <Row label="Packet Loss" value={connection.performance.packetLoss} />
+              <Row label="Uptime" value={connection.performance.uptime} />
+              <Row label="Utilization" value={`${connection.performance.bandwidthUtilization}%`} />
+              <Row label="Current Usage" value={connection.performance.currentUsage} />
+              <div className="mt-4 pt-3 border-t border-fw-secondary">
+                <Row label="Monthly Cost" value={`$${connection.billing?.total?.toLocaleString() || '999'}/mo`} />
               </div>
-              <p className="text-figma-xl font-bold text-fw-heading">{connection.linkCount || linksCount}</p>
-              <p className="text-figma-sm text-fw-bodyLight mt-1">Virtual network segments</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-fw-wash rounded-lg p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center mb-2">
-                <Box className="h-5 w-5 text-fw-bodyLight mr-2" />
-                <p className="text-figma-lg font-bold text-fw-heading">VNFs</p>
-              </div>
-              <p className="text-figma-xl font-bold text-fw-heading">{vnfsCount}</p>
-              <p className="text-figma-sm text-fw-bodyLight mt-1">Virtual network functions</p>
-            </div>
-          </div>
+            </>
+          ) : isPending ? (
+            <>
+              <h3 className="text-figma-base font-bold text-fw-heading mb-3">Status</h3>
+              <Row label="Status" value={<StatusBadge status={connection.status} />} />
+              <Row label="Estimated Cost" value={`$${connection.billing?.total?.toLocaleString() || '999'}/mo`} />
+              <p className="text-figma-sm text-fw-bodyLight mt-4">Performance metrics available after activation.</p>
+            </>
+          ) : (
+            <>
+              <h3 className="text-figma-base font-bold text-fw-heading mb-3">Status</h3>
+              <Row label="Status" value={<StatusBadge status={connection.status} />} />
+              <Row label="Monthly Cost" value={`$${connection.billing?.total?.toLocaleString() || '999'}/mo`} />
+            </>
+          )}
         </div>
       </div>
 
-      {/* Network Topology Preview */}
-      <div className="bg-fw-wash rounded-2xl overflow-hidden">
-        <div className="px-6 py-4 flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <Network className="h-5 w-5 text-fw-heading" />
-              <h3 className="text-[14px] font-medium text-fw-heading">Network Topology</h3>
-            </div>
-            <p className="text-[12px] text-fw-bodyLight mt-0.5">Interactive visualization of your network connection</p>
+      {/* Area 2: Network Topology */}
+      <div className="bg-fw-base rounded-xl border border-fw-secondary overflow-hidden">
+        <div className="px-5 py-3 flex items-center justify-between border-b border-fw-secondary">
+          <div className="flex items-center gap-2">
+            <Network className="h-4 w-4 text-fw-bodyLight" />
+            <h3 className="text-figma-base font-bold text-fw-heading">Network Topology</h3>
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => navigate(`/tickets/create?connectionId=conn-1`)}
-              className="tab-button inline-flex items-center gap-1 text-[14px] font-medium text-fw-bodyLight hover:text-fw-link transition-colors"
-            >
-              <Ticket className="h-3.5 w-3.5" />
-              Create Ticket
-            </button>
-            <button
-              onClick={() => navigate('/create', { state: { editMode: true, connectionId: connection.id, connectionName: connection.name, connectionStatus: connection.status } })}
-              className="tab-button text-[14px] font-medium text-fw-link hover:text-fw-linkHover transition-colors"
-            >
-              Edit Topology
-            </button>
-          </div>
+          <button
+            onClick={() => navigate('/create', { state: { editMode: true, connectionId: connection.id, connectionName: connection.name, connectionStatus: connection.status } })}
+            className="text-figma-sm font-medium text-fw-link hover:text-fw-linkHover transition-colors"
+          >
+            Edit Topology
+          </button>
         </div>
-        {/* Mini topology canvas */}
-        <div className="px-6 pb-6">
+        <div className="p-5">
           <MiniTopology
             connection={connection}
             cloudRoutersCount={cloudRoutersCount}
@@ -129,287 +148,12 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
         </div>
       </div>
 
-      {/* Monthly Cost Summary */}
-      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-figma-base font-medium text-fw-bodyLight">Monthly Cost</p>
-            <p className="text-figma-xl font-bold text-fw-heading mt-1">
-              ${connection.billing?.total?.toLocaleString() || '7,999'}<span className="text-figma-base font-medium text-fw-bodyLight">/mo</span>
-            </p>
-          </div>
-          <div className="flex items-center gap-6">
-            <div>
-              <p className="text-figma-sm text-fw-bodyLight">Plan</p>
-              <p className="text-figma-base font-medium text-fw-heading capitalize">{connection.billing?.planId?.replace(/-/g, ' ') || 'Pay as you go'}</p>
-            </div>
-            <div>
-              <p className="text-figma-sm text-fw-bodyLight">Bandwidth</p>
-              <p className="text-figma-base font-medium text-fw-heading">{connection.bandwidth}</p>
-            </div>
-            <div>
-              <p className="text-figma-sm text-fw-bodyLight">Provider</p>
-              <p className="text-figma-base font-medium text-fw-heading">{connection.type?.split('-')[0]?.trim() || 'AT&T'}</p>
-            </div>
-          </div>
+      {/* Area 3: Resiliency (conditional) */}
+      {connection.status !== 'Pending' && connection.status !== 'Provisioning' && (
+        <div className="bg-fw-base rounded-xl border border-fw-secondary p-5">
+          <ResiliencyMap connection={connection} />
         </div>
-      </div>
-
-      {/* Connection Configuration */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Connection Information */}
-        <div className="bg-fw-wash rounded-lg p-6">
-          <div className="flex items-center mb-4">
-            <Network className="h-5 w-5 text-fw-bodyLight mr-2" />
-            <h3 className="text-figma-lg font-medium text-fw-heading">Connection Information</h3>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
-              <span className="text-figma-base text-fw-body">Status</span>
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium ${
-                connection.status === 'Active' ? 'bg-fw-successLight text-fw-success' : 'bg-fw-neutral text-fw-heading'
-              }`}>
-                {connection.status}
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
-              <span className="text-figma-base text-fw-body">Type</span>
-              <span className="text-figma-base font-medium text-fw-heading">{connection.type}</span>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
-              <span className="text-figma-base text-fw-body">Bandwidth</span>
-              <span className="text-figma-base font-medium text-fw-heading">{currentBandwidth}</span>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
-              <span className="text-figma-base text-fw-body">Location</span>
-              <span className="text-figma-base font-medium text-fw-heading">{connection.location}</span>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
-              <span className="text-figma-base text-fw-body">Cloud Provider</span>
-              <span className="text-figma-base font-medium text-fw-heading">{connection.provider || 'N/A'}</span>
-            </div>
-
-            {connection.primaryIPE && (
-              <>
-                <div className="flex items-center justify-between p-3 bg-fw-wash rounded-lg border border-fw-secondary">
-                  <div className="flex items-center">
-                    <Server className="h-4 w-4 text-fw-link mr-2" />
-                    <span className="text-figma-base text-fw-body">Primary IPE</span>
-                  </div>
-                  <span className="text-figma-base font-medium text-fw-heading">{connection.primaryIPE}</span>
-                </div>
-                {connection.secondaryIPE && (
-                  <div className="flex items-center justify-between p-3 bg-fw-successLight rounded-lg border border-fw-success">
-                    <div className="flex items-center">
-                      <Server className="h-4 w-4 text-fw-success mr-2" />
-                      <span className="text-figma-base text-fw-body">Secondary IPE (Redundant)</span>
-                    </div>
-                    <span className="text-figma-base font-medium text-fw-heading">{connection.secondaryIPE}</span>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-
-          {connection.primaryIPE && (
-            <div className="mt-4 pt-4 border-t border-fw-secondary flex items-start space-x-2">
-              <IPEInfoTooltip variant="connection" className="flex-shrink-0 mt-0.5" />
-              <p className="text-figma-base text-fw-bodyLight">
-                <strong>IPE (Infrastructure Provider Edge Router)</strong> is the physical router at the data center where your virtual connection runs. It provides the actual network capacity and cloud provider on-ramps.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Network Architecture Explanation */}
-        <div className="bg-fw-wash rounded-lg p-6">
-          <div className="flex items-center mb-4">
-            <Network className="h-5 w-5 text-fw-bodyLight mr-2" />
-            <h3 className="text-figma-lg font-medium text-fw-heading">Network Architecture</h3>
-          </div>
-
-          <div className="space-y-4">
-            <div className="p-4 bg-fw-accent rounded-lg border border-fw-active">
-              <div className="flex items-start">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-fw-bodyLight flex items-center justify-center">
-                    <AttIcon name="cloudRouter" className="h-4 w-4 text-white" />
-                  </div>
-                </div>
-                <div className="ml-3">
-                  <h4 className="text-figma-base font-semibold text-fw-heading tracking-[-0.03em] mb-1">Cloud Routers</h4>
-                  <p className="text-figma-base text-fw-bodyLight">
-                    Virtual routing instances that provide connectivity to cloud providers and other networks. Each cloud router can be associated with multiple links.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center">
-              <div className="text-fw-bodyLight">↓</div>
-            </div>
-
-            <div className="p-4 bg-fw-successLight rounded-lg border border-fw-successLight">
-              <div className="flex items-start">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-fw-success flex items-center justify-center">
-                    <Link2 className="h-4 w-4 text-white" />
-                  </div>
-                </div>
-                <div className="ml-3">
-                  <h4 className="text-figma-base font-semibold text-fw-heading tracking-[-0.03em] mb-1">Links (VLANs)</h4>
-                  <p className="text-figma-base text-fw-bodyLight">
-                    Virtual network segments that connect to one or more cloud routers. Links provide Layer 2/3 connectivity and can carry traffic for multiple VNFs.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center">
-              <div className="text-fw-bodyLight">↓</div>
-            </div>
-
-            <div className="p-4 bg-fw-wash rounded-lg border border-fw-secondary">
-              <div className="flex items-start">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-fw-bodyLight flex items-center justify-center">
-                    <Box className="h-4 w-4 text-white" />
-                  </div>
-                </div>
-                <div className="ml-3">
-                  <h4 className="text-figma-base font-semibold text-fw-heading tracking-[-0.03em] mb-1">Virtual Network Functions</h4>
-                  <p className="text-figma-base text-fw-bodyLight">
-                    Software-based network services (firewalls, load balancers, SD-WAN) that run on one or more links. VNFs provide advanced networking capabilities.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 pt-4 border-t border-fw-secondary">
-            <p className="text-figma-sm text-fw-bodyLight">
-              <strong>Hierarchy:</strong> Connection → Cloud Routers ← Links (many-to-many) → VNFs (many-to-many)
-            </p>
-          </div>
-        </div>
-
-        {/* Security Overview */}
-        <div className="bg-fw-wash rounded-lg p-6">
-          <div className="flex items-center mb-4">
-            <Shield className="h-5 w-5 text-fw-bodyLight mr-2" />
-            <h3 className="text-figma-lg font-medium text-fw-heading">Security Overview</h3>
-          </div>
-
-          <div className="space-y-4">
-            {Object.entries(connection.security || {}).map(([key, value]) => (
-              <div key={key} className="flex items-center justify-between p-3 bg-fw-wash rounded-lg">
-                <span className="text-figma-base text-fw-body">
-                  {key.replace(/([A-Z])/g, ' $1').trim()}
-                </span>
-                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-figma-sm font-medium ${
-                  value === true ? 'bg-fw-successLight text-fw-success' : 'bg-fw-accent text-fw-linkHover'
-                }`}>
-                  {typeof value === 'boolean' ? (value ? 'Enabled' : 'Disabled') : value}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 pt-4 border-t border-fw-secondary">
-            <p className="text-figma-base text-fw-bodyLight">
-              Security features protect your data during transit through encryption, firewall rules, and DDoS protection mechanisms.
-            </p>
-          </div>
-        </div>
-
-        {/* Performance Metrics */}
-        <div className="bg-fw-wash rounded-lg p-6">
-          <div className="flex items-center mb-4">
-            <Activity className="h-5 w-5 text-fw-bodyLight mr-2" />
-            <h3 className="text-figma-lg font-medium text-fw-heading">Performance Metrics</h3>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-3 bg-fw-wash rounded-lg">
-              <div className="flex flex-col">
-                <span className="text-figma-sm text-fw-bodyLight mb-1">Latency</span>
-                <span className="text-figma-lg font-medium text-fw-heading">{connection.performance?.latency || 'N/A'}</span>
-              </div>
-            </div>
-
-            <div className="p-3 bg-fw-wash rounded-lg">
-              <div className="flex flex-col">
-                <span className="text-figma-sm text-fw-bodyLight mb-1">Packet Loss</span>
-                <span className="text-figma-lg font-medium text-fw-heading">{connection.performance?.packetLoss || 'N/A'}</span>
-              </div>
-            </div>
-
-            <div className="p-3 bg-fw-wash rounded-lg">
-              <div className="flex flex-col">
-                <span className="text-figma-sm text-fw-bodyLight mb-1">Uptime</span>
-                <span className="text-figma-lg font-medium text-fw-heading">{connection.performance?.uptime || 'N/A'}</span>
-              </div>
-            </div>
-
-            <div className="p-3 bg-fw-wash rounded-lg">
-              <div className="flex flex-col">
-                <span className="text-figma-sm text-fw-bodyLight mb-1">Bandwidth Utilization</span>
-                <span className="text-figma-lg font-medium text-fw-heading">{connection.performance?.bandwidthUtilization || 0}%</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 pt-4 border-t border-fw-secondary">
-            <p className="text-figma-base text-fw-bodyLight">
-              Performance metrics are updated every 5 minutes. These metrics help you monitor the health and efficiency of your connection.
-            </p>
-          </div>
-        </div>
-
-        {/* Connection Features */}
-        <div className="bg-fw-wash rounded-lg p-6">
-          <div className="flex items-center mb-4">
-            <Server className="h-5 w-5 text-fw-bodyLight mr-2" />
-            <h3 className="text-figma-lg font-medium text-fw-heading">Connection Features</h3>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4">
-            {Object.entries(connection.features || {}).map(([key, value]) => (
-              <div key={key} className="flex items-center p-3 bg-fw-wash rounded-lg">
-                <div className="flex-shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-fw-accent flex items-center justify-center">
-                    <Server className="h-4 w-4 text-fw-link" />
-                  </div>
-                </div>
-                <div className="ml-4">
-                  <p className="text-figma-base font-medium text-fw-heading">
-                    {key.replace(/([A-Z])/g, ' $1').trim()}
-                  </p>
-                  <p className="text-figma-base text-fw-bodyLight">
-                    {typeof value === 'boolean' ? (value ? 'Enabled' : 'Disabled') : value}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 pt-4 border-t border-fw-secondary">
-            <p className="text-figma-base text-fw-bodyLight">
-              Connection features define capabilities like redundancy, load balancing, and auto-scaling that enhance your network's resilience and performance.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Resiliency Architecture */}
-      <div className="bg-fw-base rounded-2xl border border-fw-secondary p-6">
-        <ResiliencyMap connection={connection} />
-      </div>
+      )}
     </div>
   );
 }
