@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import { UserRole } from '../../store/slices/roleSlice';
-import { Shield, Building2, Users } from 'lucide-react';
+import { Shield, Users } from 'lucide-react';
 
 interface Scenario {
   id: string;
@@ -18,9 +18,9 @@ interface Scenario {
 const SCENARIOS: Scenario[] = [
   {
     id: 'platform-admin',
-    label: 'AT&T Platform Admin',
+    label: 'AT&T Platform',
     icon: Shield,
-    description: 'Full platform access',
+    description: 'AT&T platform with tenant management',
     tenantId: 'TNT-001',
     role: 'super-admin',
     color: 'text-fw-bodyLight hover:bg-fw-wash',
@@ -28,21 +28,10 @@ const SCENARIOS: Scenario[] = [
     navigateTo: '/manage',
   },
   {
-    id: 'enterprise',
-    label: 'Enterprise Customer',
-    icon: Building2,
-    description: 'Acme Corp portal',
-    tenantId: 'TNT-002',
-    role: 'admin',
-    color: 'text-fw-bodyLight hover:bg-fw-wash',
-    activeColor: 'bg-fw-heading/10 text-fw-heading',
-    navigateTo: '/manage',
-  },
-  {
     id: 'reseller',
-    label: 'Reseller Partner',
+    label: 'Reseller',
     icon: Users,
-    description: 'GNS reseller view',
+    description: 'GNS reseller portal',
     tenantId: 'TNT-004',
     role: 'admin',
     color: 'text-fw-bodyLight hover:bg-fw-wash',
@@ -60,10 +49,9 @@ export function DemoScenarioBar() {
   const currentRole = useStore(state => state.currentRole);
 
   const getActiveScenarioId = () => {
-    if (activeTenantId === 'TNT-001' && currentRole === 'super-admin') return 'platform-admin';
-    if (activeTenantId === 'TNT-002') return 'enterprise';
+    if (activeTenantId === 'TNT-001') return 'platform-admin';
     if (activeTenantId === 'TNT-004' || location.pathname === '/reseller') return 'reseller';
-    return null;
+    return 'platform-admin';
   };
 
   const activeId = getActiveScenarioId();
@@ -72,7 +60,6 @@ export function DemoScenarioBar() {
     setActiveTenant(scenario.tenantId);
     setRole(scenario.role);
     if (scenario.navigateTo) {
-      // Defer navigation to let tenant switch settle
       setTimeout(() => navigate(scenario.navigateTo!), 50);
     }
   };

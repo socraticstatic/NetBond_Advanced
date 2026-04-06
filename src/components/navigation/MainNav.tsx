@@ -180,7 +180,7 @@ export function MainNav({ items = [], onSearch }: MainNavProps) {
               tabIndex={0}
             >
               <div className="flex items-center">
-                {isATT ? (
+                {tenantBranding.productName === 'NetBond\u00AE Advanced' ? (
                   <>
                     <span className="text-base font-bold text-brand-accent tracking-[-0.03em]">AT&T</span>
                     <span className="ml-2 text-base font-bold text-black tracking-[-0.03em]">NetBond<sup className="text-[10px]">®</sup> Advanced</span>

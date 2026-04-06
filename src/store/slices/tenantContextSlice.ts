@@ -46,28 +46,31 @@ export const createTenantContextSlice: StateCreator<TenantContextSlice & { conne
       applyBranding(DEFAULT_BRANDING);
     } else {
       const data: TenantDataSet | undefined = tenantData[id];
+      // Only reseller tenants get custom branding.
+      // Regular tenants see AT&T branding with their own data.
+      const isReseller = id === 'TNT-004';
+      const branding = isReseller && data ? data.branding : DEFAULT_BRANDING;
+
       if (data) {
         set({
           activeTenantId: id,
           activeTenant: tenant,
-          tenantBranding: data.branding,
+          tenantBranding: branding,
           connections: [...data.connections],
           users: [...data.users],
           groups: [...data.groups],
         });
-        applyBranding(data.branding);
       } else {
-        // Tenant exists but no mock data; clear to empty
         set({
           activeTenantId: id,
           activeTenant: tenant,
-          tenantBranding: DEFAULT_BRANDING,
+          tenantBranding: branding,
           connections: [],
           users: [],
           groups: [],
         });
-        applyBranding(DEFAULT_BRANDING);
       }
+      applyBranding(branding);
     }
 
     window.addToast?.({
