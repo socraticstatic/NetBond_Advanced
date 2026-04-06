@@ -546,21 +546,21 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                     />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-figma-sm font-medium text-fw-heading">{policy.globalPolicyName}</span>
-                        <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-figma-xs font-medium ${ac}`}>
+                        <span className="text-figma-base font-medium text-fw-heading">{policy.globalPolicyName}</span>
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-figma-sm font-medium ${ac}`}>
                           {policy.globalPolicyAction}
                         </span>
-                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-figma-xs font-medium bg-fw-wash text-fw-body border border-fw-secondary">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-figma-sm font-medium bg-fw-wash text-fw-body border border-fw-secondary">
                           {contextLabels[policy.protocolContext] || policy.protocolContext}
                         </span>
-                        <span className="text-figma-xs text-fw-bodyLight flex items-center gap-1">
+                        <span className="text-figma-sm text-fw-bodyLight flex items-center gap-1">
                           {policy.direction === 'onPremiseToPartner' ? 'On Premise' : 'Partner'}
                           <ArrowRight className="h-3 w-3" />
                           {policy.direction === 'onPremiseToPartner' ? 'Partner' : 'On Premise'}
                         </span>
                       </div>
                       {policy.prefixes.length > 0 && (
-                        <p className="text-figma-xs text-fw-bodyLight mt-0.5">
+                        <p className="text-figma-sm text-fw-bodyLight mt-0.5">
                           {policy.prefixes.length} prefix{policy.prefixes.length !== 1 ? 'es' : ''}{policy.communities.length > 0 ? `, ${policy.communities.length} communit${policy.communities.length !== 1 ? 'ies' : 'y'}` : ''}
                         </p>
                       )}
@@ -581,7 +581,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                     {/* Prefix list with bulk operations */}
                     <div>
                       <div className="flex items-center justify-between mb-1.5">
-                        <label className="text-figma-xs font-medium text-fw-body">
+                        <label className="text-figma-sm font-medium text-fw-body">
                           Prefixes ({policy.globalPolicyAction === 'advertise' ? 'routes to advertise' : policy.globalPolicyAction === 'deny' ? 'routes to deny' : 'routes to allow'})
                           {policy.prefixes.length > 0 && <span className="ml-1 text-fw-bodyLight">({policy.prefixes.length})</span>}
                         </label>
@@ -661,7 +661,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                       <div className="p-4 rounded-lg bg-fw-wash border border-fw-secondary space-y-4">
                         {/* BGP Communities */}
                         <div>
-                          <label className="block text-figma-xs font-medium text-fw-body mb-1.5">BGP Communities</label>
+                          <label className="block text-figma-sm font-medium text-fw-body mb-1.5">BGP Communities</label>
                           <div className="space-y-1.5">
                             {policy.communities.map(comm => (
                               <div key={comm.id} className="flex items-center gap-2">
@@ -708,7 +708,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
 
                         {/* AS-Path Filters */}
                         <div>
-                          <label className="block text-figma-xs font-medium text-fw-body mb-1.5">AS-Path Filters</label>
+                          <label className="block text-figma-sm font-medium text-fw-body mb-1.5">AS-Path Filters</label>
                           {policy.asPathFilters.length === 0 ? (
                             <p className="text-figma-xs text-fw-bodyLight">No AS-path filters configured</p>
                           ) : (
@@ -726,7 +726,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
 
                         {/* Priority */}
                         <div className="flex items-center gap-3">
-                          <label className="text-figma-xs font-medium text-fw-body">Priority</label>
+                          <label className="text-figma-sm font-medium text-fw-body">Priority</label>
                           <input
                             type="number"
                             value={policy.priority}
