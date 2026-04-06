@@ -49,7 +49,7 @@ const TABS: Tab[] = [
 export function ConnectionTabs({ activeTab, onTabChange }: ConnectionTabsProps) {
   return (
     <div className="border-b border-fw-secondary">
-      <nav className="-mb-px flex items-center gap-0 overflow-x-auto">
+      <nav className="-mb-px flex items-center gap-0 overflow-x-auto scrollbar-none" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {TABS.map((tab) => (
           <button
             key={tab.id}
