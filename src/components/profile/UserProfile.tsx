@@ -1178,47 +1178,36 @@ export function UserProfile() {
         </div>
       </div>
 
-      {/* Run Locally */}
+      {/* Get the App */}
       <div className="bg-fw-base rounded-xl border border-fw-secondary p-6 mt-8">
-        <h3 className="text-figma-base font-bold text-fw-heading mb-4">Run This App Locally</h3>
-        <p className="text-figma-sm text-fw-bodyLight mb-4">
-          NetBond Advanced is a self-contained app. No server required. Download, install Node.js, and run it on your laptop.
-        </p>
-        <div className="space-y-3">
-          <div className="flex items-start gap-3">
-            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-fw-heading/10 text-fw-heading text-figma-sm font-bold flex items-center justify-center">1</span>
-            <div>
-              <p className="text-figma-sm font-medium text-fw-heading">Install Node.js</p>
-              <p className="text-figma-sm text-fw-bodyLight">Download from <span className="font-mono text-fw-link">nodejs.org</span> (v18 or later). Includes npm.</p>
-            </div>
+        <h3 className="text-figma-base font-bold text-fw-heading mb-4">Get the App</h3>
+
+        <div className="space-y-4">
+          <div>
+            <p className="text-figma-sm font-medium text-fw-heading">Desktop App (recommended)</p>
+            <p className="text-figma-sm text-fw-bodyLight mt-1">
+              Download and double-click to run. No setup required.
+            </p>
+            <p className="text-figma-sm text-fw-bodyLight mt-1">
+              Available at <span className="font-mono text-fw-link">github.com/socraticstatic/NetBond_Advanced/releases</span>
+            </p>
           </div>
-          <div className="flex items-start gap-3">
-            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-fw-heading/10 text-fw-heading text-figma-sm font-bold flex items-center justify-center">2</span>
-            <div>
-              <p className="text-figma-sm font-medium text-fw-heading">Download the app</p>
-              <p className="text-figma-sm text-fw-bodyLight">Clone or download from <span className="font-mono text-fw-link">github.com/socraticstatic/NetBond_Advanced</span></p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-fw-heading/10 text-fw-heading text-figma-sm font-bold flex items-center justify-center">3</span>
-            <div>
-              <p className="text-figma-sm font-medium text-fw-heading">Install and run</p>
-              <div className="mt-1 bg-fw-heading rounded-lg p-3 font-mono text-figma-xs text-green-300">
-                <div>cd NetBond_Advanced</div>
-                <div>npm install</div>
-                <div>npm run dev</div>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-fw-heading/10 text-fw-heading text-figma-sm font-bold flex items-center justify-center">4</span>
-            <div>
-              <p className="text-figma-sm font-medium text-fw-heading">Open in browser</p>
-              <p className="text-figma-sm text-fw-bodyLight">Visit <span className="font-mono text-fw-link">http://localhost:5173</span></p>
+
+          <div className="border-t border-fw-secondary pt-4">
+            <p className="text-figma-sm font-medium text-fw-heading">Developer Setup</p>
+            <p className="text-figma-sm text-fw-bodyLight mt-1">
+              Requires <span className="font-mono">Node.js 18+</span> from <span className="font-mono text-fw-link">nodejs.org</span>
+            </p>
+            <div className="mt-2 bg-fw-heading rounded-lg p-3 font-mono text-figma-xs text-green-300">
+              <div>git clone github.com/socraticstatic/NetBond_Advanced</div>
+              <div>cd NetBond_Advanced</div>
+              <div>npm install</div>
+              <div>npm run dev</div>
             </div>
           </div>
         </div>
-        <p className="text-figma-sm text-fw-bodyLight mt-4">Works on Mac and Windows. No internet connection needed after install.</p>
+
+        <p className="text-figma-sm text-fw-bodyLight mt-4">Mac and Windows. No internet needed after install.</p>
       </div>
 
       {/* Permission Matrix Modal */}
