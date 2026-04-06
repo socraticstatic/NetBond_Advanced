@@ -110,3 +110,5 @@ stats.html
 
 # Bolt sync timestamp
 .bolt-sync-timestamp
+# Electron build output
+release/
