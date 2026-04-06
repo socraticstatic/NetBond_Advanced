@@ -1,5 +1,5 @@
 interface StatusBadgeProps {
-  status: 'active' | 'Active' | 'inactive' | 'Inactive' | 'suspended' | 'Suspended' | 'Pending' | 'pending';
+  status: 'active' | 'Active' | 'inactive' | 'Inactive' | 'suspended' | 'Suspended' | 'Pending' | 'pending' | 'Provisioning' | 'provisioning';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
@@ -20,14 +20,16 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
     active: 'text-fw-success border-fw-success',
     inactive: 'text-fw-disabled border-fw-bodyLight',
     suspended: 'text-fw-error border-fw-error',
-    pending: 'text-fw-warn border-fw-warn'
+    pending: 'text-fw-warn border-fw-warn',
+    provisioning: 'text-fw-link border-fw-link'
   };
 
   const statusLabels = {
     active: 'Active',
     inactive: 'Inactive',
     suspended: 'Suspended',
-    pending: 'Pending'
+    pending: 'Pending',
+    provisioning: 'Provisioning'
   };
 
   const style = statusStyles[normalizedStatus as keyof typeof statusStyles] || statusStyles.inactive;
@@ -39,6 +41,7 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
         normalizedStatus === 'active' ? 'bg-fw-success' :
         normalizedStatus === 'inactive' ? 'bg-fw-bodyLight' :
         normalizedStatus === 'suspended' ? 'bg-fw-error' :
+        normalizedStatus === 'provisioning' ? 'bg-fw-link animate-pulse' :
         'bg-fw-warn'
       }`} />
       {label}
