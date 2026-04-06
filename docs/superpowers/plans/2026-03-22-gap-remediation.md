@@ -202,7 +202,7 @@ git commit -m "feat(connection): apply Figma form tokens to edit mode inputs"
 - [ ] **Step 1: Pull Figma maintenance frame details**
 
 ```bash
-curl -s -H "X-Figma-Token: ***REMOVED***" \
+curl -s -H "X-Figma-Token: REVOKED_TOKEN" \
   "https://api.figma.com/v1/files/Z2DZTBbatSi8miUWWf5g7B/nodes?ids=3725:32623,3831:980&depth=3"
 ```
 
