@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import {
-  Plus, Play, Pause, Edit2, Trash2, X,
+  Plus, Play, Pause, Edit2, Trash2, X, Copy,
   Shield, AlertTriangle, Check, Network, Layers,
   ChevronDown, ChevronUp, Globe, ArrowRight, Settings,
   Upload, Download, FileText
@@ -19,6 +19,24 @@ import { Link } from '../../../types';
 import { Modal } from '../../common/Modal';
 import { SideDrawer } from '../../common/SideDrawer';
 import { FormField } from '../../form/FormField';
+
+function CopyBtn({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(value); setCopied(true); setTimeout(() => setCopied(false), 1200); }}
+      className="relative p-1 text-fw-disabled hover:text-fw-link rounded transition-colors"
+      title="Copy"
+    >
+      {copied ? <Check className="h-3 w-3 text-fw-success" /> : <Copy className="h-3 w-3" />}
+      {copied && (
+        <span className="absolute -top-6 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-[9px] font-medium bg-fw-heading text-white whitespace-nowrap">
+          Copied
+        </span>
+      )}
+    </button>
+  );
+}
 
 interface PoliciesTabProps {
   connection: Connection;
@@ -491,7 +509,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
           <div className="flex items-center gap-2">
             <Globe className="h-5 w-5 text-fw-link" />
             <h3 className="text-figma-base font-semibold text-fw-heading">Inherited Global Policies</h3>
-            <span className="inline-flex items-center px-2 py-0.5 rounded-[8px] text-[10px] font-medium" style={{ color: '#0057b8', backgroundColor: 'rgba(0,87,184,0.16)' }}>
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-figma-xs font-medium text-fw-link bg-fw-accent">
               {inheritedPolicies.filter(p => p.overrideEnabled).length} active
             </span>
           </div>
@@ -502,13 +520,13 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
           {inheritedPolicies.map(policy => {
             const isExpanded = expandedInherited === policy.globalPolicyId;
             const isAdvanced = showAdvanced[policy.globalPolicyId] || false;
-            const actionColors: Record<string, { color: string; bg: string }> = {
-              deny: { color: '#cc3333', bg: 'rgba(204,51,51,0.12)' },
-              allow: { color: '#2d7e24', bg: 'rgba(45,126,36,0.12)' },
-              manipulate: { color: '#cc7a00', bg: 'rgba(204,122,0,0.12)' },
-              advertise: { color: '#0057b8', bg: 'rgba(0,87,184,0.12)' },
+            const actionClasses: Record<string, string> = {
+              deny: 'text-fw-error bg-fw-errorLight',
+              allow: 'text-fw-success bg-fw-successLight',
+              manipulate: 'text-fw-warn bg-fw-warn/10',
+              advertise: 'text-fw-link bg-fw-accent',
             };
-            const ac = actionColors[policy.globalPolicyAction] || actionColors.allow;
+            const ac = actionClasses[policy.globalPolicyAction] || actionClasses.allow;
             const contextLabels: Record<string, string> = {
               'internet': 'Internet',
               'l3vpn-ipv4': 'L3VPN IPv4',
@@ -529,10 +547,10 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-figma-sm font-medium text-fw-heading">{policy.globalPolicyName}</span>
-                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium" style={{ color: ac.color, backgroundColor: ac.bg }}>
+                        <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-figma-xs font-medium ${ac}`}>
                           {policy.globalPolicyAction}
                         </span>
-                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-fw-wash text-fw-body border border-fw-secondary">
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-figma-xs font-medium bg-fw-wash text-fw-body border border-fw-secondary">
                           {contextLabels[policy.protocolContext] || policy.protocolContext}
                         </span>
                         <span className="text-figma-xs text-fw-bodyLight flex items-center gap-1">
@@ -601,10 +619,11 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                       <div className="space-y-1.5">
                         {policy.prefixes.map(prefix => (
                           <div key={prefix.id} className="flex items-center gap-2">
-                            <code className="flex-1 px-3 py-1.5 bg-fw-wash border border-fw-secondary rounded-lg text-figma-xs font-mono text-fw-heading">
+                            <code className="flex-1 px-3 py-1.5 bg-fw-wash border border-fw-secondary rounded-lg text-figma-sm font-mono text-fw-heading">
                               {prefix.value}
                             </code>
-                            <span className="text-figma-xs text-fw-bodyLight w-14">{prefix.action}</span>
+                            <CopyBtn value={prefix.value} />
+                            <span className="text-figma-sm text-fw-bodyLight w-14">{prefix.action}</span>
                             <button onClick={() => removePrefix(policy.globalPolicyId, prefix.id)} className="text-fw-disabled hover:text-fw-error">
                               <X className="h-3.5 w-3.5" />
                             </button>
@@ -646,9 +665,10 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                           <div className="space-y-1.5">
                             {policy.communities.map(comm => (
                               <div key={comm.id} className="flex items-center gap-2">
-                                <code className="flex-1 px-3 py-1.5 bg-fw-base border border-fw-secondary rounded-lg text-figma-xs font-mono text-fw-heading">
+                                <code className="flex-1 px-3 py-1.5 bg-fw-base border border-fw-secondary rounded-lg text-figma-sm font-mono text-fw-heading">
                                   {comm.value}
                                 </code>
+                                <CopyBtn value={comm.value} />
                                 <select
                                   value={comm.action}
                                   onChange={(e) => {
@@ -695,8 +715,9 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                             <div className="space-y-1.5">
                               {policy.asPathFilters.map(asp => (
                                 <div key={asp.id} className="flex items-center gap-2">
-                                  <code className="flex-1 px-3 py-1.5 bg-fw-base border border-fw-secondary rounded-lg text-figma-xs font-mono">{asp.pattern}</code>
-                                  <span className="text-figma-xs text-fw-bodyLight">{asp.action}</span>
+                                  <code className="flex-1 px-3 py-1.5 bg-fw-base border border-fw-secondary rounded-lg text-figma-sm font-mono text-fw-heading">{asp.pattern}</code>
+                                  <CopyBtn value={asp.pattern} />
+                                  <span className="text-figma-sm text-fw-bodyLight">{asp.action}</span>
                                 </div>
                               ))}
                             </div>
@@ -794,7 +815,7 @@ export function PoliciesTab({ connection, cloudRouters, vnfs, allLinks }: Polici
                   {/* Policy Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-2">
-                      <h3 className="text-base font-medium text-fw-heading truncate">{policy.name}</h3>
+                      <h3 className="text-figma-base font-medium text-fw-heading truncate">{policy.name}</h3>
 
                       {/* Action Badge */}
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-figma-sm font-medium ${
