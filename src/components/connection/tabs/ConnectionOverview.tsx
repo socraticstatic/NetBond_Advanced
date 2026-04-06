@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Network } from 'lucide-react';
 import { CopyButton } from '../../common/CopyButton';
+import { StatusBadge } from '../../common/StatusBadge';
 import { Connection } from '../../../types';
 import { MiniTopology } from '../MiniTopology';
 import { LMCCStatusPanel } from '../lmcc/LMCCStatusPanel';
@@ -25,11 +26,6 @@ function Row({ label, value, copy }: { label: string; value: string | React.Reac
       </div>
     </div>
   );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const color = status === 'Active' ? 'text-fw-success' : status === 'Pending' ? 'text-fw-warn' : 'text-fw-bodyLight';
-  return <span className={`text-figma-sm font-medium ${color}`}>{status}</span>;
 }
 
 export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCount = 0, vnfsCount = 0 }: ConnectionOverviewProps) {
@@ -94,14 +90,14 @@ export function ConnectionOverview({ connection, cloudRoutersCount = 0, linksCou
           ) : isPending ? (
             <>
               <h3 className="text-figma-base font-bold text-fw-heading mb-3">Status</h3>
-              <Row label="Status" value={<StatusBadge status={connection.status} />} />
+              <Row label="Status" value={<StatusBadge status={connection.status} size="sm" />} />
               <Row label="Estimated Cost" value={`$${connection.billing?.total?.toLocaleString() || '999'}/mo`} />
               <p className="text-figma-sm text-fw-bodyLight mt-4">Performance metrics available after activation.</p>
             </>
           ) : (
             <>
               <h3 className="text-figma-base font-bold text-fw-heading mb-3">Status</h3>
-              <Row label="Status" value={<StatusBadge status={connection.status} />} />
+              <Row label="Status" value={<StatusBadge status={connection.status} size="sm" />} />
               <Row label="Monthly Cost" value={`$${connection.billing?.total?.toLocaleString() || '999'}/mo`} />
             </>
           )}
