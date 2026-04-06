@@ -571,22 +571,13 @@ export function ConnectionDetails() {
           </div>
         </div>
 
-        {/* Connection Edit Warning - specific about what requires deactivation */}
+        {/* Connection Edit Warning */}
         {connection.status === 'Active' && !['policies', 'access', 'billing', 'logs', 'api', 'apps'].includes(activeTab) && (
-          <div className="flex items-start space-x-3 p-4 bg-fw-warnLight border border-fw-warn rounded-lg mb-6">
-            <AlertCircle className="h-5 w-5 text-fw-warn flex-shrink-0 mt-0.5" />
-            <div>
-              <h4 className="text-figma-base font-semibold text-fw-heading mb-1">Connection Must Be Deactivated to Modify</h4>
-              <p className="text-figma-base text-fw-body">
-                Changes to network topology, cloud routers, links, and VNFs require the connection to be deactivated first.
-              </p>
-              <p className="text-figma-xs text-fw-bodyLight mt-1">
-                Policies, access controls, billing, API keys, apps, and logs can be modified while active.
-              </p>
-            </div>
+          <div className="flex items-center gap-2 px-4 py-2 border border-fw-secondary rounded-lg mb-6 text-figma-sm text-fw-bodyLight">
+            <AlertCircle className="h-4 w-4 text-fw-warn flex-shrink-0" />
+            <span>Deactivate to modify topology. Policies, billing, and API keys can be changed while active.</span>
           </div>
         )}
-
         {/* Action Bar */}
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center space-x-4">
