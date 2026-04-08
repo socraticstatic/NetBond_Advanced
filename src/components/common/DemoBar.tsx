@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import { UserRole } from '../../store/slices/roleSlice';
-import { Shield, Users } from 'lucide-react';
+import { Shield, Users, Wrench } from 'lucide-react';
 
 const SCENARIOS = [
   { id: 'platform-admin', label: 'AT&T Platform', icon: Shield, tenantId: 'TNT-001', role: 'super-admin' as UserRole, navigateTo: '/manage' },
@@ -19,7 +19,12 @@ const pill = (active: boolean) =>
     active ? 'bg-fw-heading/10 text-fw-heading' : 'text-fw-bodyLight hover:bg-fw-wash'
   }`;
 
-export function DemoBar() {
+interface DemoBarProps {
+  isMaintenanceFreeze?: boolean;
+  onToggleMaintenanceFreeze?: () => void;
+}
+
+export function DemoBar({ isMaintenanceFreeze = false, onToggleMaintenanceFreeze }: DemoBarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const activeTenantId = useStore(s => s.activeTenantId);
@@ -50,6 +55,18 @@ export function DemoBar() {
           {r.label}
         </button>
       ))}
+      <div className="w-px h-4 bg-fw-secondary/50 mx-1" />
+      <button
+        onClick={onToggleMaintenanceFreeze}
+        className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium transition-all duration-200 cursor-pointer ${
+          isMaintenanceFreeze
+            ? 'bg-fw-warn/20 text-fw-warn'
+            : 'text-fw-bodyLight hover:bg-fw-wash'
+        }`}
+      >
+        <Wrench className="h-3 w-3" />
+        <span className="hidden sm:inline">Maintenance</span>
+      </button>
     </div>
   );
 }

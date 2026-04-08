@@ -26,6 +26,7 @@ import { GlobalKeyboardShortcuts } from './components/common/GlobalKeyboardShort
 import { ImpersonationBanner } from './components/common/ImpersonationBanner';
 import { PWAUpdatePrompt, usePWAUpdate } from './components/common/PWAUpdatePrompt';
 import { MaintenanceModal } from './components/common/MaintenanceModal';
+import { MaintenanceBanner } from './components/common/MaintenanceBanner';
 import { DemoBar } from './components/common/DemoBar';
 
 // Optimized lazy loading with better error handling
@@ -237,6 +238,14 @@ function App() {
   const tour = useTour('main-app');
   const pwaUpdate = usePWAUpdate();
   const [showMaintenance, setShowMaintenance] = useState(false);
+  const [isMaintenanceFreeze, setIsMaintenanceFreeze] = useState(false);
+  const [showMaintenanceBanner, setShowMaintenanceBanner] = useState(false);
+
+  const handleToggleMaintenanceFreeze = () => {
+    const next = !isMaintenanceFreeze;
+    setIsMaintenanceFreeze(next);
+    setShowMaintenanceBanner(next);
+  };
 
   const maintenanceSchedule = {
     date: 'March 25, 2026',
@@ -287,6 +296,9 @@ function App() {
     <NavigationStateProvider>
       <ThemeProvider>
         <ErrorBoundary onReset={() => window.location.reload()}>
+          {showMaintenanceBanner && (
+            <MaintenanceBanner onDismiss={() => setShowMaintenanceBanner(false)} />
+          )}
           <ImpersonationBanner />
           <ToastContainer />
           <GlobalKeyboardShortcuts />
@@ -701,7 +713,10 @@ function App() {
             />
             {/* SmartAssistant removed */}
             <FeedbackWidget />
-            <DemoBar />
+            <DemoBar
+              isMaintenanceFreeze={isMaintenanceFreeze}
+              onToggleMaintenanceFreeze={handleToggleMaintenanceFreeze}
+            />
             <MaintenanceModal
               isOpen={showMaintenance}
               onClose={() => setShowMaintenance(false)}
