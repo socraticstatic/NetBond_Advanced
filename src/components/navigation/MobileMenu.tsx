@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Settings, BarChart2, PlusCircle, Sliders, User, Bell, HelpCircle, LogOut, Search, ChevronRight, PenTool as Tool } from 'lucide-react';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
   const navigate = useNavigate();
   const location = useLocation();
   const menuRef = useFocusTrap(isOpen);
+  const { signOut } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [animationComplete, setAnimationComplete] = useState(false);
 
@@ -243,14 +245,10 @@ export function MobileMenu({ isOpen, onClose, userInfo, notifications }: MobileM
             {/* Footer */}
             <div className="p-4 border-t border-fw-secondary">
               <button
-                onClick={() => {
-                  window.addToast({
-                    type: 'info',
-                    title: 'Logging out',
-                    message: 'This is a demo feature',
-                    duration: 3000
-                  });
+                onClick={async () => {
+                  await signOut();
                   onClose();
+                  navigate('/login');
                 }}
                 className="w-full flex items-center justify-center px-4 py-3 text-figma-base text-fw-body bg-fw-neutral rounded-full hover:bg-fw-wash transition-colors"
               >

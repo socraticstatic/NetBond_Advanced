@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__vault-daemon__memory_read",
+      "mcp__vault-daemon__threads_surface",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(lsof -ti:5173,5174,5175)",
+      "Bash(xargs kill:*)",
+      "Bash(npx tsc:*)",
+      "Bash(lsof -ti:5173,5174,5175,5176,5177,5178,5179)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(mkdir -p /tmp/att-icons)",
+      "Bash(unzip -o \"/Users/micahbos/Library/Mobile Documents/com~apple~CloudDocs/att-icons-package.zip\" -d /tmp/att-icons)",
+      "mcp__ruflo__hooks_worker-status",
+      "mcp__ruflo__hooks_worker-dispatch",
+      "mcp__ruflo__hooks_intelligence_learn"
+    ]
+  }
+}

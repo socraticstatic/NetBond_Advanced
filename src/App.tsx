@@ -28,6 +28,7 @@ import { PWAUpdatePrompt, usePWAUpdate } from './components/common/PWAUpdateProm
 import { MaintenanceModal } from './components/common/MaintenanceModal';
 import { MaintenanceBanner } from './components/common/MaintenanceBanner';
 import { DemoBar } from './components/common/DemoBar';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 // Optimized lazy loading with better error handling
 const LazyConnectionWizard = lazy(() =>
@@ -184,6 +185,10 @@ const LazyLoginPage = lazy(() =>
   }))
 );
 
+const LazyMagicLinkLogin = lazy(() =>
+  import('./components/pages/MagicLinkLogin')
+);
+
 const LazyOnboardingWizard = lazy(() =>
   import('./components/onboarding/OnboardingWizard').then(module => ({
     default: module.OnboardingWizard
@@ -316,8 +321,15 @@ function App() {
               </Suspense>
             } />
 
-            {/* Login - standalone, no layout */}
+            {/* Magic Link Login - standalone, no layout */}
             <Route path="/login" element={
+              <Suspense fallback={<LoadingFallback />}>
+                <LazyMagicLinkLogin />
+              </Suspense>
+            } />
+
+            {/* SSO Login (demo) - standalone, no layout */}
+            <Route path="/sso-login" element={
               <Suspense fallback={<LoadingFallback />}>
                 <LazyLoginPage />
               </Suspense>
@@ -351,8 +363,9 @@ function App() {
               </Suspense>
             } />
 
-            {/* Main app routes - with layout wrapper */}
+            {/* Main app routes - with layout wrapper, auth-gated */}
             <Route path="*" element={
+              <ProtectedRoute>
               <DashboardLayout>
                 <main id="main-content" tabIndex={-1} className="min-h-screen">
                   <Routes>
@@ -699,6 +712,7 @@ function App() {
                   </Routes>
                 </main>
               </DashboardLayout>
+              </ProtectedRoute>
             } />
           </Routes>
         </ErrorBoundary>

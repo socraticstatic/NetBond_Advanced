@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import App from './App';
+import { AuthProvider } from './contexts/AuthContext';
 import './index.css';
 import './styles/fonts.css';
 import { initializePerformanceOptimizations } from './utils/performanceOptimizations';
@@ -61,7 +62,9 @@ if (!rootElement) {
     // Use HashRouter for file:// protocol compatibility (flash drive usage)
     root.render(
       <HashRouter>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </HashRouter>
     );
     
