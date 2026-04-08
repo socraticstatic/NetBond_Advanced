@@ -19,18 +19,15 @@ const pill = (active: boolean) =>
     active ? 'bg-fw-heading/10 text-fw-heading' : 'text-fw-bodyLight hover:bg-fw-wash'
   }`;
 
-interface DemoBarProps {
-  isMaintenanceFreeze?: boolean;
-  onToggleMaintenanceFreeze?: () => void;
-}
-
-export function DemoBar({ isMaintenanceFreeze = false, onToggleMaintenanceFreeze }: DemoBarProps) {
+export function DemoBar() {
   const navigate = useNavigate();
   const location = useLocation();
   const activeTenantId = useStore(s => s.activeTenantId);
   const setActiveTenant = useStore(s => s.setActiveTenant);
   const currentRole = useStore(s => s.currentRole);
   const setRole = useStore(s => s.setRole);
+  const maintenanceFreeze = useStore(s => s.maintenanceFreeze);
+  const setMaintenanceFreeze = useStore(s => s.setMaintenanceFreeze);
 
   const activeScenario = activeTenantId === 'TNT-004' || location.pathname === '/reseller' ? 'reseller' : 'platform-admin';
 
@@ -57,12 +54,8 @@ export function DemoBar({ isMaintenanceFreeze = false, onToggleMaintenanceFreeze
       ))}
       <div className="w-px h-4 bg-fw-secondary/50 mx-1" />
       <button
-        onClick={onToggleMaintenanceFreeze}
-        className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium transition-all duration-200 cursor-pointer ${
-          isMaintenanceFreeze
-            ? 'bg-fw-warn/20 text-fw-warn'
-            : 'text-fw-bodyLight hover:bg-fw-wash'
-        }`}
+        onClick={() => setMaintenanceFreeze(!maintenanceFreeze)}
+        className={`flex items-center gap-1 ${pill(maintenanceFreeze)}`}
       >
         <Wrench className="h-3 w-3" />
         <span className="hidden sm:inline">Maintenance</span>

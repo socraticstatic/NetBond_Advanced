@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { PlusCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../common/Button';
+import { useStore } from '../../store/useStore';
 
 interface SubNavProps {
   title: string | ReactNode;
@@ -17,8 +18,13 @@ interface SubNavProps {
 
 export function SubNav({ title, description, action, children }: SubNavProps) {
   const navigate = useNavigate();
+  const maintenanceFreeze = useStore(s => s.maintenanceFreeze);
 
   const handleActionClick = () => {
+    if (maintenanceFreeze) {
+      window.addToast?.({ type: 'info', title: 'Read-Only', message: 'Configuration changes are disabled during maintenance.', duration: 3000 });
+      return;
+    }
     if (action?.to) {
       navigate(action.to);
     } else if (action?.onClick) {
@@ -42,7 +48,11 @@ export function SubNav({ title, description, action, children }: SubNavProps) {
               {action && (
                 <button
                   onClick={handleActionClick}
-                  className="inline-flex items-center justify-center h-10 px-6 rounded-full border border-fw-active text-fw-link text-figma-base font-medium hover:bg-fw-ctaGhost transition-colors"
+                  className={`inline-flex items-center justify-center h-10 px-6 rounded-full border text-figma-base font-medium transition-colors ${
+                    maintenanceFreeze
+                      ? 'border-fw-secondary text-fw-bodyLight cursor-not-allowed'
+                      : 'border-fw-active text-fw-link hover:bg-fw-ctaGhost'
+                  }`}
                 >
                   {action.icon && action.icon}
                   {action.label}

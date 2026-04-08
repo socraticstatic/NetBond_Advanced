@@ -3,6 +3,7 @@ import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, ChevronsLeft, Chevro
 import { downloadCSV } from '../../utils/downloadCSV';
 import { ColumnVisibilityPopover, ColumnDefinition } from './ColumnVisibilityPopover';
 import { useColumnVisibility } from '../../hooks/useColumnVisibility';
+import { useStore } from '../../store/useStore';
 
 /**
  * StandardTable - The single table component for the entire app.
@@ -81,6 +82,8 @@ export function StandardTable<T>({
   showColumnManager = true,
   stickyHeader = false,
 }: StandardTableProps<T>) {
+  const maintenanceFreeze = useStore(s => s.maintenanceFreeze);
+
   // Internal sort state (used when onSort is not provided)
   const [internalSortField, setInternalSortField] = useState<keyof T | null>(null);
   const [internalSortDirection, setInternalSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -307,7 +310,7 @@ export function StandardTable<T>({
                     {col.render(item)}
                   </td>
                 ))}
-                {actions ? (
+                {actions && !maintenanceFreeze ? (
                   <td className="w-16 px-6 py-4">
                     <div className="flex justify-end" onClick={(e) => e.stopPropagation()}>
                       {actions(item)}

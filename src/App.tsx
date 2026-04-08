@@ -238,14 +238,14 @@ function App() {
   const tour = useTour('main-app');
   const pwaUpdate = usePWAUpdate();
   const [showMaintenance, setShowMaintenance] = useState(false);
-  const [isMaintenanceFreeze, setIsMaintenanceFreeze] = useState(false);
-  const [showMaintenanceBanner, setShowMaintenanceBanner] = useState(false);
+  const maintenanceFreeze = useStore(s => s.maintenanceFreeze);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+  const showMaintenanceBanner = maintenanceFreeze && !bannerDismissed;
 
-  const handleToggleMaintenanceFreeze = () => {
-    const next = !isMaintenanceFreeze;
-    setIsMaintenanceFreeze(next);
-    setShowMaintenanceBanner(next);
-  };
+  // Reset dismiss state when freeze is toggled back on
+  useEffect(() => {
+    if (maintenanceFreeze) setBannerDismissed(false);
+  }, [maintenanceFreeze]);
 
   const maintenanceSchedule = {
     date: 'March 25, 2026',
@@ -297,7 +297,7 @@ function App() {
       <ThemeProvider>
         <ErrorBoundary onReset={() => window.location.reload()}>
           {showMaintenanceBanner && (
-            <MaintenanceBanner onDismiss={() => setShowMaintenanceBanner(false)} />
+            <MaintenanceBanner onDismiss={() => setBannerDismissed(true)} />
           )}
           <ImpersonationBanner />
           <ToastContainer />
@@ -713,10 +713,7 @@ function App() {
             />
             {/* SmartAssistant removed */}
             <FeedbackWidget />
-            <DemoBar
-              isMaintenanceFreeze={isMaintenanceFreeze}
-              onToggleMaintenanceFreeze={handleToggleMaintenanceFreeze}
-            />
+            <DemoBar />
             <MaintenanceModal
               isOpen={showMaintenance}
               onClose={() => setShowMaintenance(false)}
