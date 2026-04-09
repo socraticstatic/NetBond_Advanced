@@ -1,0 +1,21 @@
+{
+  "name": "AT&T NetBond Advanced",
+  "short_name": "NetBond",
+  "description": "AT&T NetBond Advanced Cloud Network Management",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8fafb",
+  "theme_color": "#0057b8",
+  "icons": [
+    {
+      "src": "./icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
