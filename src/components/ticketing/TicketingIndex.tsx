@@ -208,15 +208,17 @@ export function TicketingIndex() {
                   </th>
                 );
               })}
-              <th className="w-12 px-2 h-12 align-middle text-right">
-                <button
-                  ref={columnButtonRef}
-                  onClick={() => setShowColumnPopover(!showColumnPopover)}
-                  className="p-1.5 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral transition-colors"
-                  title="Manage Columns"
-                >
-                  <Settings className="h-4 w-4" />
-                </button>
+              <th className="w-12 px-2 h-12 align-middle">
+                <div className="flex justify-end">
+                  <button
+                    ref={columnButtonRef}
+                    onClick={() => setShowColumnPopover(!showColumnPopover)}
+                    className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral transition-colors"
+                    title="Manage Columns"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </button>
+                </div>
               </th>
             </tr>
           </thead>
@@ -264,12 +266,14 @@ export function TicketingIndex() {
                     <input type="checkbox" className="h-4 w-4 rounded border-fw-secondary" />
                   </td>
                   {columns.map(col => cellMap[col.key])}
-                  <td className="w-12 px-2 py-3 text-right" onClick={e => e.stopPropagation()}>
+                  <td className="w-12 px-2 py-3" onClick={e => e.stopPropagation()}>
+                    <div className="flex justify-end">
                     <OverflowMenu items={[
                       { id: 'view', label: 'View Details', icon: <Eye className="h-4 w-4" />, onClick: () => navigate(`/tickets/${ticket.id}`) },
                       { id: 'edit', label: 'Edit Ticket', icon: <Edit className="h-4 w-4" />, onClick: () => navigate(`/tickets/${ticket.id}`) },
                       { id: 'delete', label: 'Delete', icon: <Trash2 className="h-4 w-4" />, onClick: () => {}, variant: 'danger' as const },
                     ]} />
+                    </div>
                   </td>
                 </tr>
               );
