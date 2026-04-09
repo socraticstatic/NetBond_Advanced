@@ -178,79 +178,102 @@ export function TicketingIndex() {
           />
         </div>
 
-        <table className="w-full table-fixed">
+        <div className="overflow-x-auto">
+        <table className="w-full">
           <thead className="bg-fw-wash border-b border-fw-secondary">
             <tr>
               <th className="w-10 px-4 h-12 align-middle">
                 <input type="checkbox" className="h-4 w-4 rounded border-fw-secondary" />
               </th>
-              {columns.map(col => (
-                <th
-                  key={col.key}
-                  className="px-6 h-12 text-left text-[14px] font-medium text-fw-heading whitespace-nowrap overflow-hidden text-ellipsis align-middle"
-                >
-                  <button onClick={() => handleSort(col.key)} className="group inline-flex items-center space-x-1">
-                    <span>{col.label}</span>
-                    <span className="flex flex-col">
-                      <ChevronUp className={`h-3 w-3 ${sortColumn === col.key && sortDirection === 'asc' ? 'text-fw-body' : 'text-fw-bodyLight group-hover:text-fw-body'}`} />
-                      <ChevronDown className={`h-3 w-3 -mt-1 ${sortColumn === col.key && sortDirection === 'desc' ? 'text-fw-body' : 'text-fw-bodyLight group-hover:text-fw-body'}`} />
-                    </span>
-                  </button>
-                </th>
-              ))}
-              <th className="w-16 px-6 h-12 align-middle">
-                <div className="flex justify-end">
-                  <button
-                    ref={columnButtonRef}
-                    onClick={() => setShowColumnPopover(!showColumnPopover)}
-                    className="p-2 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral transition-colors"
-                    title="Manage Columns"
+              {columns.map(col => {
+                const widthClass = col.key === 'ticketNumber' ? 'w-[130px]'
+                  : col.key === 'description' ? 'min-w-[240px]'
+                  : col.key === 'troubleType' ? 'w-[120px]'
+                  : col.key === 'status' ? 'w-[100px]'
+                  : col.key === 'connection' ? 'min-w-[200px]'
+                  : col.key === 'asset' ? 'w-[140px]'
+                  : '';
+                return (
+                  <th
+                    key={col.key}
+                    className={`px-4 h-12 text-left text-figma-sm font-medium text-fw-heading whitespace-nowrap align-middle ${widthClass}`}
                   >
-                    <Settings className="h-5 w-5" />
-                  </button>
-                </div>
+                    <button onClick={() => handleSort(col.key)} className="group inline-flex items-center space-x-1">
+                      <span>{col.label}</span>
+                      <span className="flex flex-col">
+                        <ChevronUp className={`h-3 w-3 ${sortColumn === col.key && sortDirection === 'asc' ? 'text-fw-body' : 'text-fw-bodyLight group-hover:text-fw-body'}`} />
+                        <ChevronDown className={`h-3 w-3 -mt-1 ${sortColumn === col.key && sortDirection === 'desc' ? 'text-fw-body' : 'text-fw-bodyLight group-hover:text-fw-body'}`} />
+                      </span>
+                    </button>
+                  </th>
+                );
+              })}
+              <th className="w-12 px-2 h-12 align-middle text-right">
+                <button
+                  ref={columnButtonRef}
+                  onClick={() => setShowColumnPopover(!showColumnPopover)}
+                  className="p-1.5 text-fw-bodyLight hover:text-fw-body rounded-full hover:bg-fw-neutral transition-colors"
+                  title="Manage Columns"
+                >
+                  <Settings className="h-4 w-4" />
+                </button>
               </th>
             </tr>
           </thead>
           <tbody className="bg-fw-base divide-y divide-fw-secondary">
-            {paginatedTickets.map(ticket => (
-              <tr key={ticket.id} className="hover:bg-fw-wash transition-colors cursor-pointer" onClick={() => navigate(`/tickets/${ticket.id}`)}>
-                <td className="px-4 py-4 align-middle" onClick={e => e.stopPropagation()}>
-                  <input type="checkbox" className="h-4 w-4 rounded border-fw-secondary" />
-                </td>
-                <td className="px-6 py-4 text-[14px] text-fw-link font-medium whitespace-nowrap overflow-hidden text-ellipsis">
-                  {ticket.ticketNumber}
-                </td>
-                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
-                  {ticket.description}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] font-medium ${TROUBLE_TYPE_STYLES[ticket.troubleType]}`}>
-                    {TROUBLE_TYPE_LABELS[ticket.troubleType]}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap overflow-hidden text-ellipsis">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] font-medium ${STATUS_STYLES[ticket.status]}`}>
-                    {STATUS_LABELS[ticket.status]}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
-                  {ticket.connection || '-'}
-                </td>
-                <td className="px-6 py-4 text-[14px] text-fw-body whitespace-nowrap overflow-hidden text-ellipsis">
-                  {ticket.asset || '-'}
-                </td>
-                <td className="w-16 px-6 py-4" onClick={e => e.stopPropagation()}>
-                  <div className="flex justify-end">
+            {paginatedTickets.map(ticket => {
+              const cellMap: Record<string, React.ReactNode> = {
+                ticketNumber: (
+                  <td key="ticketNumber" className="px-4 py-3 text-figma-sm text-fw-link font-medium whitespace-nowrap">
+                    {ticket.ticketNumber}
+                  </td>
+                ),
+                description: (
+                  <td key="description" className="px-4 py-3 text-figma-sm text-fw-body max-w-[320px] truncate">
+                    {ticket.description}
+                  </td>
+                ),
+                troubleType: (
+                  <td key="troubleType" className="px-4 py-3 whitespace-nowrap">
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] font-medium ${TROUBLE_TYPE_STYLES[ticket.troubleType]}`}>
+                      {TROUBLE_TYPE_LABELS[ticket.troubleType]}
+                    </span>
+                  </td>
+                ),
+                status: (
+                  <td key="status" className="px-4 py-3 whitespace-nowrap">
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-[8px] text-[12px] font-medium ${STATUS_STYLES[ticket.status]}`}>
+                      {STATUS_LABELS[ticket.status]}
+                    </span>
+                  </td>
+                ),
+                connection: (
+                  <td key="connection" className="px-4 py-3 text-figma-sm text-fw-body whitespace-nowrap">
+                    {ticket.connection || '-'}
+                  </td>
+                ),
+                asset: (
+                  <td key="asset" className="px-4 py-3 text-figma-sm text-fw-body whitespace-nowrap">
+                    {ticket.asset || '-'}
+                  </td>
+                ),
+              };
+              return (
+                <tr key={ticket.id} className="hover:bg-fw-wash transition-colors cursor-pointer" onClick={() => navigate(`/tickets/${ticket.id}`)}>
+                  <td className="px-4 py-3 align-middle" onClick={e => e.stopPropagation()}>
+                    <input type="checkbox" className="h-4 w-4 rounded border-fw-secondary" />
+                  </td>
+                  {columns.map(col => cellMap[col.key])}
+                  <td className="w-12 px-2 py-3 text-right" onClick={e => e.stopPropagation()}>
                     <OverflowMenu items={[
                       { id: 'view', label: 'View Details', icon: <Eye className="h-4 w-4" />, onClick: () => navigate(`/tickets/${ticket.id}`) },
                       { id: 'edit', label: 'Edit Ticket', icon: <Edit className="h-4 w-4" />, onClick: () => navigate(`/tickets/${ticket.id}`) },
                       { id: 'delete', label: 'Delete', icon: <Trash2 className="h-4 w-4" />, onClick: () => {}, variant: 'danger' as const },
                     ]} />
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              );
+            })}
             {paginatedTickets.length === 0 && (
               <tr>
                 <td colSpan={columns.length + 2} className="px-6 py-16 text-center">
@@ -269,6 +292,7 @@ export function TicketingIndex() {
             )}
           </tbody>
         </table>
+        </div>
 
         {/* Pagination */}
         <div className="flex items-center justify-between px-6 py-3 border-t border-fw-secondary">
