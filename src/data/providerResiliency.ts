@@ -40,10 +40,10 @@ const AWS_TIERS: Record<Tier, ResiliencyTierConfig> = {
     providerName: 'Dev/Test',
     sla: 'No SLA',
     architecture: 'Connectivity from one Direct Connect location with redundant routers/links within the site. Protects against device failure only.',
-    minConnections: 2,
+    minConnections: 1,
     minLocations: 1,
     minMetros: 1,
-    locationConstraint: '1 Direct Connect location, separate devices',
+    locationConstraint: '1 Direct Connect location, device redundancy',
     locationBehavior: 'single-site',
     uiLabel: 'Single-site, locally redundant',
     details: [

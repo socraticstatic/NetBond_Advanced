@@ -28,12 +28,18 @@ export const PROVIDER_LOCATIONS: Record<string, ProviderLocation[]> = {
   'AWS': [
     // Direct Connect locations serve ALL AWS regions via the AWS backbone.
     // The "servesRegions" field shows the nearest region for latency guidance only.
+    // Multiple facilities per metro listed per provider-trees.md
     { label: 'Ashburn, VA (Equinix DC1-DC15)', servesRegions: ['us-east-1', 'us-east-2'], metro: 'Ashburn' },
+    { label: 'Ashburn, VA (CoreSite VA1)', servesRegions: ['us-east-1', 'us-east-2'], metro: 'Ashburn' },
     { label: 'Columbus, OH (Cologix COL1)', servesRegions: ['us-east-2'], metro: 'Columbus' },
     { label: 'Chicago, IL (CoreSite CH1)', servesRegions: ['us-east-2', 'us-west-2'], metro: 'Chicago' },
+    { label: 'Chicago, IL (Equinix CH)', servesRegions: ['us-east-2', 'us-west-2'], metro: 'Chicago' },
     { label: 'Dallas, TX (Equinix DA1)', servesRegions: ['us-east-1', 'us-west-2'], metro: 'Dallas' },
+    { label: 'Dallas, TX (CyrusOne)', servesRegions: ['us-east-1', 'us-west-2'], metro: 'Dallas' },
     { label: 'Los Angeles, CA (CoreSite LA1)', servesRegions: ['us-west-2', 'us-west-1'], metro: 'Los Angeles' },
+    { label: 'Los Angeles, CA (Equinix LA)', servesRegions: ['us-west-2', 'us-west-1'], metro: 'Los Angeles' },
     { label: 'Portland, OR (Pittock Block)', servesRegions: ['us-west-2'], metro: 'Portland' },
+    { label: 'Portland, OR (EdgeConneX)', servesRegions: ['us-west-2'], metro: 'Portland' },
   ],
   'Azure': [
     // Peering locations where AT&T NetBond is listed as connectivity provider

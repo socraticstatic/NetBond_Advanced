@@ -184,7 +184,7 @@ export const MOCK_LMCC_CONNECTIONS: LMCCConnection[] = [
       customerASN: 65000,
       md5Key: '********',
     },
-    bfd: { interval: 300, multiplier: 3 },
+    bfd: { interval: 100, multiplier: 3 },
     billing: {
       trigger: 'bgp-established',
       startedAt: '2026-07-01T14:30:00Z',
@@ -247,7 +247,7 @@ export const MOCK_LMCC_CONNECTIONS: LMCCConnection[] = [
       partnerASN: 7018,
       customerASN: 65100,
     },
-    bfd: { interval: 300, multiplier: 3 },
+    bfd: { interval: 100, multiplier: 3 },
     billing: {
       trigger: 'bgp-established',
       model: 'fixed-rate',

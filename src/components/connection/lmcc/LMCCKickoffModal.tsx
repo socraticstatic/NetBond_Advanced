@@ -33,7 +33,7 @@ const PHASES = [
 ];
 
 export function LMCCKickoffModal({ connection, isOpen, onClose, onStartSetup }: LMCCKickoffModalProps) {
-  const [activationKey, setActivationKey] = useState('');
+  const [activationKey, setActivationKey] = useState('DEMO-NETBOND-2026');
 
   if (!isOpen) return null;
 
