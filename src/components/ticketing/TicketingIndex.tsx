@@ -19,6 +19,9 @@ interface Ticket {
   status: TicketStatus;
   connection: string;
   asset: string;
+  bcOrgId: string;
+  externalTicketId: string;
+  resolution: string;
 }
 
 const TROUBLE_TYPE_STYLES: Record<TroubleType, string> = {
@@ -48,16 +51,16 @@ const STATUS_LABELS: Record<TicketStatus, string> = {
 };
 
 const MOCK_TICKETS: Ticket[] = [
-  { id: '1', ticketNumber: 'TKT-2024-001', description: 'Tunnel status down on AWS Direct Connect', troubleType: 'trouble', status: 'open', connection: 'AWS Direct Connect - US East', asset: 'PALO-FW-PROD-01' },
-  { id: '2', ticketNumber: 'TKT-2024-002', description: 'Request BGP peering configuration change', troubleType: 'configuration', status: 'in-progress', connection: 'Azure ExpressRoute - West', asset: 'CR-EAST-01' },
-  { id: '3', ticketNumber: 'TKT-2024-003', description: 'Bandwidth upgrade inquiry for Q2', troubleType: 'info', status: 'open', connection: 'Google Interconnect - Central', asset: '' },
-  { id: '4', ticketNumber: 'TKT-2024-004', description: 'High latency on Oracle FastConnect link', troubleType: 'trouble', status: 'pending', connection: 'Oracle FastConnect - Phoenix', asset: 'CR-WEST-02' },
-  { id: '5', ticketNumber: 'TKT-2024-005', description: 'Add VLAN tagging to production link', troubleType: 'configuration', status: 'closed', connection: 'AWS Direct Connect - US East', asset: 'VLAN-100' },
-  { id: '6', ticketNumber: 'TKT-2024-006', description: 'VNF firewall rule update request', troubleType: 'configuration', status: 'open', connection: 'Azure ExpressRoute - West', asset: 'PALO-FW-DEV-01' },
-  { id: '7', ticketNumber: 'TKT-2024-007', description: 'Connection failover test scheduling', troubleType: 'info', status: 'in-progress', connection: 'AWS Direct Connect - US East', asset: '' },
-  { id: '8', ticketNumber: 'TKT-2024-008', description: 'Packet loss detected on Cloud Router B', troubleType: 'trouble', status: 'open', connection: 'Google Interconnect - Central', asset: 'CR-CENTRAL-01' },
-  { id: '9', ticketNumber: 'TKT-2024-009', description: 'Decommission old SD-WAN VNF', troubleType: 'configuration', status: 'closed', connection: 'Oracle FastConnect - Phoenix', asset: 'SDWAN-BRANCH-01' },
-  { id: '10', ticketNumber: 'TKT-2024-010', description: 'SLA compliance report request', troubleType: 'info', status: 'pending', connection: 'AWS Direct Connect - US East', asset: '' },
+  { id: '1', ticketNumber: 'TKT-2024-001', description: 'Tunnel status down on AWS Direct Connect', troubleType: 'trouble', status: 'open', connection: 'AWS Direct Connect - US East', asset: 'PALO-FW-PROD-01', bcOrgId: 'BC-ORG-44821', externalTicketId: 'AOTS-TKT-88432', resolution: '' },
+  { id: '2', ticketNumber: 'TKT-2024-002', description: 'Request BGP peering configuration change', troubleType: 'configuration', status: 'in-progress', connection: 'Azure ExpressRoute - West', asset: 'CR-EAST-01', bcOrgId: 'BC-ORG-44821', externalTicketId: '', resolution: '' },
+  { id: '3', ticketNumber: 'TKT-2024-003', description: 'Bandwidth upgrade inquiry for Q2', troubleType: 'info', status: 'open', connection: 'Google Interconnect - Central', asset: '', bcOrgId: 'BC-ORG-55102', externalTicketId: '', resolution: '' },
+  { id: '4', ticketNumber: 'TKT-2024-004', description: 'High latency on Oracle FastConnect link', troubleType: 'trouble', status: 'pending', connection: 'Oracle FastConnect - Phoenix', asset: 'CR-WEST-02', bcOrgId: 'BC-ORG-44821', externalTicketId: 'AOTS-TKT-90011', resolution: '' },
+  { id: '5', ticketNumber: 'TKT-2024-005', description: 'Add VLAN tagging to production link', troubleType: 'configuration', status: 'closed', connection: 'AWS Direct Connect - US East', asset: 'VLAN-100', bcOrgId: 'BC-ORG-44821', externalTicketId: '', resolution: 'Completed - VLAN 100 tagged on all 4 paths' },
+  { id: '6', ticketNumber: 'TKT-2024-006', description: 'VNF firewall rule update request', troubleType: 'configuration', status: 'open', connection: 'Azure ExpressRoute - West', asset: 'PALO-FW-DEV-01', bcOrgId: 'BC-ORG-55102', externalTicketId: '', resolution: '' },
+  { id: '7', ticketNumber: 'TKT-2024-007', description: 'Connection failover test scheduling', troubleType: 'info', status: 'in-progress', connection: 'AWS Direct Connect - US East', asset: '', bcOrgId: 'BC-ORG-44821', externalTicketId: '', resolution: '' },
+  { id: '8', ticketNumber: 'TKT-2024-008', description: 'Packet loss detected on Cloud Router B', troubleType: 'trouble', status: 'open', connection: 'Google Interconnect - Central', asset: 'CR-CENTRAL-01', bcOrgId: 'BC-ORG-55102', externalTicketId: 'AOTS-TKT-90455', resolution: '' },
+  { id: '9', ticketNumber: 'TKT-2024-009', description: 'Decommission old SD-WAN VNF', troubleType: 'configuration', status: 'closed', connection: 'Oracle FastConnect - Phoenix', asset: 'SDWAN-BRANCH-01', bcOrgId: 'BC-ORG-44821', externalTicketId: '', resolution: 'Decommissioned - VNF removed from inventory' },
+  { id: '10', ticketNumber: 'TKT-2024-010', description: 'SLA compliance report request', troubleType: 'info', status: 'pending', connection: 'AWS Direct Connect - US East', asset: '', bcOrgId: 'BC-ORG-55102', externalTicketId: '', resolution: '' },
 ];
 
 const PAGE_SIZE = 20;
@@ -135,8 +138,11 @@ export function TicketingIndex() {
     { key: 'description', label: 'Description' },
     { key: 'troubleType', label: 'Trouble Type' },
     { key: 'status', label: 'Status' },
+    { key: 'bcOrgId', label: 'BC Org' },
     { key: 'connection', label: 'Connection' },
     { key: 'asset', label: 'Asset' },
+    { key: 'externalTicketId', label: 'AOTS Ref' },
+    { key: 'resolution', label: 'Resolution' },
   ];
 
   const columns = visibleColumns.length === 0
@@ -257,6 +263,21 @@ export function TicketingIndex() {
                 asset: (
                   <td key="asset" className="px-4 py-3 text-figma-sm text-fw-body whitespace-nowrap">
                     {ticket.asset || '-'}
+                  </td>
+                ),
+                bcOrgId: (
+                  <td key="bcOrgId" className="px-4 py-3 text-figma-sm text-fw-body whitespace-nowrap font-mono">
+                    {ticket.bcOrgId || '-'}
+                  </td>
+                ),
+                externalTicketId: (
+                  <td key="externalTicketId" className="px-4 py-3 text-figma-sm text-fw-link whitespace-nowrap font-mono">
+                    {ticket.externalTicketId || '-'}
+                  </td>
+                ),
+                resolution: (
+                  <td key="resolution" className="px-4 py-3 text-figma-sm text-fw-body max-w-[200px] truncate">
+                    {ticket.resolution || '-'}
                   </td>
                 ),
               };

@@ -34,7 +34,7 @@ const DEFAULT_COLUMNS: ColumnConfig = {
   'cms-banners': ['title', 'status', 'position', 'startDate', 'endDate'],
   'group-connections': ['name', 'status', 'bandwidth', 'location'],
   'group-members': ['user', 'role', 'status'],
-  tickets: ['ticketNumber', 'description', 'troubleType', 'status', 'connection', 'asset'],
+  tickets: ['ticketNumber', 'description', 'troubleType', 'status', 'bcOrgId', 'connection', 'asset'],
   'monitor-logs': ['time', 'type', 'severity', 'message', 'source', 'user'],
 };
 

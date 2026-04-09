@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Upload, Check, Trash2 } from 'lucide-react';
+import { ArrowLeft, Upload, Check, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '../common/Button';
 
 interface AttachmentFile {
@@ -64,6 +64,7 @@ const SELECT_CLASS = 'w-full h-10 px-3 rounded-lg border bg-fw-base text-figma-b
 const LABEL_CLASS = 'block text-figma-base font-medium text-fw-heading mb-2';
 const HELPER_CLASS = 'mt-1 text-figma-sm text-fw-bodyLight';
 const ERROR_CLASS = 'mt-1 text-figma-sm text-fw-error';
+const RADIO_CLASS = 'inline-flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer text-figma-sm font-medium transition-colors';
 
 export function CreateTicket() {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ export function CreateTicket() {
   const preselectedConnectionId = searchParams.get('connectionId') || '';
   const preselectedAsset = searchParams.get('asset') || '';
 
-  // Form state
+  // Form state - existing
   const [connectionId, setConnectionId] = useState(preselectedConnectionId);
   const [cspName, setCspName] = useState('');
   const [vnfId, setVnfId] = useState('');
@@ -84,6 +85,19 @@ export function CreateTicket() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+
+  // Form state - new SD3 fields
+  const [assetType, setAssetType] = useState<'vnf' | 'connection'>('connection');
+  const [billingAssetId, setBillingAssetId] = useState('');
+  const [bcOrgId, setBcOrgId] = useState('');
+  const [ubSubaccountId, setUbSubaccountId] = useState('');
+  const [externalTicketId, setExternalTicketId] = useState('');
+  const [preferredContact, setPreferredContact] = useState<'phone' | 'email' | 'address'>('email');
+  const [showNetworkInfo, setShowNetworkInfo] = useState(false);
+  const [ipeHostname, setIpeHostname] = useState('');
+  const [taoLocationId, setTaoLocationId] = useState('');
+  const [ipeLogicPort, setIpeLogicPort] = useState('');
+  const [equinixCircuitId, setEquinixCircuitId] = useState('');
 
   // Derived data
   const selectedConnection = useMemo(
@@ -101,7 +115,6 @@ export function CreateTicket() {
     return MOCK_CONNECTIONS.flatMap(c => c.vnfs);
   }, [selectedConnection]);
 
-  // Auto-fill CSP when connection changes
   const handleConnectionChange = (id: string) => {
     setConnectionId(id);
     const conn = MOCK_CONNECTIONS.find(c => c.id === id);
@@ -118,6 +131,7 @@ export function CreateTicket() {
     const newErrors: Record<string, string> = {};
     if (!troubleType) newErrors.troubleType = 'Trouble type is required';
     if (!description.trim()) newErrors.description = 'Description is required';
+    if (!bcOrgId.trim()) newErrors.bcOrgId = 'BC Org ID is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -167,6 +181,17 @@ export function CreateTicket() {
     setAddress('');
     setAttachments([]);
     setErrors({});
+    setBcOrgId('');
+    setUbSubaccountId('');
+    setBillingAssetId('');
+    setExternalTicketId('');
+    setAssetType('connection');
+    setPreferredContact('email');
+    setIpeHostname('');
+    setTaoLocationId('');
+    setIpeLogicPort('');
+    setEquinixCircuitId('');
+    setShowNetworkInfo(false);
   };
 
   if (submitted) {
@@ -219,10 +244,42 @@ export function CreateTicket() {
         {/* Left: Form */}
         <div className="lg:col-span-2 max-w-[560px]">
           <div className="space-y-6">
-            {/* Section: Asset Identification */}
+            {/* Section 1: Asset Identification */}
             <div>
               <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Asset Identification</h3>
               <div className="space-y-4">
+                {/* Network Asset Type */}
+                <div>
+                  <label className={LABEL_CLASS}>Network Asset Type</label>
+                  <div className="flex gap-2">
+                    {(['connection', 'vnf'] as const).map(t => (
+                      <label
+                        key={t}
+                        className={`${RADIO_CLASS} ${assetType === t
+                          ? 'border-fw-active bg-fw-active/5 text-fw-link'
+                          : 'border-fw-secondary text-fw-body hover:border-fw-active/50'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="assetType"
+                          value={t}
+                          checked={assetType === t}
+                          onChange={() => setAssetType(t)}
+                          className="sr-only"
+                        />
+                        <span className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center ${
+                          assetType === t ? 'border-fw-active' : 'border-fw-secondary'
+                        }`}>
+                          {assetType === t && <span className="w-1.5 h-1.5 rounded-full bg-fw-active" />}
+                        </span>
+                        {t === 'connection' ? 'Connection' : 'VNF'}
+                      </label>
+                    ))}
+                  </div>
+                  <p className={HELPER_CLASS}>Select whether you are reporting against a connection or a VNF</p>
+                </div>
+
                 {/* Connection Name */}
                 <div>
                   <label className={LABEL_CLASS}>Connection Name</label>
@@ -276,14 +333,61 @@ export function CreateTicket() {
                     <p className={HELPER_CLASS}>No VNFs available for this connection</p>
                   )}
                 </div>
+
+                {/* Billing Asset ID */}
+                <div>
+                  <label className={LABEL_CLASS}>Billing Asset ID</label>
+                  <input
+                    type="text"
+                    value={billingAssetId}
+                    onChange={e => setBillingAssetId(e.target.value)}
+                    className={`${INPUT_CLASS} border-fw-secondary`}
+                    placeholder="e.g., BILL-AST-00123"
+                  />
+                  <p className={HELPER_CLASS}>Customer asset reference from billing system</p>
+                </div>
               </div>
             </div>
 
-            {/* Section: Issue Details */}
+            {/* Section 2: Customer Service */}
+            <div>
+              <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Customer Service</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className={LABEL_CLASS}>
+                    BC Org ID <span className="text-fw-error">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={bcOrgId}
+                    onChange={e => { setBcOrgId(e.target.value); setErrors(prev => ({ ...prev, bcOrgId: '' })); }}
+                    className={`${INPUT_CLASS} ${borderClass('bcOrgId')}`}
+                    placeholder="e.g., BC-ORG-12345"
+                  />
+                  {errors.bcOrgId ? (
+                    <p className={ERROR_CLASS}>{errors.bcOrgId}</p>
+                  ) : (
+                    <p className={HELPER_CLASS}>Business Customer organization identifier</p>
+                  )}
+                </div>
+                <div>
+                  <label className={LABEL_CLASS}>UB Subaccount ID</label>
+                  <input
+                    type="text"
+                    value={ubSubaccountId}
+                    onChange={e => setUbSubaccountId(e.target.value)}
+                    className={`${INPUT_CLASS} border-fw-secondary`}
+                    placeholder="e.g., UB-SUB-98765"
+                  />
+                  <p className={HELPER_CLASS}>Universal Billing subaccount identifier</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3: Issue Details */}
             <div>
               <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Issue Details</h3>
               <div className="space-y-4">
-                {/* Trouble Type */}
                 <div>
                   <label className={LABEL_CLASS}>
                     Trouble Type <span className="text-fw-error">*</span>
@@ -301,7 +405,6 @@ export function CreateTicket() {
                   {errors.troubleType && <p className={ERROR_CLASS}>{errors.troubleType}</p>}
                 </div>
 
-                {/* Trouble Description */}
                 <div>
                   <label className={LABEL_CLASS}>
                     Trouble Description <span className="text-fw-error">*</span>
@@ -315,49 +418,158 @@ export function CreateTicket() {
                   />
                   {errors.description && <p className={ERROR_CLASS}>{errors.description}</p>}
                 </div>
+
+                <div>
+                  <label className={LABEL_CLASS}>External Ticket ID (AOTS)</label>
+                  <input
+                    type="text"
+                    value={externalTicketId}
+                    onChange={e => setExternalTicketId(e.target.value)}
+                    className={`${INPUT_CLASS} border-fw-secondary`}
+                    placeholder="e.g., AOTS-TKT-00456"
+                  />
+                  <p className={HELPER_CLASS}>Reference to an external AOTS ticket for log correlation</p>
+                </div>
               </div>
             </div>
 
-            {/* Section: Customer Contact */}
+            {/* Section 4: Customer Contact */}
             <div>
               <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Customer Contact</h3>
               <div className="space-y-4">
+                {/* Preferred Contact Method */}
+                <div>
+                  <label className={LABEL_CLASS}>Preferred Contact Method</label>
+                  <div className="flex gap-2">
+                    {(['phone', 'email', 'address'] as const).map(m => (
+                      <label
+                        key={m}
+                        className={`${RADIO_CLASS} ${preferredContact === m
+                          ? 'border-fw-active bg-fw-active/5 text-fw-link'
+                          : 'border-fw-secondary text-fw-body hover:border-fw-active/50'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="preferredContact"
+                          value={m}
+                          checked={preferredContact === m}
+                          onChange={() => setPreferredContact(m)}
+                          className="sr-only"
+                        />
+                        <span className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center ${
+                          preferredContact === m ? 'border-fw-active' : 'border-fw-secondary'
+                        }`}>
+                          {preferredContact === m && <span className="w-1.5 h-1.5 rounded-full bg-fw-active" />}
+                        </span>
+                        {m.charAt(0).toUpperCase() + m.slice(1)}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className={LABEL_CLASS}>Phone</label>
+                    <label className={LABEL_CLASS}>
+                      Phone {preferredContact === 'phone' && <span className="text-fw-link text-figma-xs">(preferred)</span>}
+                    </label>
                     <input
                       type="tel"
                       value={phone}
                       onChange={e => setPhone(e.target.value)}
-                      className={`${INPUT_CLASS} border-fw-secondary`}
+                      className={`${INPUT_CLASS} ${preferredContact === 'phone' ? 'border-fw-active' : 'border-fw-secondary'}`}
                       placeholder="+1 555 123-4567"
                     />
                   </div>
                   <div>
-                    <label className={LABEL_CLASS}>Email</label>
+                    <label className={LABEL_CLASS}>
+                      Email {preferredContact === 'email' && <span className="text-fw-link text-figma-xs">(preferred)</span>}
+                    </label>
                     <input
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
-                      className={`${INPUT_CLASS} border-fw-secondary`}
+                      className={`${INPUT_CLASS} ${preferredContact === 'email' ? 'border-fw-active' : 'border-fw-secondary'}`}
                       placeholder="user@company.com"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className={LABEL_CLASS}>Street Address</label>
+                  <label className={LABEL_CLASS}>
+                    Street Address {preferredContact === 'address' && <span className="text-fw-link text-figma-xs">(preferred)</span>}
+                  </label>
                   <input
                     type="text"
                     value={address}
                     onChange={e => setAddress(e.target.value)}
-                    className={`${INPUT_CLASS} border-fw-secondary`}
+                    className={`${INPUT_CLASS} ${preferredContact === 'address' ? 'border-fw-active' : 'border-fw-secondary'}`}
                     placeholder="123 Main St, Suite 100, Dallas, TX 75201"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Section: Attachments */}
+            {/* Section 5: Network Information (collapsible) */}
+            <div>
+              <button
+                onClick={() => setShowNetworkInfo(!showNetworkInfo)}
+                className="flex items-center gap-2 text-figma-base font-semibold text-fw-heading mb-4 hover:text-fw-link transition-colors"
+              >
+                {showNetworkInfo ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                Network Information
+                <span className="text-figma-xs font-normal text-fw-bodyLight">(optional)</span>
+              </button>
+              {showNetworkInfo && (
+                <div className="space-y-4 pl-6 border-l-2 border-fw-secondary">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className={LABEL_CLASS}>IPE Hostname</label>
+                      <input
+                        type="text"
+                        value={ipeHostname}
+                        onChange={e => setIpeHostname(e.target.value)}
+                        className={`${INPUT_CLASS} border-fw-secondary`}
+                        placeholder="e.g., MX304-SV1-A"
+                      />
+                    </div>
+                    <div>
+                      <label className={LABEL_CLASS}>TAO Location ID</label>
+                      <input
+                        type="text"
+                        value={taoLocationId}
+                        onChange={e => setTaoLocationId(e.target.value)}
+                        className={`${INPUT_CLASS} border-fw-secondary`}
+                        placeholder="e.g., TAO-SJC-01"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className={LABEL_CLASS}>IPE Logic Port (CSP/TAO)</label>
+                      <input
+                        type="text"
+                        value={ipeLogicPort}
+                        onChange={e => setIpeLogicPort(e.target.value)}
+                        className={`${INPUT_CLASS} border-fw-secondary`}
+                        placeholder="e.g., 100GE-0/0/0"
+                      />
+                    </div>
+                    <div>
+                      <label className={LABEL_CLASS}>Equinix Circuit ID</label>
+                      <input
+                        type="text"
+                        value={equinixCircuitId}
+                        onChange={e => setEquinixCircuitId(e.target.value)}
+                        className={`${INPUT_CLASS} border-fw-secondary`}
+                        placeholder="e.g., EQX-CKT-12345"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Section 6: Attachments */}
             <div>
               <h3 className="text-figma-base font-semibold text-fw-heading mb-4">Attachment (AOTS TM Log)</h3>
               <div
@@ -436,6 +648,10 @@ export function CreateTicket() {
                 <span className="text-fw-heading font-medium">NBAdvanced</span>
               </div>
               <div className="flex justify-between">
+                <span className="text-fw-bodyLight">Asset Type</span>
+                <span className="text-fw-heading font-medium">{assetType === 'vnf' ? 'VNF' : 'Connection'}</span>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-fw-bodyLight">Connection</span>
                 <span className="text-fw-heading font-medium truncate ml-4 max-w-[160px]">
                   {selectedConnection?.name || 'None'}
@@ -459,9 +675,29 @@ export function CreateTicket() {
                   {TROUBLE_TYPES.find(t => t.value === troubleType)?.label || 'Not selected'}
                 </span>
               </div>
-              <div className="border-t border-fw-secondary pt-3 flex justify-between">
-                <span className="text-fw-bodyLight">Reported Product</span>
-                <span className="text-fw-heading font-medium">NetBond Advanced</span>
+              <div className="border-t border-fw-secondary pt-3 space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-fw-bodyLight">Reported Product</span>
+                  <span className="text-fw-heading font-medium">NetBond Advanced</span>
+                </div>
+                {bcOrgId && (
+                  <div className="flex justify-between">
+                    <span className="text-fw-bodyLight">BC Org ID</span>
+                    <span className="text-fw-heading font-medium">{bcOrgId}</span>
+                  </div>
+                )}
+                {ubSubaccountId && (
+                  <div className="flex justify-between">
+                    <span className="text-fw-bodyLight">UB Subaccount</span>
+                    <span className="text-fw-heading font-medium">{ubSubaccountId}</span>
+                  </div>
+                )}
+                {externalTicketId && (
+                  <div className="flex justify-between">
+                    <span className="text-fw-bodyLight">AOTS Ref</span>
+                    <span className="text-fw-heading font-medium">{externalTicketId}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>

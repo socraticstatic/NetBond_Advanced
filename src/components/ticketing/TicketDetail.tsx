@@ -36,6 +36,17 @@ interface TicketData {
   endDate: string;
   phone: string;
   attachment: string;
+  // SD3 fields
+  assetType: 'vnf' | 'connection';
+  bcOrgId: string;
+  ubSubaccountId: string;
+  billingAssetId: string;
+  externalTicketId: string;
+  preferredContact: 'phone' | 'email' | 'address';
+  ipeHostname: string;
+  taoLocationId: string;
+  ipeLogicPort: string;
+  equinixCircuitId: string;
   steps: StageStep[];
   activityLog: ActivityEntry[];
   conversation: ConversationMessage[];
@@ -100,6 +111,16 @@ Requesting investigation and restoration of primary tunnel.`,
   endDate: '2024/10/13, 3:00 PM',
   phone: '+1 973 1234567',
   attachment: 'tunnel-status-log.txt',
+  assetType: 'vnf',
+  bcOrgId: 'BC-ORG-44821',
+  ubSubaccountId: 'UB-SUB-90112',
+  billingAssetId: 'BILL-AST-00789',
+  externalTicketId: 'AOTS-TKT-88432',
+  preferredContact: 'email',
+  ipeHostname: 'MX304-DC2-A',
+  taoLocationId: 'TAO-ASH-01',
+  ipeLogicPort: '100GE-0/0/0',
+  equinixCircuitId: 'EQX-CKT-55901',
   steps: [
     { label: 'Submitted', completed: true, active: false },
     { label: 'Acknowledged', completed: false, active: true },
@@ -224,6 +245,14 @@ export function TicketDetail() {
     phone: MOCK_TICKET.phone,
     startDate: MOCK_TICKET.startDate,
     endDate: MOCK_TICKET.endDate,
+    bcOrgId: MOCK_TICKET.bcOrgId,
+    ubSubaccountId: MOCK_TICKET.ubSubaccountId,
+    billingAssetId: MOCK_TICKET.billingAssetId,
+    externalTicketId: MOCK_TICKET.externalTicketId,
+    ipeHostname: MOCK_TICKET.ipeHostname,
+    taoLocationId: MOCK_TICKET.taoLocationId,
+    ipeLogicPort: MOCK_TICKET.ipeLogicPort,
+    equinixCircuitId: MOCK_TICKET.equinixCircuitId,
   });
 
   const ticket = MOCK_TICKET;
@@ -703,8 +732,96 @@ export function TicketDetail() {
                   <p className="text-figma-base font-mono text-figma-sm text-fw-heading tracking-[-0.03em]">{editData.vnf || '-'}</p>
                 )}
               </div>
+              <div>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Billing Asset ID</p>
+                {isEditing ? (
+                  <input type="text" value={editData.billingAssetId} onChange={(e) => setEditData({ ...editData, billingAssetId: e.target.value })} className="fw-input" />
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.billingAssetId || '-'}</p>
+                )}
+              </div>
+              {ticket.externalTicketId && (
+                <div>
+                  <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">AOTS Reference</p>
+                  {isEditing ? (
+                    <input type="text" value={editData.externalTicketId} onChange={(e) => setEditData({ ...editData, externalTicketId: e.target.value })} className="fw-input" />
+                  ) : (
+                    <p className="text-figma-base font-mono text-figma-sm text-fw-link tracking-[-0.03em]">{ticket.externalTicketId}</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
+
+          {/* Customer Service card */}
+          <div className="bg-fw-base rounded-2xl border border-fw-secondary p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <User className="h-5 w-5 text-fw-heading" />
+              <h3 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">Customer Service</h3>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">BC Org ID</p>
+                {isEditing ? (
+                  <input type="text" value={editData.bcOrgId} onChange={(e) => setEditData({ ...editData, bcOrgId: e.target.value })} className="fw-input" />
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.bcOrgId}</p>
+                )}
+              </div>
+              <div>
+                <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">UB Subaccount ID</p>
+                {isEditing ? (
+                  <input type="text" value={editData.ubSubaccountId} onChange={(e) => setEditData({ ...editData, ubSubaccountId: e.target.value })} className="fw-input" />
+                ) : (
+                  <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.ubSubaccountId || '-'}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Network Information card */}
+          {(ticket.ipeHostname || ticket.taoLocationId || ticket.ipeLogicPort || ticket.equinixCircuitId || isEditing) && (
+            <div className="bg-fw-base rounded-2xl border border-fw-secondary p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <ArrowUpDown className="h-5 w-5 text-fw-heading" />
+                <h3 className="text-figma-base font-bold text-fw-heading tracking-[-0.03em]">Network Information</h3>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">IPE Hostname</p>
+                  {isEditing ? (
+                    <input type="text" value={editData.ipeHostname} onChange={(e) => setEditData({ ...editData, ipeHostname: e.target.value })} className="fw-input" />
+                  ) : (
+                    <p className="text-figma-base font-mono text-figma-sm text-fw-heading tracking-[-0.03em]">{ticket.ipeHostname || '-'}</p>
+                  )}
+                </div>
+                <div>
+                  <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">TAO Location ID</p>
+                  {isEditing ? (
+                    <input type="text" value={editData.taoLocationId} onChange={(e) => setEditData({ ...editData, taoLocationId: e.target.value })} className="fw-input" />
+                  ) : (
+                    <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.taoLocationId || '-'}</p>
+                  )}
+                </div>
+                <div>
+                  <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">IPE Logic Port (CSP/TAO)</p>
+                  {isEditing ? (
+                    <input type="text" value={editData.ipeLogicPort} onChange={(e) => setEditData({ ...editData, ipeLogicPort: e.target.value })} className="fw-input" />
+                  ) : (
+                    <p className="text-figma-base font-mono text-figma-sm text-fw-heading tracking-[-0.03em]">{ticket.ipeLogicPort || '-'}</p>
+                  )}
+                </div>
+                <div>
+                  <p className="text-figma-base font-medium text-fw-bodyLight tracking-[-0.03em] mb-1">Equinix Circuit ID</p>
+                  {isEditing ? (
+                    <input type="text" value={editData.equinixCircuitId} onChange={(e) => setEditData({ ...editData, equinixCircuitId: e.target.value })} className="fw-input" />
+                  ) : (
+                    <p className="text-figma-base font-medium text-fw-heading tracking-[-0.03em]">{ticket.equinixCircuitId || '-'}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Time info card */}
           <div className="bg-fw-base rounded-2xl border border-fw-secondary p-5">
