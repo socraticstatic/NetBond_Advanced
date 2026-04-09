@@ -41,19 +41,12 @@ export const LMCC_METROS: LMCCMetro[] = [
   },
 ];
 
-// GA-expanded metros (San Jose + LA get CoreSite added)
+// GA-expanded metros: San Jose + Ashburn only (LA drops at GA per product brief)
 export const LMCC_METROS_GA: LMCCMetro[] = [
   {
     id: 'metro-sj',
     name: 'San Jose, CA',
     datacenters: ['Equinix SV1', 'Equinix SV5', 'CoreSite SV1'],
-    facilities: ['Equinix', 'CoreSite'],
-    phase: 'ga',
-  },
-  {
-    id: 'metro-la',
-    name: 'Los Angeles, CA',
-    datacenters: ['Equinix LA1', 'Equinix LA3', 'CoreSite LA1'],
     facilities: ['Equinix', 'CoreSite'],
     phase: 'ga',
   },
@@ -85,7 +78,7 @@ export const LMCC_PHASES: Record<'preview' | 'ga', LMCCPhaseConfig> = {
   },
   ga: {
     phase: 'ga',
-    availableMetros: ['metro-sj', 'metro-la', 'metro-ash'],
+    availableMetros: ['metro-sj', 'metro-ash'],
     bandwidthOptions: [50, 100, 200, 300, 400, 500, 1000, 2000, 5000, 10000, 25000, 50000, 100000],
     contractTypes: ['monthly', 'fixed-12', 'fixed-24', 'fixed-36'],
     transports: ['mpls', 'internet'],
